@@ -30,6 +30,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case codeBlockItem = 92
   case codeBlockItemList = 163
   case codeBlock = 93
+  case garbageNodes = 266
   case inOutExpr = 25
   case poundColumnExpr = 26
   case tupleExprElementList = 165
@@ -276,6 +277,7 @@ internal enum SyntaxKind: CSyntaxKind {
   var isSyntaxCollection: Bool {
     switch self {
     case .codeBlockItemList: return true
+    case .garbageNodes: return true
     case .tupleExprElementList: return true
     case .arrayElementList: return true
     case .dictionaryElementList: return true

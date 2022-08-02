@@ -127,9 +127,13 @@ public class CustomReflectableTests: XCTestCase {
                      expectedDumped: """
                                      ▿ SwiftSyntax.TupleExprElementListSyntax
                                        ▿ SwiftSyntax.TupleExprElementSyntax
+                                         - garbageBeforeLabel: nil
                                          - label: nil
+                                         - garbageBetweenLabelAndColon: nil
                                          - colon: nil
+                                         - garbageBetweenColonAndExpression: nil
                                          ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                           - garbageBeforeDigits: nil
                                            ▿ digits: SwiftSyntax.TokenSyntax
                                              - text: "1"
                                              ▿ leadingTrivia:
@@ -138,11 +142,16 @@ public class CustomReflectableTests: XCTestCase {
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "1"
+                                         - garbageBetweenExpressionAndTrailingComma: nil
                                          - trailingComma: nil
                                        ▿ SwiftSyntax.TupleExprElementSyntax
+                                         - garbageBeforeLabel: nil
                                          - label: nil
+                                         - garbageBetweenLabelAndColon: nil
                                          - colon: nil
+                                         - garbageBetweenColonAndExpression: nil
                                          ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                           - garbageBeforeDigits: nil
                                            ▿ digits: SwiftSyntax.TokenSyntax
                                              - text: "2"
                                              ▿ leadingTrivia:
@@ -151,6 +160,7 @@ public class CustomReflectableTests: XCTestCase {
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "2"
+                                         - garbageBetweenExpressionAndTrailingComma: nil
                                          - trailingComma: nil
 
                                      """)
@@ -180,9 +190,13 @@ public class CustomReflectableTests: XCTestCase {
                                      ▿ Swift.ReversedCollection<SwiftSyntax.TupleExprElementListSyntax>
                                        ▿ _base: SwiftSyntax.TupleExprElementListSyntax
                                          ▿ SwiftSyntax.TupleExprElementSyntax
+                                           - garbageBeforeLabel: nil
                                            - label: nil
+                                           - garbageBetweenLabelAndColon: nil
                                            - colon: nil
+                                           - garbageBetweenColonAndExpression: nil
                                            ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                             - garbageBeforeDigits: nil
                                              ▿ digits: SwiftSyntax.TokenSyntax
                                                - text: "1"
                                                ▿ leadingTrivia:
@@ -191,21 +205,27 @@ public class CustomReflectableTests: XCTestCase {
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "1"
+                                           - garbageBetweenExpressionAndTrailingComma: nil
                                            - trailingComma: nil
                                          ▿ SwiftSyntax.TupleExprElementSyntax
+                                           - garbageBeforeLabel: nil
                                            - label: nil
+                                           - garbageBetweenLabelAndColon: nil
                                            - colon: nil
+                                           - garbageBetweenColonAndExpression: nil
                                            ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                             - garbageBeforeDigits: nil
                                              ▿ digits: SwiftSyntax.TokenSyntax
                                                - text: "2"
                                                ▿ leadingTrivia:
                                                  - pieces: 0 elements
-                                               ▿ trailingTrivia: 
+                                               ▿ trailingTrivia:
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "2"
+                                           - garbageBetweenExpressionAndTrailingComma: nil
                                            - trailingComma: nil
-
+                                     
                                      """)
       }(),
     ]

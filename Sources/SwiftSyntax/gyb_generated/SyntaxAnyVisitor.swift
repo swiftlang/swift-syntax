@@ -159,6 +159,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: CodeBlockSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: GarbageNodesSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: GarbageNodesSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

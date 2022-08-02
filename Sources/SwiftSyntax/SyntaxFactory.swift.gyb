@@ -52,10 +52,16 @@ public enum SyntaxFactory {
 %   elif node.children:
 %     child_params = []
 %     for child in node.children:
-%         param_type = child.type_name
-%         if child.is_optional:
-%            param_type = param_type + "?"
+%       param_type = child.type_name
+%       if child.is_optional:
+%          param_type = param_type + "?"
+%       end
+%       if child.is_garbage_nodes():
+%         child_params.append("garbage %s: %s = nil" % (child.swift_name, param_type))
+%       else:
 %         child_params.append("%s: %s" % (child.swift_name, param_type))
+%       end
+%     end
 %     child_params = ', '.join(child_params)
   public static func make${node.syntax_kind}(${child_params}) -> ${node.name} {
     let layout: [RawSyntax?] = [

@@ -18,6 +18,13 @@ class SyntaxBuildableChild:
     """
     return self.child.swift_name
 
+
+  def factory_parameter_name(self):
+    if self.child.is_garbage_nodes():
+      return 'garbage'
+    else:
+      return self.name()
+
   def type(self):
     """
     The type of this child, represented by a `SyntaxBuildableType`, which can be used to create the corresponding `Buildable` and `ExpressibleAs` types.

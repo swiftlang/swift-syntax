@@ -16,8 +16,11 @@ import SwiftSyntax
 
 /// A CodeBlockItem is any Syntax node that appears on its own line insidea CodeBlock.
 public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
+  let garbageBeforeItem: GarbageNodes?
   let item: SyntaxBuildable
+  let garbageBetweenItemAndSemicolon: GarbageNodes?
   let semicolon: TokenSyntax?
+  let garbageBetweenSemicolonAndErrorTokens: GarbageNodes?
   let errorTokens: SyntaxBuildable?
 
   /// The leading trivia attached to this syntax node once built.
@@ -26,19 +29,28 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
 
   /// Creates a `CodeBlockItem` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeItem: 
   ///   - item: The underlying node inside the code block.
+  ///   - garbageBetweenItemAndSemicolon: 
   ///   - semicolon: If present, the trailing semicolon at the end of the item.
+  ///   - garbageBetweenSemicolonAndErrorTokens: 
   ///   - errorTokens: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeItem: ExpressibleAsGarbageNodes? = nil,
     item: ExpressibleAsSyntaxBuildable,
+    garbageBetweenItemAndSemicolon: ExpressibleAsGarbageNodes? = nil,
     semicolon: TokenSyntax? = nil,
+    garbageBetweenSemicolonAndErrorTokens: ExpressibleAsGarbageNodes? = nil,
     errorTokens: ExpressibleAsSyntaxBuildable? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeItem = garbageBeforeItem?.createGarbageNodes()
     self.item = item.createSyntaxBuildable()
+    self.garbageBetweenItemAndSemicolon = garbageBetweenItemAndSemicolon?.createGarbageNodes()
     self.semicolon = semicolon
     assert(semicolon == nil || semicolon!.text == ";")
+    self.garbageBetweenSemicolonAndErrorTokens = garbageBetweenSemicolonAndErrorTokens?.createGarbageNodes()
     self.errorTokens = errorTokens?.createSyntaxBuildable()
   }
 
@@ -49,8 +61,11 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// - Returns: The built `CodeBlockItemSyntax`.
   func buildCodeBlockItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockItemSyntax {
     let result = SyntaxFactory.makeCodeBlockItem(
+      garbage: garbageBeforeItem?.buildGarbageNodes(format: format, leadingTrivia: nil),
       item: item.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenItemAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       semicolon: semicolon,
+      garbage: garbageBetweenSemicolonAndErrorTokens?.buildGarbageNodes(format: format, leadingTrivia: nil),
       errorTokens: errorTokens?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -77,8 +92,11 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
 
 }
 public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
+  let garbageBeforeLeftBrace: GarbageNodes?
   let leftBrace: TokenSyntax
+  let garbageBetweenLeftBraceAndStatements: GarbageNodes?
   let statements: CodeBlockItemList
+  let garbageBetweenStatementsAndRightBrace: GarbageNodes?
   let rightBrace: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -87,19 +105,28 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
 
   /// Creates a `CodeBlock` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftBrace: 
   ///   - leftBrace: 
+  ///   - garbageBetweenLeftBraceAndStatements: 
   ///   - statements: 
+  ///   - garbageBetweenStatementsAndRightBrace: 
   ///   - rightBrace: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndStatements: ExpressibleAsGarbageNodes? = nil,
     statements: ExpressibleAsCodeBlockItemList,
+    garbageBetweenStatementsAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftBrace = garbageBeforeLeftBrace?.createGarbageNodes()
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
+    self.garbageBetweenLeftBraceAndStatements = garbageBetweenLeftBraceAndStatements?.createGarbageNodes()
     self.statements = statements.createCodeBlockItemList()
+    self.garbageBetweenStatementsAndRightBrace = garbageBetweenStatementsAndRightBrace?.createGarbageNodes()
     self.rightBrace = rightBrace
     assert(rightBrace.text == "}")
   }
@@ -109,14 +136,20 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndStatements: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenStatementsAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftBrace: garbageBeforeLeftBrace,
       leftBrace: leftBrace,
+      garbageBetweenLeftBraceAndStatements: garbageBetweenLeftBraceAndStatements,
       statements: statementsBuilder(),
+      garbageBetweenStatementsAndRightBrace: garbageBetweenStatementsAndRightBrace,
       rightBrace: rightBrace
     )
   }
@@ -127,8 +160,11 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// - Returns: The built `CodeBlockSyntax`.
   func buildCodeBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockSyntax {
     let result = SyntaxFactory.makeCodeBlock(
+      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
+      garbage: garbageBetweenLeftBraceAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
+      garbage: garbageBetweenStatementsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -155,7 +191,9 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
 
 }
 public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
+  let garbageBeforeAmpersand: GarbageNodes?
   let ampersand: TokenSyntax
+  let garbageBetweenAmpersandAndExpression: GarbageNodes?
   let expression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -164,16 +202,22 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
 
   /// Creates a `InOutExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAmpersand: 
   ///   - ampersand: 
+  ///   - garbageBetweenAmpersandAndExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAmpersand: ExpressibleAsGarbageNodes? = nil,
     ampersand: TokenSyntax = TokenSyntax.`prefixAmpersand`,
+    garbageBetweenAmpersandAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAmpersand = garbageBeforeAmpersand?.createGarbageNodes()
     self.ampersand = ampersand
     assert(ampersand.text == "&")
+    self.garbageBetweenAmpersandAndExpression = garbageBetweenAmpersandAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
   }
 
@@ -184,7 +228,9 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// - Returns: The built `InOutExprSyntax`.
   func buildInOutExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InOutExprSyntax {
     let result = SyntaxFactory.makeInOutExpr(
+      garbage: garbageBeforeAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ampersand: ampersand,
+      garbage: garbageBetweenAmpersandAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -217,6 +263,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   }
 }
 public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
+  let garbageBeforePoundColumn: GarbageNodes?
   let poundColumn: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -225,12 +272,15 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
 
   /// Creates a `PoundColumnExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundColumn: 
   ///   - poundColumn: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundColumn: ExpressibleAsGarbageNodes? = nil,
     poundColumn: TokenSyntax = TokenSyntax.`poundColumn`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundColumn = garbageBeforePoundColumn?.createGarbageNodes()
     self.poundColumn = poundColumn
     assert(poundColumn.text == "#column")
   }
@@ -242,6 +292,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// - Returns: The built `PoundColumnExprSyntax`.
   func buildPoundColumnExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundColumnExprSyntax {
     let result = SyntaxFactory.makePoundColumnExpr(
+      garbage: garbageBeforePoundColumn?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundColumn: poundColumn
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -274,8 +325,11 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   }
 }
 public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
+  let garbageBeforeTryKeyword: GarbageNodes?
   let tryKeyword: TokenSyntax
+  let garbageBetweenTryKeywordAndQuestionOrExclamationMark: GarbageNodes?
   let questionOrExclamationMark: TokenSyntax?
+  let garbageBetweenQuestionOrExclamationMarkAndExpression: GarbageNodes?
   let expression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -284,20 +338,29 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
 
   /// Creates a `TryExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeTryKeyword: 
   ///   - tryKeyword: 
+  ///   - garbageBetweenTryKeywordAndQuestionOrExclamationMark: 
   ///   - questionOrExclamationMark: 
+  ///   - garbageBetweenQuestionOrExclamationMarkAndExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeTryKeyword: ExpressibleAsGarbageNodes? = nil,
     tryKeyword: TokenSyntax = TokenSyntax.`try`,
+    garbageBetweenTryKeywordAndQuestionOrExclamationMark: ExpressibleAsGarbageNodes? = nil,
     questionOrExclamationMark: TokenSyntax? = nil,
+    garbageBetweenQuestionOrExclamationMarkAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeTryKeyword = garbageBeforeTryKeyword?.createGarbageNodes()
     self.tryKeyword = tryKeyword
     assert(tryKeyword.text == "try")
+    self.garbageBetweenTryKeywordAndQuestionOrExclamationMark = garbageBetweenTryKeywordAndQuestionOrExclamationMark?.createGarbageNodes()
     self.questionOrExclamationMark = questionOrExclamationMark
     assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == "?" || questionOrExclamationMark!.text == "!")
+    self.garbageBetweenQuestionOrExclamationMarkAndExpression = garbageBetweenQuestionOrExclamationMarkAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
   }
 
@@ -308,8 +371,11 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// - Returns: The built `TryExprSyntax`.
   func buildTryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TryExprSyntax {
     let result = SyntaxFactory.makeTryExpr(
+      garbage: garbageBeforeTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tryKeyword: tryKeyword,
+      garbage: garbageBetweenTryKeywordAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionOrExclamationMark: questionOrExclamationMark,
+      garbage: garbageBetweenQuestionOrExclamationMarkAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -342,7 +408,9 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   }
 }
 public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
+  let garbageBeforeAwaitKeyword: GarbageNodes?
   let awaitKeyword: TokenSyntax
+  let garbageBetweenAwaitKeywordAndExpression: GarbageNodes?
   let expression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -351,16 +419,22 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
 
   /// Creates a `AwaitExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAwaitKeyword: 
   ///   - awaitKeyword: 
+  ///   - garbageBetweenAwaitKeywordAndExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAwaitKeyword: ExpressibleAsGarbageNodes? = nil,
     awaitKeyword: TokenSyntax,
+    garbageBetweenAwaitKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAwaitKeyword = garbageBeforeAwaitKeyword?.createGarbageNodes()
     self.awaitKeyword = awaitKeyword
     assert(awaitKeyword.text == "await")
+    self.garbageBetweenAwaitKeywordAndExpression = garbageBetweenAwaitKeywordAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
   }
 
@@ -369,12 +443,16 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAwaitKeyword: ExpressibleAsGarbageNodes? = nil,
     awaitKeyword: String,
+    garbageBetweenAwaitKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAwaitKeyword: garbageBeforeAwaitKeyword,
       awaitKeyword: TokenSyntax.contextualKeyword(awaitKeyword),
+      garbageBetweenAwaitKeywordAndExpression: garbageBetweenAwaitKeywordAndExpression,
       expression: expression
     )
   }
@@ -385,7 +463,9 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// - Returns: The built `AwaitExprSyntax`.
   func buildAwaitExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AwaitExprSyntax {
     let result = SyntaxFactory.makeAwaitExpr(
+      garbage: garbageBeforeAwaitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       awaitKeyword: awaitKeyword,
+      garbage: garbageBetweenAwaitKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -418,7 +498,9 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   }
 }
 public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndColon: GarbageNodes?
   let colon: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -427,15 +509,21 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
 
   /// Creates a `DeclNameArgument` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndColon: 
   ///   - colon: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndColon = garbageBetweenNameAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
   }
@@ -447,7 +535,9 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// - Returns: The built `DeclNameArgumentSyntax`.
   func buildDeclNameArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentSyntax {
     let result = SyntaxFactory.makeDeclNameArgument(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -474,8 +564,11 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
 
 }
 public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndArguments: GarbageNodes?
   let arguments: DeclNameArgumentList
+  let garbageBetweenArgumentsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -484,19 +577,28 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
 
   /// Creates a `DeclNameArguments` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndArguments: 
   ///   - arguments: 
+  ///   - garbageBetweenArgumentsAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndArguments: ExpressibleAsGarbageNodes? = nil,
     arguments: ExpressibleAsDeclNameArgumentList,
+    garbageBetweenArgumentsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndArguments = garbageBetweenLeftParenAndArguments?.createGarbageNodes()
     self.arguments = arguments.createDeclNameArgumentList()
+    self.garbageBetweenArgumentsAndRightParen = garbageBetweenArgumentsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -508,8 +610,11 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// - Returns: The built `DeclNameArgumentsSyntax`.
   func buildDeclNameArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
     let result = SyntaxFactory.makeDeclNameArguments(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildDeclNameArgumentList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -536,7 +641,9 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
 
 }
 public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
+  let garbageBeforeIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndDeclNameArguments: GarbageNodes?
   let declNameArguments: DeclNameArguments?
 
   /// The leading trivia attached to this syntax node once built.
@@ -545,15 +652,21 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
 
   /// Creates a `IdentifierExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndDeclNameArguments: 
   ///   - declNameArguments: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndDeclNameArguments: ExpressibleAsGarbageNodes? = nil,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIdentifier = garbageBeforeIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndDeclNameArguments = garbageBetweenIdentifierAndDeclNameArguments?.createGarbageNodes()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
 
@@ -564,7 +677,9 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// - Returns: The built `IdentifierExprSyntax`.
   func buildIdentifierExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierExprSyntax {
     let result = SyntaxFactory.makeIdentifierExpr(
+      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -597,6 +712,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   }
 }
 public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
+  let garbageBeforeSuperKeyword: GarbageNodes?
   let superKeyword: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -605,12 +721,15 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
 
   /// Creates a `SuperRefExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeSuperKeyword: 
   ///   - superKeyword: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeSuperKeyword: ExpressibleAsGarbageNodes? = nil,
     superKeyword: TokenSyntax = TokenSyntax.`super`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeSuperKeyword = garbageBeforeSuperKeyword?.createGarbageNodes()
     self.superKeyword = superKeyword
     assert(superKeyword.text == "super")
   }
@@ -622,6 +741,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// - Returns: The built `SuperRefExprSyntax`.
   func buildSuperRefExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SuperRefExprSyntax {
     let result = SyntaxFactory.makeSuperRefExpr(
+      garbage: garbageBeforeSuperKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       superKeyword: superKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -654,6 +774,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   }
 }
 public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
+  let garbageBeforeNilKeyword: GarbageNodes?
   let nilKeyword: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -662,12 +783,15 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
 
   /// Creates a `NilLiteralExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeNilKeyword: 
   ///   - nilKeyword: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeNilKeyword: ExpressibleAsGarbageNodes? = nil,
     nilKeyword: TokenSyntax = TokenSyntax.`nil`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeNilKeyword = garbageBeforeNilKeyword?.createGarbageNodes()
     self.nilKeyword = nilKeyword
     assert(nilKeyword.text == "nil")
   }
@@ -679,6 +803,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// - Returns: The built `NilLiteralExprSyntax`.
   func buildNilLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NilLiteralExprSyntax {
     let result = SyntaxFactory.makeNilLiteralExpr(
+      garbage: garbageBeforeNilKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       nilKeyword: nilKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -711,6 +836,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   }
 }
 public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignmentExpr {
+  let garbageBeforeWildcard: GarbageNodes?
   let wildcard: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -719,12 +845,15 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
 
   /// Creates a `DiscardAssignmentExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeWildcard: 
   ///   - wildcard: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWildcard: ExpressibleAsGarbageNodes? = nil,
     wildcard: TokenSyntax = TokenSyntax.`wildcard`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeWildcard = garbageBeforeWildcard?.createGarbageNodes()
     self.wildcard = wildcard
     assert(wildcard.text == "_")
   }
@@ -736,6 +865,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// - Returns: The built `DiscardAssignmentExprSyntax`.
   func buildDiscardAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DiscardAssignmentExprSyntax {
     let result = SyntaxFactory.makeDiscardAssignmentExpr(
+      garbage: garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wildcard: wildcard
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -768,6 +898,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   }
 }
 public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
+  let garbageBeforeAssignToken: GarbageNodes?
   let assignToken: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -776,12 +907,15 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
 
   /// Creates a `AssignmentExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAssignToken: 
   ///   - assignToken: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAssignToken: ExpressibleAsGarbageNodes? = nil,
     assignToken: TokenSyntax = TokenSyntax.`equal`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAssignToken = garbageBeforeAssignToken?.createGarbageNodes()
     self.assignToken = assignToken
     assert(assignToken.text == "=")
   }
@@ -793,6 +927,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// - Returns: The built `AssignmentExprSyntax`.
   func buildAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssignmentExprSyntax {
     let result = SyntaxFactory.makeAssignmentExpr(
+      garbage: garbageBeforeAssignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignToken: assignToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -825,6 +960,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   }
 }
 public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
+  let garbageBeforeElements: GarbageNodes?
   let elements: ExprList
 
   /// The leading trivia attached to this syntax node once built.
@@ -833,12 +969,15 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
 
   /// Creates a `SequenceExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeElements: 
   ///   - elements: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeElements: ExpressibleAsGarbageNodes? = nil,
     elements: ExpressibleAsExprList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeElements = garbageBeforeElements?.createGarbageNodes()
     self.elements = elements.createExprList()
   }
 
@@ -847,10 +986,12 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeElements: ExpressibleAsGarbageNodes? = nil,
     @ExprListBuilder elementsBuilder: () -> ExpressibleAsExprList = { ExprList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeElements: garbageBeforeElements,
       elements: elementsBuilder()
     )
   }
@@ -861,6 +1002,7 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// - Returns: The built `SequenceExprSyntax`.
   func buildSequenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SequenceExprSyntax {
     let result = SyntaxFactory.makeSequenceExpr(
+      garbage: garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildExprList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -893,6 +1035,7 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   }
 }
 public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
+  let garbageBeforePoundLine: GarbageNodes?
   let poundLine: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -901,12 +1044,15 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
 
   /// Creates a `PoundLineExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundLine: 
   ///   - poundLine: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundLine: ExpressibleAsGarbageNodes? = nil,
     poundLine: TokenSyntax = TokenSyntax.`poundLine`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundLine = garbageBeforePoundLine?.createGarbageNodes()
     self.poundLine = poundLine
     assert(poundLine.text == "#line")
   }
@@ -918,6 +1064,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// - Returns: The built `PoundLineExprSyntax`.
   func buildPoundLineExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundLineExprSyntax {
     let result = SyntaxFactory.makePoundLineExpr(
+      garbage: garbageBeforePoundLine?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundLine: poundLine
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -950,6 +1097,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   }
 }
 public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
+  let garbageBeforePoundFile: GarbageNodes?
   let poundFile: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -958,12 +1106,15 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
 
   /// Creates a `PoundFileExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundFile: 
   ///   - poundFile: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundFile: ExpressibleAsGarbageNodes? = nil,
     poundFile: TokenSyntax = TokenSyntax.`poundFile`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundFile = garbageBeforePoundFile?.createGarbageNodes()
     self.poundFile = poundFile
     assert(poundFile.text == "#file")
   }
@@ -975,6 +1126,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// - Returns: The built `PoundFileExprSyntax`.
   func buildPoundFileExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileExprSyntax {
     let result = SyntaxFactory.makePoundFileExpr(
+      garbage: garbageBeforePoundFile?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFile: poundFile
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1007,6 +1159,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   }
 }
 public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
+  let garbageBeforePoundFileID: GarbageNodes?
   let poundFileID: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1015,12 +1168,15 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
 
   /// Creates a `PoundFileIDExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundFileID: 
   ///   - poundFileID: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundFileID: ExpressibleAsGarbageNodes? = nil,
     poundFileID: TokenSyntax = TokenSyntax.`poundFileID`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundFileID = garbageBeforePoundFileID?.createGarbageNodes()
     self.poundFileID = poundFileID
     assert(poundFileID.text == "#fileID")
   }
@@ -1032,6 +1188,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// - Returns: The built `PoundFileIDExprSyntax`.
   func buildPoundFileIDExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileIDExprSyntax {
     let result = SyntaxFactory.makePoundFileIDExpr(
+      garbage: garbageBeforePoundFileID?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFileID: poundFileID
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1064,6 +1221,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   }
 }
 public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
+  let garbageBeforePoundFilePath: GarbageNodes?
   let poundFilePath: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1072,12 +1230,15 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
 
   /// Creates a `PoundFilePathExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundFilePath: 
   ///   - poundFilePath: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundFilePath: ExpressibleAsGarbageNodes? = nil,
     poundFilePath: TokenSyntax = TokenSyntax.`poundFilePath`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundFilePath = garbageBeforePoundFilePath?.createGarbageNodes()
     self.poundFilePath = poundFilePath
     assert(poundFilePath.text == "#filePath")
   }
@@ -1089,6 +1250,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// - Returns: The built `PoundFilePathExprSyntax`.
   func buildPoundFilePathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFilePathExprSyntax {
     let result = SyntaxFactory.makePoundFilePathExpr(
+      garbage: garbageBeforePoundFilePath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFilePath: poundFilePath
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1121,6 +1283,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   }
 }
 public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
+  let garbageBeforePoundFunction: GarbageNodes?
   let poundFunction: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1129,12 +1292,15 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
 
   /// Creates a `PoundFunctionExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundFunction: 
   ///   - poundFunction: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundFunction: ExpressibleAsGarbageNodes? = nil,
     poundFunction: TokenSyntax = TokenSyntax.`poundFunction`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundFunction = garbageBeforePoundFunction?.createGarbageNodes()
     self.poundFunction = poundFunction
     assert(poundFunction.text == "#function")
   }
@@ -1146,6 +1312,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// - Returns: The built `PoundFunctionExprSyntax`.
   func buildPoundFunctionExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFunctionExprSyntax {
     let result = SyntaxFactory.makePoundFunctionExpr(
+      garbage: garbageBeforePoundFunction?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFunction: poundFunction
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1178,6 +1345,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   }
 }
 public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr {
+  let garbageBeforePoundDsohandle: GarbageNodes?
   let poundDsohandle: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1186,12 +1354,15 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
 
   /// Creates a `PoundDsohandleExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundDsohandle: 
   ///   - poundDsohandle: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundDsohandle: ExpressibleAsGarbageNodes? = nil,
     poundDsohandle: TokenSyntax = TokenSyntax.`poundDsohandle`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundDsohandle = garbageBeforePoundDsohandle?.createGarbageNodes()
     self.poundDsohandle = poundDsohandle
     assert(poundDsohandle.text == "#dsohandle")
   }
@@ -1203,6 +1374,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// - Returns: The built `PoundDsohandleExprSyntax`.
   func buildPoundDsohandleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundDsohandleExprSyntax {
     let result = SyntaxFactory.makePoundDsohandleExpr(
+      garbage: garbageBeforePoundDsohandle?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundDsohandle: poundDsohandle
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1235,7 +1407,9 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   }
 }
 public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferenceExpr {
+  let garbageBeforeIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndGenericArgumentClause: GarbageNodes?
   let genericArgumentClause: GenericArgumentClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -1244,15 +1418,21 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
 
   /// Creates a `SymbolicReferenceExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndGenericArgumentClause: 
   ///   - genericArgumentClause: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericArgumentClause: ExpressibleAsGarbageNodes? = nil,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIdentifier = garbageBeforeIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndGenericArgumentClause = garbageBetweenIdentifierAndGenericArgumentClause?.createGarbageNodes()
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
   }
 
@@ -1261,12 +1441,16 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndGenericArgumentClause: ExpressibleAsGarbageNodes? = nil,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeIdentifier: garbageBeforeIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndGenericArgumentClause: garbageBetweenIdentifierAndGenericArgumentClause,
       genericArgumentClause: genericArgumentClause
     )
   }
@@ -1277,7 +1461,9 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// - Returns: The built `SymbolicReferenceExprSyntax`.
   func buildSymbolicReferenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SymbolicReferenceExprSyntax {
     let result = SyntaxFactory.makeSymbolicReferenceExpr(
+      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1310,7 +1496,9 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   }
 }
 public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr {
+  let garbageBeforeOperatorToken: GarbageNodes?
   let operatorToken: TokenSyntax?
+  let garbageBetweenOperatorTokenAndPostfixExpression: GarbageNodes?
   let postfixExpression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -1319,15 +1507,21 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
 
   /// Creates a `PrefixOperatorExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeOperatorToken: 
   ///   - operatorToken: 
+  ///   - garbageBetweenOperatorTokenAndPostfixExpression: 
   ///   - postfixExpression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeOperatorToken: ExpressibleAsGarbageNodes? = nil,
     operatorToken: TokenSyntax? = nil,
+    garbageBetweenOperatorTokenAndPostfixExpression: ExpressibleAsGarbageNodes? = nil,
     postfixExpression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeOperatorToken = garbageBeforeOperatorToken?.createGarbageNodes()
     self.operatorToken = operatorToken
+    self.garbageBetweenOperatorTokenAndPostfixExpression = garbageBetweenOperatorTokenAndPostfixExpression?.createGarbageNodes()
     self.postfixExpression = postfixExpression.createExprBuildable()
   }
 
@@ -1336,12 +1530,16 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeOperatorToken: ExpressibleAsGarbageNodes? = nil,
     operatorToken: String?,
+    garbageBetweenOperatorTokenAndPostfixExpression: ExpressibleAsGarbageNodes? = nil,
     postfixExpression: ExpressibleAsExprBuildable
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeOperatorToken: garbageBeforeOperatorToken,
       operatorToken: operatorToken.map(TokenSyntax.prefixOperator),
+      garbageBetweenOperatorTokenAndPostfixExpression: garbageBetweenOperatorTokenAndPostfixExpression,
       postfixExpression: postfixExpression
     )
   }
@@ -1352,7 +1550,9 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// - Returns: The built `PrefixOperatorExprSyntax`.
   func buildPrefixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrefixOperatorExprSyntax {
     let result = SyntaxFactory.makePrefixOperatorExpr(
+      garbage: garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken,
+      garbage: garbageBetweenOperatorTokenAndPostfixExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       postfixExpression: postfixExpression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1385,6 +1585,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   }
 }
 public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr {
+  let garbageBeforeOperatorToken: GarbageNodes?
   let operatorToken: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1393,12 +1594,15 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
 
   /// Creates a `BinaryOperatorExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeOperatorToken: 
   ///   - operatorToken: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeOperatorToken: ExpressibleAsGarbageNodes? = nil,
     operatorToken: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeOperatorToken = garbageBeforeOperatorToken?.createGarbageNodes()
     self.operatorToken = operatorToken
   }
 
@@ -1409,6 +1613,7 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// - Returns: The built `BinaryOperatorExprSyntax`.
   func buildBinaryOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BinaryOperatorExprSyntax {
     let result = SyntaxFactory.makeBinaryOperatorExpr(
+      garbage: garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1441,8 +1646,11 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   }
 }
 public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
+  let garbageBeforeAsyncKeyword: GarbageNodes?
   let asyncKeyword: TokenSyntax?
+  let garbageBetweenAsyncKeywordAndThrowsToken: GarbageNodes?
   let throwsToken: TokenSyntax?
+  let garbageBetweenThrowsTokenAndArrowToken: GarbageNodes?
   let arrowToken: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1451,20 +1659,29 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
 
   /// Creates a `ArrowExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAsyncKeyword: 
   ///   - asyncKeyword: 
+  ///   - garbageBetweenAsyncKeywordAndThrowsToken: 
   ///   - throwsToken: 
+  ///   - garbageBetweenThrowsTokenAndArrowToken: 
   ///   - arrowToken: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAsyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncKeyword: TokenSyntax? = nil,
+    garbageBetweenAsyncKeywordAndThrowsToken: ExpressibleAsGarbageNodes? = nil,
     throwsToken: TokenSyntax? = nil,
+    garbageBetweenThrowsTokenAndArrowToken: ExpressibleAsGarbageNodes? = nil,
     arrowToken: TokenSyntax = TokenSyntax.`arrow`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAsyncKeyword = garbageBeforeAsyncKeyword?.createGarbageNodes()
     self.asyncKeyword = asyncKeyword
     assert(asyncKeyword == nil || asyncKeyword!.text == "async")
+    self.garbageBetweenAsyncKeywordAndThrowsToken = garbageBetweenAsyncKeywordAndThrowsToken?.createGarbageNodes()
     self.throwsToken = throwsToken
     assert(throwsToken == nil || throwsToken!.text == "throws")
+    self.garbageBetweenThrowsTokenAndArrowToken = garbageBetweenThrowsTokenAndArrowToken?.createGarbageNodes()
     self.arrowToken = arrowToken
     assert(arrowToken.text == "->")
   }
@@ -1474,14 +1691,20 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAsyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncKeyword: String?,
+    garbageBetweenAsyncKeywordAndThrowsToken: ExpressibleAsGarbageNodes? = nil,
     throwsToken: TokenSyntax? = nil,
+    garbageBetweenThrowsTokenAndArrowToken: ExpressibleAsGarbageNodes? = nil,
     arrowToken: TokenSyntax = TokenSyntax.`arrow`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAsyncKeyword: garbageBeforeAsyncKeyword,
       asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
+      garbageBetweenAsyncKeywordAndThrowsToken: garbageBetweenAsyncKeywordAndThrowsToken,
       throwsToken: throwsToken,
+      garbageBetweenThrowsTokenAndArrowToken: garbageBetweenThrowsTokenAndArrowToken,
       arrowToken: arrowToken
     )
   }
@@ -1492,8 +1715,11 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// - Returns: The built `ArrowExprSyntax`.
   func buildArrowExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrowExprSyntax {
     let result = SyntaxFactory.makeArrowExpr(
+      garbage: garbageBeforeAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
+      garbage: garbageBetweenAsyncKeywordAndThrowsToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsToken: throwsToken,
+      garbage: garbageBetweenThrowsTokenAndArrowToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arrowToken: arrowToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1526,6 +1752,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   }
 }
 public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
+  let garbageBeforeFloatingDigits: GarbageNodes?
   let floatingDigits: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1534,12 +1761,15 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
 
   /// Creates a `FloatLiteralExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeFloatingDigits: 
   ///   - floatingDigits: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeFloatingDigits: ExpressibleAsGarbageNodes? = nil,
     floatingDigits: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeFloatingDigits = garbageBeforeFloatingDigits?.createGarbageNodes()
     self.floatingDigits = floatingDigits
   }
 
@@ -1548,10 +1778,12 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeFloatingDigits: ExpressibleAsGarbageNodes? = nil,
     floatingDigits: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeFloatingDigits: garbageBeforeFloatingDigits,
       floatingDigits: TokenSyntax.floatingLiteral(floatingDigits)
     )
   }
@@ -1562,6 +1794,7 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// - Returns: The built `FloatLiteralExprSyntax`.
   func buildFloatLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FloatLiteralExprSyntax {
     let result = SyntaxFactory.makeFloatLiteralExpr(
+      garbage: garbageBeforeFloatingDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
       floatingDigits: floatingDigits
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1594,8 +1827,11 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   }
 }
 public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndElementList: GarbageNodes?
   let elementList: TupleExprElementList
+  let garbageBetweenElementListAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1604,19 +1840,28 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
 
   /// Creates a `TupleExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndElementList: 
   ///   - elementList: 
+  ///   - garbageBetweenElementListAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndElementList: ExpressibleAsGarbageNodes? = nil,
     elementList: ExpressibleAsTupleExprElementList,
+    garbageBetweenElementListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndElementList = garbageBetweenLeftParenAndElementList?.createGarbageNodes()
     self.elementList = elementList.createTupleExprElementList()
+    self.garbageBetweenElementListAndRightParen = garbageBetweenElementListAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -1626,14 +1871,20 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndElementList: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenElementListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @TupleExprElementListBuilder elementListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftParen: garbageBeforeLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndElementList: garbageBetweenLeftParenAndElementList,
       elementList: elementListBuilder(),
+      garbageBetweenElementListAndRightParen: garbageBetweenElementListAndRightParen,
       rightParen: rightParen
     )
   }
@@ -1644,8 +1895,11 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// - Returns: The built `TupleExprSyntax`.
   func buildTupleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprSyntax {
     let result = SyntaxFactory.makeTupleExpr(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elementList: elementList.buildTupleExprElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenElementListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1678,8 +1932,11 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   }
 }
 public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
+  let garbageBeforeLeftSquare: GarbageNodes?
   let leftSquare: TokenSyntax
+  let garbageBetweenLeftSquareAndElements: GarbageNodes?
   let elements: ArrayElementList
+  let garbageBetweenElementsAndRightSquare: GarbageNodes?
   let rightSquare: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1688,19 +1945,28 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
 
   /// Creates a `ArrayExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftSquare: 
   ///   - leftSquare: 
+  ///   - garbageBetweenLeftSquareAndElements: 
   ///   - elements: 
+  ///   - garbageBetweenElementsAndRightSquare: 
   ///   - rightSquare: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftSquare: ExpressibleAsGarbageNodes? = nil,
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftSquareAndElements: ExpressibleAsGarbageNodes? = nil,
     elements: ExpressibleAsArrayElementList,
+    garbageBetweenElementsAndRightSquare: ExpressibleAsGarbageNodes? = nil,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftSquare = garbageBeforeLeftSquare?.createGarbageNodes()
     self.leftSquare = leftSquare
     assert(leftSquare.text == "[")
+    self.garbageBetweenLeftSquareAndElements = garbageBetweenLeftSquareAndElements?.createGarbageNodes()
     self.elements = elements.createArrayElementList()
+    self.garbageBetweenElementsAndRightSquare = garbageBetweenElementsAndRightSquare?.createGarbageNodes()
     self.rightSquare = rightSquare
     assert(rightSquare.text == "]")
   }
@@ -1710,14 +1976,20 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftSquare: ExpressibleAsGarbageNodes? = nil,
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftSquareAndElements: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenElementsAndRightSquare: ExpressibleAsGarbageNodes? = nil,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
     @ArrayElementListBuilder elementsBuilder: () -> ExpressibleAsArrayElementList = { ArrayElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftSquare: garbageBeforeLeftSquare,
       leftSquare: leftSquare,
+      garbageBetweenLeftSquareAndElements: garbageBetweenLeftSquareAndElements,
       elements: elementsBuilder(),
+      garbageBetweenElementsAndRightSquare: garbageBetweenElementsAndRightSquare,
       rightSquare: rightSquare
     )
   }
@@ -1728,8 +2000,11 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// - Returns: The built `ArrayExprSyntax`.
   func buildArrayExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayExprSyntax {
     let result = SyntaxFactory.makeArrayExpr(
+      garbage: garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
+      garbage: garbageBetweenLeftSquareAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildArrayElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenElementsAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1762,8 +2037,11 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   }
 }
 public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
+  let garbageBeforeLeftSquare: GarbageNodes?
   let leftSquare: TokenSyntax
+  let garbageBetweenLeftSquareAndContent: GarbageNodes?
   let content: SyntaxBuildable
+  let garbageBetweenContentAndRightSquare: GarbageNodes?
   let rightSquare: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -1772,19 +2050,28 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
 
   /// Creates a `DictionaryExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftSquare: 
   ///   - leftSquare: 
+  ///   - garbageBetweenLeftSquareAndContent: 
   ///   - content: 
+  ///   - garbageBetweenContentAndRightSquare: 
   ///   - rightSquare: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftSquare: ExpressibleAsGarbageNodes? = nil,
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftSquareAndContent: ExpressibleAsGarbageNodes? = nil,
     content: ExpressibleAsSyntaxBuildable,
+    garbageBetweenContentAndRightSquare: ExpressibleAsGarbageNodes? = nil,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftSquare = garbageBeforeLeftSquare?.createGarbageNodes()
     self.leftSquare = leftSquare
     assert(leftSquare.text == "[")
+    self.garbageBetweenLeftSquareAndContent = garbageBetweenLeftSquareAndContent?.createGarbageNodes()
     self.content = content.createSyntaxBuildable()
+    self.garbageBetweenContentAndRightSquare = garbageBetweenContentAndRightSquare?.createGarbageNodes()
     self.rightSquare = rightSquare
     assert(rightSquare.text == "]")
   }
@@ -1796,8 +2083,11 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// - Returns: The built `DictionaryExprSyntax`.
   func buildDictionaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryExprSyntax {
     let result = SyntaxFactory.makeDictionaryExpr(
+      garbage: garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
+      garbage: garbageBetweenLeftSquareAndContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
       content: content.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenContentAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1830,9 +2120,13 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   }
 }
 public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, HasTrailingComma {
+  let garbageBeforeLabel: GarbageNodes?
   let label: TokenSyntax?
+  let garbageBetweenLabelAndColon: GarbageNodes?
   let colon: TokenSyntax?
+  let garbageBetweenColonAndExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -1841,22 +2135,34 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
 
   /// Creates a `TupleExprElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabel: 
   ///   - label: 
+  ///   - garbageBetweenLabelAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax? = nil,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil,
+    garbageBetweenColonAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabel = garbageBeforeLabel?.createGarbageNodes()
     self.label = label
+    self.garbageBetweenLabelAndColon = garbageBetweenLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
+    self.garbageBetweenColonAndExpression = garbageBetweenColonAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndTrailingComma = garbageBetweenExpressionAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -1868,9 +2174,13 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// - Returns: The built `TupleExprElementSyntax`.
   func buildTupleExprElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprElementSyntax {
     let result = SyntaxFactory.makeTupleExprElement(
+      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
+      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1891,9 +2201,13 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeLabel: garbageBeforeLabel,
         label: label,
+        garbageBetweenLabelAndColon: garbageBetweenLabelAndColon,
         colon: colon,
+        garbageBetweenColonAndExpression: garbageBetweenColonAndExpression,
         expression: expression,
+        garbageBetweenExpressionAndTrailingComma: garbageBetweenExpressionAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -1907,7 +2221,9 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
 
 }
 public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrailingComma {
+  let garbageBeforeExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -1916,15 +2232,21 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
 
   /// Creates a `ArrayElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeExpression = garbageBeforeExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndTrailingComma = garbageBetweenExpressionAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -1936,7 +2258,9 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   /// - Returns: The built `ArrayElementSyntax`.
   func buildArrayElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayElementSyntax {
     let result = SyntaxFactory.makeArrayElement(
+      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1957,7 +2281,9 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeExpression: garbageBeforeExpression,
         expression: expression,
+        garbageBetweenExpressionAndTrailingComma: garbageBetweenExpressionAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -1971,9 +2297,13 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
 
 }
 public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement, HasTrailingComma {
+  let garbageBeforeKeyExpression: GarbageNodes?
   let keyExpression: ExprBuildable
+  let garbageBetweenKeyExpressionAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndValueExpression: GarbageNodes?
   let valueExpression: ExprBuildable
+  let garbageBetweenValueExpressionAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -1982,22 +2312,34 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
 
   /// Creates a `DictionaryElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeKeyExpression: 
   ///   - keyExpression: 
+  ///   - garbageBetweenKeyExpressionAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndValueExpression: 
   ///   - valueExpression: 
+  ///   - garbageBetweenValueExpressionAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeKeyExpression: ExpressibleAsGarbageNodes? = nil,
     keyExpression: ExpressibleAsExprBuildable,
+    garbageBetweenKeyExpressionAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValueExpression: ExpressibleAsGarbageNodes? = nil,
     valueExpression: ExpressibleAsExprBuildable,
+    garbageBetweenValueExpressionAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeKeyExpression = garbageBeforeKeyExpression?.createGarbageNodes()
     self.keyExpression = keyExpression.createExprBuildable()
+    self.garbageBetweenKeyExpressionAndColon = garbageBetweenKeyExpressionAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndValueExpression = garbageBetweenColonAndValueExpression?.createGarbageNodes()
     self.valueExpression = valueExpression.createExprBuildable()
+    self.garbageBetweenValueExpressionAndTrailingComma = garbageBetweenValueExpressionAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -2009,9 +2351,13 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// - Returns: The built `DictionaryElementSyntax`.
   func buildDictionaryElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryElementSyntax {
     let result = SyntaxFactory.makeDictionaryElement(
+      garbage: garbageBeforeKeyExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyExpression: keyExpression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenKeyExpressionAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndValueExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       valueExpression: valueExpression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenValueExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2032,9 +2378,13 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeKeyExpression: garbageBeforeKeyExpression,
         keyExpression: keyExpression,
+        garbageBetweenKeyExpressionAndColon: garbageBetweenKeyExpressionAndColon,
         colon: colon,
+        garbageBetweenColonAndValueExpression: garbageBetweenColonAndValueExpression,
         valueExpression: valueExpression,
+        garbageBetweenValueExpressionAndTrailingComma: garbageBetweenValueExpressionAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -2048,6 +2398,7 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
 
 }
 public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr {
+  let garbageBeforeDigits: GarbageNodes?
   let digits: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -2056,12 +2407,15 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
 
   /// Creates a `IntegerLiteralExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeDigits: 
   ///   - digits: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDigits: ExpressibleAsGarbageNodes? = nil,
     digits: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeDigits = garbageBeforeDigits?.createGarbageNodes()
     self.digits = digits
   }
 
@@ -2070,10 +2424,12 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDigits: ExpressibleAsGarbageNodes? = nil,
     digits: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeDigits: garbageBeforeDigits,
       digits: TokenSyntax.integerLiteral(digits)
     )
   }
@@ -2084,6 +2440,7 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   /// - Returns: The built `IntegerLiteralExprSyntax`.
   func buildIntegerLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IntegerLiteralExprSyntax {
     let result = SyntaxFactory.makeIntegerLiteralExpr(
+      garbage: garbageBeforeDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
       digits: digits
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2116,6 +2473,7 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   }
 }
 public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr {
+  let garbageBeforeBooleanLiteral: GarbageNodes?
   let booleanLiteral: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -2124,12 +2482,15 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
 
   /// Creates a `BooleanLiteralExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBooleanLiteral: 
   ///   - booleanLiteral: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBooleanLiteral: ExpressibleAsGarbageNodes? = nil,
     booleanLiteral: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBooleanLiteral = garbageBeforeBooleanLiteral?.createGarbageNodes()
     self.booleanLiteral = booleanLiteral
     assert(booleanLiteral.text == "true" || booleanLiteral.text == "false")
   }
@@ -2141,6 +2502,7 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// - Returns: The built `BooleanLiteralExprSyntax`.
   func buildBooleanLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BooleanLiteralExprSyntax {
     let result = SyntaxFactory.makeBooleanLiteralExpr(
+      garbage: garbageBeforeBooleanLiteral?.buildGarbageNodes(format: format, leadingTrivia: nil),
       booleanLiteral: booleanLiteral
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2173,10 +2535,15 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   }
 }
 public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
+  let garbageBeforeConditionExpression: GarbageNodes?
   let conditionExpression: ExprBuildable
+  let garbageBetweenConditionExpressionAndQuestionMark: GarbageNodes?
   let questionMark: TokenSyntax
+  let garbageBetweenQuestionMarkAndFirstChoice: GarbageNodes?
   let firstChoice: ExprBuildable
+  let garbageBetweenFirstChoiceAndColonMark: GarbageNodes?
   let colonMark: TokenSyntax
+  let garbageBetweenColonMarkAndSecondChoice: GarbageNodes?
   let secondChoice: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -2185,26 +2552,41 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
 
   /// Creates a `TernaryExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeConditionExpression: 
   ///   - conditionExpression: 
+  ///   - garbageBetweenConditionExpressionAndQuestionMark: 
   ///   - questionMark: 
+  ///   - garbageBetweenQuestionMarkAndFirstChoice: 
   ///   - firstChoice: 
+  ///   - garbageBetweenFirstChoiceAndColonMark: 
   ///   - colonMark: 
+  ///   - garbageBetweenColonMarkAndSecondChoice: 
   ///   - secondChoice: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeConditionExpression: ExpressibleAsGarbageNodes? = nil,
     conditionExpression: ExpressibleAsExprBuildable,
+    garbageBetweenConditionExpressionAndQuestionMark: ExpressibleAsGarbageNodes? = nil,
     questionMark: TokenSyntax = TokenSyntax.`infixQuestionMark`,
+    garbageBetweenQuestionMarkAndFirstChoice: ExpressibleAsGarbageNodes? = nil,
     firstChoice: ExpressibleAsExprBuildable,
+    garbageBetweenFirstChoiceAndColonMark: ExpressibleAsGarbageNodes? = nil,
     colonMark: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonMarkAndSecondChoice: ExpressibleAsGarbageNodes? = nil,
     secondChoice: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeConditionExpression = garbageBeforeConditionExpression?.createGarbageNodes()
     self.conditionExpression = conditionExpression.createExprBuildable()
+    self.garbageBetweenConditionExpressionAndQuestionMark = garbageBetweenConditionExpressionAndQuestionMark?.createGarbageNodes()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
+    self.garbageBetweenQuestionMarkAndFirstChoice = garbageBetweenQuestionMarkAndFirstChoice?.createGarbageNodes()
     self.firstChoice = firstChoice.createExprBuildable()
+    self.garbageBetweenFirstChoiceAndColonMark = garbageBetweenFirstChoiceAndColonMark?.createGarbageNodes()
     self.colonMark = colonMark
     assert(colonMark.text == ":")
+    self.garbageBetweenColonMarkAndSecondChoice = garbageBetweenColonMarkAndSecondChoice?.createGarbageNodes()
     self.secondChoice = secondChoice.createExprBuildable()
   }
 
@@ -2215,10 +2597,15 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// - Returns: The built `TernaryExprSyntax`.
   func buildTernaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TernaryExprSyntax {
     let result = SyntaxFactory.makeTernaryExpr(
+      garbage: garbageBeforeConditionExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditionExpression: conditionExpression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenConditionExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark,
+      garbage: garbageBetweenQuestionMarkAndFirstChoice?.buildGarbageNodes(format: format, leadingTrivia: nil),
       firstChoice: firstChoice.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenFirstChoiceAndColonMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colonMark: colonMark,
+      garbage: garbageBetweenColonMarkAndSecondChoice?.buildGarbageNodes(format: format, leadingTrivia: nil),
       secondChoice: secondChoice.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2251,9 +2638,13 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   }
 }
 public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
+  let garbageBeforeBase: GarbageNodes?
   let base: ExprBuildable?
+  let garbageBetweenBaseAndDot: GarbageNodes?
   let dot: TokenSyntax
+  let garbageBetweenDotAndName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndDeclNameArguments: GarbageNodes?
   let declNameArguments: DeclNameArguments?
 
   /// The leading trivia attached to this syntax node once built.
@@ -2262,22 +2653,34 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
 
   /// Creates a `MemberAccessExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBase: 
   ///   - base: 
+  ///   - garbageBetweenBaseAndDot: 
   ///   - dot: 
+  ///   - garbageBetweenDotAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndDeclNameArguments: 
   ///   - declNameArguments: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBase: ExpressibleAsGarbageNodes? = nil,
     base: ExpressibleAsExprBuildable? = nil,
+    garbageBetweenBaseAndDot: ExpressibleAsGarbageNodes? = nil,
     dot: TokenSyntax,
+    garbageBetweenDotAndName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndDeclNameArguments: ExpressibleAsGarbageNodes? = nil,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBase = garbageBeforeBase?.createGarbageNodes()
     self.base = base?.createExprBuildable()
+    self.garbageBetweenBaseAndDot = garbageBetweenBaseAndDot?.createGarbageNodes()
     self.dot = dot
     assert(dot.text == "." || dot.text == ".")
+    self.garbageBetweenDotAndName = garbageBetweenDotAndName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndDeclNameArguments = garbageBetweenNameAndDeclNameArguments?.createGarbageNodes()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
 
@@ -2288,9 +2691,13 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// - Returns: The built `MemberAccessExprSyntax`.
   func buildMemberAccessExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberAccessExprSyntax {
     let result = SyntaxFactory.makeMemberAccessExpr(
+      garbage: garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
       base: base?.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBaseAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       dot: dot,
+      garbage: garbageBetweenDotAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2323,7 +2730,9 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   }
 }
 public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
+  let garbageBeforeIsTok: GarbageNodes?
   let isTok: TokenSyntax
+  let garbageBetweenIsTokAndTypeName: GarbageNodes?
   let typeName: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -2332,16 +2741,22 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
 
   /// Creates a `IsExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIsTok: 
   ///   - isTok: 
+  ///   - garbageBetweenIsTokAndTypeName: 
   ///   - typeName: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIsTok: ExpressibleAsGarbageNodes? = nil,
     isTok: TokenSyntax = TokenSyntax.`is`,
+    garbageBetweenIsTokAndTypeName: ExpressibleAsGarbageNodes? = nil,
     typeName: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIsTok = garbageBeforeIsTok?.createGarbageNodes()
     self.isTok = isTok
     assert(isTok.text == "is")
+    self.garbageBetweenIsTokAndTypeName = garbageBetweenIsTokAndTypeName?.createGarbageNodes()
     self.typeName = typeName.createTypeBuildable()
   }
 
@@ -2352,7 +2767,9 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// - Returns: The built `IsExprSyntax`.
   func buildIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsExprSyntax {
     let result = SyntaxFactory.makeIsExpr(
+      garbage: garbageBeforeIsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       isTok: isTok,
+      garbage: garbageBetweenIsTokAndTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2385,8 +2802,11 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   }
 }
 public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
+  let garbageBeforeAsTok: GarbageNodes?
   let asTok: TokenSyntax
+  let garbageBetweenAsTokAndQuestionOrExclamationMark: GarbageNodes?
   let questionOrExclamationMark: TokenSyntax?
+  let garbageBetweenQuestionOrExclamationMarkAndTypeName: GarbageNodes?
   let typeName: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -2395,20 +2815,29 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
 
   /// Creates a `AsExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAsTok: 
   ///   - asTok: 
+  ///   - garbageBetweenAsTokAndQuestionOrExclamationMark: 
   ///   - questionOrExclamationMark: 
+  ///   - garbageBetweenQuestionOrExclamationMarkAndTypeName: 
   ///   - typeName: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAsTok: ExpressibleAsGarbageNodes? = nil,
     asTok: TokenSyntax = TokenSyntax.`as`,
+    garbageBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsGarbageNodes? = nil,
     questionOrExclamationMark: TokenSyntax? = nil,
+    garbageBetweenQuestionOrExclamationMarkAndTypeName: ExpressibleAsGarbageNodes? = nil,
     typeName: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAsTok = garbageBeforeAsTok?.createGarbageNodes()
     self.asTok = asTok
     assert(asTok.text == "as")
+    self.garbageBetweenAsTokAndQuestionOrExclamationMark = garbageBetweenAsTokAndQuestionOrExclamationMark?.createGarbageNodes()
     self.questionOrExclamationMark = questionOrExclamationMark
     assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == "?" || questionOrExclamationMark!.text == "!")
+    self.garbageBetweenQuestionOrExclamationMarkAndTypeName = garbageBetweenQuestionOrExclamationMarkAndTypeName?.createGarbageNodes()
     self.typeName = typeName.createTypeBuildable()
   }
 
@@ -2419,8 +2848,11 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// - Returns: The built `AsExprSyntax`.
   func buildAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsExprSyntax {
     let result = SyntaxFactory.makeAsExpr(
+      garbage: garbageBeforeAsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asTok: asTok,
+      garbage: garbageBetweenAsTokAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionOrExclamationMark: questionOrExclamationMark,
+      garbage: garbageBetweenQuestionOrExclamationMarkAndTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2453,6 +2885,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   }
 }
 public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
+  let garbageBeforeType: GarbageNodes?
   let type: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -2461,12 +2894,15 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
 
   /// Creates a `TypeExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeType: 
   ///   - type: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeType = garbageBeforeType?.createGarbageNodes()
     self.type = type.createTypeBuildable()
   }
 
@@ -2477,6 +2913,7 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// - Returns: The built `TypeExprSyntax`.
   func buildTypeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeExprSyntax {
     let result = SyntaxFactory.makeTypeExpr(
+      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2509,10 +2946,15 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   }
 }
 public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureItem, HasTrailingComma {
+  let garbageBeforeSpecifier: GarbageNodes?
   let specifier: TokenList?
+  let garbageBetweenSpecifierAndName: GarbageNodes?
   let name: TokenSyntax?
+  let garbageBetweenNameAndAssignToken: GarbageNodes?
   let assignToken: TokenSyntax?
+  let garbageBetweenAssignTokenAndExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -2521,25 +2963,40 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
 
   /// Creates a `ClosureCaptureItem` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeSpecifier: 
   ///   - specifier: 
+  ///   - garbageBetweenSpecifierAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndAssignToken: 
   ///   - assignToken: 
+  ///   - garbageBetweenAssignTokenAndExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeSpecifier: ExpressibleAsGarbageNodes? = nil,
     specifier: ExpressibleAsTokenList? = nil,
+    garbageBetweenSpecifierAndName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax? = nil,
+    garbageBetweenNameAndAssignToken: ExpressibleAsGarbageNodes? = nil,
     assignToken: TokenSyntax? = nil,
+    garbageBetweenAssignTokenAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeSpecifier = garbageBeforeSpecifier?.createGarbageNodes()
     self.specifier = specifier?.createTokenList()
+    self.garbageBetweenSpecifierAndName = garbageBetweenSpecifierAndName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndAssignToken = garbageBetweenNameAndAssignToken?.createGarbageNodes()
     self.assignToken = assignToken
     assert(assignToken == nil || assignToken!.text == "=")
+    self.garbageBetweenAssignTokenAndExpression = garbageBetweenAssignTokenAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndTrailingComma = garbageBetweenExpressionAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -2549,18 +3006,28 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeSpecifier: ExpressibleAsGarbageNodes? = nil,
     specifier: ExpressibleAsTokenList? = nil,
+    garbageBetweenSpecifierAndName: ExpressibleAsGarbageNodes? = nil,
     name: String?,
+    garbageBetweenNameAndAssignToken: ExpressibleAsGarbageNodes? = nil,
     assignToken: TokenSyntax? = nil,
+    garbageBetweenAssignTokenAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeSpecifier: garbageBeforeSpecifier,
       specifier: specifier,
+      garbageBetweenSpecifierAndName: garbageBetweenSpecifierAndName,
       name: name.map(TokenSyntax.identifier),
+      garbageBetweenNameAndAssignToken: garbageBetweenNameAndAssignToken,
       assignToken: assignToken,
+      garbageBetweenAssignTokenAndExpression: garbageBetweenAssignTokenAndExpression,
       expression: expression,
+      garbageBetweenExpressionAndTrailingComma: garbageBetweenExpressionAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -2571,10 +3038,15 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// - Returns: The built `ClosureCaptureItemSyntax`.
   func buildClosureCaptureItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
     let result = SyntaxFactory.makeClosureCaptureItem(
+      garbage: garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       specifier: specifier?.buildTokenList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenSpecifierAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndAssignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignToken: assignToken,
+      garbage: garbageBetweenAssignTokenAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2595,10 +3067,15 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeSpecifier: garbageBeforeSpecifier,
         specifier: specifier,
+        garbageBetweenSpecifierAndName: garbageBetweenSpecifierAndName,
         name: name,
+        garbageBetweenNameAndAssignToken: garbageBetweenNameAndAssignToken,
         assignToken: assignToken,
+        garbageBetweenAssignTokenAndExpression: garbageBetweenAssignTokenAndExpression,
         expression: expression,
+        garbageBetweenExpressionAndTrailingComma: garbageBetweenExpressionAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -2612,8 +3089,11 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
 
 }
 public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCaptureSignature {
+  let garbageBeforeLeftSquare: GarbageNodes?
   let leftSquare: TokenSyntax
+  let garbageBetweenLeftSquareAndItems: GarbageNodes?
   let items: ClosureCaptureItemList?
+  let garbageBetweenItemsAndRightSquare: GarbageNodes?
   let rightSquare: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -2622,19 +3102,28 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
 
   /// Creates a `ClosureCaptureSignature` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftSquare: 
   ///   - leftSquare: 
+  ///   - garbageBetweenLeftSquareAndItems: 
   ///   - items: 
+  ///   - garbageBetweenItemsAndRightSquare: 
   ///   - rightSquare: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftSquare: ExpressibleAsGarbageNodes? = nil,
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftSquareAndItems: ExpressibleAsGarbageNodes? = nil,
     items: ExpressibleAsClosureCaptureItemList? = nil,
+    garbageBetweenItemsAndRightSquare: ExpressibleAsGarbageNodes? = nil,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftSquare = garbageBeforeLeftSquare?.createGarbageNodes()
     self.leftSquare = leftSquare
     assert(leftSquare.text == "[")
+    self.garbageBetweenLeftSquareAndItems = garbageBetweenLeftSquareAndItems?.createGarbageNodes()
     self.items = items?.createClosureCaptureItemList()
+    self.garbageBetweenItemsAndRightSquare = garbageBetweenItemsAndRightSquare?.createGarbageNodes()
     self.rightSquare = rightSquare
     assert(rightSquare.text == "]")
   }
@@ -2644,14 +3133,20 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftSquare: ExpressibleAsGarbageNodes? = nil,
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftSquareAndItems: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenItemsAndRightSquare: ExpressibleAsGarbageNodes? = nil,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
     @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? = { nil }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftSquare: garbageBeforeLeftSquare,
       leftSquare: leftSquare,
+      garbageBetweenLeftSquareAndItems: garbageBetweenLeftSquareAndItems,
       items: itemsBuilder(),
+      garbageBetweenItemsAndRightSquare: garbageBetweenItemsAndRightSquare,
       rightSquare: rightSquare
     )
   }
@@ -2662,8 +3157,11 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// - Returns: The built `ClosureCaptureSignatureSyntax`.
   func buildClosureCaptureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
     let result = SyntaxFactory.makeClosureCaptureSignature(
+      garbage: garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
+      garbage: garbageBetweenLeftSquareAndItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
       items: items?.buildClosureCaptureItemList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenItemsAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2690,7 +3188,9 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
 
 }
 public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrailingComma {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -2699,15 +3199,21 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
 
   /// Creates a `ClosureParam` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndTrailingComma = garbageBetweenNameAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -2719,7 +3225,9 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// - Returns: The built `ClosureParamSyntax`.
   func buildClosureParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureParamSyntax {
     let result = SyntaxFactory.makeClosureParam(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2740,7 +3248,9 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeName: garbageBeforeName,
         name: name,
+        garbageBetweenNameAndTrailingComma: garbageBetweenNameAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -2754,12 +3264,19 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
 
 }
 public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndCapture: GarbageNodes?
   let capture: ClosureCaptureSignature?
+  let garbageBetweenCaptureAndInput: GarbageNodes?
   let input: SyntaxBuildable?
+  let garbageBetweenInputAndAsyncKeyword: GarbageNodes?
   let asyncKeyword: TokenSyntax?
+  let garbageBetweenAsyncKeywordAndThrowsTok: GarbageNodes?
   let throwsTok: TokenSyntax?
+  let garbageBetweenThrowsTokAndOutput: GarbageNodes?
   let output: ReturnClause?
+  let garbageBetweenOutputAndInTok: GarbageNodes?
   let inTok: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -2768,32 +3285,53 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
 
   /// Creates a `ClosureSignature` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndCapture: 
   ///   - capture: 
+  ///   - garbageBetweenCaptureAndInput: 
   ///   - input: 
+  ///   - garbageBetweenInputAndAsyncKeyword: 
   ///   - asyncKeyword: 
+  ///   - garbageBetweenAsyncKeywordAndThrowsTok: 
   ///   - throwsTok: 
+  ///   - garbageBetweenThrowsTokAndOutput: 
   ///   - output: 
+  ///   - garbageBetweenOutputAndInTok: 
   ///   - inTok: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndCapture: ExpressibleAsGarbageNodes? = nil,
     capture: ExpressibleAsClosureCaptureSignature? = nil,
+    garbageBetweenCaptureAndInput: ExpressibleAsGarbageNodes? = nil,
     input: ExpressibleAsSyntaxBuildable? = nil,
+    garbageBetweenInputAndAsyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncKeyword: TokenSyntax? = nil,
+    garbageBetweenAsyncKeywordAndThrowsTok: ExpressibleAsGarbageNodes? = nil,
     throwsTok: TokenSyntax? = nil,
+    garbageBetweenThrowsTokAndOutput: ExpressibleAsGarbageNodes? = nil,
     output: ExpressibleAsReturnClause? = nil,
+    garbageBetweenOutputAndInTok: ExpressibleAsGarbageNodes? = nil,
     inTok: TokenSyntax = TokenSyntax.`in`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndCapture = garbageBetweenAttributesAndCapture?.createGarbageNodes()
     self.capture = capture?.createClosureCaptureSignature()
+    self.garbageBetweenCaptureAndInput = garbageBetweenCaptureAndInput?.createGarbageNodes()
     self.input = input?.createSyntaxBuildable()
+    self.garbageBetweenInputAndAsyncKeyword = garbageBetweenInputAndAsyncKeyword?.createGarbageNodes()
     self.asyncKeyword = asyncKeyword
     assert(asyncKeyword == nil || asyncKeyword!.text == "async")
+    self.garbageBetweenAsyncKeywordAndThrowsTok = garbageBetweenAsyncKeywordAndThrowsTok?.createGarbageNodes()
     self.throwsTok = throwsTok
     assert(throwsTok == nil || throwsTok!.text == "throws")
+    self.garbageBetweenThrowsTokAndOutput = garbageBetweenThrowsTokAndOutput?.createGarbageNodes()
     self.output = output?.createReturnClause()
+    self.garbageBetweenOutputAndInTok = garbageBetweenOutputAndInTok?.createGarbageNodes()
     self.inTok = inTok
     assert(inTok.text == "in")
   }
@@ -2803,22 +3341,36 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndCapture: ExpressibleAsGarbageNodes? = nil,
     capture: ExpressibleAsClosureCaptureSignature? = nil,
+    garbageBetweenCaptureAndInput: ExpressibleAsGarbageNodes? = nil,
     input: ExpressibleAsSyntaxBuildable? = nil,
+    garbageBetweenInputAndAsyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncKeyword: String?,
+    garbageBetweenAsyncKeywordAndThrowsTok: ExpressibleAsGarbageNodes? = nil,
     throwsTok: TokenSyntax? = nil,
+    garbageBetweenThrowsTokAndOutput: ExpressibleAsGarbageNodes? = nil,
     output: ExpressibleAsReturnClause? = nil,
+    garbageBetweenOutputAndInTok: ExpressibleAsGarbageNodes? = nil,
     inTok: TokenSyntax = TokenSyntax.`in`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndCapture: garbageBetweenAttributesAndCapture,
       capture: capture,
+      garbageBetweenCaptureAndInput: garbageBetweenCaptureAndInput,
       input: input,
+      garbageBetweenInputAndAsyncKeyword: garbageBetweenInputAndAsyncKeyword,
       asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
+      garbageBetweenAsyncKeywordAndThrowsTok: garbageBetweenAsyncKeywordAndThrowsTok,
       throwsTok: throwsTok,
+      garbageBetweenThrowsTokAndOutput: garbageBetweenThrowsTokAndOutput,
       output: output,
+      garbageBetweenOutputAndInTok: garbageBetweenOutputAndInTok,
       inTok: inTok
     )
   }
@@ -2829,12 +3381,19 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// - Returns: The built `ClosureSignatureSyntax`.
   func buildClosureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
     let result = SyntaxFactory.makeClosureSignature(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndCapture?.buildGarbageNodes(format: format, leadingTrivia: nil),
       capture: capture?.buildClosureCaptureSignature(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenCaptureAndInput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       input: input?.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInputAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
+      garbage: garbageBetweenAsyncKeywordAndThrowsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsTok: throwsTok,
+      garbage: garbageBetweenThrowsTokAndOutput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       output: output?.buildReturnClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenOutputAndInTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inTok: inTok
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2861,9 +3420,13 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
 
 }
 public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
+  let garbageBeforeLeftBrace: GarbageNodes?
   let leftBrace: TokenSyntax
+  let garbageBetweenLeftBraceAndSignature: GarbageNodes?
   let signature: ClosureSignature?
+  let garbageBetweenSignatureAndStatements: GarbageNodes?
   let statements: CodeBlockItemList
+  let garbageBetweenStatementsAndRightBrace: GarbageNodes?
   let rightBrace: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -2872,22 +3435,34 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
 
   /// Creates a `ClosureExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftBrace: 
   ///   - leftBrace: 
+  ///   - garbageBetweenLeftBraceAndSignature: 
   ///   - signature: 
+  ///   - garbageBetweenSignatureAndStatements: 
   ///   - statements: 
+  ///   - garbageBetweenStatementsAndRightBrace: 
   ///   - rightBrace: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndSignature: ExpressibleAsGarbageNodes? = nil,
     signature: ExpressibleAsClosureSignature? = nil,
+    garbageBetweenSignatureAndStatements: ExpressibleAsGarbageNodes? = nil,
     statements: ExpressibleAsCodeBlockItemList,
+    garbageBetweenStatementsAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftBrace = garbageBeforeLeftBrace?.createGarbageNodes()
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
+    self.garbageBetweenLeftBraceAndSignature = garbageBetweenLeftBraceAndSignature?.createGarbageNodes()
     self.signature = signature?.createClosureSignature()
+    self.garbageBetweenSignatureAndStatements = garbageBetweenSignatureAndStatements?.createGarbageNodes()
     self.statements = statements.createCodeBlockItemList()
+    self.garbageBetweenStatementsAndRightBrace = garbageBetweenStatementsAndRightBrace?.createGarbageNodes()
     self.rightBrace = rightBrace
     assert(rightBrace.text == "}")
   }
@@ -2897,16 +3472,24 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndSignature: ExpressibleAsGarbageNodes? = nil,
     signature: ExpressibleAsClosureSignature? = nil,
+    garbageBetweenSignatureAndStatements: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenStatementsAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftBrace: garbageBeforeLeftBrace,
       leftBrace: leftBrace,
+      garbageBetweenLeftBraceAndSignature: garbageBetweenLeftBraceAndSignature,
       signature: signature,
+      garbageBetweenSignatureAndStatements: garbageBetweenSignatureAndStatements,
       statements: statementsBuilder(),
+      garbageBetweenStatementsAndRightBrace: garbageBetweenStatementsAndRightBrace,
       rightBrace: rightBrace
     )
   }
@@ -2917,9 +3500,13 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// - Returns: The built `ClosureExprSyntax`.
   func buildClosureExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureExprSyntax {
     let result = SyntaxFactory.makeClosureExpr(
+      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
+      garbage: garbageBetweenLeftBraceAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
       signature: signature?.buildClosureSignature(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenSignatureAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
+      garbage: garbageBetweenStatementsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2952,6 +3539,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   }
 }
 public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatternExpr {
+  let garbageBeforePattern: GarbageNodes?
   let pattern: PatternBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -2960,12 +3548,15 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
 
   /// Creates a `UnresolvedPatternExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePattern: 
   ///   - pattern: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePattern = garbageBeforePattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
   }
 
@@ -2976,6 +3567,7 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   /// - Returns: The built `UnresolvedPatternExprSyntax`.
   func buildUnresolvedPatternExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedPatternExprSyntax {
     let result = SyntaxFactory.makeUnresolvedPatternExpr(
+      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3008,8 +3600,11 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   }
 }
 public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMultipleTrailingClosureElement {
+  let garbageBeforeLabel: GarbageNodes?
   let label: TokenSyntax
+  let garbageBetweenLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndClosure: GarbageNodes?
   let closure: ClosureExpr
 
   /// The leading trivia attached to this syntax node once built.
@@ -3018,19 +3613,28 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
 
   /// Creates a `MultipleTrailingClosureElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabel: 
   ///   - label: 
+  ///   - garbageBetweenLabelAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndClosure: 
   ///   - closure: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndClosure: ExpressibleAsGarbageNodes? = nil,
     closure: ExpressibleAsClosureExpr
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabel = garbageBeforeLabel?.createGarbageNodes()
     self.label = label
+    self.garbageBetweenLabelAndColon = garbageBetweenLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndClosure = garbageBetweenColonAndClosure?.createGarbageNodes()
     self.closure = closure.createClosureExpr()
   }
 
@@ -3041,8 +3645,11 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// - Returns: The built `MultipleTrailingClosureElementSyntax`.
   func buildMultipleTrailingClosureElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MultipleTrailingClosureElementSyntax {
     let result = SyntaxFactory.makeMultipleTrailingClosureElement(
+      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
+      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
       closure: closure.buildClosureExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3069,11 +3676,17 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
 
 }
 public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
+  let garbageBeforeCalledExpression: GarbageNodes?
   let calledExpression: ExprBuildable
+  let garbageBetweenCalledExpressionAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax?
+  let garbageBetweenLeftParenAndArgumentList: GarbageNodes?
   let argumentList: TupleExprElementList
+  let garbageBetweenArgumentListAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax?
+  let garbageBetweenRightParenAndTrailingClosure: GarbageNodes?
   let trailingClosure: ClosureExpr?
+  let garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodes?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
   /// The leading trivia attached to this syntax node once built.
@@ -3082,29 +3695,47 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
 
   /// Creates a `FunctionCallExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeCalledExpression: 
   ///   - calledExpression: 
+  ///   - garbageBetweenCalledExpressionAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndArgumentList: 
   ///   - argumentList: 
+  ///   - garbageBetweenArgumentListAndRightParen: 
   ///   - rightParen: 
+  ///   - garbageBetweenRightParenAndTrailingClosure: 
   ///   - trailingClosure: 
+  ///   - garbageBetweenTrailingClosureAndAdditionalTrailingClosures: 
   ///   - additionalTrailingClosures: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCalledExpression: ExpressibleAsGarbageNodes? = nil,
     calledExpression: ExpressibleAsExprBuildable,
+    garbageBetweenCalledExpressionAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax? = nil,
+    garbageBetweenLeftParenAndArgumentList: ExpressibleAsGarbageNodes? = nil,
     argumentList: ExpressibleAsTupleExprElementList,
+    garbageBetweenArgumentListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax? = nil,
+    garbageBetweenRightParenAndTrailingClosure: ExpressibleAsGarbageNodes? = nil,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
+    garbageBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsGarbageNodes? = nil,
     additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeCalledExpression = garbageBeforeCalledExpression?.createGarbageNodes()
     self.calledExpression = calledExpression.createExprBuildable()
+    self.garbageBetweenCalledExpressionAndLeftParen = garbageBetweenCalledExpressionAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen == nil || leftParen!.text == "(")
+    self.garbageBetweenLeftParenAndArgumentList = garbageBetweenLeftParenAndArgumentList?.createGarbageNodes()
     self.argumentList = argumentList.createTupleExprElementList()
+    self.garbageBetweenArgumentListAndRightParen = garbageBetweenArgumentListAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen == nil || rightParen!.text == ")")
+    self.garbageBetweenRightParenAndTrailingClosure = garbageBetweenRightParenAndTrailingClosure?.createGarbageNodes()
     self.trailingClosure = trailingClosure?.createClosureExpr()
+    self.garbageBetweenTrailingClosureAndAdditionalTrailingClosures = garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.createGarbageNodes()
     self.additionalTrailingClosures = additionalTrailingClosures?.createMultipleTrailingClosureElementList()
   }
 
@@ -3113,20 +3744,32 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCalledExpression: ExpressibleAsGarbageNodes? = nil,
     calledExpression: ExpressibleAsExprBuildable,
+    garbageBetweenCalledExpressionAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax? = nil,
+    garbageBetweenLeftParenAndArgumentList: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenArgumentListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax? = nil,
+    garbageBetweenRightParenAndTrailingClosure: ExpressibleAsGarbageNodes? = nil,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
+    garbageBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsGarbageNodes? = nil,
     additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil,
     @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeCalledExpression: garbageBeforeCalledExpression,
       calledExpression: calledExpression,
+      garbageBetweenCalledExpressionAndLeftParen: garbageBetweenCalledExpressionAndLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndArgumentList: garbageBetweenLeftParenAndArgumentList,
       argumentList: argumentListBuilder(),
+      garbageBetweenArgumentListAndRightParen: garbageBetweenArgumentListAndRightParen,
       rightParen: rightParen,
+      garbageBetweenRightParenAndTrailingClosure: garbageBetweenRightParenAndTrailingClosure,
       trailingClosure: trailingClosure,
+      garbageBetweenTrailingClosureAndAdditionalTrailingClosures: garbageBetweenTrailingClosureAndAdditionalTrailingClosures,
       additionalTrailingClosures: additionalTrailingClosures
     )
   }
@@ -3137,11 +3780,17 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// - Returns: The built `FunctionCallExprSyntax`.
   func buildFunctionCallExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionCallExprSyntax {
     let result = SyntaxFactory.makeFunctionCallExpr(
+      garbage: garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenCalledExpressionAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentList: argumentList.buildTupleExprElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen,
+      garbage: garbageBetweenRightParenAndTrailingClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.buildGarbageNodes(format: format, leadingTrivia: nil),
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3174,11 +3823,17 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   }
 }
 public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
+  let garbageBeforeCalledExpression: GarbageNodes?
   let calledExpression: ExprBuildable
+  let garbageBetweenCalledExpressionAndLeftBracket: GarbageNodes?
   let leftBracket: TokenSyntax
+  let garbageBetweenLeftBracketAndArgumentList: GarbageNodes?
   let argumentList: TupleExprElementList
+  let garbageBetweenArgumentListAndRightBracket: GarbageNodes?
   let rightBracket: TokenSyntax
+  let garbageBetweenRightBracketAndTrailingClosure: GarbageNodes?
   let trailingClosure: ClosureExpr?
+  let garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodes?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
   /// The leading trivia attached to this syntax node once built.
@@ -3187,29 +3842,47 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
 
   /// Creates a `SubscriptExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeCalledExpression: 
   ///   - calledExpression: 
+  ///   - garbageBetweenCalledExpressionAndLeftBracket: 
   ///   - leftBracket: 
+  ///   - garbageBetweenLeftBracketAndArgumentList: 
   ///   - argumentList: 
+  ///   - garbageBetweenArgumentListAndRightBracket: 
   ///   - rightBracket: 
+  ///   - garbageBetweenRightBracketAndTrailingClosure: 
   ///   - trailingClosure: 
+  ///   - garbageBetweenTrailingClosureAndAdditionalTrailingClosures: 
   ///   - additionalTrailingClosures: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCalledExpression: ExpressibleAsGarbageNodes? = nil,
     calledExpression: ExpressibleAsExprBuildable,
+    garbageBetweenCalledExpressionAndLeftBracket: ExpressibleAsGarbageNodes? = nil,
     leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftBracketAndArgumentList: ExpressibleAsGarbageNodes? = nil,
     argumentList: ExpressibleAsTupleExprElementList,
+    garbageBetweenArgumentListAndRightBracket: ExpressibleAsGarbageNodes? = nil,
     rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`,
+    garbageBetweenRightBracketAndTrailingClosure: ExpressibleAsGarbageNodes? = nil,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
+    garbageBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsGarbageNodes? = nil,
     additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeCalledExpression = garbageBeforeCalledExpression?.createGarbageNodes()
     self.calledExpression = calledExpression.createExprBuildable()
+    self.garbageBetweenCalledExpressionAndLeftBracket = garbageBetweenCalledExpressionAndLeftBracket?.createGarbageNodes()
     self.leftBracket = leftBracket
     assert(leftBracket.text == "[")
+    self.garbageBetweenLeftBracketAndArgumentList = garbageBetweenLeftBracketAndArgumentList?.createGarbageNodes()
     self.argumentList = argumentList.createTupleExprElementList()
+    self.garbageBetweenArgumentListAndRightBracket = garbageBetweenArgumentListAndRightBracket?.createGarbageNodes()
     self.rightBracket = rightBracket
     assert(rightBracket.text == "]")
+    self.garbageBetweenRightBracketAndTrailingClosure = garbageBetweenRightBracketAndTrailingClosure?.createGarbageNodes()
     self.trailingClosure = trailingClosure?.createClosureExpr()
+    self.garbageBetweenTrailingClosureAndAdditionalTrailingClosures = garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.createGarbageNodes()
     self.additionalTrailingClosures = additionalTrailingClosures?.createMultipleTrailingClosureElementList()
   }
 
@@ -3218,20 +3891,32 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCalledExpression: ExpressibleAsGarbageNodes? = nil,
     calledExpression: ExpressibleAsExprBuildable,
+    garbageBetweenCalledExpressionAndLeftBracket: ExpressibleAsGarbageNodes? = nil,
     leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftBracketAndArgumentList: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenArgumentListAndRightBracket: ExpressibleAsGarbageNodes? = nil,
     rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`,
+    garbageBetweenRightBracketAndTrailingClosure: ExpressibleAsGarbageNodes? = nil,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
+    garbageBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsGarbageNodes? = nil,
     additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil,
     @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeCalledExpression: garbageBeforeCalledExpression,
       calledExpression: calledExpression,
+      garbageBetweenCalledExpressionAndLeftBracket: garbageBetweenCalledExpressionAndLeftBracket,
       leftBracket: leftBracket,
+      garbageBetweenLeftBracketAndArgumentList: garbageBetweenLeftBracketAndArgumentList,
       argumentList: argumentListBuilder(),
+      garbageBetweenArgumentListAndRightBracket: garbageBetweenArgumentListAndRightBracket,
       rightBracket: rightBracket,
+      garbageBetweenRightBracketAndTrailingClosure: garbageBetweenRightBracketAndTrailingClosure,
       trailingClosure: trailingClosure,
+      garbageBetweenTrailingClosureAndAdditionalTrailingClosures: garbageBetweenTrailingClosureAndAdditionalTrailingClosures,
       additionalTrailingClosures: additionalTrailingClosures
     )
   }
@@ -3242,11 +3927,17 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// - Returns: The built `SubscriptExprSyntax`.
   func buildSubscriptExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptExprSyntax {
     let result = SyntaxFactory.makeSubscriptExpr(
+      garbage: garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenCalledExpressionAndLeftBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBracket: leftBracket,
+      garbage: garbageBetweenLeftBracketAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentList: argumentList.buildTupleExprElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentListAndRightBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBracket: rightBracket,
+      garbage: garbageBetweenRightBracketAndTrailingClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.buildGarbageNodes(format: format, leadingTrivia: nil),
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3279,7 +3970,9 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   }
 }
 public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChainingExpr {
+  let garbageBeforeExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndQuestionMark: GarbageNodes?
   let questionMark: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -3288,15 +3981,21 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
 
   /// Creates a `OptionalChainingExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndQuestionMark: 
   ///   - questionMark: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndQuestionMark: ExpressibleAsGarbageNodes? = nil,
     questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeExpression = garbageBeforeExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndQuestionMark = garbageBetweenExpressionAndQuestionMark?.createGarbageNodes()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
   }
@@ -3308,7 +4007,9 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   /// - Returns: The built `OptionalChainingExprSyntax`.
   func buildOptionalChainingExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalChainingExprSyntax {
     let result = SyntaxFactory.makeOptionalChainingExpr(
+      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3341,7 +4042,9 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   }
 }
 public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
+  let garbageBeforeExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndExclamationMark: GarbageNodes?
   let exclamationMark: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -3350,15 +4053,21 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
 
   /// Creates a `ForcedValueExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndExclamationMark: 
   ///   - exclamationMark: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndExclamationMark: ExpressibleAsGarbageNodes? = nil,
     exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeExpression = garbageBeforeExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndExclamationMark = garbageBetweenExpressionAndExclamationMark?.createGarbageNodes()
     self.exclamationMark = exclamationMark
     assert(exclamationMark.text == "!")
   }
@@ -3370,7 +4079,9 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// - Returns: The built `ForcedValueExprSyntax`.
   func buildForcedValueExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForcedValueExprSyntax {
     let result = SyntaxFactory.makeForcedValueExpr(
+      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       exclamationMark: exclamationMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3403,7 +4114,9 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   }
 }
 public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
+  let garbageBeforeExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndOperatorToken: GarbageNodes?
   let operatorToken: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -3412,15 +4125,21 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
 
   /// Creates a `PostfixUnaryExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndOperatorToken: 
   ///   - operatorToken: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndOperatorToken: ExpressibleAsGarbageNodes? = nil,
     operatorToken: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeExpression = garbageBeforeExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndOperatorToken = garbageBetweenExpressionAndOperatorToken?.createGarbageNodes()
     self.operatorToken = operatorToken
   }
 
@@ -3429,12 +4148,16 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndOperatorToken: ExpressibleAsGarbageNodes? = nil,
     operatorToken: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeExpression: garbageBeforeExpression,
       expression: expression,
+      garbageBetweenExpressionAndOperatorToken: garbageBetweenExpressionAndOperatorToken,
       operatorToken: TokenSyntax.postfixOperator(operatorToken)
     )
   }
@@ -3445,7 +4168,9 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   /// - Returns: The built `PostfixUnaryExprSyntax`.
   func buildPostfixUnaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixUnaryExprSyntax {
     let result = SyntaxFactory.makePostfixUnaryExpr(
+      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3478,7 +4203,9 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   }
 }
 public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
+  let garbageBeforeExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndGenericArgumentClause: GarbageNodes?
   let genericArgumentClause: GenericArgumentClause
 
   /// The leading trivia attached to this syntax node once built.
@@ -3487,15 +4214,21 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
 
   /// Creates a `SpecializeExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndGenericArgumentClause: 
   ///   - genericArgumentClause: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndGenericArgumentClause: ExpressibleAsGarbageNodes? = nil,
     genericArgumentClause: ExpressibleAsGenericArgumentClause
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeExpression = garbageBeforeExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndGenericArgumentClause = garbageBetweenExpressionAndGenericArgumentClause?.createGarbageNodes()
     self.genericArgumentClause = genericArgumentClause.createGenericArgumentClause()
   }
 
@@ -3506,7 +4239,9 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// - Returns: The built `SpecializeExprSyntax`.
   func buildSpecializeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SpecializeExprSyntax {
     let result = SyntaxFactory.makeSpecializeExpr(
+      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3539,6 +4274,7 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   }
 }
 public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
+  let garbageBeforeContent: GarbageNodes?
   let content: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -3547,12 +4283,15 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
 
   /// Creates a `StringSegment` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeContent: 
   ///   - content: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeContent: ExpressibleAsGarbageNodes? = nil,
     content: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeContent = garbageBeforeContent?.createGarbageNodes()
     self.content = content
   }
 
@@ -3561,10 +4300,12 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeContent: ExpressibleAsGarbageNodes? = nil,
     content: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeContent: garbageBeforeContent,
       content: TokenSyntax.stringSegment(content)
     )
   }
@@ -3575,6 +4316,7 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// - Returns: The built `StringSegmentSyntax`.
   func buildStringSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringSegmentSyntax {
     let result = SyntaxFactory.makeStringSegment(
+      garbage: garbageBeforeContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
       content: content
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3601,10 +4343,15 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
 
 }
 public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment {
+  let garbageBeforeBackslash: GarbageNodes?
   let backslash: TokenSyntax
+  let garbageBetweenBackslashAndDelimiter: GarbageNodes?
   let delimiter: TokenSyntax?
+  let garbageBetweenDelimiterAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndExpressions: GarbageNodes?
   let expressions: TupleExprElementList
+  let garbageBetweenExpressionsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -3613,26 +4360,41 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
 
   /// Creates a `ExpressionSegment` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBackslash: 
   ///   - backslash: 
+  ///   - garbageBetweenBackslashAndDelimiter: 
   ///   - delimiter: 
+  ///   - garbageBetweenDelimiterAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndExpressions: 
   ///   - expressions: 
+  ///   - garbageBetweenExpressionsAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBackslash: ExpressibleAsGarbageNodes? = nil,
     backslash: TokenSyntax = TokenSyntax.`backslash`,
+    garbageBetweenBackslashAndDelimiter: ExpressibleAsGarbageNodes? = nil,
     delimiter: TokenSyntax? = nil,
+    garbageBetweenDelimiterAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndExpressions: ExpressibleAsGarbageNodes? = nil,
     expressions: ExpressibleAsTupleExprElementList,
+    garbageBetweenExpressionsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBackslash = garbageBeforeBackslash?.createGarbageNodes()
     self.backslash = backslash
     assert(backslash.text == "\\")
+    self.garbageBetweenBackslashAndDelimiter = garbageBetweenBackslashAndDelimiter?.createGarbageNodes()
     self.delimiter = delimiter
+    self.garbageBetweenDelimiterAndLeftParen = garbageBetweenDelimiterAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndExpressions = garbageBetweenLeftParenAndExpressions?.createGarbageNodes()
     self.expressions = expressions.createTupleExprElementList()
+    self.garbageBetweenExpressionsAndRightParen = garbageBetweenExpressionsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -3642,18 +4404,28 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBackslash: ExpressibleAsGarbageNodes? = nil,
     backslash: TokenSyntax = TokenSyntax.`backslash`,
+    garbageBetweenBackslashAndDelimiter: ExpressibleAsGarbageNodes? = nil,
     delimiter: String?,
+    garbageBetweenDelimiterAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndExpressions: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenExpressionsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`,
     @TupleExprElementListBuilder expressionsBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeBackslash: garbageBeforeBackslash,
       backslash: backslash,
+      garbageBetweenBackslashAndDelimiter: garbageBetweenBackslashAndDelimiter,
       delimiter: delimiter.map(TokenSyntax.rawStringDelimiter),
+      garbageBetweenDelimiterAndLeftParen: garbageBetweenDelimiterAndLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndExpressions: garbageBetweenLeftParenAndExpressions,
       expressions: expressionsBuilder(),
+      garbageBetweenExpressionsAndRightParen: garbageBetweenExpressionsAndRightParen,
       rightParen: rightParen
     )
   }
@@ -3664,10 +4436,15 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// - Returns: The built `ExpressionSegmentSyntax`.
   func buildExpressionSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionSegmentSyntax {
     let result = SyntaxFactory.makeExpressionSegment(
+      garbage: garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
       backslash: backslash,
+      garbage: garbageBetweenBackslashAndDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       delimiter: delimiter,
+      garbage: garbageBetweenDelimiterAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndExpressions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expressions: expressions.buildTupleExprElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3694,10 +4471,15 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
 
 }
 public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
+  let garbageBeforeOpenDelimiter: GarbageNodes?
   let openDelimiter: TokenSyntax?
+  let garbageBetweenOpenDelimiterAndOpenQuote: GarbageNodes?
   let openQuote: TokenSyntax
+  let garbageBetweenOpenQuoteAndSegments: GarbageNodes?
   let segments: StringLiteralSegments
+  let garbageBetweenSegmentsAndCloseQuote: GarbageNodes?
   let closeQuote: TokenSyntax
+  let garbageBetweenCloseQuoteAndCloseDelimiter: GarbageNodes?
   let closeDelimiter: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -3706,26 +4488,41 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
 
   /// Creates a `StringLiteralExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeOpenDelimiter: 
   ///   - openDelimiter: 
+  ///   - garbageBetweenOpenDelimiterAndOpenQuote: 
   ///   - openQuote: 
+  ///   - garbageBetweenOpenQuoteAndSegments: 
   ///   - segments: 
+  ///   - garbageBetweenSegmentsAndCloseQuote: 
   ///   - closeQuote: 
+  ///   - garbageBetweenCloseQuoteAndCloseDelimiter: 
   ///   - closeDelimiter: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeOpenDelimiter: ExpressibleAsGarbageNodes? = nil,
     openDelimiter: TokenSyntax? = nil,
+    garbageBetweenOpenDelimiterAndOpenQuote: ExpressibleAsGarbageNodes? = nil,
     openQuote: TokenSyntax,
+    garbageBetweenOpenQuoteAndSegments: ExpressibleAsGarbageNodes? = nil,
     segments: ExpressibleAsStringLiteralSegments,
+    garbageBetweenSegmentsAndCloseQuote: ExpressibleAsGarbageNodes? = nil,
     closeQuote: TokenSyntax,
+    garbageBetweenCloseQuoteAndCloseDelimiter: ExpressibleAsGarbageNodes? = nil,
     closeDelimiter: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeOpenDelimiter = garbageBeforeOpenDelimiter?.createGarbageNodes()
     self.openDelimiter = openDelimiter
+    self.garbageBetweenOpenDelimiterAndOpenQuote = garbageBetweenOpenDelimiterAndOpenQuote?.createGarbageNodes()
     self.openQuote = openQuote
     assert(openQuote.text == "\"" || openQuote.text == "\"\"\"")
+    self.garbageBetweenOpenQuoteAndSegments = garbageBetweenOpenQuoteAndSegments?.createGarbageNodes()
     self.segments = segments.createStringLiteralSegments()
+    self.garbageBetweenSegmentsAndCloseQuote = garbageBetweenSegmentsAndCloseQuote?.createGarbageNodes()
     self.closeQuote = closeQuote
     assert(closeQuote.text == "\"" || closeQuote.text == "\"\"\"")
+    self.garbageBetweenCloseQuoteAndCloseDelimiter = garbageBetweenCloseQuoteAndCloseDelimiter?.createGarbageNodes()
     self.closeDelimiter = closeDelimiter
   }
 
@@ -3734,18 +4531,28 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeOpenDelimiter: ExpressibleAsGarbageNodes? = nil,
     openDelimiter: String?,
+    garbageBetweenOpenDelimiterAndOpenQuote: ExpressibleAsGarbageNodes? = nil,
     openQuote: TokenSyntax,
+    garbageBetweenOpenQuoteAndSegments: ExpressibleAsGarbageNodes? = nil,
     segments: ExpressibleAsStringLiteralSegments,
+    garbageBetweenSegmentsAndCloseQuote: ExpressibleAsGarbageNodes? = nil,
     closeQuote: TokenSyntax,
+    garbageBetweenCloseQuoteAndCloseDelimiter: ExpressibleAsGarbageNodes? = nil,
     closeDelimiter: String?
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeOpenDelimiter: garbageBeforeOpenDelimiter,
       openDelimiter: openDelimiter.map(TokenSyntax.rawStringDelimiter),
+      garbageBetweenOpenDelimiterAndOpenQuote: garbageBetweenOpenDelimiterAndOpenQuote,
       openQuote: openQuote,
+      garbageBetweenOpenQuoteAndSegments: garbageBetweenOpenQuoteAndSegments,
       segments: segments,
+      garbageBetweenSegmentsAndCloseQuote: garbageBetweenSegmentsAndCloseQuote,
       closeQuote: closeQuote,
+      garbageBetweenCloseQuoteAndCloseDelimiter: garbageBetweenCloseQuoteAndCloseDelimiter,
       closeDelimiter: closeDelimiter.map(TokenSyntax.rawStringDelimiter)
     )
   }
@@ -3756,10 +4563,15 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// - Returns: The built `StringLiteralExprSyntax`.
   func buildStringLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringLiteralExprSyntax {
     let result = SyntaxFactory.makeStringLiteralExpr(
+      garbage: garbageBeforeOpenDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       openDelimiter: openDelimiter,
+      garbage: garbageBetweenOpenDelimiterAndOpenQuote?.buildGarbageNodes(format: format, leadingTrivia: nil),
       openQuote: openQuote,
+      garbage: garbageBetweenOpenQuoteAndSegments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       segments: segments.buildStringLiteralSegments(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenSegmentsAndCloseQuote?.buildGarbageNodes(format: format, leadingTrivia: nil),
       closeQuote: closeQuote,
+      garbage: garbageBetweenCloseQuoteAndCloseDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       closeDelimiter: closeDelimiter
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3792,6 +4604,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   }
 }
 public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
+  let garbageBeforeRegex: GarbageNodes?
   let regex: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -3800,12 +4613,15 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
 
   /// Creates a `RegexLiteralExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeRegex: 
   ///   - regex: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeRegex: ExpressibleAsGarbageNodes? = nil,
     regex: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeRegex = garbageBeforeRegex?.createGarbageNodes()
     self.regex = regex
   }
 
@@ -3814,10 +4630,12 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeRegex: ExpressibleAsGarbageNodes? = nil,
     regex: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeRegex: garbageBeforeRegex,
       regex: TokenSyntax.regexLiteral(regex)
     )
   }
@@ -3828,6 +4646,7 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// - Returns: The built `RegexLiteralExprSyntax`.
   func buildRegexLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RegexLiteralExprSyntax {
     let result = SyntaxFactory.makeRegexLiteralExpr(
+      garbage: garbageBeforeRegex?.buildGarbageNodes(format: format, leadingTrivia: nil),
       regex: regex
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3860,8 +4679,11 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   }
 }
 public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
+  let garbageBeforeBackslash: GarbageNodes?
   let backslash: TokenSyntax
+  let garbageBetweenBackslashAndRootExpr: GarbageNodes?
   let rootExpr: ExprBuildable?
+  let garbageBetweenRootExprAndExpression: GarbageNodes?
   let expression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -3870,19 +4692,28 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
 
   /// Creates a `KeyPathExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBackslash: 
   ///   - backslash: 
+  ///   - garbageBetweenBackslashAndRootExpr: 
   ///   - rootExpr: 
+  ///   - garbageBetweenRootExprAndExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBackslash: ExpressibleAsGarbageNodes? = nil,
     backslash: TokenSyntax = TokenSyntax.`backslash`,
+    garbageBetweenBackslashAndRootExpr: ExpressibleAsGarbageNodes? = nil,
     rootExpr: ExpressibleAsExprBuildable? = nil,
+    garbageBetweenRootExprAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBackslash = garbageBeforeBackslash?.createGarbageNodes()
     self.backslash = backslash
     assert(backslash.text == "\\")
+    self.garbageBetweenBackslashAndRootExpr = garbageBetweenBackslashAndRootExpr?.createGarbageNodes()
     self.rootExpr = rootExpr?.createExprBuildable()
+    self.garbageBetweenRootExprAndExpression = garbageBetweenRootExprAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
   }
 
@@ -3893,8 +4724,11 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// - Returns: The built `KeyPathExprSyntax`.
   func buildKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathExprSyntax {
     let result = SyntaxFactory.makeKeyPathExpr(
+      garbage: garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
       backslash: backslash,
+      garbage: garbageBetweenBackslashAndRootExpr?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rootExpr: rootExpr?.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenRootExprAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3927,6 +4761,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   }
 }
 public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
+  let garbageBeforePeriod: GarbageNodes?
   let period: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -3935,12 +4770,15 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
 
   /// Creates a `KeyPathBaseExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePeriod: 
   ///   - period: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax = TokenSyntax.`period`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePeriod = garbageBeforePeriod?.createGarbageNodes()
     self.period = period
     assert(period.text == ".")
   }
@@ -3952,6 +4790,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// - Returns: The built `KeyPathBaseExprSyntax`.
   func buildKeyPathBaseExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathBaseExprSyntax {
     let result = SyntaxFactory.makeKeyPathBaseExpr(
+      garbage: garbageBeforePeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3984,7 +4823,9 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   }
 }
 public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndDot: GarbageNodes?
   let dot: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -3993,15 +4834,21 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
 
   /// Creates a `ObjcNamePiece` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndDot: 
   ///   - dot: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndDot: ExpressibleAsGarbageNodes? = nil,
     dot: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndDot = garbageBetweenNameAndDot?.createGarbageNodes()
     self.dot = dot
     assert(dot == nil || dot!.text == ".")
   }
@@ -4011,12 +4858,16 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: String,
+    garbageBetweenNameAndDot: ExpressibleAsGarbageNodes? = nil,
     dot: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeName: garbageBeforeName,
       name: TokenSyntax.identifier(name),
+      garbageBetweenNameAndDot: garbageBetweenNameAndDot,
       dot: dot
     )
   }
@@ -4027,7 +4878,9 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// - Returns: The built `ObjcNamePieceSyntax`.
   func buildObjcNamePiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcNamePieceSyntax {
     let result = SyntaxFactory.makeObjcNamePiece(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       dot: dot
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4054,9 +4907,13 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
 
 }
 public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
+  let garbageBeforeKeyPath: GarbageNodes?
   let keyPath: TokenSyntax
+  let garbageBetweenKeyPathAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndName: GarbageNodes?
   let name: ObjcName
+  let garbageBetweenNameAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -4065,23 +4922,35 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
 
   /// Creates a `ObjcKeyPathExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeKeyPath: 
   ///   - keyPath: 
+  ///   - garbageBetweenKeyPathAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeKeyPath: ExpressibleAsGarbageNodes? = nil,
     keyPath: TokenSyntax = TokenSyntax.`poundKeyPath`,
+    garbageBetweenKeyPathAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndName: ExpressibleAsGarbageNodes? = nil,
     name: ExpressibleAsObjcName,
+    garbageBetweenNameAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeKeyPath = garbageBeforeKeyPath?.createGarbageNodes()
     self.keyPath = keyPath
     assert(keyPath.text == "#keyPath")
+    self.garbageBetweenKeyPathAndLeftParen = garbageBetweenKeyPathAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndName = garbageBetweenLeftParenAndName?.createGarbageNodes()
     self.name = name.createObjcName()
+    self.garbageBetweenNameAndRightParen = garbageBetweenNameAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -4093,9 +4962,13 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// - Returns: The built `ObjcKeyPathExprSyntax`.
   func buildObjcKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
     let result = SyntaxFactory.makeObjcKeyPathExpr(
+      garbage: garbageBeforeKeyPath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyPath: keyPath,
+      garbage: garbageBetweenKeyPathAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name.buildObjcName(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4128,11 +5001,17 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   }
 }
 public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
+  let garbageBeforePoundSelector: GarbageNodes?
   let poundSelector: TokenSyntax
+  let garbageBetweenPoundSelectorAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndKind: GarbageNodes?
   let kind: TokenSyntax?
+  let garbageBetweenKindAndColon: GarbageNodes?
   let colon: TokenSyntax?
+  let garbageBetweenColonAndName: GarbageNodes?
   let name: ExprBuildable
+  let garbageBetweenNameAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -4141,31 +5020,49 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
 
   /// Creates a `ObjcSelectorExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundSelector: 
   ///   - poundSelector: 
+  ///   - garbageBetweenPoundSelectorAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndKind: 
   ///   - kind: 
+  ///   - garbageBetweenKindAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundSelector: ExpressibleAsGarbageNodes? = nil,
     poundSelector: TokenSyntax = TokenSyntax.`poundSelector`,
+    garbageBetweenPoundSelectorAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndKind: ExpressibleAsGarbageNodes? = nil,
     kind: TokenSyntax? = nil,
+    garbageBetweenKindAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil,
+    garbageBetweenColonAndName: ExpressibleAsGarbageNodes? = nil,
     name: ExpressibleAsExprBuildable,
+    garbageBetweenNameAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundSelector = garbageBeforePoundSelector?.createGarbageNodes()
     self.poundSelector = poundSelector
     assert(poundSelector.text == "#selector")
+    self.garbageBetweenPoundSelectorAndLeftParen = garbageBetweenPoundSelectorAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndKind = garbageBetweenLeftParenAndKind?.createGarbageNodes()
     self.kind = kind
     assert(kind == nil || kind!.text == "getter" || kind!.text == "setter")
+    self.garbageBetweenKindAndColon = garbageBetweenKindAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
+    self.garbageBetweenColonAndName = garbageBetweenColonAndName?.createGarbageNodes()
     self.name = name.createExprBuildable()
+    self.garbageBetweenNameAndRightParen = garbageBetweenNameAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -4175,20 +5072,32 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundSelector: ExpressibleAsGarbageNodes? = nil,
     poundSelector: TokenSyntax = TokenSyntax.`poundSelector`,
+    garbageBetweenPoundSelectorAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndKind: ExpressibleAsGarbageNodes? = nil,
     kind: String?,
+    garbageBetweenKindAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil,
+    garbageBetweenColonAndName: ExpressibleAsGarbageNodes? = nil,
     name: ExpressibleAsExprBuildable,
+    garbageBetweenNameAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforePoundSelector: garbageBeforePoundSelector,
       poundSelector: poundSelector,
+      garbageBetweenPoundSelectorAndLeftParen: garbageBetweenPoundSelectorAndLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndKind: garbageBetweenLeftParenAndKind,
       kind: kind.map(TokenSyntax.contextualKeyword),
+      garbageBetweenKindAndColon: garbageBetweenKindAndColon,
       colon: colon,
+      garbageBetweenColonAndName: garbageBetweenColonAndName,
       name: name,
+      garbageBetweenNameAndRightParen: garbageBetweenNameAndRightParen,
       rightParen: rightParen
     )
   }
@@ -4199,11 +5108,17 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// - Returns: The built `ObjcSelectorExprSyntax`.
   func buildObjcSelectorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcSelectorExprSyntax {
     let result = SyntaxFactory.makeObjcSelectorExpr(
+      garbage: garbageBeforePoundSelector?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundSelector: poundSelector,
+      garbage: garbageBetweenPoundSelectorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       kind: kind,
+      garbage: garbageBetweenKindAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4236,7 +5151,9 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   }
 }
 public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigExpr {
+  let garbageBeforeBase: GarbageNodes?
   let base: ExprBuildable?
+  let garbageBetweenBaseAndConfig: GarbageNodes?
   let config: IfConfigDecl
 
   /// The leading trivia attached to this syntax node once built.
@@ -4245,15 +5162,21 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
 
   /// Creates a `PostfixIfConfigExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBase: 
   ///   - base: 
+  ///   - garbageBetweenBaseAndConfig: 
   ///   - config: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBase: ExpressibleAsGarbageNodes? = nil,
     base: ExpressibleAsExprBuildable? = nil,
+    garbageBetweenBaseAndConfig: ExpressibleAsGarbageNodes? = nil,
     config: ExpressibleAsIfConfigDecl
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBase = garbageBeforeBase?.createGarbageNodes()
     self.base = base?.createExprBuildable()
+    self.garbageBetweenBaseAndConfig = garbageBetweenBaseAndConfig?.createGarbageNodes()
     self.config = config.createIfConfigDecl()
   }
 
@@ -4264,7 +5187,9 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   /// - Returns: The built `PostfixIfConfigExprSyntax`.
   func buildPostfixIfConfigExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
     let result = SyntaxFactory.makePostfixIfConfigExpr(
+      garbage: garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
       base: base?.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBaseAndConfig?.buildGarbageNodes(format: format, leadingTrivia: nil),
       config: config.buildIfConfigDecl(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4297,6 +5222,7 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   }
 }
 public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlaceholderExpr {
+  let garbageBeforeIdentifier: GarbageNodes?
   let identifier: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -4305,12 +5231,15 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
 
   /// Creates a `EditorPlaceholderExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIdentifier: 
   ///   - identifier: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIdentifier = garbageBeforeIdentifier?.createGarbageNodes()
     self.identifier = identifier
   }
 
@@ -4319,10 +5248,12 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeIdentifier: garbageBeforeIdentifier,
       identifier: TokenSyntax.identifier(identifier)
     )
   }
@@ -4333,6 +5264,7 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// - Returns: The built `EditorPlaceholderExprSyntax`.
   func buildEditorPlaceholderExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EditorPlaceholderExprSyntax {
     let result = SyntaxFactory.makeEditorPlaceholderExpr(
+      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4365,9 +5297,13 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   }
 }
 public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
+  let garbageBeforeIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndArguments: GarbageNodes?
   let arguments: TupleExprElementList
+  let garbageBetweenArgumentsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -4376,23 +5312,35 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
 
   /// Creates a `ObjectLiteralExpr` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndArguments: 
   ///   - arguments: 
+  ///   - garbageBetweenArgumentsAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndArguments: ExpressibleAsGarbageNodes? = nil,
     arguments: ExpressibleAsTupleExprElementList,
+    garbageBetweenArgumentsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIdentifier = garbageBeforeIdentifier?.createGarbageNodes()
     self.identifier = identifier
     assert(identifier.text == "#colorLiteral" || identifier.text == "#fileLiteral" || identifier.text == "#imageLiteral")
+    self.garbageBetweenIdentifierAndLeftParen = garbageBetweenIdentifierAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndArguments = garbageBetweenLeftParenAndArguments?.createGarbageNodes()
     self.arguments = arguments.createTupleExprElementList()
+    self.garbageBetweenArgumentsAndRightParen = garbageBetweenArgumentsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -4402,16 +5350,24 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndArguments: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenArgumentsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @TupleExprElementListBuilder argumentsBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeIdentifier: garbageBeforeIdentifier,
       identifier: identifier,
+      garbageBetweenIdentifierAndLeftParen: garbageBetweenIdentifierAndLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndArguments: garbageBetweenLeftParenAndArguments,
       arguments: argumentsBuilder(),
+      garbageBetweenArgumentsAndRightParen: garbageBetweenArgumentsAndRightParen,
       rightParen: rightParen
     )
   }
@@ -4422,9 +5378,13 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// - Returns: The built `ObjectLiteralExprSyntax`.
   func buildObjectLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjectLiteralExprSyntax {
     let result = SyntaxFactory.makeObjectLiteralExpr(
+      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildTupleExprElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4457,7 +5417,9 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   }
 }
 public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializerClause {
+  let garbageBeforeEqual: GarbageNodes?
   let equal: TokenSyntax
+  let garbageBetweenEqualAndValue: GarbageNodes?
   let value: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -4466,16 +5428,22 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
 
   /// Creates a `TypeInitializerClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeEqual: 
   ///   - equal: 
+  ///   - garbageBetweenEqualAndValue: 
   ///   - value: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeEqual: ExpressibleAsGarbageNodes? = nil,
     equal: TokenSyntax = TokenSyntax.`equal`,
+    garbageBetweenEqualAndValue: ExpressibleAsGarbageNodes? = nil,
     value: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeEqual = garbageBeforeEqual?.createGarbageNodes()
     self.equal = equal
     assert(equal.text == "=")
+    self.garbageBetweenEqualAndValue = garbageBetweenEqualAndValue?.createGarbageNodes()
     self.value = value.createTypeBuildable()
   }
 
@@ -4486,7 +5454,9 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// - Returns: The built `TypeInitializerClauseSyntax`.
   func buildTypeInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInitializerClauseSyntax {
     let result = SyntaxFactory.makeTypeInitializerClause(
+      garbage: garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equal: equal,
+      garbage: garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4513,12 +5483,19 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
 
 }
 public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndTypealiasKeyword: GarbageNodes?
   let typealiasKeyword: TokenSyntax
+  let garbageBetweenTypealiasKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndGenericParameterClause: GarbageNodes?
   let genericParameterClause: GenericParameterClause?
+  let garbageBetweenGenericParameterClauseAndInitializer: GarbageNodes?
   let initializer: TypeInitializerClause
+  let garbageBetweenInitializerAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -4527,31 +5504,52 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
 
   /// Creates a `TypealiasDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndTypealiasKeyword: 
   ///   - typealiasKeyword: 
+  ///   - garbageBetweenTypealiasKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndGenericParameterClause: 
   ///   - genericParameterClause: 
+  ///   - garbageBetweenGenericParameterClauseAndInitializer: 
   ///   - initializer: 
+  ///   - garbageBetweenInitializerAndGenericWhereClause: 
   ///   - genericWhereClause: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndTypealiasKeyword: ExpressibleAsGarbageNodes? = nil,
     typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`,
+    garbageBetweenTypealiasKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsTypeInitializerClause,
+    garbageBetweenInitializerAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndTypealiasKeyword = garbageBetweenModifiersAndTypealiasKeyword?.createGarbageNodes()
     self.typealiasKeyword = typealiasKeyword
     assert(typealiasKeyword.text == "typealias")
+    self.garbageBetweenTypealiasKeywordAndIdentifier = garbageBetweenTypealiasKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndGenericParameterClause = garbageBetweenIdentifierAndGenericParameterClause?.createGarbageNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.garbageBetweenGenericParameterClauseAndInitializer = garbageBetweenGenericParameterClauseAndInitializer?.createGarbageNodes()
     self.initializer = initializer.createTypeInitializerClause()
+    self.garbageBetweenInitializerAndGenericWhereClause = garbageBetweenInitializerAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
   }
 
@@ -4560,22 +5558,36 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndTypealiasKeyword: ExpressibleAsGarbageNodes? = nil,
     typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`,
+    garbageBetweenTypealiasKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsTypeInitializerClause,
+    garbageBetweenInitializerAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndTypealiasKeyword: garbageBetweenModifiersAndTypealiasKeyword,
       typealiasKeyword: typealiasKeyword,
+      garbageBetweenTypealiasKeywordAndIdentifier: garbageBetweenTypealiasKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndGenericParameterClause: garbageBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
+      garbageBetweenGenericParameterClauseAndInitializer: garbageBetweenGenericParameterClauseAndInitializer,
       initializer: initializer,
+      garbageBetweenInitializerAndGenericWhereClause: garbageBetweenInitializerAndGenericWhereClause,
       genericWhereClause: genericWhereClause
     )
   }
@@ -4586,12 +5598,19 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// - Returns: The built `TypealiasDeclSyntax`.
   func buildTypealiasDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypealiasDeclSyntax {
     let result = SyntaxFactory.makeTypealiasDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndTypealiasKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typealiasKeyword: typealiasKeyword,
+      garbage: garbageBetweenTypealiasKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterClauseAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer.buildTypeInitializerClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInitializerAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4624,12 +5643,19 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   }
 }
 public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndAssociatedtypeKeyword: GarbageNodes?
   let associatedtypeKeyword: TokenSyntax
+  let garbageBetweenAssociatedtypeKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndInheritanceClause: GarbageNodes?
   let inheritanceClause: TypeInheritanceClause?
+  let garbageBetweenInheritanceClauseAndInitializer: GarbageNodes?
   let initializer: TypeInitializerClause?
+  let garbageBetweenInitializerAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -4638,31 +5664,52 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
 
   /// Creates a `AssociatedtypeDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndAssociatedtypeKeyword: 
   ///   - associatedtypeKeyword: 
+  ///   - garbageBetweenAssociatedtypeKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndInheritanceClause: 
   ///   - inheritanceClause: 
+  ///   - garbageBetweenInheritanceClauseAndInitializer: 
   ///   - initializer: 
+  ///   - garbageBetweenInitializerAndGenericWhereClause: 
   ///   - genericWhereClause: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndAssociatedtypeKeyword: ExpressibleAsGarbageNodes? = nil,
     associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`,
+    garbageBetweenAssociatedtypeKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsTypeInitializerClause? = nil,
+    garbageBetweenInitializerAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndAssociatedtypeKeyword = garbageBetweenModifiersAndAssociatedtypeKeyword?.createGarbageNodes()
     self.associatedtypeKeyword = associatedtypeKeyword
     assert(associatedtypeKeyword.text == "associatedtype")
+    self.garbageBetweenAssociatedtypeKeywordAndIdentifier = garbageBetweenAssociatedtypeKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndInheritanceClause = garbageBetweenIdentifierAndInheritanceClause?.createGarbageNodes()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.garbageBetweenInheritanceClauseAndInitializer = garbageBetweenInheritanceClauseAndInitializer?.createGarbageNodes()
     self.initializer = initializer?.createTypeInitializerClause()
+    self.garbageBetweenInitializerAndGenericWhereClause = garbageBetweenInitializerAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
   }
 
@@ -4671,22 +5718,36 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndAssociatedtypeKeyword: ExpressibleAsGarbageNodes? = nil,
     associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`,
+    garbageBetweenAssociatedtypeKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsTypeInitializerClause? = nil,
+    garbageBetweenInitializerAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndAssociatedtypeKeyword: garbageBetweenModifiersAndAssociatedtypeKeyword,
       associatedtypeKeyword: associatedtypeKeyword,
+      garbageBetweenAssociatedtypeKeywordAndIdentifier: garbageBetweenAssociatedtypeKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndInheritanceClause: garbageBetweenIdentifierAndInheritanceClause,
       inheritanceClause: inheritanceClause,
+      garbageBetweenInheritanceClauseAndInitializer: garbageBetweenInheritanceClauseAndInitializer,
       initializer: initializer,
+      garbageBetweenInitializerAndGenericWhereClause: garbageBetweenInitializerAndGenericWhereClause,
       genericWhereClause: genericWhereClause
     )
   }
@@ -4697,12 +5758,19 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   /// - Returns: The built `AssociatedtypeDeclSyntax`.
   func buildAssociatedtypeDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssociatedtypeDeclSyntax {
     let result = SyntaxFactory.makeAssociatedtypeDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndAssociatedtypeKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associatedtypeKeyword: associatedtypeKeyword,
+      garbage: garbageBetweenAssociatedtypeKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritanceClauseAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInitializerAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4735,8 +5803,11 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   }
 }
 public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndParameterList: GarbageNodes?
   let parameterList: FunctionParameterList
+  let garbageBetweenParameterListAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -4745,19 +5816,28 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
 
   /// Creates a `ParameterClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndParameterList: 
   ///   - parameterList: 
+  ///   - garbageBetweenParameterListAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndParameterList: ExpressibleAsGarbageNodes? = nil,
     parameterList: ExpressibleAsFunctionParameterList,
+    garbageBetweenParameterListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndParameterList = garbageBetweenLeftParenAndParameterList?.createGarbageNodes()
     self.parameterList = parameterList.createFunctionParameterList()
+    self.garbageBetweenParameterListAndRightParen = garbageBetweenParameterListAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -4767,14 +5847,20 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndParameterList: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenParameterListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @FunctionParameterListBuilder parameterListBuilder: () -> ExpressibleAsFunctionParameterList = { FunctionParameterList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftParen: garbageBeforeLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndParameterList: garbageBetweenLeftParenAndParameterList,
       parameterList: parameterListBuilder(),
+      garbageBetweenParameterListAndRightParen: garbageBetweenParameterListAndRightParen,
       rightParen: rightParen
     )
   }
@@ -4785,8 +5871,11 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// - Returns: The built `ParameterClauseSyntax`.
   func buildParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ParameterClauseSyntax {
     let result = SyntaxFactory.makeParameterClause(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameterList: parameterList.buildFunctionParameterList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenParameterListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4813,7 +5902,9 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
 
 }
 public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
+  let garbageBeforeArrow: GarbageNodes?
   let arrow: TokenSyntax
+  let garbageBetweenArrowAndReturnType: GarbageNodes?
   let returnType: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -4822,16 +5913,22 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
 
   /// Creates a `ReturnClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeArrow: 
   ///   - arrow: 
+  ///   - garbageBetweenArrowAndReturnType: 
   ///   - returnType: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeArrow: ExpressibleAsGarbageNodes? = nil,
     arrow: TokenSyntax = TokenSyntax.`arrow`,
+    garbageBetweenArrowAndReturnType: ExpressibleAsGarbageNodes? = nil,
     returnType: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeArrow = garbageBeforeArrow?.createGarbageNodes()
     self.arrow = arrow
     assert(arrow.text == "->")
+    self.garbageBetweenArrowAndReturnType = garbageBetweenArrowAndReturnType?.createGarbageNodes()
     self.returnType = returnType.createTypeBuildable()
   }
 
@@ -4842,7 +5939,9 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// - Returns: The built `ReturnClauseSyntax`.
   func buildReturnClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnClauseSyntax {
     let result = SyntaxFactory.makeReturnClause(
+      garbage: garbageBeforeArrow?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arrow: arrow,
+      garbage: garbageBetweenArrowAndReturnType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4869,9 +5968,13 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
 
 }
 public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature {
+  let garbageBeforeInput: GarbageNodes?
   let input: ParameterClause
+  let garbageBetweenInputAndAsyncOrReasyncKeyword: GarbageNodes?
   let asyncOrReasyncKeyword: TokenSyntax?
+  let garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodes?
   let throwsOrRethrowsKeyword: TokenSyntax?
+  let garbageBetweenThrowsOrRethrowsKeywordAndOutput: GarbageNodes?
   let output: ReturnClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -4880,23 +5983,35 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
 
   /// Creates a `FunctionSignature` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeInput: 
   ///   - input: 
+  ///   - garbageBetweenInputAndAsyncOrReasyncKeyword: 
   ///   - asyncOrReasyncKeyword: 
+  ///   - garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: 
   ///   - throwsOrRethrowsKeyword: 
+  ///   - garbageBetweenThrowsOrRethrowsKeywordAndOutput: 
   ///   - output: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeInput: ExpressibleAsGarbageNodes? = nil,
     input: ExpressibleAsParameterClause,
+    garbageBetweenInputAndAsyncOrReasyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncOrReasyncKeyword: TokenSyntax? = nil,
+    garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsGarbageNodes? = nil,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
+    garbageBetweenThrowsOrRethrowsKeywordAndOutput: ExpressibleAsGarbageNodes? = nil,
     output: ExpressibleAsReturnClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeInput = garbageBeforeInput?.createGarbageNodes()
     self.input = input.createParameterClause()
+    self.garbageBetweenInputAndAsyncOrReasyncKeyword = garbageBetweenInputAndAsyncOrReasyncKeyword?.createGarbageNodes()
     self.asyncOrReasyncKeyword = asyncOrReasyncKeyword
     assert(asyncOrReasyncKeyword == nil || asyncOrReasyncKeyword!.text == "async" || asyncOrReasyncKeyword!.text == "reasync")
+    self.garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword = garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.createGarbageNodes()
     self.throwsOrRethrowsKeyword = throwsOrRethrowsKeyword
     assert(throwsOrRethrowsKeyword == nil || throwsOrRethrowsKeyword!.text == "throws" || throwsOrRethrowsKeyword!.text == "rethrows")
+    self.garbageBetweenThrowsOrRethrowsKeywordAndOutput = garbageBetweenThrowsOrRethrowsKeywordAndOutput?.createGarbageNodes()
     self.output = output?.createReturnClause()
   }
 
@@ -4905,16 +6020,24 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeInput: ExpressibleAsGarbageNodes? = nil,
     input: ExpressibleAsParameterClause,
+    garbageBetweenInputAndAsyncOrReasyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncOrReasyncKeyword: String?,
+    garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsGarbageNodes? = nil,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
+    garbageBetweenThrowsOrRethrowsKeywordAndOutput: ExpressibleAsGarbageNodes? = nil,
     output: ExpressibleAsReturnClause? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeInput: garbageBeforeInput,
       input: input,
+      garbageBetweenInputAndAsyncOrReasyncKeyword: garbageBetweenInputAndAsyncOrReasyncKeyword,
       asyncOrReasyncKeyword: asyncOrReasyncKeyword.map(TokenSyntax.contextualKeyword),
+      garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword,
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
+      garbageBetweenThrowsOrRethrowsKeywordAndOutput: garbageBetweenThrowsOrRethrowsKeywordAndOutput,
       output: output
     )
   }
@@ -4925,9 +6048,13 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// - Returns: The built `FunctionSignatureSyntax`.
   func buildFunctionSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionSignatureSyntax {
     let result = SyntaxFactory.makeFunctionSignature(
+      garbage: garbageBeforeInput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       input: input.buildParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInputAndAsyncOrReasyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncOrReasyncKeyword: asyncOrReasyncKeyword,
+      garbage: garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
+      garbage: garbageBetweenThrowsOrRethrowsKeywordAndOutput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       output: output?.buildReturnClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4954,8 +6081,11 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
 
 }
 public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
+  let garbageBeforePoundKeyword: GarbageNodes?
   let poundKeyword: TokenSyntax
+  let garbageBetweenPoundKeywordAndCondition: GarbageNodes?
   let condition: ExprBuildable?
+  let garbageBetweenConditionAndElements: GarbageNodes?
   let elements: SyntaxBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -4964,19 +6094,28 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
 
   /// Creates a `IfConfigClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundKeyword: 
   ///   - poundKeyword: 
+  ///   - garbageBetweenPoundKeywordAndCondition: 
   ///   - condition: 
+  ///   - garbageBetweenConditionAndElements: 
   ///   - elements: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundKeyword: ExpressibleAsGarbageNodes? = nil,
     poundKeyword: TokenSyntax,
+    garbageBetweenPoundKeywordAndCondition: ExpressibleAsGarbageNodes? = nil,
     condition: ExpressibleAsExprBuildable? = nil,
+    garbageBetweenConditionAndElements: ExpressibleAsGarbageNodes? = nil,
     elements: ExpressibleAsSyntaxBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundKeyword = garbageBeforePoundKeyword?.createGarbageNodes()
     self.poundKeyword = poundKeyword
     assert(poundKeyword.text == "#if" || poundKeyword.text == "#elseif" || poundKeyword.text == "#else")
+    self.garbageBetweenPoundKeywordAndCondition = garbageBetweenPoundKeywordAndCondition?.createGarbageNodes()
     self.condition = condition?.createExprBuildable()
+    self.garbageBetweenConditionAndElements = garbageBetweenConditionAndElements?.createGarbageNodes()
     self.elements = elements.createSyntaxBuildable()
   }
 
@@ -4987,8 +6126,11 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// - Returns: The built `IfConfigClauseSyntax`.
   func buildIfConfigClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigClauseSyntax {
     let result = SyntaxFactory.makeIfConfigClause(
+      garbage: garbageBeforePoundKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundKeyword: poundKeyword,
+      garbage: garbageBetweenPoundKeywordAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition?.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenConditionAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5015,7 +6157,9 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
 
 }
 public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
+  let garbageBeforeClauses: GarbageNodes?
   let clauses: IfConfigClauseList
+  let garbageBetweenClausesAndPoundEndif: GarbageNodes?
   let poundEndif: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -5024,15 +6168,21 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
 
   /// Creates a `IfConfigDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeClauses: 
   ///   - clauses: 
+  ///   - garbageBetweenClausesAndPoundEndif: 
   ///   - poundEndif: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeClauses: ExpressibleAsGarbageNodes? = nil,
     clauses: ExpressibleAsIfConfigClauseList,
+    garbageBetweenClausesAndPoundEndif: ExpressibleAsGarbageNodes? = nil,
     poundEndif: TokenSyntax = TokenSyntax.`poundEndif`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeClauses = garbageBeforeClauses?.createGarbageNodes()
     self.clauses = clauses.createIfConfigClauseList()
+    self.garbageBetweenClausesAndPoundEndif = garbageBetweenClausesAndPoundEndif?.createGarbageNodes()
     self.poundEndif = poundEndif
     assert(poundEndif.text == "#endif")
   }
@@ -5044,7 +6194,9 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// - Returns: The built `IfConfigDeclSyntax`.
   func buildIfConfigDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
     let result = SyntaxFactory.makeIfConfigDecl(
+      garbage: garbageBeforeClauses?.buildGarbageNodes(format: format, leadingTrivia: nil),
       clauses: clauses.buildIfConfigClauseList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenClausesAndPoundEndif?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundEndif: poundEndif
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5077,9 +6229,13 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   }
 }
 public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
+  let garbageBeforePoundError: GarbageNodes?
   let poundError: TokenSyntax
+  let garbageBetweenPoundErrorAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndMessage: GarbageNodes?
   let message: StringLiteralExpr
+  let garbageBetweenMessageAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -5088,23 +6244,35 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
 
   /// Creates a `PoundErrorDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundError: 
   ///   - poundError: 
+  ///   - garbageBetweenPoundErrorAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndMessage: 
   ///   - message: 
+  ///   - garbageBetweenMessageAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundError: ExpressibleAsGarbageNodes? = nil,
     poundError: TokenSyntax = TokenSyntax.`poundError`,
+    garbageBetweenPoundErrorAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndMessage: ExpressibleAsGarbageNodes? = nil,
     message: ExpressibleAsStringLiteralExpr,
+    garbageBetweenMessageAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundError = garbageBeforePoundError?.createGarbageNodes()
     self.poundError = poundError
     assert(poundError.text == "#error")
+    self.garbageBetweenPoundErrorAndLeftParen = garbageBetweenPoundErrorAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndMessage = garbageBetweenLeftParenAndMessage?.createGarbageNodes()
     self.message = message.createStringLiteralExpr()
+    self.garbageBetweenMessageAndRightParen = garbageBetweenMessageAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -5116,9 +6284,13 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// - Returns: The built `PoundErrorDeclSyntax`.
   func buildPoundErrorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundErrorDeclSyntax {
     let result = SyntaxFactory.makePoundErrorDecl(
+      garbage: garbageBeforePoundError?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundError: poundError,
+      garbage: garbageBetweenPoundErrorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
       message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5151,9 +6323,13 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   }
 }
 public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
+  let garbageBeforePoundWarning: GarbageNodes?
   let poundWarning: TokenSyntax
+  let garbageBetweenPoundWarningAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndMessage: GarbageNodes?
   let message: StringLiteralExpr
+  let garbageBetweenMessageAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -5162,23 +6338,35 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
 
   /// Creates a `PoundWarningDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundWarning: 
   ///   - poundWarning: 
+  ///   - garbageBetweenPoundWarningAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndMessage: 
   ///   - message: 
+  ///   - garbageBetweenMessageAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundWarning: ExpressibleAsGarbageNodes? = nil,
     poundWarning: TokenSyntax = TokenSyntax.`poundWarning`,
+    garbageBetweenPoundWarningAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndMessage: ExpressibleAsGarbageNodes? = nil,
     message: ExpressibleAsStringLiteralExpr,
+    garbageBetweenMessageAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundWarning = garbageBeforePoundWarning?.createGarbageNodes()
     self.poundWarning = poundWarning
     assert(poundWarning.text == "#warning")
+    self.garbageBetweenPoundWarningAndLeftParen = garbageBetweenPoundWarningAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndMessage = garbageBetweenLeftParenAndMessage?.createGarbageNodes()
     self.message = message.createStringLiteralExpr()
+    self.garbageBetweenMessageAndRightParen = garbageBetweenMessageAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -5190,9 +6378,13 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// - Returns: The built `PoundWarningDeclSyntax`.
   func buildPoundWarningDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundWarningDeclSyntax {
     let result = SyntaxFactory.makePoundWarningDecl(
+      garbage: garbageBeforePoundWarning?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundWarning: poundWarning,
+      garbage: garbageBetweenPoundWarningAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
       message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5225,9 +6417,13 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   }
 }
 public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocation {
+  let garbageBeforePoundSourceLocation: GarbageNodes?
   let poundSourceLocation: TokenSyntax
+  let garbageBetweenPoundSourceLocationAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndArgs: GarbageNodes?
   let args: PoundSourceLocationArgs?
+  let garbageBetweenArgsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -5236,23 +6432,35 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
 
   /// Creates a `PoundSourceLocation` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundSourceLocation: 
   ///   - poundSourceLocation: 
+  ///   - garbageBetweenPoundSourceLocationAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndArgs: 
   ///   - args: 
+  ///   - garbageBetweenArgsAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundSourceLocation: ExpressibleAsGarbageNodes? = nil,
     poundSourceLocation: TokenSyntax = TokenSyntax.`poundSourceLocation`,
+    garbageBetweenPoundSourceLocationAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndArgs: ExpressibleAsGarbageNodes? = nil,
     args: ExpressibleAsPoundSourceLocationArgs? = nil,
+    garbageBetweenArgsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundSourceLocation = garbageBeforePoundSourceLocation?.createGarbageNodes()
     self.poundSourceLocation = poundSourceLocation
     assert(poundSourceLocation.text == "#sourceLocation")
+    self.garbageBetweenPoundSourceLocationAndLeftParen = garbageBetweenPoundSourceLocationAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndArgs = garbageBetweenLeftParenAndArgs?.createGarbageNodes()
     self.args = args?.createPoundSourceLocationArgs()
+    self.garbageBetweenArgsAndRightParen = garbageBetweenArgsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -5264,9 +6472,13 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// - Returns: The built `PoundSourceLocationSyntax`.
   func buildPoundSourceLocation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationSyntax {
     let result = SyntaxFactory.makePoundSourceLocation(
+      garbage: garbageBeforePoundSourceLocation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundSourceLocation: poundSourceLocation,
+      garbage: garbageBetweenPoundSourceLocationAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndArgs?.buildGarbageNodes(format: format, leadingTrivia: nil),
       args: args?.buildPoundSourceLocationArgs(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5299,12 +6511,19 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   }
 }
 public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSourceLocationArgs {
+  let garbageBeforeFileArgLabel: GarbageNodes?
   let fileArgLabel: TokenSyntax
+  let garbageBetweenFileArgLabelAndFileArgColon: GarbageNodes?
   let fileArgColon: TokenSyntax
+  let garbageBetweenFileArgColonAndFileName: GarbageNodes?
   let fileName: TokenSyntax
+  let garbageBetweenFileNameAndComma: GarbageNodes?
   let comma: TokenSyntax
+  let garbageBetweenCommaAndLineArgLabel: GarbageNodes?
   let lineArgLabel: TokenSyntax
+  let garbageBetweenLineArgLabelAndLineArgColon: GarbageNodes?
   let lineArgColon: TokenSyntax
+  let garbageBetweenLineArgColonAndLineNumber: GarbageNodes?
   let lineNumber: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -5313,35 +6532,56 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
 
   /// Creates a `PoundSourceLocationArgs` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeFileArgLabel: 
   ///   - fileArgLabel: 
+  ///   - garbageBetweenFileArgLabelAndFileArgColon: 
   ///   - fileArgColon: 
+  ///   - garbageBetweenFileArgColonAndFileName: 
   ///   - fileName: 
+  ///   - garbageBetweenFileNameAndComma: 
   ///   - comma: 
+  ///   - garbageBetweenCommaAndLineArgLabel: 
   ///   - lineArgLabel: 
+  ///   - garbageBetweenLineArgLabelAndLineArgColon: 
   ///   - lineArgColon: 
+  ///   - garbageBetweenLineArgColonAndLineNumber: 
   ///   - lineNumber: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeFileArgLabel: ExpressibleAsGarbageNodes? = nil,
     fileArgLabel: TokenSyntax,
+    garbageBetweenFileArgLabelAndFileArgColon: ExpressibleAsGarbageNodes? = nil,
     fileArgColon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenFileArgColonAndFileName: ExpressibleAsGarbageNodes? = nil,
     fileName: TokenSyntax,
+    garbageBetweenFileNameAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax = TokenSyntax.`comma`,
+    garbageBetweenCommaAndLineArgLabel: ExpressibleAsGarbageNodes? = nil,
     lineArgLabel: TokenSyntax,
+    garbageBetweenLineArgLabelAndLineArgColon: ExpressibleAsGarbageNodes? = nil,
     lineArgColon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenLineArgColonAndLineNumber: ExpressibleAsGarbageNodes? = nil,
     lineNumber: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeFileArgLabel = garbageBeforeFileArgLabel?.createGarbageNodes()
     self.fileArgLabel = fileArgLabel
     assert(fileArgLabel.text == "file")
+    self.garbageBetweenFileArgLabelAndFileArgColon = garbageBetweenFileArgLabelAndFileArgColon?.createGarbageNodes()
     self.fileArgColon = fileArgColon
     assert(fileArgColon.text == ":")
+    self.garbageBetweenFileArgColonAndFileName = garbageBetweenFileArgColonAndFileName?.createGarbageNodes()
     self.fileName = fileName
+    self.garbageBetweenFileNameAndComma = garbageBetweenFileNameAndComma?.createGarbageNodes()
     self.comma = comma
     assert(comma.text == ",")
+    self.garbageBetweenCommaAndLineArgLabel = garbageBetweenCommaAndLineArgLabel?.createGarbageNodes()
     self.lineArgLabel = lineArgLabel
     assert(lineArgLabel.text == "line")
+    self.garbageBetweenLineArgLabelAndLineArgColon = garbageBetweenLineArgLabelAndLineArgColon?.createGarbageNodes()
     self.lineArgColon = lineArgColon
     assert(lineArgColon.text == ":")
+    self.garbageBetweenLineArgColonAndLineNumber = garbageBetweenLineArgColonAndLineNumber?.createGarbageNodes()
     self.lineNumber = lineNumber
   }
 
@@ -5350,22 +6590,36 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeFileArgLabel: ExpressibleAsGarbageNodes? = nil,
     fileArgLabel: String,
+    garbageBetweenFileArgLabelAndFileArgColon: ExpressibleAsGarbageNodes? = nil,
     fileArgColon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenFileArgColonAndFileName: ExpressibleAsGarbageNodes? = nil,
     fileName: String,
+    garbageBetweenFileNameAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax = TokenSyntax.`comma`,
+    garbageBetweenCommaAndLineArgLabel: ExpressibleAsGarbageNodes? = nil,
     lineArgLabel: String,
+    garbageBetweenLineArgLabelAndLineArgColon: ExpressibleAsGarbageNodes? = nil,
     lineArgColon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenLineArgColonAndLineNumber: ExpressibleAsGarbageNodes? = nil,
     lineNumber: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeFileArgLabel: garbageBeforeFileArgLabel,
       fileArgLabel: TokenSyntax.identifier(fileArgLabel),
+      garbageBetweenFileArgLabelAndFileArgColon: garbageBetweenFileArgLabelAndFileArgColon,
       fileArgColon: fileArgColon,
+      garbageBetweenFileArgColonAndFileName: garbageBetweenFileArgColonAndFileName,
       fileName: TokenSyntax.stringLiteral(fileName),
+      garbageBetweenFileNameAndComma: garbageBetweenFileNameAndComma,
       comma: comma,
+      garbageBetweenCommaAndLineArgLabel: garbageBetweenCommaAndLineArgLabel,
       lineArgLabel: TokenSyntax.identifier(lineArgLabel),
+      garbageBetweenLineArgLabelAndLineArgColon: garbageBetweenLineArgLabelAndLineArgColon,
       lineArgColon: lineArgColon,
+      garbageBetweenLineArgColonAndLineNumber: garbageBetweenLineArgColonAndLineNumber,
       lineNumber: TokenSyntax.integerLiteral(lineNumber)
     )
   }
@@ -5376,12 +6630,19 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// - Returns: The built `PoundSourceLocationArgsSyntax`.
   func buildPoundSourceLocationArgs(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationArgsSyntax {
     let result = SyntaxFactory.makePoundSourceLocationArgs(
+      garbage: garbageBeforeFileArgLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fileArgLabel: fileArgLabel,
+      garbage: garbageBetweenFileArgLabelAndFileArgColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fileArgColon: fileArgColon,
+      garbage: garbageBetweenFileArgColonAndFileName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fileName: fileName,
+      garbage: garbageBetweenFileNameAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
+      garbage: garbageBetweenCommaAndLineArgLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       lineArgLabel: lineArgLabel,
+      garbage: garbageBetweenLineArgLabelAndLineArgColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       lineArgColon: lineArgColon,
+      garbage: garbageBetweenLineArgColonAndLineNumber?.buildGarbageNodes(format: format, leadingTrivia: nil),
       lineNumber: lineNumber
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5408,8 +6669,11 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
 
 }
 public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDetail {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndDetail: GarbageNodes?
   let detail: TokenSyntax
+  let garbageBetweenDetailAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -5418,19 +6682,28 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
 
   /// Creates a `DeclModifierDetail` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndDetail: 
   ///   - detail: 
+  ///   - garbageBetweenDetailAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndDetail: ExpressibleAsGarbageNodes? = nil,
     detail: TokenSyntax,
+    garbageBetweenDetailAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndDetail = garbageBetweenLeftParenAndDetail?.createGarbageNodes()
     self.detail = detail
+    self.garbageBetweenDetailAndRightParen = garbageBetweenDetailAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -5440,14 +6713,20 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndDetail: ExpressibleAsGarbageNodes? = nil,
     detail: String,
+    garbageBetweenDetailAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftParen: garbageBeforeLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndDetail: garbageBetweenLeftParenAndDetail,
       detail: TokenSyntax.identifier(detail),
+      garbageBetweenDetailAndRightParen: garbageBetweenDetailAndRightParen,
       rightParen: rightParen
     )
   }
@@ -5458,8 +6737,11 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   /// - Returns: The built `DeclModifierDetailSyntax`.
   func buildDeclModifierDetail(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierDetailSyntax {
     let result = SyntaxFactory.makeDeclModifierDetail(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
       detail: detail,
+      garbage: garbageBetweenDetailAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5486,7 +6768,9 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
 
 }
 public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndDetail: GarbageNodes?
   let detail: DeclModifierDetail?
 
   /// The leading trivia attached to this syntax node once built.
@@ -5495,16 +6779,22 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
 
   /// Creates a `DeclModifier` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndDetail: 
   ///   - detail: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndDetail: ExpressibleAsGarbageNodes? = nil,
     detail: ExpressibleAsDeclModifierDetail? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
     assert(name.text == "class" || name.text == "convenience" || name.text == "dynamic" || name.text == "final" || name.text == "infix" || name.text == "lazy" || name.text == "optional" || name.text == "override" || name.text == "postfix" || name.text == "prefix" || name.text == "required" || name.text == "static" || name.text == "unowned" || name.text == "weak" || name.text == "private" || name.text == "fileprivate" || name.text == "internal" || name.text == "public" || name.text == "open" || name.text == "mutating" || name.text == "nonmutating" || name.text == "indirect" || name.text == "__consuming" || name.text == "actor" || name.text == "async" || name.text == "distributed" || name.text == "isolated" || name.text == "nonisolated" || name.text == "_const" || name.text == "_local")
+    self.garbageBetweenNameAndDetail = garbageBetweenNameAndDetail?.createGarbageNodes()
     self.detail = detail?.createDeclModifierDetail()
   }
 
@@ -5515,7 +6805,9 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// - Returns: The built `DeclModifierSyntax`.
   func buildDeclModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierSyntax {
     let result = SyntaxFactory.makeDeclModifier(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
       detail: detail?.buildDeclModifierDetail(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5542,7 +6834,9 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
 
 }
 public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTrailingComma {
+  let garbageBeforeTypeName: GarbageNodes?
   let typeName: TypeBuildable
+  let garbageBetweenTypeNameAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -5551,15 +6845,21 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
 
   /// Creates a `InheritedType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeTypeName: 
   ///   - typeName: 
+  ///   - garbageBetweenTypeNameAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeTypeName: ExpressibleAsGarbageNodes? = nil,
     typeName: ExpressibleAsTypeBuildable,
+    garbageBetweenTypeNameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeTypeName = garbageBeforeTypeName?.createGarbageNodes()
     self.typeName = typeName.createTypeBuildable()
+    self.garbageBetweenTypeNameAndTrailingComma = garbageBetweenTypeNameAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -5571,7 +6871,9 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   /// - Returns: The built `InheritedTypeSyntax`.
   func buildInheritedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InheritedTypeSyntax {
     let result = SyntaxFactory.makeInheritedType(
+      garbage: garbageBeforeTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeName: typeName.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5592,7 +6894,9 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeTypeName: garbageBeforeTypeName,
         typeName: typeName,
+        garbageBetweenTypeNameAndTrailingComma: garbageBetweenTypeNameAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -5606,7 +6910,9 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
 
 }
 public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritanceClause {
+  let garbageBeforeColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndInheritedTypeCollection: GarbageNodes?
   let inheritedTypeCollection: InheritedTypeList
 
   /// The leading trivia attached to this syntax node once built.
@@ -5615,16 +6921,22 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
 
   /// Creates a `TypeInheritanceClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndInheritedTypeCollection: 
   ///   - inheritedTypeCollection: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndInheritedTypeCollection: ExpressibleAsGarbageNodes? = nil,
     inheritedTypeCollection: ExpressibleAsInheritedTypeList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeColon = garbageBeforeColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndInheritedTypeCollection = garbageBetweenColonAndInheritedTypeCollection?.createGarbageNodes()
     self.inheritedTypeCollection = inheritedTypeCollection.createInheritedTypeList()
   }
 
@@ -5633,12 +6945,16 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndInheritedTypeCollection: ExpressibleAsGarbageNodes? = nil,
     @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> ExpressibleAsInheritedTypeList = { InheritedTypeList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeColon: garbageBeforeColon,
       colon: colon,
+      garbageBetweenColonAndInheritedTypeCollection: garbageBetweenColonAndInheritedTypeCollection,
       inheritedTypeCollection: inheritedTypeCollectionBuilder()
     )
   }
@@ -5649,7 +6965,9 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// - Returns: The built `TypeInheritanceClauseSyntax`.
   func buildTypeInheritanceClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInheritanceClauseSyntax {
     let result = SyntaxFactory.makeTypeInheritanceClause(
+      garbage: garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndInheritedTypeCollection?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5676,13 +6994,21 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
 
 }
 public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndClassKeyword: GarbageNodes?
   let classKeyword: TokenSyntax
+  let garbageBetweenClassKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndGenericParameterClause: GarbageNodes?
   let genericParameterClause: GenericParameterClause?
+  let garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodes?
   let inheritanceClause: TypeInheritanceClause?
+  let garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndMembers: GarbageNodes?
   let members: MemberDeclBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -5691,34 +7017,58 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
 
   /// Creates a `ClassDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndClassKeyword: 
   ///   - classKeyword: 
+  ///   - garbageBetweenClassKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndGenericParameterClause: 
   ///   - genericParameterClause: 
+  ///   - garbageBetweenGenericParameterClauseAndInheritanceClause: 
   ///   - inheritanceClause: 
+  ///   - garbageBetweenInheritanceClauseAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndClassKeyword: ExpressibleAsGarbageNodes? = nil,
     classKeyword: TokenSyntax = TokenSyntax.`class`,
+    garbageBetweenClassKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndClassKeyword = garbageBetweenModifiersAndClassKeyword?.createGarbageNodes()
     self.classKeyword = classKeyword
     assert(classKeyword.text == "class")
+    self.garbageBetweenClassKeywordAndIdentifier = garbageBetweenClassKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndGenericParameterClause = garbageBetweenIdentifierAndGenericParameterClause?.createGarbageNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.garbageBetweenGenericParameterClauseAndInheritanceClause = garbageBetweenGenericParameterClauseAndInheritanceClause?.createGarbageNodes()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.garbageBetweenInheritanceClauseAndGenericWhereClause = garbageBetweenInheritanceClauseAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndMembers = garbageBetweenGenericWhereClauseAndMembers?.createGarbageNodes()
     self.members = members.createMemberDeclBlock()
   }
 
@@ -5727,24 +7077,40 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndClassKeyword: ExpressibleAsGarbageNodes? = nil,
     classKeyword: TokenSyntax = TokenSyntax.`class`,
+    garbageBetweenClassKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndClassKeyword: garbageBetweenModifiersAndClassKeyword,
       classKeyword: classKeyword,
+      garbageBetweenClassKeywordAndIdentifier: garbageBetweenClassKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndGenericParameterClause: garbageBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
+      garbageBetweenGenericParameterClauseAndInheritanceClause: garbageBetweenGenericParameterClauseAndInheritanceClause,
       inheritanceClause: inheritanceClause,
+      garbageBetweenInheritanceClauseAndGenericWhereClause: garbageBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndMembers: garbageBetweenGenericWhereClauseAndMembers,
       members: membersBuilder()
     )
   }
@@ -5755,13 +7121,21 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// - Returns: The built `ClassDeclSyntax`.
   func buildClassDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassDeclSyntax {
     let result = SyntaxFactory.makeClassDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndClassKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       classKeyword: classKeyword,
+      garbage: garbageBetweenClassKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5794,13 +7168,21 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   }
 }
 public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndActorKeyword: GarbageNodes?
   let actorKeyword: TokenSyntax
+  let garbageBetweenActorKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndGenericParameterClause: GarbageNodes?
   let genericParameterClause: GenericParameterClause?
+  let garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodes?
   let inheritanceClause: TypeInheritanceClause?
+  let garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndMembers: GarbageNodes?
   let members: MemberDeclBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -5809,34 +7191,58 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
 
   /// Creates a `ActorDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndActorKeyword: 
   ///   - actorKeyword: 
+  ///   - garbageBetweenActorKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndGenericParameterClause: 
   ///   - genericParameterClause: 
+  ///   - garbageBetweenGenericParameterClauseAndInheritanceClause: 
   ///   - inheritanceClause: 
+  ///   - garbageBetweenInheritanceClauseAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndActorKeyword: ExpressibleAsGarbageNodes? = nil,
     actorKeyword: TokenSyntax,
+    garbageBetweenActorKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndActorKeyword = garbageBetweenModifiersAndActorKeyword?.createGarbageNodes()
     self.actorKeyword = actorKeyword
     assert(actorKeyword.text == "actor")
+    self.garbageBetweenActorKeywordAndIdentifier = garbageBetweenActorKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndGenericParameterClause = garbageBetweenIdentifierAndGenericParameterClause?.createGarbageNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.garbageBetweenGenericParameterClauseAndInheritanceClause = garbageBetweenGenericParameterClauseAndInheritanceClause?.createGarbageNodes()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.garbageBetweenInheritanceClauseAndGenericWhereClause = garbageBetweenInheritanceClauseAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndMembers = garbageBetweenGenericWhereClauseAndMembers?.createGarbageNodes()
     self.members = members.createMemberDeclBlock()
   }
 
@@ -5845,24 +7251,40 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndActorKeyword: ExpressibleAsGarbageNodes? = nil,
     actorKeyword: String,
+    garbageBetweenActorKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndActorKeyword: garbageBetweenModifiersAndActorKeyword,
       actorKeyword: TokenSyntax.contextualKeyword(actorKeyword),
+      garbageBetweenActorKeywordAndIdentifier: garbageBetweenActorKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndGenericParameterClause: garbageBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
+      garbageBetweenGenericParameterClauseAndInheritanceClause: garbageBetweenGenericParameterClauseAndInheritanceClause,
       inheritanceClause: inheritanceClause,
+      garbageBetweenInheritanceClauseAndGenericWhereClause: garbageBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndMembers: garbageBetweenGenericWhereClauseAndMembers,
       members: membersBuilder()
     )
   }
@@ -5873,13 +7295,21 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// - Returns: The built `ActorDeclSyntax`.
   func buildActorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ActorDeclSyntax {
     let result = SyntaxFactory.makeActorDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndActorKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       actorKeyword: actorKeyword,
+      garbage: garbageBetweenActorKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5912,13 +7342,21 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   }
 }
 public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndStructKeyword: GarbageNodes?
   let structKeyword: TokenSyntax
+  let garbageBetweenStructKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndGenericParameterClause: GarbageNodes?
   let genericParameterClause: GenericParameterClause?
+  let garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodes?
   let inheritanceClause: TypeInheritanceClause?
+  let garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndMembers: GarbageNodes?
   let members: MemberDeclBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -5927,34 +7365,58 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
 
   /// Creates a `StructDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndStructKeyword: 
   ///   - structKeyword: 
+  ///   - garbageBetweenStructKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndGenericParameterClause: 
   ///   - genericParameterClause: 
+  ///   - garbageBetweenGenericParameterClauseAndInheritanceClause: 
   ///   - inheritanceClause: 
+  ///   - garbageBetweenInheritanceClauseAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndStructKeyword: ExpressibleAsGarbageNodes? = nil,
     structKeyword: TokenSyntax = TokenSyntax.`struct`,
+    garbageBetweenStructKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndStructKeyword = garbageBetweenModifiersAndStructKeyword?.createGarbageNodes()
     self.structKeyword = structKeyword
     assert(structKeyword.text == "struct")
+    self.garbageBetweenStructKeywordAndIdentifier = garbageBetweenStructKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndGenericParameterClause = garbageBetweenIdentifierAndGenericParameterClause?.createGarbageNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.garbageBetweenGenericParameterClauseAndInheritanceClause = garbageBetweenGenericParameterClauseAndInheritanceClause?.createGarbageNodes()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.garbageBetweenInheritanceClauseAndGenericWhereClause = garbageBetweenInheritanceClauseAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndMembers = garbageBetweenGenericWhereClauseAndMembers?.createGarbageNodes()
     self.members = members.createMemberDeclBlock()
   }
 
@@ -5963,24 +7425,40 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndStructKeyword: ExpressibleAsGarbageNodes? = nil,
     structKeyword: TokenSyntax = TokenSyntax.`struct`,
+    garbageBetweenStructKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndStructKeyword: garbageBetweenModifiersAndStructKeyword,
       structKeyword: structKeyword,
+      garbageBetweenStructKeywordAndIdentifier: garbageBetweenStructKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndGenericParameterClause: garbageBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
+      garbageBetweenGenericParameterClauseAndInheritanceClause: garbageBetweenGenericParameterClauseAndInheritanceClause,
       inheritanceClause: inheritanceClause,
+      garbageBetweenInheritanceClauseAndGenericWhereClause: garbageBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndMembers: garbageBetweenGenericWhereClauseAndMembers,
       members: membersBuilder()
     )
   }
@@ -5991,13 +7469,21 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// - Returns: The built `StructDeclSyntax`.
   func buildStructDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StructDeclSyntax {
     let result = SyntaxFactory.makeStructDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndStructKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       structKeyword: structKeyword,
+      garbage: garbageBetweenStructKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6030,13 +7516,21 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   }
 }
 public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndProtocolKeyword: GarbageNodes?
   let protocolKeyword: TokenSyntax
+  let garbageBetweenProtocolKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: GarbageNodes?
   let primaryAssociatedTypeClause: PrimaryAssociatedTypeClause?
+  let garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: GarbageNodes?
   let inheritanceClause: TypeInheritanceClause?
+  let garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndMembers: GarbageNodes?
   let members: MemberDeclBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -6045,34 +7539,58 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
 
   /// Creates a `ProtocolDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndProtocolKeyword: 
   ///   - protocolKeyword: 
+  ///   - garbageBetweenProtocolKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: 
   ///   - primaryAssociatedTypeClause: 
+  ///   - garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: 
   ///   - inheritanceClause: 
+  ///   - garbageBetweenInheritanceClauseAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndProtocolKeyword: ExpressibleAsGarbageNodes? = nil,
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
+    garbageBetweenProtocolKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsGarbageNodes? = nil,
     primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil,
+    garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndProtocolKeyword = garbageBetweenModifiersAndProtocolKeyword?.createGarbageNodes()
     self.protocolKeyword = protocolKeyword
     assert(protocolKeyword.text == "protocol")
+    self.garbageBetweenProtocolKeywordAndIdentifier = garbageBetweenProtocolKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndPrimaryAssociatedTypeClause = garbageBetweenIdentifierAndPrimaryAssociatedTypeClause?.createGarbageNodes()
     self.primaryAssociatedTypeClause = primaryAssociatedTypeClause?.createPrimaryAssociatedTypeClause()
+    self.garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause = garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.createGarbageNodes()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.garbageBetweenInheritanceClauseAndGenericWhereClause = garbageBetweenInheritanceClauseAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndMembers = garbageBetweenGenericWhereClauseAndMembers?.createGarbageNodes()
     self.members = members.createMemberDeclBlock()
   }
 
@@ -6081,24 +7599,40 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndProtocolKeyword: ExpressibleAsGarbageNodes? = nil,
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
+    garbageBetweenProtocolKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsGarbageNodes? = nil,
     primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil,
+    garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndProtocolKeyword: garbageBetweenModifiersAndProtocolKeyword,
       protocolKeyword: protocolKeyword,
+      garbageBetweenProtocolKeywordAndIdentifier: garbageBetweenProtocolKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: garbageBetweenIdentifierAndPrimaryAssociatedTypeClause,
       primaryAssociatedTypeClause: primaryAssociatedTypeClause,
+      garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause,
       inheritanceClause: inheritanceClause,
+      garbageBetweenInheritanceClauseAndGenericWhereClause: garbageBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndMembers: garbageBetweenGenericWhereClauseAndMembers,
       members: membersBuilder()
     )
   }
@@ -6109,13 +7643,21 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// - Returns: The built `ProtocolDeclSyntax`.
   func buildProtocolDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ProtocolDeclSyntax {
     let result = SyntaxFactory.makeProtocolDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndProtocolKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       protocolKeyword: protocolKeyword,
+      garbage: garbageBetweenProtocolKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndPrimaryAssociatedTypeClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       primaryAssociatedTypeClause: primaryAssociatedTypeClause?.buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6148,12 +7690,19 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   }
 }
 public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndExtensionKeyword: GarbageNodes?
   let extensionKeyword: TokenSyntax
+  let garbageBetweenExtensionKeywordAndExtendedType: GarbageNodes?
   let extendedType: TypeBuildable
+  let garbageBetweenExtendedTypeAndInheritanceClause: GarbageNodes?
   let inheritanceClause: TypeInheritanceClause?
+  let garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndMembers: GarbageNodes?
   let members: MemberDeclBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -6162,31 +7711,52 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
 
   /// Creates a `ExtensionDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndExtensionKeyword: 
   ///   - extensionKeyword: 
+  ///   - garbageBetweenExtensionKeywordAndExtendedType: 
   ///   - extendedType: 
+  ///   - garbageBetweenExtendedTypeAndInheritanceClause: 
   ///   - inheritanceClause: 
+  ///   - garbageBetweenInheritanceClauseAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndExtensionKeyword: ExpressibleAsGarbageNodes? = nil,
     extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
+    garbageBetweenExtensionKeywordAndExtendedType: ExpressibleAsGarbageNodes? = nil,
     extendedType: ExpressibleAsTypeBuildable,
+    garbageBetweenExtendedTypeAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndExtensionKeyword = garbageBetweenModifiersAndExtensionKeyword?.createGarbageNodes()
     self.extensionKeyword = extensionKeyword
     assert(extensionKeyword.text == "extension")
+    self.garbageBetweenExtensionKeywordAndExtendedType = garbageBetweenExtensionKeywordAndExtendedType?.createGarbageNodes()
     self.extendedType = extendedType.createTypeBuildable()
+    self.garbageBetweenExtendedTypeAndInheritanceClause = garbageBetweenExtendedTypeAndInheritanceClause?.createGarbageNodes()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.garbageBetweenInheritanceClauseAndGenericWhereClause = garbageBetweenInheritanceClauseAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndMembers = garbageBetweenGenericWhereClauseAndMembers?.createGarbageNodes()
     self.members = members.createMemberDeclBlock()
   }
 
@@ -6195,22 +7765,36 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndExtensionKeyword: ExpressibleAsGarbageNodes? = nil,
     extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
+    garbageBetweenExtensionKeywordAndExtendedType: ExpressibleAsGarbageNodes? = nil,
     extendedType: ExpressibleAsTypeBuildable,
+    garbageBetweenExtendedTypeAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndExtensionKeyword: garbageBetweenModifiersAndExtensionKeyword,
       extensionKeyword: extensionKeyword,
+      garbageBetweenExtensionKeywordAndExtendedType: garbageBetweenExtensionKeywordAndExtendedType,
       extendedType: extendedType,
+      garbageBetweenExtendedTypeAndInheritanceClause: garbageBetweenExtendedTypeAndInheritanceClause,
       inheritanceClause: inheritanceClause,
+      garbageBetweenInheritanceClauseAndGenericWhereClause: garbageBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndMembers: garbageBetweenGenericWhereClauseAndMembers,
       members: membersBuilder()
     )
   }
@@ -6221,12 +7805,19 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// - Returns: The built `ExtensionDeclSyntax`.
   func buildExtensionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExtensionDeclSyntax {
     let result = SyntaxFactory.makeExtensionDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndExtensionKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       extensionKeyword: extensionKeyword,
+      garbage: garbageBetweenExtensionKeywordAndExtendedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       extendedType: extendedType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExtendedTypeAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6259,8 +7850,11 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   }
 }
 public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
+  let garbageBeforeLeftBrace: GarbageNodes?
   let leftBrace: TokenSyntax
+  let garbageBetweenLeftBraceAndMembers: GarbageNodes?
   let members: MemberDeclList
+  let garbageBetweenMembersAndRightBrace: GarbageNodes?
   let rightBrace: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -6269,19 +7863,28 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
 
   /// Creates a `MemberDeclBlock` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftBrace: 
   ///   - leftBrace: 
+  ///   - garbageBetweenLeftBraceAndMembers: 
   ///   - members: 
+  ///   - garbageBetweenMembersAndRightBrace: 
   ///   - rightBrace: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndMembers: ExpressibleAsGarbageNodes? = nil,
     members: ExpressibleAsMemberDeclList,
+    garbageBetweenMembersAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftBrace = garbageBeforeLeftBrace?.createGarbageNodes()
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
+    self.garbageBetweenLeftBraceAndMembers = garbageBetweenLeftBraceAndMembers?.createGarbageNodes()
     self.members = members.createMemberDeclList()
+    self.garbageBetweenMembersAndRightBrace = garbageBetweenMembersAndRightBrace?.createGarbageNodes()
     self.rightBrace = rightBrace
     assert(rightBrace.text == "}")
   }
@@ -6291,14 +7894,20 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndMembers: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenMembersAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftBrace: garbageBeforeLeftBrace,
       leftBrace: leftBrace,
+      garbageBetweenLeftBraceAndMembers: garbageBetweenLeftBraceAndMembers,
       members: membersBuilder(),
+      garbageBetweenMembersAndRightBrace: garbageBetweenMembersAndRightBrace,
       rightBrace: rightBrace
     )
   }
@@ -6309,8 +7918,11 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// - Returns: The built `MemberDeclBlockSyntax`.
   func buildMemberDeclBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclBlockSyntax {
     let result = SyntaxFactory.makeMemberDeclBlock(
+      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
+      garbage: garbageBetweenLeftBraceAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclList(format: format._indented(), leadingTrivia: nil),
+      garbage: garbageBetweenMembersAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6338,7 +7950,9 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
 }
 /// A member declaration of a type consisting of a declaration and anoptional semicolon;
 public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListItem {
+  let garbageBeforeDecl: GarbageNodes?
   let decl: DeclBuildable
+  let garbageBetweenDeclAndSemicolon: GarbageNodes?
   let semicolon: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -6347,15 +7961,21 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
 
   /// Creates a `MemberDeclListItem` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeDecl: 
   ///   - decl: The declaration of the type member.
+  ///   - garbageBetweenDeclAndSemicolon: 
   ///   - semicolon: An optional trailing semicolon.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDecl: ExpressibleAsGarbageNodes? = nil,
     decl: ExpressibleAsDeclBuildable,
+    garbageBetweenDeclAndSemicolon: ExpressibleAsGarbageNodes? = nil,
     semicolon: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeDecl = garbageBeforeDecl?.createGarbageNodes()
     self.decl = decl.createDeclBuildable()
+    self.garbageBetweenDeclAndSemicolon = garbageBetweenDeclAndSemicolon?.createGarbageNodes()
     self.semicolon = semicolon
     assert(semicolon == nil || semicolon!.text == ";")
   }
@@ -6367,7 +7987,9 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// - Returns: The built `MemberDeclListItemSyntax`.
   func buildMemberDeclListItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclListItemSyntax {
     let result = SyntaxFactory.makeMemberDeclListItem(
+      garbage: garbageBeforeDecl?.buildGarbageNodes(format: format, leadingTrivia: nil),
       decl: decl.buildDecl(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenDeclAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       semicolon: semicolon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6394,7 +8016,9 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
 
 }
 public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
+  let garbageBeforeStatements: GarbageNodes?
   let statements: CodeBlockItemList
+  let garbageBetweenStatementsAndEOFToken: GarbageNodes?
   let eofToken: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -6403,15 +8027,21 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
 
   /// Creates a `SourceFile` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeStatements: 
   ///   - statements: 
+  ///   - garbageBetweenStatementsAndEOFToken: 
   ///   - eofToken: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeStatements: ExpressibleAsGarbageNodes? = nil,
     statements: ExpressibleAsCodeBlockItemList,
+    garbageBetweenStatementsAndEOFToken: ExpressibleAsGarbageNodes? = nil,
     eofToken: TokenSyntax = TokenSyntax.eof
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeStatements = garbageBeforeStatements?.createGarbageNodes()
     self.statements = statements.createCodeBlockItemList()
+    self.garbageBetweenStatementsAndEOFToken = garbageBetweenStatementsAndEOFToken?.createGarbageNodes()
     self.eofToken = eofToken
   }
 
@@ -6420,12 +8050,16 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeStatements: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenStatementsAndEOFToken: ExpressibleAsGarbageNodes? = nil,
     eofToken: TokenSyntax = TokenSyntax.eof,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeStatements: garbageBeforeStatements,
       statements: statementsBuilder(),
+      garbageBetweenStatementsAndEOFToken: garbageBetweenStatementsAndEOFToken,
       eofToken: eofToken
     )
   }
@@ -6436,7 +8070,9 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// - Returns: The built `SourceFileSyntax`.
   func buildSourceFile(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SourceFileSyntax {
     let result = SyntaxFactory.makeSourceFile(
+      garbage: garbageBeforeStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenStatementsAndEOFToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       eofToken: eofToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6463,7 +8099,9 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
 
 }
 public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause {
+  let garbageBeforeEqual: GarbageNodes?
   let equal: TokenSyntax
+  let garbageBetweenEqualAndValue: GarbageNodes?
   let value: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -6472,16 +8110,22 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
 
   /// Creates a `InitializerClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeEqual: 
   ///   - equal: 
+  ///   - garbageBetweenEqualAndValue: 
   ///   - value: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeEqual: ExpressibleAsGarbageNodes? = nil,
     equal: TokenSyntax = TokenSyntax.`equal`,
+    garbageBetweenEqualAndValue: ExpressibleAsGarbageNodes? = nil,
     value: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeEqual = garbageBeforeEqual?.createGarbageNodes()
     self.equal = equal
     assert(equal.text == "=")
+    self.garbageBetweenEqualAndValue = garbageBetweenEqualAndValue?.createGarbageNodes()
     self.value = value.createExprBuildable()
   }
 
@@ -6492,7 +8136,9 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// - Returns: The built `InitializerClauseSyntax`.
   func buildInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerClauseSyntax {
     let result = SyntaxFactory.makeInitializerClause(
+      garbage: garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equal: equal,
+      garbage: garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6519,13 +8165,21 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
 
 }
 public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter, HasTrailingComma {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndFirstName: GarbageNodes?
   let firstName: TokenSyntax?
+  let garbageBetweenFirstNameAndSecondName: GarbageNodes?
   let secondName: TokenSyntax?
+  let garbageBetweenSecondNameAndColon: GarbageNodes?
   let colon: TokenSyntax?
+  let garbageBetweenColonAndType: GarbageNodes?
   let type: TypeBuildable?
+  let garbageBetweenTypeAndEllipsis: GarbageNodes?
   let ellipsis: TokenSyntax?
+  let garbageBetweenEllipsisAndDefaultArgument: GarbageNodes?
   let defaultArgument: InitializerClause?
+  let garbageBetweenDefaultArgumentAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -6534,35 +8188,59 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
 
   /// Creates a `FunctionParameter` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndFirstName: 
   ///   - firstName: 
+  ///   - garbageBetweenFirstNameAndSecondName: 
   ///   - secondName: 
+  ///   - garbageBetweenSecondNameAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndType: 
   ///   - type: 
+  ///   - garbageBetweenTypeAndEllipsis: 
   ///   - ellipsis: 
+  ///   - garbageBetweenEllipsisAndDefaultArgument: 
   ///   - defaultArgument: 
+  ///   - garbageBetweenDefaultArgumentAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndFirstName: ExpressibleAsGarbageNodes? = nil,
     firstName: TokenSyntax? = nil,
+    garbageBetweenFirstNameAndSecondName: ExpressibleAsGarbageNodes? = nil,
     secondName: TokenSyntax? = nil,
+    garbageBetweenSecondNameAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil,
+    garbageBetweenColonAndType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable? = nil,
+    garbageBetweenTypeAndEllipsis: ExpressibleAsGarbageNodes? = nil,
     ellipsis: TokenSyntax? = nil,
+    garbageBetweenEllipsisAndDefaultArgument: ExpressibleAsGarbageNodes? = nil,
     defaultArgument: ExpressibleAsInitializerClause? = nil,
+    garbageBetweenDefaultArgumentAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndFirstName = garbageBetweenAttributesAndFirstName?.createGarbageNodes()
     self.firstName = firstName
+    self.garbageBetweenFirstNameAndSecondName = garbageBetweenFirstNameAndSecondName?.createGarbageNodes()
     self.secondName = secondName
+    self.garbageBetweenSecondNameAndColon = garbageBetweenSecondNameAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
+    self.garbageBetweenColonAndType = garbageBetweenColonAndType?.createGarbageNodes()
     self.type = type?.createTypeBuildable()
+    self.garbageBetweenTypeAndEllipsis = garbageBetweenTypeAndEllipsis?.createGarbageNodes()
     self.ellipsis = ellipsis
     assert(ellipsis == nil || ellipsis!.text == "...")
+    self.garbageBetweenEllipsisAndDefaultArgument = garbageBetweenEllipsisAndDefaultArgument?.createGarbageNodes()
     self.defaultArgument = defaultArgument?.createInitializerClause()
+    self.garbageBetweenDefaultArgumentAndTrailingComma = garbageBetweenDefaultArgumentAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -6574,13 +8252,21 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Returns: The built `FunctionParameterSyntax`.
   func buildFunctionParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
     let result = SyntaxFactory.makeFunctionParameter(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndFirstName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       firstName: firstName,
+      garbage: garbageBetweenFirstNameAndSecondName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       secondName: secondName,
+      garbage: garbageBetweenSecondNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type?.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAndEllipsis?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ellipsis: ellipsis,
+      garbage: garbageBetweenEllipsisAndDefaultArgument?.buildGarbageNodes(format: format, leadingTrivia: nil),
       defaultArgument: defaultArgument?.buildInitializerClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenDefaultArgumentAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6601,13 +8287,21 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeAttributes: garbageBeforeAttributes,
         attributes: attributes,
+        garbageBetweenAttributesAndFirstName: garbageBetweenAttributesAndFirstName,
         firstName: firstName,
+        garbageBetweenFirstNameAndSecondName: garbageBetweenFirstNameAndSecondName,
         secondName: secondName,
+        garbageBetweenSecondNameAndColon: garbageBetweenSecondNameAndColon,
         colon: colon,
+        garbageBetweenColonAndType: garbageBetweenColonAndType,
         type: type,
+        garbageBetweenTypeAndEllipsis: garbageBetweenTypeAndEllipsis,
         ellipsis: ellipsis,
+        garbageBetweenEllipsisAndDefaultArgument: garbageBetweenEllipsisAndDefaultArgument,
         defaultArgument: defaultArgument,
+        garbageBetweenDefaultArgumentAndTrailingComma: garbageBetweenDefaultArgumentAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -6621,13 +8315,21 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
 
 }
 public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndFuncKeyword: GarbageNodes?
   let funcKeyword: TokenSyntax
+  let garbageBetweenFuncKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndGenericParameterClause: GarbageNodes?
   let genericParameterClause: GenericParameterClause?
+  let garbageBetweenGenericParameterClauseAndSignature: GarbageNodes?
   let signature: FunctionSignature
+  let garbageBetweenSignatureAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndBody: GarbageNodes?
   let body: CodeBlock?
 
   /// The leading trivia attached to this syntax node once built.
@@ -6636,34 +8338,58 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
 
   /// Creates a `FunctionDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndFuncKeyword: 
   ///   - funcKeyword: 
+  ///   - garbageBetweenFuncKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndGenericParameterClause: 
   ///   - genericParameterClause: 
+  ///   - garbageBetweenGenericParameterClauseAndSignature: 
   ///   - signature: 
+  ///   - garbageBetweenSignatureAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndFuncKeyword: ExpressibleAsGarbageNodes? = nil,
     funcKeyword: TokenSyntax = TokenSyntax.`func`,
+    garbageBetweenFuncKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndSignature: ExpressibleAsGarbageNodes? = nil,
     signature: ExpressibleAsFunctionSignature,
+    garbageBetweenSignatureAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndFuncKeyword = garbageBetweenModifiersAndFuncKeyword?.createGarbageNodes()
     self.funcKeyword = funcKeyword
     assert(funcKeyword.text == "func")
+    self.garbageBetweenFuncKeywordAndIdentifier = garbageBetweenFuncKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndGenericParameterClause = garbageBetweenIdentifierAndGenericParameterClause?.createGarbageNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.garbageBetweenGenericParameterClauseAndSignature = garbageBetweenGenericParameterClauseAndSignature?.createGarbageNodes()
     self.signature = signature.createFunctionSignature()
+    self.garbageBetweenSignatureAndGenericWhereClause = garbageBetweenSignatureAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndBody = garbageBetweenGenericWhereClauseAndBody?.createGarbageNodes()
     self.body = body?.createCodeBlock()
   }
 
@@ -6672,24 +8398,40 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndFuncKeyword: ExpressibleAsGarbageNodes? = nil,
     funcKeyword: TokenSyntax = TokenSyntax.`func`,
+    garbageBetweenFuncKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndSignature: ExpressibleAsGarbageNodes? = nil,
     signature: ExpressibleAsFunctionSignature,
+    garbageBetweenSignatureAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndFuncKeyword: garbageBetweenModifiersAndFuncKeyword,
       funcKeyword: funcKeyword,
+      garbageBetweenFuncKeywordAndIdentifier: garbageBetweenFuncKeywordAndIdentifier,
       identifier: identifier,
+      garbageBetweenIdentifierAndGenericParameterClause: garbageBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
+      garbageBetweenGenericParameterClauseAndSignature: garbageBetweenGenericParameterClauseAndSignature,
       signature: signature,
+      garbageBetweenSignatureAndGenericWhereClause: garbageBetweenSignatureAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndBody: garbageBetweenGenericWhereClauseAndBody,
       body: bodyBuilder()
     )
   }
@@ -6700,13 +8442,21 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// - Returns: The built `FunctionDeclSyntax`.
   func buildFunctionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclSyntax {
     let result = SyntaxFactory.makeFunctionDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndFuncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       funcKeyword: funcKeyword,
+      garbage: garbageBetweenFuncKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterClauseAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
       signature: signature.buildFunctionSignature(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenSignatureAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6739,13 +8489,21 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   }
 }
 public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndInitKeyword: GarbageNodes?
   let initKeyword: TokenSyntax
+  let garbageBetweenInitKeywordAndOptionalMark: GarbageNodes?
   let optionalMark: TokenSyntax?
+  let garbageBetweenOptionalMarkAndGenericParameterClause: GarbageNodes?
   let genericParameterClause: GenericParameterClause?
+  let garbageBetweenGenericParameterClauseAndSignature: GarbageNodes?
   let signature: FunctionSignature
+  let garbageBetweenSignatureAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndBody: GarbageNodes?
   let body: CodeBlock?
 
   /// The leading trivia attached to this syntax node once built.
@@ -6754,35 +8512,59 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
 
   /// Creates a `InitializerDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndInitKeyword: 
   ///   - initKeyword: 
+  ///   - garbageBetweenInitKeywordAndOptionalMark: 
   ///   - optionalMark: 
+  ///   - garbageBetweenOptionalMarkAndGenericParameterClause: 
   ///   - genericParameterClause: 
+  ///   - garbageBetweenGenericParameterClauseAndSignature: 
   ///   - signature: 
+  ///   - garbageBetweenSignatureAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndInitKeyword: ExpressibleAsGarbageNodes? = nil,
     initKeyword: TokenSyntax = TokenSyntax.`init`,
+    garbageBetweenInitKeywordAndOptionalMark: ExpressibleAsGarbageNodes? = nil,
     optionalMark: TokenSyntax? = nil,
+    garbageBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndSignature: ExpressibleAsGarbageNodes? = nil,
     signature: ExpressibleAsFunctionSignature,
+    garbageBetweenSignatureAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndInitKeyword = garbageBetweenModifiersAndInitKeyword?.createGarbageNodes()
     self.initKeyword = initKeyword
     assert(initKeyword.text == "init")
+    self.garbageBetweenInitKeywordAndOptionalMark = garbageBetweenInitKeywordAndOptionalMark?.createGarbageNodes()
     self.optionalMark = optionalMark
     assert(optionalMark == nil || optionalMark!.text == "?" || optionalMark!.text == "?" || optionalMark!.text == "!")
+    self.garbageBetweenOptionalMarkAndGenericParameterClause = garbageBetweenOptionalMarkAndGenericParameterClause?.createGarbageNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.garbageBetweenGenericParameterClauseAndSignature = garbageBetweenGenericParameterClauseAndSignature?.createGarbageNodes()
     self.signature = signature.createFunctionSignature()
+    self.garbageBetweenSignatureAndGenericWhereClause = garbageBetweenSignatureAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndBody = garbageBetweenGenericWhereClauseAndBody?.createGarbageNodes()
     self.body = body?.createCodeBlock()
   }
 
@@ -6791,24 +8573,40 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndInitKeyword: ExpressibleAsGarbageNodes? = nil,
     initKeyword: TokenSyntax = TokenSyntax.`init`,
+    garbageBetweenInitKeywordAndOptionalMark: ExpressibleAsGarbageNodes? = nil,
     optionalMark: TokenSyntax? = nil,
+    garbageBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndSignature: ExpressibleAsGarbageNodes? = nil,
     signature: ExpressibleAsFunctionSignature,
+    garbageBetweenSignatureAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndInitKeyword: garbageBetweenModifiersAndInitKeyword,
       initKeyword: initKeyword,
+      garbageBetweenInitKeywordAndOptionalMark: garbageBetweenInitKeywordAndOptionalMark,
       optionalMark: optionalMark,
+      garbageBetweenOptionalMarkAndGenericParameterClause: garbageBetweenOptionalMarkAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
+      garbageBetweenGenericParameterClauseAndSignature: garbageBetweenGenericParameterClauseAndSignature,
       signature: signature,
+      garbageBetweenSignatureAndGenericWhereClause: garbageBetweenSignatureAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndBody: garbageBetweenGenericWhereClauseAndBody,
       body: bodyBuilder()
     )
   }
@@ -6819,13 +8617,21 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// - Returns: The built `InitializerDeclSyntax`.
   func buildInitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerDeclSyntax {
     let result = SyntaxFactory.makeInitializerDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndInitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initKeyword: initKeyword,
+      garbage: garbageBetweenInitKeywordAndOptionalMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       optionalMark: optionalMark,
+      garbage: garbageBetweenOptionalMarkAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterClauseAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
       signature: signature.buildFunctionSignature(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenSignatureAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6858,9 +8664,13 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   }
 }
 public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndDeinitKeyword: GarbageNodes?
   let deinitKeyword: TokenSyntax
+  let garbageBetweenDeinitKeywordAndBody: GarbageNodes?
   let body: CodeBlock?
 
   /// The leading trivia attached to this syntax node once built.
@@ -6869,22 +8679,34 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
 
   /// Creates a `DeinitializerDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndDeinitKeyword: 
   ///   - deinitKeyword: 
+  ///   - garbageBetweenDeinitKeywordAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndDeinitKeyword: ExpressibleAsGarbageNodes? = nil,
     deinitKeyword: TokenSyntax = TokenSyntax.`deinit`,
+    garbageBetweenDeinitKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndDeinitKeyword = garbageBetweenModifiersAndDeinitKeyword?.createGarbageNodes()
     self.deinitKeyword = deinitKeyword
     assert(deinitKeyword.text == "deinit")
+    self.garbageBetweenDeinitKeywordAndBody = garbageBetweenDeinitKeywordAndBody?.createGarbageNodes()
     self.body = body?.createCodeBlock()
   }
 
@@ -6893,16 +8715,24 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndDeinitKeyword: ExpressibleAsGarbageNodes? = nil,
     deinitKeyword: TokenSyntax = TokenSyntax.`deinit`,
+    garbageBetweenDeinitKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndDeinitKeyword: garbageBetweenModifiersAndDeinitKeyword,
       deinitKeyword: deinitKeyword,
+      garbageBetweenDeinitKeywordAndBody: garbageBetweenDeinitKeywordAndBody,
       body: bodyBuilder()
     )
   }
@@ -6913,9 +8743,13 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// - Returns: The built `DeinitializerDeclSyntax`.
   func buildDeinitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeinitializerDeclSyntax {
     let result = SyntaxFactory.makeDeinitializerDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndDeinitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       deinitKeyword: deinitKeyword,
+      garbage: garbageBetweenDeinitKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6948,13 +8782,21 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   }
 }
 public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndSubscriptKeyword: GarbageNodes?
   let subscriptKeyword: TokenSyntax
+  let garbageBetweenSubscriptKeywordAndGenericParameterClause: GarbageNodes?
   let genericParameterClause: GenericParameterClause?
+  let garbageBetweenGenericParameterClauseAndIndices: GarbageNodes?
   let indices: ParameterClause
+  let garbageBetweenIndicesAndResult: GarbageNodes?
   let result: ReturnClause
+  let garbageBetweenResultAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndAccessor: GarbageNodes?
   let accessor: SyntaxBuildable?
 
   /// The leading trivia attached to this syntax node once built.
@@ -6963,34 +8805,58 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
 
   /// Creates a `SubscriptDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndSubscriptKeyword: 
   ///   - subscriptKeyword: 
+  ///   - garbageBetweenSubscriptKeywordAndGenericParameterClause: 
   ///   - genericParameterClause: 
+  ///   - garbageBetweenGenericParameterClauseAndIndices: 
   ///   - indices: 
+  ///   - garbageBetweenIndicesAndResult: 
   ///   - result: 
+  ///   - garbageBetweenResultAndGenericWhereClause: 
   ///   - genericWhereClause: 
+  ///   - garbageBetweenGenericWhereClauseAndAccessor: 
   ///   - accessor: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndSubscriptKeyword: ExpressibleAsGarbageNodes? = nil,
     subscriptKeyword: TokenSyntax = TokenSyntax.`subscript`,
+    garbageBetweenSubscriptKeywordAndGenericParameterClause: ExpressibleAsGarbageNodes? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParameterClauseAndIndices: ExpressibleAsGarbageNodes? = nil,
     indices: ExpressibleAsParameterClause,
+    garbageBetweenIndicesAndResult: ExpressibleAsGarbageNodes? = nil,
     result: ExpressibleAsReturnClause,
+    garbageBetweenResultAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndAccessor: ExpressibleAsGarbageNodes? = nil,
     accessor: ExpressibleAsSyntaxBuildable? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndSubscriptKeyword = garbageBetweenModifiersAndSubscriptKeyword?.createGarbageNodes()
     self.subscriptKeyword = subscriptKeyword
     assert(subscriptKeyword.text == "subscript")
+    self.garbageBetweenSubscriptKeywordAndGenericParameterClause = garbageBetweenSubscriptKeywordAndGenericParameterClause?.createGarbageNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.garbageBetweenGenericParameterClauseAndIndices = garbageBetweenGenericParameterClauseAndIndices?.createGarbageNodes()
     self.indices = indices.createParameterClause()
+    self.garbageBetweenIndicesAndResult = garbageBetweenIndicesAndResult?.createGarbageNodes()
     self.result = result.createReturnClause()
+    self.garbageBetweenResultAndGenericWhereClause = garbageBetweenResultAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndAccessor = garbageBetweenGenericWhereClauseAndAccessor?.createGarbageNodes()
     self.accessor = accessor?.createSyntaxBuildable()
   }
 
@@ -7001,13 +8867,21 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// - Returns: The built `SubscriptDeclSyntax`.
   func buildSubscriptDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptDeclSyntax {
     let result = SyntaxFactory.makeSubscriptDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndSubscriptKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       subscriptKeyword: subscriptKeyword,
+      garbage: garbageBetweenSubscriptKeywordAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterClauseAndIndices?.buildGarbageNodes(format: format, leadingTrivia: nil),
       indices: indices.buildParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenIndicesAndResult?.buildGarbageNodes(format: format, leadingTrivia: nil),
       result: result.buildReturnClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenResultAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndAccessor?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7040,7 +8914,9 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   }
 }
 public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModifier {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndModifier: GarbageNodes?
   let modifier: DeclModifierDetail?
 
   /// The leading trivia attached to this syntax node once built.
@@ -7049,15 +8925,21 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
 
   /// Creates a `AccessLevelModifier` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndModifier: 
   ///   - modifier: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndModifier: ExpressibleAsGarbageNodes? = nil,
     modifier: ExpressibleAsDeclModifierDetail? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndModifier = garbageBetweenNameAndModifier?.createGarbageNodes()
     self.modifier = modifier?.createDeclModifierDetail()
   }
 
@@ -7066,12 +8948,16 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: String,
+    garbageBetweenNameAndModifier: ExpressibleAsGarbageNodes? = nil,
     modifier: ExpressibleAsDeclModifierDetail? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeName: garbageBeforeName,
       name: TokenSyntax.identifier(name),
+      garbageBetweenNameAndModifier: garbageBetweenNameAndModifier,
       modifier: modifier
     )
   }
@@ -7082,7 +8968,9 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// - Returns: The built `AccessLevelModifierSyntax`.
   func buildAccessLevelModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessLevelModifierSyntax {
     let result = SyntaxFactory.makeAccessLevelModifier(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifier: modifier?.buildDeclModifierDetail(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7109,7 +8997,9 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
 
 }
 public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathComponent {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndTrailingDot: GarbageNodes?
   let trailingDot: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -7118,15 +9008,21 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
 
   /// Creates a `AccessPathComponent` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndTrailingDot: 
   ///   - trailingDot: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndTrailingDot: ExpressibleAsGarbageNodes? = nil,
     trailingDot: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndTrailingDot = garbageBetweenNameAndTrailingDot?.createGarbageNodes()
     self.trailingDot = trailingDot
     assert(trailingDot == nil || trailingDot!.text == ".")
   }
@@ -7136,12 +9032,16 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: String,
+    garbageBetweenNameAndTrailingDot: ExpressibleAsGarbageNodes? = nil,
     trailingDot: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeName: garbageBeforeName,
       name: TokenSyntax.identifier(name),
+      garbageBetweenNameAndTrailingDot: garbageBetweenNameAndTrailingDot,
       trailingDot: trailingDot
     )
   }
@@ -7152,7 +9052,9 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// - Returns: The built `AccessPathComponentSyntax`.
   func buildAccessPathComponent(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessPathComponentSyntax {
     let result = SyntaxFactory.makeAccessPathComponent(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndTrailingDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingDot: trailingDot
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7179,10 +9081,15 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
 
 }
 public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndImportTok: GarbageNodes?
   let importTok: TokenSyntax
+  let garbageBetweenImportTokAndImportKind: GarbageNodes?
   let importKind: TokenSyntax?
+  let garbageBetweenImportKindAndPath: GarbageNodes?
   let path: AccessPath
 
   /// The leading trivia attached to this syntax node once built.
@@ -7191,26 +9098,41 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
 
   /// Creates a `ImportDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndImportTok: 
   ///   - importTok: 
+  ///   - garbageBetweenImportTokAndImportKind: 
   ///   - importKind: 
+  ///   - garbageBetweenImportKindAndPath: 
   ///   - path: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndImportTok: ExpressibleAsGarbageNodes? = nil,
     importTok: TokenSyntax = TokenSyntax.`import`,
+    garbageBetweenImportTokAndImportKind: ExpressibleAsGarbageNodes? = nil,
     importKind: TokenSyntax? = nil,
+    garbageBetweenImportKindAndPath: ExpressibleAsGarbageNodes? = nil,
     path: ExpressibleAsAccessPath
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndImportTok = garbageBetweenModifiersAndImportTok?.createGarbageNodes()
     self.importTok = importTok
     assert(importTok.text == "import")
+    self.garbageBetweenImportTokAndImportKind = garbageBetweenImportTokAndImportKind?.createGarbageNodes()
     self.importKind = importKind
     assert(importKind == nil || importKind!.text == "typealias" || importKind!.text == "struct" || importKind!.text == "class" || importKind!.text == "enum" || importKind!.text == "protocol" || importKind!.text == "var" || importKind!.text == "let" || importKind!.text == "func")
+    self.garbageBetweenImportKindAndPath = garbageBetweenImportKindAndPath?.createGarbageNodes()
     self.path = path.createAccessPath()
   }
 
@@ -7221,10 +9143,15 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// - Returns: The built `ImportDeclSyntax`.
   func buildImportDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImportDeclSyntax {
     let result = SyntaxFactory.makeImportDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndImportTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       importTok: importTok,
+      garbage: garbageBetweenImportTokAndImportKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       importKind: importKind,
+      garbage: garbageBetweenImportKindAndPath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       path: path.buildAccessPath(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7257,8 +9184,11 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   }
 }
 public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -7267,19 +9197,28 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
 
   /// Creates a `AccessorParameter` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndName = garbageBetweenLeftParenAndName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndRightParen = garbageBetweenNameAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -7289,14 +9228,20 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndName: ExpressibleAsGarbageNodes? = nil,
     name: String,
+    garbageBetweenNameAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftParen: garbageBeforeLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndName: garbageBetweenLeftParenAndName,
       name: TokenSyntax.identifier(name),
+      garbageBetweenNameAndRightParen: garbageBetweenNameAndRightParen,
       rightParen: rightParen
     )
   }
@@ -7307,8 +9252,11 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// - Returns: The built `AccessorParameterSyntax`.
   func buildAccessorParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorParameterSyntax {
     let result = SyntaxFactory.makeAccessorParameter(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7335,12 +9283,19 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
 
 }
 public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifier: GarbageNodes?
   let modifier: DeclModifier?
+  let garbageBetweenModifierAndAccessorKind: GarbageNodes?
   let accessorKind: TokenSyntax
+  let garbageBetweenAccessorKindAndParameter: GarbageNodes?
   let parameter: AccessorParameter?
+  let garbageBetweenParameterAndAsyncKeyword: GarbageNodes?
   let asyncKeyword: TokenSyntax?
+  let garbageBetweenAsyncKeywordAndThrowsKeyword: GarbageNodes?
   let throwsKeyword: TokenSyntax?
+  let garbageBetweenThrowsKeywordAndBody: GarbageNodes?
   let body: CodeBlock?
 
   /// The leading trivia attached to this syntax node once built.
@@ -7349,33 +9304,54 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
 
   /// Creates a `AccessorDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifier: 
   ///   - modifier: 
+  ///   - garbageBetweenModifierAndAccessorKind: 
   ///   - accessorKind: 
+  ///   - garbageBetweenAccessorKindAndParameter: 
   ///   - parameter: 
+  ///   - garbageBetweenParameterAndAsyncKeyword: 
   ///   - asyncKeyword: 
+  ///   - garbageBetweenAsyncKeywordAndThrowsKeyword: 
   ///   - throwsKeyword: 
+  ///   - garbageBetweenThrowsKeywordAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifier: ExpressibleAsGarbageNodes? = nil,
     modifier: ExpressibleAsDeclModifier? = nil,
+    garbageBetweenModifierAndAccessorKind: ExpressibleAsGarbageNodes? = nil,
     accessorKind: TokenSyntax,
+    garbageBetweenAccessorKindAndParameter: ExpressibleAsGarbageNodes? = nil,
     parameter: ExpressibleAsAccessorParameter? = nil,
+    garbageBetweenParameterAndAsyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncKeyword: TokenSyntax? = nil,
+    garbageBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsGarbageNodes? = nil,
     throwsKeyword: TokenSyntax? = nil,
+    garbageBetweenThrowsKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifier = garbageBetweenAttributesAndModifier?.createGarbageNodes()
     self.modifier = modifier?.createDeclModifier()
+    self.garbageBetweenModifierAndAccessorKind = garbageBetweenModifierAndAccessorKind?.createGarbageNodes()
     self.accessorKind = accessorKind
     assert(accessorKind.text == "get" || accessorKind.text == "set" || accessorKind.text == "didSet" || accessorKind.text == "willSet" || accessorKind.text == "unsafeAddress" || accessorKind.text == "addressWithOwner" || accessorKind.text == "addressWithNativeOwner" || accessorKind.text == "unsafeMutableAddress" || accessorKind.text == "mutableAddressWithOwner" || accessorKind.text == "mutableAddressWithNativeOwner" || accessorKind.text == "_read" || accessorKind.text == "_modify")
+    self.garbageBetweenAccessorKindAndParameter = garbageBetweenAccessorKindAndParameter?.createGarbageNodes()
     self.parameter = parameter?.createAccessorParameter()
+    self.garbageBetweenParameterAndAsyncKeyword = garbageBetweenParameterAndAsyncKeyword?.createGarbageNodes()
     self.asyncKeyword = asyncKeyword
     assert(asyncKeyword == nil || asyncKeyword!.text == "async")
+    self.garbageBetweenAsyncKeywordAndThrowsKeyword = garbageBetweenAsyncKeywordAndThrowsKeyword?.createGarbageNodes()
     self.throwsKeyword = throwsKeyword
     assert(throwsKeyword == nil || throwsKeyword!.text == "throws" || throwsKeyword!.text == "rethrows")
+    self.garbageBetweenThrowsKeywordAndBody = garbageBetweenThrowsKeywordAndBody?.createGarbageNodes()
     self.body = body?.createCodeBlock()
   }
 
@@ -7384,22 +9360,36 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifier: ExpressibleAsGarbageNodes? = nil,
     modifier: ExpressibleAsDeclModifier? = nil,
+    garbageBetweenModifierAndAccessorKind: ExpressibleAsGarbageNodes? = nil,
     accessorKind: TokenSyntax,
+    garbageBetweenAccessorKindAndParameter: ExpressibleAsGarbageNodes? = nil,
     parameter: ExpressibleAsAccessorParameter? = nil,
+    garbageBetweenParameterAndAsyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncKeyword: String?,
+    garbageBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsGarbageNodes? = nil,
     throwsKeyword: TokenSyntax? = nil,
+    garbageBetweenThrowsKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifier: garbageBetweenAttributesAndModifier,
       modifier: modifier,
+      garbageBetweenModifierAndAccessorKind: garbageBetweenModifierAndAccessorKind,
       accessorKind: accessorKind,
+      garbageBetweenAccessorKindAndParameter: garbageBetweenAccessorKindAndParameter,
       parameter: parameter,
+      garbageBetweenParameterAndAsyncKeyword: garbageBetweenParameterAndAsyncKeyword,
       asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
+      garbageBetweenAsyncKeywordAndThrowsKeyword: garbageBetweenAsyncKeywordAndThrowsKeyword,
       throwsKeyword: throwsKeyword,
+      garbageBetweenThrowsKeywordAndBody: garbageBetweenThrowsKeywordAndBody,
       body: bodyBuilder()
     )
   }
@@ -7410,12 +9400,19 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// - Returns: The built `AccessorDeclSyntax`.
   func buildAccessorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorDeclSyntax {
     let result = SyntaxFactory.makeAccessorDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifier: modifier?.buildDeclModifier(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifierAndAccessorKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessorKind: accessorKind,
+      garbage: garbageBetweenAccessorKindAndParameter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameter: parameter?.buildAccessorParameter(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenParameterAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
+      garbage: garbageBetweenAsyncKeywordAndThrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsKeyword: throwsKeyword,
+      garbage: garbageBetweenThrowsKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7448,8 +9445,11 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   }
 }
 public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
+  let garbageBeforeLeftBrace: GarbageNodes?
   let leftBrace: TokenSyntax
+  let garbageBetweenLeftBraceAndAccessors: GarbageNodes?
   let accessors: AccessorList
+  let garbageBetweenAccessorsAndRightBrace: GarbageNodes?
   let rightBrace: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -7458,19 +9458,28 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
 
   /// Creates a `AccessorBlock` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftBrace: 
   ///   - leftBrace: 
+  ///   - garbageBetweenLeftBraceAndAccessors: 
   ///   - accessors: 
+  ///   - garbageBetweenAccessorsAndRightBrace: 
   ///   - rightBrace: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndAccessors: ExpressibleAsGarbageNodes? = nil,
     accessors: ExpressibleAsAccessorList,
+    garbageBetweenAccessorsAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftBrace = garbageBeforeLeftBrace?.createGarbageNodes()
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
+    self.garbageBetweenLeftBraceAndAccessors = garbageBetweenLeftBraceAndAccessors?.createGarbageNodes()
     self.accessors = accessors.createAccessorList()
+    self.garbageBetweenAccessorsAndRightBrace = garbageBetweenAccessorsAndRightBrace?.createGarbageNodes()
     self.rightBrace = rightBrace
     assert(rightBrace.text == "}")
   }
@@ -7482,8 +9491,11 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// - Returns: The built `AccessorBlockSyntax`.
   func buildAccessorBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
     let result = SyntaxFactory.makeAccessorBlock(
+      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
+      garbage: garbageBetweenLeftBraceAndAccessors?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessors: accessors.buildAccessorList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAccessorsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7510,10 +9522,15 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
 
 }
 public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasTrailingComma {
+  let garbageBeforePattern: GarbageNodes?
   let pattern: PatternBuildable
+  let garbageBetweenPatternAndTypeAnnotation: GarbageNodes?
   let typeAnnotation: TypeAnnotation?
+  let garbageBetweenTypeAnnotationAndInitializer: GarbageNodes?
   let initializer: InitializerClause?
+  let garbageBetweenInitializerAndAccessor: GarbageNodes?
   let accessor: SyntaxBuildable?
+  let garbageBetweenAccessorAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -7522,24 +9539,39 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
 
   /// Creates a `PatternBinding` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndTypeAnnotation: 
   ///   - typeAnnotation: 
+  ///   - garbageBetweenTypeAnnotationAndInitializer: 
   ///   - initializer: 
+  ///   - garbageBetweenInitializerAndAccessor: 
   ///   - accessor: 
+  ///   - garbageBetweenAccessorAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndTypeAnnotation: ExpressibleAsGarbageNodes? = nil,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
+    garbageBetweenTypeAnnotationAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsInitializerClause? = nil,
+    garbageBetweenInitializerAndAccessor: ExpressibleAsGarbageNodes? = nil,
     accessor: ExpressibleAsSyntaxBuildable? = nil,
+    garbageBetweenAccessorAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePattern = garbageBeforePattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
+    self.garbageBetweenPatternAndTypeAnnotation = garbageBetweenPatternAndTypeAnnotation?.createGarbageNodes()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
+    self.garbageBetweenTypeAnnotationAndInitializer = garbageBetweenTypeAnnotationAndInitializer?.createGarbageNodes()
     self.initializer = initializer?.createInitializerClause()
+    self.garbageBetweenInitializerAndAccessor = garbageBetweenInitializerAndAccessor?.createGarbageNodes()
     self.accessor = accessor?.createSyntaxBuildable()
+    self.garbageBetweenAccessorAndTrailingComma = garbageBetweenAccessorAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -7551,10 +9583,15 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   /// - Returns: The built `PatternBindingSyntax`.
   func buildPatternBinding(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternBindingSyntax {
     let result = SyntaxFactory.makePatternBinding(
+      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInitializerAndAccessor?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAccessorAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7575,10 +9612,15 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforePattern: garbageBeforePattern,
         pattern: pattern,
+        garbageBetweenPatternAndTypeAnnotation: garbageBetweenPatternAndTypeAnnotation,
         typeAnnotation: typeAnnotation,
+        garbageBetweenTypeAnnotationAndInitializer: garbageBetweenTypeAnnotationAndInitializer,
         initializer: initializer,
+        garbageBetweenInitializerAndAccessor: garbageBetweenInitializerAndAccessor,
         accessor: accessor,
+        garbageBetweenAccessorAndTrailingComma: garbageBetweenAccessorAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -7592,9 +9634,13 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
 
 }
 public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndLetOrVarKeyword: GarbageNodes?
   let letOrVarKeyword: TokenSyntax
+  let garbageBetweenLetOrVarKeywordAndBindings: GarbageNodes?
   let bindings: PatternBindingList
 
   /// The leading trivia attached to this syntax node once built.
@@ -7603,22 +9649,34 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
 
   /// Creates a `VariableDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: 
+  ///   - garbageBetweenModifiersAndLetOrVarKeyword: 
   ///   - letOrVarKeyword: 
+  ///   - garbageBetweenLetOrVarKeywordAndBindings: 
   ///   - bindings: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndLetOrVarKeyword: ExpressibleAsGarbageNodes? = nil,
     letOrVarKeyword: TokenSyntax,
+    garbageBetweenLetOrVarKeywordAndBindings: ExpressibleAsGarbageNodes? = nil,
     bindings: ExpressibleAsPatternBindingList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndLetOrVarKeyword = garbageBetweenModifiersAndLetOrVarKeyword?.createGarbageNodes()
     self.letOrVarKeyword = letOrVarKeyword
     assert(letOrVarKeyword.text == "let" || letOrVarKeyword.text == "var")
+    self.garbageBetweenLetOrVarKeywordAndBindings = garbageBetweenLetOrVarKeywordAndBindings?.createGarbageNodes()
     self.bindings = bindings.createPatternBindingList()
   }
 
@@ -7627,16 +9685,24 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndLetOrVarKeyword: ExpressibleAsGarbageNodes? = nil,
     letOrVarKeyword: TokenSyntax,
+    garbageBetweenLetOrVarKeywordAndBindings: ExpressibleAsGarbageNodes? = nil,
     @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList = { PatternBindingList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndLetOrVarKeyword: garbageBetweenModifiersAndLetOrVarKeyword,
       letOrVarKeyword: letOrVarKeyword,
+      garbageBetweenLetOrVarKeywordAndBindings: garbageBetweenLetOrVarKeywordAndBindings,
       bindings: bindingsBuilder()
     )
   }
@@ -7647,9 +9713,13 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// - Returns: The built `VariableDeclSyntax`.
   func buildVariableDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VariableDeclSyntax {
     let result = SyntaxFactory.makeVariableDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
+      garbage: garbageBetweenLetOrVarKeywordAndBindings?.buildGarbageNodes(format: format, leadingTrivia: nil),
       bindings: bindings.buildPatternBindingList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7683,9 +9753,13 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
 }
 /// An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.
 public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, HasTrailingComma {
+  let garbageBeforeIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndAssociatedValue: GarbageNodes?
   let associatedValue: ParameterClause?
+  let garbageBetweenAssociatedValueAndRawValue: GarbageNodes?
   let rawValue: InitializerClause?
+  let garbageBetweenRawValueAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -7694,21 +9768,33 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
 
   /// Creates a `EnumCaseElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIdentifier: 
   ///   - identifier: The name of this case.
+  ///   - garbageBetweenIdentifierAndAssociatedValue: 
   ///   - associatedValue: The set of associated values of the case.
+  ///   - garbageBetweenAssociatedValueAndRawValue: 
   ///   - rawValue: The raw value of this enum element, if present.
+  ///   - garbageBetweenRawValueAndTrailingComma: 
   ///   - trailingComma: The trailing comma of this element, if the case hasmultiple elements.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndAssociatedValue: ExpressibleAsGarbageNodes? = nil,
     associatedValue: ExpressibleAsParameterClause? = nil,
+    garbageBetweenAssociatedValueAndRawValue: ExpressibleAsGarbageNodes? = nil,
     rawValue: ExpressibleAsInitializerClause? = nil,
+    garbageBetweenRawValueAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIdentifier = garbageBeforeIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndAssociatedValue = garbageBetweenIdentifierAndAssociatedValue?.createGarbageNodes()
     self.associatedValue = associatedValue?.createParameterClause()
+    self.garbageBetweenAssociatedValueAndRawValue = garbageBetweenAssociatedValueAndRawValue?.createGarbageNodes()
     self.rawValue = rawValue?.createInitializerClause()
+    self.garbageBetweenRawValueAndTrailingComma = garbageBetweenRawValueAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -7718,16 +9804,24 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndAssociatedValue: ExpressibleAsGarbageNodes? = nil,
     associatedValue: ExpressibleAsParameterClause? = nil,
+    garbageBetweenAssociatedValueAndRawValue: ExpressibleAsGarbageNodes? = nil,
     rawValue: ExpressibleAsInitializerClause? = nil,
+    garbageBetweenRawValueAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeIdentifier: garbageBeforeIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndAssociatedValue: garbageBetweenIdentifierAndAssociatedValue,
       associatedValue: associatedValue,
+      garbageBetweenAssociatedValueAndRawValue: garbageBetweenAssociatedValueAndRawValue,
       rawValue: rawValue,
+      garbageBetweenRawValueAndTrailingComma: garbageBetweenRawValueAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -7738,9 +9832,13 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// - Returns: The built `EnumCaseElementSyntax`.
   func buildEnumCaseElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseElementSyntax {
     let result = SyntaxFactory.makeEnumCaseElement(
+      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndAssociatedValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associatedValue: associatedValue?.buildParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAssociatedValueAndRawValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rawValue: rawValue?.buildInitializerClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenRawValueAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7761,9 +9859,13 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeIdentifier: garbageBeforeIdentifier,
         identifier: identifier,
+        garbageBetweenIdentifierAndAssociatedValue: garbageBetweenIdentifierAndAssociatedValue,
         associatedValue: associatedValue,
+        garbageBetweenAssociatedValueAndRawValue: garbageBetweenAssociatedValueAndRawValue,
         rawValue: rawValue,
+        garbageBetweenRawValueAndTrailingComma: garbageBetweenRawValueAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -7778,9 +9880,13 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
 }
 /// A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.
 public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndCaseKeyword: GarbageNodes?
   let caseKeyword: TokenSyntax
+  let garbageBetweenCaseKeywordAndElements: GarbageNodes?
   let elements: EnumCaseElementList
 
   /// The leading trivia attached to this syntax node once built.
@@ -7789,22 +9895,34 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
 
   /// Creates a `EnumCaseDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: The attributes applied to the case declaration.
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: The declaration modifiers applied to the case declaration.
+  ///   - garbageBetweenModifiersAndCaseKeyword: 
   ///   - caseKeyword: The `case` keyword for this case.
+  ///   - garbageBetweenCaseKeywordAndElements: 
   ///   - elements: The elements this case declares.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndCaseKeyword: ExpressibleAsGarbageNodes? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
+    garbageBetweenCaseKeywordAndElements: ExpressibleAsGarbageNodes? = nil,
     elements: ExpressibleAsEnumCaseElementList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndCaseKeyword = garbageBetweenModifiersAndCaseKeyword?.createGarbageNodes()
     self.caseKeyword = caseKeyword
     assert(caseKeyword.text == "case")
+    self.garbageBetweenCaseKeywordAndElements = garbageBetweenCaseKeywordAndElements?.createGarbageNodes()
     self.elements = elements.createEnumCaseElementList()
   }
 
@@ -7813,16 +9931,24 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndCaseKeyword: ExpressibleAsGarbageNodes? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
+    garbageBetweenCaseKeywordAndElements: ExpressibleAsGarbageNodes? = nil,
     @EnumCaseElementListBuilder elementsBuilder: () -> ExpressibleAsEnumCaseElementList = { EnumCaseElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndCaseKeyword: garbageBetweenModifiersAndCaseKeyword,
       caseKeyword: caseKeyword,
+      garbageBetweenCaseKeywordAndElements: garbageBetweenCaseKeywordAndElements,
       elements: elementsBuilder()
     )
   }
@@ -7833,9 +9959,13 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// - Returns: The built `EnumCaseDeclSyntax`.
   func buildEnumCaseDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseDeclSyntax {
     let result = SyntaxFactory.makeEnumCaseDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
+      garbage: garbageBetweenCaseKeywordAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildEnumCaseElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7869,13 +9999,21 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
 }
 /// A Swift `enum` declaration.
 public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndEnumKeyword: GarbageNodes?
   let enumKeyword: TokenSyntax
+  let garbageBetweenEnumKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndGenericParameters: GarbageNodes?
   let genericParameters: GenericParameterClause?
+  let garbageBetweenGenericParametersAndInheritanceClause: GarbageNodes?
   let inheritanceClause: TypeInheritanceClause?
+  let garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodes?
   let genericWhereClause: GenericWhereClause?
+  let garbageBetweenGenericWhereClauseAndMembers: GarbageNodes?
   let members: MemberDeclBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -7884,34 +10022,58 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
 
   /// Creates a `EnumDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: The attributes applied to the enum declaration.
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: The declaration modifiers applied to the enum declaration.
+  ///   - garbageBetweenModifiersAndEnumKeyword: 
   ///   - enumKeyword: The `enum` keyword for this declaration.
+  ///   - garbageBetweenEnumKeywordAndIdentifier: 
   ///   - identifier: The name of this enum.
+  ///   - garbageBetweenIdentifierAndGenericParameters: 
   ///   - genericParameters: The generic parameters, if any, for this enum.
+  ///   - garbageBetweenGenericParametersAndInheritanceClause: 
   ///   - inheritanceClause: The inheritance clause describing conformances or rawvalues for this enum.
+  ///   - garbageBetweenInheritanceClauseAndGenericWhereClause: 
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters ofthis enum.
+  ///   - garbageBetweenGenericWhereClauseAndMembers: 
   ///   - members: The cases and other members of this enum.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndEnumKeyword: ExpressibleAsGarbageNodes? = nil,
     enumKeyword: TokenSyntax = TokenSyntax.`enum`,
+    garbageBetweenEnumKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndGenericParameters: ExpressibleAsGarbageNodes? = nil,
     genericParameters: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParametersAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndEnumKeyword = garbageBetweenModifiersAndEnumKeyword?.createGarbageNodes()
     self.enumKeyword = enumKeyword
     assert(enumKeyword.text == "enum")
+    self.garbageBetweenEnumKeywordAndIdentifier = garbageBetweenEnumKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndGenericParameters = garbageBetweenIdentifierAndGenericParameters?.createGarbageNodes()
     self.genericParameters = genericParameters?.createGenericParameterClause()
+    self.garbageBetweenGenericParametersAndInheritanceClause = garbageBetweenGenericParametersAndInheritanceClause?.createGarbageNodes()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.garbageBetweenInheritanceClauseAndGenericWhereClause = garbageBetweenInheritanceClauseAndGenericWhereClause?.createGarbageNodes()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.garbageBetweenGenericWhereClauseAndMembers = garbageBetweenGenericWhereClauseAndMembers?.createGarbageNodes()
     self.members = members.createMemberDeclBlock()
   }
 
@@ -7920,24 +10082,40 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndEnumKeyword: ExpressibleAsGarbageNodes? = nil,
     enumKeyword: TokenSyntax = TokenSyntax.`enum`,
+    garbageBetweenEnumKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndGenericParameters: ExpressibleAsGarbageNodes? = nil,
     genericParameters: ExpressibleAsGenericParameterClause? = nil,
+    garbageBetweenGenericParametersAndInheritanceClause: ExpressibleAsGarbageNodes? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    garbageBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsGarbageNodes? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    garbageBetweenGenericWhereClauseAndMembers: ExpressibleAsGarbageNodes? = nil,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndEnumKeyword: garbageBetweenModifiersAndEnumKeyword,
       enumKeyword: enumKeyword,
+      garbageBetweenEnumKeywordAndIdentifier: garbageBetweenEnumKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndGenericParameters: garbageBetweenIdentifierAndGenericParameters,
       genericParameters: genericParameters,
+      garbageBetweenGenericParametersAndInheritanceClause: garbageBetweenGenericParametersAndInheritanceClause,
       inheritanceClause: inheritanceClause,
+      garbageBetweenInheritanceClauseAndGenericWhereClause: garbageBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
+      garbageBetweenGenericWhereClauseAndMembers: garbageBetweenGenericWhereClauseAndMembers,
       members: membersBuilder()
     )
   }
@@ -7948,13 +10126,21 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// - Returns: The built `EnumDeclSyntax`.
   func buildEnumDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumDeclSyntax {
     let result = SyntaxFactory.makeEnumDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndEnumKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       enumKeyword: enumKeyword,
+      garbage: garbageBetweenEnumKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndGenericParameters?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameters: genericParameters?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParametersAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7988,10 +10174,15 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
 }
 /// A Swift `operator` declaration.
 public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndOperatorKeyword: GarbageNodes?
   let operatorKeyword: TokenSyntax
+  let garbageBetweenOperatorKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: GarbageNodes?
   let operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
 
   /// The leading trivia attached to this syntax node once built.
@@ -8000,25 +10191,40 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
 
   /// Creates a `OperatorDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: The attributes applied to the 'operator' declaration.
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: The declaration modifiers applied to the 'operator'declaration.
+  ///   - garbageBetweenModifiersAndOperatorKeyword: 
   ///   - operatorKeyword: 
+  ///   - garbageBetweenOperatorKeywordAndIdentifier: 
   ///   - identifier: 
+  ///   - garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: 
   ///   - operatorPrecedenceAndTypes: Optionally specify a precedence group and designated types.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndOperatorKeyword: ExpressibleAsGarbageNodes? = nil,
     operatorKeyword: TokenSyntax = TokenSyntax.`operator`,
+    garbageBetweenOperatorKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: ExpressibleAsGarbageNodes? = nil,
     operatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndOperatorKeyword = garbageBetweenModifiersAndOperatorKeyword?.createGarbageNodes()
     self.operatorKeyword = operatorKeyword
     assert(operatorKeyword.text == "operator")
+    self.garbageBetweenOperatorKeywordAndIdentifier = garbageBetweenOperatorKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndOperatorPrecedenceAndTypes = garbageBetweenIdentifierAndOperatorPrecedenceAndTypes?.createGarbageNodes()
     self.operatorPrecedenceAndTypes = operatorPrecedenceAndTypes?.createOperatorPrecedenceAndTypes()
   }
 
@@ -8029,10 +10235,15 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// - Returns: The built `OperatorDeclSyntax`.
   func buildOperatorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorDeclSyntax {
     let result = SyntaxFactory.makeOperatorDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndOperatorKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorKeyword: operatorKeyword,
+      garbage: garbageBetweenOperatorKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndOperatorPrecedenceAndTypes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8066,7 +10277,9 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
 }
 /// A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
 public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperatorPrecedenceAndTypes {
+  let garbageBeforeColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: GarbageNodes?
   let precedenceGroupAndDesignatedTypes: IdentifierList
 
   /// The leading trivia attached to this syntax node once built.
@@ -8075,16 +10288,22 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
 
   /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: 
   ///   - precedenceGroupAndDesignatedTypes: The precedence group and designated types for this operator
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: ExpressibleAsGarbageNodes? = nil,
     precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeColon = garbageBeforeColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes = garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.createGarbageNodes()
     self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
   }
 
@@ -8095,7 +10314,9 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
   func buildOperatorPrecedenceAndTypes(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorPrecedenceAndTypesSyntax {
     let result = SyntaxFactory.makeOperatorPrecedenceAndTypes(
+      garbage: garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8123,12 +10344,19 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
 }
 /// A Swift `precedencegroup` declaration.
 public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDecl {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndModifiers: GarbageNodes?
   let modifiers: ModifierList?
+  let garbageBetweenModifiersAndPrecedencegroupKeyword: GarbageNodes?
   let precedencegroupKeyword: TokenSyntax
+  let garbageBetweenPrecedencegroupKeywordAndIdentifier: GarbageNodes?
   let identifier: TokenSyntax
+  let garbageBetweenIdentifierAndLeftBrace: GarbageNodes?
   let leftBrace: TokenSyntax
+  let garbageBetweenLeftBraceAndGroupAttributes: GarbageNodes?
   let groupAttributes: PrecedenceGroupAttributeList
+  let garbageBetweenGroupAttributesAndRightBrace: GarbageNodes?
   let rightBrace: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -8137,32 +10365,53 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
 
   /// Creates a `PrecedenceGroupDecl` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: The attributes applied to the 'precedencegroup' declaration.
+  ///   - garbageBetweenAttributesAndModifiers: 
   ///   - modifiers: The declaration modifiers applied to the 'precedencegroup'declaration.
+  ///   - garbageBetweenModifiersAndPrecedencegroupKeyword: 
   ///   - precedencegroupKeyword: 
+  ///   - garbageBetweenPrecedencegroupKeywordAndIdentifier: 
   ///   - identifier: The name of this precedence group.
+  ///   - garbageBetweenIdentifierAndLeftBrace: 
   ///   - leftBrace: 
+  ///   - garbageBetweenLeftBraceAndGroupAttributes: 
   ///   - groupAttributes: The characteristics of this precedence group.
+  ///   - garbageBetweenGroupAttributesAndRightBrace: 
   ///   - rightBrace: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndPrecedencegroupKeyword: ExpressibleAsGarbageNodes? = nil,
     precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`,
+    garbageBetweenPrecedencegroupKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax,
+    garbageBetweenIdentifierAndLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndGroupAttributes: ExpressibleAsGarbageNodes? = nil,
     groupAttributes: ExpressibleAsPrecedenceGroupAttributeList,
+    garbageBetweenGroupAttributesAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndModifiers = garbageBetweenAttributesAndModifiers?.createGarbageNodes()
     self.modifiers = modifiers?.createModifierList()
+    self.garbageBetweenModifiersAndPrecedencegroupKeyword = garbageBetweenModifiersAndPrecedencegroupKeyword?.createGarbageNodes()
     self.precedencegroupKeyword = precedencegroupKeyword
     assert(precedencegroupKeyword.text == "precedencegroup")
+    self.garbageBetweenPrecedencegroupKeywordAndIdentifier = garbageBetweenPrecedencegroupKeywordAndIdentifier?.createGarbageNodes()
     self.identifier = identifier
+    self.garbageBetweenIdentifierAndLeftBrace = garbageBetweenIdentifierAndLeftBrace?.createGarbageNodes()
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
+    self.garbageBetweenLeftBraceAndGroupAttributes = garbageBetweenLeftBraceAndGroupAttributes?.createGarbageNodes()
     self.groupAttributes = groupAttributes.createPrecedenceGroupAttributeList()
+    self.garbageBetweenGroupAttributesAndRightBrace = garbageBetweenGroupAttributesAndRightBrace?.createGarbageNodes()
     self.rightBrace = rightBrace
     assert(rightBrace.text == "}")
   }
@@ -8172,22 +10421,36 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndModifiers: ExpressibleAsGarbageNodes? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
+    garbageBetweenModifiersAndPrecedencegroupKeyword: ExpressibleAsGarbageNodes? = nil,
     precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`,
+    garbageBetweenPrecedencegroupKeywordAndIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: String,
+    garbageBetweenIdentifierAndLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndGroupAttributes: ExpressibleAsGarbageNodes? = nil,
     groupAttributes: ExpressibleAsPrecedenceGroupAttributeList,
+    garbageBetweenGroupAttributesAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndModifiers: garbageBetweenAttributesAndModifiers,
       modifiers: modifiers,
+      garbageBetweenModifiersAndPrecedencegroupKeyword: garbageBetweenModifiersAndPrecedencegroupKeyword,
       precedencegroupKeyword: precedencegroupKeyword,
+      garbageBetweenPrecedencegroupKeywordAndIdentifier: garbageBetweenPrecedencegroupKeywordAndIdentifier,
       identifier: TokenSyntax.identifier(identifier),
+      garbageBetweenIdentifierAndLeftBrace: garbageBetweenIdentifierAndLeftBrace,
       leftBrace: leftBrace,
+      garbageBetweenLeftBraceAndGroupAttributes: garbageBetweenLeftBraceAndGroupAttributes,
       groupAttributes: groupAttributes,
+      garbageBetweenGroupAttributesAndRightBrace: garbageBetweenGroupAttributesAndRightBrace,
       rightBrace: rightBrace
     )
   }
@@ -8198,12 +10461,19 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   /// - Returns: The built `PrecedenceGroupDeclSyntax`.
   func buildPrecedenceGroupDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupDeclSyntax {
     let result = SyntaxFactory.makePrecedenceGroupDecl(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenModifiersAndPrecedencegroupKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       precedencegroupKeyword: precedencegroupKeyword,
+      garbage: garbageBetweenPrecedencegroupKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
+      garbage: garbageBetweenIdentifierAndLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
+      garbage: garbageBetweenLeftBraceAndGroupAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       groupAttributes: groupAttributes.buildPrecedenceGroupAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGroupAttributesAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8237,8 +10507,11 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
 }
 /// Specify the new precedence group's relation to existing precedencegroups.
 public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceGroupRelation {
+  let garbageBeforeHigherThanOrLowerThan: GarbageNodes?
   let higherThanOrLowerThan: TokenSyntax
+  let garbageBetweenHigherThanOrLowerThanAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndOtherNames: GarbageNodes?
   let otherNames: PrecedenceGroupNameList
 
   /// The leading trivia attached to this syntax node once built.
@@ -8247,20 +10520,29 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
 
   /// Creates a `PrecedenceGroupRelation` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeHigherThanOrLowerThan: 
   ///   - higherThanOrLowerThan: The relation to specified other precedence groups.
+  ///   - garbageBetweenHigherThanOrLowerThanAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndOtherNames: 
   ///   - otherNames: The name of other precedence group to which this precedencegroup relates.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeHigherThanOrLowerThan: ExpressibleAsGarbageNodes? = nil,
     higherThanOrLowerThan: TokenSyntax,
+    garbageBetweenHigherThanOrLowerThanAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndOtherNames: ExpressibleAsGarbageNodes? = nil,
     otherNames: ExpressibleAsPrecedenceGroupNameList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeHigherThanOrLowerThan = garbageBeforeHigherThanOrLowerThan?.createGarbageNodes()
     self.higherThanOrLowerThan = higherThanOrLowerThan
     assert(higherThanOrLowerThan.text == "higherThan" || higherThanOrLowerThan.text == "lowerThan")
+    self.garbageBetweenHigherThanOrLowerThanAndColon = garbageBetweenHigherThanOrLowerThanAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndOtherNames = garbageBetweenColonAndOtherNames?.createGarbageNodes()
     self.otherNames = otherNames.createPrecedenceGroupNameList()
   }
 
@@ -8269,14 +10551,20 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeHigherThanOrLowerThan: ExpressibleAsGarbageNodes? = nil,
     higherThanOrLowerThan: String,
+    garbageBetweenHigherThanOrLowerThanAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndOtherNames: ExpressibleAsGarbageNodes? = nil,
     otherNames: ExpressibleAsPrecedenceGroupNameList
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeHigherThanOrLowerThan: garbageBeforeHigherThanOrLowerThan,
       higherThanOrLowerThan: TokenSyntax.identifier(higherThanOrLowerThan),
+      garbageBetweenHigherThanOrLowerThanAndColon: garbageBetweenHigherThanOrLowerThanAndColon,
       colon: colon,
+      garbageBetweenColonAndOtherNames: garbageBetweenColonAndOtherNames,
       otherNames: otherNames
     )
   }
@@ -8287,8 +10575,11 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// - Returns: The built `PrecedenceGroupRelationSyntax`.
   func buildPrecedenceGroupRelation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupRelationSyntax {
     let result = SyntaxFactory.makePrecedenceGroupRelation(
+      garbage: garbageBeforeHigherThanOrLowerThan?.buildGarbageNodes(format: format, leadingTrivia: nil),
       higherThanOrLowerThan: higherThanOrLowerThan,
+      garbage: garbageBetweenHigherThanOrLowerThanAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndOtherNames?.buildGarbageNodes(format: format, leadingTrivia: nil),
       otherNames: otherNames.buildPrecedenceGroupNameList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8315,7 +10606,9 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
 
 }
 public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPrecedenceGroupNameElement {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -8324,15 +10617,21 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
 
   /// Creates a `PrecedenceGroupNameElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndTrailingComma = garbageBetweenNameAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -8342,12 +10641,16 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: String,
+    garbageBetweenNameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeName: garbageBeforeName,
       name: TokenSyntax.identifier(name),
+      garbageBetweenNameAndTrailingComma: garbageBetweenNameAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -8358,7 +10661,9 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// - Returns: The built `PrecedenceGroupNameElementSyntax`.
   func buildPrecedenceGroupNameElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupNameElementSyntax {
     let result = SyntaxFactory.makePrecedenceGroupNameElement(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8386,8 +10691,11 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
 }
 /// Specifies the precedence of an operator when used in an operationthat includes optional chaining.
 public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenceGroupAssignment {
+  let garbageBeforeAssignmentKeyword: GarbageNodes?
   let assignmentKeyword: TokenSyntax
+  let garbageBetweenAssignmentKeywordAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndFlag: GarbageNodes?
   let flag: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -8396,20 +10704,29 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
 
   /// Creates a `PrecedenceGroupAssignment` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAssignmentKeyword: 
   ///   - assignmentKeyword: 
+  ///   - garbageBetweenAssignmentKeywordAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndFlag: 
   ///   - flag: When true, an operator in the corresponding precedence groupuses the same grouping rules during optional chaining as theassignment operators from the standard library. Otherwise,operators in the precedence group follows the same optionalchaining rules as operators that don't perform assignment.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAssignmentKeyword: ExpressibleAsGarbageNodes? = nil,
     assignmentKeyword: TokenSyntax,
+    garbageBetweenAssignmentKeywordAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndFlag: ExpressibleAsGarbageNodes? = nil,
     flag: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAssignmentKeyword = garbageBeforeAssignmentKeyword?.createGarbageNodes()
     self.assignmentKeyword = assignmentKeyword
     assert(assignmentKeyword.text == "assignment")
+    self.garbageBetweenAssignmentKeywordAndColon = garbageBetweenAssignmentKeywordAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndFlag = garbageBetweenColonAndFlag?.createGarbageNodes()
     self.flag = flag
     assert(flag.text == "true" || flag.text == "false")
   }
@@ -8419,14 +10736,20 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAssignmentKeyword: ExpressibleAsGarbageNodes? = nil,
     assignmentKeyword: String,
+    garbageBetweenAssignmentKeywordAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndFlag: ExpressibleAsGarbageNodes? = nil,
     flag: TokenSyntax
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAssignmentKeyword: garbageBeforeAssignmentKeyword,
       assignmentKeyword: TokenSyntax.identifier(assignmentKeyword),
+      garbageBetweenAssignmentKeywordAndColon: garbageBetweenAssignmentKeywordAndColon,
       colon: colon,
+      garbageBetweenColonAndFlag: garbageBetweenColonAndFlag,
       flag: flag
     )
   }
@@ -8437,8 +10760,11 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// - Returns: The built `PrecedenceGroupAssignmentSyntax`.
   func buildPrecedenceGroupAssignment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssignmentSyntax {
     let result = SyntaxFactory.makePrecedenceGroupAssignment(
+      garbage: garbageBeforeAssignmentKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignmentKeyword: assignmentKeyword,
+      garbage: garbageBetweenAssignmentKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndFlag?.buildGarbageNodes(format: format, leadingTrivia: nil),
       flag: flag
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8466,8 +10792,11 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
 }
 /// Specifies how a sequence of operators with the same precedence levelare grouped together in the absence of grouping parentheses.
 public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPrecedenceGroupAssociativity {
+  let garbageBeforeAssociativityKeyword: GarbageNodes?
   let associativityKeyword: TokenSyntax
+  let garbageBetweenAssociativityKeywordAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndValue: GarbageNodes?
   let value: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -8476,20 +10805,29 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
 
   /// Creates a `PrecedenceGroupAssociativity` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAssociativityKeyword: 
   ///   - associativityKeyword: 
+  ///   - garbageBetweenAssociativityKeywordAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndValue: 
   ///   - value: Operators that are `left`-associative group left-to-right.Operators that are `right`-associative group right-to-left.Operators that are specified with an associativity of `none`don't associate at all
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAssociativityKeyword: ExpressibleAsGarbageNodes? = nil,
     associativityKeyword: TokenSyntax,
+    garbageBetweenAssociativityKeywordAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValue: ExpressibleAsGarbageNodes? = nil,
     value: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAssociativityKeyword = garbageBeforeAssociativityKeyword?.createGarbageNodes()
     self.associativityKeyword = associativityKeyword
     assert(associativityKeyword.text == "associativity")
+    self.garbageBetweenAssociativityKeywordAndColon = garbageBetweenAssociativityKeywordAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndValue = garbageBetweenColonAndValue?.createGarbageNodes()
     self.value = value
     assert(value.text == "left" || value.text == "right" || value.text == "none")
   }
@@ -8499,14 +10837,20 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAssociativityKeyword: ExpressibleAsGarbageNodes? = nil,
     associativityKeyword: String,
+    garbageBetweenAssociativityKeywordAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValue: ExpressibleAsGarbageNodes? = nil,
     value: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAssociativityKeyword: garbageBeforeAssociativityKeyword,
       associativityKeyword: TokenSyntax.identifier(associativityKeyword),
+      garbageBetweenAssociativityKeywordAndColon: garbageBetweenAssociativityKeywordAndColon,
       colon: colon,
+      garbageBetweenColonAndValue: garbageBetweenColonAndValue,
       value: TokenSyntax.identifier(value)
     )
   }
@@ -8517,8 +10861,11 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// - Returns: The built `PrecedenceGroupAssociativitySyntax`.
   func buildPrecedenceGroupAssociativity(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssociativitySyntax {
     let result = SyntaxFactory.makePrecedenceGroupAssociativity(
+      garbage: garbageBeforeAssociativityKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associativityKeyword: associativityKeyword,
+      garbage: garbageBetweenAssociativityKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8546,10 +10893,15 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
 }
 /// A custom `@` attribute.
 public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
+  let garbageBeforeAtSignToken: GarbageNodes?
   let atSignToken: TokenSyntax
+  let garbageBetweenAtSignTokenAndAttributeName: GarbageNodes?
   let attributeName: TypeBuildable
+  let garbageBetweenAttributeNameAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax?
+  let garbageBetweenLeftParenAndArgumentList: GarbageNodes?
   let argumentList: TupleExprElementList?
+  let garbageBetweenArgumentListAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -8558,26 +10910,41 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
 
   /// Creates a `CustomAttribute` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAtSignToken: 
   ///   - atSignToken: The `@` sign.
+  ///   - garbageBetweenAtSignTokenAndAttributeName: 
   ///   - attributeName: The name of the attribute.
+  ///   - garbageBetweenAttributeNameAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndArgumentList: 
   ///   - argumentList: 
+  ///   - garbageBetweenArgumentListAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAtSignToken: ExpressibleAsGarbageNodes? = nil,
     atSignToken: TokenSyntax = TokenSyntax.`atSign`,
+    garbageBetweenAtSignTokenAndAttributeName: ExpressibleAsGarbageNodes? = nil,
     attributeName: ExpressibleAsTypeBuildable,
+    garbageBetweenAttributeNameAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax? = nil,
+    garbageBetweenLeftParenAndArgumentList: ExpressibleAsGarbageNodes? = nil,
     argumentList: ExpressibleAsTupleExprElementList? = nil,
+    garbageBetweenArgumentListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAtSignToken = garbageBeforeAtSignToken?.createGarbageNodes()
     self.atSignToken = atSignToken
     assert(atSignToken.text == "@")
+    self.garbageBetweenAtSignTokenAndAttributeName = garbageBetweenAtSignTokenAndAttributeName?.createGarbageNodes()
     self.attributeName = attributeName.createTypeBuildable()
+    self.garbageBetweenAttributeNameAndLeftParen = garbageBetweenAttributeNameAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen == nil || leftParen!.text == "(")
+    self.garbageBetweenLeftParenAndArgumentList = garbageBetweenLeftParenAndArgumentList?.createGarbageNodes()
     self.argumentList = argumentList?.createTupleExprElementList()
+    self.garbageBetweenArgumentListAndRightParen = garbageBetweenArgumentListAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen == nil || rightParen!.text == ")")
   }
@@ -8587,18 +10954,28 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAtSignToken: ExpressibleAsGarbageNodes? = nil,
     atSignToken: TokenSyntax = TokenSyntax.`atSign`,
+    garbageBetweenAtSignTokenAndAttributeName: ExpressibleAsGarbageNodes? = nil,
     attributeName: ExpressibleAsTypeBuildable,
+    garbageBetweenAttributeNameAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax? = nil,
+    garbageBetweenLeftParenAndArgumentList: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenArgumentListAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax? = nil,
     @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList? = { nil }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAtSignToken: garbageBeforeAtSignToken,
       atSignToken: atSignToken,
+      garbageBetweenAtSignTokenAndAttributeName: garbageBetweenAtSignTokenAndAttributeName,
       attributeName: attributeName,
+      garbageBetweenAttributeNameAndLeftParen: garbageBetweenAttributeNameAndLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndArgumentList: garbageBetweenLeftParenAndArgumentList,
       argumentList: argumentListBuilder(),
+      garbageBetweenArgumentListAndRightParen: garbageBetweenArgumentListAndRightParen,
       rightParen: rightParen
     )
   }
@@ -8609,10 +10986,15 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// - Returns: The built `CustomAttributeSyntax`.
   func buildCustomAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CustomAttributeSyntax {
     let result = SyntaxFactory.makeCustomAttribute(
+      garbage: garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       atSignToken: atSignToken,
+      garbage: garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributeName: attributeName.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributeNameAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentList: argumentList?.buildTupleExprElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8640,11 +11022,17 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
 }
 /// An `@` attribute.
 public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
+  let garbageBeforeAtSignToken: GarbageNodes?
   let atSignToken: TokenSyntax
+  let garbageBetweenAtSignTokenAndAttributeName: GarbageNodes?
   let attributeName: TokenSyntax
+  let garbageBetweenAttributeNameAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax?
+  let garbageBetweenLeftParenAndArgument: GarbageNodes?
   let argument: SyntaxBuildable?
+  let garbageBetweenArgumentAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax?
+  let garbageBetweenRightParenAndTokenList: GarbageNodes?
   let tokenList: TokenList?
 
   /// The leading trivia attached to this syntax node once built.
@@ -8653,30 +11041,48 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
 
   /// Creates a `Attribute` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAtSignToken: 
   ///   - atSignToken: The `@` sign.
+  ///   - garbageBetweenAtSignTokenAndAttributeName: 
   ///   - attributeName: The name of the attribute.
+  ///   - garbageBetweenAttributeNameAndLeftParen: 
   ///   - leftParen: If the attribute takes arguments, the opening parenthesis.
+  ///   - garbageBetweenLeftParenAndArgument: 
   ///   - argument: The arguments of the attribute. In case the attributetakes multiple arguments, they are gather in theappropriate takes first.
+  ///   - garbageBetweenArgumentAndRightParen: 
   ///   - rightParen: If the attribute takes arguments, the closing parenthesis.
+  ///   - garbageBetweenRightParenAndTokenList: 
   ///   - tokenList: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAtSignToken: ExpressibleAsGarbageNodes? = nil,
     atSignToken: TokenSyntax = TokenSyntax.`atSign`,
+    garbageBetweenAtSignTokenAndAttributeName: ExpressibleAsGarbageNodes? = nil,
     attributeName: TokenSyntax,
+    garbageBetweenAttributeNameAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax? = nil,
+    garbageBetweenLeftParenAndArgument: ExpressibleAsGarbageNodes? = nil,
     argument: ExpressibleAsSyntaxBuildable? = nil,
+    garbageBetweenArgumentAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax? = nil,
+    garbageBetweenRightParenAndTokenList: ExpressibleAsGarbageNodes? = nil,
     tokenList: ExpressibleAsTokenList? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAtSignToken = garbageBeforeAtSignToken?.createGarbageNodes()
     self.atSignToken = atSignToken
     assert(atSignToken.text == "@")
+    self.garbageBetweenAtSignTokenAndAttributeName = garbageBetweenAtSignTokenAndAttributeName?.createGarbageNodes()
     self.attributeName = attributeName
+    self.garbageBetweenAttributeNameAndLeftParen = garbageBetweenAttributeNameAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen == nil || leftParen!.text == "(")
+    self.garbageBetweenLeftParenAndArgument = garbageBetweenLeftParenAndArgument?.createGarbageNodes()
     self.argument = argument?.createSyntaxBuildable()
+    self.garbageBetweenArgumentAndRightParen = garbageBetweenArgumentAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen == nil || rightParen!.text == ")")
+    self.garbageBetweenRightParenAndTokenList = garbageBetweenRightParenAndTokenList?.createGarbageNodes()
     self.tokenList = tokenList?.createTokenList()
   }
 
@@ -8687,11 +11093,17 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// - Returns: The built `AttributeSyntax`.
   func buildAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributeSyntax {
     let result = SyntaxFactory.makeAttribute(
+      garbage: garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       atSignToken: atSignToken,
+      garbage: garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributeName: attributeName,
+      garbage: garbageBetweenAttributeNameAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndArgument?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argument: argument?.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen,
+      garbage: garbageBetweenRightParenAndTokenList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tokenList: tokenList?.buildTokenList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8719,9 +11131,13 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
 }
 /// The availability argument for the _specialize attribute
 public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry {
+  let garbageBeforeLabel: GarbageNodes?
   let label: TokenSyntax
+  let garbageBetweenLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndAvailabilityList: GarbageNodes?
   let availabilityList: AvailabilitySpecList
+  let garbageBetweenAvailabilityListAndSemicolon: GarbageNodes?
   let semicolon: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -8730,22 +11146,34 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
 
   /// Creates a `AvailabilityEntry` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabel: 
   ///   - label: The label of the argument
+  ///   - garbageBetweenLabelAndColon: 
   ///   - colon: The colon separating the label and the value
+  ///   - garbageBetweenColonAndAvailabilityList: 
   ///   - availabilityList: 
+  ///   - garbageBetweenAvailabilityListAndSemicolon: 
   ///   - semicolon: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndAvailabilityList: ExpressibleAsGarbageNodes? = nil,
     availabilityList: ExpressibleAsAvailabilitySpecList,
+    garbageBetweenAvailabilityListAndSemicolon: ExpressibleAsGarbageNodes? = nil,
     semicolon: TokenSyntax = TokenSyntax.`semicolon`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabel = garbageBeforeLabel?.createGarbageNodes()
     self.label = label
+    self.garbageBetweenLabelAndColon = garbageBetweenLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndAvailabilityList = garbageBetweenColonAndAvailabilityList?.createGarbageNodes()
     self.availabilityList = availabilityList.createAvailabilitySpecList()
+    self.garbageBetweenAvailabilityListAndSemicolon = garbageBetweenAvailabilityListAndSemicolon?.createGarbageNodes()
     self.semicolon = semicolon
     assert(semicolon.text == ";")
   }
@@ -8755,16 +11183,24 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: String,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndAvailabilityList: ExpressibleAsGarbageNodes? = nil,
     availabilityList: ExpressibleAsAvailabilitySpecList,
+    garbageBetweenAvailabilityListAndSemicolon: ExpressibleAsGarbageNodes? = nil,
     semicolon: TokenSyntax = TokenSyntax.`semicolon`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabel: garbageBeforeLabel,
       label: TokenSyntax.identifier(label),
+      garbageBetweenLabelAndColon: garbageBetweenLabelAndColon,
       colon: colon,
+      garbageBetweenColonAndAvailabilityList: garbageBetweenColonAndAvailabilityList,
       availabilityList: availabilityList,
+      garbageBetweenAvailabilityListAndSemicolon: garbageBetweenAvailabilityListAndSemicolon,
       semicolon: semicolon
     )
   }
@@ -8775,9 +11211,13 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// - Returns: The built `AvailabilityEntrySyntax`.
   func buildAvailabilityEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
     let result = SyntaxFactory.makeAvailabilityEntry(
+      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
+      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndAvailabilityList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilityList: availabilityList.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAvailabilityListAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       semicolon: semicolon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8805,9 +11245,13 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
 }
 /// A labeled argument for the `@_specialize` attribute like`exported: true`
 public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpecializeEntry, HasTrailingComma {
+  let garbageBeforeLabel: GarbageNodes?
   let label: TokenSyntax
+  let garbageBetweenLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndValue: GarbageNodes?
   let value: TokenSyntax
+  let garbageBetweenValueAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -8816,22 +11260,34 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
 
   /// Creates a `LabeledSpecializeEntry` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabel: 
   ///   - label: The label of the argument
+  ///   - garbageBetweenLabelAndColon: 
   ///   - colon: The colon separating the label and the value
+  ///   - garbageBetweenColonAndValue: 
   ///   - value: The value for this argument
+  ///   - garbageBetweenValueAndTrailingComma: 
   ///   - trailingComma: A trailing comma if this argument is followed by another one
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValue: ExpressibleAsGarbageNodes? = nil,
     value: TokenSyntax,
+    garbageBetweenValueAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabel = garbageBeforeLabel?.createGarbageNodes()
     self.label = label
+    self.garbageBetweenLabelAndColon = garbageBetweenLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndValue = garbageBetweenColonAndValue?.createGarbageNodes()
     self.value = value
+    self.garbageBetweenValueAndTrailingComma = garbageBetweenValueAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -8841,16 +11297,24 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: String,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValue: ExpressibleAsGarbageNodes? = nil,
     value: TokenSyntax,
+    garbageBetweenValueAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabel: garbageBeforeLabel,
       label: TokenSyntax.identifier(label),
+      garbageBetweenLabelAndColon: garbageBetweenLabelAndColon,
       colon: colon,
+      garbageBetweenColonAndValue: garbageBetweenColonAndValue,
       value: value,
+      garbageBetweenValueAndTrailingComma: garbageBetweenValueAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -8861,9 +11325,13 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// - Returns: The built `LabeledSpecializeEntrySyntax`.
   func buildLabeledSpecializeEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledSpecializeEntrySyntax {
     let result = SyntaxFactory.makeLabeledSpecializeEntry(
+      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
+      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value,
+      garbage: garbageBetweenValueAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8884,9 +11352,13 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeLabel: garbageBeforeLabel,
         label: label,
+        garbageBetweenLabelAndColon: garbageBetweenLabelAndColon,
         colon: colon,
+        garbageBetweenColonAndValue: garbageBetweenColonAndValue,
         value: value,
+        garbageBetweenValueAndTrailingComma: garbageBetweenValueAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -8901,9 +11373,13 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
 }
 /// A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`
 public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionEntry, HasTrailingComma {
+  let garbageBeforeLabel: GarbageNodes?
   let label: TokenSyntax
+  let garbageBetweenLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndDeclname: GarbageNodes?
   let declname: DeclName
+  let garbageBetweenDeclnameAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -8912,22 +11388,34 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
 
   /// Creates a `TargetFunctionEntry` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabel: 
   ///   - label: The label of the argument
+  ///   - garbageBetweenLabelAndColon: 
   ///   - colon: The colon separating the label and the value
+  ///   - garbageBetweenColonAndDeclname: 
   ///   - declname: The value for this argument
+  ///   - garbageBetweenDeclnameAndTrailingComma: 
   ///   - trailingComma: A trailing comma if this argument is followed by another one
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndDeclname: ExpressibleAsGarbageNodes? = nil,
     declname: ExpressibleAsDeclName,
+    garbageBetweenDeclnameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabel = garbageBeforeLabel?.createGarbageNodes()
     self.label = label
+    self.garbageBetweenLabelAndColon = garbageBetweenLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndDeclname = garbageBetweenColonAndDeclname?.createGarbageNodes()
     self.declname = declname.createDeclName()
+    self.garbageBetweenDeclnameAndTrailingComma = garbageBetweenDeclnameAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -8937,16 +11425,24 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: String,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndDeclname: ExpressibleAsGarbageNodes? = nil,
     declname: ExpressibleAsDeclName,
+    garbageBetweenDeclnameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabel: garbageBeforeLabel,
       label: TokenSyntax.identifier(label),
+      garbageBetweenLabelAndColon: garbageBetweenLabelAndColon,
       colon: colon,
+      garbageBetweenColonAndDeclname: garbageBetweenColonAndDeclname,
       declname: declname,
+      garbageBetweenDeclnameAndTrailingComma: garbageBetweenDeclnameAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -8957,9 +11453,13 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// - Returns: The built `TargetFunctionEntrySyntax`.
   func buildTargetFunctionEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TargetFunctionEntrySyntax {
     let result = SyntaxFactory.makeTargetFunctionEntry(
+      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
+      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndDeclname?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declname: declname.buildDeclName(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenDeclnameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8980,9 +11480,13 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeLabel: garbageBeforeLabel,
         label: label,
+        garbageBetweenLabelAndColon: garbageBetweenLabelAndColon,
         colon: colon,
+        garbageBetweenColonAndDeclname: garbageBetweenColonAndDeclname,
         declname: declname,
+        garbageBetweenDeclnameAndTrailingComma: garbageBetweenDeclnameAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -8997,8 +11501,11 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
 }
 /// The argument for the `@_dynamic_replacement` or `@_private`attribute of the form `for: "function()"` or `sourceFile:"Src.swift"`
 public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedAttributeStringArgument {
+  let garbageBeforeNameTok: GarbageNodes?
   let nameTok: TokenSyntax
+  let garbageBetweenNameTokAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndStringOrDeclname: GarbageNodes?
   let stringOrDeclname: SyntaxBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -9007,19 +11514,28 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
 
   /// Creates a `NamedAttributeStringArgument` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeNameTok: 
   ///   - nameTok: The label of the argument
+  ///   - garbageBetweenNameTokAndColon: 
   ///   - colon: The colon separating the label and the value
+  ///   - garbageBetweenColonAndStringOrDeclname: 
   ///   - stringOrDeclname: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeNameTok: ExpressibleAsGarbageNodes? = nil,
     nameTok: TokenSyntax,
+    garbageBetweenNameTokAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndStringOrDeclname: ExpressibleAsGarbageNodes? = nil,
     stringOrDeclname: ExpressibleAsSyntaxBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeNameTok = garbageBeforeNameTok?.createGarbageNodes()
     self.nameTok = nameTok
+    self.garbageBetweenNameTokAndColon = garbageBetweenNameTokAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndStringOrDeclname = garbageBetweenColonAndStringOrDeclname?.createGarbageNodes()
     self.stringOrDeclname = stringOrDeclname.createSyntaxBuildable()
   }
 
@@ -9030,8 +11546,11 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// - Returns: The built `NamedAttributeStringArgumentSyntax`.
   func buildNamedAttributeStringArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NamedAttributeStringArgumentSyntax {
     let result = SyntaxFactory.makeNamedAttributeStringArgument(
+      garbage: garbageBeforeNameTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       nameTok: nameTok,
+      garbage: garbageBetweenNameTokAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndStringOrDeclname?.buildGarbageNodes(format: format, leadingTrivia: nil),
       stringOrDeclname: stringOrDeclname.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9058,7 +11577,9 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
 
 }
 public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
+  let garbageBeforeDeclBaseName: GarbageNodes?
   let declBaseName: SyntaxBuildable
+  let garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodes?
   let declNameArguments: DeclNameArguments?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9067,15 +11588,21 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
 
   /// Creates a `DeclName` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeDeclBaseName: 
   ///   - declBaseName: The base name of the protocol's requirement.
+  ///   - garbageBetweenDeclBaseNameAndDeclNameArguments: 
   ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDeclBaseName: ExpressibleAsGarbageNodes? = nil,
     declBaseName: ExpressibleAsSyntaxBuildable,
+    garbageBetweenDeclBaseNameAndDeclNameArguments: ExpressibleAsGarbageNodes? = nil,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeDeclBaseName = garbageBeforeDeclBaseName?.createGarbageNodes()
     self.declBaseName = declBaseName.createSyntaxBuildable()
+    self.garbageBetweenDeclBaseNameAndDeclNameArguments = garbageBetweenDeclBaseNameAndDeclNameArguments?.createGarbageNodes()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
 
@@ -9086,7 +11613,9 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// - Returns: The built `DeclNameSyntax`.
   func buildDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameSyntax {
     let result = SyntaxFactory.makeDeclName(
+      garbage: garbageBeforeDeclBaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenDeclBaseNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9114,9 +11643,13 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
 }
 /// The arguments for the `@_implements` attribute of the form`Type, methodName(arg1Label:arg2Label:)`
 public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplementsAttributeArguments {
+  let garbageBeforeType: GarbageNodes?
   let type: SimpleTypeIdentifier
+  let garbageBetweenTypeAndComma: GarbageNodes?
   let comma: TokenSyntax
+  let garbageBetweenCommaAndDeclBaseName: GarbageNodes?
   let declBaseName: SyntaxBuildable
+  let garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodes?
   let declNameArguments: DeclNameArguments?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9125,22 +11658,34 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
 
   /// Creates a `ImplementsAttributeArguments` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeType: 
   ///   - type: The type for which the method with this attributeimplements a requirement.
+  ///   - garbageBetweenTypeAndComma: 
   ///   - comma: The comma separating the type and method name
+  ///   - garbageBetweenCommaAndDeclBaseName: 
   ///   - declBaseName: The base name of the protocol's requirement.
+  ///   - garbageBetweenDeclBaseNameAndDeclNameArguments: 
   ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsSimpleTypeIdentifier,
+    garbageBetweenTypeAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax = TokenSyntax.`comma`,
+    garbageBetweenCommaAndDeclBaseName: ExpressibleAsGarbageNodes? = nil,
     declBaseName: ExpressibleAsSyntaxBuildable,
+    garbageBetweenDeclBaseNameAndDeclNameArguments: ExpressibleAsGarbageNodes? = nil,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeType = garbageBeforeType?.createGarbageNodes()
     self.type = type.createSimpleTypeIdentifier()
+    self.garbageBetweenTypeAndComma = garbageBetweenTypeAndComma?.createGarbageNodes()
     self.comma = comma
     assert(comma.text == ",")
+    self.garbageBetweenCommaAndDeclBaseName = garbageBetweenCommaAndDeclBaseName?.createGarbageNodes()
     self.declBaseName = declBaseName.createSyntaxBuildable()
+    self.garbageBetweenDeclBaseNameAndDeclNameArguments = garbageBetweenDeclBaseNameAndDeclNameArguments?.createGarbageNodes()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
 
@@ -9151,9 +11696,13 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// - Returns: The built `ImplementsAttributeArgumentsSyntax`.
   func buildImplementsAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplementsAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeImplementsAttributeArguments(
+      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildSimpleTypeIdentifier(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
+      garbage: garbageBetweenCommaAndDeclBaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenDeclBaseNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9181,7 +11730,9 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
 }
 /// A piece of an Objective-C selector. Either consisting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument
 public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax?
+  let garbageBetweenNameAndColon: GarbageNodes?
   let colon: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9190,15 +11741,21 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
 
   /// Creates a `ObjCSelectorPiece` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndColon: 
   ///   - colon: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax? = nil,
+    garbageBetweenNameAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndColon = garbageBetweenNameAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
   }
@@ -9208,12 +11765,16 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: String?,
+    garbageBetweenNameAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeName: garbageBeforeName,
       name: name.map(TokenSyntax.identifier),
+      garbageBetweenNameAndColon: garbageBetweenNameAndColon,
       colon: colon
     )
   }
@@ -9224,7 +11785,9 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// - Returns: The built `ObjCSelectorPieceSyntax`.
   func buildObjCSelectorPiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjCSelectorPieceSyntax {
     let result = SyntaxFactory.makeObjCSelectorPiece(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9252,10 +11815,15 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
 }
 /// The arguments for the `@differentiable` attribute: an optionaldifferentiability kind, an optional differentiability parameter clause,and an optional 'where' clause.
 public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDifferentiableAttributeArguments {
+  let garbageBeforeDiffKind: GarbageNodes?
   let diffKind: TokenSyntax?
+  let garbageBetweenDiffKindAndDiffKindComma: GarbageNodes?
   let diffKindComma: TokenSyntax?
+  let garbageBetweenDiffKindCommaAndDiffParams: GarbageNodes?
   let diffParams: DifferentiabilityParamsClause?
+  let garbageBetweenDiffParamsAndDiffParamsComma: GarbageNodes?
   let diffParamsComma: TokenSyntax?
+  let garbageBetweenDiffParamsCommaAndWhereClause: GarbageNodes?
   let whereClause: GenericWhereClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9264,27 +11832,42 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
 
   /// Creates a `DifferentiableAttributeArguments` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeDiffKind: 
   ///   - diffKind: 
+  ///   - garbageBetweenDiffKindAndDiffKindComma: 
   ///   - diffKindComma: The comma following the differentiability kind, if it exists.
+  ///   - garbageBetweenDiffKindCommaAndDiffParams: 
   ///   - diffParams: 
+  ///   - garbageBetweenDiffParamsAndDiffParamsComma: 
   ///   - diffParamsComma: The comma following the differentiability parameters clause,if it exists.
+  ///   - garbageBetweenDiffParamsCommaAndWhereClause: 
   ///   - whereClause: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDiffKind: ExpressibleAsGarbageNodes? = nil,
     diffKind: TokenSyntax? = nil,
+    garbageBetweenDiffKindAndDiffKindComma: ExpressibleAsGarbageNodes? = nil,
     diffKindComma: TokenSyntax? = nil,
+    garbageBetweenDiffKindCommaAndDiffParams: ExpressibleAsGarbageNodes? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil,
+    garbageBetweenDiffParamsAndDiffParamsComma: ExpressibleAsGarbageNodes? = nil,
     diffParamsComma: TokenSyntax? = nil,
+    garbageBetweenDiffParamsCommaAndWhereClause: ExpressibleAsGarbageNodes? = nil,
     whereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeDiffKind = garbageBeforeDiffKind?.createGarbageNodes()
     self.diffKind = diffKind
     assert(diffKind == nil || diffKind!.text == "forward" || diffKind!.text == "reverse" || diffKind!.text == "linear")
+    self.garbageBetweenDiffKindAndDiffKindComma = garbageBetweenDiffKindAndDiffKindComma?.createGarbageNodes()
     self.diffKindComma = diffKindComma
     assert(diffKindComma == nil || diffKindComma!.text == ",")
+    self.garbageBetweenDiffKindCommaAndDiffParams = garbageBetweenDiffKindCommaAndDiffParams?.createGarbageNodes()
     self.diffParams = diffParams?.createDifferentiabilityParamsClause()
+    self.garbageBetweenDiffParamsAndDiffParamsComma = garbageBetweenDiffParamsAndDiffParamsComma?.createGarbageNodes()
     self.diffParamsComma = diffParamsComma
     assert(diffParamsComma == nil || diffParamsComma!.text == ",")
+    self.garbageBetweenDiffParamsCommaAndWhereClause = garbageBetweenDiffParamsCommaAndWhereClause?.createGarbageNodes()
     self.whereClause = whereClause?.createGenericWhereClause()
   }
 
@@ -9293,18 +11876,28 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDiffKind: ExpressibleAsGarbageNodes? = nil,
     diffKind: String?,
+    garbageBetweenDiffKindAndDiffKindComma: ExpressibleAsGarbageNodes? = nil,
     diffKindComma: TokenSyntax? = nil,
+    garbageBetweenDiffKindCommaAndDiffParams: ExpressibleAsGarbageNodes? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil,
+    garbageBetweenDiffParamsAndDiffParamsComma: ExpressibleAsGarbageNodes? = nil,
     diffParamsComma: TokenSyntax? = nil,
+    garbageBetweenDiffParamsCommaAndWhereClause: ExpressibleAsGarbageNodes? = nil,
     whereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeDiffKind: garbageBeforeDiffKind,
       diffKind: diffKind.map(TokenSyntax.identifier),
+      garbageBetweenDiffKindAndDiffKindComma: garbageBetweenDiffKindAndDiffKindComma,
       diffKindComma: diffKindComma,
+      garbageBetweenDiffKindCommaAndDiffParams: garbageBetweenDiffKindCommaAndDiffParams,
       diffParams: diffParams,
+      garbageBetweenDiffParamsAndDiffParamsComma: garbageBetweenDiffParamsAndDiffParamsComma,
       diffParamsComma: diffParamsComma,
+      garbageBetweenDiffParamsCommaAndWhereClause: garbageBetweenDiffParamsCommaAndWhereClause,
       whereClause: whereClause
     )
   }
@@ -9315,10 +11908,15 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// - Returns: The built `DifferentiableAttributeArgumentsSyntax`.
   func buildDifferentiableAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiableAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeDifferentiableAttributeArguments(
+      garbage: garbageBeforeDiffKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffKind: diffKind,
+      garbage: garbageBetweenDiffKindAndDiffKindComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffKindComma: diffKindComma,
+      garbage: garbageBetweenDiffKindCommaAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenDiffParamsAndDiffParamsComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParamsComma: diffParamsComma,
+      garbage: garbageBetweenDiffParamsCommaAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9346,8 +11944,11 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
 }
 /// A clause containing differentiability parameters.
 public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDifferentiabilityParamsClause {
+  let garbageBeforeWrtLabel: GarbageNodes?
   let wrtLabel: TokenSyntax
+  let garbageBetweenWrtLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndParameters: GarbageNodes?
   let parameters: SyntaxBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -9356,20 +11957,29 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
 
   /// Creates a `DifferentiabilityParamsClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeWrtLabel: 
   ///   - wrtLabel: The "wrt" label.
+  ///   - garbageBetweenWrtLabelAndColon: 
   ///   - colon: The colon separating "wrt" and the parameter list.
+  ///   - garbageBetweenColonAndParameters: 
   ///   - parameters: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWrtLabel: ExpressibleAsGarbageNodes? = nil,
     wrtLabel: TokenSyntax,
+    garbageBetweenWrtLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndParameters: ExpressibleAsGarbageNodes? = nil,
     parameters: ExpressibleAsSyntaxBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeWrtLabel = garbageBeforeWrtLabel?.createGarbageNodes()
     self.wrtLabel = wrtLabel
     assert(wrtLabel.text == "wrt")
+    self.garbageBetweenWrtLabelAndColon = garbageBetweenWrtLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndParameters = garbageBetweenColonAndParameters?.createGarbageNodes()
     self.parameters = parameters.createSyntaxBuildable()
   }
 
@@ -9378,14 +11988,20 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWrtLabel: ExpressibleAsGarbageNodes? = nil,
     wrtLabel: String,
+    garbageBetweenWrtLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndParameters: ExpressibleAsGarbageNodes? = nil,
     parameters: ExpressibleAsSyntaxBuildable
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeWrtLabel: garbageBeforeWrtLabel,
       wrtLabel: TokenSyntax.identifier(wrtLabel),
+      garbageBetweenWrtLabelAndColon: garbageBetweenWrtLabelAndColon,
       colon: colon,
+      garbageBetweenColonAndParameters: garbageBetweenColonAndParameters,
       parameters: parameters
     )
   }
@@ -9396,8 +12012,11 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// - Returns: The built `DifferentiabilityParamsClauseSyntax`.
   func buildDifferentiabilityParamsClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsClauseSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParamsClause(
+      garbage: garbageBeforeWrtLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrtLabel: wrtLabel,
+      garbage: garbageBetweenWrtLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndParameters?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameters: parameters.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9425,8 +12044,11 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
 }
 /// The differentiability parameters.
 public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentiabilityParams {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndDiffParams: GarbageNodes?
   let diffParams: DifferentiabilityParamList
+  let garbageBetweenDiffParamsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -9435,19 +12057,28 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
 
   /// Creates a `DifferentiabilityParams` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndDiffParams: 
   ///   - diffParams: The parameters for differentiation.
+  ///   - garbageBetweenDiffParamsAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndDiffParams: ExpressibleAsGarbageNodes? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamList,
+    garbageBetweenDiffParamsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndDiffParams = garbageBetweenLeftParenAndDiffParams?.createGarbageNodes()
     self.diffParams = diffParams.createDifferentiabilityParamList()
+    self.garbageBetweenDiffParamsAndRightParen = garbageBetweenDiffParamsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -9459,8 +12090,11 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// - Returns: The built `DifferentiabilityParamsSyntax`.
   func buildDifferentiabilityParams(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParams(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParams: diffParams.buildDifferentiabilityParamList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenDiffParamsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9488,7 +12122,9 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
 }
 /// A differentiability parameter: either the "self" identifier, a functionparameter name, or a function parameter index.
 public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiabilityParam, HasTrailingComma {
+  let garbageBeforeParameter: GarbageNodes?
   let parameter: SyntaxBuildable
+  let garbageBetweenParameterAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9497,15 +12133,21 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
 
   /// Creates a `DifferentiabilityParam` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeParameter: 
   ///   - parameter: 
+  ///   - garbageBetweenParameterAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeParameter: ExpressibleAsGarbageNodes? = nil,
     parameter: ExpressibleAsSyntaxBuildable,
+    garbageBetweenParameterAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeParameter = garbageBeforeParameter?.createGarbageNodes()
     self.parameter = parameter.createSyntaxBuildable()
+    self.garbageBetweenParameterAndTrailingComma = garbageBetweenParameterAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -9517,7 +12159,9 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// - Returns: The built `DifferentiabilityParamSyntax`.
   func buildDifferentiabilityParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParam(
+      garbage: garbageBeforeParameter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameter: parameter.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenParameterAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9538,7 +12182,9 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeParameter: garbageBeforeParameter,
         parameter: parameter,
+        garbageBetweenParameterAndTrailingComma: garbageBetweenParameterAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -9553,12 +12199,19 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
 }
 /// The arguments for the '@derivative(of:)' and '@transpose(of:)'attributes: the 'of:' label, the original declaration name, and anoptional differentiability parameter list.
 public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, ExpressibleAsDerivativeRegistrationAttributeArguments {
+  let garbageBeforeOfLabel: GarbageNodes?
   let ofLabel: TokenSyntax
+  let garbageBetweenOfLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndOriginalDeclName: GarbageNodes?
   let originalDeclName: QualifiedDeclName
+  let garbageBetweenOriginalDeclNameAndPeriod: GarbageNodes?
   let period: TokenSyntax?
+  let garbageBetweenPeriodAndAccessorKind: GarbageNodes?
   let accessorKind: TokenSyntax?
+  let garbageBetweenAccessorKindAndComma: GarbageNodes?
   let comma: TokenSyntax?
+  let garbageBetweenCommaAndDiffParams: GarbageNodes?
   let diffParams: DifferentiabilityParamsClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9567,35 +12220,56 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
 
   /// Creates a `DerivativeRegistrationAttributeArguments` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeOfLabel: 
   ///   - ofLabel: The "of" label.
+  ///   - garbageBetweenOfLabelAndColon: 
   ///   - colon: The colon separating the "of" label and the originaldeclaration name.
+  ///   - garbageBetweenColonAndOriginalDeclName: 
   ///   - originalDeclName: The referenced original declaration name.
+  ///   - garbageBetweenOriginalDeclNameAndPeriod: 
   ///   - period: The period separating the original declaration name and theaccessor name.
+  ///   - garbageBetweenPeriodAndAccessorKind: 
   ///   - accessorKind: The accessor name.
+  ///   - garbageBetweenAccessorKindAndComma: 
   ///   - comma: 
+  ///   - garbageBetweenCommaAndDiffParams: 
   ///   - diffParams: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeOfLabel: ExpressibleAsGarbageNodes? = nil,
     ofLabel: TokenSyntax,
+    garbageBetweenOfLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndOriginalDeclName: ExpressibleAsGarbageNodes? = nil,
     originalDeclName: ExpressibleAsQualifiedDeclName,
+    garbageBetweenOriginalDeclNameAndPeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax? = nil,
+    garbageBetweenPeriodAndAccessorKind: ExpressibleAsGarbageNodes? = nil,
     accessorKind: TokenSyntax? = nil,
+    garbageBetweenAccessorKindAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax? = nil,
+    garbageBetweenCommaAndDiffParams: ExpressibleAsGarbageNodes? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeOfLabel = garbageBeforeOfLabel?.createGarbageNodes()
     self.ofLabel = ofLabel
     assert(ofLabel.text == "of")
+    self.garbageBetweenOfLabelAndColon = garbageBetweenOfLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndOriginalDeclName = garbageBetweenColonAndOriginalDeclName?.createGarbageNodes()
     self.originalDeclName = originalDeclName.createQualifiedDeclName()
+    self.garbageBetweenOriginalDeclNameAndPeriod = garbageBetweenOriginalDeclNameAndPeriod?.createGarbageNodes()
     self.period = period
     assert(period == nil || period!.text == ".")
+    self.garbageBetweenPeriodAndAccessorKind = garbageBetweenPeriodAndAccessorKind?.createGarbageNodes()
     self.accessorKind = accessorKind
     assert(accessorKind == nil || accessorKind!.text == "get" || accessorKind!.text == "set")
+    self.garbageBetweenAccessorKindAndComma = garbageBetweenAccessorKindAndComma?.createGarbageNodes()
     self.comma = comma
     assert(comma == nil || comma!.text == ",")
+    self.garbageBetweenCommaAndDiffParams = garbageBetweenCommaAndDiffParams?.createGarbageNodes()
     self.diffParams = diffParams?.createDifferentiabilityParamsClause()
   }
 
@@ -9604,22 +12278,36 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeOfLabel: ExpressibleAsGarbageNodes? = nil,
     ofLabel: String,
+    garbageBetweenOfLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndOriginalDeclName: ExpressibleAsGarbageNodes? = nil,
     originalDeclName: ExpressibleAsQualifiedDeclName,
+    garbageBetweenOriginalDeclNameAndPeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax? = nil,
+    garbageBetweenPeriodAndAccessorKind: ExpressibleAsGarbageNodes? = nil,
     accessorKind: String?,
+    garbageBetweenAccessorKindAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax? = nil,
+    garbageBetweenCommaAndDiffParams: ExpressibleAsGarbageNodes? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeOfLabel: garbageBeforeOfLabel,
       ofLabel: TokenSyntax.identifier(ofLabel),
+      garbageBetweenOfLabelAndColon: garbageBetweenOfLabelAndColon,
       colon: colon,
+      garbageBetweenColonAndOriginalDeclName: garbageBetweenColonAndOriginalDeclName,
       originalDeclName: originalDeclName,
+      garbageBetweenOriginalDeclNameAndPeriod: garbageBetweenOriginalDeclNameAndPeriod,
       period: period,
+      garbageBetweenPeriodAndAccessorKind: garbageBetweenPeriodAndAccessorKind,
       accessorKind: accessorKind.map(TokenSyntax.identifier),
+      garbageBetweenAccessorKindAndComma: garbageBetweenAccessorKindAndComma,
       comma: comma,
+      garbageBetweenCommaAndDiffParams: garbageBetweenCommaAndDiffParams,
       diffParams: diffParams
     )
   }
@@ -9630,12 +12318,19 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// - Returns: The built `DerivativeRegistrationAttributeArgumentsSyntax`.
   func buildDerivativeRegistrationAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeDerivativeRegistrationAttributeArguments(
+      garbage: garbageBeforeOfLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ofLabel: ofLabel,
+      garbage: garbageBetweenOfLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndOriginalDeclName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       originalDeclName: originalDeclName.buildQualifiedDeclName(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenOriginalDeclNameAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
+      garbage: garbageBetweenPeriodAndAccessorKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessorKind: accessorKind,
+      garbage: garbageBetweenAccessorKindAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
+      garbage: garbageBetweenCommaAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9663,9 +12358,13 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
 }
 /// An optionally qualified function declaration name (e.g. `+(_:_:)`,`A.B.C.foo(_:_:)`).
 public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName {
+  let garbageBeforeBaseType: GarbageNodes?
   let baseType: TypeBuildable?
+  let garbageBetweenBaseTypeAndDot: GarbageNodes?
   let dot: TokenSyntax?
+  let garbageBetweenDotAndName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndArguments: GarbageNodes?
   let arguments: DeclNameArguments?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9674,22 +12373,34 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
 
   /// Creates a `QualifiedDeclName` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBaseType: 
   ///   - baseType: The base type of the qualified name, optionally specified.
+  ///   - garbageBetweenBaseTypeAndDot: 
   ///   - dot: 
+  ///   - garbageBetweenDotAndName: 
   ///   - name: The base name of the referenced function.
+  ///   - garbageBetweenNameAndArguments: 
   ///   - arguments: The argument labels of the referenced function, optionallyspecified.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBaseType: ExpressibleAsGarbageNodes? = nil,
     baseType: ExpressibleAsTypeBuildable? = nil,
+    garbageBetweenBaseTypeAndDot: ExpressibleAsGarbageNodes? = nil,
     dot: TokenSyntax? = nil,
+    garbageBetweenDotAndName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndArguments: ExpressibleAsGarbageNodes? = nil,
     arguments: ExpressibleAsDeclNameArguments? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBaseType = garbageBeforeBaseType?.createGarbageNodes()
     self.baseType = baseType?.createTypeBuildable()
+    self.garbageBetweenBaseTypeAndDot = garbageBetweenBaseTypeAndDot?.createGarbageNodes()
     self.dot = dot
     assert(dot == nil || dot!.text == "." || dot!.text == ".")
+    self.garbageBetweenDotAndName = garbageBetweenDotAndName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndArguments = garbageBetweenNameAndArguments?.createGarbageNodes()
     self.arguments = arguments?.createDeclNameArguments()
   }
 
@@ -9700,9 +12411,13 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   /// - Returns: The built `QualifiedDeclNameSyntax`.
   func buildQualifiedDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> QualifiedDeclNameSyntax {
     let result = SyntaxFactory.makeQualifiedDeclName(
+      garbage: garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType?.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBaseTypeAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       dot: dot,
+      garbage: garbageBetweenDotAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9730,7 +12445,9 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
 }
 /// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
+  let garbageBeforeName: GarbageNodes?
   let name: SyntaxBuildable
+  let garbageBetweenNameAndArguments: GarbageNodes?
   let arguments: DeclNameArguments?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9739,15 +12456,21 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
 
   /// Creates a `FunctionDeclName` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: The base name of the referenced function.
+  ///   - garbageBetweenNameAndArguments: 
   ///   - arguments: The argument labels of the referenced function, optionallyspecified.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: ExpressibleAsSyntaxBuildable,
+    garbageBetweenNameAndArguments: ExpressibleAsGarbageNodes? = nil,
     arguments: ExpressibleAsDeclNameArguments? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name.createSyntaxBuildable()
+    self.garbageBetweenNameAndArguments = garbageBetweenNameAndArguments?.createGarbageNodes()
     self.arguments = arguments?.createDeclNameArguments()
   }
 
@@ -9758,7 +12481,9 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// - Returns: The built `FunctionDeclNameSyntax`.
   func buildFunctionDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclNameSyntax {
     let result = SyntaxFactory.makeFunctionDeclName(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenNameAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9786,8 +12511,11 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
 }
 /// A collection of arguments for the `@_backDeploy` attribute
 public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDeployAttributeSpecList {
+  let garbageBeforeBeforeLabel: GarbageNodes?
   let beforeLabel: TokenSyntax
+  let garbageBetweenBeforeLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndVersionList: GarbageNodes?
   let versionList: BackDeployVersionList
 
   /// The leading trivia attached to this syntax node once built.
@@ -9796,20 +12524,29 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
 
   /// Creates a `BackDeployAttributeSpecList` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBeforeLabel: 
   ///   - beforeLabel: The "before" label.
+  ///   - garbageBetweenBeforeLabelAndColon: 
   ///   - colon: The colon separating "before" and the parameter list.
+  ///   - garbageBetweenColonAndVersionList: 
   ///   - versionList: The list of OS versions in which the declaration became ABIstable.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     beforeLabel: TokenSyntax,
+    garbageBetweenBeforeLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndVersionList: ExpressibleAsGarbageNodes? = nil,
     versionList: ExpressibleAsBackDeployVersionList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBeforeLabel = garbageBeforeBeforeLabel?.createGarbageNodes()
     self.beforeLabel = beforeLabel
     assert(beforeLabel.text == "before")
+    self.garbageBetweenBeforeLabelAndColon = garbageBetweenBeforeLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndVersionList = garbageBetweenColonAndVersionList?.createGarbageNodes()
     self.versionList = versionList.createBackDeployVersionList()
   }
 
@@ -9818,14 +12555,20 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     beforeLabel: String,
+    garbageBetweenBeforeLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndVersionList: ExpressibleAsGarbageNodes? = nil,
     versionList: ExpressibleAsBackDeployVersionList
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeBeforeLabel: garbageBeforeBeforeLabel,
       beforeLabel: TokenSyntax.identifier(beforeLabel),
+      garbageBetweenBeforeLabelAndColon: garbageBetweenBeforeLabelAndColon,
       colon: colon,
+      garbageBetweenColonAndVersionList: garbageBetweenColonAndVersionList,
       versionList: versionList
     )
   }
@@ -9836,8 +12579,11 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// - Returns: The built `BackDeployAttributeSpecListSyntax`.
   func buildBackDeployAttributeSpecList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployAttributeSpecListSyntax {
     let result = SyntaxFactory.makeBackDeployAttributeSpecList(
+      garbage: garbageBeforeBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       beforeLabel: beforeLabel,
+      garbage: garbageBetweenBeforeLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndVersionList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       versionList: versionList.buildBackDeployVersionList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9865,7 +12611,9 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
 }
 /// A single platform/version pair in a `@_backDeploy` attribute,e.g. `iOS 10.1`.
 public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeployVersionArgument {
+  let garbageBeforeAvailabilityVersionRestriction: GarbageNodes?
   let availabilityVersionRestriction: AvailabilityVersionRestriction
+  let garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9874,15 +12622,21 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
 
   /// Creates a `BackDeployVersionArgument` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAvailabilityVersionRestriction: 
   ///   - availabilityVersionRestriction: 
+  ///   - garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: 
   ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAvailabilityVersionRestriction: ExpressibleAsGarbageNodes? = nil,
     availabilityVersionRestriction: ExpressibleAsAvailabilityVersionRestriction,
+    garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAvailabilityVersionRestriction = garbageBeforeAvailabilityVersionRestriction?.createGarbageNodes()
     self.availabilityVersionRestriction = availabilityVersionRestriction.createAvailabilityVersionRestriction()
+    self.garbageBetweenAvailabilityVersionRestrictionAndTrailingComma = garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -9894,7 +12648,9 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// - Returns: The built `BackDeployVersionArgumentSyntax`.
   func buildBackDeployVersionArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployVersionArgumentSyntax {
     let result = SyntaxFactory.makeBackDeployVersionArgument(
+      garbage: garbageBeforeAvailabilityVersionRestriction?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9921,7 +12677,9 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
 
 }
 public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
+  let garbageBeforeContinueKeyword: GarbageNodes?
   let continueKeyword: TokenSyntax
+  let garbageBetweenContinueKeywordAndLabel: GarbageNodes?
   let label: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -9930,16 +12688,22 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
 
   /// Creates a `ContinueStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeContinueKeyword: 
   ///   - continueKeyword: 
+  ///   - garbageBetweenContinueKeywordAndLabel: 
   ///   - label: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeContinueKeyword: ExpressibleAsGarbageNodes? = nil,
     continueKeyword: TokenSyntax = TokenSyntax.`continue`,
+    garbageBetweenContinueKeywordAndLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeContinueKeyword = garbageBeforeContinueKeyword?.createGarbageNodes()
     self.continueKeyword = continueKeyword
     assert(continueKeyword.text == "continue")
+    self.garbageBetweenContinueKeywordAndLabel = garbageBetweenContinueKeywordAndLabel?.createGarbageNodes()
     self.label = label
   }
 
@@ -9948,12 +12712,16 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeContinueKeyword: ExpressibleAsGarbageNodes? = nil,
     continueKeyword: TokenSyntax = TokenSyntax.`continue`,
+    garbageBetweenContinueKeywordAndLabel: ExpressibleAsGarbageNodes? = nil,
     label: String?
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeContinueKeyword: garbageBeforeContinueKeyword,
       continueKeyword: continueKeyword,
+      garbageBetweenContinueKeywordAndLabel: garbageBetweenContinueKeywordAndLabel,
       label: label.map(TokenSyntax.identifier)
     )
   }
@@ -9964,7 +12732,9 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// - Returns: The built `ContinueStmtSyntax`.
   func buildContinueStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ContinueStmtSyntax {
     let result = SyntaxFactory.makeContinueStmt(
+      garbage: garbageBeforeContinueKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       continueKeyword: continueKeyword,
+      garbage: garbageBetweenContinueKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9997,10 +12767,15 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   }
 }
 public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
+  let garbageBeforeLabelName: GarbageNodes?
   let labelName: TokenSyntax?
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
   let labelColon: TokenSyntax?
+  let garbageBetweenLabelColonAndWhileKeyword: GarbageNodes?
   let whileKeyword: TokenSyntax
+  let garbageBetweenWhileKeywordAndConditions: GarbageNodes?
   let conditions: ConditionElementList
+  let garbageBetweenConditionsAndBody: GarbageNodes?
   let body: CodeBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -10009,26 +12784,41 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
 
   /// Creates a `WhileStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabelName: 
   ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
   ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndWhileKeyword: 
   ///   - whileKeyword: 
+  ///   - garbageBetweenWhileKeywordAndConditions: 
   ///   - conditions: 
+  ///   - garbageBetweenConditionsAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: TokenSyntax? = nil,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndWhileKeyword: ExpressibleAsGarbageNodes? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
+    garbageBetweenWhileKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
+    garbageBetweenConditionsAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
     self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
+    self.garbageBetweenLabelColonAndWhileKeyword = garbageBetweenLabelColonAndWhileKeyword?.createGarbageNodes()
     self.whileKeyword = whileKeyword
     assert(whileKeyword.text == "while")
+    self.garbageBetweenWhileKeywordAndConditions = garbageBetweenWhileKeywordAndConditions?.createGarbageNodes()
     self.conditions = conditions.createConditionElementList()
+    self.garbageBetweenConditionsAndBody = garbageBetweenConditionsAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
   }
 
@@ -10037,18 +12827,28 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: String?,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndWhileKeyword: ExpressibleAsGarbageNodes? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
+    garbageBetweenWhileKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
+    garbageBetweenConditionsAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
       labelName: labelName.map(TokenSyntax.identifier),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
+      garbageBetweenLabelColonAndWhileKeyword: garbageBetweenLabelColonAndWhileKeyword,
       whileKeyword: whileKeyword,
+      garbageBetweenWhileKeywordAndConditions: garbageBetweenWhileKeywordAndConditions,
       conditions: conditions,
+      garbageBetweenConditionsAndBody: garbageBetweenConditionsAndBody,
       body: bodyBuilder()
     )
   }
@@ -10059,10 +12859,15 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// - Returns: The built `WhileStmtSyntax`.
   func buildWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhileStmtSyntax {
     let result = SyntaxFactory.makeWhileStmt(
+      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
+      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
+      garbage: garbageBetweenLabelColonAndWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whileKeyword: whileKeyword,
+      garbage: garbageBetweenWhileKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenConditionsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10095,7 +12900,9 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   }
 }
 public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
+  let garbageBeforeDeferKeyword: GarbageNodes?
   let deferKeyword: TokenSyntax
+  let garbageBetweenDeferKeywordAndBody: GarbageNodes?
   let body: CodeBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -10104,16 +12911,22 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
 
   /// Creates a `DeferStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeDeferKeyword: 
   ///   - deferKeyword: 
+  ///   - garbageBetweenDeferKeywordAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDeferKeyword: ExpressibleAsGarbageNodes? = nil,
     deferKeyword: TokenSyntax = TokenSyntax.`defer`,
+    garbageBetweenDeferKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeDeferKeyword = garbageBeforeDeferKeyword?.createGarbageNodes()
     self.deferKeyword = deferKeyword
     assert(deferKeyword.text == "defer")
+    self.garbageBetweenDeferKeywordAndBody = garbageBetweenDeferKeywordAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
   }
 
@@ -10122,12 +12935,16 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDeferKeyword: ExpressibleAsGarbageNodes? = nil,
     deferKeyword: TokenSyntax = TokenSyntax.`defer`,
+    garbageBetweenDeferKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeDeferKeyword: garbageBeforeDeferKeyword,
       deferKeyword: deferKeyword,
+      garbageBetweenDeferKeywordAndBody: garbageBetweenDeferKeywordAndBody,
       body: bodyBuilder()
     )
   }
@@ -10138,7 +12955,9 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// - Returns: The built `DeferStmtSyntax`.
   func buildDeferStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeferStmtSyntax {
     let result = SyntaxFactory.makeDeferStmt(
+      garbage: garbageBeforeDeferKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       deferKeyword: deferKeyword,
+      garbage: garbageBetweenDeferKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10171,6 +12990,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   }
 }
 public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
+  let garbageBeforeExpression: GarbageNodes?
   let expression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -10179,12 +12999,15 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
 
   /// Creates a `ExpressionStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeExpression = garbageBeforeExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
   }
 
@@ -10195,6 +13018,7 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// - Returns: The built `ExpressionStmtSyntax`.
   func buildExpressionStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionStmtSyntax {
     let result = SyntaxFactory.makeExpressionStmt(
+      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10227,11 +13051,17 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   }
 }
 public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
+  let garbageBeforeLabelName: GarbageNodes?
   let labelName: TokenSyntax?
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
   let labelColon: TokenSyntax?
+  let garbageBetweenLabelColonAndRepeatKeyword: GarbageNodes?
   let repeatKeyword: TokenSyntax
+  let garbageBetweenRepeatKeywordAndBody: GarbageNodes?
   let body: CodeBlock
+  let garbageBetweenBodyAndWhileKeyword: GarbageNodes?
   let whileKeyword: TokenSyntax
+  let garbageBetweenWhileKeywordAndCondition: GarbageNodes?
   let condition: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -10240,30 +13070,48 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
 
   /// Creates a `RepeatWhileStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabelName: 
   ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
   ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndRepeatKeyword: 
   ///   - repeatKeyword: 
+  ///   - garbageBetweenRepeatKeywordAndBody: 
   ///   - body: 
+  ///   - garbageBetweenBodyAndWhileKeyword: 
   ///   - whileKeyword: 
+  ///   - garbageBetweenWhileKeywordAndCondition: 
   ///   - condition: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: TokenSyntax? = nil,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndRepeatKeyword: ExpressibleAsGarbageNodes? = nil,
     repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
+    garbageBetweenRepeatKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock,
+    garbageBetweenBodyAndWhileKeyword: ExpressibleAsGarbageNodes? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
+    garbageBetweenWhileKeywordAndCondition: ExpressibleAsGarbageNodes? = nil,
     condition: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
     self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
+    self.garbageBetweenLabelColonAndRepeatKeyword = garbageBetweenLabelColonAndRepeatKeyword?.createGarbageNodes()
     self.repeatKeyword = repeatKeyword
     assert(repeatKeyword.text == "repeat")
+    self.garbageBetweenRepeatKeywordAndBody = garbageBetweenRepeatKeywordAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
+    self.garbageBetweenBodyAndWhileKeyword = garbageBetweenBodyAndWhileKeyword?.createGarbageNodes()
     self.whileKeyword = whileKeyword
     assert(whileKeyword.text == "while")
+    self.garbageBetweenWhileKeywordAndCondition = garbageBetweenWhileKeywordAndCondition?.createGarbageNodes()
     self.condition = condition.createExprBuildable()
   }
 
@@ -10272,20 +13120,32 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: String?,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndRepeatKeyword: ExpressibleAsGarbageNodes? = nil,
     repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
+    garbageBetweenRepeatKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenBodyAndWhileKeyword: ExpressibleAsGarbageNodes? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
+    garbageBetweenWhileKeywordAndCondition: ExpressibleAsGarbageNodes? = nil,
     condition: ExpressibleAsExprBuildable,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
       labelName: labelName.map(TokenSyntax.identifier),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
+      garbageBetweenLabelColonAndRepeatKeyword: garbageBetweenLabelColonAndRepeatKeyword,
       repeatKeyword: repeatKeyword,
+      garbageBetweenRepeatKeywordAndBody: garbageBetweenRepeatKeywordAndBody,
       body: bodyBuilder(),
+      garbageBetweenBodyAndWhileKeyword: garbageBetweenBodyAndWhileKeyword,
       whileKeyword: whileKeyword,
+      garbageBetweenWhileKeywordAndCondition: garbageBetweenWhileKeywordAndCondition,
       condition: condition
     )
   }
@@ -10296,11 +13156,17 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// - Returns: The built `RepeatWhileStmtSyntax`.
   func buildRepeatWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RepeatWhileStmtSyntax {
     let result = SyntaxFactory.makeRepeatWhileStmt(
+      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
+      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
+      garbage: garbageBetweenLabelColonAndRepeatKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       repeatKeyword: repeatKeyword,
+      garbage: garbageBetweenRepeatKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBodyAndWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whileKeyword: whileKeyword,
+      garbage: garbageBetweenWhileKeywordAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10333,9 +13199,13 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   }
 }
 public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
+  let garbageBeforeGuardKeyword: GarbageNodes?
   let guardKeyword: TokenSyntax
+  let garbageBetweenGuardKeywordAndConditions: GarbageNodes?
   let conditions: ConditionElementList
+  let garbageBetweenConditionsAndElseKeyword: GarbageNodes?
   let elseKeyword: TokenSyntax
+  let garbageBetweenElseKeywordAndBody: GarbageNodes?
   let body: CodeBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -10344,23 +13214,35 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
 
   /// Creates a `GuardStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeGuardKeyword: 
   ///   - guardKeyword: 
+  ///   - garbageBetweenGuardKeywordAndConditions: 
   ///   - conditions: 
+  ///   - garbageBetweenConditionsAndElseKeyword: 
   ///   - elseKeyword: 
+  ///   - garbageBetweenElseKeywordAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeGuardKeyword: ExpressibleAsGarbageNodes? = nil,
     guardKeyword: TokenSyntax = TokenSyntax.`guard`,
+    garbageBetweenGuardKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
+    garbageBetweenConditionsAndElseKeyword: ExpressibleAsGarbageNodes? = nil,
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
+    garbageBetweenElseKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeGuardKeyword = garbageBeforeGuardKeyword?.createGarbageNodes()
     self.guardKeyword = guardKeyword
     assert(guardKeyword.text == "guard")
+    self.garbageBetweenGuardKeywordAndConditions = garbageBetweenGuardKeywordAndConditions?.createGarbageNodes()
     self.conditions = conditions.createConditionElementList()
+    self.garbageBetweenConditionsAndElseKeyword = garbageBetweenConditionsAndElseKeyword?.createGarbageNodes()
     self.elseKeyword = elseKeyword
     assert(elseKeyword.text == "else")
+    self.garbageBetweenElseKeywordAndBody = garbageBetweenElseKeywordAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
   }
 
@@ -10369,16 +13251,24 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeGuardKeyword: ExpressibleAsGarbageNodes? = nil,
     guardKeyword: TokenSyntax = TokenSyntax.`guard`,
+    garbageBetweenGuardKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
+    garbageBetweenConditionsAndElseKeyword: ExpressibleAsGarbageNodes? = nil,
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
+    garbageBetweenElseKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeGuardKeyword: garbageBeforeGuardKeyword,
       guardKeyword: guardKeyword,
+      garbageBetweenGuardKeywordAndConditions: garbageBetweenGuardKeywordAndConditions,
       conditions: conditions,
+      garbageBetweenConditionsAndElseKeyword: garbageBetweenConditionsAndElseKeyword,
       elseKeyword: elseKeyword,
+      garbageBetweenElseKeywordAndBody: garbageBetweenElseKeywordAndBody,
       body: bodyBuilder()
     )
   }
@@ -10389,9 +13279,13 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// - Returns: The built `GuardStmtSyntax`.
   func buildGuardStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GuardStmtSyntax {
     let result = SyntaxFactory.makeGuardStmt(
+      garbage: garbageBeforeGuardKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       guardKeyword: guardKeyword,
+      garbage: garbageBetweenGuardKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenConditionsAndElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
+      garbage: garbageBetweenElseKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10424,7 +13318,9 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   }
 }
 public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
+  let garbageBeforeWhereKeyword: GarbageNodes?
   let whereKeyword: TokenSyntax
+  let garbageBetweenWhereKeywordAndGuardResult: GarbageNodes?
   let guardResult: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -10433,16 +13329,22 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
 
   /// Creates a `WhereClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeWhereKeyword: 
   ///   - whereKeyword: 
+  ///   - garbageBetweenWhereKeywordAndGuardResult: 
   ///   - guardResult: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWhereKeyword: ExpressibleAsGarbageNodes? = nil,
     whereKeyword: TokenSyntax = TokenSyntax.`where`,
+    garbageBetweenWhereKeywordAndGuardResult: ExpressibleAsGarbageNodes? = nil,
     guardResult: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeWhereKeyword = garbageBeforeWhereKeyword?.createGarbageNodes()
     self.whereKeyword = whereKeyword
     assert(whereKeyword.text == "where")
+    self.garbageBetweenWhereKeywordAndGuardResult = garbageBetweenWhereKeywordAndGuardResult?.createGarbageNodes()
     self.guardResult = guardResult.createExprBuildable()
   }
 
@@ -10453,7 +13355,9 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// - Returns: The built `WhereClauseSyntax`.
   func buildWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhereClauseSyntax {
     let result = SyntaxFactory.makeWhereClause(
+      garbage: garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereKeyword: whereKeyword,
+      garbage: garbageBetweenWhereKeywordAndGuardResult?.buildGarbageNodes(format: format, leadingTrivia: nil),
       guardResult: guardResult.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10480,17 +13384,29 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
 
 }
 public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
+  let garbageBeforeLabelName: GarbageNodes?
   let labelName: TokenSyntax?
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
   let labelColon: TokenSyntax?
+  let garbageBetweenLabelColonAndForKeyword: GarbageNodes?
   let forKeyword: TokenSyntax
+  let garbageBetweenForKeywordAndTryKeyword: GarbageNodes?
   let tryKeyword: TokenSyntax?
+  let garbageBetweenTryKeywordAndAwaitKeyword: GarbageNodes?
   let awaitKeyword: TokenSyntax?
+  let garbageBetweenAwaitKeywordAndCaseKeyword: GarbageNodes?
   let caseKeyword: TokenSyntax?
+  let garbageBetweenCaseKeywordAndPattern: GarbageNodes?
   let pattern: PatternBuildable
+  let garbageBetweenPatternAndTypeAnnotation: GarbageNodes?
   let typeAnnotation: TypeAnnotation?
+  let garbageBetweenTypeAnnotationAndInKeyword: GarbageNodes?
   let inKeyword: TokenSyntax
+  let garbageBetweenInKeywordAndSequenceExpr: GarbageNodes?
   let sequenceExpr: ExprBuildable
+  let garbageBetweenSequenceExprAndWhereClause: GarbageNodes?
   let whereClause: WhereClause?
+  let garbageBetweenWhereClauseAndBody: GarbageNodes?
   let body: CodeBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -10499,51 +13415,87 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
 
   /// Creates a `ForInStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabelName: 
   ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
   ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndForKeyword: 
   ///   - forKeyword: 
+  ///   - garbageBetweenForKeywordAndTryKeyword: 
   ///   - tryKeyword: 
+  ///   - garbageBetweenTryKeywordAndAwaitKeyword: 
   ///   - awaitKeyword: 
+  ///   - garbageBetweenAwaitKeywordAndCaseKeyword: 
   ///   - caseKeyword: 
+  ///   - garbageBetweenCaseKeywordAndPattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndTypeAnnotation: 
   ///   - typeAnnotation: 
+  ///   - garbageBetweenTypeAnnotationAndInKeyword: 
   ///   - inKeyword: 
+  ///   - garbageBetweenInKeywordAndSequenceExpr: 
   ///   - sequenceExpr: 
+  ///   - garbageBetweenSequenceExprAndWhereClause: 
   ///   - whereClause: 
+  ///   - garbageBetweenWhereClauseAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: TokenSyntax? = nil,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndForKeyword: ExpressibleAsGarbageNodes? = nil,
     forKeyword: TokenSyntax = TokenSyntax.`for`,
+    garbageBetweenForKeywordAndTryKeyword: ExpressibleAsGarbageNodes? = nil,
     tryKeyword: TokenSyntax? = nil,
+    garbageBetweenTryKeywordAndAwaitKeyword: ExpressibleAsGarbageNodes? = nil,
     awaitKeyword: TokenSyntax? = nil,
+    garbageBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsGarbageNodes? = nil,
     caseKeyword: TokenSyntax? = nil,
+    garbageBetweenCaseKeywordAndPattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndTypeAnnotation: ExpressibleAsGarbageNodes? = nil,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
+    garbageBetweenTypeAnnotationAndInKeyword: ExpressibleAsGarbageNodes? = nil,
     inKeyword: TokenSyntax = TokenSyntax.`in`,
+    garbageBetweenInKeywordAndSequenceExpr: ExpressibleAsGarbageNodes? = nil,
     sequenceExpr: ExpressibleAsExprBuildable,
+    garbageBetweenSequenceExprAndWhereClause: ExpressibleAsGarbageNodes? = nil,
     whereClause: ExpressibleAsWhereClause? = nil,
+    garbageBetweenWhereClauseAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
     self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
+    self.garbageBetweenLabelColonAndForKeyword = garbageBetweenLabelColonAndForKeyword?.createGarbageNodes()
     self.forKeyword = forKeyword
     assert(forKeyword.text == "for")
+    self.garbageBetweenForKeywordAndTryKeyword = garbageBetweenForKeywordAndTryKeyword?.createGarbageNodes()
     self.tryKeyword = tryKeyword
     assert(tryKeyword == nil || tryKeyword!.text == "try")
+    self.garbageBetweenTryKeywordAndAwaitKeyword = garbageBetweenTryKeywordAndAwaitKeyword?.createGarbageNodes()
     self.awaitKeyword = awaitKeyword
     assert(awaitKeyword == nil || awaitKeyword!.text == "await")
+    self.garbageBetweenAwaitKeywordAndCaseKeyword = garbageBetweenAwaitKeywordAndCaseKeyword?.createGarbageNodes()
     self.caseKeyword = caseKeyword
     assert(caseKeyword == nil || caseKeyword!.text == "case")
+    self.garbageBetweenCaseKeywordAndPattern = garbageBetweenCaseKeywordAndPattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
+    self.garbageBetweenPatternAndTypeAnnotation = garbageBetweenPatternAndTypeAnnotation?.createGarbageNodes()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
+    self.garbageBetweenTypeAnnotationAndInKeyword = garbageBetweenTypeAnnotationAndInKeyword?.createGarbageNodes()
     self.inKeyword = inKeyword
     assert(inKeyword.text == "in")
+    self.garbageBetweenInKeywordAndSequenceExpr = garbageBetweenInKeywordAndSequenceExpr?.createGarbageNodes()
     self.sequenceExpr = sequenceExpr.createExprBuildable()
+    self.garbageBetweenSequenceExprAndWhereClause = garbageBetweenSequenceExprAndWhereClause?.createGarbageNodes()
     self.whereClause = whereClause?.createWhereClause()
+    self.garbageBetweenWhereClauseAndBody = garbageBetweenWhereClauseAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
   }
 
@@ -10552,32 +13504,56 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: String?,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndForKeyword: ExpressibleAsGarbageNodes? = nil,
     forKeyword: TokenSyntax = TokenSyntax.`for`,
+    garbageBetweenForKeywordAndTryKeyword: ExpressibleAsGarbageNodes? = nil,
     tryKeyword: TokenSyntax? = nil,
+    garbageBetweenTryKeywordAndAwaitKeyword: ExpressibleAsGarbageNodes? = nil,
     awaitKeyword: String?,
+    garbageBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsGarbageNodes? = nil,
     caseKeyword: TokenSyntax? = nil,
+    garbageBetweenCaseKeywordAndPattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndTypeAnnotation: ExpressibleAsGarbageNodes? = nil,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
+    garbageBetweenTypeAnnotationAndInKeyword: ExpressibleAsGarbageNodes? = nil,
     inKeyword: TokenSyntax = TokenSyntax.`in`,
+    garbageBetweenInKeywordAndSequenceExpr: ExpressibleAsGarbageNodes? = nil,
     sequenceExpr: ExpressibleAsExprBuildable,
+    garbageBetweenSequenceExprAndWhereClause: ExpressibleAsGarbageNodes? = nil,
     whereClause: ExpressibleAsWhereClause? = nil,
+    garbageBetweenWhereClauseAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
       labelName: labelName.map(TokenSyntax.identifier),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
+      garbageBetweenLabelColonAndForKeyword: garbageBetweenLabelColonAndForKeyword,
       forKeyword: forKeyword,
+      garbageBetweenForKeywordAndTryKeyword: garbageBetweenForKeywordAndTryKeyword,
       tryKeyword: tryKeyword,
+      garbageBetweenTryKeywordAndAwaitKeyword: garbageBetweenTryKeywordAndAwaitKeyword,
       awaitKeyword: awaitKeyword.map(TokenSyntax.identifier),
+      garbageBetweenAwaitKeywordAndCaseKeyword: garbageBetweenAwaitKeywordAndCaseKeyword,
       caseKeyword: caseKeyword,
+      garbageBetweenCaseKeywordAndPattern: garbageBetweenCaseKeywordAndPattern,
       pattern: pattern,
+      garbageBetweenPatternAndTypeAnnotation: garbageBetweenPatternAndTypeAnnotation,
       typeAnnotation: typeAnnotation,
+      garbageBetweenTypeAnnotationAndInKeyword: garbageBetweenTypeAnnotationAndInKeyword,
       inKeyword: inKeyword,
+      garbageBetweenInKeywordAndSequenceExpr: garbageBetweenInKeywordAndSequenceExpr,
       sequenceExpr: sequenceExpr,
+      garbageBetweenSequenceExprAndWhereClause: garbageBetweenSequenceExprAndWhereClause,
       whereClause: whereClause,
+      garbageBetweenWhereClauseAndBody: garbageBetweenWhereClauseAndBody,
       body: bodyBuilder()
     )
   }
@@ -10588,17 +13564,29 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// - Returns: The built `ForInStmtSyntax`.
   func buildForInStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForInStmtSyntax {
     let result = SyntaxFactory.makeForInStmt(
+      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
+      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
+      garbage: garbageBetweenLabelColonAndForKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       forKeyword: forKeyword,
+      garbage: garbageBetweenForKeywordAndTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tryKeyword: tryKeyword,
+      garbage: garbageBetweenTryKeywordAndAwaitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       awaitKeyword: awaitKeyword,
+      garbage: garbageBetweenAwaitKeywordAndCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
+      garbage: garbageBetweenCaseKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAnnotationAndInKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inKeyword: inKeyword,
+      garbage: garbageBetweenInKeywordAndSequenceExpr?.buildGarbageNodes(format: format, leadingTrivia: nil),
       sequenceExpr: sequenceExpr.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenSequenceExprAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10631,12 +13619,19 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   }
 }
 public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
+  let garbageBeforeLabelName: GarbageNodes?
   let labelName: TokenSyntax?
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
   let labelColon: TokenSyntax?
+  let garbageBetweenLabelColonAndSwitchKeyword: GarbageNodes?
   let switchKeyword: TokenSyntax
+  let garbageBetweenSwitchKeywordAndExpression: GarbageNodes?
   let expression: ExprBuildable
+  let garbageBetweenExpressionAndLeftBrace: GarbageNodes?
   let leftBrace: TokenSyntax
+  let garbageBetweenLeftBraceAndCases: GarbageNodes?
   let cases: SwitchCaseList
+  let garbageBetweenCasesAndRightBrace: GarbageNodes?
   let rightBrace: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -10645,33 +13640,54 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
 
   /// Creates a `SwitchStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabelName: 
   ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
   ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndSwitchKeyword: 
   ///   - switchKeyword: 
+  ///   - garbageBetweenSwitchKeywordAndExpression: 
   ///   - expression: 
+  ///   - garbageBetweenExpressionAndLeftBrace: 
   ///   - leftBrace: 
+  ///   - garbageBetweenLeftBraceAndCases: 
   ///   - cases: 
+  ///   - garbageBetweenCasesAndRightBrace: 
   ///   - rightBrace: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: TokenSyntax? = nil,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndSwitchKeyword: ExpressibleAsGarbageNodes? = nil,
     switchKeyword: TokenSyntax = TokenSyntax.`switch`,
+    garbageBetweenSwitchKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndCases: ExpressibleAsGarbageNodes? = nil,
     cases: ExpressibleAsSwitchCaseList,
+    garbageBetweenCasesAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
     self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
+    self.garbageBetweenLabelColonAndSwitchKeyword = garbageBetweenLabelColonAndSwitchKeyword?.createGarbageNodes()
     self.switchKeyword = switchKeyword
     assert(switchKeyword.text == "switch")
+    self.garbageBetweenSwitchKeywordAndExpression = garbageBetweenSwitchKeywordAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
+    self.garbageBetweenExpressionAndLeftBrace = garbageBetweenExpressionAndLeftBrace?.createGarbageNodes()
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
+    self.garbageBetweenLeftBraceAndCases = garbageBetweenLeftBraceAndCases?.createGarbageNodes()
     self.cases = cases.createSwitchCaseList()
+    self.garbageBetweenCasesAndRightBrace = garbageBetweenCasesAndRightBrace?.createGarbageNodes()
     self.rightBrace = rightBrace
     assert(rightBrace.text == "}")
   }
@@ -10681,22 +13697,36 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: String?,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndSwitchKeyword: ExpressibleAsGarbageNodes? = nil,
     switchKeyword: TokenSyntax = TokenSyntax.`switch`,
+    garbageBetweenSwitchKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
+    garbageBetweenExpressionAndLeftBrace: ExpressibleAsGarbageNodes? = nil,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
+    garbageBetweenLeftBraceAndCases: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenCasesAndRightBrace: ExpressibleAsGarbageNodes? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
     @SwitchCaseListBuilder casesBuilder: () -> ExpressibleAsSwitchCaseList = { SwitchCaseList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
       labelName: labelName.map(TokenSyntax.identifier),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
+      garbageBetweenLabelColonAndSwitchKeyword: garbageBetweenLabelColonAndSwitchKeyword,
       switchKeyword: switchKeyword,
+      garbageBetweenSwitchKeywordAndExpression: garbageBetweenSwitchKeywordAndExpression,
       expression: expression,
+      garbageBetweenExpressionAndLeftBrace: garbageBetweenExpressionAndLeftBrace,
       leftBrace: leftBrace,
+      garbageBetweenLeftBraceAndCases: garbageBetweenLeftBraceAndCases,
       cases: casesBuilder(),
+      garbageBetweenCasesAndRightBrace: garbageBetweenCasesAndRightBrace,
       rightBrace: rightBrace
     )
   }
@@ -10707,12 +13737,19 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// - Returns: The built `SwitchStmtSyntax`.
   func buildSwitchStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
     let result = SyntaxFactory.makeSwitchStmt(
+      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
+      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
+      garbage: garbageBetweenLabelColonAndSwitchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       switchKeyword: switchKeyword,
+      garbage: garbageBetweenSwitchKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenExpressionAndLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
+      garbage: garbageBetweenLeftBraceAndCases?.buildGarbageNodes(format: format, leadingTrivia: nil),
       cases: cases.buildSwitchCaseList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenCasesAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10745,10 +13782,15 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   }
 }
 public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
+  let garbageBeforeLabelName: GarbageNodes?
   let labelName: TokenSyntax?
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
   let labelColon: TokenSyntax?
+  let garbageBetweenLabelColonAndDoKeyword: GarbageNodes?
   let doKeyword: TokenSyntax
+  let garbageBetweenDoKeywordAndBody: GarbageNodes?
   let body: CodeBlock
+  let garbageBetweenBodyAndCatchClauses: GarbageNodes?
   let catchClauses: CatchClauseList?
 
   /// The leading trivia attached to this syntax node once built.
@@ -10757,26 +13799,41 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
 
   /// Creates a `DoStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabelName: 
   ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
   ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndDoKeyword: 
   ///   - doKeyword: 
+  ///   - garbageBetweenDoKeywordAndBody: 
   ///   - body: 
+  ///   - garbageBetweenBodyAndCatchClauses: 
   ///   - catchClauses: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: TokenSyntax? = nil,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndDoKeyword: ExpressibleAsGarbageNodes? = nil,
     doKeyword: TokenSyntax = TokenSyntax.`do`,
+    garbageBetweenDoKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock,
+    garbageBetweenBodyAndCatchClauses: ExpressibleAsGarbageNodes? = nil,
     catchClauses: ExpressibleAsCatchClauseList? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
     self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
+    self.garbageBetweenLabelColonAndDoKeyword = garbageBetweenLabelColonAndDoKeyword?.createGarbageNodes()
     self.doKeyword = doKeyword
     assert(doKeyword.text == "do")
+    self.garbageBetweenDoKeywordAndBody = garbageBetweenDoKeywordAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
+    self.garbageBetweenBodyAndCatchClauses = garbageBetweenBodyAndCatchClauses?.createGarbageNodes()
     self.catchClauses = catchClauses?.createCatchClauseList()
   }
 
@@ -10785,18 +13842,28 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: String?,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndDoKeyword: ExpressibleAsGarbageNodes? = nil,
     doKeyword: TokenSyntax = TokenSyntax.`do`,
+    garbageBetweenDoKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenBodyAndCatchClauses: ExpressibleAsGarbageNodes? = nil,
     catchClauses: ExpressibleAsCatchClauseList? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
       labelName: labelName.map(TokenSyntax.identifier),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
+      garbageBetweenLabelColonAndDoKeyword: garbageBetweenLabelColonAndDoKeyword,
       doKeyword: doKeyword,
+      garbageBetweenDoKeywordAndBody: garbageBetweenDoKeywordAndBody,
       body: bodyBuilder(),
+      garbageBetweenBodyAndCatchClauses: garbageBetweenBodyAndCatchClauses,
       catchClauses: catchClauses
     )
   }
@@ -10807,10 +13874,15 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// - Returns: The built `DoStmtSyntax`.
   func buildDoStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DoStmtSyntax {
     let result = SyntaxFactory.makeDoStmt(
+      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
+      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
+      garbage: garbageBetweenLabelColonAndDoKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       doKeyword: doKeyword,
+      garbage: garbageBetweenDoKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBodyAndCatchClauses?.buildGarbageNodes(format: format, leadingTrivia: nil),
       catchClauses: catchClauses?.buildCatchClauseList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10843,7 +13915,9 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   }
 }
 public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
+  let garbageBeforeReturnKeyword: GarbageNodes?
   let returnKeyword: TokenSyntax
+  let garbageBetweenReturnKeywordAndExpression: GarbageNodes?
   let expression: ExprBuildable?
 
   /// The leading trivia attached to this syntax node once built.
@@ -10852,16 +13926,22 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
 
   /// Creates a `ReturnStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeReturnKeyword: 
   ///   - returnKeyword: 
+  ///   - garbageBetweenReturnKeywordAndExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeReturnKeyword: ExpressibleAsGarbageNodes? = nil,
     returnKeyword: TokenSyntax = TokenSyntax.`return`,
+    garbageBetweenReturnKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeReturnKeyword = garbageBeforeReturnKeyword?.createGarbageNodes()
     self.returnKeyword = returnKeyword
     assert(returnKeyword.text == "return")
+    self.garbageBetweenReturnKeywordAndExpression = garbageBetweenReturnKeywordAndExpression?.createGarbageNodes()
     self.expression = expression?.createExprBuildable()
   }
 
@@ -10872,7 +13952,9 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// - Returns: The built `ReturnStmtSyntax`.
   func buildReturnStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnStmtSyntax {
     let result = SyntaxFactory.makeReturnStmt(
+      garbage: garbageBeforeReturnKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       returnKeyword: returnKeyword,
+      garbage: garbageBetweenReturnKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression?.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10905,7 +13987,9 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   }
 }
 public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
+  let garbageBeforeYieldKeyword: GarbageNodes?
   let yieldKeyword: TokenSyntax
+  let garbageBetweenYieldKeywordAndYields: GarbageNodes?
   let yields: SyntaxBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -10914,16 +13998,22 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
 
   /// Creates a `YieldStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeYieldKeyword: 
   ///   - yieldKeyword: 
+  ///   - garbageBetweenYieldKeywordAndYields: 
   ///   - yields: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeYieldKeyword: ExpressibleAsGarbageNodes? = nil,
     yieldKeyword: TokenSyntax = TokenSyntax.`yield`,
+    garbageBetweenYieldKeywordAndYields: ExpressibleAsGarbageNodes? = nil,
     yields: ExpressibleAsSyntaxBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeYieldKeyword = garbageBeforeYieldKeyword?.createGarbageNodes()
     self.yieldKeyword = yieldKeyword
     assert(yieldKeyword.text == "yield")
+    self.garbageBetweenYieldKeywordAndYields = garbageBetweenYieldKeywordAndYields?.createGarbageNodes()
     self.yields = yields.createSyntaxBuildable()
   }
 
@@ -10934,7 +14024,9 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// - Returns: The built `YieldStmtSyntax`.
   func buildYieldStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldStmtSyntax {
     let result = SyntaxFactory.makeYieldStmt(
+      garbage: garbageBeforeYieldKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       yieldKeyword: yieldKeyword,
+      garbage: garbageBetweenYieldKeywordAndYields?.buildGarbageNodes(format: format, leadingTrivia: nil),
       yields: yields.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10967,9 +14059,13 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   }
 }
 public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndElementList: GarbageNodes?
   let elementList: ExprList
+  let garbageBetweenElementListAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
+  let garbageBetweenTrailingCommaAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -10978,23 +14074,35 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
 
   /// Creates a `YieldList` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndElementList: 
   ///   - elementList: 
+  ///   - garbageBetweenElementListAndTrailingComma: 
   ///   - trailingComma: 
+  ///   - garbageBetweenTrailingCommaAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndElementList: ExpressibleAsGarbageNodes? = nil,
     elementList: ExpressibleAsExprList,
+    garbageBetweenElementListAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil,
+    garbageBetweenTrailingCommaAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndElementList = garbageBetweenLeftParenAndElementList?.createGarbageNodes()
     self.elementList = elementList.createExprList()
+    self.garbageBetweenElementListAndTrailingComma = garbageBetweenElementListAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
+    self.garbageBetweenTrailingCommaAndRightParen = garbageBetweenTrailingCommaAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -11004,16 +14112,24 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndElementList: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenElementListAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil,
+    garbageBetweenTrailingCommaAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @ExprListBuilder elementListBuilder: () -> ExpressibleAsExprList = { ExprList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftParen: garbageBeforeLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndElementList: garbageBetweenLeftParenAndElementList,
       elementList: elementListBuilder(),
+      garbageBetweenElementListAndTrailingComma: garbageBetweenElementListAndTrailingComma,
       trailingComma: trailingComma,
+      garbageBetweenTrailingCommaAndRightParen: garbageBetweenTrailingCommaAndRightParen,
       rightParen: rightParen
     )
   }
@@ -11024,9 +14140,13 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// - Returns: The built `YieldListSyntax`.
   func buildYieldList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldListSyntax {
     let result = SyntaxFactory.makeYieldList(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elementList: elementList.buildExprList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenElementListAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma,
+      garbage: garbageBetweenTrailingCommaAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11053,6 +14173,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
 
 }
 public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
+  let garbageBeforeFallthroughKeyword: GarbageNodes?
   let fallthroughKeyword: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -11061,12 +14182,15 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
 
   /// Creates a `FallthroughStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeFallthroughKeyword: 
   ///   - fallthroughKeyword: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeFallthroughKeyword: ExpressibleAsGarbageNodes? = nil,
     fallthroughKeyword: TokenSyntax = TokenSyntax.`fallthrough`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeFallthroughKeyword = garbageBeforeFallthroughKeyword?.createGarbageNodes()
     self.fallthroughKeyword = fallthroughKeyword
     assert(fallthroughKeyword.text == "fallthrough")
   }
@@ -11078,6 +14202,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// - Returns: The built `FallthroughStmtSyntax`.
   func buildFallthroughStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FallthroughStmtSyntax {
     let result = SyntaxFactory.makeFallthroughStmt(
+      garbage: garbageBeforeFallthroughKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fallthroughKeyword: fallthroughKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11110,7 +14235,9 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   }
 }
 public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
+  let garbageBeforeBreakKeyword: GarbageNodes?
   let breakKeyword: TokenSyntax
+  let garbageBetweenBreakKeywordAndLabel: GarbageNodes?
   let label: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -11119,16 +14246,22 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
 
   /// Creates a `BreakStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBreakKeyword: 
   ///   - breakKeyword: 
+  ///   - garbageBetweenBreakKeywordAndLabel: 
   ///   - label: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBreakKeyword: ExpressibleAsGarbageNodes? = nil,
     breakKeyword: TokenSyntax = TokenSyntax.`break`,
+    garbageBetweenBreakKeywordAndLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBreakKeyword = garbageBeforeBreakKeyword?.createGarbageNodes()
     self.breakKeyword = breakKeyword
     assert(breakKeyword.text == "break")
+    self.garbageBetweenBreakKeywordAndLabel = garbageBetweenBreakKeywordAndLabel?.createGarbageNodes()
     self.label = label
   }
 
@@ -11137,12 +14270,16 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBreakKeyword: ExpressibleAsGarbageNodes? = nil,
     breakKeyword: TokenSyntax = TokenSyntax.`break`,
+    garbageBetweenBreakKeywordAndLabel: ExpressibleAsGarbageNodes? = nil,
     label: String?
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeBreakKeyword: garbageBeforeBreakKeyword,
       breakKeyword: breakKeyword,
+      garbageBetweenBreakKeywordAndLabel: garbageBetweenBreakKeywordAndLabel,
       label: label.map(TokenSyntax.identifier)
     )
   }
@@ -11153,7 +14290,9 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// - Returns: The built `BreakStmtSyntax`.
   func buildBreakStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BreakStmtSyntax {
     let result = SyntaxFactory.makeBreakStmt(
+      garbage: garbageBeforeBreakKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       breakKeyword: breakKeyword,
+      garbage: garbageBetweenBreakKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11186,7 +14325,9 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   }
 }
 public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, HasTrailingComma {
+  let garbageBeforeCondition: GarbageNodes?
   let condition: SyntaxBuildable
+  let garbageBetweenConditionAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -11195,15 +14336,21 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
 
   /// Creates a `ConditionElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeCondition: 
   ///   - condition: 
+  ///   - garbageBetweenConditionAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCondition: ExpressibleAsGarbageNodes? = nil,
     condition: ExpressibleAsSyntaxBuildable,
+    garbageBetweenConditionAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeCondition = garbageBeforeCondition?.createGarbageNodes()
     self.condition = condition.createSyntaxBuildable()
+    self.garbageBetweenConditionAndTrailingComma = garbageBetweenConditionAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -11215,7 +14362,9 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   /// - Returns: The built `ConditionElementSyntax`.
   func buildConditionElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConditionElementSyntax {
     let result = SyntaxFactory.makeConditionElement(
+      garbage: garbageBeforeCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenConditionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11236,7 +14385,9 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeCondition: garbageBeforeCondition,
         condition: condition,
+        garbageBetweenConditionAndTrailingComma: garbageBetweenConditionAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -11250,9 +14401,13 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
 
 }
 public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityCondition {
+  let garbageBeforePoundAvailableKeyword: GarbageNodes?
   let poundAvailableKeyword: TokenSyntax
+  let garbageBetweenPoundAvailableKeywordAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodes?
   let availabilitySpec: AvailabilitySpecList
+  let garbageBetweenAvailabilitySpecAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -11261,23 +14416,35 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
 
   /// Creates a `AvailabilityCondition` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundAvailableKeyword: 
   ///   - poundAvailableKeyword: 
+  ///   - garbageBetweenPoundAvailableKeywordAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndAvailabilitySpec: 
   ///   - availabilitySpec: 
+  ///   - garbageBetweenAvailabilitySpecAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundAvailableKeyword: ExpressibleAsGarbageNodes? = nil,
     poundAvailableKeyword: TokenSyntax = TokenSyntax.`poundAvailable`,
+    garbageBetweenPoundAvailableKeywordAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndAvailabilitySpec: ExpressibleAsGarbageNodes? = nil,
     availabilitySpec: ExpressibleAsAvailabilitySpecList,
+    garbageBetweenAvailabilitySpecAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundAvailableKeyword = garbageBeforePoundAvailableKeyword?.createGarbageNodes()
     self.poundAvailableKeyword = poundAvailableKeyword
     assert(poundAvailableKeyword.text == "#available")
+    self.garbageBetweenPoundAvailableKeywordAndLeftParen = garbageBetweenPoundAvailableKeywordAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndAvailabilitySpec = garbageBetweenLeftParenAndAvailabilitySpec?.createGarbageNodes()
     self.availabilitySpec = availabilitySpec.createAvailabilitySpecList()
+    self.garbageBetweenAvailabilitySpecAndRightParen = garbageBetweenAvailabilitySpecAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -11289,9 +14456,13 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// - Returns: The built `AvailabilityConditionSyntax`.
   func buildAvailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
     let result = SyntaxFactory.makeAvailabilityCondition(
+      garbage: garbageBeforePoundAvailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundAvailableKeyword: poundAvailableKeyword,
+      garbage: garbageBetweenPoundAvailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndAvailabilitySpec?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAvailabilitySpecAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11318,9 +14489,13 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
 
 }
 public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPatternCondition {
+  let garbageBeforeCaseKeyword: GarbageNodes?
   let caseKeyword: TokenSyntax
+  let garbageBetweenCaseKeywordAndPattern: GarbageNodes?
   let pattern: PatternBuildable
+  let garbageBetweenPatternAndTypeAnnotation: GarbageNodes?
   let typeAnnotation: TypeAnnotation?
+  let garbageBetweenTypeAnnotationAndInitializer: GarbageNodes?
   let initializer: InitializerClause
 
   /// The leading trivia attached to this syntax node once built.
@@ -11329,22 +14504,34 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
 
   /// Creates a `MatchingPatternCondition` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeCaseKeyword: 
   ///   - caseKeyword: 
+  ///   - garbageBetweenCaseKeywordAndPattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndTypeAnnotation: 
   ///   - typeAnnotation: 
+  ///   - garbageBetweenTypeAnnotationAndInitializer: 
   ///   - initializer: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCaseKeyword: ExpressibleAsGarbageNodes? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
+    garbageBetweenCaseKeywordAndPattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndTypeAnnotation: ExpressibleAsGarbageNodes? = nil,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
+    garbageBetweenTypeAnnotationAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsInitializerClause
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeCaseKeyword = garbageBeforeCaseKeyword?.createGarbageNodes()
     self.caseKeyword = caseKeyword
     assert(caseKeyword.text == "case")
+    self.garbageBetweenCaseKeywordAndPattern = garbageBetweenCaseKeywordAndPattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
+    self.garbageBetweenPatternAndTypeAnnotation = garbageBetweenPatternAndTypeAnnotation?.createGarbageNodes()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
+    self.garbageBetweenTypeAnnotationAndInitializer = garbageBetweenTypeAnnotationAndInitializer?.createGarbageNodes()
     self.initializer = initializer.createInitializerClause()
   }
 
@@ -11355,9 +14542,13 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// - Returns: The built `MatchingPatternConditionSyntax`.
   func buildMatchingPatternCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MatchingPatternConditionSyntax {
     let result = SyntaxFactory.makeMatchingPatternCondition(
+      garbage: garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
+      garbage: garbageBetweenCaseKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer.buildInitializerClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11384,9 +14575,13 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
 
 }
 public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBindingCondition {
+  let garbageBeforeLetOrVarKeyword: GarbageNodes?
   let letOrVarKeyword: TokenSyntax
+  let garbageBetweenLetOrVarKeywordAndPattern: GarbageNodes?
   let pattern: PatternBuildable
+  let garbageBetweenPatternAndTypeAnnotation: GarbageNodes?
   let typeAnnotation: TypeAnnotation?
+  let garbageBetweenTypeAnnotationAndInitializer: GarbageNodes?
   let initializer: InitializerClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -11395,22 +14590,34 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
 
   /// Creates a `OptionalBindingCondition` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLetOrVarKeyword: 
   ///   - letOrVarKeyword: 
+  ///   - garbageBetweenLetOrVarKeywordAndPattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndTypeAnnotation: 
   ///   - typeAnnotation: 
+  ///   - garbageBetweenTypeAnnotationAndInitializer: 
   ///   - initializer: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLetOrVarKeyword: ExpressibleAsGarbageNodes? = nil,
     letOrVarKeyword: TokenSyntax,
+    garbageBetweenLetOrVarKeywordAndPattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndTypeAnnotation: ExpressibleAsGarbageNodes? = nil,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
+    garbageBetweenTypeAnnotationAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsInitializerClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLetOrVarKeyword = garbageBeforeLetOrVarKeyword?.createGarbageNodes()
     self.letOrVarKeyword = letOrVarKeyword
     assert(letOrVarKeyword.text == "let" || letOrVarKeyword.text == "var")
+    self.garbageBetweenLetOrVarKeywordAndPattern = garbageBetweenLetOrVarKeywordAndPattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
+    self.garbageBetweenPatternAndTypeAnnotation = garbageBetweenPatternAndTypeAnnotation?.createGarbageNodes()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
+    self.garbageBetweenTypeAnnotationAndInitializer = garbageBetweenTypeAnnotationAndInitializer?.createGarbageNodes()
     self.initializer = initializer?.createInitializerClause()
   }
 
@@ -11421,9 +14628,13 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// - Returns: The built `OptionalBindingConditionSyntax`.
   func buildOptionalBindingCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalBindingConditionSyntax {
     let result = SyntaxFactory.makeOptionalBindingCondition(
+      garbage: garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
+      garbage: garbageBetweenLetOrVarKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11450,9 +14661,13 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
 
 }
 public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabilityCondition {
+  let garbageBeforePoundUnavailableKeyword: GarbageNodes?
   let poundUnavailableKeyword: TokenSyntax
+  let garbageBetweenPoundUnavailableKeywordAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodes?
   let availabilitySpec: AvailabilitySpecList
+  let garbageBetweenAvailabilitySpecAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -11461,23 +14676,35 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
 
   /// Creates a `UnavailabilityCondition` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundUnavailableKeyword: 
   ///   - poundUnavailableKeyword: 
+  ///   - garbageBetweenPoundUnavailableKeywordAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndAvailabilitySpec: 
   ///   - availabilitySpec: 
+  ///   - garbageBetweenAvailabilitySpecAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundUnavailableKeyword: ExpressibleAsGarbageNodes? = nil,
     poundUnavailableKeyword: TokenSyntax = TokenSyntax.`poundUnavailable`,
+    garbageBetweenPoundUnavailableKeywordAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndAvailabilitySpec: ExpressibleAsGarbageNodes? = nil,
     availabilitySpec: ExpressibleAsAvailabilitySpecList,
+    garbageBetweenAvailabilitySpecAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundUnavailableKeyword = garbageBeforePoundUnavailableKeyword?.createGarbageNodes()
     self.poundUnavailableKeyword = poundUnavailableKeyword
     assert(poundUnavailableKeyword.text == "#unavailable")
+    self.garbageBetweenPoundUnavailableKeywordAndLeftParen = garbageBetweenPoundUnavailableKeywordAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndAvailabilitySpec = garbageBetweenLeftParenAndAvailabilitySpec?.createGarbageNodes()
     self.availabilitySpec = availabilitySpec.createAvailabilitySpecList()
+    self.garbageBetweenAvailabilitySpecAndRightParen = garbageBetweenAvailabilitySpecAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -11489,9 +14716,13 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// - Returns: The built `UnavailabilityConditionSyntax`.
   func buildUnavailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
     let result = SyntaxFactory.makeUnavailabilityCondition(
+      garbage: garbageBeforePoundUnavailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundUnavailableKeyword: poundUnavailableKeyword,
+      garbage: garbageBetweenPoundUnavailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndAvailabilitySpec?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAvailabilitySpecAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11518,6 +14749,7 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
 
 }
 public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
+  let garbageBeforeDeclaration: GarbageNodes?
   let declaration: DeclBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -11526,12 +14758,15 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
 
   /// Creates a `DeclarationStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeDeclaration: 
   ///   - declaration: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDeclaration: ExpressibleAsGarbageNodes? = nil,
     declaration: ExpressibleAsDeclBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeDeclaration = garbageBeforeDeclaration?.createGarbageNodes()
     self.declaration = declaration.createDeclBuildable()
   }
 
@@ -11542,6 +14777,7 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// - Returns: The built `DeclarationStmtSyntax`.
   func buildDeclarationStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclarationStmtSyntax {
     let result = SyntaxFactory.makeDeclarationStmt(
+      garbage: garbageBeforeDeclaration?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declaration: declaration.buildDecl(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11574,7 +14810,9 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   }
 }
 public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
+  let garbageBeforeThrowKeyword: GarbageNodes?
   let throwKeyword: TokenSyntax
+  let garbageBetweenThrowKeywordAndExpression: GarbageNodes?
   let expression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -11583,16 +14821,22 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
 
   /// Creates a `ThrowStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeThrowKeyword: 
   ///   - throwKeyword: 
+  ///   - garbageBetweenThrowKeywordAndExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeThrowKeyword: ExpressibleAsGarbageNodes? = nil,
     throwKeyword: TokenSyntax = TokenSyntax.`throw`,
+    garbageBetweenThrowKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeThrowKeyword = garbageBeforeThrowKeyword?.createGarbageNodes()
     self.throwKeyword = throwKeyword
     assert(throwKeyword.text == "throw")
+    self.garbageBetweenThrowKeywordAndExpression = garbageBetweenThrowKeywordAndExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
   }
 
@@ -11603,7 +14847,9 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// - Returns: The built `ThrowStmtSyntax`.
   func buildThrowStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ThrowStmtSyntax {
     let result = SyntaxFactory.makeThrowStmt(
+      garbage: garbageBeforeThrowKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwKeyword: throwKeyword,
+      garbage: garbageBetweenThrowKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11636,12 +14882,19 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   }
 }
 public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
+  let garbageBeforeLabelName: GarbageNodes?
   let labelName: TokenSyntax?
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
   let labelColon: TokenSyntax?
+  let garbageBetweenLabelColonAndIfKeyword: GarbageNodes?
   let ifKeyword: TokenSyntax
+  let garbageBetweenIfKeywordAndConditions: GarbageNodes?
   let conditions: ConditionElementList
+  let garbageBetweenConditionsAndBody: GarbageNodes?
   let body: CodeBlock
+  let garbageBetweenBodyAndElseKeyword: GarbageNodes?
   let elseKeyword: TokenSyntax?
+  let garbageBetweenElseKeywordAndElseBody: GarbageNodes?
   let elseBody: SyntaxBuildable?
 
   /// The leading trivia attached to this syntax node once built.
@@ -11650,33 +14903,54 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
 
   /// Creates a `IfStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabelName: 
   ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
   ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndIfKeyword: 
   ///   - ifKeyword: 
+  ///   - garbageBetweenIfKeywordAndConditions: 
   ///   - conditions: 
+  ///   - garbageBetweenConditionsAndBody: 
   ///   - body: 
+  ///   - garbageBetweenBodyAndElseKeyword: 
   ///   - elseKeyword: 
+  ///   - garbageBetweenElseKeywordAndElseBody: 
   ///   - elseBody: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: TokenSyntax? = nil,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndIfKeyword: ExpressibleAsGarbageNodes? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
+    garbageBetweenIfKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
+    garbageBetweenConditionsAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock,
+    garbageBetweenBodyAndElseKeyword: ExpressibleAsGarbageNodes? = nil,
     elseKeyword: TokenSyntax? = nil,
+    garbageBetweenElseKeywordAndElseBody: ExpressibleAsGarbageNodes? = nil,
     elseBody: ExpressibleAsSyntaxBuildable? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
     self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
+    self.garbageBetweenLabelColonAndIfKeyword = garbageBetweenLabelColonAndIfKeyword?.createGarbageNodes()
     self.ifKeyword = ifKeyword
     assert(ifKeyword.text == "if")
+    self.garbageBetweenIfKeywordAndConditions = garbageBetweenIfKeywordAndConditions?.createGarbageNodes()
     self.conditions = conditions.createConditionElementList()
+    self.garbageBetweenConditionsAndBody = garbageBetweenConditionsAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
+    self.garbageBetweenBodyAndElseKeyword = garbageBetweenBodyAndElseKeyword?.createGarbageNodes()
     self.elseKeyword = elseKeyword
     assert(elseKeyword == nil || elseKeyword!.text == "else")
+    self.garbageBetweenElseKeywordAndElseBody = garbageBetweenElseKeywordAndElseBody?.createGarbageNodes()
     self.elseBody = elseBody?.createSyntaxBuildable()
   }
 
@@ -11685,22 +14959,36 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: String?,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndIfKeyword: ExpressibleAsGarbageNodes? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
+    garbageBetweenIfKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
+    garbageBetweenConditionsAndBody: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenBodyAndElseKeyword: ExpressibleAsGarbageNodes? = nil,
     elseKeyword: TokenSyntax? = nil,
+    garbageBetweenElseKeywordAndElseBody: ExpressibleAsGarbageNodes? = nil,
     elseBody: ExpressibleAsSyntaxBuildable? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
       labelName: labelName.map(TokenSyntax.identifier),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
+      garbageBetweenLabelColonAndIfKeyword: garbageBetweenLabelColonAndIfKeyword,
       ifKeyword: ifKeyword,
+      garbageBetweenIfKeywordAndConditions: garbageBetweenIfKeywordAndConditions,
       conditions: conditions,
+      garbageBetweenConditionsAndBody: garbageBetweenConditionsAndBody,
       body: bodyBuilder(),
+      garbageBetweenBodyAndElseKeyword: garbageBetweenBodyAndElseKeyword,
       elseKeyword: elseKeyword,
+      garbageBetweenElseKeywordAndElseBody: garbageBetweenElseKeywordAndElseBody,
       elseBody: elseBody
     )
   }
@@ -11711,12 +14999,19 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// - Returns: The built `IfStmtSyntax`.
   func buildIfStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfStmtSyntax {
     let result = SyntaxFactory.makeIfStmt(
+      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
+      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
+      garbage: garbageBetweenLabelColonAndIfKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ifKeyword: ifKeyword,
+      garbage: garbageBetweenIfKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenConditionsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBodyAndElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
+      garbage: garbageBetweenElseKeywordAndElseBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseBody: elseBody?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11749,6 +15044,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   }
 }
 public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuation {
+  let garbageBeforeIfStatement: GarbageNodes?
   let ifStatement: IfStmt
 
   /// The leading trivia attached to this syntax node once built.
@@ -11757,12 +15053,15 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
 
   /// Creates a `ElseIfContinuation` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIfStatement: 
   ///   - ifStatement: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIfStatement: ExpressibleAsGarbageNodes? = nil,
     ifStatement: ExpressibleAsIfStmt
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIfStatement = garbageBeforeIfStatement?.createGarbageNodes()
     self.ifStatement = ifStatement.createIfStmt()
   }
 
@@ -11773,6 +15072,7 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
   /// - Returns: The built `ElseIfContinuationSyntax`.
   func buildElseIfContinuation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseIfContinuationSyntax {
     let result = SyntaxFactory.makeElseIfContinuation(
+      garbage: garbageBeforeIfStatement?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ifStatement: ifStatement.buildIfStmt(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11799,7 +15099,9 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
 
 }
 public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
+  let garbageBeforeElseKeyword: GarbageNodes?
   let elseKeyword: TokenSyntax
+  let garbageBetweenElseKeywordAndBody: GarbageNodes?
   let body: CodeBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -11808,16 +15110,22 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
 
   /// Creates a `ElseBlock` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeElseKeyword: 
   ///   - elseKeyword: 
+  ///   - garbageBetweenElseKeywordAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeElseKeyword: ExpressibleAsGarbageNodes? = nil,
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
+    garbageBetweenElseKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeElseKeyword = garbageBeforeElseKeyword?.createGarbageNodes()
     self.elseKeyword = elseKeyword
     assert(elseKeyword.text == "else")
+    self.garbageBetweenElseKeywordAndBody = garbageBetweenElseKeywordAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
   }
 
@@ -11826,12 +15134,16 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeElseKeyword: ExpressibleAsGarbageNodes? = nil,
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
+    garbageBetweenElseKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeElseKeyword: garbageBeforeElseKeyword,
       elseKeyword: elseKeyword,
+      garbageBetweenElseKeywordAndBody: garbageBetweenElseKeywordAndBody,
       body: bodyBuilder()
     )
   }
@@ -11842,7 +15154,9 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// - Returns: The built `ElseBlockSyntax`.
   func buildElseBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseBlockSyntax {
     let result = SyntaxFactory.makeElseBlock(
+      garbage: garbageBeforeElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
+      garbage: garbageBetweenElseKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11869,8 +15183,11 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
 
 }
 public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
+  let garbageBeforeUnknownAttr: GarbageNodes?
   let unknownAttr: Attribute?
+  let garbageBetweenUnknownAttrAndLabel: GarbageNodes?
   let label: SyntaxBuildable
+  let garbageBetweenLabelAndStatements: GarbageNodes?
   let statements: CodeBlockItemList
 
   /// The leading trivia attached to this syntax node once built.
@@ -11879,18 +15196,27 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
 
   /// Creates a `SwitchCase` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeUnknownAttr: 
   ///   - unknownAttr: 
+  ///   - garbageBetweenUnknownAttrAndLabel: 
   ///   - label: 
+  ///   - garbageBetweenLabelAndStatements: 
   ///   - statements: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeUnknownAttr: ExpressibleAsGarbageNodes? = nil,
     unknownAttr: ExpressibleAsAttribute? = nil,
+    garbageBetweenUnknownAttrAndLabel: ExpressibleAsGarbageNodes? = nil,
     label: ExpressibleAsSyntaxBuildable,
+    garbageBetweenLabelAndStatements: ExpressibleAsGarbageNodes? = nil,
     statements: ExpressibleAsCodeBlockItemList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeUnknownAttr = garbageBeforeUnknownAttr?.createGarbageNodes()
     self.unknownAttr = unknownAttr?.createAttribute()
+    self.garbageBetweenUnknownAttrAndLabel = garbageBetweenUnknownAttrAndLabel?.createGarbageNodes()
     self.label = label.createSyntaxBuildable()
+    self.garbageBetweenLabelAndStatements = garbageBetweenLabelAndStatements?.createGarbageNodes()
     self.statements = statements.createCodeBlockItemList()
   }
 
@@ -11899,14 +15225,20 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeUnknownAttr: ExpressibleAsGarbageNodes? = nil,
     unknownAttr: ExpressibleAsAttribute? = nil,
+    garbageBetweenUnknownAttrAndLabel: ExpressibleAsGarbageNodes? = nil,
     label: ExpressibleAsSyntaxBuildable,
+    garbageBetweenLabelAndStatements: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeUnknownAttr: garbageBeforeUnknownAttr,
       unknownAttr: unknownAttr,
+      garbageBetweenUnknownAttrAndLabel: garbageBetweenUnknownAttrAndLabel,
       label: label,
+      garbageBetweenLabelAndStatements: garbageBetweenLabelAndStatements,
       statements: statementsBuilder()
     )
   }
@@ -11917,8 +15249,11 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// - Returns: The built `SwitchCaseSyntax`.
   func buildSwitchCase(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseSyntax {
     let result = SyntaxFactory.makeSwitchCase(
+      garbage: garbageBeforeUnknownAttr?.buildGarbageNodes(format: format, leadingTrivia: nil),
       unknownAttr: unknownAttr?.buildAttribute(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenUnknownAttrAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenLabelAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11945,7 +15280,9 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
 
 }
 public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLabel {
+  let garbageBeforeDefaultKeyword: GarbageNodes?
   let defaultKeyword: TokenSyntax
+  let garbageBetweenDefaultKeywordAndColon: GarbageNodes?
   let colon: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -11954,16 +15291,22 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
 
   /// Creates a `SwitchDefaultLabel` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeDefaultKeyword: 
   ///   - defaultKeyword: 
+  ///   - garbageBetweenDefaultKeywordAndColon: 
   ///   - colon: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeDefaultKeyword: ExpressibleAsGarbageNodes? = nil,
     defaultKeyword: TokenSyntax = TokenSyntax.`default`,
+    garbageBetweenDefaultKeywordAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeDefaultKeyword = garbageBeforeDefaultKeyword?.createGarbageNodes()
     self.defaultKeyword = defaultKeyword
     assert(defaultKeyword.text == "default")
+    self.garbageBetweenDefaultKeywordAndColon = garbageBetweenDefaultKeywordAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
   }
@@ -11975,7 +15318,9 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// - Returns: The built `SwitchDefaultLabelSyntax`.
   func buildSwitchDefaultLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchDefaultLabelSyntax {
     let result = SyntaxFactory.makeSwitchDefaultLabel(
+      garbage: garbageBeforeDefaultKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       defaultKeyword: defaultKeyword,
+      garbage: garbageBetweenDefaultKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12002,8 +15347,11 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
 
 }
 public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma {
+  let garbageBeforePattern: GarbageNodes?
   let pattern: PatternBuildable
+  let garbageBetweenPatternAndWhereClause: GarbageNodes?
   let whereClause: WhereClause?
+  let garbageBetweenWhereClauseAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12012,18 +15360,27 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
 
   /// Creates a `CaseItem` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndWhereClause: 
   ///   - whereClause: 
+  ///   - garbageBetweenWhereClauseAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndWhereClause: ExpressibleAsGarbageNodes? = nil,
     whereClause: ExpressibleAsWhereClause? = nil,
+    garbageBetweenWhereClauseAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePattern = garbageBeforePattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
+    self.garbageBetweenPatternAndWhereClause = garbageBetweenPatternAndWhereClause?.createGarbageNodes()
     self.whereClause = whereClause?.createWhereClause()
+    self.garbageBetweenWhereClauseAndTrailingComma = garbageBetweenWhereClauseAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -12035,8 +15392,11 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   /// - Returns: The built `CaseItemSyntax`.
   func buildCaseItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CaseItemSyntax {
     let result = SyntaxFactory.makeCaseItem(
+      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenWhereClauseAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12057,8 +15417,11 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforePattern: garbageBeforePattern,
         pattern: pattern,
+        garbageBetweenPatternAndWhereClause: garbageBetweenPatternAndWhereClause,
         whereClause: whereClause,
+        garbageBetweenWhereClauseAndTrailingComma: garbageBetweenWhereClauseAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -12072,8 +15435,11 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
 
 }
 public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingComma {
+  let garbageBeforePattern: GarbageNodes?
   let pattern: PatternBuildable?
+  let garbageBetweenPatternAndWhereClause: GarbageNodes?
   let whereClause: WhereClause?
+  let garbageBetweenWhereClauseAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12082,18 +15448,27 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
 
   /// Creates a `CatchItem` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndWhereClause: 
   ///   - whereClause: 
+  ///   - garbageBetweenWhereClauseAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable? = nil,
+    garbageBetweenPatternAndWhereClause: ExpressibleAsGarbageNodes? = nil,
     whereClause: ExpressibleAsWhereClause? = nil,
+    garbageBetweenWhereClauseAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePattern = garbageBeforePattern?.createGarbageNodes()
     self.pattern = pattern?.createPatternBuildable()
+    self.garbageBetweenPatternAndWhereClause = garbageBetweenPatternAndWhereClause?.createGarbageNodes()
     self.whereClause = whereClause?.createWhereClause()
+    self.garbageBetweenWhereClauseAndTrailingComma = garbageBetweenWhereClauseAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -12105,8 +15480,11 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   /// - Returns: The built `CatchItemSyntax`.
   func buildCatchItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchItemSyntax {
     let result = SyntaxFactory.makeCatchItem(
+      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern?.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenWhereClauseAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12127,8 +15505,11 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforePattern: garbageBeforePattern,
         pattern: pattern,
+        garbageBetweenPatternAndWhereClause: garbageBetweenPatternAndWhereClause,
         whereClause: whereClause,
+        garbageBetweenWhereClauseAndTrailingComma: garbageBetweenWhereClauseAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -12142,8 +15523,11 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
 
 }
 public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
+  let garbageBeforeCaseKeyword: GarbageNodes?
   let caseKeyword: TokenSyntax
+  let garbageBetweenCaseKeywordAndCaseItems: GarbageNodes?
   let caseItems: CaseItemList
+  let garbageBetweenCaseItemsAndColon: GarbageNodes?
   let colon: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -12152,19 +15536,28 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
 
   /// Creates a `SwitchCaseLabel` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeCaseKeyword: 
   ///   - caseKeyword: 
+  ///   - garbageBetweenCaseKeywordAndCaseItems: 
   ///   - caseItems: 
+  ///   - garbageBetweenCaseItemsAndColon: 
   ///   - colon: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCaseKeyword: ExpressibleAsGarbageNodes? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
+    garbageBetweenCaseKeywordAndCaseItems: ExpressibleAsGarbageNodes? = nil,
     caseItems: ExpressibleAsCaseItemList,
+    garbageBetweenCaseItemsAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeCaseKeyword = garbageBeforeCaseKeyword?.createGarbageNodes()
     self.caseKeyword = caseKeyword
     assert(caseKeyword.text == "case")
+    self.garbageBetweenCaseKeywordAndCaseItems = garbageBetweenCaseKeywordAndCaseItems?.createGarbageNodes()
     self.caseItems = caseItems.createCaseItemList()
+    self.garbageBetweenCaseItemsAndColon = garbageBetweenCaseItemsAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
   }
@@ -12174,14 +15567,20 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCaseKeyword: ExpressibleAsGarbageNodes? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
+    garbageBetweenCaseKeywordAndCaseItems: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenCaseItemsAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
     @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList = { CaseItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeCaseKeyword: garbageBeforeCaseKeyword,
       caseKeyword: caseKeyword,
+      garbageBetweenCaseKeywordAndCaseItems: garbageBetweenCaseKeywordAndCaseItems,
       caseItems: caseItemsBuilder(),
+      garbageBetweenCaseItemsAndColon: garbageBetweenCaseItemsAndColon,
       colon: colon
     )
   }
@@ -12192,8 +15591,11 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// - Returns: The built `SwitchCaseLabelSyntax`.
   func buildSwitchCaseLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
     let result = SyntaxFactory.makeSwitchCaseLabel(
+      garbage: garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
+      garbage: garbageBetweenCaseKeywordAndCaseItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseItems: caseItems.buildCaseItemList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenCaseItemsAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12220,8 +15622,11 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
 
 }
 public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
+  let garbageBeforeCatchKeyword: GarbageNodes?
   let catchKeyword: TokenSyntax
+  let garbageBetweenCatchKeywordAndCatchItems: GarbageNodes?
   let catchItems: CatchItemList?
+  let garbageBetweenCatchItemsAndBody: GarbageNodes?
   let body: CodeBlock
 
   /// The leading trivia attached to this syntax node once built.
@@ -12230,19 +15635,28 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
 
   /// Creates a `CatchClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeCatchKeyword: 
   ///   - catchKeyword: 
+  ///   - garbageBetweenCatchKeywordAndCatchItems: 
   ///   - catchItems: 
+  ///   - garbageBetweenCatchItemsAndBody: 
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCatchKeyword: ExpressibleAsGarbageNodes? = nil,
     catchKeyword: TokenSyntax = TokenSyntax.`catch`,
+    garbageBetweenCatchKeywordAndCatchItems: ExpressibleAsGarbageNodes? = nil,
     catchItems: ExpressibleAsCatchItemList? = nil,
+    garbageBetweenCatchItemsAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeCatchKeyword = garbageBeforeCatchKeyword?.createGarbageNodes()
     self.catchKeyword = catchKeyword
     assert(catchKeyword.text == "catch")
+    self.garbageBetweenCatchKeywordAndCatchItems = garbageBetweenCatchKeywordAndCatchItems?.createGarbageNodes()
     self.catchItems = catchItems?.createCatchItemList()
+    self.garbageBetweenCatchItemsAndBody = garbageBetweenCatchItemsAndBody?.createGarbageNodes()
     self.body = body.createCodeBlock()
   }
 
@@ -12251,14 +15665,20 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeCatchKeyword: ExpressibleAsGarbageNodes? = nil,
     catchKeyword: TokenSyntax = TokenSyntax.`catch`,
+    garbageBetweenCatchKeywordAndCatchItems: ExpressibleAsGarbageNodes? = nil,
     catchItems: ExpressibleAsCatchItemList? = nil,
+    garbageBetweenCatchItemsAndBody: ExpressibleAsGarbageNodes? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeCatchKeyword: garbageBeforeCatchKeyword,
       catchKeyword: catchKeyword,
+      garbageBetweenCatchKeywordAndCatchItems: garbageBetweenCatchKeywordAndCatchItems,
       catchItems: catchItems,
+      garbageBetweenCatchItemsAndBody: garbageBetweenCatchItemsAndBody,
       body: bodyBuilder()
     )
   }
@@ -12269,8 +15689,11 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// - Returns: The built `CatchClauseSyntax`.
   func buildCatchClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchClauseSyntax {
     let result = SyntaxFactory.makeCatchClause(
+      garbage: garbageBeforeCatchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       catchKeyword: catchKeyword,
+      garbage: garbageBetweenCatchKeywordAndCatchItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
       catchItems: catchItems?.buildCatchItemList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenCatchItemsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12297,11 +15720,17 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
 
 }
 public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
+  let garbageBeforePoundAssert: GarbageNodes?
   let poundAssert: TokenSyntax
+  let garbageBetweenPoundAssertAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndCondition: GarbageNodes?
   let condition: ExprBuildable
+  let garbageBetweenConditionAndComma: GarbageNodes?
   let comma: TokenSyntax?
+  let garbageBetweenCommaAndMessage: GarbageNodes?
   let message: TokenSyntax?
+  let garbageBetweenMessageAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -12310,30 +15739,48 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
 
   /// Creates a `PoundAssertStmt` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePoundAssert: 
   ///   - poundAssert: 
+  ///   - garbageBetweenPoundAssertAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndCondition: 
   ///   - condition: The assertion condition.
+  ///   - garbageBetweenConditionAndComma: 
   ///   - comma: The comma after the assertion condition.
+  ///   - garbageBetweenCommaAndMessage: 
   ///   - message: The assertion message.
+  ///   - garbageBetweenMessageAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundAssert: ExpressibleAsGarbageNodes? = nil,
     poundAssert: TokenSyntax = TokenSyntax.`poundAssert`,
+    garbageBetweenPoundAssertAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndCondition: ExpressibleAsGarbageNodes? = nil,
     condition: ExpressibleAsExprBuildable,
+    garbageBetweenConditionAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax? = nil,
+    garbageBetweenCommaAndMessage: ExpressibleAsGarbageNodes? = nil,
     message: TokenSyntax? = nil,
+    garbageBetweenMessageAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePoundAssert = garbageBeforePoundAssert?.createGarbageNodes()
     self.poundAssert = poundAssert
     assert(poundAssert.text == "#assert")
+    self.garbageBetweenPoundAssertAndLeftParen = garbageBetweenPoundAssertAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndCondition = garbageBetweenLeftParenAndCondition?.createGarbageNodes()
     self.condition = condition.createExprBuildable()
+    self.garbageBetweenConditionAndComma = garbageBetweenConditionAndComma?.createGarbageNodes()
     self.comma = comma
     assert(comma == nil || comma!.text == ",")
+    self.garbageBetweenCommaAndMessage = garbageBetweenCommaAndMessage?.createGarbageNodes()
     self.message = message
+    self.garbageBetweenMessageAndRightParen = garbageBetweenMessageAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -12343,20 +15790,32 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePoundAssert: ExpressibleAsGarbageNodes? = nil,
     poundAssert: TokenSyntax = TokenSyntax.`poundAssert`,
+    garbageBetweenPoundAssertAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndCondition: ExpressibleAsGarbageNodes? = nil,
     condition: ExpressibleAsExprBuildable,
+    garbageBetweenConditionAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax? = nil,
+    garbageBetweenCommaAndMessage: ExpressibleAsGarbageNodes? = nil,
     message: String?,
+    garbageBetweenMessageAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforePoundAssert: garbageBeforePoundAssert,
       poundAssert: poundAssert,
+      garbageBetweenPoundAssertAndLeftParen: garbageBetweenPoundAssertAndLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndCondition: garbageBetweenLeftParenAndCondition,
       condition: condition,
+      garbageBetweenConditionAndComma: garbageBetweenConditionAndComma,
       comma: comma,
+      garbageBetweenCommaAndMessage: garbageBetweenCommaAndMessage,
       message: message.map(TokenSyntax.stringLiteral),
+      garbageBetweenMessageAndRightParen: garbageBetweenMessageAndRightParen,
       rightParen: rightParen
     )
   }
@@ -12367,11 +15826,17 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// - Returns: The built `PoundAssertStmtSyntax`.
   func buildPoundAssertStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundAssertStmtSyntax {
     let result = SyntaxFactory.makePoundAssertStmt(
+      garbage: garbageBeforePoundAssert?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundAssert: poundAssert,
+      garbage: garbageBetweenPoundAssertAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition.buildExpr(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenConditionAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
+      garbage: garbageBetweenCommaAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
       message: message,
+      garbage: garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12404,7 +15869,9 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   }
 }
 public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClause {
+  let garbageBeforeWhereKeyword: GarbageNodes?
   let whereKeyword: TokenSyntax
+  let garbageBetweenWhereKeywordAndRequirementList: GarbageNodes?
   let requirementList: GenericRequirementList
 
   /// The leading trivia attached to this syntax node once built.
@@ -12413,16 +15880,22 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
 
   /// Creates a `GenericWhereClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeWhereKeyword: 
   ///   - whereKeyword: 
+  ///   - garbageBetweenWhereKeywordAndRequirementList: 
   ///   - requirementList: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWhereKeyword: ExpressibleAsGarbageNodes? = nil,
     whereKeyword: TokenSyntax = TokenSyntax.`where`,
+    garbageBetweenWhereKeywordAndRequirementList: ExpressibleAsGarbageNodes? = nil,
     requirementList: ExpressibleAsGenericRequirementList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeWhereKeyword = garbageBeforeWhereKeyword?.createGarbageNodes()
     self.whereKeyword = whereKeyword
     assert(whereKeyword.text == "where")
+    self.garbageBetweenWhereKeywordAndRequirementList = garbageBetweenWhereKeywordAndRequirementList?.createGarbageNodes()
     self.requirementList = requirementList.createGenericRequirementList()
   }
 
@@ -12431,12 +15904,16 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWhereKeyword: ExpressibleAsGarbageNodes? = nil,
     whereKeyword: TokenSyntax = TokenSyntax.`where`,
+    garbageBetweenWhereKeywordAndRequirementList: ExpressibleAsGarbageNodes? = nil,
     @GenericRequirementListBuilder requirementListBuilder: () -> ExpressibleAsGenericRequirementList = { GenericRequirementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeWhereKeyword: garbageBeforeWhereKeyword,
       whereKeyword: whereKeyword,
+      garbageBetweenWhereKeywordAndRequirementList: garbageBetweenWhereKeywordAndRequirementList,
       requirementList: requirementListBuilder()
     )
   }
@@ -12447,7 +15924,9 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// - Returns: The built `GenericWhereClauseSyntax`.
   func buildGenericWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericWhereClauseSyntax {
     let result = SyntaxFactory.makeGenericWhereClause(
+      garbage: garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereKeyword: whereKeyword,
+      garbage: garbageBetweenWhereKeywordAndRequirementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       requirementList: requirementList.buildGenericRequirementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12474,7 +15953,9 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
 
 }
 public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequirement, HasTrailingComma {
+  let garbageBeforeBody: GarbageNodes?
   let body: SyntaxBuildable
+  let garbageBetweenBodyAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12483,15 +15964,21 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
 
   /// Creates a `GenericRequirement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBody: 
   ///   - body: 
+  ///   - garbageBetweenBodyAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsSyntaxBuildable,
+    garbageBetweenBodyAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBody = garbageBeforeBody?.createGarbageNodes()
     self.body = body.createSyntaxBuildable()
+    self.garbageBetweenBodyAndTrailingComma = garbageBetweenBodyAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -12503,7 +15990,9 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// - Returns: The built `GenericRequirementSyntax`.
   func buildGenericRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericRequirementSyntax {
     let result = SyntaxFactory.makeGenericRequirement(
+      garbage: garbageBeforeBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBodyAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12524,7 +16013,9 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeBody: garbageBeforeBody,
         body: body,
+        garbageBetweenBodyAndTrailingComma: garbageBetweenBodyAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -12538,8 +16029,11 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
 
 }
 public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequirement {
+  let garbageBeforeLeftTypeIdentifier: GarbageNodes?
   let leftTypeIdentifier: TypeBuildable
+  let garbageBetweenLeftTypeIdentifierAndEqualityToken: GarbageNodes?
   let equalityToken: TokenSyntax
+  let garbageBetweenEqualityTokenAndRightTypeIdentifier: GarbageNodes?
   let rightTypeIdentifier: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -12548,18 +16042,27 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
 
   /// Creates a `SameTypeRequirement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftTypeIdentifier: 
   ///   - leftTypeIdentifier: 
+  ///   - garbageBetweenLeftTypeIdentifierAndEqualityToken: 
   ///   - equalityToken: 
+  ///   - garbageBetweenEqualityTokenAndRightTypeIdentifier: 
   ///   - rightTypeIdentifier: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftTypeIdentifier: ExpressibleAsGarbageNodes? = nil,
     leftTypeIdentifier: ExpressibleAsTypeBuildable,
+    garbageBetweenLeftTypeIdentifierAndEqualityToken: ExpressibleAsGarbageNodes? = nil,
     equalityToken: TokenSyntax,
+    garbageBetweenEqualityTokenAndRightTypeIdentifier: ExpressibleAsGarbageNodes? = nil,
     rightTypeIdentifier: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftTypeIdentifier = garbageBeforeLeftTypeIdentifier?.createGarbageNodes()
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
+    self.garbageBetweenLeftTypeIdentifierAndEqualityToken = garbageBetweenLeftTypeIdentifierAndEqualityToken?.createGarbageNodes()
     self.equalityToken = equalityToken
+    self.garbageBetweenEqualityTokenAndRightTypeIdentifier = garbageBetweenEqualityTokenAndRightTypeIdentifier?.createGarbageNodes()
     self.rightTypeIdentifier = rightTypeIdentifier.createTypeBuildable()
   }
 
@@ -12570,8 +16073,11 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// - Returns: The built `SameTypeRequirementSyntax`.
   func buildSameTypeRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SameTypeRequirementSyntax {
     let result = SyntaxFactory.makeSameTypeRequirement(
+      garbage: garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenLeftTypeIdentifierAndEqualityToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equalityToken: equalityToken,
+      garbage: garbageBetweenEqualityTokenAndRightTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12598,13 +16104,21 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
 
 }
 public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement {
+  let garbageBeforeTypeIdentifier: GarbageNodes?
   let typeIdentifier: TypeBuildable
+  let garbageBetweenTypeIdentifierAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndLayoutConstraint: GarbageNodes?
   let layoutConstraint: TokenSyntax
+  let garbageBetweenLayoutConstraintAndLeftParen: GarbageNodes?
   let leftParen: TokenSyntax?
+  let garbageBetweenLeftParenAndSize: GarbageNodes?
   let size: TokenSyntax?
+  let garbageBetweenSizeAndComma: GarbageNodes?
   let comma: TokenSyntax?
+  let garbageBetweenCommaAndAlignment: GarbageNodes?
   let alignment: TokenSyntax?
+  let garbageBetweenAlignmentAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12613,36 +16127,60 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
 
   /// Creates a `LayoutRequirement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeTypeIdentifier: 
   ///   - typeIdentifier: 
+  ///   - garbageBetweenTypeIdentifierAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndLayoutConstraint: 
   ///   - layoutConstraint: 
+  ///   - garbageBetweenLayoutConstraintAndLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndSize: 
   ///   - size: 
+  ///   - garbageBetweenSizeAndComma: 
   ///   - comma: 
+  ///   - garbageBetweenCommaAndAlignment: 
   ///   - alignment: 
+  ///   - garbageBetweenAlignmentAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeTypeIdentifier: ExpressibleAsGarbageNodes? = nil,
     typeIdentifier: ExpressibleAsTypeBuildable,
+    garbageBetweenTypeIdentifierAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndLayoutConstraint: ExpressibleAsGarbageNodes? = nil,
     layoutConstraint: TokenSyntax,
+    garbageBetweenLayoutConstraintAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax? = nil,
+    garbageBetweenLeftParenAndSize: ExpressibleAsGarbageNodes? = nil,
     size: TokenSyntax? = nil,
+    garbageBetweenSizeAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax? = nil,
+    garbageBetweenCommaAndAlignment: ExpressibleAsGarbageNodes? = nil,
     alignment: TokenSyntax? = nil,
+    garbageBetweenAlignmentAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeTypeIdentifier = garbageBeforeTypeIdentifier?.createGarbageNodes()
     self.typeIdentifier = typeIdentifier.createTypeBuildable()
+    self.garbageBetweenTypeIdentifierAndColon = garbageBetweenTypeIdentifierAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndLayoutConstraint = garbageBetweenColonAndLayoutConstraint?.createGarbageNodes()
     self.layoutConstraint = layoutConstraint
+    self.garbageBetweenLayoutConstraintAndLeftParen = garbageBetweenLayoutConstraintAndLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen == nil || leftParen!.text == "(")
+    self.garbageBetweenLeftParenAndSize = garbageBetweenLeftParenAndSize?.createGarbageNodes()
     self.size = size
+    self.garbageBetweenSizeAndComma = garbageBetweenSizeAndComma?.createGarbageNodes()
     self.comma = comma
     assert(comma == nil || comma!.text == ",")
+    self.garbageBetweenCommaAndAlignment = garbageBetweenCommaAndAlignment?.createGarbageNodes()
     self.alignment = alignment
+    self.garbageBetweenAlignmentAndRightParen = garbageBetweenAlignmentAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen == nil || rightParen!.text == ")")
   }
@@ -12652,24 +16190,40 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeTypeIdentifier: ExpressibleAsGarbageNodes? = nil,
     typeIdentifier: ExpressibleAsTypeBuildable,
+    garbageBetweenTypeIdentifierAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndLayoutConstraint: ExpressibleAsGarbageNodes? = nil,
     layoutConstraint: String,
+    garbageBetweenLayoutConstraintAndLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax? = nil,
+    garbageBetweenLeftParenAndSize: ExpressibleAsGarbageNodes? = nil,
     size: String?,
+    garbageBetweenSizeAndComma: ExpressibleAsGarbageNodes? = nil,
     comma: TokenSyntax? = nil,
+    garbageBetweenCommaAndAlignment: ExpressibleAsGarbageNodes? = nil,
     alignment: String?,
+    garbageBetweenAlignmentAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeTypeIdentifier: garbageBeforeTypeIdentifier,
       typeIdentifier: typeIdentifier,
+      garbageBetweenTypeIdentifierAndColon: garbageBetweenTypeIdentifierAndColon,
       colon: colon,
+      garbageBetweenColonAndLayoutConstraint: garbageBetweenColonAndLayoutConstraint,
       layoutConstraint: TokenSyntax.identifier(layoutConstraint),
+      garbageBetweenLayoutConstraintAndLeftParen: garbageBetweenLayoutConstraintAndLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndSize: garbageBetweenLeftParenAndSize,
       size: size.map(TokenSyntax.integerLiteral),
+      garbageBetweenSizeAndComma: garbageBetweenSizeAndComma,
       comma: comma,
+      garbageBetweenCommaAndAlignment: garbageBetweenCommaAndAlignment,
       alignment: alignment.map(TokenSyntax.integerLiteral),
+      garbageBetweenAlignmentAndRightParen: garbageBetweenAlignmentAndRightParen,
       rightParen: rightParen
     )
   }
@@ -12680,13 +16234,21 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   /// - Returns: The built `LayoutRequirementSyntax`.
   func buildLayoutRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LayoutRequirementSyntax {
     let result = SyntaxFactory.makeLayoutRequirement(
+      garbage: garbageBeforeTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeIdentifier: typeIdentifier.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndLayoutConstraint?.buildGarbageNodes(format: format, leadingTrivia: nil),
       layoutConstraint: layoutConstraint,
+      garbage: garbageBetweenLayoutConstraintAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndSize?.buildGarbageNodes(format: format, leadingTrivia: nil),
       size: size,
+      garbage: garbageBetweenSizeAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
+      garbage: garbageBetweenCommaAndAlignment?.buildGarbageNodes(format: format, leadingTrivia: nil),
       alignment: alignment,
+      garbage: garbageBetweenAlignmentAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12713,10 +16275,15 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
 
 }
 public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, HasTrailingComma {
+  let garbageBeforeAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndColon: GarbageNodes?
   let colon: TokenSyntax?
+  let garbageBetweenColonAndInheritedType: GarbageNodes?
   let inheritedType: TypeBuildable?
+  let garbageBetweenInheritedTypeAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12725,25 +16292,40 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
 
   /// Creates a `GenericParameter` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndInheritedType: 
   ///   - inheritedType: 
+  ///   - garbageBetweenInheritedTypeAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil,
+    garbageBetweenColonAndInheritedType: ExpressibleAsGarbageNodes? = nil,
     inheritedType: ExpressibleAsTypeBuildable? = nil,
+    garbageBetweenInheritedTypeAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeAttributes = garbageBeforeAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndName = garbageBetweenAttributesAndName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndColon = garbageBetweenNameAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
+    self.garbageBetweenColonAndInheritedType = garbageBetweenColonAndInheritedType?.createGarbageNodes()
     self.inheritedType = inheritedType?.createTypeBuildable()
+    self.garbageBetweenInheritedTypeAndTrailingComma = garbageBetweenInheritedTypeAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -12753,18 +16335,28 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndName: ExpressibleAsGarbageNodes? = nil,
     name: String,
+    garbageBetweenNameAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil,
+    garbageBetweenColonAndInheritedType: ExpressibleAsGarbageNodes? = nil,
     inheritedType: ExpressibleAsTypeBuildable? = nil,
+    garbageBetweenInheritedTypeAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeAttributes: garbageBeforeAttributes,
       attributes: attributes,
+      garbageBetweenAttributesAndName: garbageBetweenAttributesAndName,
       name: TokenSyntax.identifier(name),
+      garbageBetweenNameAndColon: garbageBetweenNameAndColon,
       colon: colon,
+      garbageBetweenColonAndInheritedType: garbageBetweenColonAndInheritedType,
       inheritedType: inheritedType,
+      garbageBetweenInheritedTypeAndTrailingComma: garbageBetweenInheritedTypeAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -12775,10 +16367,15 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   /// - Returns: The built `GenericParameterSyntax`.
   func buildGenericParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterSyntax {
     let result = SyntaxFactory.makeGenericParameter(
+      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndInheritedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritedType: inheritedType?.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInheritedTypeAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12799,10 +16396,15 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeAttributes: garbageBeforeAttributes,
         attributes: attributes,
+        garbageBetweenAttributesAndName: garbageBetweenAttributesAndName,
         name: name,
+        garbageBetweenNameAndColon: garbageBetweenNameAndColon,
         colon: colon,
+        garbageBetweenColonAndInheritedType: garbageBetweenColonAndInheritedType,
         inheritedType: inheritedType,
+        garbageBetweenInheritedTypeAndTrailingComma: garbageBetweenInheritedTypeAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -12816,7 +16418,9 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
 
 }
 public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType, HasTrailingComma {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12825,15 +16429,21 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
 
   /// Creates a `PrimaryAssociatedType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndTrailingComma = garbageBetweenNameAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -12843,12 +16453,16 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: String,
+    garbageBetweenNameAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeName: garbageBeforeName,
       name: TokenSyntax.identifier(name),
+      garbageBetweenNameAndTrailingComma: garbageBetweenNameAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -12859,7 +16473,9 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
   func buildPrimaryAssociatedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedType(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12880,7 +16496,9 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeName: garbageBeforeName,
         name: name,
+        garbageBetweenNameAndTrailingComma: garbageBetweenNameAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -12894,8 +16512,11 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
 
 }
 public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParameterClause {
+  let garbageBeforeLeftAngleBracket: GarbageNodes?
   let leftAngleBracket: TokenSyntax
+  let garbageBetweenLeftAngleBracketAndGenericParameterList: GarbageNodes?
   let genericParameterList: GenericParameterList
+  let garbageBetweenGenericParameterListAndRightAngleBracket: GarbageNodes?
   let rightAngleBracket: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -12904,19 +16525,28 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
 
   /// Creates a `GenericParameterClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftAngleBracket: 
   ///   - leftAngleBracket: 
+  ///   - garbageBetweenLeftAngleBracketAndGenericParameterList: 
   ///   - genericParameterList: 
+  ///   - garbageBetweenGenericParameterListAndRightAngleBracket: 
   ///   - rightAngleBracket: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftAngleBracket: ExpressibleAsGarbageNodes? = nil,
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    garbageBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsGarbageNodes? = nil,
     genericParameterList: ExpressibleAsGenericParameterList,
+    garbageBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsGarbageNodes? = nil,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftAngleBracket = garbageBeforeLeftAngleBracket?.createGarbageNodes()
     self.leftAngleBracket = leftAngleBracket
     assert(leftAngleBracket.text == "<")
+    self.garbageBetweenLeftAngleBracketAndGenericParameterList = garbageBetweenLeftAngleBracketAndGenericParameterList?.createGarbageNodes()
     self.genericParameterList = genericParameterList.createGenericParameterList()
+    self.garbageBetweenGenericParameterListAndRightAngleBracket = garbageBetweenGenericParameterListAndRightAngleBracket?.createGarbageNodes()
     self.rightAngleBracket = rightAngleBracket
     assert(rightAngleBracket.text == ">")
   }
@@ -12926,14 +16556,20 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftAngleBracket: ExpressibleAsGarbageNodes? = nil,
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    garbageBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsGarbageNodes? = nil,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
     @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList = { GenericParameterList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftAngleBracket: garbageBeforeLeftAngleBracket,
       leftAngleBracket: leftAngleBracket,
+      garbageBetweenLeftAngleBracketAndGenericParameterList: garbageBetweenLeftAngleBracketAndGenericParameterList,
       genericParameterList: genericParameterListBuilder(),
+      garbageBetweenGenericParameterListAndRightAngleBracket: garbageBetweenGenericParameterListAndRightAngleBracket,
       rightAngleBracket: rightAngleBracket
     )
   }
@@ -12944,8 +16580,11 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// - Returns: The built `GenericParameterClauseSyntax`.
   func buildGenericParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterClauseSyntax {
     let result = SyntaxFactory.makeGenericParameterClause(
+      garbage: garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
+      garbage: garbageBetweenLeftAngleBracketAndGenericParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterList: genericParameterList.buildGenericParameterList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenGenericParameterListAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12972,8 +16611,11 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
 
 }
 public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceRequirement {
+  let garbageBeforeLeftTypeIdentifier: GarbageNodes?
   let leftTypeIdentifier: TypeBuildable
+  let garbageBetweenLeftTypeIdentifierAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndRightTypeIdentifier: GarbageNodes?
   let rightTypeIdentifier: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -12982,19 +16624,28 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
 
   /// Creates a `ConformanceRequirement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftTypeIdentifier: 
   ///   - leftTypeIdentifier: 
+  ///   - garbageBetweenLeftTypeIdentifierAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndRightTypeIdentifier: 
   ///   - rightTypeIdentifier: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftTypeIdentifier: ExpressibleAsGarbageNodes? = nil,
     leftTypeIdentifier: ExpressibleAsTypeBuildable,
+    garbageBetweenLeftTypeIdentifierAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndRightTypeIdentifier: ExpressibleAsGarbageNodes? = nil,
     rightTypeIdentifier: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftTypeIdentifier = garbageBeforeLeftTypeIdentifier?.createGarbageNodes()
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
+    self.garbageBetweenLeftTypeIdentifierAndColon = garbageBetweenLeftTypeIdentifierAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndRightTypeIdentifier = garbageBetweenColonAndRightTypeIdentifier?.createGarbageNodes()
     self.rightTypeIdentifier = rightTypeIdentifier.createTypeBuildable()
   }
 
@@ -13005,8 +16656,11 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// - Returns: The built `ConformanceRequirementSyntax`.
   func buildConformanceRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConformanceRequirementSyntax {
     let result = SyntaxFactory.makeConformanceRequirement(
+      garbage: garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenLeftTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndRightTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13033,8 +16687,11 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
 
 }
 public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeClause {
+  let garbageBeforeLeftAngleBracket: GarbageNodes?
   let leftAngleBracket: TokenSyntax
+  let garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: GarbageNodes?
   let primaryAssociatedTypeList: PrimaryAssociatedTypeList
+  let garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: GarbageNodes?
   let rightAngleBracket: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13043,19 +16700,28 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
 
   /// Creates a `PrimaryAssociatedTypeClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftAngleBracket: 
   ///   - leftAngleBracket: 
+  ///   - garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: 
   ///   - primaryAssociatedTypeList: 
+  ///   - garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: 
   ///   - rightAngleBracket: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftAngleBracket: ExpressibleAsGarbageNodes? = nil,
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: ExpressibleAsGarbageNodes? = nil,
     primaryAssociatedTypeList: ExpressibleAsPrimaryAssociatedTypeList,
+    garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: ExpressibleAsGarbageNodes? = nil,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftAngleBracket = garbageBeforeLeftAngleBracket?.createGarbageNodes()
     self.leftAngleBracket = leftAngleBracket
     assert(leftAngleBracket.text == "<")
+    self.garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList = garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.createGarbageNodes()
     self.primaryAssociatedTypeList = primaryAssociatedTypeList.createPrimaryAssociatedTypeList()
+    self.garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket = garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.createGarbageNodes()
     self.rightAngleBracket = rightAngleBracket
     assert(rightAngleBracket.text == ">")
   }
@@ -13067,8 +16733,11 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// - Returns: The built `PrimaryAssociatedTypeClauseSyntax`.
   func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedTypeClause(
+      garbage: garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
+      garbage: garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13095,7 +16764,9 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
 
 }
 public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdentifier {
+  let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndGenericArgumentClause: GarbageNodes?
   let genericArgumentClause: GenericArgumentClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -13104,15 +16775,21 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
 
   /// Creates a `SimpleTypeIdentifier` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndGenericArgumentClause: 
   ///   - genericArgumentClause: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndGenericArgumentClause: ExpressibleAsGarbageNodes? = nil,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeName = garbageBeforeName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndGenericArgumentClause = garbageBetweenNameAndGenericArgumentClause?.createGarbageNodes()
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
   }
 
@@ -13123,7 +16800,9 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// - Returns: The built `SimpleTypeIdentifierSyntax`.
   func buildSimpleTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SimpleTypeIdentifierSyntax {
     let result = SyntaxFactory.makeSimpleTypeIdentifier(
+      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13156,9 +16835,13 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   }
 }
 public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdentifier {
+  let garbageBeforeBaseType: GarbageNodes?
   let baseType: TypeBuildable
+  let garbageBetweenBaseTypeAndPeriod: GarbageNodes?
   let period: TokenSyntax
+  let garbageBetweenPeriodAndName: GarbageNodes?
   let name: TokenSyntax
+  let garbageBetweenNameAndGenericArgumentClause: GarbageNodes?
   let genericArgumentClause: GenericArgumentClause?
 
   /// The leading trivia attached to this syntax node once built.
@@ -13167,22 +16850,34 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
 
   /// Creates a `MemberTypeIdentifier` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBaseType: 
   ///   - baseType: 
+  ///   - garbageBetweenBaseTypeAndPeriod: 
   ///   - period: 
+  ///   - garbageBetweenPeriodAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndGenericArgumentClause: 
   ///   - genericArgumentClause: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBaseType: ExpressibleAsGarbageNodes? = nil,
     baseType: ExpressibleAsTypeBuildable,
+    garbageBetweenBaseTypeAndPeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax,
+    garbageBetweenPeriodAndName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax,
+    garbageBetweenNameAndGenericArgumentClause: ExpressibleAsGarbageNodes? = nil,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBaseType = garbageBeforeBaseType?.createGarbageNodes()
     self.baseType = baseType.createTypeBuildable()
+    self.garbageBetweenBaseTypeAndPeriod = garbageBetweenBaseTypeAndPeriod?.createGarbageNodes()
     self.period = period
     assert(period.text == "." || period.text == ".")
+    self.garbageBetweenPeriodAndName = garbageBetweenPeriodAndName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndGenericArgumentClause = garbageBetweenNameAndGenericArgumentClause?.createGarbageNodes()
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
   }
 
@@ -13193,9 +16888,13 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   /// - Returns: The built `MemberTypeIdentifierSyntax`.
   func buildMemberTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberTypeIdentifierSyntax {
     let result = SyntaxFactory.makeMemberTypeIdentifier(
+      garbage: garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
+      garbage: garbageBetweenPeriodAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13228,6 +16927,7 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   }
 }
 public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestrictionType {
+  let garbageBeforeClassKeyword: GarbageNodes?
   let classKeyword: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13236,12 +16936,15 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
 
   /// Creates a `ClassRestrictionType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeClassKeyword: 
   ///   - classKeyword: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeClassKeyword: ExpressibleAsGarbageNodes? = nil,
     classKeyword: TokenSyntax = TokenSyntax.`class`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeClassKeyword = garbageBeforeClassKeyword?.createGarbageNodes()
     self.classKeyword = classKeyword
     assert(classKeyword.text == "class")
   }
@@ -13253,6 +16956,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// - Returns: The built `ClassRestrictionTypeSyntax`.
   func buildClassRestrictionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassRestrictionTypeSyntax {
     let result = SyntaxFactory.makeClassRestrictionType(
+      garbage: garbageBeforeClassKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       classKeyword: classKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13285,8 +16989,11 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   }
 }
 public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
+  let garbageBeforeLeftSquareBracket: GarbageNodes?
   let leftSquareBracket: TokenSyntax
+  let garbageBetweenLeftSquareBracketAndElementType: GarbageNodes?
   let elementType: TypeBuildable
+  let garbageBetweenElementTypeAndRightSquareBracket: GarbageNodes?
   let rightSquareBracket: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13295,19 +17002,28 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
 
   /// Creates a `ArrayType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftSquareBracket: 
   ///   - leftSquareBracket: 
+  ///   - garbageBetweenLeftSquareBracketAndElementType: 
   ///   - elementType: 
+  ///   - garbageBetweenElementTypeAndRightSquareBracket: 
   ///   - rightSquareBracket: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftSquareBracket: ExpressibleAsGarbageNodes? = nil,
     leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftSquareBracketAndElementType: ExpressibleAsGarbageNodes? = nil,
     elementType: ExpressibleAsTypeBuildable,
+    garbageBetweenElementTypeAndRightSquareBracket: ExpressibleAsGarbageNodes? = nil,
     rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftSquareBracket = garbageBeforeLeftSquareBracket?.createGarbageNodes()
     self.leftSquareBracket = leftSquareBracket
     assert(leftSquareBracket.text == "[")
+    self.garbageBetweenLeftSquareBracketAndElementType = garbageBetweenLeftSquareBracketAndElementType?.createGarbageNodes()
     self.elementType = elementType.createTypeBuildable()
+    self.garbageBetweenElementTypeAndRightSquareBracket = garbageBetweenElementTypeAndRightSquareBracket?.createGarbageNodes()
     self.rightSquareBracket = rightSquareBracket
     assert(rightSquareBracket.text == "]")
   }
@@ -13319,8 +17035,11 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// - Returns: The built `ArrayTypeSyntax`.
   func buildArrayType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayTypeSyntax {
     let result = SyntaxFactory.makeArrayType(
+      garbage: garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquareBracket: leftSquareBracket,
+      garbage: garbageBetweenLeftSquareBracketAndElementType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elementType: elementType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenElementTypeAndRightSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquareBracket: rightSquareBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13353,10 +17072,15 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   }
 }
 public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
+  let garbageBeforeLeftSquareBracket: GarbageNodes?
   let leftSquareBracket: TokenSyntax
+  let garbageBetweenLeftSquareBracketAndKeyType: GarbageNodes?
   let keyType: TypeBuildable
+  let garbageBetweenKeyTypeAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndValueType: GarbageNodes?
   let valueType: TypeBuildable
+  let garbageBetweenValueTypeAndRightSquareBracket: GarbageNodes?
   let rightSquareBracket: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13365,26 +17089,41 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
 
   /// Creates a `DictionaryType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftSquareBracket: 
   ///   - leftSquareBracket: 
+  ///   - garbageBetweenLeftSquareBracketAndKeyType: 
   ///   - keyType: 
+  ///   - garbageBetweenKeyTypeAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndValueType: 
   ///   - valueType: 
+  ///   - garbageBetweenValueTypeAndRightSquareBracket: 
   ///   - rightSquareBracket: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftSquareBracket: ExpressibleAsGarbageNodes? = nil,
     leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    garbageBetweenLeftSquareBracketAndKeyType: ExpressibleAsGarbageNodes? = nil,
     keyType: ExpressibleAsTypeBuildable,
+    garbageBetweenKeyTypeAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValueType: ExpressibleAsGarbageNodes? = nil,
     valueType: ExpressibleAsTypeBuildable,
+    garbageBetweenValueTypeAndRightSquareBracket: ExpressibleAsGarbageNodes? = nil,
     rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftSquareBracket = garbageBeforeLeftSquareBracket?.createGarbageNodes()
     self.leftSquareBracket = leftSquareBracket
     assert(leftSquareBracket.text == "[")
+    self.garbageBetweenLeftSquareBracketAndKeyType = garbageBetweenLeftSquareBracketAndKeyType?.createGarbageNodes()
     self.keyType = keyType.createTypeBuildable()
+    self.garbageBetweenKeyTypeAndColon = garbageBetweenKeyTypeAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndValueType = garbageBetweenColonAndValueType?.createGarbageNodes()
     self.valueType = valueType.createTypeBuildable()
+    self.garbageBetweenValueTypeAndRightSquareBracket = garbageBetweenValueTypeAndRightSquareBracket?.createGarbageNodes()
     self.rightSquareBracket = rightSquareBracket
     assert(rightSquareBracket.text == "]")
   }
@@ -13396,10 +17135,15 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// - Returns: The built `DictionaryTypeSyntax`.
   func buildDictionaryType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryTypeSyntax {
     let result = SyntaxFactory.makeDictionaryType(
+      garbage: garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquareBracket: leftSquareBracket,
+      garbage: garbageBetweenLeftSquareBracketAndKeyType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyType: keyType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenKeyTypeAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndValueType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       valueType: valueType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenValueTypeAndRightSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquareBracket: rightSquareBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13432,8 +17176,11 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   }
 }
 public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
+  let garbageBeforeBaseType: GarbageNodes?
   let baseType: TypeBuildable
+  let garbageBetweenBaseTypeAndPeriod: GarbageNodes?
   let period: TokenSyntax
+  let garbageBetweenPeriodAndTypeOrProtocol: GarbageNodes?
   let typeOrProtocol: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13442,19 +17189,28 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
 
   /// Creates a `MetatypeType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeBaseType: 
   ///   - baseType: 
+  ///   - garbageBetweenBaseTypeAndPeriod: 
   ///   - period: 
+  ///   - garbageBetweenPeriodAndTypeOrProtocol: 
   ///   - typeOrProtocol: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBaseType: ExpressibleAsGarbageNodes? = nil,
     baseType: ExpressibleAsTypeBuildable,
+    garbageBetweenBaseTypeAndPeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax = TokenSyntax.`period`,
+    garbageBetweenPeriodAndTypeOrProtocol: ExpressibleAsGarbageNodes? = nil,
     typeOrProtocol: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeBaseType = garbageBeforeBaseType?.createGarbageNodes()
     self.baseType = baseType.createTypeBuildable()
+    self.garbageBetweenBaseTypeAndPeriod = garbageBetweenBaseTypeAndPeriod?.createGarbageNodes()
     self.period = period
     assert(period.text == ".")
+    self.garbageBetweenPeriodAndTypeOrProtocol = garbageBetweenPeriodAndTypeOrProtocol?.createGarbageNodes()
     self.typeOrProtocol = typeOrProtocol
     assert(typeOrProtocol.text == "Type" || typeOrProtocol.text == "Protocol")
   }
@@ -13464,14 +17220,20 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeBaseType: ExpressibleAsGarbageNodes? = nil,
     baseType: ExpressibleAsTypeBuildable,
+    garbageBetweenBaseTypeAndPeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax = TokenSyntax.`period`,
+    garbageBetweenPeriodAndTypeOrProtocol: ExpressibleAsGarbageNodes? = nil,
     typeOrProtocol: String
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeBaseType: garbageBeforeBaseType,
       baseType: baseType,
+      garbageBetweenBaseTypeAndPeriod: garbageBetweenBaseTypeAndPeriod,
       period: period,
+      garbageBetweenPeriodAndTypeOrProtocol: garbageBetweenPeriodAndTypeOrProtocol,
       typeOrProtocol: TokenSyntax.identifier(typeOrProtocol)
     )
   }
@@ -13482,8 +17244,11 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// - Returns: The built `MetatypeTypeSyntax`.
   func buildMetatypeType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MetatypeTypeSyntax {
     let result = SyntaxFactory.makeMetatypeType(
+      garbage: garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
+      garbage: garbageBetweenPeriodAndTypeOrProtocol?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeOrProtocol: typeOrProtocol
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13516,7 +17281,9 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   }
 }
 public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
+  let garbageBeforeWrappedType: GarbageNodes?
   let wrappedType: TypeBuildable
+  let garbageBetweenWrappedTypeAndQuestionMark: GarbageNodes?
   let questionMark: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13525,15 +17292,21 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
 
   /// Creates a `OptionalType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeWrappedType: 
   ///   - wrappedType: 
+  ///   - garbageBetweenWrappedTypeAndQuestionMark: 
   ///   - questionMark: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWrappedType: ExpressibleAsGarbageNodes? = nil,
     wrappedType: ExpressibleAsTypeBuildable,
+    garbageBetweenWrappedTypeAndQuestionMark: ExpressibleAsGarbageNodes? = nil,
     questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeWrappedType = garbageBeforeWrappedType?.createGarbageNodes()
     self.wrappedType = wrappedType.createTypeBuildable()
+    self.garbageBetweenWrappedTypeAndQuestionMark = garbageBetweenWrappedTypeAndQuestionMark?.createGarbageNodes()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
   }
@@ -13545,7 +17318,9 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// - Returns: The built `OptionalTypeSyntax`.
   func buildOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalTypeSyntax {
     let result = SyntaxFactory.makeOptionalType(
+      garbage: garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenWrappedTypeAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13578,7 +17353,9 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   }
 }
 public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugarType {
+  let garbageBeforeSomeOrAnySpecifier: GarbageNodes?
   let someOrAnySpecifier: TokenSyntax
+  let garbageBetweenSomeOrAnySpecifierAndBaseType: GarbageNodes?
   let baseType: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -13587,16 +17364,22 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
 
   /// Creates a `ConstrainedSugarType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeSomeOrAnySpecifier: 
   ///   - someOrAnySpecifier: 
+  ///   - garbageBetweenSomeOrAnySpecifierAndBaseType: 
   ///   - baseType: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeSomeOrAnySpecifier: ExpressibleAsGarbageNodes? = nil,
     someOrAnySpecifier: TokenSyntax,
+    garbageBetweenSomeOrAnySpecifierAndBaseType: ExpressibleAsGarbageNodes? = nil,
     baseType: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeSomeOrAnySpecifier = garbageBeforeSomeOrAnySpecifier?.createGarbageNodes()
     self.someOrAnySpecifier = someOrAnySpecifier
     assert(someOrAnySpecifier.text == "some" || someOrAnySpecifier.text == "any")
+    self.garbageBetweenSomeOrAnySpecifierAndBaseType = garbageBetweenSomeOrAnySpecifierAndBaseType?.createGarbageNodes()
     self.baseType = baseType.createTypeBuildable()
   }
 
@@ -13605,12 +17388,16 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeSomeOrAnySpecifier: ExpressibleAsGarbageNodes? = nil,
     someOrAnySpecifier: String,
+    garbageBetweenSomeOrAnySpecifierAndBaseType: ExpressibleAsGarbageNodes? = nil,
     baseType: ExpressibleAsTypeBuildable
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeSomeOrAnySpecifier: garbageBeforeSomeOrAnySpecifier,
       someOrAnySpecifier: TokenSyntax.identifier(someOrAnySpecifier),
+      garbageBetweenSomeOrAnySpecifierAndBaseType: garbageBetweenSomeOrAnySpecifierAndBaseType,
       baseType: baseType
     )
   }
@@ -13621,7 +17408,9 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   /// - Returns: The built `ConstrainedSugarTypeSyntax`.
   func buildConstrainedSugarType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConstrainedSugarTypeSyntax {
     let result = SyntaxFactory.makeConstrainedSugarType(
+      garbage: garbageBeforeSomeOrAnySpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       someOrAnySpecifier: someOrAnySpecifier,
+      garbage: garbageBetweenSomeOrAnySpecifierAndBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13654,7 +17443,9 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   }
 }
 public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImplicitlyUnwrappedOptionalType {
+  let garbageBeforeWrappedType: GarbageNodes?
   let wrappedType: TypeBuildable
+  let garbageBetweenWrappedTypeAndExclamationMark: GarbageNodes?
   let exclamationMark: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13663,15 +17454,21 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
 
   /// Creates a `ImplicitlyUnwrappedOptionalType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeWrappedType: 
   ///   - wrappedType: 
+  ///   - garbageBetweenWrappedTypeAndExclamationMark: 
   ///   - exclamationMark: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWrappedType: ExpressibleAsGarbageNodes? = nil,
     wrappedType: ExpressibleAsTypeBuildable,
+    garbageBetweenWrappedTypeAndExclamationMark: ExpressibleAsGarbageNodes? = nil,
     exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeWrappedType = garbageBeforeWrappedType?.createGarbageNodes()
     self.wrappedType = wrappedType.createTypeBuildable()
+    self.garbageBetweenWrappedTypeAndExclamationMark = garbageBetweenWrappedTypeAndExclamationMark?.createGarbageNodes()
     self.exclamationMark = exclamationMark
     assert(exclamationMark.text == "!")
   }
@@ -13683,7 +17480,9 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   /// - Returns: The built `ImplicitlyUnwrappedOptionalTypeSyntax`.
   func buildImplicitlyUnwrappedOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplicitlyUnwrappedOptionalTypeSyntax {
     let result = SyntaxFactory.makeImplicitlyUnwrappedOptionalType(
+      garbage: garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenWrappedTypeAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       exclamationMark: exclamationMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13716,7 +17515,9 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   }
 }
 public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionTypeElement {
+  let garbageBeforeType: GarbageNodes?
   let type: TypeBuildable
+  let garbageBetweenTypeAndAmpersand: GarbageNodes?
   let ampersand: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -13725,15 +17526,21 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
 
   /// Creates a `CompositionTypeElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeType: 
   ///   - type: 
+  ///   - garbageBetweenTypeAndAmpersand: 
   ///   - ampersand: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable,
+    garbageBetweenTypeAndAmpersand: ExpressibleAsGarbageNodes? = nil,
     ampersand: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeType = garbageBeforeType?.createGarbageNodes()
     self.type = type.createTypeBuildable()
+    self.garbageBetweenTypeAndAmpersand = garbageBetweenTypeAndAmpersand?.createGarbageNodes()
     self.ampersand = ampersand
     assert(ampersand == nil || ampersand!.text == "&")
   }
@@ -13745,7 +17552,9 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   /// - Returns: The built `CompositionTypeElementSyntax`.
   func buildCompositionTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeElementSyntax {
     let result = SyntaxFactory.makeCompositionTypeElement(
+      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAndAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ampersand: ampersand
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13772,6 +17581,7 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
 
 }
 public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
+  let garbageBeforeElements: GarbageNodes?
   let elements: CompositionTypeElementList
 
   /// The leading trivia attached to this syntax node once built.
@@ -13780,12 +17590,15 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
 
   /// Creates a `CompositionType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeElements: 
   ///   - elements: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeElements: ExpressibleAsGarbageNodes? = nil,
     elements: ExpressibleAsCompositionTypeElementList
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeElements = garbageBeforeElements?.createGarbageNodes()
     self.elements = elements.createCompositionTypeElementList()
   }
 
@@ -13796,6 +17609,7 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// - Returns: The built `CompositionTypeSyntax`.
   func buildCompositionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeSyntax {
     let result = SyntaxFactory.makeCompositionType(
+      garbage: garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildCompositionTypeElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13828,13 +17642,21 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   }
 }
 public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, HasTrailingComma {
+  let garbageBeforeInOut: GarbageNodes?
   let inOut: TokenSyntax?
+  let garbageBetweenInOutAndName: GarbageNodes?
   let name: TokenSyntax?
+  let garbageBetweenNameAndSecondName: GarbageNodes?
   let secondName: TokenSyntax?
+  let garbageBetweenSecondNameAndColon: GarbageNodes?
   let colon: TokenSyntax?
+  let garbageBetweenColonAndType: GarbageNodes?
   let type: TypeBuildable
+  let garbageBetweenTypeAndEllipsis: GarbageNodes?
   let ellipsis: TokenSyntax?
+  let garbageBetweenEllipsisAndInitializer: GarbageNodes?
   let initializer: InitializerClause?
+  let garbageBetweenInitializerAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -13843,36 +17665,60 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
 
   /// Creates a `TupleTypeElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeInOut: 
   ///   - inOut: 
+  ///   - garbageBetweenInOutAndName: 
   ///   - name: 
+  ///   - garbageBetweenNameAndSecondName: 
   ///   - secondName: 
+  ///   - garbageBetweenSecondNameAndColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndType: 
   ///   - type: 
+  ///   - garbageBetweenTypeAndEllipsis: 
   ///   - ellipsis: 
+  ///   - garbageBetweenEllipsisAndInitializer: 
   ///   - initializer: 
+  ///   - garbageBetweenInitializerAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeInOut: ExpressibleAsGarbageNodes? = nil,
     inOut: TokenSyntax? = nil,
+    garbageBetweenInOutAndName: ExpressibleAsGarbageNodes? = nil,
     name: TokenSyntax? = nil,
+    garbageBetweenNameAndSecondName: ExpressibleAsGarbageNodes? = nil,
     secondName: TokenSyntax? = nil,
+    garbageBetweenSecondNameAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax? = nil,
+    garbageBetweenColonAndType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable,
+    garbageBetweenTypeAndEllipsis: ExpressibleAsGarbageNodes? = nil,
     ellipsis: TokenSyntax? = nil,
+    garbageBetweenEllipsisAndInitializer: ExpressibleAsGarbageNodes? = nil,
     initializer: ExpressibleAsInitializerClause? = nil,
+    garbageBetweenInitializerAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeInOut = garbageBeforeInOut?.createGarbageNodes()
     self.inOut = inOut
     assert(inOut == nil || inOut!.text == "inout")
+    self.garbageBetweenInOutAndName = garbageBetweenInOutAndName?.createGarbageNodes()
     self.name = name
+    self.garbageBetweenNameAndSecondName = garbageBetweenNameAndSecondName?.createGarbageNodes()
     self.secondName = secondName
+    self.garbageBetweenSecondNameAndColon = garbageBetweenSecondNameAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
+    self.garbageBetweenColonAndType = garbageBetweenColonAndType?.createGarbageNodes()
     self.type = type.createTypeBuildable()
+    self.garbageBetweenTypeAndEllipsis = garbageBetweenTypeAndEllipsis?.createGarbageNodes()
     self.ellipsis = ellipsis
     assert(ellipsis == nil || ellipsis!.text == "...")
+    self.garbageBetweenEllipsisAndInitializer = garbageBetweenEllipsisAndInitializer?.createGarbageNodes()
     self.initializer = initializer?.createInitializerClause()
+    self.garbageBetweenInitializerAndTrailingComma = garbageBetweenInitializerAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -13884,13 +17730,21 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// - Returns: The built `TupleTypeElementSyntax`.
   func buildTupleTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeElementSyntax {
     let result = SyntaxFactory.makeTupleTypeElement(
+      garbage: garbageBeforeInOut?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inOut: inOut,
+      garbage: garbageBetweenInOutAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
+      garbage: garbageBetweenNameAndSecondName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       secondName: secondName,
+      garbage: garbageBetweenSecondNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAndEllipsis?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ellipsis: ellipsis,
+      garbage: garbageBetweenEllipsisAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenInitializerAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13911,13 +17765,21 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeInOut: garbageBeforeInOut,
         inOut: inOut,
+        garbageBetweenInOutAndName: garbageBetweenInOutAndName,
         name: name,
+        garbageBetweenNameAndSecondName: garbageBetweenNameAndSecondName,
         secondName: secondName,
+        garbageBetweenSecondNameAndColon: garbageBetweenSecondNameAndColon,
         colon: colon,
+        garbageBetweenColonAndType: garbageBetweenColonAndType,
         type: type,
+        garbageBetweenTypeAndEllipsis: garbageBetweenTypeAndEllipsis,
         ellipsis: ellipsis,
+        garbageBetweenEllipsisAndInitializer: garbageBetweenEllipsisAndInitializer,
         initializer: initializer,
+        garbageBetweenInitializerAndTrailingComma: garbageBetweenInitializerAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -13931,8 +17793,11 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
 
 }
 public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndElements: GarbageNodes?
   let elements: TupleTypeElementList
+  let garbageBetweenElementsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -13941,19 +17806,28 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
 
   /// Creates a `TupleType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndElements: 
   ///   - elements: 
+  ///   - garbageBetweenElementsAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndElements: ExpressibleAsGarbageNodes? = nil,
     elements: ExpressibleAsTupleTypeElementList,
+    garbageBetweenElementsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndElements = garbageBetweenLeftParenAndElements?.createGarbageNodes()
     self.elements = elements.createTupleTypeElementList()
+    self.garbageBetweenElementsAndRightParen = garbageBetweenElementsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -13965,8 +17839,11 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// - Returns: The built `TupleTypeSyntax`.
   func buildTupleType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
     let result = SyntaxFactory.makeTupleType(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildTupleTypeElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenElementsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13999,12 +17876,19 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   }
 }
 public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndArguments: GarbageNodes?
   let arguments: TupleTypeElementList
+  let garbageBetweenArgumentsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
+  let garbageBetweenRightParenAndAsyncKeyword: GarbageNodes?
   let asyncKeyword: TokenSyntax?
+  let garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodes?
   let throwsOrRethrowsKeyword: TokenSyntax?
+  let garbageBetweenThrowsOrRethrowsKeywordAndArrow: GarbageNodes?
   let arrow: TokenSyntax
+  let garbageBetweenArrowAndReturnType: GarbageNodes?
   let returnType: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -14013,35 +17897,56 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
 
   /// Creates a `FunctionType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndArguments: 
   ///   - arguments: 
+  ///   - garbageBetweenArgumentsAndRightParen: 
   ///   - rightParen: 
+  ///   - garbageBetweenRightParenAndAsyncKeyword: 
   ///   - asyncKeyword: 
+  ///   - garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: 
   ///   - throwsOrRethrowsKeyword: 
+  ///   - garbageBetweenThrowsOrRethrowsKeywordAndArrow: 
   ///   - arrow: 
+  ///   - garbageBetweenArrowAndReturnType: 
   ///   - returnType: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndArguments: ExpressibleAsGarbageNodes? = nil,
     arguments: ExpressibleAsTupleTypeElementList,
+    garbageBetweenArgumentsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    garbageBetweenRightParenAndAsyncKeyword: ExpressibleAsGarbageNodes? = nil,
     asyncKeyword: TokenSyntax? = nil,
+    garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsGarbageNodes? = nil,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
+    garbageBetweenThrowsOrRethrowsKeywordAndArrow: ExpressibleAsGarbageNodes? = nil,
     arrow: TokenSyntax = TokenSyntax.`arrow`,
+    garbageBetweenArrowAndReturnType: ExpressibleAsGarbageNodes? = nil,
     returnType: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndArguments = garbageBetweenLeftParenAndArguments?.createGarbageNodes()
     self.arguments = arguments.createTupleTypeElementList()
+    self.garbageBetweenArgumentsAndRightParen = garbageBetweenArgumentsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
+    self.garbageBetweenRightParenAndAsyncKeyword = garbageBetweenRightParenAndAsyncKeyword?.createGarbageNodes()
     self.asyncKeyword = asyncKeyword
     assert(asyncKeyword == nil || asyncKeyword!.text == "async")
+    self.garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword = garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.createGarbageNodes()
     self.throwsOrRethrowsKeyword = throwsOrRethrowsKeyword
     assert(throwsOrRethrowsKeyword == nil || throwsOrRethrowsKeyword!.text == "throws" || throwsOrRethrowsKeyword!.text == "rethrows" || throwsOrRethrowsKeyword!.text == "throw")
+    self.garbageBetweenThrowsOrRethrowsKeywordAndArrow = garbageBetweenThrowsOrRethrowsKeywordAndArrow?.createGarbageNodes()
     self.arrow = arrow
     assert(arrow.text == "->")
+    self.garbageBetweenArrowAndReturnType = garbageBetweenArrowAndReturnType?.createGarbageNodes()
     self.returnType = returnType.createTypeBuildable()
   }
 
@@ -14052,12 +17957,19 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// - Returns: The built `FunctionTypeSyntax`.
   func buildFunctionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionTypeSyntax {
     let result = SyntaxFactory.makeFunctionType(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildTupleTypeElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen,
+      garbage: garbageBetweenRightParenAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
+      garbage: garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
+      garbage: garbageBetweenThrowsOrRethrowsKeywordAndArrow?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arrow: arrow,
+      garbage: garbageBetweenArrowAndReturnType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14090,8 +18002,11 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   }
 }
 public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
+  let garbageBeforeSpecifier: GarbageNodes?
   let specifier: TokenSyntax?
+  let garbageBetweenSpecifierAndAttributes: GarbageNodes?
   let attributes: AttributeList?
+  let garbageBetweenAttributesAndBaseType: GarbageNodes?
   let baseType: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -14100,19 +18015,28 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
 
   /// Creates a `AttributedType` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeSpecifier: 
   ///   - specifier: 
+  ///   - garbageBetweenSpecifierAndAttributes: 
   ///   - attributes: 
+  ///   - garbageBetweenAttributesAndBaseType: 
   ///   - baseType: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeSpecifier: ExpressibleAsGarbageNodes? = nil,
     specifier: TokenSyntax? = nil,
+    garbageBetweenSpecifierAndAttributes: ExpressibleAsGarbageNodes? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
+    garbageBetweenAttributesAndBaseType: ExpressibleAsGarbageNodes? = nil,
     baseType: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeSpecifier = garbageBeforeSpecifier?.createGarbageNodes()
     self.specifier = specifier
     assert(specifier == nil || specifier!.text == "inout" || specifier!.text == "__shared" || specifier!.text == "__owned")
+    self.garbageBetweenSpecifierAndAttributes = garbageBetweenSpecifierAndAttributes?.createGarbageNodes()
     self.attributes = attributes?.createAttributeList()
+    self.garbageBetweenAttributesAndBaseType = garbageBetweenAttributesAndBaseType?.createGarbageNodes()
     self.baseType = baseType.createTypeBuildable()
   }
 
@@ -14123,8 +18047,11 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// - Returns: The built `AttributedTypeSyntax`.
   func buildAttributedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributedTypeSyntax {
     let result = SyntaxFactory.makeAttributedType(
+      garbage: garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       specifier: specifier,
+      garbage: garbageBetweenSpecifierAndAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenAttributesAndBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14157,7 +18084,9 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   }
 }
 public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, HasTrailingComma {
+  let garbageBeforeArgumentType: GarbageNodes?
   let argumentType: TypeBuildable
+  let garbageBetweenArgumentTypeAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -14166,15 +18095,21 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
 
   /// Creates a `GenericArgument` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeArgumentType: 
   ///   - argumentType: 
+  ///   - garbageBetweenArgumentTypeAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeArgumentType: ExpressibleAsGarbageNodes? = nil,
     argumentType: ExpressibleAsTypeBuildable,
+    garbageBetweenArgumentTypeAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeArgumentType = garbageBeforeArgumentType?.createGarbageNodes()
     self.argumentType = argumentType.createTypeBuildable()
+    self.garbageBetweenArgumentTypeAndTrailingComma = garbageBetweenArgumentTypeAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -14186,7 +18121,9 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   /// - Returns: The built `GenericArgumentSyntax`.
   func buildGenericArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentSyntax {
     let result = SyntaxFactory.makeGenericArgument(
+      garbage: garbageBeforeArgumentType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentType: argumentType.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentTypeAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14207,7 +18144,9 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeArgumentType: garbageBeforeArgumentType,
         argumentType: argumentType,
+        garbageBetweenArgumentTypeAndTrailingComma: garbageBetweenArgumentTypeAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -14221,8 +18160,11 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
 
 }
 public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgumentClause {
+  let garbageBeforeLeftAngleBracket: GarbageNodes?
   let leftAngleBracket: TokenSyntax
+  let garbageBetweenLeftAngleBracketAndArguments: GarbageNodes?
   let arguments: GenericArgumentList
+  let garbageBetweenArgumentsAndRightAngleBracket: GarbageNodes?
   let rightAngleBracket: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -14231,19 +18173,28 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
 
   /// Creates a `GenericArgumentClause` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftAngleBracket: 
   ///   - leftAngleBracket: 
+  ///   - garbageBetweenLeftAngleBracketAndArguments: 
   ///   - arguments: 
+  ///   - garbageBetweenArgumentsAndRightAngleBracket: 
   ///   - rightAngleBracket: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftAngleBracket: ExpressibleAsGarbageNodes? = nil,
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    garbageBetweenLeftAngleBracketAndArguments: ExpressibleAsGarbageNodes? = nil,
     arguments: ExpressibleAsGenericArgumentList,
+    garbageBetweenArgumentsAndRightAngleBracket: ExpressibleAsGarbageNodes? = nil,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftAngleBracket = garbageBeforeLeftAngleBracket?.createGarbageNodes()
     self.leftAngleBracket = leftAngleBracket
     assert(leftAngleBracket.text == "<")
+    self.garbageBetweenLeftAngleBracketAndArguments = garbageBetweenLeftAngleBracketAndArguments?.createGarbageNodes()
     self.arguments = arguments.createGenericArgumentList()
+    self.garbageBetweenArgumentsAndRightAngleBracket = garbageBetweenArgumentsAndRightAngleBracket?.createGarbageNodes()
     self.rightAngleBracket = rightAngleBracket
     assert(rightAngleBracket.text == ">")
   }
@@ -14253,14 +18204,20 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftAngleBracket: ExpressibleAsGarbageNodes? = nil,
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    garbageBetweenLeftAngleBracketAndArguments: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenArgumentsAndRightAngleBracket: ExpressibleAsGarbageNodes? = nil,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
     @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList = { GenericArgumentList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftAngleBracket: garbageBeforeLeftAngleBracket,
       leftAngleBracket: leftAngleBracket,
+      garbageBetweenLeftAngleBracketAndArguments: garbageBetweenLeftAngleBracketAndArguments,
       arguments: argumentsBuilder(),
+      garbageBetweenArgumentsAndRightAngleBracket: garbageBetweenArgumentsAndRightAngleBracket,
       rightAngleBracket: rightAngleBracket
     )
   }
@@ -14271,8 +18228,11 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// - Returns: The built `GenericArgumentClauseSyntax`.
   func buildGenericArgumentClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
     let result = SyntaxFactory.makeGenericArgumentClause(
+      garbage: garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
+      garbage: garbageBetweenLeftAngleBracketAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildGenericArgumentList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenArgumentsAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14299,7 +18259,9 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
 
 }
 public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
+  let garbageBeforeColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndType: GarbageNodes?
   let type: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -14308,16 +18270,22 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
 
   /// Creates a `TypeAnnotation` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeColon: 
   ///   - colon: 
+  ///   - garbageBetweenColonAndType: 
   ///   - type: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeColon = garbageBeforeColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndType = garbageBetweenColonAndType?.createGarbageNodes()
     self.type = type.createTypeBuildable()
   }
 
@@ -14328,7 +18296,9 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// - Returns: The built `TypeAnnotationSyntax`.
   func buildTypeAnnotation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeAnnotationSyntax {
     let result = SyntaxFactory.makeTypeAnnotation(
+      garbage: garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14355,9 +18325,13 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
 
 }
 public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
+  let garbageBeforeType: GarbageNodes?
   let type: TypeBuildable?
+  let garbageBetweenTypeAndPeriod: GarbageNodes?
   let period: TokenSyntax
+  let garbageBetweenPeriodAndCaseName: GarbageNodes?
   let caseName: TokenSyntax
+  let garbageBetweenCaseNameAndAssociatedTuple: GarbageNodes?
   let associatedTuple: TuplePattern?
 
   /// The leading trivia attached to this syntax node once built.
@@ -14366,22 +18340,34 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
 
   /// Creates a `EnumCasePattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeType: 
   ///   - type: 
+  ///   - garbageBetweenTypeAndPeriod: 
   ///   - period: 
+  ///   - garbageBetweenPeriodAndCaseName: 
   ///   - caseName: 
+  ///   - garbageBetweenCaseNameAndAssociatedTuple: 
   ///   - associatedTuple: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable? = nil,
+    garbageBetweenTypeAndPeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax = TokenSyntax.`period`,
+    garbageBetweenPeriodAndCaseName: ExpressibleAsGarbageNodes? = nil,
     caseName: TokenSyntax,
+    garbageBetweenCaseNameAndAssociatedTuple: ExpressibleAsGarbageNodes? = nil,
     associatedTuple: ExpressibleAsTuplePattern? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeType = garbageBeforeType?.createGarbageNodes()
     self.type = type?.createTypeBuildable()
+    self.garbageBetweenTypeAndPeriod = garbageBetweenTypeAndPeriod?.createGarbageNodes()
     self.period = period
     assert(period.text == ".")
+    self.garbageBetweenPeriodAndCaseName = garbageBetweenPeriodAndCaseName?.createGarbageNodes()
     self.caseName = caseName
+    self.garbageBetweenCaseNameAndAssociatedTuple = garbageBetweenCaseNameAndAssociatedTuple?.createGarbageNodes()
     self.associatedTuple = associatedTuple?.createTuplePattern()
   }
 
@@ -14390,16 +18376,24 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable? = nil,
+    garbageBetweenTypeAndPeriod: ExpressibleAsGarbageNodes? = nil,
     period: TokenSyntax = TokenSyntax.`period`,
+    garbageBetweenPeriodAndCaseName: ExpressibleAsGarbageNodes? = nil,
     caseName: String,
+    garbageBetweenCaseNameAndAssociatedTuple: ExpressibleAsGarbageNodes? = nil,
     associatedTuple: ExpressibleAsTuplePattern? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeType: garbageBeforeType,
       type: type,
+      garbageBetweenTypeAndPeriod: garbageBetweenTypeAndPeriod,
       period: period,
+      garbageBetweenPeriodAndCaseName: garbageBetweenPeriodAndCaseName,
       caseName: TokenSyntax.identifier(caseName),
+      garbageBetweenCaseNameAndAssociatedTuple: garbageBetweenCaseNameAndAssociatedTuple,
       associatedTuple: associatedTuple
     )
   }
@@ -14410,9 +18404,13 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// - Returns: The built `EnumCasePatternSyntax`.
   func buildEnumCasePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCasePatternSyntax {
     let result = SyntaxFactory.makeEnumCasePattern(
+      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type?.buildType(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
+      garbage: garbageBetweenPeriodAndCaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseName: caseName,
+      garbage: garbageBetweenCaseNameAndAssociatedTuple?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associatedTuple: associatedTuple?.buildTuplePattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14445,7 +18443,9 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   }
 }
 public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
+  let garbageBeforeIsKeyword: GarbageNodes?
   let isKeyword: TokenSyntax
+  let garbageBetweenIsKeywordAndType: GarbageNodes?
   let type: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -14454,16 +18454,22 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
 
   /// Creates a `IsTypePattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIsKeyword: 
   ///   - isKeyword: 
+  ///   - garbageBetweenIsKeywordAndType: 
   ///   - type: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIsKeyword: ExpressibleAsGarbageNodes? = nil,
     isKeyword: TokenSyntax = TokenSyntax.`is`,
+    garbageBetweenIsKeywordAndType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIsKeyword = garbageBeforeIsKeyword?.createGarbageNodes()
     self.isKeyword = isKeyword
     assert(isKeyword.text == "is")
+    self.garbageBetweenIsKeywordAndType = garbageBetweenIsKeywordAndType?.createGarbageNodes()
     self.type = type.createTypeBuildable()
   }
 
@@ -14474,7 +18480,9 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// - Returns: The built `IsTypePatternSyntax`.
   func buildIsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsTypePatternSyntax {
     let result = SyntaxFactory.makeIsTypePattern(
+      garbage: garbageBeforeIsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       isKeyword: isKeyword,
+      garbage: garbageBetweenIsKeywordAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14507,7 +18515,9 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   }
 }
 public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
+  let garbageBeforeSubPattern: GarbageNodes?
   let subPattern: PatternBuildable
+  let garbageBetweenSubPatternAndQuestionMark: GarbageNodes?
   let questionMark: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -14516,15 +18526,21 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
 
   /// Creates a `OptionalPattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeSubPattern: 
   ///   - subPattern: 
+  ///   - garbageBetweenSubPatternAndQuestionMark: 
   ///   - questionMark: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeSubPattern: ExpressibleAsGarbageNodes? = nil,
     subPattern: ExpressibleAsPatternBuildable,
+    garbageBetweenSubPatternAndQuestionMark: ExpressibleAsGarbageNodes? = nil,
     questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeSubPattern = garbageBeforeSubPattern?.createGarbageNodes()
     self.subPattern = subPattern.createPatternBuildable()
+    self.garbageBetweenSubPatternAndQuestionMark = garbageBetweenSubPatternAndQuestionMark?.createGarbageNodes()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
   }
@@ -14536,7 +18552,9 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// - Returns: The built `OptionalPatternSyntax`.
   func buildOptionalPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalPatternSyntax {
     let result = SyntaxFactory.makeOptionalPattern(
+      garbage: garbageBeforeSubPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       subPattern: subPattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenSubPatternAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14569,6 +18587,7 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   }
 }
 public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPattern {
+  let garbageBeforeIdentifier: GarbageNodes?
   let identifier: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -14577,12 +18596,15 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
 
   /// Creates a `IdentifierPattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeIdentifier: 
   ///   - identifier: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeIdentifier: ExpressibleAsGarbageNodes? = nil,
     identifier: TokenSyntax
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeIdentifier = garbageBeforeIdentifier?.createGarbageNodes()
     self.identifier = identifier
   }
 
@@ -14593,6 +18615,7 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// - Returns: The built `IdentifierPatternSyntax`.
   func buildIdentifierPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierPatternSyntax {
     let result = SyntaxFactory.makeIdentifierPattern(
+      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14625,8 +18648,11 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   }
 }
 public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
+  let garbageBeforePattern: GarbageNodes?
   let pattern: PatternBuildable
+  let garbageBetweenPatternAndAsKeyword: GarbageNodes?
   let asKeyword: TokenSyntax
+  let garbageBetweenAsKeywordAndType: GarbageNodes?
   let type: TypeBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -14635,19 +18661,28 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
 
   /// Creates a `AsTypePattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndAsKeyword: 
   ///   - asKeyword: 
+  ///   - garbageBetweenAsKeywordAndType: 
   ///   - type: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndAsKeyword: ExpressibleAsGarbageNodes? = nil,
     asKeyword: TokenSyntax = TokenSyntax.`as`,
+    garbageBetweenAsKeywordAndType: ExpressibleAsGarbageNodes? = nil,
     type: ExpressibleAsTypeBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePattern = garbageBeforePattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
+    self.garbageBetweenPatternAndAsKeyword = garbageBetweenPatternAndAsKeyword?.createGarbageNodes()
     self.asKeyword = asKeyword
     assert(asKeyword.text == "as")
+    self.garbageBetweenAsKeywordAndType = garbageBetweenAsKeywordAndType?.createGarbageNodes()
     self.type = type.createTypeBuildable()
   }
 
@@ -14658,8 +18693,11 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// - Returns: The built `AsTypePatternSyntax`.
   func buildAsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsTypePatternSyntax {
     let result = SyntaxFactory.makeAsTypePattern(
+      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndAsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asKeyword: asKeyword,
+      garbage: garbageBetweenAsKeywordAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14692,8 +18730,11 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   }
 }
 public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
+  let garbageBeforeLeftParen: GarbageNodes?
   let leftParen: TokenSyntax
+  let garbageBetweenLeftParenAndElements: GarbageNodes?
   let elements: TuplePatternElementList
+  let garbageBetweenElementsAndRightParen: GarbageNodes?
   let rightParen: TokenSyntax
 
   /// The leading trivia attached to this syntax node once built.
@@ -14702,19 +18743,28 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
 
   /// Creates a `TuplePattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLeftParen: 
   ///   - leftParen: 
+  ///   - garbageBetweenLeftParenAndElements: 
   ///   - elements: 
+  ///   - garbageBetweenElementsAndRightParen: 
   ///   - rightParen: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndElements: ExpressibleAsGarbageNodes? = nil,
     elements: ExpressibleAsTuplePatternElementList,
+    garbageBetweenElementsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftParen = garbageBeforeLeftParen?.createGarbageNodes()
     self.leftParen = leftParen
     assert(leftParen.text == "(")
+    self.garbageBetweenLeftParenAndElements = garbageBetweenLeftParenAndElements?.createGarbageNodes()
     self.elements = elements.createTuplePatternElementList()
+    self.garbageBetweenElementsAndRightParen = garbageBetweenElementsAndRightParen?.createGarbageNodes()
     self.rightParen = rightParen
     assert(rightParen.text == ")")
   }
@@ -14724,14 +18774,20 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLeftParen: ExpressibleAsGarbageNodes? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    garbageBetweenLeftParenAndElements: ExpressibleAsGarbageNodes? = nil,
+    garbageBetweenElementsAndRightParen: ExpressibleAsGarbageNodes? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList = { TuplePatternElementList([]) }
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLeftParen: garbageBeforeLeftParen,
       leftParen: leftParen,
+      garbageBetweenLeftParenAndElements: garbageBetweenLeftParenAndElements,
       elements: elementsBuilder(),
+      garbageBetweenElementsAndRightParen: garbageBetweenElementsAndRightParen,
       rightParen: rightParen
     )
   }
@@ -14742,8 +18798,11 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// - Returns: The built `TuplePatternSyntax`.
   func buildTuplePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
     let result = SyntaxFactory.makeTuplePattern(
+      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
+      garbage: garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildTuplePatternElementList(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenElementsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14776,7 +18835,9 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   }
 }
 public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
+  let garbageBeforeWildcard: GarbageNodes?
   let wildcard: TokenSyntax
+  let garbageBetweenWildcardAndTypeAnnotation: GarbageNodes?
   let typeAnnotation: TypeAnnotation?
 
   /// The leading trivia attached to this syntax node once built.
@@ -14785,16 +18846,22 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
 
   /// Creates a `WildcardPattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeWildcard: 
   ///   - wildcard: 
+  ///   - garbageBetweenWildcardAndTypeAnnotation: 
   ///   - typeAnnotation: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeWildcard: ExpressibleAsGarbageNodes? = nil,
     wildcard: TokenSyntax = TokenSyntax.`wildcard`,
+    garbageBetweenWildcardAndTypeAnnotation: ExpressibleAsGarbageNodes? = nil,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeWildcard = garbageBeforeWildcard?.createGarbageNodes()
     self.wildcard = wildcard
     assert(wildcard.text == "_")
+    self.garbageBetweenWildcardAndTypeAnnotation = garbageBetweenWildcardAndTypeAnnotation?.createGarbageNodes()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
   }
 
@@ -14805,7 +18872,9 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// - Returns: The built `WildcardPatternSyntax`.
   func buildWildcardPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WildcardPatternSyntax {
     let result = SyntaxFactory.makeWildcardPattern(
+      garbage: garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wildcard: wildcard,
+      garbage: garbageBetweenWildcardAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14838,9 +18907,13 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   }
 }
 public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternElement, HasTrailingComma {
+  let garbageBeforeLabelName: GarbageNodes?
   let labelName: TokenSyntax?
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
   let labelColon: TokenSyntax?
+  let garbageBetweenLabelColonAndPattern: GarbageNodes?
   let pattern: PatternBuildable
+  let garbageBetweenPatternAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -14849,22 +18922,34 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
 
   /// Creates a `TuplePatternElement` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabelName: 
   ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
   ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndPattern: 
   ///   - pattern: 
+  ///   - garbageBetweenPatternAndTrailingComma: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: TokenSyntax? = nil,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndPattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
     self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
+    self.garbageBetweenLabelColonAndPattern = garbageBetweenLabelColonAndPattern?.createGarbageNodes()
     self.pattern = pattern.createPatternBuildable()
+    self.garbageBetweenPatternAndTrailingComma = garbageBetweenPatternAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -14874,16 +18959,24 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
     labelName: String?,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
     labelColon: TokenSyntax? = nil,
+    garbageBetweenLabelColonAndPattern: ExpressibleAsGarbageNodes? = nil,
     pattern: ExpressibleAsPatternBuildable,
+    garbageBetweenPatternAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
       labelName: labelName.map(TokenSyntax.identifier),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
+      garbageBetweenLabelColonAndPattern: garbageBetweenLabelColonAndPattern,
       pattern: pattern,
+      garbageBetweenPatternAndTrailingComma: garbageBetweenPatternAndTrailingComma,
       trailingComma: trailingComma
     )
   }
@@ -14894,9 +18987,13 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// - Returns: The built `TuplePatternElementSyntax`.
   func buildTuplePatternElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternElementSyntax {
     let result = SyntaxFactory.makeTuplePatternElement(
+      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
+      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
+      garbage: garbageBetweenLabelColonAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenPatternAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14917,9 +19014,13 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        garbageBeforeLabelName: garbageBeforeLabelName,
         labelName: labelName,
+        garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
         labelColon: labelColon,
+        garbageBetweenLabelColonAndPattern: garbageBetweenLabelColonAndPattern,
         pattern: pattern,
+        garbageBetweenPatternAndTrailingComma: garbageBetweenPatternAndTrailingComma,
         trailingComma: withComma ? .comma : nil
       )
   }
@@ -14933,6 +19034,7 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
 
 }
 public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPattern {
+  let garbageBeforeExpression: GarbageNodes?
   let expression: ExprBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -14941,12 +19043,15 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
 
   /// Creates a `ExpressionPattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeExpression: 
   ///   - expression: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeExpression = garbageBeforeExpression?.createGarbageNodes()
     self.expression = expression.createExprBuildable()
   }
 
@@ -14957,6 +19062,7 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   /// - Returns: The built `ExpressionPatternSyntax`.
   func buildExpressionPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionPatternSyntax {
     let result = SyntaxFactory.makeExpressionPattern(
+      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14989,7 +19095,9 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   }
 }
 public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPattern {
+  let garbageBeforeLetOrVarKeyword: GarbageNodes?
   let letOrVarKeyword: TokenSyntax
+  let garbageBetweenLetOrVarKeywordAndValuePattern: GarbageNodes?
   let valuePattern: PatternBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -14998,16 +19106,22 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
 
   /// Creates a `ValueBindingPattern` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLetOrVarKeyword: 
   ///   - letOrVarKeyword: 
+  ///   - garbageBetweenLetOrVarKeywordAndValuePattern: 
   ///   - valuePattern: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLetOrVarKeyword: ExpressibleAsGarbageNodes? = nil,
     letOrVarKeyword: TokenSyntax,
+    garbageBetweenLetOrVarKeywordAndValuePattern: ExpressibleAsGarbageNodes? = nil,
     valuePattern: ExpressibleAsPatternBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLetOrVarKeyword = garbageBeforeLetOrVarKeyword?.createGarbageNodes()
     self.letOrVarKeyword = letOrVarKeyword
     assert(letOrVarKeyword.text == "let" || letOrVarKeyword.text == "var")
+    self.garbageBetweenLetOrVarKeywordAndValuePattern = garbageBetweenLetOrVarKeywordAndValuePattern?.createGarbageNodes()
     self.valuePattern = valuePattern.createPatternBuildable()
   }
 
@@ -15018,7 +19132,9 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// - Returns: The built `ValueBindingPatternSyntax`.
   func buildValueBindingPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ValueBindingPatternSyntax {
     let result = SyntaxFactory.makeValueBindingPattern(
+      garbage: garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
+      garbage: garbageBetweenLetOrVarKeywordAndValuePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       valuePattern: valuePattern.buildPattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15052,7 +19168,9 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
 }
 /// A single argument to an `@available` argument like `*`, `iOS 10.1`,or `message: "This has been deprecated"`.
 public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityArgument {
+  let garbageBeforeEntry: GarbageNodes?
   let entry: SyntaxBuildable
+  let garbageBetweenEntryAndTrailingComma: GarbageNodes?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -15061,15 +19179,21 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
 
   /// Creates a `AvailabilityArgument` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeEntry: 
   ///   - entry: The actual argument
+  ///   - garbageBetweenEntryAndTrailingComma: 
   ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeEntry: ExpressibleAsGarbageNodes? = nil,
     entry: ExpressibleAsSyntaxBuildable,
+    garbageBetweenEntryAndTrailingComma: ExpressibleAsGarbageNodes? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeEntry = garbageBeforeEntry?.createGarbageNodes()
     self.entry = entry.createSyntaxBuildable()
+    self.garbageBetweenEntryAndTrailingComma = garbageBetweenEntryAndTrailingComma?.createGarbageNodes()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -15081,7 +19205,9 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// - Returns: The built `AvailabilityArgumentSyntax`.
   func buildAvailabilityArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityArgumentSyntax {
     let result = SyntaxFactory.makeAvailabilityArgument(
+      garbage: garbageBeforeEntry?.buildGarbageNodes(format: format, leadingTrivia: nil),
       entry: entry.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenEntryAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15109,8 +19235,11 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
 }
 /// A argument to an `@available` attribute that consists of a label anda value, e.g. `message: "This has been deprecated"`.
 public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailabilityLabeledArgument {
+  let garbageBeforeLabel: GarbageNodes?
   let label: TokenSyntax
+  let garbageBetweenLabelAndColon: GarbageNodes?
   let colon: TokenSyntax
+  let garbageBetweenColonAndValue: GarbageNodes?
   let value: SyntaxBuildable
 
   /// The leading trivia attached to this syntax node once built.
@@ -15119,19 +19248,28 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
 
   /// Creates a `AvailabilityLabeledArgument` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeLabel: 
   ///   - label: The label of the argument
+  ///   - garbageBetweenLabelAndColon: 
   ///   - colon: The colon separating label and value
+  ///   - garbageBetweenColonAndValue: 
   ///   - value: The value of this labeled argument
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: TokenSyntax,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValue: ExpressibleAsGarbageNodes? = nil,
     value: ExpressibleAsSyntaxBuildable
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabel = garbageBeforeLabel?.createGarbageNodes()
     self.label = label
+    self.garbageBetweenLabelAndColon = garbageBetweenLabelAndColon?.createGarbageNodes()
     self.colon = colon
     assert(colon.text == ":")
+    self.garbageBetweenColonAndValue = garbageBetweenColonAndValue?.createGarbageNodes()
     self.value = value.createSyntaxBuildable()
   }
 
@@ -15140,14 +19278,20 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeLabel: ExpressibleAsGarbageNodes? = nil,
     label: String,
+    garbageBetweenLabelAndColon: ExpressibleAsGarbageNodes? = nil,
     colon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenColonAndValue: ExpressibleAsGarbageNodes? = nil,
     value: ExpressibleAsSyntaxBuildable
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeLabel: garbageBeforeLabel,
       label: TokenSyntax.identifier(label),
+      garbageBetweenLabelAndColon: garbageBetweenLabelAndColon,
       colon: colon,
+      garbageBetweenColonAndValue: garbageBetweenColonAndValue,
       value: value
     )
   }
@@ -15158,8 +19302,11 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// - Returns: The built `AvailabilityLabeledArgumentSyntax`.
   func buildAvailabilityLabeledArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityLabeledArgumentSyntax {
     let result = SyntaxFactory.makeAvailabilityLabeledArgument(
+      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
+      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
+      garbage: garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15187,7 +19334,9 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
 }
 /// An argument to `@available` that restricts the availability on acertain platform to a version, e.g. `iOS 10` or `swift 3.4`.
 public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvailabilityVersionRestriction {
+  let garbageBeforePlatform: GarbageNodes?
   let platform: TokenSyntax
+  let garbageBetweenPlatformAndVersion: GarbageNodes?
   let version: VersionTuple?
 
   /// The leading trivia attached to this syntax node once built.
@@ -15196,15 +19345,21 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
 
   /// Creates a `AvailabilityVersionRestriction` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforePlatform: 
   ///   - platform: The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.
+  ///   - garbageBetweenPlatformAndVersion: 
   ///   - version: 
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePlatform: ExpressibleAsGarbageNodes? = nil,
     platform: TokenSyntax,
+    garbageBetweenPlatformAndVersion: ExpressibleAsGarbageNodes? = nil,
     version: ExpressibleAsVersionTuple? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforePlatform = garbageBeforePlatform?.createGarbageNodes()
     self.platform = platform
+    self.garbageBetweenPlatformAndVersion = garbageBetweenPlatformAndVersion?.createGarbageNodes()
     self.version = version?.createVersionTuple()
   }
 
@@ -15213,12 +19368,16 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforePlatform: ExpressibleAsGarbageNodes? = nil,
     platform: String,
+    garbageBetweenPlatformAndVersion: ExpressibleAsGarbageNodes? = nil,
     version: ExpressibleAsVersionTuple? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforePlatform: garbageBeforePlatform,
       platform: TokenSyntax.identifier(platform),
+      garbageBetweenPlatformAndVersion: garbageBetweenPlatformAndVersion,
       version: version
     )
   }
@@ -15229,7 +19388,9 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// - Returns: The built `AvailabilityVersionRestrictionSyntax`.
   func buildAvailabilityVersionRestriction(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityVersionRestrictionSyntax {
     let result = SyntaxFactory.makeAvailabilityVersionRestriction(
+      garbage: garbageBeforePlatform?.buildGarbageNodes(format: format, leadingTrivia: nil),
       platform: platform,
+      garbage: garbageBetweenPlatformAndVersion?.buildGarbageNodes(format: format, leadingTrivia: nil),
       version: version?.buildVersionTuple(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15257,8 +19418,11 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
 }
 /// A version number of the form major.minor.patch in which the minorand patch part may be omitted.
 public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
+  let garbageBeforeMajorMinor: GarbageNodes?
   let majorMinor: SyntaxBuildable
+  let garbageBetweenMajorMinorAndPatchPeriod: GarbageNodes?
   let patchPeriod: TokenSyntax?
+  let garbageBetweenPatchPeriodAndPatchVersion: GarbageNodes?
   let patchVersion: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -15267,19 +19431,28 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
 
   /// Creates a `VersionTuple` using the provided parameters.
   /// - Parameters:
+  ///   - garbageBeforeMajorMinor: 
   ///   - majorMinor: In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version.
+  ///   - garbageBetweenMajorMinorAndPatchPeriod: 
   ///   - patchPeriod: If the version contains a patch number, the periodseparating the minor from the patch number.
+  ///   - garbageBetweenPatchPeriodAndPatchVersion: 
   ///   - patchVersion: The patch version if specified.
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeMajorMinor: ExpressibleAsGarbageNodes? = nil,
     majorMinor: ExpressibleAsSyntaxBuildable,
+    garbageBetweenMajorMinorAndPatchPeriod: ExpressibleAsGarbageNodes? = nil,
     patchPeriod: TokenSyntax? = nil,
+    garbageBetweenPatchPeriodAndPatchVersion: ExpressibleAsGarbageNodes? = nil,
     patchVersion: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.garbageBeforeMajorMinor = garbageBeforeMajorMinor?.createGarbageNodes()
     self.majorMinor = majorMinor.createSyntaxBuildable()
+    self.garbageBetweenMajorMinorAndPatchPeriod = garbageBetweenMajorMinorAndPatchPeriod?.createGarbageNodes()
     self.patchPeriod = patchPeriod
     assert(patchPeriod == nil || patchPeriod!.text == ".")
+    self.garbageBetweenPatchPeriodAndPatchVersion = garbageBetweenPatchPeriodAndPatchVersion?.createGarbageNodes()
     self.patchVersion = patchVersion
   }
 
@@ -15288,14 +19461,20 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    garbageBeforeMajorMinor: ExpressibleAsGarbageNodes? = nil,
     majorMinor: ExpressibleAsSyntaxBuildable,
+    garbageBetweenMajorMinorAndPatchPeriod: ExpressibleAsGarbageNodes? = nil,
     patchPeriod: TokenSyntax? = nil,
+    garbageBetweenPatchPeriodAndPatchVersion: ExpressibleAsGarbageNodes? = nil,
     patchVersion: String?
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      garbageBeforeMajorMinor: garbageBeforeMajorMinor,
       majorMinor: majorMinor,
+      garbageBetweenMajorMinorAndPatchPeriod: garbageBetweenMajorMinorAndPatchPeriod,
       patchPeriod: patchPeriod,
+      garbageBetweenPatchPeriodAndPatchVersion: garbageBetweenPatchPeriodAndPatchVersion,
       patchVersion: patchVersion.map(TokenSyntax.integerLiteral)
     )
   }
@@ -15306,8 +19485,11 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// - Returns: The built `VersionTupleSyntax`.
   func buildVersionTuple(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VersionTupleSyntax {
     let result = SyntaxFactory.makeVersionTuple(
+      garbage: garbageBeforeMajorMinor?.buildGarbageNodes(format: format, leadingTrivia: nil),
       majorMinor: majorMinor.buildSyntax(format: format, leadingTrivia: nil),
+      garbage: garbageBetweenMajorMinorAndPatchPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       patchPeriod: patchPeriod,
+      garbage: garbageBetweenPatchPeriodAndPatchVersion?.buildGarbageNodes(format: format, leadingTrivia: nil),
       patchVersion: patchVersion
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])

@@ -103,6 +103,12 @@ extension SyntaxNode {
     return CodeBlockSyntax(asSyntaxData)
   }
 
+  public var isGarbageNodes: Bool { return raw.kind == .garbageNodes }
+  public var asGarbageNodes: GarbageNodesSyntax? {
+    guard isGarbageNodes else { return nil }
+    return GarbageNodesSyntax(asSyntaxData)
+  }
+
   public var isInOutExpr: Bool { return raw.kind == .inOutExpr }
   public var asInOutExpr: InOutExprSyntax? {
     guard isInOutExpr else { return nil }
@@ -1600,6 +1606,8 @@ extension Syntax {
     case .codeBlockItemList(let node):
       return node
     case .codeBlock(let node):
+      return node
+    case .garbageNodes(let node):
       return node
     case .inOutExpr(let node):
       return node

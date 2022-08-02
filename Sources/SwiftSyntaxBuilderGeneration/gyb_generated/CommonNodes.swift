@@ -113,4 +113,9 @@ let COMMON_NODES: [Node] = [
                requiresLeadingNewline: true)
        ]),
 
+  Node(name: "GarbageNodes",
+       description: "A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.",
+       kind: "SyntaxCollection",
+       element: "Syntax"),
+
 ]

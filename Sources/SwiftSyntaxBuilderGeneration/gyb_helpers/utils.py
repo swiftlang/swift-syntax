@@ -16,9 +16,9 @@ def make_swift_node(node):
     mapped_traits = map(lambda x: (' ' * spaces) + '"%s"' % x, node.traits)
     parameters += ['traits: [\n%s\n' % ',\n'.join(mapped_traits) + (' ' * (spaces - 2)) + ']']
 
-  if node.children:
+  if node.non_garbage_children:
     children = []
-    for child in node.children:
+    for child in node.non_garbage_children:
       children += [make_swift_child(child, spaces)]
     parameters += ['children: [\n%s\n' % ',\n'.join(children) + (' ' * (spaces - 2)) + ']']
 

@@ -11740,6 +11740,303 @@ extension SameTypeRequirementSyntax: CustomReflectable {
   }
 }
 
+// MARK: - LayoutRequirementSyntax
+
+public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case typeIdentifier
+    case colon
+    case layoutConstraint
+    case leftParen
+    case size
+    case comma
+    case alignment
+    case rightParen
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `LayoutRequirementSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .layoutRequirement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `LayoutRequirementSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .layoutRequirement)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var typeIdentifier: TypeSyntax {
+    get {
+      let childData = data.child(at: Cursor.typeIdentifier,
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `typeIdentifier` replaced.
+  /// - param newChild: The new `typeIdentifier` to replace the node's
+  ///                   current `typeIdentifier`, if present.
+  public func withTypeIdentifier(
+    _ newChild: TypeSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let newData = data.replacingChild(raw, at: Cursor.typeIdentifier)
+    return LayoutRequirementSyntax(newData)
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return LayoutRequirementSyntax(newData)
+  }
+
+  public var layoutConstraint: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.layoutConstraint,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLayoutConstraint(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `layoutConstraint` replaced.
+  /// - param newChild: The new `layoutConstraint` to replace the node's
+  ///                   current `layoutConstraint`, if present.
+  public func withLayoutConstraint(
+    _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.layoutConstraint)
+    return LayoutRequirementSyntax(newData)
+  }
+
+  public var leftParen: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.leftParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftParen` replaced.
+  /// - param newChild: The new `leftParen` to replace the node's
+  ///                   current `leftParen`, if present.
+  public func withLeftParen(
+    _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    return LayoutRequirementSyntax(newData)
+  }
+
+  public var size: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.size,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSize(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `size` replaced.
+  /// - param newChild: The new `size` to replace the node's
+  ///                   current `size`, if present.
+  public func withSize(
+    _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.size)
+    return LayoutRequirementSyntax(newData)
+  }
+
+  public var comma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.comma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `comma` replaced.
+  /// - param newChild: The new `comma` to replace the node's
+  ///                   current `comma`, if present.
+  public func withComma(
+    _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.comma)
+    return LayoutRequirementSyntax(newData)
+  }
+
+  public var alignment: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.alignment,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAlignment(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `alignment` replaced.
+  /// - param newChild: The new `alignment` to replace the node's
+  ///                   current `alignment`, if present.
+  public func withAlignment(
+    _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.alignment)
+    return LayoutRequirementSyntax(newData)
+  }
+
+  public var rightParen: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.rightParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightParen` replaced.
+  /// - param newChild: The new `rightParen` to replace the node's
+  ///                   current `rightParen`, if present.
+  public func withRightParen(
+    _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    return LayoutRequirementSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 8)
+    // Check child #0 child is TypeSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #4 child is TokenSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is TokenSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax or missing
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension LayoutRequirementSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "typeIdentifier": Syntax(typeIdentifier).asProtocol(SyntaxProtocol.self),
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "layoutConstraint": Syntax(layoutConstraint).asProtocol(SyntaxProtocol.self),
+      "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "size": size.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "alignment": alignment.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - GenericParameterSyntax
 
 public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {

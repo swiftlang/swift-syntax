@@ -227,6 +227,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case genericRequirementList = 194
   case genericRequirement = 232
   case sameTypeRequirement = 149
+  case layoutRequirement = 164
   case genericParameterList = 195
   case genericParameter = 150
   case primaryAssociatedTypeList = 254

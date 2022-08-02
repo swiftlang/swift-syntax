@@ -2151,6 +2151,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `SameTypeRequirementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SameTypeRequirementSyntax) {}
+  /// Visiting `LayoutRequirementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: LayoutRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `LayoutRequirementSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: LayoutRequirementSyntax) {}
   /// Visiting `GenericParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4991,6 +5001,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLayoutRequirementSyntax(_ data: SyntaxData) {
+      let node = LayoutRequirementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericParameterListSyntax(_ data: SyntaxData) {
       let node = GenericParameterListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5916,6 +5937,8 @@ open class SyntaxVisitor {
       visitImplGenericRequirementSyntax(data)
     case .sameTypeRequirement:
       visitImplSameTypeRequirementSyntax(data)
+    case .layoutRequirement:
+      visitImplLayoutRequirementSyntax(data)
     case .genericParameterList:
       visitImplGenericParameterListSyntax(data)
     case .genericParameter:

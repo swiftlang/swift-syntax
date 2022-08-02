@@ -9227,6 +9227,85 @@ extension SameTypeRequirementSyntax {
   }
 }
 
+public struct LayoutRequirementSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 8)
+
+  internal init() {}
+
+  public mutating func useTypeIdentifier(_ node: TypeSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.typeIdentifier.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useLayoutConstraint(_ node: TokenSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.layoutConstraint.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useLeftParen(_ node: TokenSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.leftParen.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useSize(_ node: TokenSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.size.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useComma(_ node: TokenSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.comma.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useAlignment(_ node: TokenSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.alignment.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useRightParen(_ node: TokenSyntax) {
+    let idx = LayoutRequirementSyntax.Cursor.rightParen.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .layoutRequirement,
+      layout: layout, presence: .present))
+  }
+}
+
+extension LayoutRequirementSyntax {
+  /// Creates a `LayoutRequirementSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `LayoutRequirementSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `LayoutRequirementSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout LayoutRequirementSyntaxBuilder) -> Void) {
+    var builder = LayoutRequirementSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct GenericParameterSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 5)

@@ -40,7 +40,9 @@ let GENERIC_NODES: [Node] = [
                  Child(name: "SameTypeRequirement",
                        kind: "SameTypeRequirement"),
                  Child(name: "ConformanceRequirement",
-                       kind: "ConformanceRequirement")
+                       kind: "ConformanceRequirement"),
+                 Child(name: "LayoutRequirement",
+                       kind: "LayoutRequirement")
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",
@@ -62,6 +64,32 @@ let GENERIC_NODES: [Node] = [
                ]),
          Child(name: "RightTypeIdentifier",
                kind: "Type")
+       ]),
+
+  Node(name: "LayoutRequirement",
+       kind: "Syntax",
+       children: [
+         Child(name: "TypeIdentifier",
+               kind: "Type"),
+         Child(name: "Colon",
+               kind: "ColonToken"),
+         Child(name: "LayoutConstraint",
+               kind: "IdentifierToken"),
+         Child(name: "LeftParen",
+               kind: "LeftParenToken",
+               isOptional: true),
+         Child(name: "Size",
+               kind: "IntegerLiteralToken",
+               isOptional: true),
+         Child(name: "Comma",
+               kind: "CommaToken",
+               isOptional: true),
+         Child(name: "Alignment",
+               kind: "IntegerLiteralToken",
+               isOptional: true),
+         Child(name: "RightParen",
+               kind: "RightParenToken",
+               isOptional: true)
        ]),
 
   Node(name: "GenericParameterList",

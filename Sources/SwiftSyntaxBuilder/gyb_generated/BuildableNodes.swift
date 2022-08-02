@@ -12597,6 +12597,121 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   }
 
 }
+public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement {
+  let typeIdentifier: TypeBuildable
+  let colon: TokenSyntax
+  let layoutConstraint: TokenSyntax
+  let leftParen: TokenSyntax?
+  let size: TokenSyntax?
+  let comma: TokenSyntax?
+  let alignment: TokenSyntax?
+  let rightParen: TokenSyntax?
+
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
+  /// Creates a `LayoutRequirement` using the provided parameters.
+  /// - Parameters:
+  ///   - typeIdentifier: 
+  ///   - colon: 
+  ///   - layoutConstraint: 
+  ///   - leftParen: 
+  ///   - size: 
+  ///   - comma: 
+  ///   - alignment: 
+  ///   - rightParen: 
+  public init(
+    leadingTrivia: Trivia = [],
+    typeIdentifier: ExpressibleAsTypeBuildable,
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    layoutConstraint: TokenSyntax,
+    leftParen: TokenSyntax? = nil,
+    size: TokenSyntax? = nil,
+    comma: TokenSyntax? = nil,
+    alignment: TokenSyntax? = nil,
+    rightParen: TokenSyntax? = nil
+  ) {
+    self.leadingTrivia = leadingTrivia
+    self.typeIdentifier = typeIdentifier.createTypeBuildable()
+    self.colon = colon
+    assert(colon.text == ":")
+    self.layoutConstraint = layoutConstraint
+    self.leftParen = leftParen
+    assert(leftParen == nil || leftParen!.text == "(")
+    self.size = size
+    self.comma = comma
+    assert(comma == nil || comma!.text == ",")
+    self.alignment = alignment
+    self.rightParen = rightParen
+    assert(rightParen == nil || rightParen!.text == ")")
+  }
+
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leadingTrivia: Trivia = [],
+    typeIdentifier: ExpressibleAsTypeBuildable,
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    layoutConstraint: String,
+    leftParen: TokenSyntax? = nil,
+    size: String?,
+    comma: TokenSyntax? = nil,
+    alignment: String?,
+    rightParen: TokenSyntax? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      typeIdentifier: typeIdentifier,
+      colon: colon,
+      layoutConstraint: TokenSyntax.identifier(layoutConstraint),
+      leftParen: leftParen,
+      size: size.map(TokenSyntax.integerLiteral),
+      comma: comma,
+      alignment: alignment.map(TokenSyntax.integerLiteral),
+      rightParen: rightParen
+    )
+  }
+
+  /// Builds a `LayoutRequirementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `LayoutRequirementSyntax`.
+  func buildLayoutRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LayoutRequirementSyntax {
+    let result = SyntaxFactory.makeLayoutRequirement(
+      typeIdentifier: typeIdentifier.buildType(format: format, leadingTrivia: nil),
+      colon: colon,
+      layoutConstraint: layoutConstraint,
+      leftParen: leftParen,
+      size: size,
+      comma: comma,
+      alignment: alignment,
+      rightParen: rightParen
+    )
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
+  }
+
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildLayoutRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
+    return Syntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsLayoutRequirement`.
+  public func createLayoutRequirement() -> LayoutRequirement {
+    return self
+  }
+
+  /// `LayoutRequirement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+
+}
 public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, HasTrailingComma {
   let attributes: AttributeList?
   let name: TokenSyntax

@@ -1285,6 +1285,12 @@ extension SyntaxNode {
     return SameTypeRequirementSyntax(asSyntaxData)
   }
 
+  public var isLayoutRequirement: Bool { return raw.kind == .layoutRequirement }
+  public var asLayoutRequirement: LayoutRequirementSyntax? {
+    guard isLayoutRequirement else { return nil }
+    return LayoutRequirementSyntax(asSyntaxData)
+  }
+
   public var isGenericParameterList: Bool { return raw.kind == .genericParameterList }
   public var asGenericParameterList: GenericParameterListSyntax? {
     guard isGenericParameterList else { return nil }
@@ -1988,6 +1994,8 @@ extension Syntax {
     case .genericRequirement(let node):
       return node
     case .sameTypeRequirement(let node):
+      return node
+    case .layoutRequirement(let node):
       return node
     case .genericParameterList(let node):
       return node

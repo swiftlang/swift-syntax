@@ -54,7 +54,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
       errorTokens: errorTokens?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -132,7 +132,7 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -188,7 +188,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -245,7 +245,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
       poundColumn: poundColumn
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -313,7 +313,7 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -389,7 +389,7 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -451,7 +451,7 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -513,7 +513,7 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -568,7 +568,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -625,7 +625,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
       superKeyword: superKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -682,7 +682,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
       nilKeyword: nilKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -739,7 +739,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
       wildcard: wildcard
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -796,7 +796,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
       assignToken: assignToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -864,7 +864,7 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
       elements: elements.buildExprList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -921,7 +921,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
       poundLine: poundLine
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -978,7 +978,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
       poundFile: poundFile
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1035,7 +1035,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
       poundFileID: poundFileID
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1092,7 +1092,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
       poundFilePath: poundFilePath
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1149,7 +1149,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
       poundFunction: poundFunction
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1206,7 +1206,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
       poundDsohandle: poundDsohandle
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1281,7 +1281,7 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1356,7 +1356,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
       postfixExpression: postfixExpression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1412,7 +1412,7 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
       operatorToken: operatorToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1497,7 +1497,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
       arrowToken: arrowToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1565,7 +1565,7 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
       floatingDigits: floatingDigits
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1649,7 +1649,7 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1733,7 +1733,7 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1801,7 +1801,7 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -1874,7 +1874,7 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -1940,7 +1940,7 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -2015,7 +2015,7 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -2087,7 +2087,7 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
       digits: digits
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2144,7 +2144,7 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
       booleanLiteral: booleanLiteral
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2222,7 +2222,7 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
       secondChoice: secondChoice.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2294,7 +2294,7 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2356,7 +2356,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2424,7 +2424,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2480,7 +2480,7 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2578,7 +2578,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -2667,7 +2667,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -2723,7 +2723,7 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -2838,7 +2838,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
       inTok: inTok
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -2923,7 +2923,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -2979,7 +2979,7 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3046,7 +3046,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
       closure: closure.buildClosureExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -3145,7 +3145,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3250,7 +3250,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3312,7 +3312,7 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3374,7 +3374,7 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
       exclamationMark: exclamationMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3449,7 +3449,7 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
       operatorToken: operatorToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3510,7 +3510,7 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
       genericArgumentClause: genericArgumentClause.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3578,7 +3578,7 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
       content: content
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -3671,7 +3671,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -3763,7 +3763,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
       closeDelimiter: closeDelimiter
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3831,7 +3831,7 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
       regex: regex
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3898,7 +3898,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -3955,7 +3955,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
       period: period
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -4031,7 +4031,7 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
       dot: dot
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -4099,7 +4099,7 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -4207,7 +4207,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -4268,7 +4268,7 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
       config: config.buildIfConfigDecl(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -4336,7 +4336,7 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
       identifier: identifier
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -4428,7 +4428,7 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `ExprBuildable`.
@@ -4490,7 +4490,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
       value: value.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -4595,7 +4595,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -4706,7 +4706,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -4790,7 +4790,7 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -4846,7 +4846,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -4931,7 +4931,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
       output: output?.buildReturnClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -4992,7 +4992,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
       elements: elements.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -5048,7 +5048,7 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
       poundEndif: poundEndif
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -5122,7 +5122,7 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -5196,7 +5196,7 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -5270,7 +5270,7 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -5385,7 +5385,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
       lineNumber: lineNumber
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -5463,7 +5463,7 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -5519,7 +5519,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
       detail: detail?.buildDeclModifierDetail(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -5575,7 +5575,7 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -5653,7 +5653,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
       inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -5765,7 +5765,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -5883,7 +5883,7 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -6001,7 +6001,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -6119,7 +6119,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -6230,7 +6230,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -6314,7 +6314,7 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -6371,7 +6371,7 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
       semicolon: semicolon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -6440,7 +6440,7 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
       eofToken: eofToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -6496,7 +6496,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
       value: value.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -6584,7 +6584,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -6710,7 +6710,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -6829,7 +6829,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -6919,7 +6919,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -7011,7 +7011,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
       accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -7086,7 +7086,7 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
       modifier: modifier?.buildDeclModifierDetail(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -7156,7 +7156,7 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
       trailingDot: trailingDot
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -7228,7 +7228,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
       path: path.buildAccessPath(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -7312,7 +7312,7 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -7419,7 +7419,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -7487,7 +7487,7 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
       rightBrace: rightBrace
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -7558,7 +7558,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -7653,7 +7653,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
       bindings: bindings.buildPatternBindingList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -7744,7 +7744,7 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -7839,7 +7839,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
       elements: elements.buildEnumCaseElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -7958,7 +7958,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -8036,7 +8036,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
       operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -8099,7 +8099,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
       precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8207,7 +8207,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
       rightBrace: rightBrace
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `DeclBuildable`.
@@ -8292,7 +8292,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
       otherNames: otherNames.buildPrecedenceGroupNameList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8362,7 +8362,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8442,7 +8442,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
       flag: flag
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8522,7 +8522,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
       value: value
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8616,7 +8616,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8695,7 +8695,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
       tokenList: tokenList?.buildTokenList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8781,7 +8781,7 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
       semicolon: semicolon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8867,7 +8867,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -8963,7 +8963,7 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9035,7 +9035,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
       stringOrDeclname: stringOrDeclname.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9090,7 +9090,7 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9157,7 +9157,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9228,7 +9228,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9322,7 +9322,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
       whereClause: whereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9401,7 +9401,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
       parameters: parameters.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9464,7 +9464,7 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9521,7 +9521,7 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9639,7 +9639,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
       diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9706,7 +9706,7 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9762,7 +9762,7 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9841,7 +9841,7 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
       versionList: versionList.buildBackDeployVersionList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9898,7 +9898,7 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -9968,7 +9968,7 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
       label: label
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10066,7 +10066,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10142,7 +10142,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10198,7 +10198,7 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10304,7 +10304,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
       condition: condition.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10395,7 +10395,7 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10457,7 +10457,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
       guardResult: guardResult.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -10602,7 +10602,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10716,7 +10716,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10814,7 +10814,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
       catchClauses: catchClauses?.buildCatchClauseList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10876,7 +10876,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
       expression: expression?.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -10938,7 +10938,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
       yields: yields.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -11030,7 +11030,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11081,7 +11081,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
       fallthroughKeyword: fallthroughKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -11157,7 +11157,7 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
       label: label
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -11219,7 +11219,7 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11295,7 +11295,7 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11361,7 +11361,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
       initializer: initializer.buildInitializerClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11427,7 +11427,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11495,7 +11495,7 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11545,7 +11545,7 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
       declaration: declaration.buildDecl(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -11607,7 +11607,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -11720,7 +11720,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
       elseBody: elseBody?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -11776,7 +11776,7 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
       ifStatement: ifStatement.buildIfStmt(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11846,7 +11846,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11922,7 +11922,7 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -11979,7 +11979,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12040,7 +12040,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12110,7 +12110,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12197,7 +12197,7 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12274,7 +12274,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12375,7 +12375,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `StmtBuildable`.
@@ -12451,7 +12451,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
       requirementList: requirementList.buildGenericRequirementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12507,7 +12507,7 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12575,7 +12575,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12690,7 +12690,7 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12782,7 +12782,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12863,7 +12863,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -12949,7 +12949,7 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -13010,7 +13010,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -13072,7 +13072,7 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -13127,7 +13127,7 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13199,7 +13199,7 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13256,7 +13256,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
       classKeyword: classKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13324,7 +13324,7 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
       rightSquareBracket: rightSquareBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13403,7 +13403,7 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
       rightSquareBracket: rightSquareBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13487,7 +13487,7 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
       typeOrProtocol: typeOrProtocol
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13549,7 +13549,7 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13625,7 +13625,7 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13687,7 +13687,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
       exclamationMark: exclamationMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13749,7 +13749,7 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
       ampersand: ampersand
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -13799,7 +13799,7 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
       elements: elements.buildCompositionTypeElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -13894,7 +13894,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -13970,7 +13970,7 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -14061,7 +14061,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -14128,7 +14128,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `TypeBuildable`.
@@ -14190,7 +14190,7 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -14276,7 +14276,7 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -14332,7 +14332,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -14416,7 +14416,7 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
       associatedTuple: associatedTuple?.buildTuplePattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -14478,7 +14478,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -14540,7 +14540,7 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -14596,7 +14596,7 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
       identifier: identifier
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -14663,7 +14663,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -14747,7 +14747,7 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -14809,7 +14809,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -14900,7 +14900,7 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -14960,7 +14960,7 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -15022,7 +15022,7 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
       valuePattern: valuePattern.buildPattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `PatternBuildable`.
@@ -15085,7 +15085,7 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -15163,7 +15163,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
       value: value.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -15233,7 +15233,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
       version: version?.buildVersionTuple(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.
@@ -15311,7 +15311,7 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
       patchVersion: patchVersion
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `SyntaxBuildable`.

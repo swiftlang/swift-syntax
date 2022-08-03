@@ -120,7 +120,7 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
       ${',\n      '.join(['%s: %s' % (child.name(), child.generate_expr_build_syntax_node(child.name(), 'format')) for child in children])}
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    return result.withLeadingTrivia(combinedLeadingTrivia)
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
 
   /// Conformance to `${base_type.buildable()}`.

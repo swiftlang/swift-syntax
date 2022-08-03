@@ -112,7 +112,6 @@ let package = Package(
           "ExpressibleAsConformances.swift.gyb",
           "ExprNodes.swift.gyb",
           "GenericNodes.swift.gyb",
-          "Kinds.swift.gyb",
           "NodeSerializationCodes.swift.gyb",
           "PatternNodes.swift.gyb",
           "StmtNodes.swift.gyb",

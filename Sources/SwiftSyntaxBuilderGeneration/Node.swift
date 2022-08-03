@@ -30,7 +30,7 @@ class Node {
 
   /// Returns `True` if this node declares one of the base syntax kinds.
   var isBase: Bool {
-    return SyntaxBaseKinds.contains(syntaxKind)
+    return SYNTAX_BASE_KINDS.contains(syntaxKind)
   }
 
   /// Returns `True` if this node is a subclass of SyntaxCollection.
@@ -87,7 +87,7 @@ class Node {
     self.children = children
     self.baseKind = kind
 
-    if !SyntaxBaseKinds.contains(baseKind) {
+    if !SYNTAX_BASE_KINDS.contains(baseKind) {
       fatalError("unknown base kind '\(baseKind)' for node '\(syntaxKind)'")
     }
 

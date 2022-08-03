@@ -45,14 +45,28 @@ You can either copy `lib_InternalSwiftSyntaxParser.dylib/.so` directly from the 
 ```bash
 git clone https://github.com/apple/swift.git
 ./swift/utils/update-checkout --clone
-./swift/utils/build-parser-lib --release --no-assertions --build-dir /tmp/parser-lib-build
+./swift/utils/build-tooling-libs --release --no-assertions --build-dir /tmp/tooling-libs-build
+```
+
+If you see an error similar to the following:
+
+```
+Outdated Swift compiler: building with host tools requires Swift 5.8 or
+newer.  Please update your Swift toolchain or switch BOOTSTRAPPING_MODE to
+BOOTSTRAPPING(-WITH-HOSTLIBS)? or OFF.
+```
+
+then you will need to build a newer compiler from source or download a more recent development snapshot from https://swift.org and pass its path to the script using the `--swiftc` flag:
+
+```bash
+./swift/utils/build-tooling-libs --release --no-assertions --build-dir /tmp/tooling-libs-build --swiftc /path/to/newer/swiftc
 ```
 
 ### Embedding in an iOS Application
 
-You need to build `lib_InternalSwiftSyntaxParser.dylib` yourself, you cannot copy it from the toolchain. Follow the instructions above and change the invocation of `build-parser-lib` accordingly:
+You need to build `lib_InternalSwiftSyntaxParser.dylib` yourself, you cannot copy it from the toolchain. Follow the instructions above and change the invocation of `build-tooling-libs` accordingly:
 
 ```bash
-./swift/utils/build-parser-lib --release --no-assertions --build-dir /tmp/parser-lib-build-iossim --host iphonesimulator --architectures x86_64
-./swift/utils/build-parser-lib --release --no-assertions --build-dir /tmp/parser-lib-build-ios --host iphoneos --architectures arm64
+./swift/utils/build-tooling-libs --release --no-assertions --build-dir /tmp/tooling-libs-build-iossim --host iphonesimulator --architectures x86_64
+./swift/utils/build-tooling-libs --release --no-assertions --build-dir /tmp/tooling-libs-build-ios --host iphoneos --architectures arm64
 ```

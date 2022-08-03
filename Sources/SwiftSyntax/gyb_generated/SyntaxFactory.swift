@@ -4195,6 +4195,37 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SameTypeRequirementSyntax(data)
   }
+  public static func makeLayoutRequirement(typeIdentifier: TypeSyntax, colon: TokenSyntax, layoutConstraint: TokenSyntax, leftParen: TokenSyntax?, size: TokenSyntax?, comma: TokenSyntax?, alignment: TokenSyntax?, rightParen: TokenSyntax?) -> LayoutRequirementSyntax {
+    let layout: [RawSyntax?] = [
+      typeIdentifier.raw,
+      colon.raw,
+      layoutConstraint.raw,
+      leftParen?.raw,
+      size?.raw,
+      comma?.raw,
+      alignment?.raw,
+      rightParen?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.layoutRequirement,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return LayoutRequirementSyntax(data)
+  }
+
+  public static func makeBlankLayoutRequirement(presence: SourcePresence = .present) -> LayoutRequirementSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .layoutRequirement,
+      layout: [
+      RawSyntax.missing(SyntaxKind.missingType),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+    ], length: .zero, presence: presence))
+    return LayoutRequirementSyntax(data)
+  }
   public static func makeGenericParameterList(
     _ elements: [GenericParameterSyntax]) -> GenericParameterListSyntax {
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterList,

@@ -1541,6 +1541,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: SameTypeRequirementSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: LayoutRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: LayoutRequirementSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

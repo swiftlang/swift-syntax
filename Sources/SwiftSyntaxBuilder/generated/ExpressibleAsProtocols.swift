@@ -1662,6 +1662,14 @@ public extension ExpressibleAsSameTypeRequirement {
     return createSameTypeRequirement()
   }
 }
+public protocol ExpressibleAsLayoutRequirement: ExpressibleAsSyntaxBuildable {
+  func createLayoutRequirement() -> LayoutRequirement
+}
+public extension ExpressibleAsLayoutRequirement {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createLayoutRequirement()
+  }
+}
 public protocol ExpressibleAsGenericParameterList {
   func createGenericParameterList() -> GenericParameterList
 }

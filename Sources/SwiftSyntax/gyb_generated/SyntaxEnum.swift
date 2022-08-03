@@ -227,6 +227,7 @@ public enum SyntaxEnum {
   case genericRequirementList(GenericRequirementListSyntax)
   case genericRequirement(GenericRequirementSyntax)
   case sameTypeRequirement(SameTypeRequirementSyntax)
+  case layoutRequirement(LayoutRequirementSyntax)
   case genericParameterList(GenericParameterListSyntax)
   case genericParameter(GenericParameterSyntax)
   case primaryAssociatedTypeList(PrimaryAssociatedTypeListSyntax)
@@ -703,6 +704,8 @@ public extension Syntax {
       return .genericRequirement(GenericRequirementSyntax(self)!)
     case .sameTypeRequirement:
       return .sameTypeRequirement(SameTypeRequirementSyntax(self)!)
+    case .layoutRequirement:
+      return .layoutRequirement(LayoutRequirementSyntax(self)!)
     case .genericParameterList:
       return .genericParameterList(GenericParameterListSyntax(self)!)
     case .genericParameter:

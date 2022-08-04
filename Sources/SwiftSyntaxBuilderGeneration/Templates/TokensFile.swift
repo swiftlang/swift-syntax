@@ -55,15 +55,15 @@ let tokensFile = SourceFile {
         }
       } else {
         let signature = FunctionSignature(
-          input: ParameterClause(
-            parameterList: FunctionParameter(
+          input: ParameterClause {
+            FunctionParameter(
               attributes: nil,
               firstName: .wildcard,
               secondName: .identifier("text"),
               colon: .colon,
               type: "String"
             )
-          ),
+          },
           output: "TokenSyntax"
         )
 

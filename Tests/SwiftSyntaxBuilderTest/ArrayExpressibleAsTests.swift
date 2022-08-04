@@ -30,17 +30,15 @@ final class ArrayExpressibleAsTests: XCTestCase {
 
   func testFunctionParameters() {
     let signature = FunctionSignature(
-      input: ParameterClause(
-        parameterList: [
-          FunctionParameter(
-            attributes: nil,
-            firstName: .wildcard,
-            secondName: .identifier("args"),
-            colon: .colon,
-            type: ArrayType(elementType: "String")
-          )
-        ]
-      ),
+      input: ParameterClause {
+        FunctionParameter(
+          attributes: nil,
+          firstName: .wildcard,
+          secondName: .identifier("args"),
+          colon: .colon,
+          type: ArrayType(elementType: "String")
+        )
+      },
       output: "Int"
     )
 

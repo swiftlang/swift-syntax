@@ -10,6 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+import SwiftSyntaxBuilder
+
 /// Extension to the `Child` type to provide functionality specific to
 /// SwiftSyntaxBuilder.
 extension Child {
@@ -31,17 +34,37 @@ extension Child {
   /// Generate a Swift expression that creates a proper SwiftSyntax node of type
   /// `type.syntax` from a variable named `varName` of type `type.buildable` that
   /// represents this child node.
-  func generateExprBuildSyntaxNode(varName: String, formatName: String) -> String {
+  func generateExprBuildSyntaxNode(varName: String, formatName: String) -> ExpressibleAsExprBuildable {
     if type.isToken {
       if requiresLeadingNewline {
-        return "\(varName).withLeadingTrivia(.newline + \(formatName)._makeIndent() + (\(varName).leadingTrivia ?? []))"
+        return FunctionCallExpr(MemberAccessExpr(base: varName, name: "withLeadingTrivia")) {
+          SequenceExpr {
+            MemberAccessExpr(name: "newline")
+            BinaryOperatorExpr("+")
+            FunctionCallExpr(MemberAccessExpr(base: formatName, name: "_makeIndent"))
+            BinaryOperatorExpr("+")
+            TupleExpr {
+              SequenceExpr {
+                MemberAccessExpr(base: varName, name: "leadingTrivia")
+                BinaryOperatorExpr("??")
+                ArrayExpr(elements: [])
+              }
+            }
+          }
+        }
       } else {
         return varName
       }
     } else {
-      let format = formatName + (isIndented ? "._indented()" : "")
-      let expr = "\(varName)\(type.optionalQuestionMark)"
-      return "\(expr).build\(type.baseName)(format: \(format), leadingTrivia: nil)"
+      var format: ExpressibleAsExprBuildable = formatName
+      if isIndented {
+        format = FunctionCallExpr(MemberAccessExpr(base: format, name: "_indented"))
+      }
+      let expr = type.optionalChained(expr: varName)
+      return FunctionCallExpr(MemberAccessExpr(base: expr, name: "build\(type.baseName)")) {
+        TupleExprElement(label: "format", expression: format)
+        TupleExprElement(label: "leadingTrivia", expression: NilLiteralExpr())
+      }
     }
   }
 

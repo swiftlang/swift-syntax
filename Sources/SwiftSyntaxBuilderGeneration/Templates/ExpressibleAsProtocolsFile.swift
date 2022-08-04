@@ -39,8 +39,8 @@ let expressibleAsProtocolsFile = SourceFile {
 
     ProtocolDecl(
       modifiers: [TokenSyntax.public],
-      identifier: type.expressibleAs,
-      inheritanceClause: createTypeInheritanceClause(conformances: declaredConformances.map(\.expressibleAs))
+      identifier: type.expressibleAsBaseName,
+      inheritanceClause: createTypeInheritanceClause(conformances: declaredConformances.map(\.expressibleAsBaseName))
     ) {
       FunctionDecl(
         identifier: .identifier("create\(type.buildableBaseName)"),
@@ -55,18 +55,18 @@ let expressibleAsProtocolsFile = SourceFile {
     if !conformances.isEmpty {
       ExtensionDecl(
         modifiers: [TokenSyntax.public],
-        extendedType: type.expressibleAs
+        extendedType: type.expressibleAsBaseName
       ) {
         for conformance in type.elementInCollections {
           FunctionDecl(
-            leadingTrivia: .docLineComment("/// Conformance to `\(conformance.expressibleAs)`") + .newline,
+            leadingTrivia: .docLineComment("/// Conformance to `\(conformance.expressibleAsBaseName)`") + .newline,
             identifier: .identifier("create\(conformance.buildableBaseName)"),
             signature: FunctionSignature(
               input: ParameterClause(),
               output: conformance.buildable
             )
           ) {
-            ReturnStmt(expression: FunctionCallExpr(conformance.buildable) {
+            ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
               TupleExprElement(expression: ArrayExpr {
                 ArrayElement(expression: "self")
               })
@@ -76,14 +76,14 @@ let expressibleAsProtocolsFile = SourceFile {
         for conformance in type.convertibleToTypes {
           let param = Node.from(type: conformance).singleNonDefaultedChild
           FunctionDecl(
-            leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAs)") + .newline,
+            leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAsBaseName)") + .newline,
             identifier: .identifier("create\(conformance.buildableBaseName)"),
             signature: FunctionSignature(
               input: ParameterClause(),
-              output: conformance.buildable
+              output: conformance.buildableBaseName
             )
           ) {
-            ReturnStmt(expression: FunctionCallExpr(conformance.buildable) {
+            ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
               TupleExprElement(label: param.swiftName, expression: "self")
             })
           }

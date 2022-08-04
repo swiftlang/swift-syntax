@@ -30,24 +30,24 @@ let buildableBaseProtocolsFile = SourceFile {
     let syntaxType = SyntaxBuildableType(syntaxKind: "Syntax")
     let isSyntax = type == syntaxType
     // Types that the `*Buildable` conforms to
-    let buildableConformances: [String] = [type.expressibleAs, type.listBuildable] + (isSyntax ? [] : [syntaxType.buildable])
-    let listConformances: [String] = isSyntax ? [] : [syntaxType.listBuildable]
+    let buildableConformances: [String] = [type.expressibleAsBaseName, type.listBuildableBaseName] + (isSyntax ? [] : [syntaxType.buildableBaseName])
+    let listConformances: [String] = isSyntax ? [] : [syntaxType.listBuildableBaseName]
 
     ProtocolDecl(
       modifiers: [TokenSyntax.public],
-      identifier: type.listBuildable,
+      identifier: type.listBuildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: listConformances)
     ) {
       FunctionDecl(
         leadingTrivia: [
-          "/// Builds list of `\(type.syntax)`s.",
+          "/// Builds list of `\(type.syntaxBaseName)`s.",
           "/// - Parameter format: The `Format` to use.",
           "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)List"),
         signature: FunctionSignature(
           input: formatLeadingTriviaParameters(),
-          output: ArrayType(elementType: type.syntax)
+          output: ArrayType(elementType: type.syntaxBaseName)
         ),
         body: nil
       )
@@ -55,19 +55,19 @@ let buildableBaseProtocolsFile = SourceFile {
 
     ProtocolDecl(
       modifiers: [TokenSyntax.public],
-      identifier: type.buildable,
+      identifier: type.buildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: buildableConformances)
     ) {
       FunctionDecl(
         leadingTrivia: [
-          "/// Builds list of `\(type.syntax)`s.",
+          "/// Builds list of `\(type.syntaxBaseName)`s.",
           "/// - Parameter format: The `Format` to use.",
           "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)"),
         signature: FunctionSignature(
           input: formatLeadingTriviaParameters(),
-          output: type.syntax
+          output: type.syntaxBaseName
         ),
         body: nil
       )
@@ -75,14 +75,14 @@ let buildableBaseProtocolsFile = SourceFile {
 
     ExtensionDecl(
       modifiers: [TokenSyntax.public],
-      extendedType: type.buildable
+      extendedType: type.buildableBaseName
     ) {
       FunctionDecl(
-        leadingTrivia: .docLineComment("/// Satisfies conformance to `\(type.expressibleAs)`.") + .newline,
+        leadingTrivia: .docLineComment("/// Satisfies conformance to `\(type.expressibleAsBaseName)`.") + .newline,
         identifier: .identifier("create\(type.buildableBaseName)"),
         signature: FunctionSignature(
           input: ParameterClause(),
-          output: type.buildable
+          output: type.buildableBaseName
         )
       ) {
         ReturnStmt(expression: "self")
@@ -90,7 +90,7 @@ let buildableBaseProtocolsFile = SourceFile {
 
       FunctionDecl(
         leadingTrivia: [
-          "/// Builds list of `\(type.syntax)`s.",
+          "/// Builds list of `\(type.syntaxBaseName)`s.",
           "/// - Parameter format: The `Format` to use.",
           "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
           "///",
@@ -99,7 +99,7 @@ let buildableBaseProtocolsFile = SourceFile {
         identifier: .identifier("build\(type.baseName)List"),
         signature: FunctionSignature(
           input: formatLeadingTriviaParameters(withDefaultTrivia: true),
-          output: ArrayType(elementType: type.syntax)
+          output: ArrayType(elementType: type.syntaxBaseName)
         )
       ) {
         ReturnStmt(expression: ArrayExpr {
@@ -113,10 +113,10 @@ let buildableBaseProtocolsFile = SourceFile {
       if !isSyntax {
         FunctionDecl(
           leadingTrivia: [
-          "/// Builds a `\(type.syntax)`.",
+          "/// Builds a `\(type.syntaxBaseName)`.",
           "/// - Parameter format: The `Format` to use.",
           "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
-          "/// - Returns: A new `Syntax` with the built `\(type.syntax)`.",
+          "/// - Returns: A new `Syntax` with the built `\(type.syntaxBaseName)`.",
           "///",
           "/// Satisfies conformance to `SyntaxBuildable`.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
@@ -153,7 +153,7 @@ private func formatLeadingTriviaParameters(withDefaultTrivia: Bool = false) -> P
         firstName: .identifier("leadingTrivia"),
         colon: .colon,
         type: OptionalType(wrappedType: "Trivia"),
-        defaultArgument: withDefaultTrivia ? InitializerClause(value: "nil") : nil
+        defaultArgument: withDefaultTrivia ? InitializerClause(value: NilLiteralExpr()) : nil
       ),
     ]
   )

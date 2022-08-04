@@ -25,19 +25,19 @@ let tokenSyntaxFile = SourceFile {
 
   ExtensionDecl(
     extendedType: "TokenSyntax",
-    inheritanceClause: createTypeInheritanceClause(conformances: conformances.map(\.expressibleAs))
+    inheritanceClause: createTypeInheritanceClause(conformances: conformances.map(\.expressibleAsBaseName))
   ) {
     for conformance in tokenType.elementInCollections {
       FunctionDecl(
-        leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAs)") + .newline,
+        leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAsBaseName)") + .newline,
         modifiers: [TokenSyntax.public],
         identifier: .identifier("create\(conformance.buildableBaseName)"),
         signature: FunctionSignature(
           input: ParameterClause(),
-          output: conformance.buildable
+          output: conformance.buildableBaseName
         )
       ) {
-        ReturnStmt(expression: FunctionCallExpr(conformance.buildable) {
+        ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
           TupleExprElement(expression: ArrayExpr {
             ArrayElement(expression: "self")
           })
@@ -47,15 +47,15 @@ let tokenSyntaxFile = SourceFile {
     for conformance in tokenType.convertibleToTypes {
       let param = Node.from(type: conformance).singleNonDefaultedChild
       FunctionDecl(
-        leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAs)") + .newline,
+        leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAsBaseName)") + .newline,
         modifiers: [TokenSyntax.public],
         identifier: .identifier("create\(conformance.buildableBaseName)"),
         signature: FunctionSignature(
           input: ParameterClause(),
-          output: conformance.buildable
+          output: conformance.buildableBaseName
         )
       ) {
-        ReturnStmt(expression: FunctionCallExpr(conformance.buildable) {
+        ReturnStmt(expression: FunctionCallExpr(conformance.buildableBaseName) {
           TupleExprElement(label: param.swiftName, expression: "self")
         })
       }

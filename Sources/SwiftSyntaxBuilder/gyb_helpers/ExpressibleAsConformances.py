@@ -2,6 +2,9 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     'AccessorList': [
         'AccessorBlock'
     ],
+    'ArrayElementList': [
+        'ArrayExpr'
+    ],
     'ArrayType': [
         'TypeAnnotation'
     ],

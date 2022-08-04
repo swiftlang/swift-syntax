@@ -171,11 +171,6 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   }
 }
 
-extension Array: ExpressibleAsArrayElementList where Element == ExpressibleAsArrayElement {
-  public func createArrayElementList() -> ArrayElementList {
-    return ArrayElementList(self)
-  }
-}
 
 /// `DictionaryElementList` represents a collection of `DictionaryElement`s.
 public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDictionaryElementList {

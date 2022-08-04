@@ -142,8 +142,14 @@ public extension ExpressibleAsPoundColumnExpr {
 public protocol ExpressibleAsTupleExprElementList {
   func createTupleExprElementList() -> TupleExprElementList
 }
-public protocol ExpressibleAsArrayElementList {
+public protocol ExpressibleAsArrayElementList: ExpressibleAsArrayExpr {
   func createArrayElementList() -> ArrayElementList
+}
+public extension ExpressibleAsArrayElementList {
+  /// Conformance to ExpressibleAsArrayExpr
+  func createArrayExpr() -> ArrayExpr {
+    return ArrayExpr(elements: self)
+  }
 }
 public protocol ExpressibleAsDictionaryElementList {
   func createDictionaryElementList() -> DictionaryElementList
@@ -379,7 +385,7 @@ public extension ExpressibleAsTupleExprElement {
     return createTupleExprElement()
   }
 }
-public protocol ExpressibleAsArrayElement: ExpressibleAsArrayElementList, ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleAsArrayElement: ExpressibleAsArrayElementList {
   func createArrayElement() -> ArrayElement
 }
 public extension ExpressibleAsArrayElement {

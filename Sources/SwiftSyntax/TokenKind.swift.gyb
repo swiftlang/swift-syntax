@@ -18,7 +18,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the kinds of tokens in the Swift language.
-public enum TokenKind {
+public enum TokenKind: Hashable {
   case eof
 % for token in SYNTAX_TOKENS:
 %   kind = token.swift_kind()

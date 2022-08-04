@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the kinds of tokens in the Swift language.
-public enum TokenKind {
+public enum TokenKind: Hashable {
   case eof
   case associatedtypeKeyword
   case classKeyword

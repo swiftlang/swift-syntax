@@ -92,14 +92,14 @@ private func createArrayInitializer(node: Node) -> InitializerDecl {
     ].map { .docLineComment($0) + .newline }.reduce([], +),
     modifiers: [TokenSyntax.public],
     signature: FunctionSignature(
-      input: ParameterClause(
-        parameterList: FunctionParameter(
+      input: ParameterClause {
+        FunctionParameter(
           firstName: .wildcard,
           secondName: .identifier("elements"),
           colon: .colon,
           type: ArrayType(elementType: elementType.expressibleAs)
         )
-      )
+      }
     )
   ) {
     SequenceExpr {
@@ -123,14 +123,14 @@ private func createCombiningInitializer(node: Node) -> InitializerDecl {
     leadingTrivia: .docLineComment("/// Creates a new `\(type.buildableBaseName)` by flattening the elements in `lists`") + .newline,
     modifiers: [TokenSyntax.public],
     signature: FunctionSignature(
-      input: ParameterClause(
-        parameterList: FunctionParameter(
+      input: ParameterClause {
+        FunctionParameter(
           firstName: .identifier("combining").withTrailingTrivia(.space),
           secondName: .identifier("lists"),
           colon: .colon,
           type: ArrayType(elementType: type.expressibleAs)
         )
-      )
+      }
     )
   ) {
     SequenceExpr {
@@ -152,15 +152,15 @@ private func createArrayLiteralInitializer(node: Node) -> InitializerDecl {
   return InitializerDecl(
     modifiers: [TokenSyntax.public],
     signature: FunctionSignature(
-      input: ParameterClause(
-        parameterList: FunctionParameter(
+      input: ParameterClause {
+        FunctionParameter(
           firstName: .identifier("arrayLiteral").withTrailingTrivia(.space),
           secondName: .identifier("elements"),
           colon: .colon,
           type: elementType.expressibleAs,
           ellipsis: .ellipsis
         )
-      )
+      }
     )
   ) {
     FunctionCallExpr(MemberAccessExpr(base: "self", name: "init")) {

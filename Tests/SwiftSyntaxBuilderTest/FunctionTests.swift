@@ -6,9 +6,9 @@ final class FunctionTests: XCTestCase {
   func testFibonacci() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let input = ParameterClause(parameterList: [
+    let input = ParameterClause {
       FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int")
-    ])
+    }
 
     let ifCodeBlock = ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
     

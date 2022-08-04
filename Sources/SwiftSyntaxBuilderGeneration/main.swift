@@ -17,13 +17,14 @@ import SwiftSyntaxBuilder
 /// SwiftSyntaxBuilder sources to be generated
 let sourceTemplates = [
   (buildableBaseProtocolsFile, "BuildableBaseProtocols.swift"),
+  (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
   (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
   (tokensFile, "Tokens.swift"),
   (tokenSyntaxFile, "TokenSyntax.swift"),
 ]
 
 guard CommandLine.arguments.count > 1 else {
-    fatalError("Please add a destination as the first argument")
+  fatalError("Please add a destination as the first argument")
 }
 
 let destination = CommandLine.arguments[1]

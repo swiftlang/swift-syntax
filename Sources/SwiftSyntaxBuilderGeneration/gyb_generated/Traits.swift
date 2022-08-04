@@ -59,12 +59,6 @@ let TRAITS: [Trait] = [
           Child(name: "TrailingComma", kind: "CommaToken", isOptional: true),
         ]
   ),
-  Trait(traitName: "Labeled",
-        children: [
-          Child(name: "LabelName", kind: "IdentifierToken", isOptional: true),
-          Child(name: "LabelColon", kind: "ColonToken", isOptional: true),
-        ]
-  ),
   Trait(traitName: "WithStatements",
         children: [
           Child(name: "Statements", kind: "CodeBlockItemList"),

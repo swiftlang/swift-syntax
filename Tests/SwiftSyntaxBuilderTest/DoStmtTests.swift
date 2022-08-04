@@ -4,7 +4,6 @@ import SwiftSyntaxBuilder
 final class DoStmtTests: XCTestCase {
   func testDoStmt() {
     let buildable = DoStmt(
-      labelName: nil,
       body: CodeBlock(statementsBuilder: {
         CodeBlockItem(item: TryExpr(expression: FunctionCallExpr(MemberAccessExpr(base: "a", name: "b"))))
       }),

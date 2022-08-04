@@ -91,6 +91,239 @@ extension MissingStmtSyntax: CustomReflectable {
   }
 }
 
+// MARK: - LabeledStmtSyntax
+
+public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case garbageBeforeLabelName
+    case labelName
+    case garbageBetweenLabelNameAndLabelColon
+    case labelColon
+    case garbageBetweenLabelColonAndStatement
+    case statement
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `LabeledStmtSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .labeledStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `LabeledStmtSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .labeledStmt)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeLabelName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
+  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
+  ///                   current `garbageBeforeLabelName`, if present.
+  public func withGarbageBeforeLabelName(
+    _ newChild: GarbageNodesSyntax?) -> LabeledStmtSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
+    return LabeledStmtSyntax(newData)
+  }
+
+  public var labelName: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.labelName,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `labelName` replaced.
+  /// - param newChild: The new `labelName` to replace the node's
+  ///                   current `labelName`, if present.
+  public func withLabelName(
+    _ newChild: TokenSyntax?) -> LabeledStmtSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.labelName)
+    return LabeledStmtSyntax(newData)
+  }
+
+  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLabelNameAndLabelColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
+  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
+  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
+  public func withGarbageBetweenLabelNameAndLabelColon(
+    _ newChild: GarbageNodesSyntax?) -> LabeledStmtSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
+    return LabeledStmtSyntax(newData)
+  }
+
+  public var labelColon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.labelColon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `labelColon` replaced.
+  /// - param newChild: The new `labelColon` to replace the node's
+  ///                   current `labelColon`, if present.
+  public func withLabelColon(
+    _ newChild: TokenSyntax?) -> LabeledStmtSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.labelColon)
+    return LabeledStmtSyntax(newData)
+  }
+
+  public var garbageBetweenLabelColonAndStatement: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndStatement,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLabelColonAndStatement(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndStatement` replaced.
+  /// - param newChild: The new `garbageBetweenLabelColonAndStatement` to replace the node's
+  ///                   current `garbageBetweenLabelColonAndStatement`, if present.
+  public func withGarbageBetweenLabelColonAndStatement(
+    _ newChild: GarbageNodesSyntax?) -> LabeledStmtSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndStatement)
+    return LabeledStmtSyntax(newData)
+  }
+
+  public var statement: StmtSyntax {
+    get {
+      let childData = data.child(at: Cursor.statement,
+                                 parent: Syntax(self))
+      return StmtSyntax(childData!)
+    }
+    set(value) {
+      self = withStatement(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `statement` replaced.
+  /// - param newChild: The new `statement` to replace the node's
+  ///                   current `statement`, if present.
+  public func withStatement(
+    _ newChild: StmtSyntax?) -> LabeledStmtSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingStmt)
+    let newData = data.replacingChild(raw, at: Cursor.statement)
+    return LabeledStmtSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 6)
+    // Check child #0 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax 
+    assert(rawChildren[3].raw != nil)
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is StmtSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(StmtSyntax.self))
+    }
+  }
+}
+
+extension LabeledStmtSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelName": Syntax(labelName).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelColon": Syntax(labelColon).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLabelColonAndStatement": garbageBetweenLabelColonAndStatement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "statement": Syntax(statement).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - ContinueStmtSyntax
 
 public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
@@ -264,11 +497,7 @@ extension ContinueStmtSyntax: CustomReflectable {
 
 public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabelName
-    case labelName
-    case garbageBetweenLabelNameAndLabelColon
-    case labelColon
-    case garbageBetweenLabelColonAndWhileKeyword
+    case garbageBeforeWhileKeyword
     case whileKeyword
     case garbageBetweenWhileKeywordAndConditions
     case conditions
@@ -297,113 +526,25 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+  public var garbageBeforeWhileKeyword: GarbageNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+      let childData = data.child(at: Cursor.garbageBeforeWhileKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
       return GarbageNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabelName(value)
+      self = withGarbageBeforeWhileKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
-  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
-  ///                   current `garbageBeforeLabelName`, if present.
-  public func withGarbageBeforeLabelName(
+  /// Returns a copy of the receiver with its `garbageBeforeWhileKeyword` replaced.
+  /// - param newChild: The new `garbageBeforeWhileKeyword` to replace the node's
+  ///                   current `garbageBeforeWhileKeyword`, if present.
+  public func withGarbageBeforeWhileKeyword(
     _ newChild: GarbageNodesSyntax?) -> WhileStmtSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
-    return WhileStmtSyntax(newData)
-  }
-
-  public var labelName: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelName,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelName` replaced.
-  /// - param newChild: The new `labelName` to replace the node's
-  ///                   current `labelName`, if present.
-  public func withLabelName(
-    _ newChild: TokenSyntax?) -> WhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelName)
-    return WhileStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelNameAndLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
-  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
-  public func withGarbageBetweenLabelNameAndLabelColon(
-    _ newChild: GarbageNodesSyntax?) -> WhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
-    return WhileStmtSyntax(newData)
-  }
-
-  public var labelColon: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelColon` replaced.
-  /// - param newChild: The new `labelColon` to replace the node's
-  ///                   current `labelColon`, if present.
-  public func withLabelColon(
-    _ newChild: TokenSyntax?) -> WhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelColon)
-    return WhileStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelColonAndWhileKeyword: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndWhileKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelColonAndWhileKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndWhileKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenLabelColonAndWhileKeyword` to replace the node's
-  ///                   current `garbageBetweenLabelColonAndWhileKeyword`, if present.
-  public func withGarbageBetweenLabelColonAndWhileKeyword(
-    _ newChild: GarbageNodesSyntax?) -> WhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndWhileKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeWhileKeyword)
     return WhileStmtSyntax(newData)
   }
 
@@ -536,7 +677,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 10)
+    assert(rawChildren.count == 6)
     // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -545,7 +686,8 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -561,13 +703,14 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax or missing
+    // Check child #3 child is ConditionElementListSyntax 
+    assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ConditionElementListSyntax.self))
     }
     // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
@@ -577,44 +720,10 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TokenSyntax 
+    // Check child #5 child is CodeBlockSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #6 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[6].raw {
-      let info = rawChildren[6].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #7 child is ConditionElementListSyntax 
-    assert(rawChildren[7].raw != nil)
-    if let raw = rawChildren[7].raw {
-      let info = rawChildren[7].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ConditionElementListSyntax.self))
-    }
-    // Check child #8 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[8].raw {
-      let info = rawChildren[8].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #9 child is CodeBlockSyntax 
-    assert(rawChildren[9].raw != nil)
-    if let raw = rawChildren[9].raw {
-      let info = rawChildren[9].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -626,11 +735,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension WhileStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelColonAndWhileKeyword": garbageBetweenLabelColonAndWhileKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBeforeWhileKeyword": garbageBeforeWhileKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "whileKeyword": Syntax(whileKeyword).asProtocol(SyntaxProtocol.self),
       "garbageBetweenWhileKeywordAndConditions": garbageBetweenWhileKeywordAndConditions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self),
@@ -918,11 +1023,7 @@ extension ExpressionStmtSyntax: CustomReflectable {
 
 public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabelName
-    case labelName
-    case garbageBetweenLabelNameAndLabelColon
-    case labelColon
-    case garbageBetweenLabelColonAndRepeatKeyword
+    case garbageBeforeRepeatKeyword
     case repeatKeyword
     case garbageBetweenRepeatKeywordAndBody
     case body
@@ -953,113 +1054,25 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+  public var garbageBeforeRepeatKeyword: GarbageNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+      let childData = data.child(at: Cursor.garbageBeforeRepeatKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
       return GarbageNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabelName(value)
+      self = withGarbageBeforeRepeatKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
-  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
-  ///                   current `garbageBeforeLabelName`, if present.
-  public func withGarbageBeforeLabelName(
+  /// Returns a copy of the receiver with its `garbageBeforeRepeatKeyword` replaced.
+  /// - param newChild: The new `garbageBeforeRepeatKeyword` to replace the node's
+  ///                   current `garbageBeforeRepeatKeyword`, if present.
+  public func withGarbageBeforeRepeatKeyword(
     _ newChild: GarbageNodesSyntax?) -> RepeatWhileStmtSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
-    return RepeatWhileStmtSyntax(newData)
-  }
-
-  public var labelName: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelName,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelName` replaced.
-  /// - param newChild: The new `labelName` to replace the node's
-  ///                   current `labelName`, if present.
-  public func withLabelName(
-    _ newChild: TokenSyntax?) -> RepeatWhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelName)
-    return RepeatWhileStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelNameAndLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
-  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
-  public func withGarbageBetweenLabelNameAndLabelColon(
-    _ newChild: GarbageNodesSyntax?) -> RepeatWhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
-    return RepeatWhileStmtSyntax(newData)
-  }
-
-  public var labelColon: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelColon` replaced.
-  /// - param newChild: The new `labelColon` to replace the node's
-  ///                   current `labelColon`, if present.
-  public func withLabelColon(
-    _ newChild: TokenSyntax?) -> RepeatWhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelColon)
-    return RepeatWhileStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelColonAndRepeatKeyword: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndRepeatKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelColonAndRepeatKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndRepeatKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenLabelColonAndRepeatKeyword` to replace the node's
-  ///                   current `garbageBetweenLabelColonAndRepeatKeyword`, if present.
-  public func withGarbageBetweenLabelColonAndRepeatKeyword(
-    _ newChild: GarbageNodesSyntax?) -> RepeatWhileStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndRepeatKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeRepeatKeyword)
     return RepeatWhileStmtSyntax(newData)
   }
 
@@ -1216,7 +1229,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 12)
+    assert(rawChildren.count == 8)
     // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -1225,7 +1238,8 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -1241,13 +1255,14 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax or missing
+    // Check child #3 child is CodeBlockSyntax 
+    assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(CodeBlockSyntax.self))
     }
     // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
@@ -1274,44 +1289,10 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is CodeBlockSyntax 
+    // Check child #7 child is ExprSyntax 
     assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(CodeBlockSyntax.self))
-    }
-    // Check child #8 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[8].raw {
-      let info = rawChildren[8].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #9 child is TokenSyntax 
-    assert(rawChildren[9].raw != nil)
-    if let raw = rawChildren[9].raw {
-      let info = rawChildren[9].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #10 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[10].raw {
-      let info = rawChildren[10].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #11 child is ExprSyntax 
-    assert(rawChildren[11].raw != nil)
-    if let raw = rawChildren[11].raw {
-      let info = rawChildren[11].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1323,11 +1304,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension RepeatWhileStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelColonAndRepeatKeyword": garbageBetweenLabelColonAndRepeatKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBeforeRepeatKeyword": garbageBeforeRepeatKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "repeatKeyword": Syntax(repeatKeyword).asProtocol(SyntaxProtocol.self),
       "garbageBetweenRepeatKeywordAndBody": garbageBetweenRepeatKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": Syntax(body).asProtocol(SyntaxProtocol.self),
@@ -1659,11 +1636,7 @@ extension GuardStmtSyntax: CustomReflectable {
 
 public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabelName
-    case labelName
-    case garbageBetweenLabelNameAndLabelColon
-    case labelColon
-    case garbageBetweenLabelColonAndForKeyword
+    case garbageBeforeForKeyword
     case forKeyword
     case garbageBetweenForKeywordAndTryKeyword
     case tryKeyword
@@ -1706,113 +1679,25 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+  public var garbageBeforeForKeyword: GarbageNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+      let childData = data.child(at: Cursor.garbageBeforeForKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
       return GarbageNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabelName(value)
+      self = withGarbageBeforeForKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
-  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
-  ///                   current `garbageBeforeLabelName`, if present.
-  public func withGarbageBeforeLabelName(
+  /// Returns a copy of the receiver with its `garbageBeforeForKeyword` replaced.
+  /// - param newChild: The new `garbageBeforeForKeyword` to replace the node's
+  ///                   current `garbageBeforeForKeyword`, if present.
+  public func withGarbageBeforeForKeyword(
     _ newChild: GarbageNodesSyntax?) -> ForInStmtSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
-    return ForInStmtSyntax(newData)
-  }
-
-  public var labelName: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelName,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelName` replaced.
-  /// - param newChild: The new `labelName` to replace the node's
-  ///                   current `labelName`, if present.
-  public func withLabelName(
-    _ newChild: TokenSyntax?) -> ForInStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelName)
-    return ForInStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelNameAndLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
-  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
-  public func withGarbageBetweenLabelNameAndLabelColon(
-    _ newChild: GarbageNodesSyntax?) -> ForInStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
-    return ForInStmtSyntax(newData)
-  }
-
-  public var labelColon: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelColon` replaced.
-  /// - param newChild: The new `labelColon` to replace the node's
-  ///                   current `labelColon`, if present.
-  public func withLabelColon(
-    _ newChild: TokenSyntax?) -> ForInStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelColon)
-    return ForInStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelColonAndForKeyword: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndForKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelColonAndForKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndForKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenLabelColonAndForKeyword` to replace the node's
-  ///                   current `garbageBetweenLabelColonAndForKeyword`, if present.
-  public func withGarbageBetweenLabelColonAndForKeyword(
-    _ newChild: GarbageNodesSyntax?) -> ForInStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndForKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeForKeyword)
     return ForInStmtSyntax(newData)
   }
 
@@ -2232,7 +2117,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 24)
+    assert(rawChildren.count == 20)
     // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -2241,7 +2126,8 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -2273,8 +2159,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TokenSyntax 
-    assert(rawChildren[5].raw != nil)
+    // Check child #5 child is TokenSyntax or missing
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -2306,13 +2191,14 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #9 child is TokenSyntax or missing
+    // Check child #9 child is PatternSyntax 
+    assert(rawChildren[9].raw != nil)
     if let raw = rawChildren[9].raw {
       let info = rawChildren[9].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(PatternSyntax.self))
     }
     // Check child #10 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[10].raw {
@@ -2322,13 +2208,13 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #11 child is TokenSyntax or missing
+    // Check child #11 child is TypeAnnotationSyntax or missing
     if let raw = rawChildren[11].raw {
       let info = rawChildren[11].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(TypeAnnotationSyntax.self))
     }
     // Check child #12 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[12].raw {
@@ -2338,14 +2224,14 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #13 child is PatternSyntax 
+    // Check child #13 child is TokenSyntax 
     assert(rawChildren[13].raw != nil)
     if let raw = rawChildren[13].raw {
       let info = rawChildren[13].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PatternSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #14 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[14].raw {
@@ -2355,13 +2241,14 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #15 child is TypeAnnotationSyntax or missing
+    // Check child #15 child is ExprSyntax 
+    assert(rawChildren[15].raw != nil)
     if let raw = rawChildren[15].raw {
       let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeAnnotationSyntax.self))
+      assert(syntaxChild.is(ExprSyntax.self))
     }
     // Check child #16 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[16].raw {
@@ -2371,14 +2258,13 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #17 child is TokenSyntax 
-    assert(rawChildren[17].raw != nil)
+    // Check child #17 child is WhereClauseSyntax or missing
     if let raw = rawChildren[17].raw {
       let info = rawChildren[17].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(WhereClauseSyntax.self))
     }
     // Check child #18 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[18].raw {
@@ -2388,43 +2274,10 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #19 child is ExprSyntax 
+    // Check child #19 child is CodeBlockSyntax 
     assert(rawChildren[19].raw != nil)
     if let raw = rawChildren[19].raw {
       let info = rawChildren[19].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ExprSyntax.self))
-    }
-    // Check child #20 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[20].raw {
-      let info = rawChildren[20].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #21 child is WhereClauseSyntax or missing
-    if let raw = rawChildren[21].raw {
-      let info = rawChildren[21].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(WhereClauseSyntax.self))
-    }
-    // Check child #22 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[22].raw {
-      let info = rawChildren[22].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #23 child is CodeBlockSyntax 
-    assert(rawChildren[23].raw != nil)
-    if let raw = rawChildren[23].raw {
-      let info = rawChildren[23].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -2436,11 +2289,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension ForInStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelColonAndForKeyword": garbageBetweenLabelColonAndForKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBeforeForKeyword": garbageBeforeForKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "forKeyword": Syntax(forKeyword).asProtocol(SyntaxProtocol.self),
       "garbageBetweenForKeywordAndTryKeyword": garbageBetweenForKeywordAndTryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "tryKeyword": tryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
@@ -2468,11 +2317,7 @@ extension ForInStmtSyntax: CustomReflectable {
 
 public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabelName
-    case labelName
-    case garbageBetweenLabelNameAndLabelColon
-    case labelColon
-    case garbageBetweenLabelColonAndSwitchKeyword
+    case garbageBeforeSwitchKeyword
     case switchKeyword
     case garbageBetweenSwitchKeywordAndExpression
     case expression
@@ -2505,113 +2350,25 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+  public var garbageBeforeSwitchKeyword: GarbageNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+      let childData = data.child(at: Cursor.garbageBeforeSwitchKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
       return GarbageNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabelName(value)
+      self = withGarbageBeforeSwitchKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
-  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
-  ///                   current `garbageBeforeLabelName`, if present.
-  public func withGarbageBeforeLabelName(
+  /// Returns a copy of the receiver with its `garbageBeforeSwitchKeyword` replaced.
+  /// - param newChild: The new `garbageBeforeSwitchKeyword` to replace the node's
+  ///                   current `garbageBeforeSwitchKeyword`, if present.
+  public func withGarbageBeforeSwitchKeyword(
     _ newChild: GarbageNodesSyntax?) -> SwitchStmtSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var labelName: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelName,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelName` replaced.
-  /// - param newChild: The new `labelName` to replace the node's
-  ///                   current `labelName`, if present.
-  public func withLabelName(
-    _ newChild: TokenSyntax?) -> SwitchStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelName)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelNameAndLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
-  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
-  public func withGarbageBetweenLabelNameAndLabelColon(
-    _ newChild: GarbageNodesSyntax?) -> SwitchStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var labelColon: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelColon` replaced.
-  /// - param newChild: The new `labelColon` to replace the node's
-  ///                   current `labelColon`, if present.
-  public func withLabelColon(
-    _ newChild: TokenSyntax?) -> SwitchStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelColon)
-    return SwitchStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelColonAndSwitchKeyword: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndSwitchKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelColonAndSwitchKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndSwitchKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenLabelColonAndSwitchKeyword` to replace the node's
-  ///                   current `garbageBetweenLabelColonAndSwitchKeyword`, if present.
-  public func withGarbageBetweenLabelColonAndSwitchKeyword(
-    _ newChild: GarbageNodesSyntax?) -> SwitchStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndSwitchKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeSwitchKeyword)
     return SwitchStmtSyntax(newData)
   }
 
@@ -2830,7 +2587,7 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 14)
+    assert(rawChildren.count == 10)
     // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -2839,7 +2596,8 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -2855,13 +2613,14 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax or missing
+    // Check child #3 child is ExprSyntax 
+    assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ExprSyntax.self))
     }
     // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
@@ -2888,14 +2647,14 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is ExprSyntax 
+    // Check child #7 child is SwitchCaseListSyntax 
     assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ExprSyntax.self))
+      assert(syntaxChild.is(SwitchCaseListSyntax.self))
     }
     // Check child #8 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[8].raw {
@@ -2914,51 +2673,13 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #10 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[10].raw {
-      let info = rawChildren[10].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #11 child is SwitchCaseListSyntax 
-    assert(rawChildren[11].raw != nil)
-    if let raw = rawChildren[11].raw {
-      let info = rawChildren[11].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(SwitchCaseListSyntax.self))
-    }
-    // Check child #12 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[12].raw {
-      let info = rawChildren[12].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #13 child is TokenSyntax 
-    assert(rawChildren[13].raw != nil)
-    if let raw = rawChildren[13].raw {
-      let info = rawChildren[13].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
   }
 }
 
 extension SwitchStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelColonAndSwitchKeyword": garbageBetweenLabelColonAndSwitchKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBeforeSwitchKeyword": garbageBeforeSwitchKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "switchKeyword": Syntax(switchKeyword).asProtocol(SyntaxProtocol.self),
       "garbageBetweenSwitchKeywordAndExpression": garbageBetweenSwitchKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
@@ -2976,11 +2697,7 @@ extension SwitchStmtSyntax: CustomReflectable {
 
 public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabelName
-    case labelName
-    case garbageBetweenLabelNameAndLabelColon
-    case labelColon
-    case garbageBetweenLabelColonAndDoKeyword
+    case garbageBeforeDoKeyword
     case doKeyword
     case garbageBetweenDoKeywordAndBody
     case body
@@ -3009,113 +2726,25 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+  public var garbageBeforeDoKeyword: GarbageNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+      let childData = data.child(at: Cursor.garbageBeforeDoKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
       return GarbageNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabelName(value)
+      self = withGarbageBeforeDoKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
-  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
-  ///                   current `garbageBeforeLabelName`, if present.
-  public func withGarbageBeforeLabelName(
+  /// Returns a copy of the receiver with its `garbageBeforeDoKeyword` replaced.
+  /// - param newChild: The new `garbageBeforeDoKeyword` to replace the node's
+  ///                   current `garbageBeforeDoKeyword`, if present.
+  public func withGarbageBeforeDoKeyword(
     _ newChild: GarbageNodesSyntax?) -> DoStmtSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
-    return DoStmtSyntax(newData)
-  }
-
-  public var labelName: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelName,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelName` replaced.
-  /// - param newChild: The new `labelName` to replace the node's
-  ///                   current `labelName`, if present.
-  public func withLabelName(
-    _ newChild: TokenSyntax?) -> DoStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelName)
-    return DoStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelNameAndLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
-  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
-  public func withGarbageBetweenLabelNameAndLabelColon(
-    _ newChild: GarbageNodesSyntax?) -> DoStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
-    return DoStmtSyntax(newData)
-  }
-
-  public var labelColon: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelColon` replaced.
-  /// - param newChild: The new `labelColon` to replace the node's
-  ///                   current `labelColon`, if present.
-  public func withLabelColon(
-    _ newChild: TokenSyntax?) -> DoStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelColon)
-    return DoStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelColonAndDoKeyword: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndDoKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelColonAndDoKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndDoKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenLabelColonAndDoKeyword` to replace the node's
-  ///                   current `garbageBetweenLabelColonAndDoKeyword`, if present.
-  public func withGarbageBetweenLabelColonAndDoKeyword(
-    _ newChild: GarbageNodesSyntax?) -> DoStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndDoKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeDoKeyword)
     return DoStmtSyntax(newData)
   }
 
@@ -3249,7 +2878,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 10)
+    assert(rawChildren.count == 6)
     // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -3258,7 +2887,8 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -3274,13 +2904,14 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax or missing
+    // Check child #3 child is CodeBlockSyntax 
+    assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(CodeBlockSyntax.self))
     }
     // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
@@ -3290,43 +2921,9 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TokenSyntax 
-    assert(rawChildren[5].raw != nil)
+    // Check child #5 child is CatchClauseListSyntax or missing
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #6 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[6].raw {
-      let info = rawChildren[6].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #7 child is CodeBlockSyntax 
-    assert(rawChildren[7].raw != nil)
-    if let raw = rawChildren[7].raw {
-      let info = rawChildren[7].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(CodeBlockSyntax.self))
-    }
-    // Check child #8 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[8].raw {
-      let info = rawChildren[8].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #9 child is CatchClauseListSyntax or missing
-    if let raw = rawChildren[9].raw {
-      let info = rawChildren[9].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -3338,11 +2935,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension DoStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelColonAndDoKeyword": garbageBetweenLabelColonAndDoKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBeforeDoKeyword": garbageBeforeDoKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "doKeyword": Syntax(doKeyword).asProtocol(SyntaxProtocol.self),
       "garbageBetweenDoKeywordAndBody": garbageBetweenDoKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": Syntax(body).asProtocol(SyntaxProtocol.self),
@@ -4242,11 +3835,7 @@ extension ThrowStmtSyntax: CustomReflectable {
 
 public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabelName
-    case labelName
-    case garbageBetweenLabelNameAndLabelColon
-    case labelColon
-    case garbageBetweenLabelColonAndIfKeyword
+    case garbageBeforeIfKeyword
     case ifKeyword
     case garbageBetweenIfKeywordAndConditions
     case conditions
@@ -4279,113 +3868,25 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+  public var garbageBeforeIfKeyword: GarbageNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+      let childData = data.child(at: Cursor.garbageBeforeIfKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
       return GarbageNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabelName(value)
+      self = withGarbageBeforeIfKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
-  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
-  ///                   current `garbageBeforeLabelName`, if present.
-  public func withGarbageBeforeLabelName(
+  /// Returns a copy of the receiver with its `garbageBeforeIfKeyword` replaced.
+  /// - param newChild: The new `garbageBeforeIfKeyword` to replace the node's
+  ///                   current `garbageBeforeIfKeyword`, if present.
+  public func withGarbageBeforeIfKeyword(
     _ newChild: GarbageNodesSyntax?) -> IfStmtSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
-    return IfStmtSyntax(newData)
-  }
-
-  public var labelName: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelName,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelName(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelName` replaced.
-  /// - param newChild: The new `labelName` to replace the node's
-  ///                   current `labelName`, if present.
-  public func withLabelName(
-    _ newChild: TokenSyntax?) -> IfStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelName)
-    return IfStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelNameAndLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
-  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
-  public func withGarbageBetweenLabelNameAndLabelColon(
-    _ newChild: GarbageNodesSyntax?) -> IfStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
-    return IfStmtSyntax(newData)
-  }
-
-  public var labelColon: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.labelColon,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLabelColon(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `labelColon` replaced.
-  /// - param newChild: The new `labelColon` to replace the node's
-  ///                   current `labelColon`, if present.
-  public func withLabelColon(
-    _ newChild: TokenSyntax?) -> IfStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.labelColon)
-    return IfStmtSyntax(newData)
-  }
-
-  public var garbageBetweenLabelColonAndIfKeyword: GarbageNodesSyntax? {
-    get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndIfKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withGarbageBetweenLabelColonAndIfKeyword(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndIfKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenLabelColonAndIfKeyword` to replace the node's
-  ///                   current `garbageBetweenLabelColonAndIfKeyword`, if present.
-  public func withGarbageBetweenLabelColonAndIfKeyword(
-    _ newChild: GarbageNodesSyntax?) -> IfStmtSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndIfKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeIfKeyword)
     return IfStmtSyntax(newData)
   }
 
@@ -4606,7 +4107,7 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 14)
+    assert(rawChildren.count == 10)
     // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -4615,7 +4116,8 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -4631,13 +4133,14 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax or missing
+    // Check child #3 child is ConditionElementListSyntax 
+    assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ConditionElementListSyntax.self))
     }
     // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
@@ -4647,14 +4150,14 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TokenSyntax 
+    // Check child #5 child is CodeBlockSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(CodeBlockSyntax.self))
     }
     // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
@@ -4664,14 +4167,13 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is ConditionElementListSyntax 
-    assert(rawChildren[7].raw != nil)
+    // Check child #7 child is TokenSyntax or missing
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ConditionElementListSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #8 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[8].raw {
@@ -4681,42 +4183,9 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #9 child is CodeBlockSyntax 
-    assert(rawChildren[9].raw != nil)
+    // Check child #9 child is Syntax or missing
     if let raw = rawChildren[9].raw {
       let info = rawChildren[9].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(CodeBlockSyntax.self))
-    }
-    // Check child #10 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[10].raw {
-      let info = rawChildren[10].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #11 child is TokenSyntax or missing
-    if let raw = rawChildren[11].raw {
-      let info = rawChildren[11].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #12 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[12].raw {
-      let info = rawChildren[12].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #13 child is Syntax or missing
-    if let raw = rawChildren[13].raw {
-      let info = rawChildren[13].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -4728,11 +4197,7 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension IfStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelColonAndIfKeyword": garbageBetweenLabelColonAndIfKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBeforeIfKeyword": garbageBeforeIfKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "ifKeyword": Syntax(ifKeyword).asProtocol(SyntaxProtocol.self),
       "garbageBetweenIfKeywordAndConditions": garbageBetweenIfKeywordAndConditions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self),

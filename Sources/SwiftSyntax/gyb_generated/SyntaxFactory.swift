@@ -4236,6 +4236,33 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return BackDeployVersionArgumentSyntax(data)
   }
+  public static func makeLabeledStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax, _ garbageBetweenLabelColonAndStatement: GarbageNodesSyntax? = nil, statement: StmtSyntax) -> LabeledStmtSyntax {
+    let layout: [RawSyntax?] = [
+      garbageBeforeLabelName?.raw,
+      labelName.raw,
+      garbageBetweenLabelNameAndLabelColon?.raw,
+      labelColon.raw,
+      garbageBetweenLabelColonAndStatement?.raw,
+      statement.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.labeledStmt,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return LabeledStmtSyntax(data)
+  }
+
+  public static func makeBlankLabeledStmt(presence: SourcePresence = .present) -> LabeledStmtSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .labeledStmt,
+      layout: [
+      nil,
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
+      RawSyntax.missingToken(TokenKind.colon),
+      nil,
+      RawSyntax.missing(SyntaxKind.missingStmt),
+    ], length: .zero, presence: presence))
+    return LabeledStmtSyntax(data)
+  }
   public static func makeContinueStmt(_ garbageBeforeContinueKeyword: GarbageNodesSyntax? = nil, continueKeyword: TokenSyntax, _ garbageBetweenContinueKeywordAndLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?) -> ContinueStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeContinueKeyword?.raw,
@@ -4259,13 +4286,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ContinueStmtSyntax(data)
   }
-  public static func makeWhileStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> WhileStmtSyntax {
+  public static func makeWhileStmt(_ garbageBeforeWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> WhileStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
-      labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
-      labelColon?.raw,
-      garbageBetweenLabelColonAndWhileKeyword?.raw,
+      garbageBeforeWhileKeyword?.raw,
       whileKeyword.raw,
       garbageBetweenWhileKeywordAndConditions?.raw,
       conditions.raw,
@@ -4281,10 +4304,6 @@ public enum SyntaxFactory {
   public static func makeBlankWhileStmt(presence: SourcePresence = .present) -> WhileStmtSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .whileStmt,
       layout: [
-      nil,
-      nil,
-      nil,
-      nil,
       nil,
       RawSyntax.missingToken(TokenKind.whileKeyword),
       nil,
@@ -4350,13 +4369,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SwitchCaseListSyntax(data)
   }
-  public static func makeRepeatWhileStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndRepeatKeyword: GarbageNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ garbageBetweenRepeatKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax) -> RepeatWhileStmtSyntax {
+  public static func makeRepeatWhileStmt(_ garbageBeforeRepeatKeyword: GarbageNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ garbageBetweenRepeatKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax) -> RepeatWhileStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
-      labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
-      labelColon?.raw,
-      garbageBetweenLabelColonAndRepeatKeyword?.raw,
+      garbageBeforeRepeatKeyword?.raw,
       repeatKeyword.raw,
       garbageBetweenRepeatKeywordAndBody?.raw,
       body.raw,
@@ -4374,10 +4389,6 @@ public enum SyntaxFactory {
   public static func makeBlankRepeatWhileStmt(presence: SourcePresence = .present) -> RepeatWhileStmtSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .repeatWhileStmt,
       layout: [
-      nil,
-      nil,
-      nil,
-      nil,
       nil,
       RawSyntax.missingToken(TokenKind.repeatKeyword),
       nil,
@@ -4443,13 +4454,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return WhereClauseSyntax(data)
   }
-  public static func makeForInStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndForKeyword: GarbageNodesSyntax? = nil, forKeyword: TokenSyntax, _ garbageBetweenForKeywordAndTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax?, _ garbageBetweenTryKeywordAndAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax?, _ garbageBetweenAwaitKeywordAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax?, _ garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInKeyword: GarbageNodesSyntax? = nil, inKeyword: TokenSyntax, _ garbageBetweenInKeywordAndSequenceExpr: GarbageNodesSyntax? = nil, sequenceExpr: ExprSyntax, _ garbageBetweenSequenceExprAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ForInStmtSyntax {
+  public static func makeForInStmt(_ garbageBeforeForKeyword: GarbageNodesSyntax? = nil, forKeyword: TokenSyntax, _ garbageBetweenForKeywordAndTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax?, _ garbageBetweenTryKeywordAndAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax?, _ garbageBetweenAwaitKeywordAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax?, _ garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInKeyword: GarbageNodesSyntax? = nil, inKeyword: TokenSyntax, _ garbageBetweenInKeywordAndSequenceExpr: GarbageNodesSyntax? = nil, sequenceExpr: ExprSyntax, _ garbageBetweenSequenceExprAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ForInStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
-      labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
-      labelColon?.raw,
-      garbageBetweenLabelColonAndForKeyword?.raw,
+      garbageBeforeForKeyword?.raw,
       forKeyword.raw,
       garbageBetweenForKeywordAndTryKeyword?.raw,
       tryKeyword?.raw,
@@ -4480,10 +4487,6 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .forInStmt,
       layout: [
       nil,
-      nil,
-      nil,
-      nil,
-      nil,
       RawSyntax.missingToken(TokenKind.forKeyword),
       nil,
       nil,
@@ -4506,13 +4509,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ForInStmtSyntax(data)
   }
-  public static func makeSwitchStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndSwitchKeyword: GarbageNodesSyntax? = nil, switchKeyword: TokenSyntax, _ garbageBetweenSwitchKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndCases: GarbageNodesSyntax? = nil, cases: SwitchCaseListSyntax, _ garbageBetweenCasesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> SwitchStmtSyntax {
+  public static func makeSwitchStmt(_ garbageBeforeSwitchKeyword: GarbageNodesSyntax? = nil, switchKeyword: TokenSyntax, _ garbageBetweenSwitchKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndCases: GarbageNodesSyntax? = nil, cases: SwitchCaseListSyntax, _ garbageBetweenCasesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> SwitchStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
-      labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
-      labelColon?.raw,
-      garbageBetweenLabelColonAndSwitchKeyword?.raw,
+      garbageBeforeSwitchKeyword?.raw,
       switchKeyword.raw,
       garbageBetweenSwitchKeywordAndExpression?.raw,
       expression.raw,
@@ -4532,10 +4531,6 @@ public enum SyntaxFactory {
   public static func makeBlankSwitchStmt(presence: SourcePresence = .present) -> SwitchStmtSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .switchStmt,
       layout: [
-      nil,
-      nil,
-      nil,
-      nil,
       nil,
       RawSyntax.missingToken(TokenKind.switchKeyword),
       nil,
@@ -4563,13 +4558,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CatchClauseListSyntax(data)
   }
-  public static func makeDoStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndDoKeyword: GarbageNodesSyntax? = nil, doKeyword: TokenSyntax, _ garbageBetweenDoKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndCatchClauses: GarbageNodesSyntax? = nil, catchClauses: CatchClauseListSyntax?) -> DoStmtSyntax {
+  public static func makeDoStmt(_ garbageBeforeDoKeyword: GarbageNodesSyntax? = nil, doKeyword: TokenSyntax, _ garbageBetweenDoKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndCatchClauses: GarbageNodesSyntax? = nil, catchClauses: CatchClauseListSyntax?) -> DoStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
-      labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
-      labelColon?.raw,
-      garbageBetweenLabelColonAndDoKeyword?.raw,
+      garbageBeforeDoKeyword?.raw,
       doKeyword.raw,
       garbageBetweenDoKeywordAndBody?.raw,
       body.raw,
@@ -4585,10 +4576,6 @@ public enum SyntaxFactory {
   public static func makeBlankDoStmt(presence: SourcePresence = .present) -> DoStmtSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .doStmt,
       layout: [
-      nil,
-      nil,
-      nil,
-      nil,
       nil,
       RawSyntax.missingToken(TokenKind.doKeyword),
       nil,
@@ -4948,13 +4935,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ThrowStmtSyntax(data)
   }
-  public static func makeIfStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndIfKeyword: GarbageNodesSyntax? = nil, ifKeyword: TokenSyntax, _ garbageBetweenIfKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax?, _ garbageBetweenElseKeywordAndElseBody: GarbageNodesSyntax? = nil, elseBody: Syntax?) -> IfStmtSyntax {
+  public static func makeIfStmt(_ garbageBeforeIfKeyword: GarbageNodesSyntax? = nil, ifKeyword: TokenSyntax, _ garbageBetweenIfKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax?, _ garbageBetweenElseKeywordAndElseBody: GarbageNodesSyntax? = nil, elseBody: Syntax?) -> IfStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
-      labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
-      labelColon?.raw,
-      garbageBetweenLabelColonAndIfKeyword?.raw,
+      garbageBeforeIfKeyword?.raw,
       ifKeyword.raw,
       garbageBetweenIfKeywordAndConditions?.raw,
       conditions.raw,
@@ -4974,10 +4957,6 @@ public enum SyntaxFactory {
   public static func makeBlankIfStmt(presence: SourcePresence = .present) -> IfStmtSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .ifStmt,
       layout: [
-      nil,
-      nil,
-      nil,
-      nil,
       nil,
       RawSyntax.missingToken(TokenKind.ifKeyword),
       nil,

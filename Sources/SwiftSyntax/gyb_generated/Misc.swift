@@ -1045,6 +1045,12 @@ extension SyntaxNode {
     return BackDeployVersionArgumentSyntax(asSyntaxData)
   }
 
+  public var isLabeledStmt: Bool { return raw.kind == .labeledStmt }
+  public var asLabeledStmt: LabeledStmtSyntax? {
+    guard isLabeledStmt else { return nil }
+    return LabeledStmtSyntax(asSyntaxData)
+  }
+
   public var isContinueStmt: Bool { return raw.kind == .continueStmt }
   public var asContinueStmt: ContinueStmtSyntax? {
     guard isContinueStmt else { return nil }
@@ -1920,6 +1926,8 @@ extension Syntax {
     case .backDeployVersionList(let node):
       return node
     case .backDeployVersionArgument(let node):
+      return node
+    case .labeledStmt(let node):
       return node
     case .continueStmt(let node):
       return node

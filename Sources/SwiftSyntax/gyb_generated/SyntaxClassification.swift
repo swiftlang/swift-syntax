@@ -79,7 +79,7 @@ extension SyntaxClassification {
         return (.keyword, false)
       case (.attribute, 3):
         return (.attribute, false)
-      case (.forInStmt, 9):
+      case (.forInStmt, 5):
         return (.keyword, false)
       case (.simpleTypeIdentifier, 1):
         return (.typeIdentifier, false)

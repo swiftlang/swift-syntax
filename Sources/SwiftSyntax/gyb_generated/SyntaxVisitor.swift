@@ -1751,6 +1751,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `BackDeployVersionArgumentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BackDeployVersionArgumentSyntax) {}
+  /// Visiting `LabeledStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: LabeledStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `LabeledStmtSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: LabeledStmtSyntax) {}
   /// Visiting `ContinueStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4571,6 +4581,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLabeledStmtSyntax(_ data: SyntaxData) {
+      let node = LabeledStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplContinueStmtSyntax(_ data: SyntaxData) {
       let node = ContinueStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5878,6 +5899,8 @@ open class SyntaxVisitor {
       visitImplBackDeployVersionListSyntax(data)
     case .backDeployVersionArgument:
       visitImplBackDeployVersionArgumentSyntax(data)
+    case .labeledStmt:
+      visitImplLabeledStmtSyntax(data)
     case .continueStmt:
       visitImplContinueStmtSyntax(data)
     case .whileStmt:

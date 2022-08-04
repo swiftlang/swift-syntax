@@ -1353,6 +1353,14 @@ public extension ExpressibleAsBackDeployVersionArgument {
     return createBackDeployVersionArgument()
   }
 }
+public protocol ExpressibleAsLabeledStmt: ExpressibleAsStmtBuildable {
+  func createLabeledStmt() -> LabeledStmt
+}
+public extension ExpressibleAsLabeledStmt {
+  func createStmtBuildable() -> StmtBuildable {
+    return createLabeledStmt()
+  }
+}
 public protocol ExpressibleAsContinueStmt: ExpressibleAsStmtBuildable {
   func createContinueStmt() -> ContinueStmt
 }

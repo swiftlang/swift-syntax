@@ -65,7 +65,6 @@ final class ExpressibleBuildablesTests: XCTestCase {
     let expression = IdentifierExpr("version")
 
     let switchStmt = SwitchStmt(
-      labelName: nil,
       expression: expression
     ) {
       for (version, semVer) in versions {

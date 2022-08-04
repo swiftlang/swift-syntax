@@ -1258,6 +1258,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: BackDeployVersionArgumentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: LabeledStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: LabeledStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

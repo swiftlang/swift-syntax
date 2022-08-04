@@ -24,14 +24,12 @@ extension Node {
   }
 
   /// If documentation exists for this node, return it as a single-line string.
-  /// Otherwise return an empty string.
+  /// Otherwise return an empty string or a description of collection if this
+  /// node is a syntax collection.
   var documentation: String {
-    guard let description = description,
-          !description.isEmpty else {
-      return ""
-    }
-    if isSyntaxCollection {
-      return "`\(syntaxKind)` represents a collection of `\(description)`"
+    let description = self.description ?? ""
+    if description.isEmpty && isSyntaxCollection {
+      return "`\(syntaxKind)` represents a collection of `\(collectionElementType.buildableBaseName)`"
     } else {
       return flattened(indentedDocumentation: description)
     }

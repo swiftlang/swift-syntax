@@ -1,0 +1,137 @@
+//===--------- SyntaxComparison.swift - Syntax Comparison -----------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+//
+// Utility APIs to compare two difference syntax trees for structual
+// equivalence.
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+public enum DifferenceReason {
+  case nodeType, presence, missingNode, additionalNode, trivia, token
+}
+
+public struct TreeDifference {
+  /// The `node` that's different to `baseline`, unless `reason` is
+  /// `.missingNode`. In that case it's actually the parent that's missing a
+  /// child node.
+  public let node: SyntaxProtocol
+  /// The corresponding `baseline` that does not match `node`, unless `reason`
+  /// is `.additionalNode`. In that case it's what would be the parent (if the
+  /// baseline node existed).
+  public let baseline: SyntaxProtocol
+  public let reason: DifferenceReason
+
+  public init(node: SyntaxProtocol, baseline: SyntaxProtocol, reason: DifferenceReason) {
+    self.node = node
+    self.baseline = baseline
+    self.reason = reason
+  }
+}
+
+extension TreeDifference: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    let includeTrivia = reason == .trivia
+
+    let expectedConverter = SourceLocationConverter(file: "Baseline.swift", source: baseline.description)
+    let actualConverter = SourceLocationConverter(file: "Actual.swift", source: node.description)
+
+    let expectedDesc = baseline.debugDescription(includeTrivia: includeTrivia, converter: expectedConverter)
+    let actualDesc = node.debugDescription(includeTrivia: includeTrivia, converter: actualConverter)
+
+    let message: String
+    switch reason {
+    case .nodeType, .presence, .trivia, .token:
+      message = """
+                Trees do not match due to \(reason) in:
+                \(actualDesc)
+                when expecting:
+                \(expectedDesc)
+                """
+    case .missingNode:
+      message = """
+                Trees do not match due to a missing node:
+                \(expectedDesc)
+                in parent:
+                \(actualDesc)
+                """
+    case .additionalNode:
+      message = """
+                Trees do not match due to an additional node:
+                \(actualDesc)
+                in parent:
+                \(expectedDesc)
+                """
+    }
+
+    return """
+           \(message)
+
+           Full Expected Tree:
+           \(baseline.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: expectedConverter, mark: baseline))
+
+           Full Actual Tree:
+           \(node.root.debugDescription(includeChildren: true, includeTrivia: includeTrivia, converter: actualConverter, mark: node))
+           """
+  }
+}
+
+public extension SyntaxProtocol {
+  /// Compares the current tree against a `baseline`, returning the first
+  /// difference it finds.
+  func findFirstDifference(baseline: SyntaxProtocol, includeTrivia: Bool = false) -> TreeDifference? {
+    if let reason = isDifferent(baseline: baseline, includeTrivia: includeTrivia) {
+      return TreeDifference(node: self, baseline: baseline, reason: reason)
+    }
+
+    var iterator = children(viewMode: ._all).makeIterator()
+    var baseIterator = baseline.children(viewMode: ._all).makeIterator()
+    while let child = iterator.next() {
+      guard let baselineChild = baseIterator.next() else {
+        return TreeDifference(node: child, baseline: baseline, reason: .additionalNode)
+      }
+
+      if let diff = child.findFirstDifference(baseline: baselineChild, includeTrivia: includeTrivia) {
+        return diff
+      }
+    }
+
+    if let baseChild = baseIterator.next() {
+      return TreeDifference(node: self, baseline: baseChild, reason: .missingNode)
+    }
+    return nil
+  }
+
+  private func isDifferent(baseline: SyntaxProtocol, includeTrivia: Bool = false) -> DifferenceReason? {
+    if syntaxNodeType != baseline.syntaxNodeType {
+      return .nodeType
+    }
+
+    if isPresent != baseline.isPresent {
+      return .presence
+    }
+
+    if isToken {
+      if let token = Syntax(self).as(TokenSyntax.self), let baselineToken = Syntax(baseline).as(TokenSyntax.self) {
+        if token.tokenKind != baselineToken.tokenKind {
+          return .token
+        }
+        if includeTrivia && (token.leadingTrivia != baselineToken.leadingTrivia ||
+                             token.trailingTrivia != baselineToken.trailingTrivia) {
+          return .trivia
+        }
+      }
+    }
+    return nil
+  }
+}

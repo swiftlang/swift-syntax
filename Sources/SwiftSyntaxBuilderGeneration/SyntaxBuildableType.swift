@@ -154,10 +154,16 @@ struct SyntaxBuildableType: Hashable {
     optionalWrapped(type: listBuildableBaseName)
   }
 
+  /// Assuming that this is a collection type, the non-optional type of the result builder
+  /// that can be used to build the collection.
+  var resultBuilderBaseName: String {
+    "\(syntaxKind)Builder"
+  }
+
   /// Assuming that this is a collection type, the type of the result builder
   /// that can be used to build the collection.
   var resultBuilder: ExpressibleAsTypeBuildable {
-    optionalWrapped(type: "\(syntaxKind)Builder")
+    optionalWrapped(type: resultBuilderBaseName)
   }
 
   /// The collection types in which this type occurs as an element.

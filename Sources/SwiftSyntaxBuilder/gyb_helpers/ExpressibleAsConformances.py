@@ -5,18 +5,12 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     'ArrayElementList': [
         'ArrayExpr'
     ],
-    'ArrayType': [
-        'TypeAnnotation'
-    ],
     'CodeBlockItemList': [
         'CodeBlock'
     ],
     'DeclBuildable': [
         'CodeBlockItem',
         'MemberDeclListItem'
-    ],
-    'DictionaryType': [
-        'TypeAnnotation'
     ],
     'ExprBuildable': [
         'CodeBlockItem',
@@ -39,7 +33,6 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
         'TupleExprElement'
     ],
     'SimpleTypeIdentifier': [
-        'TypeAnnotation',
         'TypeExpr'
     ],
     'StmtBuildable': [
@@ -52,7 +45,8 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     ],
     'TypeBuildable': [
         'ReturnClause',
-        'TypeInitializerClause'
+        'TypeInitializerClause',
+        'TypeAnnotation'
     ]
 }
 

@@ -85,7 +85,7 @@ public extension ExpressibleAsSyntaxBuildable {
     return SwitchCaseList([self])
   }
 }
-public protocol ExpressibleAsTypeBuildable: ExpressibleAsReturnClause, ExpressibleAsTypeInitializerClause {
+public protocol ExpressibleAsTypeBuildable: ExpressibleAsReturnClause, ExpressibleAsTypeInitializerClause, ExpressibleAsTypeAnnotation {
   func createTypeBuildable() -> TypeBuildable
 }
 public extension ExpressibleAsTypeBuildable {
@@ -96,6 +96,10 @@ public extension ExpressibleAsTypeBuildable {
   /// Conformance to ExpressibleAsTypeInitializerClause
   func createTypeInitializerClause() -> TypeInitializerClause {
     return TypeInitializerClause(value: self)
+  }
+  /// Conformance to ExpressibleAsTypeAnnotation
+  func createTypeAnnotation() -> TypeAnnotation {
+    return TypeAnnotation(type: self)
   }
 }
 public protocol ExpressibleAsCodeBlockItem: ExpressibleAsCodeBlockItemList {
@@ -1737,14 +1741,10 @@ public extension ExpressibleAsPrimaryAssociatedTypeClause {
     return createPrimaryAssociatedTypeClause()
   }
 }
-public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeAnnotation, ExpressibleAsTypeExpr, ExpressibleAsTypeBuildable {
+public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeExpr, ExpressibleAsTypeBuildable {
   func createSimpleTypeIdentifier() -> SimpleTypeIdentifier
 }
 public extension ExpressibleAsSimpleTypeIdentifier {
-  /// Conformance to ExpressibleAsTypeAnnotation
-  func createTypeAnnotation() -> TypeAnnotation {
-    return TypeAnnotation(type: self)
-  }
   /// Conformance to ExpressibleAsTypeExpr
   func createTypeExpr() -> TypeExpr {
     return TypeExpr(type: self)
@@ -1769,26 +1769,18 @@ public extension ExpressibleAsClassRestrictionType {
     return createClassRestrictionType()
   }
 }
-public protocol ExpressibleAsArrayType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable {
+public protocol ExpressibleAsArrayType: ExpressibleAsTypeBuildable {
   func createArrayType() -> ArrayType
 }
 public extension ExpressibleAsArrayType {
-  /// Conformance to ExpressibleAsTypeAnnotation
-  func createTypeAnnotation() -> TypeAnnotation {
-    return TypeAnnotation(type: self)
-  }
   func createTypeBuildable() -> TypeBuildable {
     return createArrayType()
   }
 }
-public protocol ExpressibleAsDictionaryType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable {
+public protocol ExpressibleAsDictionaryType: ExpressibleAsTypeBuildable {
   func createDictionaryType() -> DictionaryType
 }
 public extension ExpressibleAsDictionaryType {
-  /// Conformance to ExpressibleAsTypeAnnotation
-  func createTypeAnnotation() -> TypeAnnotation {
-    return TypeAnnotation(type: self)
-  }
   func createTypeBuildable() -> TypeBuildable {
     return createDictionaryType()
   }

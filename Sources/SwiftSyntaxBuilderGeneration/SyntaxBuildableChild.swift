@@ -47,7 +47,7 @@ extension Child {
               SequenceExpr {
                 MemberAccessExpr(base: varName, name: "leadingTrivia")
                 BinaryOperatorExpr("??")
-                ArrayExpr(elements: [])
+                ArrayExpr {}
               }
             }
           }

@@ -63,6 +63,11 @@ class Child {
     return tokenChoices.first
   }
 
+  /// Whether this child has syntax kind `GarbageNodes`.
+  var isGarbageNodes: Bool {
+    syntaxKind == "GarbageNodes"
+  }
+
   /// If a classification is passed, it specifies the color identifiers in
   /// that subtree should inherit for syntax coloring. Must be a member of
   /// SyntaxClassification in SyntaxClassifier.h.gyb

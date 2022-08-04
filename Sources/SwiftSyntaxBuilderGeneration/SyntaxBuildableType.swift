@@ -43,7 +43,7 @@ struct SyntaxBuildableType: Hashable {
   /// Otherwise, return the empty string.
   var defaultInitialization: ExpressibleAsExprBuildable? {
     if isOptional {
-      return "nil"
+      return NilLiteralExpr()
     } else if isToken {
       if let token = token, token.text != nil {
         return MemberAccessExpr(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name))

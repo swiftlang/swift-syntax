@@ -63,7 +63,7 @@ extension Child {
       let expr = type.optionalChained(expr: varName)
       return FunctionCallExpr(MemberAccessExpr(base: expr, name: "build\(type.baseName)")) {
         TupleExprElement(label: "format", expression: format)
-        TupleExprElement(label: "leadingTrivia", expression: "nil")
+        TupleExprElement(label: "leadingTrivia", expression: NilLiteralExpr())
       }
     }
   }

@@ -153,7 +153,7 @@ private func formatLeadingTriviaParameters(withDefaultTrivia: Bool = false) -> P
         firstName: .identifier("leadingTrivia"),
         colon: .colon,
         type: OptionalType(wrappedType: "Trivia"),
-        defaultArgument: withDefaultTrivia ? InitializerClause(value: "nil") : nil
+        defaultArgument: withDefaultTrivia ? InitializerClause(value: NilLiteralExpr()) : nil
       ),
     ]
   )

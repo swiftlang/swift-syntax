@@ -65,6 +65,62 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
 }
 
 
+/// A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.
+public struct GarbageNodes: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGarbageNodes {
+  let elements: [SyntaxBuildable]
+
+  /// Creates a `GarbageNodes` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
+  }
+  
+  /// Creates a new GarbageNodes by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsGarbageNodes]) {
+    self.elements = lists.flatMap {
+      $0.createGarbageNodes().elements
+    }
+  }
+
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+    self.init(elements)
+  }
+
+  public func buildGarbageNodes(format: Format, leadingTrivia: Trivia? = nil) -> GarbageNodesSyntax {
+    let result = SyntaxFactory.makeGarbageNodes(elements.map {
+      $0.buildSyntax(format: format, leadingTrivia: nil)
+    })
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+    } else {
+      return result
+    }
+  }
+
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    return Syntax(buildGarbageNodes(format: format, leadingTrivia: leadingTrivia))
+  }
+
+  /// Conformance to `ExpressibleAsGarbageNodes`.
+  public func createGarbageNodes() -> GarbageNodes {
+    return self
+  }
+
+  /// `GarbageNodes` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
+
+extension Array: ExpressibleAsGarbageNodes where Element == ExpressibleAsSyntaxBuildable {
+  public func createGarbageNodes() -> GarbageNodes {
+    return GarbageNodes(self)
+  }
+}
+
 /// `TupleExprElementList` represents a collection of `TupleExprElement`s.
 public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTupleExprElementList {
   let elements: [TupleExprElement]

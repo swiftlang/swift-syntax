@@ -95,12 +95,19 @@ extension MissingDeclSyntax: CustomReflectable {
 
 public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndTypealiasKeyword
     case typealiasKeyword
+    case garbageBetweenTypealiasKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndGenericParameterClause
     case genericParameterClause
+    case garbageBetweenGenericParameterClauseAndInitializer
     case initializer
+    case garbageBetweenInitializerAndGenericWhereClause
     case genericWhereClause
   }
 
@@ -123,6 +130,28 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return TypealiasDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -163,6 +192,28 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return TypealiasDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -207,6 +258,28 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return TypealiasDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndTypealiasKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndTypealiasKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndTypealiasKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndTypealiasKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndTypealiasKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndTypealiasKeyword`, if present.
+  public func withGarbageBetweenModifiersAndTypealiasKeyword(
+    _ newChild: GarbageNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndTypealiasKeyword)
+    return TypealiasDeclSyntax(newData)
+  }
+
   public var typealiasKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.typealiasKeyword,
@@ -228,6 +301,28 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return TypealiasDeclSyntax(newData)
   }
 
+  public var garbageBetweenTypealiasKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenTypealiasKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenTypealiasKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenTypealiasKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenTypealiasKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenTypealiasKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenTypealiasKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypealiasKeywordAndIdentifier)
+    return TypealiasDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -246,6 +341,28 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return TypealiasDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndGenericParameterClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndGenericParameterClause` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndGenericParameterClause` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndGenericParameterClause`, if present.
+  public func withGarbageBetweenIdentifierAndGenericParameterClause(
+    _ newChild: GarbageNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndGenericParameterClause)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -271,6 +388,28 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return TypealiasDeclSyntax(newData)
   }
 
+  public var garbageBetweenGenericParameterClauseAndInitializer: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParameterClauseAndInitializer,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParameterClauseAndInitializer(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterClauseAndInitializer` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParameterClauseAndInitializer` to replace the node's
+  ///                   current `garbageBetweenGenericParameterClauseAndInitializer`, if present.
+  public func withGarbageBetweenGenericParameterClauseAndInitializer(
+    _ newChild: GarbageNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterClauseAndInitializer)
+    return TypealiasDeclSyntax(newData)
+  }
+
   public var initializer: TypeInitializerClauseSyntax {
     get {
       let childData = data.child(at: Cursor.initializer,
@@ -289,6 +428,28 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TypeInitializerClauseSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.typeInitializerClause)
     let newData = data.replacingChild(raw, at: Cursor.initializer)
+    return TypealiasDeclSyntax(newData)
+  }
+
+  public var garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInitializerAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInitializerAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInitializerAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInitializerAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInitializerAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInitializerAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> TypealiasDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInitializerAndGenericWhereClause)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -317,61 +478,117 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 14)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is GenericParameterClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TypeInitializerClauseSyntax 
+    // Check child #5 child is TokenSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInitializerClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is GenericParameterClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TypeInitializerClauseSyntax 
+    assert(rawChildren[11].raw != nil)
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInitializerClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -383,12 +600,19 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension TypealiasDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndTypealiasKeyword": garbageBetweenModifiersAndTypealiasKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typealiasKeyword": Syntax(typealiasKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenTypealiasKeywordAndIdentifier": garbageBetweenTypealiasKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndGenericParameterClause": garbageBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParameterClauseAndInitializer": garbageBetweenGenericParameterClauseAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": Syntax(initializer).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenInitializerAndGenericWhereClause": garbageBetweenInitializerAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -398,12 +622,19 @@ extension TypealiasDeclSyntax: CustomReflectable {
 
 public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndAssociatedtypeKeyword
     case associatedtypeKeyword
+    case garbageBetweenAssociatedtypeKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndInheritanceClause
     case inheritanceClause
+    case garbageBetweenInheritanceClauseAndInitializer
     case initializer
+    case garbageBetweenInitializerAndGenericWhereClause
     case genericWhereClause
   }
 
@@ -426,6 +657,28 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return AssociatedtypeDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -466,6 +719,28 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return AssociatedtypeDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -510,6 +785,28 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AssociatedtypeDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndAssociatedtypeKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndAssociatedtypeKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndAssociatedtypeKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndAssociatedtypeKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndAssociatedtypeKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndAssociatedtypeKeyword`, if present.
+  public func withGarbageBetweenModifiersAndAssociatedtypeKeyword(
+    _ newChild: GarbageNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndAssociatedtypeKeyword)
+    return AssociatedtypeDeclSyntax(newData)
+  }
+
   public var associatedtypeKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.associatedtypeKeyword,
@@ -531,6 +828,28 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AssociatedtypeDeclSyntax(newData)
   }
 
+  public var garbageBetweenAssociatedtypeKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAssociatedtypeKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAssociatedtypeKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAssociatedtypeKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenAssociatedtypeKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenAssociatedtypeKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenAssociatedtypeKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAssociatedtypeKeywordAndIdentifier)
+    return AssociatedtypeDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -549,6 +868,28 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return AssociatedtypeDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndInheritanceClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndInheritanceClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndInheritanceClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndInheritanceClause` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndInheritanceClause` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndInheritanceClause`, if present.
+  public func withGarbageBetweenIdentifierAndInheritanceClause(
+    _ newChild: GarbageNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndInheritanceClause)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -574,6 +915,28 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AssociatedtypeDeclSyntax(newData)
   }
 
+  public var garbageBetweenInheritanceClauseAndInitializer: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInheritanceClauseAndInitializer,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInheritanceClauseAndInitializer(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInheritanceClauseAndInitializer` replaced.
+  /// - param newChild: The new `garbageBetweenInheritanceClauseAndInitializer` to replace the node's
+  ///                   current `garbageBetweenInheritanceClauseAndInitializer`, if present.
+  public func withGarbageBetweenInheritanceClauseAndInitializer(
+    _ newChild: GarbageNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritanceClauseAndInitializer)
+    return AssociatedtypeDeclSyntax(newData)
+  }
+
   public var initializer: TypeInitializerClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.initializer,
@@ -593,6 +956,28 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TypeInitializerClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.initializer)
+    return AssociatedtypeDeclSyntax(newData)
+  }
+
+  public var garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInitializerAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInitializerAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInitializerAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInitializerAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInitializerAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInitializerAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> AssociatedtypeDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInitializerAndGenericWhereClause)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -621,60 +1006,116 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 14)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is TypeInheritanceClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TypeInitializerClauseSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInitializerClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is TypeInheritanceClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TypeInitializerClauseSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInitializerClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -686,12 +1127,19 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension AssociatedtypeDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndAssociatedtypeKeyword": garbageBetweenModifiersAndAssociatedtypeKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "associatedtypeKeyword": Syntax(associatedtypeKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenAssociatedtypeKeywordAndIdentifier": garbageBetweenAssociatedtypeKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndInheritanceClause": garbageBetweenIdentifierAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInheritanceClauseAndInitializer": garbageBetweenInheritanceClauseAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInitializerAndGenericWhereClause": garbageBetweenInitializerAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -701,7 +1149,9 @@ extension AssociatedtypeDeclSyntax: CustomReflectable {
 
 public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeClauses
     case clauses
+    case garbageBetweenClausesAndPoundEndif
     case poundEndif
   }
 
@@ -724,6 +1174,28 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeClauses: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeClauses,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeClauses(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeClauses` replaced.
+  /// - param newChild: The new `garbageBeforeClauses` to replace the node's
+  ///                   current `garbageBeforeClauses`, if present.
+  public func withGarbageBeforeClauses(
+    _ newChild: GarbageNodesSyntax?) -> IfConfigDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeClauses)
+    return IfConfigDeclSyntax(newData)
   }
 
   public var clauses: IfConfigClauseListSyntax {
@@ -766,6 +1238,28 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return IfConfigDeclSyntax(newData)
   }
 
+  public var garbageBetweenClausesAndPoundEndif: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenClausesAndPoundEndif,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenClausesAndPoundEndif(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenClausesAndPoundEndif` replaced.
+  /// - param newChild: The new `garbageBetweenClausesAndPoundEndif` to replace the node's
+  ///                   current `garbageBetweenClausesAndPoundEndif`, if present.
+  public func withGarbageBetweenClausesAndPoundEndif(
+    _ newChild: GarbageNodesSyntax?) -> IfConfigDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenClausesAndPoundEndif)
+    return IfConfigDeclSyntax(newData)
+  }
+
   public var poundEndif: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundEndif,
@@ -790,20 +1284,36 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
-    // Check child #0 child is IfConfigClauseListSyntax 
-    assert(rawChildren[0].raw != nil)
+    assert(rawChildren.count == 4)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(IfConfigClauseListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is TokenSyntax 
+    // Check child #1 child is IfConfigClauseListSyntax 
     assert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(IfConfigClauseListSyntax.self))
+    }
+    // Check child #2 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax 
+    assert(rawChildren[3].raw != nil)
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -815,7 +1325,9 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension IfConfigDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeClauses": garbageBeforeClauses.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "clauses": Syntax(clauses).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenClausesAndPoundEndif": garbageBetweenClausesAndPoundEndif.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundEndif": Syntax(poundEndif).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -825,9 +1337,13 @@ extension IfConfigDeclSyntax: CustomReflectable {
 
 public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforePoundError
     case poundError
+    case garbageBetweenPoundErrorAndLeftParen
     case leftParen
+    case garbageBetweenLeftParenAndMessage
     case message
+    case garbageBetweenMessageAndRightParen
     case rightParen
   }
 
@@ -852,6 +1368,28 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
+  public var garbageBeforePoundError: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforePoundError,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforePoundError(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforePoundError` replaced.
+  /// - param newChild: The new `garbageBeforePoundError` to replace the node's
+  ///                   current `garbageBeforePoundError`, if present.
+  public func withGarbageBeforePoundError(
+    _ newChild: GarbageNodesSyntax?) -> PoundErrorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePoundError)
+    return PoundErrorDeclSyntax(newData)
+  }
+
   public var poundError: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundError,
@@ -873,6 +1411,28 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundErrorDeclSyntax(newData)
   }
 
+  public var garbageBetweenPoundErrorAndLeftParen: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenPoundErrorAndLeftParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenPoundErrorAndLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenPoundErrorAndLeftParen` replaced.
+  /// - param newChild: The new `garbageBetweenPoundErrorAndLeftParen` to replace the node's
+  ///                   current `garbageBetweenPoundErrorAndLeftParen`, if present.
+  public func withGarbageBetweenPoundErrorAndLeftParen(
+    _ newChild: GarbageNodesSyntax?) -> PoundErrorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPoundErrorAndLeftParen)
+    return PoundErrorDeclSyntax(newData)
+  }
+
   public var leftParen: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.leftParen,
@@ -891,6 +1451,28 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    return PoundErrorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndMessage,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLeftParenAndMessage(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndMessage` replaced.
+  /// - param newChild: The new `garbageBetweenLeftParenAndMessage` to replace the node's
+  ///                   current `garbageBetweenLeftParenAndMessage`, if present.
+  public func withGarbageBetweenLeftParenAndMessage(
+    _ newChild: GarbageNodesSyntax?) -> PoundErrorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndMessage)
     return PoundErrorDeclSyntax(newData)
   }
 
@@ -915,6 +1497,28 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundErrorDeclSyntax(newData)
   }
 
+  public var garbageBetweenMessageAndRightParen: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenMessageAndRightParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenMessageAndRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenMessageAndRightParen` replaced.
+  /// - param newChild: The new `garbageBetweenMessageAndRightParen` to replace the node's
+  ///                   current `garbageBetweenMessageAndRightParen`, if present.
+  public func withGarbageBetweenMessageAndRightParen(
+    _ newChild: GarbageNodesSyntax?) -> PoundErrorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenMessageAndRightParen)
+    return PoundErrorDeclSyntax(newData)
+  }
+
   public var rightParen: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.rightParen,
@@ -939,15 +1543,14 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    assert(rawChildren.count == 8)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
     // Check child #1 child is TokenSyntax 
     assert(rawChildren[1].raw != nil)
@@ -958,19 +1561,52 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #2 child is StringLiteralExprSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(StringLiteralExprSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
     // Check child #3 child is TokenSyntax 
     assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is StringLiteralExprSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(StringLiteralExprSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -982,9 +1618,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PoundErrorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforePoundError": garbageBeforePoundError.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundError": Syntax(poundError).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenPoundErrorAndLeftParen": garbageBetweenPoundErrorAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLeftParenAndMessage": garbageBetweenLeftParenAndMessage.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "message": Syntax(message).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenMessageAndRightParen": garbageBetweenMessageAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -994,9 +1634,13 @@ extension PoundErrorDeclSyntax: CustomReflectable {
 
 public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforePoundWarning
     case poundWarning
+    case garbageBetweenPoundWarningAndLeftParen
     case leftParen
+    case garbageBetweenLeftParenAndMessage
     case message
+    case garbageBetweenMessageAndRightParen
     case rightParen
   }
 
@@ -1021,6 +1665,28 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
+  public var garbageBeforePoundWarning: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforePoundWarning,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforePoundWarning(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforePoundWarning` replaced.
+  /// - param newChild: The new `garbageBeforePoundWarning` to replace the node's
+  ///                   current `garbageBeforePoundWarning`, if present.
+  public func withGarbageBeforePoundWarning(
+    _ newChild: GarbageNodesSyntax?) -> PoundWarningDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePoundWarning)
+    return PoundWarningDeclSyntax(newData)
+  }
+
   public var poundWarning: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundWarning,
@@ -1039,6 +1705,28 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundWarningKeyword)
     let newData = data.replacingChild(raw, at: Cursor.poundWarning)
+    return PoundWarningDeclSyntax(newData)
+  }
+
+  public var garbageBetweenPoundWarningAndLeftParen: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenPoundWarningAndLeftParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenPoundWarningAndLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenPoundWarningAndLeftParen` replaced.
+  /// - param newChild: The new `garbageBetweenPoundWarningAndLeftParen` to replace the node's
+  ///                   current `garbageBetweenPoundWarningAndLeftParen`, if present.
+  public func withGarbageBetweenPoundWarningAndLeftParen(
+    _ newChild: GarbageNodesSyntax?) -> PoundWarningDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPoundWarningAndLeftParen)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1063,6 +1751,28 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundWarningDeclSyntax(newData)
   }
 
+  public var garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndMessage,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLeftParenAndMessage(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndMessage` replaced.
+  /// - param newChild: The new `garbageBetweenLeftParenAndMessage` to replace the node's
+  ///                   current `garbageBetweenLeftParenAndMessage`, if present.
+  public func withGarbageBetweenLeftParenAndMessage(
+    _ newChild: GarbageNodesSyntax?) -> PoundWarningDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndMessage)
+    return PoundWarningDeclSyntax(newData)
+  }
+
   public var message: StringLiteralExprSyntax {
     get {
       let childData = data.child(at: Cursor.message,
@@ -1081,6 +1791,28 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: StringLiteralExprSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.stringLiteralExpr)
     let newData = data.replacingChild(raw, at: Cursor.message)
+    return PoundWarningDeclSyntax(newData)
+  }
+
+  public var garbageBetweenMessageAndRightParen: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenMessageAndRightParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenMessageAndRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenMessageAndRightParen` replaced.
+  /// - param newChild: The new `garbageBetweenMessageAndRightParen` to replace the node's
+  ///                   current `garbageBetweenMessageAndRightParen`, if present.
+  public func withGarbageBetweenMessageAndRightParen(
+    _ newChild: GarbageNodesSyntax?) -> PoundWarningDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenMessageAndRightParen)
     return PoundWarningDeclSyntax(newData)
   }
 
@@ -1108,15 +1840,14 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    assert(rawChildren.count == 8)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
     // Check child #1 child is TokenSyntax 
     assert(rawChildren[1].raw != nil)
@@ -1127,19 +1858,52 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #2 child is StringLiteralExprSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(StringLiteralExprSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
     // Check child #3 child is TokenSyntax 
     assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is StringLiteralExprSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(StringLiteralExprSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1151,9 +1915,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PoundWarningDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforePoundWarning": garbageBeforePoundWarning.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundWarning": Syntax(poundWarning).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenPoundWarningAndLeftParen": garbageBetweenPoundWarningAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLeftParenAndMessage": garbageBetweenLeftParenAndMessage.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "message": Syntax(message).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenMessageAndRightParen": garbageBetweenMessageAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -1163,9 +1931,13 @@ extension PoundWarningDeclSyntax: CustomReflectable {
 
 public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforePoundSourceLocation
     case poundSourceLocation
+    case garbageBetweenPoundSourceLocationAndLeftParen
     case leftParen
+    case garbageBetweenLeftParenAndArgs
     case args
+    case garbageBetweenArgsAndRightParen
     case rightParen
   }
 
@@ -1190,6 +1962,28 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
+  public var garbageBeforePoundSourceLocation: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforePoundSourceLocation,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforePoundSourceLocation(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforePoundSourceLocation` replaced.
+  /// - param newChild: The new `garbageBeforePoundSourceLocation` to replace the node's
+  ///                   current `garbageBeforePoundSourceLocation`, if present.
+  public func withGarbageBeforePoundSourceLocation(
+    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePoundSourceLocation)
+    return PoundSourceLocationSyntax(newData)
+  }
+
   public var poundSourceLocation: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundSourceLocation,
@@ -1211,6 +2005,28 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationSyntax(newData)
   }
 
+  public var garbageBetweenPoundSourceLocationAndLeftParen: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenPoundSourceLocationAndLeftParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenPoundSourceLocationAndLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenPoundSourceLocationAndLeftParen` replaced.
+  /// - param newChild: The new `garbageBetweenPoundSourceLocationAndLeftParen` to replace the node's
+  ///                   current `garbageBetweenPoundSourceLocationAndLeftParen`, if present.
+  public func withGarbageBetweenPoundSourceLocationAndLeftParen(
+    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPoundSourceLocationAndLeftParen)
+    return PoundSourceLocationSyntax(newData)
+  }
+
   public var leftParen: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.leftParen,
@@ -1229,6 +2045,28 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    return PoundSourceLocationSyntax(newData)
+  }
+
+  public var garbageBetweenLeftParenAndArgs: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndArgs,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLeftParenAndArgs(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndArgs` replaced.
+  /// - param newChild: The new `garbageBetweenLeftParenAndArgs` to replace the node's
+  ///                   current `garbageBetweenLeftParenAndArgs`, if present.
+  public func withGarbageBetweenLeftParenAndArgs(
+    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndArgs)
     return PoundSourceLocationSyntax(newData)
   }
 
@@ -1254,6 +2092,28 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationSyntax(newData)
   }
 
+  public var garbageBetweenArgsAndRightParen: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenArgsAndRightParen,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenArgsAndRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenArgsAndRightParen` replaced.
+  /// - param newChild: The new `garbageBetweenArgsAndRightParen` to replace the node's
+  ///                   current `garbageBetweenArgsAndRightParen`, if present.
+  public func withGarbageBetweenArgsAndRightParen(
+    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenArgsAndRightParen)
+    return PoundSourceLocationSyntax(newData)
+  }
+
   public var rightParen: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.rightParen,
@@ -1278,15 +2138,14 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    assert(rawChildren.count == 8)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
     // Check child #1 child is TokenSyntax 
     assert(rawChildren[1].raw != nil)
@@ -1297,18 +2156,51 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #2 child is PoundSourceLocationArgsSyntax or missing
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PoundSourceLocationArgsSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
     // Check child #3 child is TokenSyntax 
     assert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is PoundSourceLocationArgsSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(PoundSourceLocationArgsSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1320,9 +2212,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PoundSourceLocationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforePoundSourceLocation": garbageBeforePoundSourceLocation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundSourceLocation": Syntax(poundSourceLocation).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenPoundSourceLocationAndLeftParen": garbageBetweenPoundSourceLocationAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLeftParenAndArgs": garbageBetweenLeftParenAndArgs.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "args": args.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenArgsAndRightParen": garbageBetweenArgsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -1332,13 +2228,21 @@ extension PoundSourceLocationSyntax: CustomReflectable {
 
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndClassKeyword
     case classKeyword
+    case garbageBetweenClassKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndGenericParameterClause
     case genericParameterClause
+    case garbageBetweenGenericParameterClauseAndInheritanceClause
     case inheritanceClause
+    case garbageBetweenInheritanceClauseAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndMembers
     case members
   }
 
@@ -1361,6 +2265,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return ClassDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -1401,6 +2327,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return ClassDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return ClassDeclSyntax(newData)
   }
 
@@ -1445,6 +2393,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ClassDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndClassKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndClassKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndClassKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndClassKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndClassKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndClassKeyword`, if present.
+  public func withGarbageBetweenModifiersAndClassKeyword(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndClassKeyword)
+    return ClassDeclSyntax(newData)
+  }
+
   public var classKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.classKeyword,
@@ -1466,6 +2436,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ClassDeclSyntax(newData)
   }
 
+  public var garbageBetweenClassKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenClassKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenClassKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenClassKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenClassKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenClassKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenClassKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenClassKeywordAndIdentifier)
+    return ClassDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -1484,6 +2476,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return ClassDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndGenericParameterClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndGenericParameterClause` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndGenericParameterClause` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndGenericParameterClause`, if present.
+  public func withGarbageBetweenIdentifierAndGenericParameterClause(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndGenericParameterClause)
     return ClassDeclSyntax(newData)
   }
 
@@ -1509,6 +2523,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ClassDeclSyntax(newData)
   }
 
+  public var garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParameterClauseAndInheritanceClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParameterClauseAndInheritanceClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterClauseAndInheritanceClause` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParameterClauseAndInheritanceClause` to replace the node's
+  ///                   current `garbageBetweenGenericParameterClauseAndInheritanceClause`, if present.
+  public func withGarbageBetweenGenericParameterClauseAndInheritanceClause(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterClauseAndInheritanceClause)
+    return ClassDeclSyntax(newData)
+  }
+
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.inheritanceClause,
@@ -1531,6 +2567,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ClassDeclSyntax(newData)
   }
 
+  public var garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInheritanceClauseAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInheritanceClauseAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInheritanceClauseAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInheritanceClauseAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause)
+    return ClassDeclSyntax(newData)
+  }
+
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericWhereClause,
@@ -1550,6 +2608,28 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return ClassDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndMembers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndMembers` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndMembers` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndMembers`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndMembers(
+    _ newChild: GarbageNodesSyntax?) -> ClassDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndMembers)
     return ClassDeclSyntax(newData)
   }
 
@@ -1577,69 +2657,133 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is GenericParameterClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TypeInheritanceClauseSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is MemberDeclBlockSyntax 
+    // Check child #7 child is TokenSyntax 
     assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is GenericParameterClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TypeInheritanceClauseSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is MemberDeclBlockSyntax 
+    assert(rawChildren[15].raw != nil)
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1651,13 +2795,21 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ClassDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndClassKeyword": garbageBetweenModifiersAndClassKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "classKeyword": Syntax(classKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenClassKeywordAndIdentifier": garbageBetweenClassKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndGenericParameterClause": garbageBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParameterClauseAndInheritanceClause": garbageBetweenGenericParameterClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInheritanceClauseAndGenericWhereClause": garbageBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndMembers": garbageBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -1667,13 +2819,21 @@ extension ClassDeclSyntax: CustomReflectable {
 
 public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndActorKeyword
     case actorKeyword
+    case garbageBetweenActorKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndGenericParameterClause
     case genericParameterClause
+    case garbageBetweenGenericParameterClauseAndInheritanceClause
     case inheritanceClause
+    case garbageBetweenInheritanceClauseAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndMembers
     case members
   }
 
@@ -1696,6 +2856,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return ActorDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -1736,6 +2918,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return ActorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return ActorDeclSyntax(newData)
   }
 
@@ -1780,6 +2984,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ActorDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndActorKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndActorKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndActorKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndActorKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndActorKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndActorKeyword`, if present.
+  public func withGarbageBetweenModifiersAndActorKeyword(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndActorKeyword)
+    return ActorDeclSyntax(newData)
+  }
+
   public var actorKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.actorKeyword,
@@ -1801,6 +3027,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ActorDeclSyntax(newData)
   }
 
+  public var garbageBetweenActorKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenActorKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenActorKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenActorKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenActorKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenActorKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenActorKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenActorKeywordAndIdentifier)
+    return ActorDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -1819,6 +3067,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return ActorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndGenericParameterClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndGenericParameterClause` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndGenericParameterClause` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndGenericParameterClause`, if present.
+  public func withGarbageBetweenIdentifierAndGenericParameterClause(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndGenericParameterClause)
     return ActorDeclSyntax(newData)
   }
 
@@ -1844,6 +3114,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ActorDeclSyntax(newData)
   }
 
+  public var garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParameterClauseAndInheritanceClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParameterClauseAndInheritanceClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterClauseAndInheritanceClause` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParameterClauseAndInheritanceClause` to replace the node's
+  ///                   current `garbageBetweenGenericParameterClauseAndInheritanceClause`, if present.
+  public func withGarbageBetweenGenericParameterClauseAndInheritanceClause(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterClauseAndInheritanceClause)
+    return ActorDeclSyntax(newData)
+  }
+
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.inheritanceClause,
@@ -1866,6 +3158,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ActorDeclSyntax(newData)
   }
 
+  public var garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInheritanceClauseAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInheritanceClauseAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInheritanceClauseAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInheritanceClauseAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause)
+    return ActorDeclSyntax(newData)
+  }
+
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericWhereClause,
@@ -1885,6 +3199,28 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return ActorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndMembers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndMembers` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndMembers` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndMembers`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndMembers(
+    _ newChild: GarbageNodesSyntax?) -> ActorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndMembers)
     return ActorDeclSyntax(newData)
   }
 
@@ -1912,69 +3248,133 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is GenericParameterClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TypeInheritanceClauseSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is MemberDeclBlockSyntax 
+    // Check child #7 child is TokenSyntax 
     assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is GenericParameterClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TypeInheritanceClauseSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is MemberDeclBlockSyntax 
+    assert(rawChildren[15].raw != nil)
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1986,13 +3386,21 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ActorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndActorKeyword": garbageBetweenModifiersAndActorKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "actorKeyword": Syntax(actorKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenActorKeywordAndIdentifier": garbageBetweenActorKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndGenericParameterClause": garbageBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParameterClauseAndInheritanceClause": garbageBetweenGenericParameterClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInheritanceClauseAndGenericWhereClause": garbageBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndMembers": garbageBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2002,13 +3410,21 @@ extension ActorDeclSyntax: CustomReflectable {
 
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndStructKeyword
     case structKeyword
+    case garbageBetweenStructKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndGenericParameterClause
     case genericParameterClause
+    case garbageBetweenGenericParameterClauseAndInheritanceClause
     case inheritanceClause
+    case garbageBetweenInheritanceClauseAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndMembers
     case members
   }
 
@@ -2031,6 +3447,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return StructDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -2071,6 +3509,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return StructDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return StructDeclSyntax(newData)
   }
 
@@ -2115,6 +3575,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return StructDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndStructKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndStructKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndStructKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndStructKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndStructKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndStructKeyword`, if present.
+  public func withGarbageBetweenModifiersAndStructKeyword(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndStructKeyword)
+    return StructDeclSyntax(newData)
+  }
+
   public var structKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.structKeyword,
@@ -2136,6 +3618,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return StructDeclSyntax(newData)
   }
 
+  public var garbageBetweenStructKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenStructKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenStructKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenStructKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenStructKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenStructKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenStructKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenStructKeywordAndIdentifier)
+    return StructDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -2154,6 +3658,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return StructDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndGenericParameterClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndGenericParameterClause` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndGenericParameterClause` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndGenericParameterClause`, if present.
+  public func withGarbageBetweenIdentifierAndGenericParameterClause(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndGenericParameterClause)
     return StructDeclSyntax(newData)
   }
 
@@ -2179,6 +3705,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return StructDeclSyntax(newData)
   }
 
+  public var garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParameterClauseAndInheritanceClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParameterClauseAndInheritanceClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterClauseAndInheritanceClause` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParameterClauseAndInheritanceClause` to replace the node's
+  ///                   current `garbageBetweenGenericParameterClauseAndInheritanceClause`, if present.
+  public func withGarbageBetweenGenericParameterClauseAndInheritanceClause(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterClauseAndInheritanceClause)
+    return StructDeclSyntax(newData)
+  }
+
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.inheritanceClause,
@@ -2201,6 +3749,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return StructDeclSyntax(newData)
   }
 
+  public var garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInheritanceClauseAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInheritanceClauseAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInheritanceClauseAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInheritanceClauseAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause)
+    return StructDeclSyntax(newData)
+  }
+
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericWhereClause,
@@ -2220,6 +3790,28 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return StructDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndMembers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndMembers` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndMembers` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndMembers`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndMembers(
+    _ newChild: GarbageNodesSyntax?) -> StructDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndMembers)
     return StructDeclSyntax(newData)
   }
 
@@ -2247,69 +3839,133 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is GenericParameterClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TypeInheritanceClauseSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is MemberDeclBlockSyntax 
+    // Check child #7 child is TokenSyntax 
     assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is GenericParameterClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TypeInheritanceClauseSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is MemberDeclBlockSyntax 
+    assert(rawChildren[15].raw != nil)
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -2321,13 +3977,21 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension StructDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndStructKeyword": garbageBetweenModifiersAndStructKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "structKeyword": Syntax(structKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenStructKeywordAndIdentifier": garbageBetweenStructKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndGenericParameterClause": garbageBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParameterClauseAndInheritanceClause": garbageBetweenGenericParameterClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInheritanceClauseAndGenericWhereClause": garbageBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndMembers": garbageBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2337,13 +4001,21 @@ extension StructDeclSyntax: CustomReflectable {
 
 public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndProtocolKeyword
     case protocolKeyword
+    case garbageBetweenProtocolKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndPrimaryAssociatedTypeClause
     case primaryAssociatedTypeClause
+    case garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause
     case inheritanceClause
+    case garbageBetweenInheritanceClauseAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndMembers
     case members
   }
 
@@ -2366,6 +4038,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return ProtocolDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -2406,6 +4100,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return ProtocolDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -2450,6 +4166,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ProtocolDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndProtocolKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndProtocolKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndProtocolKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndProtocolKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndProtocolKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndProtocolKeyword`, if present.
+  public func withGarbageBetweenModifiersAndProtocolKeyword(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndProtocolKeyword)
+    return ProtocolDeclSyntax(newData)
+  }
+
   public var protocolKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.protocolKeyword,
@@ -2471,6 +4209,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ProtocolDeclSyntax(newData)
   }
 
+  public var garbageBetweenProtocolKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenProtocolKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenProtocolKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenProtocolKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenProtocolKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenProtocolKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenProtocolKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenProtocolKeywordAndIdentifier)
+    return ProtocolDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -2489,6 +4249,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return ProtocolDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndPrimaryAssociatedTypeClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndPrimaryAssociatedTypeClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndPrimaryAssociatedTypeClause` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndPrimaryAssociatedTypeClause` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndPrimaryAssociatedTypeClause`, if present.
+  public func withGarbageBetweenIdentifierAndPrimaryAssociatedTypeClause(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndPrimaryAssociatedTypeClause)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -2514,6 +4296,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ProtocolDeclSyntax(newData)
   }
 
+  public var garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause` replaced.
+  /// - param newChild: The new `garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause` to replace the node's
+  ///                   current `garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause`, if present.
+  public func withGarbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause)
+    return ProtocolDeclSyntax(newData)
+  }
+
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.inheritanceClause,
@@ -2536,6 +4340,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ProtocolDeclSyntax(newData)
   }
 
+  public var garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInheritanceClauseAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInheritanceClauseAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInheritanceClauseAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInheritanceClauseAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause)
+    return ProtocolDeclSyntax(newData)
+  }
+
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericWhereClause,
@@ -2555,6 +4381,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return ProtocolDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndMembers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndMembers` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndMembers` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndMembers`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndMembers(
+    _ newChild: GarbageNodesSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndMembers)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -2582,69 +4430,133 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is PrimaryAssociatedTypeClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PrimaryAssociatedTypeClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TypeInheritanceClauseSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is MemberDeclBlockSyntax 
+    // Check child #7 child is TokenSyntax 
     assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is PrimaryAssociatedTypeClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(PrimaryAssociatedTypeClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TypeInheritanceClauseSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is MemberDeclBlockSyntax 
+    assert(rawChildren[15].raw != nil)
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -2656,13 +4568,21 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ProtocolDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndProtocolKeyword": garbageBetweenModifiersAndProtocolKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "protocolKeyword": Syntax(protocolKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenProtocolKeywordAndIdentifier": garbageBetweenProtocolKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndPrimaryAssociatedTypeClause": garbageBetweenIdentifierAndPrimaryAssociatedTypeClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "primaryAssociatedTypeClause": primaryAssociatedTypeClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause": garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInheritanceClauseAndGenericWhereClause": garbageBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndMembers": garbageBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2672,12 +4592,19 @@ extension ProtocolDeclSyntax: CustomReflectable {
 
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndExtensionKeyword
     case extensionKeyword
+    case garbageBetweenExtensionKeywordAndExtendedType
     case extendedType
+    case garbageBetweenExtendedTypeAndInheritanceClause
     case inheritanceClause
+    case garbageBetweenInheritanceClauseAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndMembers
     case members
   }
 
@@ -2700,6 +4627,28 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return ExtensionDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -2740,6 +4689,28 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return ExtensionDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -2784,6 +4755,28 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ExtensionDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndExtensionKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndExtensionKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndExtensionKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndExtensionKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndExtensionKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndExtensionKeyword`, if present.
+  public func withGarbageBetweenModifiersAndExtensionKeyword(
+    _ newChild: GarbageNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndExtensionKeyword)
+    return ExtensionDeclSyntax(newData)
+  }
+
   public var extensionKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.extensionKeyword,
@@ -2805,6 +4798,28 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ExtensionDeclSyntax(newData)
   }
 
+  public var garbageBetweenExtensionKeywordAndExtendedType: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenExtensionKeywordAndExtendedType,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenExtensionKeywordAndExtendedType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenExtensionKeywordAndExtendedType` replaced.
+  /// - param newChild: The new `garbageBetweenExtensionKeywordAndExtendedType` to replace the node's
+  ///                   current `garbageBetweenExtensionKeywordAndExtendedType`, if present.
+  public func withGarbageBetweenExtensionKeywordAndExtendedType(
+    _ newChild: GarbageNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenExtensionKeywordAndExtendedType)
+    return ExtensionDeclSyntax(newData)
+  }
+
   public var extendedType: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.extendedType,
@@ -2823,6 +4838,28 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TypeSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.extendedType)
+    return ExtensionDeclSyntax(newData)
+  }
+
+  public var garbageBetweenExtendedTypeAndInheritanceClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenExtendedTypeAndInheritanceClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenExtendedTypeAndInheritanceClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenExtendedTypeAndInheritanceClause` replaced.
+  /// - param newChild: The new `garbageBetweenExtendedTypeAndInheritanceClause` to replace the node's
+  ///                   current `garbageBetweenExtendedTypeAndInheritanceClause`, if present.
+  public func withGarbageBetweenExtendedTypeAndInheritanceClause(
+    _ newChild: GarbageNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenExtendedTypeAndInheritanceClause)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -2848,6 +4885,28 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ExtensionDeclSyntax(newData)
   }
 
+  public var garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInheritanceClauseAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInheritanceClauseAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInheritanceClauseAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInheritanceClauseAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause)
+    return ExtensionDeclSyntax(newData)
+  }
+
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericWhereClause,
@@ -2867,6 +4926,28 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return ExtensionDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndMembers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndMembers` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndMembers` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndMembers`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndMembers(
+    _ newChild: GarbageNodesSyntax?) -> ExtensionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndMembers)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -2894,61 +4975,117 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 14)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TypeSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is TypeInheritanceClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is GenericWhereClauseSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is MemberDeclBlockSyntax 
-    assert(rawChildren[6].raw != nil)
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TypeSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is TypeInheritanceClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is MemberDeclBlockSyntax 
+    assert(rawChildren[13].raw != nil)
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -2960,12 +5097,19 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ExtensionDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndExtensionKeyword": garbageBetweenModifiersAndExtensionKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "extensionKeyword": Syntax(extensionKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenExtensionKeywordAndExtendedType": garbageBetweenExtensionKeywordAndExtendedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "extendedType": Syntax(extendedType).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenExtendedTypeAndInheritanceClause": garbageBetweenExtendedTypeAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInheritanceClauseAndGenericWhereClause": garbageBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndMembers": garbageBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2975,13 +5119,21 @@ extension ExtensionDeclSyntax: CustomReflectable {
 
 public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndFuncKeyword
     case funcKeyword
+    case garbageBetweenFuncKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndGenericParameterClause
     case genericParameterClause
+    case garbageBetweenGenericParameterClauseAndSignature
     case signature
+    case garbageBetweenSignatureAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndBody
     case body
   }
 
@@ -3004,6 +5156,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return FunctionDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -3044,6 +5218,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return FunctionDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return FunctionDeclSyntax(newData)
   }
 
@@ -3088,6 +5284,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return FunctionDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndFuncKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndFuncKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndFuncKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndFuncKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndFuncKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndFuncKeyword`, if present.
+  public func withGarbageBetweenModifiersAndFuncKeyword(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndFuncKeyword)
+    return FunctionDeclSyntax(newData)
+  }
+
   public var funcKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.funcKeyword,
@@ -3109,6 +5327,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return FunctionDeclSyntax(newData)
   }
 
+  public var garbageBetweenFuncKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenFuncKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenFuncKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenFuncKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenFuncKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenFuncKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenFuncKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenFuncKeywordAndIdentifier)
+    return FunctionDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -3127,6 +5367,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return FunctionDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndGenericParameterClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndGenericParameterClause` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndGenericParameterClause` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndGenericParameterClause`, if present.
+  public func withGarbageBetweenIdentifierAndGenericParameterClause(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndGenericParameterClause)
     return FunctionDeclSyntax(newData)
   }
 
@@ -3152,6 +5414,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return FunctionDeclSyntax(newData)
   }
 
+  public var garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParameterClauseAndSignature,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParameterClauseAndSignature(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterClauseAndSignature` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParameterClauseAndSignature` to replace the node's
+  ///                   current `garbageBetweenGenericParameterClauseAndSignature`, if present.
+  public func withGarbageBetweenGenericParameterClauseAndSignature(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterClauseAndSignature)
+    return FunctionDeclSyntax(newData)
+  }
+
   public var signature: FunctionSignatureSyntax {
     get {
       let childData = data.child(at: Cursor.signature,
@@ -3170,6 +5454,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: FunctionSignatureSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.functionSignature)
     let newData = data.replacingChild(raw, at: Cursor.signature)
+    return FunctionDeclSyntax(newData)
+  }
+
+  public var garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenSignatureAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenSignatureAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenSignatureAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenSignatureAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenSignatureAndGenericWhereClause`, if present.
+  public func withGarbageBetweenSignatureAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSignatureAndGenericWhereClause)
     return FunctionDeclSyntax(newData)
   }
 
@@ -3192,6 +5498,28 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return FunctionDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndBody,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndBody` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndBody` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndBody`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndBody(
+    _ newChild: GarbageNodesSyntax?) -> FunctionDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndBody)
     return FunctionDeclSyntax(newData)
   }
 
@@ -3220,69 +5548,133 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is GenericParameterClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is FunctionSignatureSyntax 
+    // Check child #5 child is TokenSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(FunctionSignatureSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is CodeBlockSyntax or missing
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is GenericParameterClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is FunctionSignatureSyntax 
+    assert(rawChildren[11].raw != nil)
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(FunctionSignatureSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is CodeBlockSyntax or missing
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -3294,13 +5686,21 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension FunctionDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndFuncKeyword": garbageBetweenModifiersAndFuncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "funcKeyword": Syntax(funcKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenFuncKeywordAndIdentifier": garbageBetweenFuncKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndGenericParameterClause": garbageBetweenIdentifierAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParameterClauseAndSignature": garbageBetweenGenericParameterClauseAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "signature": Syntax(signature).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenSignatureAndGenericWhereClause": garbageBetweenSignatureAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndBody": garbageBetweenGenericWhereClauseAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -3310,13 +5710,21 @@ extension FunctionDeclSyntax: CustomReflectable {
 
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndInitKeyword
     case initKeyword
+    case garbageBetweenInitKeywordAndOptionalMark
     case optionalMark
+    case garbageBetweenOptionalMarkAndGenericParameterClause
     case genericParameterClause
+    case garbageBetweenGenericParameterClauseAndSignature
     case signature
+    case garbageBetweenSignatureAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndBody
     case body
   }
 
@@ -3339,6 +5747,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return InitializerDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -3379,6 +5809,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return InitializerDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return InitializerDeclSyntax(newData)
   }
 
@@ -3423,6 +5875,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return InitializerDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndInitKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndInitKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndInitKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndInitKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndInitKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndInitKeyword`, if present.
+  public func withGarbageBetweenModifiersAndInitKeyword(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndInitKeyword)
+    return InitializerDeclSyntax(newData)
+  }
+
   public var initKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.initKeyword,
@@ -3441,6 +5915,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.initKeyword)
     let newData = data.replacingChild(raw, at: Cursor.initKeyword)
+    return InitializerDeclSyntax(newData)
+  }
+
+  public var garbageBetweenInitKeywordAndOptionalMark: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInitKeywordAndOptionalMark,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInitKeywordAndOptionalMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInitKeywordAndOptionalMark` replaced.
+  /// - param newChild: The new `garbageBetweenInitKeywordAndOptionalMark` to replace the node's
+  ///                   current `garbageBetweenInitKeywordAndOptionalMark`, if present.
+  public func withGarbageBetweenInitKeywordAndOptionalMark(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInitKeywordAndOptionalMark)
     return InitializerDeclSyntax(newData)
   }
 
@@ -3466,6 +5962,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return InitializerDeclSyntax(newData)
   }
 
+  public var garbageBetweenOptionalMarkAndGenericParameterClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenOptionalMarkAndGenericParameterClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenOptionalMarkAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenOptionalMarkAndGenericParameterClause` replaced.
+  /// - param newChild: The new `garbageBetweenOptionalMarkAndGenericParameterClause` to replace the node's
+  ///                   current `garbageBetweenOptionalMarkAndGenericParameterClause`, if present.
+  public func withGarbageBetweenOptionalMarkAndGenericParameterClause(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenOptionalMarkAndGenericParameterClause)
+    return InitializerDeclSyntax(newData)
+  }
+
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericParameterClause,
@@ -3485,6 +6003,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericParameterClauseSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    return InitializerDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParameterClauseAndSignature,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParameterClauseAndSignature(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterClauseAndSignature` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParameterClauseAndSignature` to replace the node's
+  ///                   current `garbageBetweenGenericParameterClauseAndSignature`, if present.
+  public func withGarbageBetweenGenericParameterClauseAndSignature(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterClauseAndSignature)
     return InitializerDeclSyntax(newData)
   }
 
@@ -3509,6 +6049,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return InitializerDeclSyntax(newData)
   }
 
+  public var garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenSignatureAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenSignatureAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenSignatureAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenSignatureAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenSignatureAndGenericWhereClause`, if present.
+  public func withGarbageBetweenSignatureAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSignatureAndGenericWhereClause)
+    return InitializerDeclSyntax(newData)
+  }
+
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericWhereClause,
@@ -3528,6 +6090,28 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return InitializerDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndBody,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndBody` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndBody` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndBody`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndBody(
+    _ newChild: GarbageNodesSyntax?) -> InitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndBody)
     return InitializerDeclSyntax(newData)
   }
 
@@ -3556,68 +6140,132 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax or missing
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is GenericParameterClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is FunctionSignatureSyntax 
+    // Check child #5 child is TokenSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(FunctionSignatureSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is CodeBlockSyntax or missing
+    // Check child #7 child is TokenSyntax or missing
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is GenericParameterClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is FunctionSignatureSyntax 
+    assert(rawChildren[11].raw != nil)
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(FunctionSignatureSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is CodeBlockSyntax or missing
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -3629,13 +6277,21 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension InitializerDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndInitKeyword": garbageBetweenModifiersAndInitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initKeyword": Syntax(initKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenInitKeywordAndOptionalMark": garbageBetweenInitKeywordAndOptionalMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "optionalMark": optionalMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenOptionalMarkAndGenericParameterClause": garbageBetweenOptionalMarkAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParameterClauseAndSignature": garbageBetweenGenericParameterClauseAndSignature.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "signature": Syntax(signature).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenSignatureAndGenericWhereClause": garbageBetweenSignatureAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndBody": garbageBetweenGenericWhereClauseAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -3645,9 +6301,13 @@ extension InitializerDeclSyntax: CustomReflectable {
 
 public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndDeinitKeyword
     case deinitKeyword
+    case garbageBetweenDeinitKeywordAndBody
     case body
   }
 
@@ -3670,6 +6330,28 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> DeinitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return DeinitializerDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -3710,6 +6392,28 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return DeinitializerDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> DeinitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -3754,6 +6458,28 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return DeinitializerDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndDeinitKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndDeinitKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndDeinitKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndDeinitKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndDeinitKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndDeinitKeyword`, if present.
+  public func withGarbageBetweenModifiersAndDeinitKeyword(
+    _ newChild: GarbageNodesSyntax?) -> DeinitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndDeinitKeyword)
+    return DeinitializerDeclSyntax(newData)
+  }
+
   public var deinitKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.deinitKeyword,
@@ -3772,6 +6498,28 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.deinitKeyword)
     let newData = data.replacingChild(raw, at: Cursor.deinitKeyword)
+    return DeinitializerDeclSyntax(newData)
+  }
+
+  public var garbageBetweenDeinitKeywordAndBody: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenDeinitKeywordAndBody,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenDeinitKeywordAndBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenDeinitKeywordAndBody` replaced.
+  /// - param newChild: The new `garbageBetweenDeinitKeywordAndBody` to replace the node's
+  ///                   current `garbageBetweenDeinitKeywordAndBody`, if present.
+  public func withGarbageBetweenDeinitKeywordAndBody(
+    _ newChild: GarbageNodesSyntax?) -> DeinitializerDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDeinitKeywordAndBody)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -3800,35 +6548,67 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 8)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is CodeBlockSyntax or missing
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ModifierListSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is CodeBlockSyntax or missing
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -3840,9 +6620,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension DeinitializerDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndDeinitKeyword": garbageBetweenModifiersAndDeinitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "deinitKeyword": Syntax(deinitKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenDeinitKeywordAndBody": garbageBetweenDeinitKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -3852,13 +6636,21 @@ extension DeinitializerDeclSyntax: CustomReflectable {
 
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndSubscriptKeyword
     case subscriptKeyword
+    case garbageBetweenSubscriptKeywordAndGenericParameterClause
     case genericParameterClause
+    case garbageBetweenGenericParameterClauseAndIndices
     case indices
+    case garbageBetweenIndicesAndResult
     case result
+    case garbageBetweenResultAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndAccessor
     case accessor
   }
 
@@ -3881,6 +6673,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return SubscriptDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -3921,6 +6735,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return SubscriptDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -3965,6 +6801,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return SubscriptDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndSubscriptKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndSubscriptKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndSubscriptKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndSubscriptKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndSubscriptKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndSubscriptKeyword`, if present.
+  public func withGarbageBetweenModifiersAndSubscriptKeyword(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndSubscriptKeyword)
+    return SubscriptDeclSyntax(newData)
+  }
+
   public var subscriptKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.subscriptKeyword,
@@ -3983,6 +6841,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.subscriptKeyword)
     let newData = data.replacingChild(raw, at: Cursor.subscriptKeyword)
+    return SubscriptDeclSyntax(newData)
+  }
+
+  public var garbageBetweenSubscriptKeywordAndGenericParameterClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenSubscriptKeywordAndGenericParameterClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenSubscriptKeywordAndGenericParameterClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenSubscriptKeywordAndGenericParameterClause` replaced.
+  /// - param newChild: The new `garbageBetweenSubscriptKeywordAndGenericParameterClause` to replace the node's
+  ///                   current `garbageBetweenSubscriptKeywordAndGenericParameterClause`, if present.
+  public func withGarbageBetweenSubscriptKeywordAndGenericParameterClause(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSubscriptKeywordAndGenericParameterClause)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -4008,6 +6888,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return SubscriptDeclSyntax(newData)
   }
 
+  public var garbageBetweenGenericParameterClauseAndIndices: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParameterClauseAndIndices,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParameterClauseAndIndices(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterClauseAndIndices` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParameterClauseAndIndices` to replace the node's
+  ///                   current `garbageBetweenGenericParameterClauseAndIndices`, if present.
+  public func withGarbageBetweenGenericParameterClauseAndIndices(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterClauseAndIndices)
+    return SubscriptDeclSyntax(newData)
+  }
+
   public var indices: ParameterClauseSyntax {
     get {
       let childData = data.child(at: Cursor.indices,
@@ -4026,6 +6928,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: ParameterClauseSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.parameterClause)
     let newData = data.replacingChild(raw, at: Cursor.indices)
+    return SubscriptDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIndicesAndResult: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIndicesAndResult,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIndicesAndResult(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIndicesAndResult` replaced.
+  /// - param newChild: The new `garbageBetweenIndicesAndResult` to replace the node's
+  ///                   current `garbageBetweenIndicesAndResult`, if present.
+  public func withGarbageBetweenIndicesAndResult(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIndicesAndResult)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -4050,6 +6974,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return SubscriptDeclSyntax(newData)
   }
 
+  public var garbageBetweenResultAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenResultAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenResultAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenResultAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenResultAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenResultAndGenericWhereClause`, if present.
+  public func withGarbageBetweenResultAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenResultAndGenericWhereClause)
+    return SubscriptDeclSyntax(newData)
+  }
+
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.genericWhereClause,
@@ -4069,6 +7015,28 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return SubscriptDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndAccessor: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndAccessor,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndAccessor(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndAccessor` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndAccessor` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndAccessor`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndAccessor(
+    _ newChild: GarbageNodesSyntax?) -> SubscriptDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndAccessor)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -4097,69 +7065,133 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is GenericParameterClauseSyntax or missing
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is ParameterClauseSyntax 
-    assert(rawChildren[4].raw != nil)
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is ReturnClauseSyntax 
+    // Check child #5 child is TokenSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ReturnClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is Syntax or missing
+    // Check child #7 child is GenericParameterClauseSyntax or missing
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is ParameterClauseSyntax 
+    assert(rawChildren[9].raw != nil)
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is ReturnClauseSyntax 
+    assert(rawChildren[11].raw != nil)
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ReturnClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is Syntax or missing
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -4171,13 +7203,21 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension SubscriptDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndSubscriptKeyword": garbageBetweenModifiersAndSubscriptKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "subscriptKeyword": Syntax(subscriptKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenSubscriptKeywordAndGenericParameterClause": garbageBetweenSubscriptKeywordAndGenericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParameterClauseAndIndices": garbageBetweenGenericParameterClauseAndIndices.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "indices": Syntax(indices).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIndicesAndResult": garbageBetweenIndicesAndResult.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "result": Syntax(result).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenResultAndGenericWhereClause": garbageBetweenResultAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndAccessor": garbageBetweenGenericWhereClauseAndAccessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "accessor": accessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -4187,10 +7227,15 @@ extension SubscriptDeclSyntax: CustomReflectable {
 
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndImportTok
     case importTok
+    case garbageBetweenImportTokAndImportKind
     case importKind
+    case garbageBetweenImportKindAndPath
     case path
   }
 
@@ -4213,6 +7258,28 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> ImportDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return ImportDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -4253,6 +7320,28 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return ImportDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> ImportDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return ImportDeclSyntax(newData)
   }
 
@@ -4297,6 +7386,28 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ImportDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndImportTok: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndImportTok,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndImportTok(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndImportTok` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndImportTok` to replace the node's
+  ///                   current `garbageBetweenModifiersAndImportTok`, if present.
+  public func withGarbageBetweenModifiersAndImportTok(
+    _ newChild: GarbageNodesSyntax?) -> ImportDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndImportTok)
+    return ImportDeclSyntax(newData)
+  }
+
   public var importTok: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.importTok,
@@ -4315,6 +7426,28 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.importKeyword)
     let newData = data.replacingChild(raw, at: Cursor.importTok)
+    return ImportDeclSyntax(newData)
+  }
+
+  public var garbageBetweenImportTokAndImportKind: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenImportTokAndImportKind,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenImportTokAndImportKind(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenImportTokAndImportKind` replaced.
+  /// - param newChild: The new `garbageBetweenImportTokAndImportKind` to replace the node's
+  ///                   current `garbageBetweenImportTokAndImportKind`, if present.
+  public func withGarbageBetweenImportTokAndImportKind(
+    _ newChild: GarbageNodesSyntax?) -> ImportDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenImportTokAndImportKind)
     return ImportDeclSyntax(newData)
   }
 
@@ -4337,6 +7470,28 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.importKind)
+    return ImportDeclSyntax(newData)
+  }
+
+  public var garbageBetweenImportKindAndPath: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenImportKindAndPath,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenImportKindAndPath(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenImportKindAndPath` replaced.
+  /// - param newChild: The new `garbageBetweenImportKindAndPath` to replace the node's
+  ///                   current `garbageBetweenImportKindAndPath`, if present.
+  public func withGarbageBetweenImportKindAndPath(
+    _ newChild: GarbageNodesSyntax?) -> ImportDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenImportKindAndPath)
     return ImportDeclSyntax(newData)
   }
 
@@ -4383,44 +7538,84 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 10)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax or missing
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is AccessPathSyntax 
-    assert(rawChildren[4].raw != nil)
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax or missing
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is AccessPathSyntax 
+    assert(rawChildren[9].raw != nil)
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -4432,10 +7627,15 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ImportDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndImportTok": garbageBetweenModifiersAndImportTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "importTok": Syntax(importTok).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenImportTokAndImportKind": garbageBetweenImportTokAndImportKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "importKind": importKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenImportKindAndPath": garbageBetweenImportKindAndPath.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "path": Syntax(path).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -4445,12 +7645,19 @@ extension ImportDeclSyntax: CustomReflectable {
 
 public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifier
     case modifier
+    case garbageBetweenModifierAndAccessorKind
     case accessorKind
+    case garbageBetweenAccessorKindAndParameter
     case parameter
+    case garbageBetweenParameterAndAsyncKeyword
     case asyncKeyword
+    case garbageBetweenAsyncKeywordAndThrowsKeyword
     case throwsKeyword
+    case garbageBetweenThrowsKeywordAndBody
     case body
   }
 
@@ -4473,6 +7680,28 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return AccessorDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -4516,6 +7745,28 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AccessorDeclSyntax(newData)
   }
 
+  public var garbageBetweenAttributesAndModifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifier` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifier` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifier`, if present.
+  public func withGarbageBetweenAttributesAndModifier(
+    _ newChild: GarbageNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifier)
+    return AccessorDeclSyntax(newData)
+  }
+
   public var modifier: DeclModifierSyntax? {
     get {
       let childData = data.child(at: Cursor.modifier,
@@ -4538,6 +7789,28 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AccessorDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifierAndAccessorKind: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifierAndAccessorKind,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifierAndAccessorKind(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifierAndAccessorKind` replaced.
+  /// - param newChild: The new `garbageBetweenModifierAndAccessorKind` to replace the node's
+  ///                   current `garbageBetweenModifierAndAccessorKind`, if present.
+  public func withGarbageBetweenModifierAndAccessorKind(
+    _ newChild: GarbageNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifierAndAccessorKind)
+    return AccessorDeclSyntax(newData)
+  }
+
   public var accessorKind: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.accessorKind,
@@ -4556,6 +7829,28 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
     let newData = data.replacingChild(raw, at: Cursor.accessorKind)
+    return AccessorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAccessorKindAndParameter: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAccessorKindAndParameter,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAccessorKindAndParameter(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAccessorKindAndParameter` replaced.
+  /// - param newChild: The new `garbageBetweenAccessorKindAndParameter` to replace the node's
+  ///                   current `garbageBetweenAccessorKindAndParameter`, if present.
+  public func withGarbageBetweenAccessorKindAndParameter(
+    _ newChild: GarbageNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAccessorKindAndParameter)
     return AccessorDeclSyntax(newData)
   }
 
@@ -4581,6 +7876,28 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AccessorDeclSyntax(newData)
   }
 
+  public var garbageBetweenParameterAndAsyncKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenParameterAndAsyncKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenParameterAndAsyncKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenParameterAndAsyncKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenParameterAndAsyncKeyword` to replace the node's
+  ///                   current `garbageBetweenParameterAndAsyncKeyword`, if present.
+  public func withGarbageBetweenParameterAndAsyncKeyword(
+    _ newChild: GarbageNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenParameterAndAsyncKeyword)
+    return AccessorDeclSyntax(newData)
+  }
+
   public var asyncKeyword: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.asyncKeyword,
@@ -4603,6 +7920,28 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AccessorDeclSyntax(newData)
   }
 
+  public var garbageBetweenAsyncKeywordAndThrowsKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAsyncKeywordAndThrowsKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAsyncKeywordAndThrowsKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAsyncKeywordAndThrowsKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenAsyncKeywordAndThrowsKeyword` to replace the node's
+  ///                   current `garbageBetweenAsyncKeywordAndThrowsKeyword`, if present.
+  public func withGarbageBetweenAsyncKeywordAndThrowsKeyword(
+    _ newChild: GarbageNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAsyncKeywordAndThrowsKeyword)
+    return AccessorDeclSyntax(newData)
+  }
+
   public var throwsKeyword: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.throwsKeyword,
@@ -4622,6 +7961,28 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.throwsKeyword)
+    return AccessorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenThrowsKeywordAndBody: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenThrowsKeywordAndBody,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenThrowsKeywordAndBody(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenThrowsKeywordAndBody` replaced.
+  /// - param newChild: The new `garbageBetweenThrowsKeywordAndBody` to replace the node's
+  ///                   current `garbageBetweenThrowsKeywordAndBody`, if present.
+  public func withGarbageBetweenThrowsKeywordAndBody(
+    _ newChild: GarbageNodesSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenThrowsKeywordAndBody)
     return AccessorDeclSyntax(newData)
   }
 
@@ -4650,49 +8011,49 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 14)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is DeclModifierSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(DeclModifierSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is AccessorParameterSyntax or missing
+    // Check child #3 child is DeclModifierSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AccessorParameterSyntax.self))
+      assert(syntaxChild.is(DeclModifierSyntax.self))
     }
-    // Check child #4 child is TokenSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TokenSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -4700,9 +8061,65 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is CodeBlockSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is AccessorParameterSyntax or missing
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(AccessorParameterSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is TokenSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TokenSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is CodeBlockSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -4714,12 +8131,19 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension AccessorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifier": garbageBetweenAttributesAndModifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifier": modifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifierAndAccessorKind": garbageBetweenModifierAndAccessorKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "accessorKind": Syntax(accessorKind).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenAccessorKindAndParameter": garbageBetweenAccessorKindAndParameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "parameter": parameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenParameterAndAsyncKeyword": garbageBetweenParameterAndAsyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAsyncKeywordAndThrowsKeyword": garbageBetweenAsyncKeywordAndThrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsKeyword": throwsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenThrowsKeywordAndBody": garbageBetweenThrowsKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -4729,9 +8153,13 @@ extension AccessorDeclSyntax: CustomReflectable {
 
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndLetOrVarKeyword
     case letOrVarKeyword
+    case garbageBetweenLetOrVarKeywordAndBindings
     case bindings
   }
 
@@ -4754,6 +8182,28 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> VariableDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return VariableDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -4794,6 +8244,28 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return VariableDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> VariableDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return VariableDeclSyntax(newData)
   }
 
@@ -4838,6 +8310,28 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return VariableDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndLetOrVarKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndLetOrVarKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndLetOrVarKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndLetOrVarKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndLetOrVarKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndLetOrVarKeyword`, if present.
+  public func withGarbageBetweenModifiersAndLetOrVarKeyword(
+    _ newChild: GarbageNodesSyntax?) -> VariableDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndLetOrVarKeyword)
+    return VariableDeclSyntax(newData)
+  }
+
   public var letOrVarKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.letOrVarKeyword,
@@ -4856,6 +8350,28 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.letKeyword)
     let newData = data.replacingChild(raw, at: Cursor.letOrVarKeyword)
+    return VariableDeclSyntax(newData)
+  }
+
+  public var garbageBetweenLetOrVarKeywordAndBindings: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLetOrVarKeywordAndBindings,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLetOrVarKeywordAndBindings(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLetOrVarKeywordAndBindings` replaced.
+  /// - param newChild: The new `garbageBetweenLetOrVarKeywordAndBindings` to replace the node's
+  ///                   current `garbageBetweenLetOrVarKeywordAndBindings`, if present.
+  public func withGarbageBetweenLetOrVarKeywordAndBindings(
+    _ newChild: GarbageNodesSyntax?) -> VariableDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLetOrVarKeywordAndBindings)
     return VariableDeclSyntax(newData)
   }
 
@@ -4902,36 +8418,68 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 8)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is PatternBindingListSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ModifierListSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is PatternBindingListSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -4943,9 +8491,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension VariableDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndLetOrVarKeyword": garbageBetweenModifiersAndLetOrVarKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLetOrVarKeywordAndBindings": garbageBetweenLetOrVarKeywordAndBindings.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "bindings": Syntax(bindings).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -4960,9 +8512,13 @@ extension VariableDeclSyntax: CustomReflectable {
 /// 
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndCaseKeyword
     case caseKeyword
+    case garbageBetweenCaseKeywordAndElements
     case elements
   }
 
@@ -4985,6 +8541,28 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> EnumCaseDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return EnumCaseDeclSyntax(newData)
   }
 
   /// 
@@ -5028,6 +8606,28 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return EnumCaseDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> EnumCaseDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -5075,6 +8675,28 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return EnumCaseDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndCaseKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndCaseKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndCaseKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndCaseKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndCaseKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndCaseKeyword`, if present.
+  public func withGarbageBetweenModifiersAndCaseKeyword(
+    _ newChild: GarbageNodesSyntax?) -> EnumCaseDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndCaseKeyword)
+    return EnumCaseDeclSyntax(newData)
+  }
+
   /// The `case` keyword for this case.
   public var caseKeyword: TokenSyntax {
     get {
@@ -5094,6 +8716,28 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.caseKeyword)
     let newData = data.replacingChild(raw, at: Cursor.caseKeyword)
+    return EnumCaseDeclSyntax(newData)
+  }
+
+  public var garbageBetweenCaseKeywordAndElements: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenCaseKeywordAndElements,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenCaseKeywordAndElements(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenCaseKeywordAndElements` replaced.
+  /// - param newChild: The new `garbageBetweenCaseKeywordAndElements` to replace the node's
+  ///                   current `garbageBetweenCaseKeywordAndElements`, if present.
+  public func withGarbageBetweenCaseKeywordAndElements(
+    _ newChild: GarbageNodesSyntax?) -> EnumCaseDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCaseKeywordAndElements)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -5141,36 +8785,68 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 8)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is EnumCaseElementListSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ModifierListSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is EnumCaseElementListSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -5182,9 +8858,13 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension EnumCaseDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndCaseKeyword": garbageBetweenModifiersAndCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenCaseKeywordAndElements": garbageBetweenCaseKeywordAndElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -5195,13 +8875,21 @@ extension EnumCaseDeclSyntax: CustomReflectable {
 /// A Swift `enum` declaration.
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndEnumKeyword
     case enumKeyword
+    case garbageBetweenEnumKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndGenericParameters
     case genericParameters
+    case garbageBetweenGenericParametersAndInheritanceClause
     case inheritanceClause
+    case garbageBetweenInheritanceClauseAndGenericWhereClause
     case genericWhereClause
+    case garbageBetweenGenericWhereClauseAndMembers
     case members
   }
 
@@ -5224,6 +8912,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return EnumDeclSyntax(newData)
   }
 
   /// 
@@ -5267,6 +8977,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return EnumDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return EnumDeclSyntax(newData)
   }
 
@@ -5314,6 +9046,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return EnumDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndEnumKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndEnumKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndEnumKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndEnumKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndEnumKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndEnumKeyword`, if present.
+  public func withGarbageBetweenModifiersAndEnumKeyword(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndEnumKeyword)
+    return EnumDeclSyntax(newData)
+  }
+
   /// 
   /// The `enum` keyword for this declaration.
   /// 
@@ -5335,6 +9089,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.enumKeyword)
     let newData = data.replacingChild(raw, at: Cursor.enumKeyword)
+    return EnumDeclSyntax(newData)
+  }
+
+  public var garbageBetweenEnumKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenEnumKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenEnumKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenEnumKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenEnumKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenEnumKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenEnumKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenEnumKeywordAndIdentifier)
     return EnumDeclSyntax(newData)
   }
 
@@ -5362,6 +9138,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return EnumDeclSyntax(newData)
   }
 
+  public var garbageBetweenIdentifierAndGenericParameters: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndGenericParameters,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndGenericParameters(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndGenericParameters` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndGenericParameters` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndGenericParameters`, if present.
+  public func withGarbageBetweenIdentifierAndGenericParameters(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndGenericParameters)
+    return EnumDeclSyntax(newData)
+  }
+
   /// 
   /// The generic parameters, if any, for this enum.
   /// 
@@ -5384,6 +9182,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericParameterClauseSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericParameters)
+    return EnumDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericParametersAndInheritanceClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericParametersAndInheritanceClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericParametersAndInheritanceClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericParametersAndInheritanceClause` replaced.
+  /// - param newChild: The new `garbageBetweenGenericParametersAndInheritanceClause` to replace the node's
+  ///                   current `garbageBetweenGenericParametersAndInheritanceClause`, if present.
+  public func withGarbageBetweenGenericParametersAndInheritanceClause(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParametersAndInheritanceClause)
     return EnumDeclSyntax(newData)
   }
 
@@ -5413,6 +9233,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return EnumDeclSyntax(newData)
   }
 
+  public var garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenInheritanceClauseAndGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenInheritanceClauseAndGenericWhereClause` replaced.
+  /// - param newChild: The new `garbageBetweenInheritanceClauseAndGenericWhereClause` to replace the node's
+  ///                   current `garbageBetweenInheritanceClauseAndGenericWhereClause`, if present.
+  public func withGarbageBetweenInheritanceClauseAndGenericWhereClause(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritanceClauseAndGenericWhereClause)
+    return EnumDeclSyntax(newData)
+  }
+
   /// 
   /// The `where` clause that applies to the generic parameters of
   /// this enum.
@@ -5436,6 +9278,28 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: GenericWhereClauseSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    return EnumDeclSyntax(newData)
+  }
+
+  public var garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGenericWhereClauseAndMembers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGenericWhereClauseAndMembers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGenericWhereClauseAndMembers` replaced.
+  /// - param newChild: The new `garbageBetweenGenericWhereClauseAndMembers` to replace the node's
+  ///                   current `garbageBetweenGenericWhereClauseAndMembers`, if present.
+  public func withGarbageBetweenGenericWhereClauseAndMembers(
+    _ newChild: GarbageNodesSyntax?) -> EnumDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericWhereClauseAndMembers)
     return EnumDeclSyntax(newData)
   }
 
@@ -5466,69 +9330,133 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 16)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is GenericParameterClauseSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is TypeInheritanceClauseSyntax or missing
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #7 child is MemberDeclBlockSyntax 
+    // Check child #7 child is TokenSyntax 
     assert(rawChildren[7].raw != nil)
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is GenericParameterClauseSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericParameterClauseSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is TypeInheritanceClauseSyntax or missing
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #14 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[14].raw {
+      let info = rawChildren[14].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #15 child is MemberDeclBlockSyntax 
+    assert(rawChildren[15].raw != nil)
+    if let raw = rawChildren[15].raw {
+      let info = rawChildren[15].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -5540,13 +9468,21 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension EnumDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndEnumKeyword": garbageBetweenModifiersAndEnumKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "enumKeyword": Syntax(enumKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenEnumKeywordAndIdentifier": garbageBetweenEnumKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndGenericParameters": garbageBetweenIdentifierAndGenericParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameters": genericParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericParametersAndInheritanceClause": garbageBetweenGenericParametersAndInheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenInheritanceClauseAndGenericWhereClause": garbageBetweenInheritanceClauseAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenGenericWhereClauseAndMembers": garbageBetweenGenericWhereClauseAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -5557,10 +9493,15 @@ extension EnumDeclSyntax: CustomReflectable {
 /// A Swift `operator` declaration.
 public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndOperatorKeyword
     case operatorKeyword
+    case garbageBetweenOperatorKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndOperatorPrecedenceAndTypes
     case operatorPrecedenceAndTypes
   }
 
@@ -5583,6 +9524,28 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> OperatorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return OperatorDeclSyntax(newData)
   }
 
   /// 
@@ -5626,6 +9589,28 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return OperatorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> OperatorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return OperatorDeclSyntax(newData)
   }
 
@@ -5674,6 +9659,28 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return OperatorDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndOperatorKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndOperatorKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndOperatorKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndOperatorKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndOperatorKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndOperatorKeyword`, if present.
+  public func withGarbageBetweenModifiersAndOperatorKeyword(
+    _ newChild: GarbageNodesSyntax?) -> OperatorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndOperatorKeyword)
+    return OperatorDeclSyntax(newData)
+  }
+
   public var operatorKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.operatorKeyword,
@@ -5695,6 +9702,28 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return OperatorDeclSyntax(newData)
   }
 
+  public var garbageBetweenOperatorKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenOperatorKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenOperatorKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenOperatorKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenOperatorKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenOperatorKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenOperatorKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> OperatorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenOperatorKeywordAndIdentifier)
+    return OperatorDeclSyntax(newData)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -5713,6 +9742,28 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unspacedBinaryOperator(""))
     let newData = data.replacingChild(raw, at: Cursor.identifier)
+    return OperatorDeclSyntax(newData)
+  }
+
+  public var garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndOperatorPrecedenceAndTypes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndOperatorPrecedenceAndTypes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndOperatorPrecedenceAndTypes` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndOperatorPrecedenceAndTypes` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndOperatorPrecedenceAndTypes`, if present.
+  public func withGarbageBetweenIdentifierAndOperatorPrecedenceAndTypes(
+    _ newChild: GarbageNodesSyntax?) -> OperatorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndOperatorPrecedenceAndTypes)
     return OperatorDeclSyntax(newData)
   }
 
@@ -5744,44 +9795,84 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 10)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is OperatorPrecedenceAndTypesSyntax or missing
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is OperatorPrecedenceAndTypesSyntax or missing
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -5793,10 +9884,15 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension OperatorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndOperatorKeyword": garbageBetweenModifiersAndOperatorKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "operatorKeyword": Syntax(operatorKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenOperatorKeywordAndIdentifier": garbageBetweenOperatorKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndOperatorPrecedenceAndTypes": garbageBetweenIdentifierAndOperatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "operatorPrecedenceAndTypes": operatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -5807,12 +9903,19 @@ extension OperatorDeclSyntax: CustomReflectable {
 /// A Swift `precedencegroup` declaration.
 public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case garbageBeforeAttributes
     case attributes
+    case garbageBetweenAttributesAndModifiers
     case modifiers
+    case garbageBetweenModifiersAndPrecedencegroupKeyword
     case precedencegroupKeyword
+    case garbageBetweenPrecedencegroupKeywordAndIdentifier
     case identifier
+    case garbageBetweenIdentifierAndLeftBrace
     case leftBrace
+    case garbageBetweenLeftBraceAndGroupAttributes
     case groupAttributes
+    case garbageBetweenGroupAttributesAndRightBrace
     case rightBrace
   }
 
@@ -5835,6 +9938,28 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return PrecedenceGroupDeclSyntax(newData)
   }
 
   /// 
@@ -5878,6 +10003,28 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: AttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return PrecedenceGroupDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -5926,6 +10073,28 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupDeclSyntax(newData)
   }
 
+  public var garbageBetweenModifiersAndPrecedencegroupKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenModifiersAndPrecedencegroupKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenModifiersAndPrecedencegroupKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenModifiersAndPrecedencegroupKeyword` replaced.
+  /// - param newChild: The new `garbageBetweenModifiersAndPrecedencegroupKeyword` to replace the node's
+  ///                   current `garbageBetweenModifiersAndPrecedencegroupKeyword`, if present.
+  public func withGarbageBetweenModifiersAndPrecedencegroupKeyword(
+    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenModifiersAndPrecedencegroupKeyword)
+    return PrecedenceGroupDeclSyntax(newData)
+  }
+
   public var precedencegroupKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.precedencegroupKeyword,
@@ -5944,6 +10113,28 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.precedencegroupKeyword)
     let newData = data.replacingChild(raw, at: Cursor.precedencegroupKeyword)
+    return PrecedenceGroupDeclSyntax(newData)
+  }
+
+  public var garbageBetweenPrecedencegroupKeywordAndIdentifier: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenPrecedencegroupKeywordAndIdentifier,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenPrecedencegroupKeywordAndIdentifier(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenPrecedencegroupKeywordAndIdentifier` replaced.
+  /// - param newChild: The new `garbageBetweenPrecedencegroupKeywordAndIdentifier` to replace the node's
+  ///                   current `garbageBetweenPrecedencegroupKeywordAndIdentifier`, if present.
+  public func withGarbageBetweenPrecedencegroupKeywordAndIdentifier(
+    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPrecedencegroupKeywordAndIdentifier)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -5971,6 +10162,28 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupDeclSyntax(newData)
   }
 
+  public var garbageBetweenIdentifierAndLeftBrace: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndLeftBrace,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenIdentifierAndLeftBrace(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndLeftBrace` replaced.
+  /// - param newChild: The new `garbageBetweenIdentifierAndLeftBrace` to replace the node's
+  ///                   current `garbageBetweenIdentifierAndLeftBrace`, if present.
+  public func withGarbageBetweenIdentifierAndLeftBrace(
+    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndLeftBrace)
+    return PrecedenceGroupDeclSyntax(newData)
+  }
+
   public var leftBrace: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.leftBrace,
@@ -5989,6 +10202,28 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftBrace)
     let newData = data.replacingChild(raw, at: Cursor.leftBrace)
+    return PrecedenceGroupDeclSyntax(newData)
+  }
+
+  public var garbageBetweenLeftBraceAndGroupAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLeftBraceAndGroupAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLeftBraceAndGroupAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLeftBraceAndGroupAttributes` replaced.
+  /// - param newChild: The new `garbageBetweenLeftBraceAndGroupAttributes` to replace the node's
+  ///                   current `garbageBetweenLeftBraceAndGroupAttributes`, if present.
+  public func withGarbageBetweenLeftBraceAndGroupAttributes(
+    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftBraceAndGroupAttributes)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -6035,6 +10270,28 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupDeclSyntax(newData)
   }
 
+  public var garbageBetweenGroupAttributesAndRightBrace: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenGroupAttributesAndRightBrace,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenGroupAttributesAndRightBrace(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenGroupAttributesAndRightBrace` replaced.
+  /// - param newChild: The new `garbageBetweenGroupAttributesAndRightBrace` to replace the node's
+  ///                   current `garbageBetweenGroupAttributesAndRightBrace`, if present.
+  public func withGarbageBetweenGroupAttributesAndRightBrace(
+    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGroupAttributesAndRightBrace)
+    return PrecedenceGroupDeclSyntax(newData)
+  }
+
   public var rightBrace: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.rightBrace,
@@ -6059,63 +10316,119 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
-    // Check child #0 child is AttributeListSyntax or missing
+    assert(rawChildren.count == 14)
+    // Check child #0 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #1 child is ModifierListSyntax or missing
+    // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ModifierListSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is ModifierListSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(ModifierListSyntax.self))
     }
-    // Check child #4 child is TokenSyntax 
-    assert(rawChildren[4].raw != nil)
+    // Check child #4 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
     }
-    // Check child #5 child is PrecedenceGroupAttributeListSyntax 
+    // Check child #5 child is TokenSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PrecedenceGroupAttributeListSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is TokenSyntax 
-    assert(rawChildren[6].raw != nil)
+    // Check child #6 child is GarbageNodesSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #7 child is TokenSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #8 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[8].raw {
+      let info = rawChildren[8].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #9 child is TokenSyntax 
+    assert(rawChildren[9].raw != nil)
+    if let raw = rawChildren[9].raw {
+      let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #10 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #11 child is PrecedenceGroupAttributeListSyntax 
+    assert(rawChildren[11].raw != nil)
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(PrecedenceGroupAttributeListSyntax.self))
+    }
+    // Check child #12 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[12].raw {
+      let info = rawChildren[12].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #13 child is TokenSyntax 
+    assert(rawChildren[13].raw != nil)
+    if let raw = rawChildren[13].raw {
+      let info = rawChildren[13].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -6127,12 +10440,19 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenModifiersAndPrecedencegroupKeyword": garbageBetweenModifiersAndPrecedencegroupKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "precedencegroupKeyword": Syntax(precedencegroupKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenPrecedencegroupKeywordAndIdentifier": garbageBetweenPrecedencegroupKeywordAndIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenIdentifierAndLeftBrace": garbageBetweenIdentifierAndLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLeftBraceAndGroupAttributes": garbageBetweenLeftBraceAndGroupAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "groupAttributes": Syntax(groupAttributes).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenGroupAttributesAndRightBrace": garbageBetweenGroupAttributesAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
     ])
   }

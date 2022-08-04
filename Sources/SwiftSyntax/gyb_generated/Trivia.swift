@@ -303,6 +303,26 @@ extension Trivia: ExpressibleByArrayLiteral {
   }
 }
 
+extension Trivia: TextOutputStreamable {
+  /// Prints the provided trivia as they would be written in a source file.
+  ///
+  /// - Parameter stream: The stream to which to print the trivia.
+  public func write<Target>(to target: inout Target)
+    where Target: TextOutputStream {
+      for piece in pieces {
+        piece.write(to: &target)
+      }
+  }
+}
+
+extension Trivia: CustomStringConvertible {
+  public var description: String {
+    var description = ""
+    self.write(to: &description)
+    return description
+  }
+}
+
 /// Concatenates two collections of `Trivia` into one collection.
 public func +(lhs: Trivia, rhs: Trivia) -> Trivia {
   return Trivia(pieces: lhs.pieces + rhs.pieces)

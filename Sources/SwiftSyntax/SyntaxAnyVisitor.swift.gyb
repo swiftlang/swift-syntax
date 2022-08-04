@@ -40,9 +40,6 @@
 ///       }
 ///
 open class SyntaxAnyVisitor: SyntaxVisitor {
-  /// Visiting `UnknownSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
   open func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }

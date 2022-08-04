@@ -35,7 +35,7 @@ public enum SyntaxTreeViewMode {
     case .sourceAccurate:
       return node.presence == .present
     case .fixedUp:
-      return true
+      return node.kind != .garbageNodes
     case ._all:
       return true
     }

@@ -65,39 +65,39 @@ extension SyntaxClassification {
     // Separate checks for token nodes (most common checks) versus checks for layout nodes.
     if childKind == .token {
       switch (parentKind, indexInParent) {
-      case (.expressionSegment, 2):
+      case (.expressionSegment, 5):
         return (.stringInterpolationAnchor, true)
-      case (.ifConfigClause, 0):
+      case (.ifConfigClause, 1):
         return (.buildConfigId, false)
-      case (.ifConfigDecl, 1):
+      case (.ifConfigDecl, 3):
         return (.buildConfigId, false)
-      case (.declModifier, 0):
+      case (.declModifier, 1):
         return (.attribute, false)
-      case (.precedenceGroupRelation, 0):
+      case (.precedenceGroupRelation, 1):
         return (.keyword, false)
-      case (.precedenceGroupAssociativity, 0):
+      case (.precedenceGroupAssociativity, 1):
         return (.keyword, false)
-      case (.attribute, 1):
+      case (.attribute, 3):
         return (.attribute, false)
-      case (.forInStmt, 4):
+      case (.forInStmt, 9):
         return (.keyword, false)
-      case (.simpleTypeIdentifier, 0):
+      case (.simpleTypeIdentifier, 1):
         return (.typeIdentifier, false)
-      case (.memberTypeIdentifier, 2):
+      case (.memberTypeIdentifier, 5):
         return (.typeIdentifier, false)
-      case (.constrainedSugarType, 0):
+      case (.constrainedSugarType, 1):
         return (.keyword, false)
-      case (.availabilityVersionRestriction, 0):
+      case (.availabilityVersionRestriction, 1):
         return (.keyword, false)
       default: return nil
       }
     } else {
       switch (parentKind, indexInParent) {
-      case (.ifConfigClause, 1):
+      case (.ifConfigClause, 3):
         return (.buildConfigId, false)
-      case (.operatorDecl, 1):
+      case (.operatorDecl, 3):
         return (.attribute, false)
-      case (.customAttribute, 1):
+      case (.customAttribute, 3):
         return (.attribute, false)
       default: return nil
       }

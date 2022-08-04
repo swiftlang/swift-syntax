@@ -35,9 +35,6 @@
 ///       }
 ///
 open class SyntaxAnyVisitor: SyntaxVisitor {
-  /// Visiting `UnknownSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
   open func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
@@ -160,6 +157,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: CodeBlockSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: GarbageNodesSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: GarbageNodesSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {

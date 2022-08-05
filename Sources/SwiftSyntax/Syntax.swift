@@ -529,10 +529,10 @@ public extension SyntaxProtocol {
     if let token = Syntax(self).as(TokenSyntax.self) {
       target.write(String(describing: token.tokenKind))
       if includeTrivia {
-        if let leadingTrivia, !leadingTrivia.isEmpty {
+        if let leadingTrivia = leadingTrivia, !leadingTrivia.isEmpty {
           target.write(" leadingTrivia=\(leadingTrivia.debugDescription)")
         }
-        if let trailingTrivia, !trailingTrivia.isEmpty {
+        if let trailingTrivia = trailingTrivia, !trailingTrivia.isEmpty {
           target.write(" trailingTrivia=\(trailingTrivia.debugDescription)")
         }
       }

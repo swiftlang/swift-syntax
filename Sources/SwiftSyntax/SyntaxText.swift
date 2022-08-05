@@ -31,6 +31,7 @@ import Glibc
 /// buffer regardless of whether it is a valid UTF8. When creating
 /// `Swift.String`, ill-formed UTF8 sequences are replaced with the Unicode
 /// replacement character (`\u{FFFD}`).
+@_spi(Testing) // SPI name is subject to change
 public struct SyntaxText {
   var buffer: UnsafeBufferPointer<UInt8>
 

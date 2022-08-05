@@ -30,7 +30,7 @@ extension TokenSyntax {
     let contextualClassification = self.data.contextualClassification
     let relativeOffset = raw.tokenLeadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    return TokenKindAndText(kind: raw.rawTokenKind, text: raw.tokenText).classify(
+    return TokenKindAndText(kind: raw.rawTokenKind, text: raw.rawTokenText).classify(
       offset: absoluteOffset, contextualClassification: contextualClassification)
   }
 }
@@ -289,7 +289,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
     assert(token.raw.isToken)
     self.token = token
     self.offset = Int(token.position.offset)
-    self.state = .atLeadingTrivia(token.raw.tokenLeadingTriviaPieces, 0)
+    self.state = .atLeadingTrivia(token.raw.tokenLeadingRawTriviaPieces, 0)
   }
 
   var relativeOffset: Int { return offset - Int(token.position.offset) }
@@ -310,11 +310,11 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
 
       case .atTokenText:
         let classifiedRange = TokenKindAndText(
-          kind: token.raw.rawTokenKind, text: token.raw.tokenText)
+          kind: token.raw.rawTokenKind, text: token.raw.rawTokenText)
           .classify(offset: offset, contextualClassification: token.classification)
 
         // Move on to trailing trivia.
-        state = .atTrailingTrivia(token.raw.tokenTrailingTriviaPieces, 0)
+        state = .atTrailingTrivia(token.raw.tokenTrailingRawTriviaPieces, 0)
         offset = classifiedRange.endOffset
         guard classifiedRange.kind != .none else { break }
         return classifiedRange

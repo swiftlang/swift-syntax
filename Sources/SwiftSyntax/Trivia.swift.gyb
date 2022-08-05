@@ -300,7 +300,11 @@ extension RawTriviaPiece {
 % for trivia in TRIVIAS:
     case ${trivia.serialization_code}:
 %   if trivia.is_collection():
-      return .${trivia.lower_name}s(text.count / ${trivia.characters_len()})
+%     division = ""
+%     if not trivia.characters_len() == 1:
+%       division = " / %d" % (trivia.characters_len())
+%     end
+      return .${trivia.lower_name}s(text.count${division})
 %   else:
       return .${trivia.lower_name}(text)
 %   end

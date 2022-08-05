@@ -84,7 +84,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 
   /// The text of the token as written in the source code.
   public var text: String {
-    return String(syntaxText: raw.tokenText)
+    return String(syntaxText: raw.rawTokenText)
   }
 
   /// Returns a new TokenSyntax with its kind replaced
@@ -134,7 +134,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {
-      return raw.tokenLeadingTrivia
+      return raw.formTokenLeadingTrivia()!
     }
     set {
       self = withLeadingTrivia(newValue)
@@ -144,7 +144,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
     get {
-      return raw.tokenTrailingTrivia
+      return raw.formTokenTrailingTrivia()!
     }
     set {
       self = withTrailingTrivia(newValue)
@@ -154,7 +154,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The kind of token this node represents.
   public var tokenKind: TokenKind {
     get {
-      return raw.tokenKind
+      return raw.formTokenKind()!
     }
     set {
       self = withKind(newValue)

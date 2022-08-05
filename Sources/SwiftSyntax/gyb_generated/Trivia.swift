@@ -470,17 +470,17 @@ extension RawTriviaPiece {
   public static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {
     switch kind {
     case 0:
-      return .spaces(text.count / 1)
+      return .spaces(text.count)
     case 1:
-      return .tabs(text.count / 1)
+      return .tabs(text.count)
     case 2:
-      return .verticalTabs(text.count / 1)
+      return .verticalTabs(text.count)
     case 3:
-      return .formfeeds(text.count / 1)
+      return .formfeeds(text.count)
     case 4:
-      return .newlines(text.count / 1)
+      return .newlines(text.count)
     case 5:
-      return .carriageReturns(text.count / 1)
+      return .carriageReturns(text.count)
     case 6:
       return .carriageReturnLineFeeds(text.count / 2)
     case 8:

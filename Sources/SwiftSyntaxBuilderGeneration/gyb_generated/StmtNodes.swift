@@ -13,6 +13,17 @@
 //===----------------------------------------------------------------------===//
 
 let STMT_NODES: [Node] = [
+  Node(name: "LabeledStmt",
+       kind: "Stmt",
+       children: [
+         Child(name: "LabelName",
+               kind: "IdentifierToken"),
+         Child(name: "LabelColon",
+               kind: "ColonToken"),
+         Child(name: "Statement",
+               kind: "Stmt")
+       ]),
+
   Node(name: "ContinueStmt",
        kind: "Stmt",
        children: [
@@ -26,16 +37,9 @@ let STMT_NODES: [Node] = [
   Node(name: "WhileStmt",
        kind: "Stmt",
        traits: [
-         "WithCodeBlock",
-         "Labeled"
+         "WithCodeBlock"
        ],
        children: [
-         Child(name: "LabelName",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "LabelColon",
-               kind: "ColonToken",
-               isOptional: true),
          Child(name: "WhileKeyword",
                kind: "WhileToken"),
          Child(name: "Conditions",
@@ -74,16 +78,9 @@ let STMT_NODES: [Node] = [
   Node(name: "RepeatWhileStmt",
        kind: "Stmt",
        traits: [
-         "WithCodeBlock",
-         "Labeled"
+         "WithCodeBlock"
        ],
        children: [
-         Child(name: "LabelName",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "LabelColon",
-               kind: "ColonToken",
-               isOptional: true),
          Child(name: "RepeatKeyword",
                kind: "RepeatToken"),
          Child(name: "Body",
@@ -123,16 +120,9 @@ let STMT_NODES: [Node] = [
   Node(name: "ForInStmt",
        kind: "Stmt",
        traits: [
-         "WithCodeBlock",
-         "Labeled"
+         "WithCodeBlock"
        ],
        children: [
-         Child(name: "LabelName",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "LabelColon",
-               kind: "ColonToken",
-               isOptional: true),
          Child(name: "ForKeyword",
                kind: "ForToken"),
          Child(name: "TryKeyword",
@@ -167,16 +157,9 @@ let STMT_NODES: [Node] = [
   Node(name: "SwitchStmt",
        kind: "Stmt",
        traits: [
-         "Braced",
-         "Labeled"
+         "Braced"
        ],
        children: [
-         Child(name: "LabelName",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "LabelColon",
-               kind: "ColonToken",
-               isOptional: true),
          Child(name: "SwitchKeyword",
                kind: "SwitchToken"),
          Child(name: "Expression",
@@ -198,16 +181,9 @@ let STMT_NODES: [Node] = [
   Node(name: "DoStmt",
        kind: "Stmt",
        traits: [
-         "WithCodeBlock",
-         "Labeled"
+         "WithCodeBlock"
        ],
        children: [
-         Child(name: "LabelName",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "LabelColon",
-               kind: "ColonToken",
-               isOptional: true),
          Child(name: "DoKeyword",
                kind: "DoToken"),
          Child(name: "Body",
@@ -392,16 +368,9 @@ let STMT_NODES: [Node] = [
   Node(name: "IfStmt",
        kind: "Stmt",
        traits: [
-         "WithCodeBlock",
-         "Labeled"
+         "WithCodeBlock"
        ],
        children: [
-         Child(name: "LabelName",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "LabelColon",
-               kind: "ColonToken",
-               isOptional: true),
          Child(name: "IfKeyword",
                kind: "IfToken"),
          Child(name: "Conditions",

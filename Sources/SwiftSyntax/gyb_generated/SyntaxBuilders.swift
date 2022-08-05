@@ -7275,6 +7275,60 @@ extension BackDeployVersionArgumentSyntax {
   }
 }
 
+public struct LabeledStmtSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 6)
+
+  internal init() {}
+
+  public mutating func useLabelName(_ node: TokenSyntax) {
+    let idx = LabeledStmtSyntax.Cursor.labelName.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useLabelColon(_ node: TokenSyntax) {
+    let idx = LabeledStmtSyntax.Cursor.labelColon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useStatement(_ node: StmtSyntax) {
+    let idx = LabeledStmtSyntax.Cursor.statement.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[5] == nil) {
+      layout[5] = RawSyntax.missing(SyntaxKind.missingStmt)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .labeledStmt,
+      layout: layout, presence: .present))
+  }
+}
+
+extension LabeledStmtSyntax {
+  /// Creates a `LabeledStmtSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `LabeledStmtSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `LabeledStmtSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout LabeledStmtSyntaxBuilder) -> Void) {
+    var builder = LabeledStmtSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct ContinueStmtSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 4)
@@ -7320,19 +7374,9 @@ extension ContinueStmtSyntax {
 
 public struct WhileStmtSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 10)
+    Array<RawSyntax?>(repeating: nil, count: 6)
 
   internal init() {}
-
-  public mutating func useLabelName(_ node: TokenSyntax) {
-    let idx = WhileStmtSyntax.Cursor.labelName.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useLabelColon(_ node: TokenSyntax) {
-    let idx = WhileStmtSyntax.Cursor.labelColon.rawValue
-    layout[idx] = node.raw
-  }
 
   public mutating func useWhileKeyword(_ node: TokenSyntax) {
     let idx = WhileStmtSyntax.Cursor.whileKeyword.rawValue
@@ -7356,14 +7400,14 @@ public struct WhileStmtSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.whileKeyword)
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missing(SyntaxKind.conditionElementList)
+    }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.whileKeyword)
-    }
-    if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.conditionElementList)
-    }
-    if (layout[9] == nil) {
-      layout[9] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[5] = RawSyntax.missing(SyntaxKind.codeBlock)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .whileStmt,
@@ -7474,19 +7518,9 @@ extension ExpressionStmtSyntax {
 
 public struct RepeatWhileStmtSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 12)
+    Array<RawSyntax?>(repeating: nil, count: 8)
 
   internal init() {}
-
-  public mutating func useLabelName(_ node: TokenSyntax) {
-    let idx = RepeatWhileStmtSyntax.Cursor.labelName.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useLabelColon(_ node: TokenSyntax) {
-    let idx = RepeatWhileStmtSyntax.Cursor.labelColon.rawValue
-    layout[idx] = node.raw
-  }
 
   public mutating func useRepeatKeyword(_ node: TokenSyntax) {
     let idx = RepeatWhileStmtSyntax.Cursor.repeatKeyword.rawValue
@@ -7509,17 +7543,17 @@ public struct RepeatWhileStmtSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.repeatKeyword)
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missing(SyntaxKind.codeBlock)
+    }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.repeatKeyword)
+      layout[5] = RawSyntax.missingToken(TokenKind.whileKeyword)
     }
     if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.codeBlock)
-    }
-    if (layout[9] == nil) {
-      layout[9] = RawSyntax.missingToken(TokenKind.whileKeyword)
-    }
-    if (layout[11] == nil) {
-      layout[11] = RawSyntax.missing(SyntaxKind.missingExpr)
+      layout[7] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .repeatWhileStmt,
@@ -7660,19 +7694,9 @@ extension WhereClauseSyntax {
 
 public struct ForInStmtSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 24)
+    Array<RawSyntax?>(repeating: nil, count: 20)
 
   internal init() {}
-
-  public mutating func useLabelName(_ node: TokenSyntax) {
-    let idx = ForInStmtSyntax.Cursor.labelName.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useLabelColon(_ node: TokenSyntax) {
-    let idx = ForInStmtSyntax.Cursor.labelColon.rawValue
-    layout[idx] = node.raw
-  }
 
   public mutating func useForKeyword(_ node: TokenSyntax) {
     let idx = ForInStmtSyntax.Cursor.forKeyword.rawValue
@@ -7725,20 +7749,20 @@ public struct ForInStmtSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.forKeyword)
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.forKeyword)
+    }
+    if (layout[9] == nil) {
+      layout[9] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
     if (layout[13] == nil) {
-      layout[13] = RawSyntax.missing(SyntaxKind.missingPattern)
+      layout[13] = RawSyntax.missingToken(TokenKind.inKeyword)
     }
-    if (layout[17] == nil) {
-      layout[17] = RawSyntax.missingToken(TokenKind.inKeyword)
+    if (layout[15] == nil) {
+      layout[15] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[19] == nil) {
-      layout[19] = RawSyntax.missing(SyntaxKind.missingExpr)
-    }
-    if (layout[23] == nil) {
-      layout[23] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[19] = RawSyntax.missing(SyntaxKind.codeBlock)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .forInStmt,
@@ -7765,19 +7789,9 @@ extension ForInStmtSyntax {
 
 public struct SwitchStmtSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 14)
+    Array<RawSyntax?>(repeating: nil, count: 10)
 
   internal init() {}
-
-  public mutating func useLabelName(_ node: TokenSyntax) {
-    let idx = SwitchStmtSyntax.Cursor.labelName.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useLabelColon(_ node: TokenSyntax) {
-    let idx = SwitchStmtSyntax.Cursor.labelColon.rawValue
-    layout[idx] = node.raw
-  }
 
   public mutating func useSwitchKeyword(_ node: TokenSyntax) {
     let idx = SwitchStmtSyntax.Cursor.switchKeyword.rawValue
@@ -7811,20 +7825,20 @@ public struct SwitchStmtSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.switchKeyword)
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missing(SyntaxKind.missingExpr)
+    }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.switchKeyword)
+      layout[5] = RawSyntax.missingToken(TokenKind.leftBrace)
     }
     if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.missingExpr)
+      layout[7] = RawSyntax.missing(SyntaxKind.switchCaseList)
     }
     if (layout[9] == nil) {
-      layout[9] = RawSyntax.missingToken(TokenKind.leftBrace)
-    }
-    if (layout[11] == nil) {
-      layout[11] = RawSyntax.missing(SyntaxKind.switchCaseList)
-    }
-    if (layout[13] == nil) {
-      layout[13] = RawSyntax.missingToken(TokenKind.rightBrace)
+      layout[9] = RawSyntax.missingToken(TokenKind.rightBrace)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .switchStmt,
@@ -7851,19 +7865,9 @@ extension SwitchStmtSyntax {
 
 public struct DoStmtSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 10)
+    Array<RawSyntax?>(repeating: nil, count: 6)
 
   internal init() {}
-
-  public mutating func useLabelName(_ node: TokenSyntax) {
-    let idx = DoStmtSyntax.Cursor.labelName.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useLabelColon(_ node: TokenSyntax) {
-    let idx = DoStmtSyntax.Cursor.labelColon.rawValue
-    layout[idx] = node.raw
-  }
 
   public mutating func useDoKeyword(_ node: TokenSyntax) {
     let idx = DoStmtSyntax.Cursor.doKeyword.rawValue
@@ -7887,11 +7891,11 @@ public struct DoStmtSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.doKeyword)
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.doKeyword)
     }
-    if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.codeBlock)
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missing(SyntaxKind.codeBlock)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .doStmt,
@@ -8531,19 +8535,9 @@ extension ThrowStmtSyntax {
 
 public struct IfStmtSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 14)
+    Array<RawSyntax?>(repeating: nil, count: 10)
 
   internal init() {}
-
-  public mutating func useLabelName(_ node: TokenSyntax) {
-    let idx = IfStmtSyntax.Cursor.labelName.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useLabelColon(_ node: TokenSyntax) {
-    let idx = IfStmtSyntax.Cursor.labelColon.rawValue
-    layout[idx] = node.raw
-  }
 
   public mutating func useIfKeyword(_ node: TokenSyntax) {
     let idx = IfStmtSyntax.Cursor.ifKeyword.rawValue
@@ -8577,14 +8571,14 @@ public struct IfStmtSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.ifKeyword)
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missing(SyntaxKind.conditionElementList)
+    }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.ifKeyword)
-    }
-    if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.conditionElementList)
-    }
-    if (layout[9] == nil) {
-      layout[9] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[5] = RawSyntax.missing(SyntaxKind.codeBlock)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .ifStmt,

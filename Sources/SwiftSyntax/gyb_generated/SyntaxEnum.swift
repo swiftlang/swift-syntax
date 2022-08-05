@@ -187,6 +187,7 @@ public enum SyntaxEnum {
   case backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax)
   case backDeployVersionList(BackDeployVersionListSyntax)
   case backDeployVersionArgument(BackDeployVersionArgumentSyntax)
+  case labeledStmt(LabeledStmtSyntax)
   case continueStmt(ContinueStmtSyntax)
   case whileStmt(WhileStmtSyntax)
   case deferStmt(DeferStmtSyntax)
@@ -625,6 +626,8 @@ public extension Syntax {
       return .backDeployVersionList(BackDeployVersionListSyntax(self)!)
     case .backDeployVersionArgument:
       return .backDeployVersionArgument(BackDeployVersionArgumentSyntax(self)!)
+    case .labeledStmt:
+      return .labeledStmt(LabeledStmtSyntax(self)!)
     case .continueStmt:
       return .continueStmt(ContinueStmtSyntax(self)!)
     case .whileStmt:

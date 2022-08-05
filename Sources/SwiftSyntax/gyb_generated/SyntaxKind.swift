@@ -187,6 +187,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case backDeployAttributeSpecList = 257
   case backDeployVersionList = 258
   case backDeployVersionArgument = 259
+  case labeledStmt = 267
   case continueStmt = 72
   case whileStmt = 73
   case deferStmt = 74

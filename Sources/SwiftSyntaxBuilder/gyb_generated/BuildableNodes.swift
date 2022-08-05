@@ -12676,6 +12676,110 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   }
 
 }
+public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
+  let garbageBeforeLabelName: GarbageNodes?
+  let labelName: TokenSyntax
+  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
+  let labelColon: TokenSyntax
+  let garbageBetweenLabelColonAndStatement: GarbageNodes?
+  let statement: StmtBuildable
+
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
+  /// Creates a `LabeledStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - garbageBeforeLabelName: 
+  ///   - labelName: 
+  ///   - garbageBetweenLabelNameAndLabelColon: 
+  ///   - labelColon: 
+  ///   - garbageBetweenLabelColonAndStatement: 
+  ///   - statement: 
+  public init(
+    leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
+    labelName: TokenSyntax,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
+    labelColon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenLabelColonAndStatement: ExpressibleAsGarbageNodes? = nil,
+    statement: ExpressibleAsStmtBuildable
+  ) {
+    self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
+    self.labelName = labelName
+    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
+    self.labelColon = labelColon
+    assert(labelColon.text == ":")
+    self.garbageBetweenLabelColonAndStatement = garbageBetweenLabelColonAndStatement?.createGarbageNodes()
+    self.statement = statement.createStmtBuildable()
+  }
+
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leadingTrivia: Trivia = [],
+    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
+    labelName: String,
+    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
+    labelColon: TokenSyntax = TokenSyntax.`colon`,
+    garbageBetweenLabelColonAndStatement: ExpressibleAsGarbageNodes? = nil,
+    statement: ExpressibleAsStmtBuildable
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      garbageBeforeLabelName: garbageBeforeLabelName,
+      labelName: TokenSyntax.identifier(labelName),
+      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
+      labelColon: labelColon,
+      garbageBetweenLabelColonAndStatement: garbageBetweenLabelColonAndStatement,
+      statement: statement
+    )
+  }
+
+  /// Builds a `LabeledStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `LabeledStmtSyntax`.
+  func buildLabeledStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledStmtSyntax {
+    let result = SyntaxFactory.makeLabeledStmt(
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      labelName: labelName,
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      labelColon: labelColon,
+      garbageBetweenLabelColonAndStatement?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      statement: statement.buildStmt(format: format, leadingTrivia: nil)
+    )
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  }
+
+  /// Conformance to `StmtBuildable`.
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildLabeledStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+    return StmtSyntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsLabeledStmt`.
+  public func createLabeledStmt() -> LabeledStmt {
+    return self
+  }
+
+  /// `LabeledStmt` might conform to `ExpressibleAsStmtBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createStmtBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createStmtBuildable() -> StmtBuildable {
+    return self
+  }
+
+  /// `LabeledStmt` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
 public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   let garbageBeforeContinueKeyword: GarbageNodes?
   let continueKeyword: TokenSyntax
@@ -12767,11 +12871,7 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   }
 }
 public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
-  let garbageBeforeLabelName: GarbageNodes?
-  let labelName: TokenSyntax?
-  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
-  let labelColon: TokenSyntax?
-  let garbageBetweenLabelColonAndWhileKeyword: GarbageNodes?
+  let garbageBeforeWhileKeyword: GarbageNodes?
   let whileKeyword: TokenSyntax
   let garbageBetweenWhileKeywordAndConditions: GarbageNodes?
   let conditions: ConditionElementList
@@ -12784,11 +12884,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
 
   /// Creates a `WhileStmt` using the provided parameters.
   /// - Parameters:
-  ///   - garbageBeforeLabelName: 
-  ///   - labelName: 
-  ///   - garbageBetweenLabelNameAndLabelColon: 
-  ///   - labelColon: 
-  ///   - garbageBetweenLabelColonAndWhileKeyword: 
+  ///   - garbageBeforeWhileKeyword: 
   ///   - whileKeyword: 
   ///   - garbageBetweenWhileKeywordAndConditions: 
   ///   - conditions: 
@@ -12796,11 +12892,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: TokenSyntax? = nil,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndWhileKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeWhileKeyword: ExpressibleAsGarbageNodes? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
     garbageBetweenWhileKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
@@ -12808,12 +12900,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
-    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
-    self.labelName = labelName
-    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
-    self.labelColon = labelColon
-    assert(labelColon == nil || labelColon!.text == ":")
-    self.garbageBetweenLabelColonAndWhileKeyword = garbageBetweenLabelColonAndWhileKeyword?.createGarbageNodes()
+    self.garbageBeforeWhileKeyword = garbageBeforeWhileKeyword?.createGarbageNodes()
     self.whileKeyword = whileKeyword
     assert(whileKeyword.text == "while")
     self.garbageBetweenWhileKeywordAndConditions = garbageBetweenWhileKeywordAndConditions?.createGarbageNodes()
@@ -12827,11 +12914,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: String?,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndWhileKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeWhileKeyword: ExpressibleAsGarbageNodes? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
     garbageBetweenWhileKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
@@ -12840,11 +12923,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      garbageBeforeLabelName: garbageBeforeLabelName,
-      labelName: labelName.map(TokenSyntax.identifier),
-      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndWhileKeyword: garbageBetweenLabelColonAndWhileKeyword,
+      garbageBeforeWhileKeyword: garbageBeforeWhileKeyword,
       whileKeyword: whileKeyword,
       garbageBetweenWhileKeywordAndConditions: garbageBetweenWhileKeywordAndConditions,
       conditions: conditions,
@@ -12859,11 +12938,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// - Returns: The built `WhileStmtSyntax`.
   func buildWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhileStmtSyntax {
     let result = SyntaxFactory.makeWhileStmt(
-      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelName: labelName,
-      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whileKeyword: whileKeyword,
       garbageBetweenWhileKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
@@ -13051,11 +13126,7 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   }
 }
 public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
-  let garbageBeforeLabelName: GarbageNodes?
-  let labelName: TokenSyntax?
-  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
-  let labelColon: TokenSyntax?
-  let garbageBetweenLabelColonAndRepeatKeyword: GarbageNodes?
+  let garbageBeforeRepeatKeyword: GarbageNodes?
   let repeatKeyword: TokenSyntax
   let garbageBetweenRepeatKeywordAndBody: GarbageNodes?
   let body: CodeBlock
@@ -13070,11 +13141,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
 
   /// Creates a `RepeatWhileStmt` using the provided parameters.
   /// - Parameters:
-  ///   - garbageBeforeLabelName: 
-  ///   - labelName: 
-  ///   - garbageBetweenLabelNameAndLabelColon: 
-  ///   - labelColon: 
-  ///   - garbageBetweenLabelColonAndRepeatKeyword: 
+  ///   - garbageBeforeRepeatKeyword: 
   ///   - repeatKeyword: 
   ///   - garbageBetweenRepeatKeywordAndBody: 
   ///   - body: 
@@ -13084,11 +13151,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   ///   - condition: 
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: TokenSyntax? = nil,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndRepeatKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeRepeatKeyword: ExpressibleAsGarbageNodes? = nil,
     repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
     garbageBetweenRepeatKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock,
@@ -13098,12 +13161,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     condition: ExpressibleAsExprBuildable
   ) {
     self.leadingTrivia = leadingTrivia
-    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
-    self.labelName = labelName
-    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
-    self.labelColon = labelColon
-    assert(labelColon == nil || labelColon!.text == ":")
-    self.garbageBetweenLabelColonAndRepeatKeyword = garbageBetweenLabelColonAndRepeatKeyword?.createGarbageNodes()
+    self.garbageBeforeRepeatKeyword = garbageBeforeRepeatKeyword?.createGarbageNodes()
     self.repeatKeyword = repeatKeyword
     assert(repeatKeyword.text == "repeat")
     self.garbageBetweenRepeatKeywordAndBody = garbageBetweenRepeatKeywordAndBody?.createGarbageNodes()
@@ -13120,11 +13178,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: String?,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndRepeatKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeRepeatKeyword: ExpressibleAsGarbageNodes? = nil,
     repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
     garbageBetweenRepeatKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     garbageBetweenBodyAndWhileKeyword: ExpressibleAsGarbageNodes? = nil,
@@ -13135,11 +13189,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      garbageBeforeLabelName: garbageBeforeLabelName,
-      labelName: labelName.map(TokenSyntax.identifier),
-      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndRepeatKeyword: garbageBetweenLabelColonAndRepeatKeyword,
+      garbageBeforeRepeatKeyword: garbageBeforeRepeatKeyword,
       repeatKeyword: repeatKeyword,
       garbageBetweenRepeatKeywordAndBody: garbageBetweenRepeatKeywordAndBody,
       body: bodyBuilder(),
@@ -13156,11 +13206,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// - Returns: The built `RepeatWhileStmtSyntax`.
   func buildRepeatWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RepeatWhileStmtSyntax {
     let result = SyntaxFactory.makeRepeatWhileStmt(
-      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelName: labelName,
-      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndRepeatKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeRepeatKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       repeatKeyword: repeatKeyword,
       garbageBetweenRepeatKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
@@ -13384,11 +13430,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
 
 }
 public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
-  let garbageBeforeLabelName: GarbageNodes?
-  let labelName: TokenSyntax?
-  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
-  let labelColon: TokenSyntax?
-  let garbageBetweenLabelColonAndForKeyword: GarbageNodes?
+  let garbageBeforeForKeyword: GarbageNodes?
   let forKeyword: TokenSyntax
   let garbageBetweenForKeywordAndTryKeyword: GarbageNodes?
   let tryKeyword: TokenSyntax?
@@ -13415,11 +13457,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
 
   /// Creates a `ForInStmt` using the provided parameters.
   /// - Parameters:
-  ///   - garbageBeforeLabelName: 
-  ///   - labelName: 
-  ///   - garbageBetweenLabelNameAndLabelColon: 
-  ///   - labelColon: 
-  ///   - garbageBetweenLabelColonAndForKeyword: 
+  ///   - garbageBeforeForKeyword: 
   ///   - forKeyword: 
   ///   - garbageBetweenForKeywordAndTryKeyword: 
   ///   - tryKeyword: 
@@ -13441,11 +13479,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   ///   - body: 
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: TokenSyntax? = nil,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndForKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeForKeyword: ExpressibleAsGarbageNodes? = nil,
     forKeyword: TokenSyntax = TokenSyntax.`for`,
     garbageBetweenForKeywordAndTryKeyword: ExpressibleAsGarbageNodes? = nil,
     tryKeyword: TokenSyntax? = nil,
@@ -13467,12 +13501,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     body: ExpressibleAsCodeBlock
   ) {
     self.leadingTrivia = leadingTrivia
-    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
-    self.labelName = labelName
-    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
-    self.labelColon = labelColon
-    assert(labelColon == nil || labelColon!.text == ":")
-    self.garbageBetweenLabelColonAndForKeyword = garbageBetweenLabelColonAndForKeyword?.createGarbageNodes()
+    self.garbageBeforeForKeyword = garbageBeforeForKeyword?.createGarbageNodes()
     self.forKeyword = forKeyword
     assert(forKeyword.text == "for")
     self.garbageBetweenForKeywordAndTryKeyword = garbageBetweenForKeywordAndTryKeyword?.createGarbageNodes()
@@ -13504,11 +13533,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: String?,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndForKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeForKeyword: ExpressibleAsGarbageNodes? = nil,
     forKeyword: TokenSyntax = TokenSyntax.`for`,
     garbageBetweenForKeywordAndTryKeyword: ExpressibleAsGarbageNodes? = nil,
     tryKeyword: TokenSyntax? = nil,
@@ -13531,11 +13556,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      garbageBeforeLabelName: garbageBeforeLabelName,
-      labelName: labelName.map(TokenSyntax.identifier),
-      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndForKeyword: garbageBetweenLabelColonAndForKeyword,
+      garbageBeforeForKeyword: garbageBeforeForKeyword,
       forKeyword: forKeyword,
       garbageBetweenForKeywordAndTryKeyword: garbageBetweenForKeywordAndTryKeyword,
       tryKeyword: tryKeyword,
@@ -13564,11 +13585,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// - Returns: The built `ForInStmtSyntax`.
   func buildForInStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForInStmtSyntax {
     let result = SyntaxFactory.makeForInStmt(
-      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelName: labelName,
-      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndForKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeForKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       forKeyword: forKeyword,
       garbageBetweenForKeywordAndTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tryKeyword: tryKeyword,
@@ -13619,11 +13636,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   }
 }
 public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
-  let garbageBeforeLabelName: GarbageNodes?
-  let labelName: TokenSyntax?
-  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
-  let labelColon: TokenSyntax?
-  let garbageBetweenLabelColonAndSwitchKeyword: GarbageNodes?
+  let garbageBeforeSwitchKeyword: GarbageNodes?
   let switchKeyword: TokenSyntax
   let garbageBetweenSwitchKeywordAndExpression: GarbageNodes?
   let expression: ExprBuildable
@@ -13640,11 +13653,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
 
   /// Creates a `SwitchStmt` using the provided parameters.
   /// - Parameters:
-  ///   - garbageBeforeLabelName: 
-  ///   - labelName: 
-  ///   - garbageBetweenLabelNameAndLabelColon: 
-  ///   - labelColon: 
-  ///   - garbageBetweenLabelColonAndSwitchKeyword: 
+  ///   - garbageBeforeSwitchKeyword: 
   ///   - switchKeyword: 
   ///   - garbageBetweenSwitchKeywordAndExpression: 
   ///   - expression: 
@@ -13656,11 +13665,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   ///   - rightBrace: 
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: TokenSyntax? = nil,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndSwitchKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeSwitchKeyword: ExpressibleAsGarbageNodes? = nil,
     switchKeyword: TokenSyntax = TokenSyntax.`switch`,
     garbageBetweenSwitchKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
@@ -13672,12 +13677,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leadingTrivia = leadingTrivia
-    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
-    self.labelName = labelName
-    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
-    self.labelColon = labelColon
-    assert(labelColon == nil || labelColon!.text == ":")
-    self.garbageBetweenLabelColonAndSwitchKeyword = garbageBetweenLabelColonAndSwitchKeyword?.createGarbageNodes()
+    self.garbageBeforeSwitchKeyword = garbageBeforeSwitchKeyword?.createGarbageNodes()
     self.switchKeyword = switchKeyword
     assert(switchKeyword.text == "switch")
     self.garbageBetweenSwitchKeywordAndExpression = garbageBetweenSwitchKeywordAndExpression?.createGarbageNodes()
@@ -13697,11 +13697,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: String?,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndSwitchKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeSwitchKeyword: ExpressibleAsGarbageNodes? = nil,
     switchKeyword: TokenSyntax = TokenSyntax.`switch`,
     garbageBetweenSwitchKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
     expression: ExpressibleAsExprBuildable,
@@ -13714,11 +13710,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      garbageBeforeLabelName: garbageBeforeLabelName,
-      labelName: labelName.map(TokenSyntax.identifier),
-      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndSwitchKeyword: garbageBetweenLabelColonAndSwitchKeyword,
+      garbageBeforeSwitchKeyword: garbageBeforeSwitchKeyword,
       switchKeyword: switchKeyword,
       garbageBetweenSwitchKeywordAndExpression: garbageBetweenSwitchKeywordAndExpression,
       expression: expression,
@@ -13737,11 +13729,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// - Returns: The built `SwitchStmtSyntax`.
   func buildSwitchStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
     let result = SyntaxFactory.makeSwitchStmt(
-      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelName: labelName,
-      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndSwitchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeSwitchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       switchKeyword: switchKeyword,
       garbageBetweenSwitchKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
@@ -13782,11 +13770,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   }
 }
 public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
-  let garbageBeforeLabelName: GarbageNodes?
-  let labelName: TokenSyntax?
-  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
-  let labelColon: TokenSyntax?
-  let garbageBetweenLabelColonAndDoKeyword: GarbageNodes?
+  let garbageBeforeDoKeyword: GarbageNodes?
   let doKeyword: TokenSyntax
   let garbageBetweenDoKeywordAndBody: GarbageNodes?
   let body: CodeBlock
@@ -13799,11 +13783,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
 
   /// Creates a `DoStmt` using the provided parameters.
   /// - Parameters:
-  ///   - garbageBeforeLabelName: 
-  ///   - labelName: 
-  ///   - garbageBetweenLabelNameAndLabelColon: 
-  ///   - labelColon: 
-  ///   - garbageBetweenLabelColonAndDoKeyword: 
+  ///   - garbageBeforeDoKeyword: 
   ///   - doKeyword: 
   ///   - garbageBetweenDoKeywordAndBody: 
   ///   - body: 
@@ -13811,11 +13791,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   ///   - catchClauses: 
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: TokenSyntax? = nil,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndDoKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeDoKeyword: ExpressibleAsGarbageNodes? = nil,
     doKeyword: TokenSyntax = TokenSyntax.`do`,
     garbageBetweenDoKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     body: ExpressibleAsCodeBlock,
@@ -13823,12 +13799,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
     catchClauses: ExpressibleAsCatchClauseList? = nil
   ) {
     self.leadingTrivia = leadingTrivia
-    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
-    self.labelName = labelName
-    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
-    self.labelColon = labelColon
-    assert(labelColon == nil || labelColon!.text == ":")
-    self.garbageBetweenLabelColonAndDoKeyword = garbageBetweenLabelColonAndDoKeyword?.createGarbageNodes()
+    self.garbageBeforeDoKeyword = garbageBeforeDoKeyword?.createGarbageNodes()
     self.doKeyword = doKeyword
     assert(doKeyword.text == "do")
     self.garbageBetweenDoKeywordAndBody = garbageBetweenDoKeywordAndBody?.createGarbageNodes()
@@ -13842,11 +13813,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: String?,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndDoKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeDoKeyword: ExpressibleAsGarbageNodes? = nil,
     doKeyword: TokenSyntax = TokenSyntax.`do`,
     garbageBetweenDoKeywordAndBody: ExpressibleAsGarbageNodes? = nil,
     garbageBetweenBodyAndCatchClauses: ExpressibleAsGarbageNodes? = nil,
@@ -13855,11 +13822,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      garbageBeforeLabelName: garbageBeforeLabelName,
-      labelName: labelName.map(TokenSyntax.identifier),
-      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndDoKeyword: garbageBetweenLabelColonAndDoKeyword,
+      garbageBeforeDoKeyword: garbageBeforeDoKeyword,
       doKeyword: doKeyword,
       garbageBetweenDoKeywordAndBody: garbageBetweenDoKeywordAndBody,
       body: bodyBuilder(),
@@ -13874,11 +13837,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// - Returns: The built `DoStmtSyntax`.
   func buildDoStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DoStmtSyntax {
     let result = SyntaxFactory.makeDoStmt(
-      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelName: labelName,
-      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndDoKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDoKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       doKeyword: doKeyword,
       garbageBetweenDoKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
@@ -14882,11 +14841,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   }
 }
 public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
-  let garbageBeforeLabelName: GarbageNodes?
-  let labelName: TokenSyntax?
-  let garbageBetweenLabelNameAndLabelColon: GarbageNodes?
-  let labelColon: TokenSyntax?
-  let garbageBetweenLabelColonAndIfKeyword: GarbageNodes?
+  let garbageBeforeIfKeyword: GarbageNodes?
   let ifKeyword: TokenSyntax
   let garbageBetweenIfKeywordAndConditions: GarbageNodes?
   let conditions: ConditionElementList
@@ -14903,11 +14858,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
 
   /// Creates a `IfStmt` using the provided parameters.
   /// - Parameters:
-  ///   - garbageBeforeLabelName: 
-  ///   - labelName: 
-  ///   - garbageBetweenLabelNameAndLabelColon: 
-  ///   - labelColon: 
-  ///   - garbageBetweenLabelColonAndIfKeyword: 
+  ///   - garbageBeforeIfKeyword: 
   ///   - ifKeyword: 
   ///   - garbageBetweenIfKeywordAndConditions: 
   ///   - conditions: 
@@ -14919,11 +14870,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   ///   - elseBody: 
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: TokenSyntax? = nil,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndIfKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeIfKeyword: ExpressibleAsGarbageNodes? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
     garbageBetweenIfKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
@@ -14935,12 +14882,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     elseBody: ExpressibleAsSyntaxBuildable? = nil
   ) {
     self.leadingTrivia = leadingTrivia
-    self.garbageBeforeLabelName = garbageBeforeLabelName?.createGarbageNodes()
-    self.labelName = labelName
-    self.garbageBetweenLabelNameAndLabelColon = garbageBetweenLabelNameAndLabelColon?.createGarbageNodes()
-    self.labelColon = labelColon
-    assert(labelColon == nil || labelColon!.text == ":")
-    self.garbageBetweenLabelColonAndIfKeyword = garbageBetweenLabelColonAndIfKeyword?.createGarbageNodes()
+    self.garbageBeforeIfKeyword = garbageBeforeIfKeyword?.createGarbageNodes()
     self.ifKeyword = ifKeyword
     assert(ifKeyword.text == "if")
     self.garbageBetweenIfKeywordAndConditions = garbageBetweenIfKeywordAndConditions?.createGarbageNodes()
@@ -14959,11 +14901,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
-    garbageBeforeLabelName: ExpressibleAsGarbageNodes? = nil,
-    labelName: String?,
-    garbageBetweenLabelNameAndLabelColon: ExpressibleAsGarbageNodes? = nil,
-    labelColon: TokenSyntax? = nil,
-    garbageBetweenLabelColonAndIfKeyword: ExpressibleAsGarbageNodes? = nil,
+    garbageBeforeIfKeyword: ExpressibleAsGarbageNodes? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
     garbageBetweenIfKeywordAndConditions: ExpressibleAsGarbageNodes? = nil,
     conditions: ExpressibleAsConditionElementList,
@@ -14976,11 +14914,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      garbageBeforeLabelName: garbageBeforeLabelName,
-      labelName: labelName.map(TokenSyntax.identifier),
-      garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndIfKeyword: garbageBetweenLabelColonAndIfKeyword,
+      garbageBeforeIfKeyword: garbageBeforeIfKeyword,
       ifKeyword: ifKeyword,
       garbageBetweenIfKeywordAndConditions: garbageBetweenIfKeywordAndConditions,
       conditions: conditions,
@@ -14999,11 +14933,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// - Returns: The built `IfStmtSyntax`.
   func buildIfStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfStmtSyntax {
     let result = SyntaxFactory.makeIfStmt(
-      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelName: labelName,
-      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
-      labelColon: labelColon,
-      garbageBetweenLabelColonAndIfKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIfKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ifKeyword: ifKeyword,
       garbageBetweenIfKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),

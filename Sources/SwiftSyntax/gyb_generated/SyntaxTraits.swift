@@ -158,31 +158,6 @@ public extension SyntaxProtocol {
   }
 }
 
-// MARK: - LabeledSyntax
-
-public protocol LabeledSyntax: SyntaxProtocol {
-  var labelName: TokenSyntax? { get }
-  func withLabelName(_ newChild: TokenSyntax?) -> Self
-  var labelColon: TokenSyntax? { get }
-  func withLabelColon(_ newChild: TokenSyntax?) -> Self
-}
-
-public extension SyntaxProtocol {
-  /// Check whether the non-type erased version of this syntax node conforms to 
-  /// `LabeledSyntax`. 
-  /// Note that this will incur an existential conversion.
-  func isProtocol(_: LabeledSyntax.Protocol) -> Bool {
-    return self.asProtocol(LabeledSyntax.self) != nil
-  }
-
-  /// Return the non-type erased version of this syntax node if it conforms to 
-  /// `LabeledSyntax`. Otherwise return `nil`.
-  /// Note that this will incur an existential conversion.
-  func asProtocol(_: LabeledSyntax.Protocol) -> LabeledSyntax? {
-    return Syntax(self).asProtocol(SyntaxProtocol.self) as? LabeledSyntax
-  }
-}
-
 // MARK: - WithStatementsSyntax
 
 public protocol WithStatementsSyntax: SyntaxProtocol {
@@ -247,15 +222,15 @@ extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax {}
 extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {}
 extension TargetFunctionEntrySyntax: WithTrailingCommaSyntax {}
 extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {}
-extension WhileStmtSyntax: WithCodeBlockSyntax, LabeledSyntax {}
+extension WhileStmtSyntax: WithCodeBlockSyntax {}
 extension DeferStmtSyntax: WithCodeBlockSyntax {}
-extension RepeatWhileStmtSyntax: WithCodeBlockSyntax, LabeledSyntax {}
+extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {}
 extension GuardStmtSyntax: WithCodeBlockSyntax {}
-extension ForInStmtSyntax: WithCodeBlockSyntax, LabeledSyntax {}
-extension SwitchStmtSyntax: BracedSyntax, LabeledSyntax {}
-extension DoStmtSyntax: WithCodeBlockSyntax, LabeledSyntax {}
+extension ForInStmtSyntax: WithCodeBlockSyntax {}
+extension SwitchStmtSyntax: BracedSyntax {}
+extension DoStmtSyntax: WithCodeBlockSyntax {}
 extension ConditionElementSyntax: WithTrailingCommaSyntax {}
-extension IfStmtSyntax: WithCodeBlockSyntax, LabeledSyntax {}
+extension IfStmtSyntax: WithCodeBlockSyntax {}
 extension ElseBlockSyntax: WithCodeBlockSyntax {}
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 extension CaseItemSyntax: WithTrailingCommaSyntax {}
@@ -269,4 +244,4 @@ extension TupleTypeSyntax: ParenthesizedSyntax {}
 extension FunctionTypeSyntax: ParenthesizedSyntax {}
 extension GenericArgumentSyntax: WithTrailingCommaSyntax {}
 extension TuplePatternSyntax: ParenthesizedSyntax {}
-extension TuplePatternElementSyntax: WithTrailingCommaSyntax, LabeledSyntax {}
+extension TuplePatternElementSyntax: WithTrailingCommaSyntax {}

@@ -105,8 +105,7 @@ let PATTERN_NODES: [Node] = [
   Node(name: "TuplePatternElement",
        kind: "Syntax",
        traits: [
-         "WithTrailingComma",
-         "Labeled"
+         "WithTrailingComma"
        ],
        children: [
          Child(name: "LabelName",

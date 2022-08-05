@@ -150,7 +150,7 @@ public struct Trivia {
 
 extension Trivia: CustomDebugStringConvertible {
    public var debugDescription: String {
-     if count == 1, let first {
+     if count == 1, let first = first {
        return first.debugDescription
      }
      return "[" + map(\.debugDescription).joined(separator: ", ") + "]"

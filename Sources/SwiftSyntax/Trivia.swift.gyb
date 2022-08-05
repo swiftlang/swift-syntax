@@ -232,7 +232,7 @@ extension TriviaPiece {
 }
 
 /// Trivia piece for token RawSyntax.
-public enum RawTriviaPiece {
+enum RawTriviaPiece {
 % for trivia in TRIVIAS:
 %   if trivia.is_collection():
     case ${trivia.lower_name}s(Int)
@@ -255,7 +255,7 @@ public enum RawTriviaPiece {
 }
 
 extension RawTriviaPiece: TextOutputStreamable {
-  public func write<Target: TextOutputStream>(to target: inout Target) {
+  func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)
   }
 }
@@ -275,7 +275,7 @@ extension TriviaPiece {
 }
 
 extension RawTriviaPiece {
-  public var byteLength: Int {
+  var byteLength: Int {
     switch self {
 % for trivia in TRIVIAS:
 %   if trivia.is_new_line:
@@ -295,7 +295,7 @@ extension RawTriviaPiece {
 
 
 extension RawTriviaPiece {
-  public static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {
+  static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {
     switch kind {
 % for trivia in TRIVIAS:
     case ${trivia.serialization_code}:

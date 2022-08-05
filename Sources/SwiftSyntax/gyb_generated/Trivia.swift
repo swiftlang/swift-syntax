@@ -372,7 +372,7 @@ extension TriviaPiece {
 }
 
 /// Trivia piece for token RawSyntax.
-public enum RawTriviaPiece {
+enum RawTriviaPiece {
     case spaces(Int)
     case tabs(Int)
     case verticalTabs(Int)
@@ -407,7 +407,7 @@ public enum RawTriviaPiece {
 }
 
 extension RawTriviaPiece: TextOutputStreamable {
-  public func write<Target: TextOutputStream>(to target: inout Target) {
+  func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)
   }
 }
@@ -433,7 +433,7 @@ extension TriviaPiece {
 }
 
 extension RawTriviaPiece {
-  public var byteLength: Int {
+  var byteLength: Int {
     switch self {
     case let .spaces(count):
       return count
@@ -467,7 +467,7 @@ extension RawTriviaPiece {
 
 
 extension RawTriviaPiece {
-  public static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {
+  static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {
     switch kind {
     case 0:
       return .spaces(text.count)

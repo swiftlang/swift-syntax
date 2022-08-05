@@ -61,14 +61,14 @@ public class SyntaxArena {
 
   /// Allcates a buffer of `RawTriviaPiece` with the given count, then returns
   /// the uninitialized memory range as a `UnsafeMutableBufferPointer<RawTriviaPiece>`.
-  public func allocateRawTriviaPieceBuffer(
+  func allocateRawTriviaPieceBuffer(
     count: Int) -> UnsafeMutableBufferPointer<RawTriviaPiece> {
       return allocator.allocate(RawTriviaPiece.self, count: count)
     }
 
   /// Allcates a buffer of `UInt8` with the given count, then returns the
   /// uninitialized memory range as a `UnsafeMutableBufferPointer<UInt8>`.
-  public func allocateTextBuffer(count: Int) -> UnsafeMutableBufferPointer<UInt8> {
+  func allocateTextBuffer(count: Int) -> UnsafeMutableBufferPointer<UInt8> {
     return allocator.allocate(UInt8.self, count: count)
   }
 

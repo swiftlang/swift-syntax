@@ -28,7 +28,7 @@ final class StructTests: XCTestCase {
       ],
       structKeyword: .struct,
       identifier: "NestedStruct",
-      genericParameterClause: GenericParameterClause {
+      genericParameterClause: GenericParameterClause(rightAngleBracket: .rightAngle.withoutTrailingTrivia()) {
         GenericParameter(name: "A")
         GenericParameter(name: "B", colon: .colon, inheritedType: "C")
         GenericParameter(name: "D")

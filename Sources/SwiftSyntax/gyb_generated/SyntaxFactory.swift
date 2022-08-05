@@ -6643,7 +6643,7 @@ public enum SyntaxFactory {
   }
   public static func makeDoKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.doKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -6746,7 +6746,7 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
   public static func makeWhereKeyword(
-    leadingTrivia: Trivia = [],
+    leadingTrivia: Trivia = .space,
     trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.whereKeyword, presence: .present,
@@ -6754,8 +6754,8 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
   public static func makeCatchKeyword(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    leadingTrivia: Trivia = .space,
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.catchKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,

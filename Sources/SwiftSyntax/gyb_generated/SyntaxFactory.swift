@@ -755,6 +755,33 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ArrowExprSyntax(data)
   }
+  public static func makeInfixOperatorExpr(_ garbageBeforeLeftOperand: GarbageNodesSyntax? = nil, leftOperand: ExprSyntax, _ garbageBetweenLeftOperandAndOperatorOperand: GarbageNodesSyntax? = nil, operatorOperand: ExprSyntax, _ garbageBetweenOperatorOperandAndRightOperand: GarbageNodesSyntax? = nil, rightOperand: ExprSyntax) -> InfixOperatorExprSyntax {
+    let layout: [RawSyntax?] = [
+      garbageBeforeLeftOperand?.raw,
+      leftOperand.raw,
+      garbageBetweenLeftOperandAndOperatorOperand?.raw,
+      operatorOperand.raw,
+      garbageBetweenOperatorOperandAndRightOperand?.raw,
+      rightOperand.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.infixOperatorExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return InfixOperatorExprSyntax(data)
+  }
+
+  public static func makeBlankInfixOperatorExpr(presence: SourcePresence = .present) -> InfixOperatorExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .infixOperatorExpr,
+      layout: [
+      nil,
+      RawSyntax.missing(SyntaxKind.missingExpr),
+      nil,
+      RawSyntax.missing(SyntaxKind.missingExpr),
+      nil,
+      RawSyntax.missing(SyntaxKind.missingExpr),
+    ], length: .zero, presence: presence))
+    return InfixOperatorExprSyntax(data)
+  }
   public static func makeFloatLiteralExpr(_ garbageBeforeFloatingDigits: GarbageNodesSyntax? = nil, floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeFloatingDigits?.raw,

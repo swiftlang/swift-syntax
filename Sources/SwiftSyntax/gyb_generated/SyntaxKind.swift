@@ -59,6 +59,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case prefixOperatorExpr = 39
   case binaryOperatorExpr = 40
   case arrowExpr = 41
+  case infixOperatorExpr = 268
   case floatLiteralExpr = 42
   case tupleExpr = 43
   case arrayExpr = 44

@@ -84,7 +84,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 
   /// The text of the token as written in the source code.
   public var text: String {
-    return String(syntaxText: raw.rawTokenText)
+    return tokenKind.text
   }
 
   /// Returns a new TokenSyntax with its kind replaced

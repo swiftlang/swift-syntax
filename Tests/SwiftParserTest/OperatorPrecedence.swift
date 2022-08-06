@@ -25,7 +25,8 @@ public class OperatorPrecedenceTests: XCTestCase {
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
     let foldedExpr = try opPrecedence.fold(sequenceExpr)
-    XCTAssertEqual("\(foldedExpr)", "(((x && y )|| (w && v ))|| z)")
+    XCTAssertEqual("\(foldedExpr)", "x && y || w && v || z")
+    XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
   }
 
   func testParsedLogicalExprs() throws {
@@ -57,7 +58,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
     let foldedExpr = try opPrecedence.fold(sequenceExpr)
-    XCTAssertEqual("\(foldedExpr)", "(((x && y )|| (w && v ))|| z)")
-
+    XCTAssertEqual("\(foldedExpr)", "x && y || w && v || z")
+    XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
   }
 }

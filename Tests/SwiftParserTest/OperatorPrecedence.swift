@@ -4,28 +4,22 @@ import SwiftParser
 
 public class OperatorPrecedenceTests: XCTestCase {
   func testLogicalExprs() throws {
-    var opPrecedence = OperatorPrecedence()
-
-    try opPrecedence.record(
-      Operator(kind: .infix, name: "&&",
-               precedenceGroup: "LogicalConjunctionPrecedence"))
-    try opPrecedence.record(
-      Operator(kind: .infix, name: "||",
-               precedenceGroup: "LogicalDisjunctionPrecedence"))
-    try opPrecedence.record(
-      PrecedenceGroup(name: "LogicalConjunctionPrecedence",
-                      associativity: .left, assignment: false,
-                      relations: [.higherThan("LogicalDisjunctionPrecedence")]))
-    try opPrecedence.record(
-      PrecedenceGroup(name: "LogicalDisjunctionPrecedence",
-                      associativity: .left, assignment: false,
-                      relations: []))
-
+    let opPrecedence = OperatorPrecedence.logicalOperators
     let parsed = try Parser.parse(source: "x && y || w && v || z")
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
     let foldedExpr = try opPrecedence.fold(sequenceExpr)
     XCTAssertEqual("\(foldedExpr)", "x && y || w && v || z")
+    XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
+  }
+
+  func testSwiftExprs() throws {
+    let opPrecedence = OperatorPrecedence.standardOperators
+    let parsed = try Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
+    let sequenceExpr =
+      parsed.statements.first!.item.as(SequenceExprSyntax.self)!
+    let foldedExpr = try opPrecedence.fold(sequenceExpr)
+    XCTAssertEqual("\(foldedExpr)", "(x + y > 17) && x && y || w && v || z")
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
   }
 

@@ -87,16 +87,67 @@ extension OperatorPrecedence {
   /// Integrate the operator and precedence group declarations from the given
   /// source file into the operator precedence tables.
   public mutating func addSourceFile(_ sourceFile: SourceFileSyntax) throws {
-    for stmt in sourceFile.statements {
-      if let operatorSyntax = stmt.item.as(OperatorDeclSyntax.self) {
-        try record(Operator(from: operatorSyntax))
-        continue
+    class OperatorAndGroupVisitor : SyntaxAnyVisitor {
+      var opPrecedence: OperatorPrecedence
+      var errors: [Error] = []
+
+      init(opPrecedence: OperatorPrecedence) {
+        self.opPrecedence = opPrecedence
+        super.init(viewMode: .fixedUp)
       }
 
-      if let precedenceGroupSyntax = stmt.item.as(PrecedenceGroupDeclSyntax.self) {
-        try record(PrecedenceGroup(from: precedenceGroupSyntax))
-        continue
+      override func visit(
+        _ node: OperatorDeclSyntax
+      ) -> SyntaxVisitorContinueKind {
+        do {
+          try opPrecedence.record(Operator(from: node))
+        } catch {
+          errors.append(error)
+        }
+        return .skipChildren
+      }
+
+      override func visit(
+        _ node: PrecedenceGroupDeclSyntax
+      ) -> SyntaxVisitorContinueKind {
+        do {
+          try opPrecedence.record(PrecedenceGroup(from: node))
+        } catch {
+          errors.append(error)
+        }
+        return .skipChildren
+      }
+
+      // Only visit top-level entities to find operators and precedence groups.
+      override func visit(
+        _ node: SourceFileSyntax
+      ) -> SyntaxVisitorContinueKind {
+        return .visitChildren
+      }
+
+      override func visit(
+        _ node: CodeBlockItemListSyntax
+      ) -> SyntaxVisitorContinueKind {
+        return .visitChildren
+      }
+
+      override func visit(
+        _ node: CodeBlockItemSyntax
+      ) -> SyntaxVisitorContinueKind {
+        return .visitChildren
+      }
+
+      // Everything else stops the visitation.
+      override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind{
+        return .skipChildren
       }
     }
+
+    let visitor = OperatorAndGroupVisitor(opPrecedence: self)
+    _ = visitor.visit(sourceFile)
+    if let firstError = visitor.errors.first {
+      throw firstError
+    }
+    self = visitor.opPrecedence
   }
 }

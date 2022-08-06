@@ -118,15 +118,15 @@ public enum Precedence {
 
 /// A graph formed from a set of precedence groups, which can be used to
 /// determine the relative precedence of two precedence groups.
-public struct PrecedenceGraph {
+struct PrecedenceGraph {
   /// The known set of precedence groups, found by name.
-  public var precedenceGroups: [PrecedenceGroupName : PrecedenceGroup] = [:]
+  var precedenceGroups: [PrecedenceGroupName : PrecedenceGroup] = [:]
 
   /// Add a new precedence group
   ///
   /// - throws: If there is already a precedence group with the given name,
   ///   throws PrecedenceGraphError.groupAlreadyExists.
-  public mutating func add(_ group: PrecedenceGroup) throws {
+  mutating func add(_ group: PrecedenceGroup) throws {
     if let existing = precedenceGroups[group.name] {
       throw OperatorPrecedenceError.groupAlreadyExists(
         existing: existing, new: group)
@@ -137,7 +137,7 @@ public struct PrecedenceGraph {
 
   /// Look for the precedence group with the given name, or produce an error
   /// if such a group is not known.
-  public func lookupGroup(
+  func lookupGroup(
     _ groupName: PrecedenceGroupName
   ) throws -> PrecedenceGroup {
     guard let group = precedenceGroups[groupName] else {
@@ -151,7 +151,7 @@ public struct PrecedenceGraph {
   ///
   /// Follow the precedence relationships among the precedence groups to
   /// determine the precedence of the start group relative to the end group.
-  public func precedence(
+  func precedence(
     relating startGroupName: PrecedenceGroupName,
     to endGroupName: PrecedenceGroupName
   ) throws -> Precedence {
@@ -269,7 +269,7 @@ public struct OperatorPrecedence {
 
 extension OperatorPrecedence {
   /// Look for the precedence group corresponding to the given operator.
-  public func lookupOperatorPrecedenceGroupName(
+  func lookupOperatorPrecedenceGroupName(
     _ operatorName: OperatorName
   ) throws -> PrecedenceGroupName? {
     guard let op = operators[operatorName] else {
@@ -280,7 +280,7 @@ extension OperatorPrecedence {
   }
 
   /// Look for the precedence group corresponding to the given operator.
-  public func lookupOperatorPrecedenceGroup(
+  func lookupOperatorPrecedenceGroup(
     _ operatorName: OperatorName
   ) throws -> PrecedenceGroup? {
     guard let groupName = try lookupOperatorPrecedenceGroupName(operatorName)
@@ -291,7 +291,7 @@ extension OperatorPrecedence {
   }
 
   /// Determine the relative precedence between two precedence groups.
-  public func precedence(
+  func precedence(
     relating startGroupName: PrecedenceGroupName?,
     to endGroupName: PrecedenceGroupName?
   ) throws -> Precedence {

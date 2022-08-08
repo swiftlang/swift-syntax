@@ -119,7 +119,7 @@ public class BumpPtrAllocator {
   /// Check if the address is managed by this allocator.
   public func contains(address: UnsafeRawPointer) -> Bool {
     func test(_ slab: Slab) -> Bool {
-      slab.baseAddress! <= address && address < slab.baseAddress! + slab.count
+      UnsafeRawPointer(slab.baseAddress!) <= address && address < UnsafeRawPointer(slab.baseAddress!) + slab.count
     }
     return slabs.contains(where: test(_:)) || customSizeSlabs.contains(where: test(_:))
   }
@@ -145,3 +145,24 @@ public class BumpPtrAllocator {
     _totalBytesAllocated
   }
 }
+
+// MARK: Compatibilty Shims
+
+#if swift(<5.7)
+extension UnsafeMutableRawPointer {
+  /// Obtain the next pointer whose bit pattern is a multiple of alignment.
+  ///
+  /// - Parameter alignment: The alignment of the returned pointer, in bytes.
+  ///                        Alignment must be a whole power of 2.
+  /// - Returns: A pointer aligned to `alignment`.
+  fileprivate func alignedUp(toMultipleOf alignment: Int) -> Self {
+    let mask = UInt(alignment) &- 1
+    assert(
+      alignment > 0 && UInt(alignment) & mask == 0,
+      "alignment must be a whole power of 2."
+    )
+    let bits = (UInt(bitPattern: self) &+ mask) & ~mask
+    return .init(bitPattern: bits)!
+  }
+}
+#endif

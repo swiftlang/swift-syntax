@@ -16,9 +16,11 @@ public class SyntaxArena {
   /// Source file buffer the Syntax tree represents.
   private var sourceBuffer: UnsafeBufferPointer<UInt8>
 
-  /// "children" arena.
+  /// If the syntax tree that’s allocated in this arena references nodes from
+  /// other arenas, `children` contains those arenas to keep them alive.
   private var children: Set<SyntaxArena>
   /// Whether or not this arena has been added to other arenas as a child.
+  /// Used to make sure we don’t introduce retain cycles between arenas.
   private var hasParent: Bool
 
   public init() {
@@ -84,7 +86,7 @@ public class SyntaxArena {
       return value
     }
 
-    let allocated = allocator.allocate(UInt8.self, count: value.count)
+    let allocated = allocateTextBuffer(count: value.count)
     _ = allocated.initialize(from: value)
     return SyntaxText(baseAddress: allocated.baseAddress, count: allocated.count)
   }
@@ -95,7 +97,7 @@ public class SyntaxArena {
     if value.isEmpty { return SyntaxText() }
     var value = value
     return value.withUTF8 { utf8 in
-      let allocated = allocator.allocate(UInt8.self, count: utf8.count)
+      let allocated = allocateTextBuffer(count: utf8.count)
       _ = allocated.initialize(from: utf8)
       return SyntaxText(baseAddress: allocated.baseAddress, count: utf8.count)
     }

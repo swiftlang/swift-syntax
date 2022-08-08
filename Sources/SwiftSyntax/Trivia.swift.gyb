@@ -232,12 +232,15 @@ extension TriviaPiece {
 }
 
 /// Trivia piece for token RawSyntax.
+///
+/// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
+/// text of a the trivia.
 enum RawTriviaPiece {
 % for trivia in TRIVIAS:
 %   if trivia.is_collection():
-    case ${trivia.lower_name}s(Int)
+  case ${trivia.lower_name}s(Int)
 %   else:
-    case ${trivia.lower_name}(SyntaxText)
+  case ${trivia.lower_name}(SyntaxText)
 %   end
 % end
 
@@ -292,7 +295,6 @@ extension RawTriviaPiece {
     }
   }
 }
-
 
 extension RawTriviaPiece {
   static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {

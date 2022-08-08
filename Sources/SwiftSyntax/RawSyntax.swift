@@ -20,7 +20,7 @@ internal struct RawSyntaxData {
     case layout(Layout)
   }
 
-  /// Token tyoically created with `SyntaxFactory.makeToken()`.
+  /// Token typically created with `SyntaxFactory.makeToken()`.
   struct MaterializedToken {
     var tokenKind: RawTokenKind
     var tokenText: SyntaxText
@@ -34,6 +34,7 @@ internal struct RawSyntaxData {
     var kind: SyntaxKind
     var layout: RawSyntaxBuffer
     var byteLength: Int
+    /// Number of nodes in this subtree, excluding this node.
     var descendantCount: Int
   }
 
@@ -117,7 +118,7 @@ extension RawSyntax {
     }
   }
 
-  /// Leading trivia text of this node if this node is a token. 'nil' otherwise.
+  /// The UTF-8 byte length of the leading trivia, assuming this node is a token.
   var tokenLeadingTriviaByteLength: Int {
     switch rawData.payload {
     case .materializedToken(let dat):
@@ -127,7 +128,7 @@ extension RawSyntax {
     }
   }
 
-  /// Leading trivia text of this node if this node is a token. 'nil' otherwise.
+  /// The UTF-8 byte length of the trailing trivia, assuming this node is a token.
   var tokenTrailingTriviaByteLength: Int {
     switch rawData.payload {
     case .materializedToken(let dat):
@@ -142,7 +143,7 @@ extension RawSyntax {
     case .materializedToken(let dat):
       return dat.leadingTrivia
     case .layout(_):
-      preconditionFailure("tokenLeadingRawTriviaPieces is called on non-token raw syntax")
+      preconditionFailure("'tokenLeadingRawTriviaPieces' is called on non-token raw syntax")
     }
   }
 
@@ -151,7 +152,7 @@ extension RawSyntax {
     case .materializedToken(let dat):
       return dat.trailingTrivia
     case .layout(_):
-      preconditionFailure("tokenTrailingRawTriviaPieces is called on non-token raw syntax")
+      preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
     }
   }
 }
@@ -211,11 +212,22 @@ extension RawSyntax {
   }
 
   var presence: SourcePresence {
-    let isMissing = (self.byteLength == 0 &&
-                     !self.isCollection &&
-                     !self.isUnknown &&
-                     !(isToken && self.rawTokenKind == .eof))
-    return isMissing ? .missing : .present
+    if self.byteLength != 0 {
+      // The node has source text associated with it. It's present.
+      return .present
+    }
+    if self.isCollection || self.isUnknown {
+      // We always consider collections 'present' because they can just be empty.
+      return .present
+    }
+    if isToken && self.rawTokenKind == .eof {
+      // The end of file token never has source code associated with it but we
+      // still consider it valid.
+      return .present
+    }
+
+    // If none of the above apply, the node is missing.
+    return .missing
   }
 
   /// The "width" of the node.
@@ -241,37 +253,29 @@ extension RawSyntax {
     }
   }
 
-  /// Returns the leading `Trivia` length for a token node.
-  /// - Returns: .zero if called on a layout node.
+  /// Returns the leading `Trivia` length, assuming this node is a token.
   var tokenLeadingTriviaLength: SourceLength {
     return SourceLength(utf8Length: tokenLeadingTriviaByteLength)
   }
 
-  /// Returns the trailing `Trivia` length for a token node.
-  /// - Returns: .zero if called on a layout node.
+  /// Returns the trailing `Trivia` length, assuming this node is a token.
   var tokenTrailingTriviaLength: SourceLength {
     return SourceLength(utf8Length: tokenTrailingTriviaByteLength)
   }
 
-  /// Returns the leading `Trivia` for a token node.
-  /// - Returns: nil if called on a layout node.
+  /// Returns the leading `Trivia`, assuming this node is a token.
   func formTokenLeadingTrivia() -> Trivia? {
-    guard isToken else { return nil }
     return Trivia(pieces: tokenLeadingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
-  /// Returns the trailing `Trivia` for a token node.
+  /// Returns the trailing `Trivia`, assuming this node is a token.
   /// - Returns: nil if called on a layout node.
   func formTokenTrailingTrivia() -> Trivia? {
-    guard isToken else { return nil }
     return Trivia(pieces: tokenTrailingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
-  /// Passes token info to the provided closure as `UnsafeTokenText`.
-  /// - Parameters:
-  ///   - body: The closure that accepts the `UnsafeTokenText` value. This value
-  ///     must not escape the closure.
-  /// - Returns: Return value of `body`.
+  /// Calls `body` with the token text, assuming this node is a token. The token
+  /// text value must not escape the closure.
   func withUnsafeTokenText<Result>(
     _ body: (SyntaxText?) -> Result
   ) -> Result {
@@ -282,6 +286,8 @@ extension RawSyntax {
     Array(children)
   }
 
+  /// Assuming this node is a token, returns a `RawSyntax` node with the same
+  /// source text but with the token kind changed to `newValue`.
   func withTokenKind(_ newValue: TokenKind) -> RawSyntax {
     switch payload {
     case .materializedToken(var payload):
@@ -294,7 +300,7 @@ extension RawSyntax {
       payload.tokenText = text
       return RawSyntax(arena: arena, payload: .materializedToken(payload))
     default:
-      preconditionFailure("withTokenKind() is called on non-token raw syntax")
+      preconditionFailure("'withTokenKind()' is called on non-token raw syntax")
     }
   }
 
@@ -318,8 +324,8 @@ extension RawSyntax {
     return nil
   }
 
-  /// Replaces the trailing trivia of the first token in this syntax tree by `trailingTrivia`.
-   /// If the syntax tree did not contain a token and thus no trivia could be attached to it, `nil` is returned.
+  /// Replaces the trailing trivia of the last token in this syntax tree by `trailingTrivia`.
+  /// If the syntax tree did not contain a token and thus no trivia could be attached to it, `nil` is returned.
   /// - Parameters:
   ///   - trailingTrivia: The trivia to attach.
   func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax? {
@@ -355,11 +361,13 @@ extension RawSyntax {
   /// - Parameter kind: The token kind.
   /// - Returns: A new RawSyntax `.token` with the provided kind, no
   ///            leading/trailing trivia, and `.missing` source presence.
-  // @available(*, deprecated, message: "use 'makeEmptyToken()' with SyntaxArena")
+  // @available(*, deprecated, message: "use 'makeMissingToken()' with SyntaxArena")
   static func missingToken(_ kind: TokenKind) -> RawSyntax {
-    .makeEmptyToken(arena: .default, kind: kind)
+    .makeMissingToken(arena: .default, kind: kind)
   }
 
+  /// Assuming this node is a layout node, creates a new node of the same kind
+  /// but with children replaced by `elements`.
   func replacingLayout<C: Collection>(
     with elements: C,
     arena: SyntaxArena
@@ -453,6 +461,7 @@ extension RawSyntax {
     with elements: C,
     arena: SyntaxArena
   ) -> RawSyntax where C.Element == RawSyntax? {
+    precondition(!self.isToken)
     let newCount = children.count - range.count + elements.count
     return .makeLayout(arena: arena,
                        kind: kind,
@@ -537,7 +546,7 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
 }
 
 extension RawSyntax {
-  /// Return the first `present` token of a layout node or self if it is a token.
+  /// Return the first token of a layout node that should be traversed by `viewMode`.
   func firstToken(viewMode: SyntaxTreeViewMode) -> RawSyntax? {
     guard viewMode.shouldTraverse(node: self) else { return nil }
     if isToken { return self }
@@ -549,7 +558,7 @@ extension RawSyntax {
     return nil
   }
 
-  /// Return the last `present` token of a layout node or self if it is a token.
+  /// Return the last token of a layout node that should be traversed by `viewMode`.
   func lastToken(viewMode: SyntaxTreeViewMode) -> RawSyntax? {
     guard viewMode.shouldTraverse(node: self) else { return nil }
     if isToken { return self }
@@ -579,12 +588,17 @@ extension RawSyntax {
     lastToken(viewMode: .sourceAccurate)?.tokenTrailingTriviaByteLength ?? 0
   }
 
+  /// The length of this node’s content, without the first leading and the last
+  /// trailing trivia. Intermediate trivia inside a layout node is included in
+  /// this.
   var contentByteLength: Int {
     let result = byteLength - leadingTriviaByteLength - trailingTriviaByteLength
     assert(result >= 0)
     return result
   }
 
+  /// The length of the token without leading or trailing trivia, assuming this
+  /// is a token node.
   var tokenTextByteLength: Int {
     switch rawData.payload {
     case .materializedToken(let dat):
@@ -612,6 +626,8 @@ extension RawSyntax {
   }
 }
 
+// MARK: - Factories.
+
 private func makeRawTriviaPieces(arena: SyntaxArena, leadingTrivia: Trivia, trailingTrivia: Trivia) -> (pieces: RawTriviaPieceBuffer, byteLength: Int) {
   let totalTriviaCount = leadingTrivia.count + trailingTrivia.count
 
@@ -626,19 +642,16 @@ private func makeRawTriviaPieces(arena: SyntaxArena, leadingTrivia: Trivia, trai
     }
     return (pieces: .init(buffer), byteLength: byteLength)
   } else {
-
     return (pieces: .init(start: nil, count: 0), byteLength: 0)
   }
 }
-
-// MARK: - Factories.
 
 extension RawSyntax {
   /// "Designated" factory method to create a materialized token node.
   ///
   /// This should not be called directly.
   /// Use `makeMaterializedToken(arena:kind:leadingTrivia:trailingTrivia:)` or
-  /// `makeEmptyToken(arena:kind:)` instead.
+  /// `makeMissingToken(arena:kind:)` instead.
   ///
   /// - Parameters:
   ///   - arena: SyntaxArea to the result node data resides.
@@ -697,7 +710,7 @@ extension RawSyntax {
       byteLength: numericCast(byteLength))
   }
 
-  static func makeEmptyToken(
+  static func makeMissingToken(
     arena: SyntaxArena,
     kind: TokenKind
   ) -> RawSyntax {

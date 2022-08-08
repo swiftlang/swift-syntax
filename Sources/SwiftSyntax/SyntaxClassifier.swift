@@ -48,7 +48,7 @@ extension RawTriviaPiece {
   }
 }
 
-struct TokenKindAndText {
+fileprivate struct TokenKindAndText {
   let kind: RawTokenKind
   let text: SyntaxText
 

@@ -170,6 +170,6 @@ struct SyntaxArenaRef: Equatable {
 
 extension SyntaxArena {
   // FIXME: This is only for migration. All clients should move to "arena" model.
-  @available(*, deprecated, message: ".default SyntaxArena is subject to remove soon")
+  //@available(*, deprecated, message: ".default SyntaxArena is subject to remove soon")
   public static let `default` = SyntaxArena()
 }

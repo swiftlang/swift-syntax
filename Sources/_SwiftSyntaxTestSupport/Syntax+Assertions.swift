@@ -59,6 +59,30 @@ public func XCTAssertSameStructure(
   XCTAssertNil(diff, diff!.debugDescription, file: file, line: line)
 }
 
+/// See `SubtreeMatcher.assertSameStructure`.
+public func XCTAssertHasSubstructure(
+  _ markedText: String,
+  parse: (String) throws -> Syntax,
+  afterMarker: String? = nil,
+  _ expected: SyntaxProtocol,
+  includeTrivia: Bool = false,
+  file: StaticString = #filePath, line: UInt = #line
+) throws {
+  let subtreeMatcher = try SubtreeMatcher(markedText, parse: parse)
+  try subtreeMatcher.assertSameStructure(afterMarker: afterMarker, Syntax(expected), file: file, line: line)
+}
+
+/// See `SubtreeMatcher.assertSameStructure`.
+public func XCTAssertHasSubstructure(
+  _ actualTree: SyntaxProtocol,
+  _ expected: SyntaxProtocol,
+  includeTrivia: Bool = false,
+  file: StaticString = #filePath, line: UInt = #line
+) throws {
+  let subtreeMatcher = SubtreeMatcher(Syntax(actualTree))
+  try subtreeMatcher.assertSameStructure(Syntax(expected), file: file, line: line)
+}
+
 /// Allows matching a subtrees of the given `markedText` against
 /// `baseline`/`expected` trees, where a combination of markers and the type
 /// of the `expected` tree is used to first find the subtree to match. Note
@@ -121,6 +145,11 @@ public struct SubtreeMatcher {
 
     self.markers = markers.isEmpty ? ["DEFAULT": 0] : markers
     self.actualTree = try parse(text)
+  }
+
+  public init(_ actualTree: Syntax) {
+    self.markers = ["DEFAULT": 0]
+    self.actualTree = actualTree
   }
 
   /// Same as `Syntax.findFirstDifference(baseline:includeTrivia:)`, but

@@ -33,18 +33,13 @@ public class SyntaxArena {
   /// Copies a source buffer in to the memory this arena manages, and returns
   /// the interned buffer.
   ///
-  /// The interned buffer is guaranteed to be null-terminated.
   /// `contains(address _:)` is faster if the address is inside the memory
   /// range this function returned.
   public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
     precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
-    let allocated = allocator.allocate(UInt8.self, count: buffer.count + /* for NULL */1)
+    let allocated = allocator.allocate(UInt8.self, count: buffer.count)
     _ = allocated.initialize(from: buffer)
-
-    // NULL terminate.
-    allocated.baseAddress!.advanced(by: buffer.count).initialize(to: 0)
-
-    sourceBuffer = UnsafeBufferPointer(start: allocated.baseAddress!, count: buffer.count)
+    sourceBuffer = UnsafeBufferPointer(start: allocated.baseAddress, count: buffer.count)
     return sourceBuffer
   }
 

@@ -75,6 +75,18 @@ let EXPR_NODES: [Node] = [
                kind: "Expr")
        ]),
 
+  Node(name: "MoveExpr",
+       kind: "Expr",
+       children: [
+         Child(name: "MoveKeyword",
+               kind: "ContextualKeywordToken",
+               textChoices: [
+                 "_move"
+               ]),
+         Child(name: "Expression",
+               kind: "Expr")
+       ]),
+
   Node(name: "DeclNameArgument",
        kind: "Syntax",
        children: [

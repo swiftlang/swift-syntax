@@ -302,6 +302,52 @@ extension AwaitExprSyntax {
   }
 }
 
+public struct MoveExprSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 4)
+
+  internal init() {}
+
+  public mutating func useMoveKeyword(_ node: TokenSyntax) {
+    let idx = MoveExprSyntax.Cursor.moveKeyword.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useExpression(_ node: ExprSyntax) {
+    let idx = MoveExprSyntax.Cursor.expression.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.contextualKeyword(""))
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missing(SyntaxKind.missingExpr)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .moveExpr,
+      layout: layout, presence: .present))
+  }
+}
+
+extension MoveExprSyntax {
+  /// Creates a `MoveExprSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `MoveExprSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `MoveExprSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout MoveExprSyntaxBuilder) -> Void) {
+    var builder = MoveExprSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct DeclNameArgumentSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 4)

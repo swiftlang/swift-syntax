@@ -279,4 +279,5 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "GarbageNodes": 266,
   "LabeledStmt": 267,
   "InfixOperatorExpr": 268,
+  "MoveExpr": 269,
 ]

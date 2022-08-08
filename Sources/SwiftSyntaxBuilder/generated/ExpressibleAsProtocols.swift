@@ -352,6 +352,14 @@ public extension ExpressibleAsArrowExpr {
     return createArrowExpr()
   }
 }
+public protocol ExpressibleAsInfixOperatorExpr: ExpressibleAsExprBuildable {
+  func createInfixOperatorExpr() -> InfixOperatorExpr
+}
+public extension ExpressibleAsInfixOperatorExpr {
+  func createExprBuildable() -> ExprBuildable {
+    return createInfixOperatorExpr()
+  }
+}
 public protocol ExpressibleAsFloatLiteralExpr: ExpressibleAsExprBuildable {
   func createFloatLiteralExpr() -> FloatLiteralExpr
 }

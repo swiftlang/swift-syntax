@@ -471,6 +471,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `ArrowExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrowExprSyntax) {}
+  /// Visiting `InfixOperatorExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: InfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `InfixOperatorExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: InfixOperatorExprSyntax) {}
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3173,6 +3183,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplInfixOperatorExprSyntax(_ data: SyntaxData) {
+      let node = InfixOperatorExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) {
       let node = FloatLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5643,6 +5664,8 @@ open class SyntaxVisitor {
       visitImplBinaryOperatorExprSyntax(data)
     case .arrowExpr:
       visitImplArrowExprSyntax(data)
+    case .infixOperatorExpr:
+      visitImplInfixOperatorExprSyntax(data)
     case .floatLiteralExpr:
       visitImplFloatLiteralExprSyntax(data)
     case .tupleExpr:

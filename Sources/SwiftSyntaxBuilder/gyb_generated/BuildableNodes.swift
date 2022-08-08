@@ -1751,6 +1751,87 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
     return self
   }
 }
+public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
+  let garbageBeforeLeftOperand: GarbageNodes?
+  let leftOperand: ExprBuildable
+  let garbageBetweenLeftOperandAndOperatorOperand: GarbageNodes?
+  let operatorOperand: ExprBuildable
+  let garbageBetweenOperatorOperandAndRightOperand: GarbageNodes?
+  let rightOperand: ExprBuildable
+
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
+  /// Creates a `InfixOperatorExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - garbageBeforeLeftOperand: 
+  ///   - leftOperand: 
+  ///   - garbageBetweenLeftOperandAndOperatorOperand: 
+  ///   - operatorOperand: 
+  ///   - garbageBetweenOperatorOperandAndRightOperand: 
+  ///   - rightOperand: 
+  public init(
+    leadingTrivia: Trivia = [],
+    garbageBeforeLeftOperand: ExpressibleAsGarbageNodes? = nil,
+    leftOperand: ExpressibleAsExprBuildable,
+    garbageBetweenLeftOperandAndOperatorOperand: ExpressibleAsGarbageNodes? = nil,
+    operatorOperand: ExpressibleAsExprBuildable,
+    garbageBetweenOperatorOperandAndRightOperand: ExpressibleAsGarbageNodes? = nil,
+    rightOperand: ExpressibleAsExprBuildable
+  ) {
+    self.leadingTrivia = leadingTrivia
+    self.garbageBeforeLeftOperand = garbageBeforeLeftOperand?.createGarbageNodes()
+    self.leftOperand = leftOperand.createExprBuildable()
+    self.garbageBetweenLeftOperandAndOperatorOperand = garbageBetweenLeftOperandAndOperatorOperand?.createGarbageNodes()
+    self.operatorOperand = operatorOperand.createExprBuildable()
+    self.garbageBetweenOperatorOperandAndRightOperand = garbageBetweenOperatorOperandAndRightOperand?.createGarbageNodes()
+    self.rightOperand = rightOperand.createExprBuildable()
+  }
+
+
+  /// Builds a `InfixOperatorExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `InfixOperatorExprSyntax`.
+  func buildInfixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InfixOperatorExprSyntax {
+    let result = SyntaxFactory.makeInfixOperatorExpr(
+      garbageBeforeLeftOperand?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      leftOperand: leftOperand.buildExpr(format: format, leadingTrivia: nil),
+      garbageBetweenLeftOperandAndOperatorOperand?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      operatorOperand: operatorOperand.buildExpr(format: format, leadingTrivia: nil),
+      garbageBetweenOperatorOperandAndRightOperand?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      rightOperand: rightOperand.buildExpr(format: format, leadingTrivia: nil)
+    )
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  }
+
+  /// Conformance to `ExprBuildable`.
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildInfixOperatorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+    return ExprSyntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsInfixOperatorExpr`.
+  public func createInfixOperatorExpr() -> InfixOperatorExpr {
+    return self
+  }
+
+  /// `InfixOperatorExpr` might conform to `ExpressibleAsExprBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createExprBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createExprBuildable() -> ExprBuildable {
+    return self
+  }
+
+  /// `InfixOperatorExpr` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
 public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   let garbageBeforeFloatingDigits: GarbageNodes?
   let floatingDigits: TokenSyntax

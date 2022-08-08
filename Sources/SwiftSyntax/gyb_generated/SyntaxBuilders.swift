@@ -1047,6 +1047,60 @@ extension ArrowExprSyntax {
   }
 }
 
+public struct InfixOperatorExprSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 6)
+
+  internal init() {}
+
+  public mutating func useLeftOperand(_ node: ExprSyntax) {
+    let idx = InfixOperatorExprSyntax.Cursor.leftOperand.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useOperatorOperand(_ node: ExprSyntax) {
+    let idx = InfixOperatorExprSyntax.Cursor.operatorOperand.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useRightOperand(_ node: ExprSyntax) {
+    let idx = InfixOperatorExprSyntax.Cursor.rightOperand.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missing(SyntaxKind.missingExpr)
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missing(SyntaxKind.missingExpr)
+    }
+    if (layout[5] == nil) {
+      layout[5] = RawSyntax.missing(SyntaxKind.missingExpr)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .infixOperatorExpr,
+      layout: layout, presence: .present))
+  }
+}
+
+extension InfixOperatorExprSyntax {
+  /// Creates a `InfixOperatorExprSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `InfixOperatorExprSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `InfixOperatorExprSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout InfixOperatorExprSyntaxBuilder) -> Void) {
+    var builder = InfixOperatorExprSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct FloatLiteralExprSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 2)

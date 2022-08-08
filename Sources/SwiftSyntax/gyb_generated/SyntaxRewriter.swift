@@ -324,6 +324,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `InfixOperatorExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: InfixOperatorExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `FloatLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2343,6 +2350,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplArrowExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ArrowExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplInfixOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = InfixOperatorExprSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4638,6 +4655,8 @@ open class SyntaxRewriter {
       return visitImplBinaryOperatorExprSyntax
     case .arrowExpr:
       return visitImplArrowExprSyntax
+    case .infixOperatorExpr:
+      return visitImplInfixOperatorExprSyntax
     case .floatLiteralExpr:
       return visitImplFloatLiteralExprSyntax
     case .tupleExpr:
@@ -5169,6 +5188,8 @@ open class SyntaxRewriter {
       return visitImplBinaryOperatorExprSyntax(data)
     case .arrowExpr:
       return visitImplArrowExprSyntax(data)
+    case .infixOperatorExpr:
+      return visitImplInfixOperatorExprSyntax(data)
     case .floatLiteralExpr:
       return visitImplFloatLiteralExprSyntax(data)
     case .tupleExpr:

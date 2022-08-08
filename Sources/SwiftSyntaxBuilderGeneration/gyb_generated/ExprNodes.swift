@@ -247,6 +247,17 @@ let EXPR_NODES: [Node] = [
                kind: "ArrowToken")
        ]),
 
+  Node(name: "InfixOperatorExpr",
+       kind: "Expr",
+       children: [
+         Child(name: "LeftOperand",
+               kind: "Expr"),
+         Child(name: "OperatorOperand",
+               kind: "Expr"),
+         Child(name: "RightOperand",
+               kind: "Expr")
+       ]),
+
   Node(name: "FloatLiteralExpr",
        kind: "Expr",
        children: [

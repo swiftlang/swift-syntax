@@ -2786,6 +2786,239 @@ extension ArrowExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - InfixOperatorExprSyntax
+
+public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case garbageBeforeLeftOperand
+    case leftOperand
+    case garbageBetweenLeftOperandAndOperatorOperand
+    case operatorOperand
+    case garbageBetweenOperatorOperandAndRightOperand
+    case rightOperand
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `InfixOperatorExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .infixOperatorExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `InfixOperatorExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .infixOperatorExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var garbageBeforeLeftOperand: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeLeftOperand,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeLeftOperand(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeLeftOperand` replaced.
+  /// - param newChild: The new `garbageBeforeLeftOperand` to replace the node's
+  ///                   current `garbageBeforeLeftOperand`, if present.
+  public func withGarbageBeforeLeftOperand(
+    _ newChild: GarbageNodesSyntax?) -> InfixOperatorExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftOperand)
+    return InfixOperatorExprSyntax(newData)
+  }
+
+  public var leftOperand: ExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.leftOperand,
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftOperand(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftOperand` replaced.
+  /// - param newChild: The new `leftOperand` to replace the node's
+  ///                   current `leftOperand`, if present.
+  public func withLeftOperand(
+    _ newChild: ExprSyntax?) -> InfixOperatorExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let newData = data.replacingChild(raw, at: Cursor.leftOperand)
+    return InfixOperatorExprSyntax(newData)
+  }
+
+  public var garbageBetweenLeftOperandAndOperatorOperand: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenLeftOperandAndOperatorOperand,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenLeftOperandAndOperatorOperand(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenLeftOperandAndOperatorOperand` replaced.
+  /// - param newChild: The new `garbageBetweenLeftOperandAndOperatorOperand` to replace the node's
+  ///                   current `garbageBetweenLeftOperandAndOperatorOperand`, if present.
+  public func withGarbageBetweenLeftOperandAndOperatorOperand(
+    _ newChild: GarbageNodesSyntax?) -> InfixOperatorExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftOperandAndOperatorOperand)
+    return InfixOperatorExprSyntax(newData)
+  }
+
+  public var operatorOperand: ExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.operatorOperand,
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withOperatorOperand(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `operatorOperand` replaced.
+  /// - param newChild: The new `operatorOperand` to replace the node's
+  ///                   current `operatorOperand`, if present.
+  public func withOperatorOperand(
+    _ newChild: ExprSyntax?) -> InfixOperatorExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let newData = data.replacingChild(raw, at: Cursor.operatorOperand)
+    return InfixOperatorExprSyntax(newData)
+  }
+
+  public var garbageBetweenOperatorOperandAndRightOperand: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenOperatorOperandAndRightOperand,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenOperatorOperandAndRightOperand(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenOperatorOperandAndRightOperand` replaced.
+  /// - param newChild: The new `garbageBetweenOperatorOperandAndRightOperand` to replace the node's
+  ///                   current `garbageBetweenOperatorOperandAndRightOperand`, if present.
+  public func withGarbageBetweenOperatorOperandAndRightOperand(
+    _ newChild: GarbageNodesSyntax?) -> InfixOperatorExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenOperatorOperandAndRightOperand)
+    return InfixOperatorExprSyntax(newData)
+  }
+
+  public var rightOperand: ExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.rightOperand,
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withRightOperand(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightOperand` replaced.
+  /// - param newChild: The new `rightOperand` to replace the node's
+  ///                   current `rightOperand`, if present.
+  public func withRightOperand(
+    _ newChild: ExprSyntax?) -> InfixOperatorExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let newData = data.replacingChild(raw, at: Cursor.rightOperand)
+    return InfixOperatorExprSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 6)
+    // Check child #0 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #1 child is ExprSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ExprSyntax.self))
+    }
+    // Check child #2 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #3 child is ExprSyntax 
+    assert(rawChildren[3].raw != nil)
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ExprSyntax.self))
+    }
+    // Check child #4 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #5 child is ExprSyntax 
+    assert(rawChildren[5].raw != nil)
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ExprSyntax.self))
+    }
+  }
+}
+
+extension InfixOperatorExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "garbageBeforeLeftOperand": garbageBeforeLeftOperand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "leftOperand": Syntax(leftOperand).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenLeftOperandAndOperatorOperand": garbageBetweenLeftOperandAndOperatorOperand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "operatorOperand": Syntax(operatorOperand).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenOperatorOperandAndRightOperand": garbageBetweenOperatorOperandAndRightOperand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightOperand": Syntax(rightOperand).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - FloatLiteralExprSyntax
 
 public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

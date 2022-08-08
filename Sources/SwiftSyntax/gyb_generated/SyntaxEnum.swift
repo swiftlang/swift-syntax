@@ -59,6 +59,7 @@ public enum SyntaxEnum {
   case prefixOperatorExpr(PrefixOperatorExprSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
   case arrowExpr(ArrowExprSyntax)
+  case infixOperatorExpr(InfixOperatorExprSyntax)
   case floatLiteralExpr(FloatLiteralExprSyntax)
   case tupleExpr(TupleExprSyntax)
   case arrayExpr(ArrayExprSyntax)
@@ -370,6 +371,8 @@ public extension Syntax {
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .arrowExpr:
       return .arrowExpr(ArrowExprSyntax(self)!)
+    case .infixOperatorExpr:
+      return .infixOperatorExpr(InfixOperatorExprSyntax(self)!)
     case .floatLiteralExpr:
       return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
     case .tupleExpr:

@@ -362,6 +362,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: ArrowExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: InfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: InfixOperatorExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

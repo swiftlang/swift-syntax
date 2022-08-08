@@ -277,6 +277,12 @@ extension SyntaxNode {
     return ArrowExprSyntax(asSyntaxData)
   }
 
+  public var isInfixOperatorExpr: Bool { return raw.kind == .infixOperatorExpr }
+  public var asInfixOperatorExpr: InfixOperatorExprSyntax? {
+    guard isInfixOperatorExpr else { return nil }
+    return InfixOperatorExprSyntax(asSyntaxData)
+  }
+
   public var isFloatLiteralExpr: Bool { return raw.kind == .floatLiteralExpr }
   public var asFloatLiteralExpr: FloatLiteralExprSyntax? {
     guard isFloatLiteralExpr else { return nil }
@@ -1670,6 +1676,8 @@ extension Syntax {
     case .binaryOperatorExpr(let node):
       return node
     case .arrowExpr(let node):
+      return node
+    case .infixOperatorExpr(let node):
       return node
     case .floatLiteralExpr(let node):
       return node

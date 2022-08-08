@@ -84,16 +84,6 @@ struct RawSyntax {
   }
 }
 
-extension RawSyntax: Identifiable {
-  var id: Int {
-    Int(bitPattern: pointer)
-  }
-
-  static func === (lhs: Self, rhs: Self) -> Bool {
-    return lhs.pointer == rhs.pointer
-  }
-}
-
 // MARK: - Accessors
 
 /// APIs only for token syntax node.
@@ -311,9 +301,10 @@ extension RawSyntax {
   func withLeadingTrivia(_ leadingTrivia: Trivia) -> RawSyntax? {
     if isToken {
       return .makeMaterializedToken(
-        arena: arena, kind: formTokenKind()!,
+        kind: formTokenKind()!,
         leadingTrivia: leadingTrivia,
-        trailingTrivia: formTokenTrailingTrivia()!)
+        trailingTrivia: formTokenTrailingTrivia()!,
+        arena: arena)
     }
 
     for (index, child) in children.enumerated() {
@@ -331,9 +322,10 @@ extension RawSyntax {
   func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax? {
     if isToken {
       return .makeMaterializedToken(
-        arena: arena, kind: formTokenKind()!,
+        kind: formTokenKind()!,
         leadingTrivia: formTokenLeadingTrivia()!,
-        trailingTrivia: trailingTrivia)
+        trailingTrivia: trailingTrivia,
+        arena: arena)
     }
 
     for (index, child) in children.enumerated().reversed() {
@@ -353,7 +345,7 @@ extension RawSyntax {
   ///            `.missing` source presence.
   // @available(*, deprecated, message: "use 'makeEmptyLayout()' with SyntaxArena")
   static func missing(_ kind: SyntaxKind) -> RawSyntax {
-    .makeEmptyLayout(arena: .default, kind: kind)
+    .makeEmptyLayout(kind: kind, arena: .default)
   }
 
   /// Creates a RawSyntax token that's marked missing in the source with the
@@ -363,7 +355,7 @@ extension RawSyntax {
   ///            leading/trailing trivia, and `.missing` source presence.
   // @available(*, deprecated, message: "use 'makeMissingToken()' with SyntaxArena")
   static func missingToken(_ kind: TokenKind) -> RawSyntax {
-    .makeMissingToken(arena: .default, kind: kind)
+    .makeMissingToken(kind: kind, arena: .default)
   }
 
   /// Assuming this node is a layout node, creates a new node of the same kind
@@ -373,9 +365,9 @@ extension RawSyntax {
     arena: SyntaxArena
   ) -> RawSyntax where C.Element == RawSyntax? {
     assert(!isToken)
-    return .makeLayout(arena: arena,
-                       kind: kind,
-                       uninitializedCount: elements.count) { buffer in
+    return .makeLayout(kind: kind,
+                       uninitializedCount: elements.count,
+                       arena: arena) { buffer in
       if buffer.isEmpty { return }
       _ = buffer.initialize(from: elements)
     }
@@ -398,9 +390,9 @@ extension RawSyntax {
     arena: SyntaxArena
   ) -> RawSyntax {
     precondition(!self.isToken && self.children.count >= index)
-    return .makeLayout(arena: arena,
-                       kind: kind,
-                       uninitializedCount: self.children.count + 1) { buffer in
+    return .makeLayout(kind: kind,
+                       uninitializedCount: self.children.count + 1,
+                       arena: arena) { buffer in
       var childIterator = self.children.makeIterator()
       let base = buffer.baseAddress!
       for i in 0..<buffer.count {
@@ -416,9 +408,9 @@ extension RawSyntax {
   ) -> RawSyntax {
     precondition(self.children.count > index)
     let count = self.children.count - 1
-    return .makeLayout(arena: arena,
-                       kind: kind,
-                       uninitializedCount: count) { buffer in
+    return .makeLayout(kind: kind,
+                       uninitializedCount: count,
+                       arena: arena) { buffer in
       if buffer.isEmpty { return }
       let newBase = buffer.baseAddress!
       let oldBase = children.baseAddress!
@@ -463,9 +455,9 @@ extension RawSyntax {
   ) -> RawSyntax where C.Element == RawSyntax? {
     precondition(!self.isToken)
     let newCount = children.count - range.count + elements.count
-    return .makeLayout(arena: arena,
-                       kind: kind,
-                       uninitializedCount: newCount) { buffer in
+    return .makeLayout(kind: kind,
+                       uninitializedCount: newCount,
+                       arena: arena) { buffer in
       if buffer.isEmpty { return }
       var current = buffer.baseAddress!
 
@@ -487,9 +479,9 @@ extension RawSyntax {
     arena: SyntaxArena
   ) -> RawSyntax {
     precondition(!self.isToken && self.children.count > index)
-    return .makeLayout(arena: arena,
-                       kind: kind,
-                       uninitializedCount: self.children.count) { buffer in
+    return .makeLayout(kind: kind,
+                       uninitializedCount: self.children.count,
+                       arena: arena) { buffer in
       _ = buffer.initialize(from: self.children)
       buffer[index] = newChild
     }
@@ -628,7 +620,7 @@ extension RawSyntax {
 
 // MARK: - Factories.
 
-private func makeRawTriviaPieces(arena: SyntaxArena, leadingTrivia: Trivia, trailingTrivia: Trivia) -> (pieces: RawTriviaPieceBuffer, byteLength: Int) {
+private func makeRawTriviaPieces(leadingTrivia: Trivia, trailingTrivia: Trivia, arena: SyntaxArena) -> (pieces: RawTriviaPieceBuffer, byteLength: Int) {
   let totalTriviaCount = leadingTrivia.count + trailingTrivia.count
 
   if totalTriviaCount != 0 {
@@ -637,7 +629,7 @@ private func makeRawTriviaPieces(arena: SyntaxArena, leadingTrivia: Trivia, trai
     var ptr = buffer.baseAddress!
     for piece in leadingTrivia + trailingTrivia {
       byteLength += piece.sourceLength.utf8Length
-      ptr.initialize(to: .make(arena: arena, piece))
+      ptr.initialize(to: .make(piece, arena: arena))
       ptr = ptr.advanced(by: 1)
     }
     return (pieces: .init(buffer), byteLength: byteLength)
@@ -661,12 +653,12 @@ extension RawSyntax {
   ///   - numLeadingTrivia: Number of leading trivia pieces in `triviaPieces`.
   ///   - byteLength: Byte length of this token including trivia.
   internal static func materializedToken(
-    arena: SyntaxArena,
     kind: RawTokenKind,
     text: SyntaxText,
     triviaPieces: RawTriviaPieceBuffer,
     numLeadingTrivia: UInt32,
-    byteLength: UInt32
+    byteLength: UInt32,
+    arena: SyntaxArena
   ) -> RawSyntax {
     let payload = RawSyntaxData.MaterializedToken(
       tokenKind: kind, tokenText: text,
@@ -685,10 +677,10 @@ extension RawSyntax {
   ///   - leadingTrivia: Leading trivia.
   ///   - trailingTrivia: Trailing trivia.
   static func makeMaterializedToken(
-    arena: SyntaxArena,
     kind: TokenKind,
     leadingTrivia: Trivia,
-    trailingTrivia: Trivia
+    trailingTrivia: Trivia,
+    arena: SyntaxArena
   ) -> RawSyntax {
     let decomposed = kind.decomposeToRaw()
     let rawKind = decomposed.rawKind
@@ -699,27 +691,26 @@ extension RawSyntax {
     var byteLength = text.count
 
     let triviaPieces = makeRawTriviaPieces(
-      arena: arena, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, arena: arena)
 
     byteLength += triviaPieces.byteLength
 
     return .materializedToken(
-      arena: arena, kind: rawKind, text: text,
-      triviaPieces: triviaPieces.pieces,
+      kind: rawKind, text: text, triviaPieces: triviaPieces.pieces,
       numLeadingTrivia: numericCast(leadingTrivia.count),
-      byteLength: numericCast(byteLength))
+      byteLength: numericCast(byteLength),
+      arena: arena)
   }
 
   static func makeMissingToken(
-    arena: SyntaxArena,
-    kind: TokenKind
+    kind: TokenKind,
+    arena: SyntaxArena
   ) -> RawSyntax {
     let (rawKind, _) = kind.decomposeToRaw()
     return .materializedToken(
-      arena: arena, kind: rawKind, text: "",
-      triviaPieces: .init(start: nil, count: 0),
-      numLeadingTrivia: 0,
-      byteLength: 0)
+      kind: rawKind, text: "", triviaPieces: .init(start: nil, count: 0),
+      numLeadingTrivia: 0, byteLength: 0,
+      arena: arena)
   }
 }
 
@@ -737,11 +728,11 @@ extension RawSyntax {
   ///   - byteLength: Computed total byte length of this node.
   ///   - descedantCount: Total number of the descendant nodes in `layout`.
   fileprivate static func layout(
-    arena: SyntaxArena,
     kind: SyntaxKind,
     layout: RawSyntaxBuffer,
     byteLength: Int,
-    descendantCount: Int
+    descendantCount: Int,
+    arena: SyntaxArena
   ) -> RawSyntax {
     let payload = RawSyntaxData.Layout(
       kind: kind, layout: layout,
@@ -757,9 +748,9 @@ extension RawSyntax {
   ///   - count: Number of children.
   ///   - initializer: A closure that initializes elements.
   static func makeLayout(
-    arena: SyntaxArena,
     kind: SyntaxKind,
     uninitializedCount count: Int,
+    arena: SyntaxArena,
     initializingWith initializer: (UnsafeMutableBufferPointer<RawSyntax?>) -> Void
   ) -> RawSyntax {
     // Allocate and initialize the list.
@@ -776,25 +767,25 @@ extension RawSyntax {
       arena.addChild(node.arenaReference)
     }
     return .layout(
-      arena: arena, kind: kind, layout: RawSyntaxBuffer(layoutBuffer),
-      byteLength: byteLength, descendantCount: descendantCount)
+      kind: kind, layout: RawSyntaxBuffer(layoutBuffer),
+      byteLength: byteLength, descendantCount: descendantCount, arena: arena)
   }
 
   static func makeEmptyLayout(
-    arena: SyntaxArena,
-    kind: SyntaxKind
+    kind: SyntaxKind,
+    arena: SyntaxArena
   ) -> RawSyntax {
     return .layout(
-      arena: arena, kind: kind, layout: .init(start: nil, count: 0),
-      byteLength: 0, descendantCount: 0)
+      kind: kind, layout: .init(start: nil, count: 0),
+      byteLength: 0, descendantCount: 0, arena: arena)
   }
 
   static func makeLayout<C: Collection>(
-    arena: SyntaxArena,
     kind: SyntaxKind,
-    from collection: C
+    from collection: C,
+    arena: SyntaxArena
   ) -> RawSyntax where C.Element == RawSyntax? {
-    .makeLayout(arena: arena, kind: kind, uninitializedCount: collection.count) {
+    .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
       _ = $0.initialize(from: collection)
     }
   }
@@ -811,7 +802,7 @@ extension RawSyntax {
   // @available(*, deprecated, message: "use 'makeLayout()' with SyntaxArena")
   static func createAndCalcLength(kind: SyntaxKind, layout: [RawSyntax?],
       presence: SourcePresence) -> RawSyntax {
-    .makeLayout(arena: .default, kind: kind, from: layout)
+    .makeLayout(kind: kind, from: layout, arena: .default)
   }
 
   /// Convenience function to create a RawSyntax when its byte length is not
@@ -842,13 +833,13 @@ extension RawSyntax {
     }
 
     let triviaPieces = makeRawTriviaPieces(
-      arena: arena, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, arena: arena)
 
     return .materializedToken(
-      arena: arena, kind: rawTokenKind, text: tokenText,
-      triviaPieces: triviaPieces.pieces,
+      kind: rawTokenKind, text: tokenText, triviaPieces: triviaPieces.pieces,
       numLeadingTrivia: numericCast(leadingTrivia.count),
-      byteLength: numericCast(tokenText.count + triviaPieces.byteLength))
+      byteLength: numericCast(tokenText.count + triviaPieces.byteLength),
+      arena: arena)
   }
 
   /// Create a layout node using the programmatic APIs.

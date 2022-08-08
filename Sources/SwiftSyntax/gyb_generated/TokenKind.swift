@@ -1499,6 +1499,7 @@ public enum RawTokenKind {
 }
 
 extension TokenKind {
+  /// If the `rawKind` has a `defaultText`, `text` can be empty.
   static func fromRaw(kind rawKind: RawTokenKind, text: SyntaxText) -> TokenKind {
     switch rawKind {
     case .eof: return .eof
@@ -1863,6 +1864,8 @@ extension TokenKind {
     }
   }
 
+  /// Returns the `RawTokenKind` of this `TokenKind` and, if this `TokenKind`
+  /// has associated text, the associated text, otherwise `nil`.
   func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
     switch self {
     case .eof: return (.eof, nil)

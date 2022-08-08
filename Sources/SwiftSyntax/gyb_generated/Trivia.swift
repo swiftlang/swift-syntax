@@ -372,22 +372,25 @@ extension TriviaPiece {
 }
 
 /// Trivia piece for token RawSyntax.
+///
+/// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
+/// text of a the trivia.
 enum RawTriviaPiece {
-    case spaces(Int)
-    case tabs(Int)
-    case verticalTabs(Int)
-    case formfeeds(Int)
-    case newlines(Int)
-    case carriageReturns(Int)
-    case carriageReturnLineFeeds(Int)
-    case lineComment(SyntaxText)
-    case blockComment(SyntaxText)
-    case docLineComment(SyntaxText)
-    case docBlockComment(SyntaxText)
-    case garbageText(SyntaxText)
-    case shebang(SyntaxText)
+  case spaces(Int)
+  case tabs(Int)
+  case verticalTabs(Int)
+  case formfeeds(Int)
+  case newlines(Int)
+  case carriageReturns(Int)
+  case carriageReturnLineFeeds(Int)
+  case lineComment(SyntaxText)
+  case blockComment(SyntaxText)
+  case docLineComment(SyntaxText)
+  case docBlockComment(SyntaxText)
+  case garbageText(SyntaxText)
+  case shebang(SyntaxText)
 
-  static func make(arena: SyntaxArena, _ piece: TriviaPiece) -> RawTriviaPiece {
+  static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {
     switch piece {
     case let .spaces(count): return .spaces(count)
     case let .tabs(count): return .tabs(count)
@@ -464,7 +467,6 @@ extension RawTriviaPiece {
     }
   }
 }
-
 
 extension RawTriviaPiece {
   static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {

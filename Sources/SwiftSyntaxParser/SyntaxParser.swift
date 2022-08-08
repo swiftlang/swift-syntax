@@ -154,7 +154,7 @@ public enum SyntaxParser {
 
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
       return _SyntaxParserInterop.getRetainedOpaqueRawSyntax(
-        arena: arena, cnode: cnode, sourceBuffer: sourceBuffer)
+        cnode: cnode, sourceBuffer: sourceBuffer, arena: arena)
     }
     swiftparse_parser_set_node_handler(c_parser, nodeHandler);
 

@@ -25,10 +25,10 @@ public enum _SyntaxParserInterop {
   /// `CClientNode` to `nodeFromRetainedOpaqueRawSyntax` transfers ownership
   /// back to `SwiftSyntax`.
   public static func getRetainedOpaqueRawSyntax(
-    arena: SyntaxArena, cnode: UnsafeRawPointer, sourceBuffer: UnsafeBufferPointer<UInt8>
+    cnode: UnsafeRawPointer, sourceBuffer: UnsafeBufferPointer<UInt8>, arena: SyntaxArena
   ) -> CClientNode {
     let cnode = cnode.assumingMemoryBound(to: CSyntaxNode.self)
-    let node = RawSyntax.createFromCSyntaxNode(arena: arena, cnode, in: sourceBuffer)
+    let node = RawSyntax.createFromCSyntaxNode(cnode, in: sourceBuffer, arena: arena)
     return CClientNode(mutating: node.toOpaque())
   }
 

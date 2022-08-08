@@ -14,9 +14,9 @@
 
 extension RawSyntax {
   static func createFromCSyntaxNode(
-    arena: SyntaxArena,
     _ p: CSyntaxNodePtr,
-    in sourceBuffer: UnsafeBufferPointer<UInt8>
+    in sourceBuffer: UnsafeBufferPointer<UInt8>,
+    arena: SyntaxArena
   ) -> RawSyntax {
     let cnode = p.pointee
     if cnode.kind == 0 {
@@ -77,10 +77,11 @@ extension RawSyntax {
       assert(tokenText.count + pieceBuffer.reduce(0, {$0 + $1.byteLength}) == wholeText.count)
 
       return RawSyntax.materializedToken(
-        arena: arena, kind: tokenKind, text: tokenText,
+        kind: tokenKind, text: tokenText,
         triviaPieces: RawTriviaPieceBuffer(pieceBuffer),
         numLeadingTrivia: numericCast(numLeadingTrivia),
-        byteLength: numericCast(wholeText.count))
+        byteLength: numericCast(wholeText.count),
+        arena: arena)
     } else {
       // Layout.
 
@@ -88,15 +89,15 @@ extension RawSyntax {
 
       let count = Int(cnode.layout_data.nodes_count)
       if count == 0 {
-        return makeEmptyLayout(arena: arena, kind: syntaxKind)
+        return makeEmptyLayout(kind: syntaxKind, arena: arena)
       }
 
       // '!' because we know 'count' is not 0.
       let nodes: UnsafePointer<CClientNode?> = cnode.layout_data.nodes!
       return makeLayout(
-        arena: arena,
         kind: syntaxKind,
-        uninitializedCount: count
+        uninitializedCount: count,
+        arena: arena
       ) { buffer in
         var ptr = buffer.baseAddress!
         for i in 0 ..< count {

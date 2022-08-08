@@ -244,7 +244,7 @@ enum RawTriviaPiece {
 %   end
 % end
 
-  static func make(arena: SyntaxArena, _ piece: TriviaPiece) -> RawTriviaPiece {
+  static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {
     switch piece {
 % for trivia in TRIVIAS:
 %   if trivia.is_collection():

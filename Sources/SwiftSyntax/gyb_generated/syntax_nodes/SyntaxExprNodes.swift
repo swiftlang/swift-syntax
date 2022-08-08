@@ -767,6 +767,175 @@ extension AwaitExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MoveExprSyntax
+
+public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case garbageBeforeMoveKeyword
+    case moveKeyword
+    case garbageBetweenMoveKeywordAndExpression
+    case expression
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MoveExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .moveExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MoveExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .moveExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var garbageBeforeMoveKeyword: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeMoveKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeMoveKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeMoveKeyword` replaced.
+  /// - param newChild: The new `garbageBeforeMoveKeyword` to replace the node's
+  ///                   current `garbageBeforeMoveKeyword`, if present.
+  public func withGarbageBeforeMoveKeyword(
+    _ newChild: GarbageNodesSyntax?) -> MoveExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeMoveKeyword)
+    return MoveExprSyntax(newData)
+  }
+
+  public var moveKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.moveKeyword,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMoveKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `moveKeyword` replaced.
+  /// - param newChild: The new `moveKeyword` to replace the node's
+  ///                   current `moveKeyword`, if present.
+  public func withMoveKeyword(
+    _ newChild: TokenSyntax?) -> MoveExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.contextualKeyword(""))
+    let newData = data.replacingChild(raw, at: Cursor.moveKeyword)
+    return MoveExprSyntax(newData)
+  }
+
+  public var garbageBetweenMoveKeywordAndExpression: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenMoveKeywordAndExpression,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenMoveKeywordAndExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenMoveKeywordAndExpression` replaced.
+  /// - param newChild: The new `garbageBetweenMoveKeywordAndExpression` to replace the node's
+  ///                   current `garbageBetweenMoveKeywordAndExpression`, if present.
+  public func withGarbageBetweenMoveKeywordAndExpression(
+    _ newChild: GarbageNodesSyntax?) -> MoveExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenMoveKeywordAndExpression)
+    return MoveExprSyntax(newData)
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.expression,
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(
+    _ newChild: ExprSyntax?) -> MoveExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let newData = data.replacingChild(raw, at: Cursor.expression)
+    return MoveExprSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 4)
+    // Check child #0 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #3 child is ExprSyntax 
+    assert(rawChildren[3].raw != nil)
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ExprSyntax.self))
+    }
+  }
+}
+
+extension MoveExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "garbageBeforeMoveKeyword": garbageBeforeMoveKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "moveKeyword": Syntax(moveKeyword).asProtocol(SyntaxProtocol.self),
+      "garbageBetweenMoveKeywordAndExpression": garbageBetweenMoveKeywordAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - IdentifierExprSyntax
 
 public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

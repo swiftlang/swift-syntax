@@ -271,6 +271,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `AwaitExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AwaitExprSyntax) {}
+  /// Visiting `MoveExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MoveExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MoveExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MoveExprSyntax) {}
   /// Visiting `DeclNameArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2963,6 +2973,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMoveExprSyntax(_ data: SyntaxData) {
+      let node = MoveExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclNameArgumentSyntax(_ data: SyntaxData) {
       let node = DeclNameArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5624,6 +5645,8 @@ open class SyntaxVisitor {
       visitImplTryExprSyntax(data)
     case .awaitExpr:
       visitImplAwaitExprSyntax(data)
+    case .moveExpr:
+      visitImplMoveExprSyntax(data)
     case .declNameArgument:
       visitImplDeclNameArgumentSyntax(data)
     case .declNameArgumentList:

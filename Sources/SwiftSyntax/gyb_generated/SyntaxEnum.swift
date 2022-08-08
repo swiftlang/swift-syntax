@@ -39,6 +39,7 @@ public enum SyntaxEnum {
   case stringLiteralSegments(StringLiteralSegmentsSyntax)
   case tryExpr(TryExprSyntax)
   case awaitExpr(AwaitExprSyntax)
+  case moveExpr(MoveExprSyntax)
   case declNameArgument(DeclNameArgumentSyntax)
   case declNameArgumentList(DeclNameArgumentListSyntax)
   case declNameArguments(DeclNameArgumentsSyntax)
@@ -331,6 +332,8 @@ public extension Syntax {
       return .tryExpr(TryExprSyntax(self)!)
     case .awaitExpr:
       return .awaitExpr(AwaitExprSyntax(self)!)
+    case .moveExpr:
+      return .moveExpr(MoveExprSyntax(self)!)
     case .declNameArgument:
       return .declNameArgument(DeclNameArgumentSyntax(self)!)
     case .declNameArgumentList:

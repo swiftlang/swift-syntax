@@ -157,6 +157,12 @@ extension SyntaxNode {
     return AwaitExprSyntax(asSyntaxData)
   }
 
+  public var isMoveExpr: Bool { return raw.kind == .moveExpr }
+  public var asMoveExpr: MoveExprSyntax? {
+    guard isMoveExpr else { return nil }
+    return MoveExprSyntax(asSyntaxData)
+  }
+
   public var isDeclNameArgument: Bool { return raw.kind == .declNameArgument }
   public var asDeclNameArgument: DeclNameArgumentSyntax? {
     guard isDeclNameArgument else { return nil }
@@ -1636,6 +1642,8 @@ extension Syntax {
     case .tryExpr(let node):
       return node
     case .awaitExpr(let node):
+      return node
+    case .moveExpr(let node):
       return node
     case .declNameArgument(let node):
       return node

@@ -353,6 +353,29 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AwaitExprSyntax(data)
   }
+  public static func makeMoveExpr(_ garbageBeforeMoveKeyword: GarbageNodesSyntax? = nil, moveKeyword: TokenSyntax, _ garbageBetweenMoveKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> MoveExprSyntax {
+    let layout: [RawSyntax?] = [
+      garbageBeforeMoveKeyword?.raw,
+      moveKeyword.raw,
+      garbageBetweenMoveKeywordAndExpression?.raw,
+      expression.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.moveExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return MoveExprSyntax(data)
+  }
+
+  public static func makeBlankMoveExpr(presence: SourcePresence = .present) -> MoveExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .moveExpr,
+      layout: [
+      nil,
+      RawSyntax.missingToken(TokenKind.contextualKeyword("")),
+      nil,
+      RawSyntax.missing(SyntaxKind.missingExpr),
+    ], length: .zero, presence: presence))
+    return MoveExprSyntax(data)
+  }
   public static func makeDeclNameArgument(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> DeclNameArgumentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,

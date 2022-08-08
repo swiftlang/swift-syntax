@@ -184,6 +184,14 @@ public extension ExpressibleAsAwaitExpr {
     return createAwaitExpr()
   }
 }
+public protocol ExpressibleAsMoveExpr: ExpressibleAsExprBuildable {
+  func createMoveExpr() -> MoveExpr
+}
+public extension ExpressibleAsMoveExpr {
+  func createExprBuildable() -> ExprBuildable {
+    return createMoveExpr()
+  }
+}
 public protocol ExpressibleAsDeclNameArgument: ExpressibleAsDeclNameArgumentList, ExpressibleAsSyntaxBuildable {
   func createDeclNameArgument() -> DeclNameArgument
 }

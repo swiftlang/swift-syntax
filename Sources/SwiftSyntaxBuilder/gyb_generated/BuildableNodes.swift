@@ -497,6 +497,96 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
     return self
   }
 }
+public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
+  let garbageBeforeMoveKeyword: GarbageNodes?
+  let moveKeyword: TokenSyntax
+  let garbageBetweenMoveKeywordAndExpression: GarbageNodes?
+  let expression: ExprBuildable
+
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
+  /// Creates a `MoveExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - garbageBeforeMoveKeyword: 
+  ///   - moveKeyword: 
+  ///   - garbageBetweenMoveKeywordAndExpression: 
+  ///   - expression: 
+  public init(
+    leadingTrivia: Trivia = [],
+    garbageBeforeMoveKeyword: ExpressibleAsGarbageNodes? = nil,
+    moveKeyword: TokenSyntax,
+    garbageBetweenMoveKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
+    expression: ExpressibleAsExprBuildable
+  ) {
+    self.leadingTrivia = leadingTrivia
+    self.garbageBeforeMoveKeyword = garbageBeforeMoveKeyword?.createGarbageNodes()
+    self.moveKeyword = moveKeyword
+    assert(moveKeyword.text == "_move")
+    self.garbageBetweenMoveKeywordAndExpression = garbageBetweenMoveKeywordAndExpression?.createGarbageNodes()
+    self.expression = expression.createExprBuildable()
+  }
+
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leadingTrivia: Trivia = [],
+    garbageBeforeMoveKeyword: ExpressibleAsGarbageNodes? = nil,
+    moveKeyword: String,
+    garbageBetweenMoveKeywordAndExpression: ExpressibleAsGarbageNodes? = nil,
+    expression: ExpressibleAsExprBuildable
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      garbageBeforeMoveKeyword: garbageBeforeMoveKeyword,
+      moveKeyword: TokenSyntax.contextualKeyword(moveKeyword),
+      garbageBetweenMoveKeywordAndExpression: garbageBetweenMoveKeywordAndExpression,
+      expression: expression
+    )
+  }
+
+  /// Builds a `MoveExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MoveExprSyntax`.
+  func buildMoveExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MoveExprSyntax {
+    let result = SyntaxFactory.makeMoveExpr(
+      garbageBeforeMoveKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      moveKeyword: moveKeyword,
+      garbageBetweenMoveKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      expression: expression.buildExpr(format: format, leadingTrivia: nil)
+    )
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  }
+
+  /// Conformance to `ExprBuildable`.
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildMoveExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+    return ExprSyntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsMoveExpr`.
+  public func createMoveExpr() -> MoveExpr {
+    return self
+  }
+
+  /// `MoveExpr` might conform to `ExpressibleAsExprBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createExprBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createExprBuildable() -> ExprBuildable {
+    return self
+  }
+
+  /// `MoveExpr` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
 public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   let garbageBeforeName: GarbageNodes?
   let name: TokenSyntax

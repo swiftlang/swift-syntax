@@ -228,14 +228,11 @@ struct SyntaxData {
     case .parent(let parentBox): return parentBox.value.data.arena
     }
   }
-  private var parentBox: SyntaxBox? {
+  var parent: Syntax? {
     switch parentOrArena {
-    case .parent(let parentBox): return parentBox
+    case .parent(let parentBox): return parentBox.value
     case .arena(_): return nil
     }
-  }
-  var parent: Syntax? {
-    return parentBox?.value
   }
   let absoluteRaw: AbsoluteRawSyntax
 

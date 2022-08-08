@@ -15,7 +15,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import SwiftSyntaxParser
 import XCTest
 
 /// Verifies that there is a next item returned by the iterator and that it
@@ -35,18 +34,27 @@ public func XCTAssertNextIsNil<Iterator: IteratorProtocol>(_ iterator: inout Ite
 }
 
 /// Verifies that the tree parsed from `actual` has the same structure as
-/// `expected`, ie. it has the same structure and optionally the same trivia
-/// (if `includeTrivia` is set).
-public func XCTAssertSameStructure(_ actual: String, _ expected: Syntax, includeTrivia: Bool = false,
-                                   file: StaticString = #filePath, line: UInt = #line) throws {
-  let actualTree = try Syntax(SyntaxParser.parse(source: actual))
+/// `expected` when parsed with `parse`, ie. it has the same structure and
+/// optionally the same trivia (if `includeTrivia` is set).
+public func XCTAssertSameStructure(
+  _ actual: String,
+  parse: (String) throws -> Syntax,
+  _ expected: Syntax,
+  includeTrivia: Bool = false,
+  file: StaticString = #filePath, line: UInt = #line
+) throws {
+  let actualTree = try parse(actual)
   XCTAssertSameStructure(actualTree, expected, includeTrivia: includeTrivia, file: file, line: line)
 }
 
 /// Verifies that two trees are equivalent, ie. they have the same structure
 /// and optionally the same trivia if `includeTrivia` is set.
-public func XCTAssertSameStructure(_ actual: Syntax, _ expected: Syntax, includeTrivia: Bool = false,
-                                   file: StaticString = #filePath, line: UInt = #line) {
+public func XCTAssertSameStructure(
+  _ actual: SyntaxProtocol,
+  _ expected: SyntaxProtocol,
+  includeTrivia: Bool = false,
+  file: StaticString = #filePath, line: UInt = #line
+) {
   let diff = actual.findFirstDifference(baseline: expected, includeTrivia: includeTrivia)
   XCTAssertNil(diff, diff!.debugDescription, file: file, line: line)
 }
@@ -98,7 +106,7 @@ public struct SubtreeMatcher {
   /// The syntax tree from parsing source *with markers removed*.
   private var actualTree: Syntax
 
-  public init(_ markedText: String) throws {
+  public init(_ markedText: String, parse: (String) throws -> Syntax) throws {
     var text = ""
     var markers = [String: Int]()
     var lastIndex = markedText.startIndex
@@ -112,7 +120,7 @@ public struct SubtreeMatcher {
     text += markedText[lastIndex ..< markedText.endIndex]
 
     self.markers = markers.isEmpty ? ["DEFAULT": 0] : markers
-    self.actualTree = try Syntax(SyntaxParser.parse(source: text))
+    self.actualTree = try parse(text)
   }
 
   /// Same as `Syntax.findFirstDifference(baseline:includeTrivia:)`, but

@@ -91,7 +91,7 @@ let package = Package(
     ),
     .target(
       name: "_SwiftSyntaxTestSupport",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
+      dependencies: ["SwiftSyntax"]
     ),
     .executableTarget(
       name: "lit-test-helper",

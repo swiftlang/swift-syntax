@@ -121,7 +121,9 @@ public class SyntaxArena {
     precondition(
       !self.hasParent,
       "an arena can't have a new child once it's owned by other arenas")
-    // The precondition above should prevent cyclic references.
+    // `precondition(!self.hasParent)` should be sufficient to make sure we
+    // don’t add retain cycles between syntax arenas, but to be doubly sure,
+    // check the child arenas as well in debug builds.
     assert(!other.contains(arena: self), "cyclic arena hierarchy detected")
 
     other.hasParent = true

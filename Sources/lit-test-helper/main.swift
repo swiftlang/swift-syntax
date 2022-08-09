@@ -520,7 +520,7 @@ func diagnose(args: CommandLineArguments) throws {
   }
   let visitor = DiagnoseUnknown(
     diagnosticHandler: printDiagnostic,
-    SourceLocationConverter(file: treeURL.path, tree: tree)
+    SourceLocationConverter(file: treeURL.path, tree: Syntax(tree))
   )
   visitor.walk(tree)
 }

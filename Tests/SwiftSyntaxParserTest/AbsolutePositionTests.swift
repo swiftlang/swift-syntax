@@ -184,7 +184,7 @@ public class AbsolutePositionTests: XCTestCase {
   public func testSourceLocation() {
     let filePath = "/tmp/test.swift"
     let root = self.createSourceFile(2)
-    let converter = SourceLocationConverter(file: filePath, tree: root)
+    let converter = SourceLocationConverter(file: filePath, tree: Syntax(root))
     let secondReturnStmt = root.statements[1]
     let startLoc = secondReturnStmt.startLocation(converter: converter)
     XCTAssertEqual(startLoc.line, 8)

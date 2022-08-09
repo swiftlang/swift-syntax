@@ -122,7 +122,8 @@ public final class SourceLocationConverter {
   /// - Parameters:
   ///   - file: The file path associated with the syntax tree.
   ///   - tree: The syntax tree to convert positions to line/columns for.
-  public init(file: String, tree: SourceFileSyntax) {
+  public init(file: String, tree: Syntax) {
+    assert(tree.id.indexInTree == .zero, "SourceLocationConverter should be a syntax tree's root")
     self.file = file
     (self.lines, endOfFile) = computeLines(tree: tree)
     assert(tree.byteSize == endOfFile.utf8Offset)
@@ -335,7 +336,7 @@ public extension SyntaxProtocol {
 /// Returns array of lines with the position at the start of the line and
 /// the end-of-file position.
 fileprivate func computeLines(
-  tree: SourceFileSyntax
+  tree: Syntax
 ) -> ([AbsolutePosition], AbsolutePosition) {
   var lines: [AbsolutePosition] = []
   // First line starts from the beginning.

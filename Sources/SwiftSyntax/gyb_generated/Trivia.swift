@@ -371,171 +371,134 @@ extension TriviaPiece {
   }
 }
 
-extension TriviaPiece {
-  static func fromRawValue(_ piece: CTriviaPiece,
-                           textBuffer: UnsafeBufferPointer<UInt8>) -> TriviaPiece {
-    switch piece.kind {
-    case 0:
-      return .spaces(Int(piece.length)/1)
-    case 1:
-      return .tabs(Int(piece.length)/1)
-    case 2:
-      return .verticalTabs(Int(piece.length)/1)
-    case 3:
-      return .formfeeds(Int(piece.length)/1)
-    case 4:
-      return .newlines(Int(piece.length)/1)
-    case 5:
-      return .carriageReturns(Int(piece.length)/1)
-    case 6:
-      return .carriageReturnLineFeeds(Int(piece.length)/2)
-    case 8:
-      return .lineComment(.fromBuffer(textBuffer))
-    case 9:
-      return .blockComment(.fromBuffer(textBuffer))
-    case 10:
-      return .docLineComment(.fromBuffer(textBuffer))
-    case 11:
-      return .docBlockComment(.fromBuffer(textBuffer))
-    case 12:
-      return .garbageText(.fromBuffer(textBuffer))
-    case 13:
-      return .shebang(.fromBuffer(textBuffer))
-    default:
-      fatalError("unexpected trivia piece kind \(piece.kind)")
-    }
-  }
+/// Trivia piece for token RawSyntax.
+///
+/// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
+/// text of a the trivia.
+enum RawTriviaPiece {
+  case spaces(Int)
+  case tabs(Int)
+  case verticalTabs(Int)
+  case formfeeds(Int)
+  case newlines(Int)
+  case carriageReturns(Int)
+  case carriageReturnLineFeeds(Int)
+  case lineComment(SyntaxText)
+  case blockComment(SyntaxText)
+  case docLineComment(SyntaxText)
+  case docBlockComment(SyntaxText)
+  case garbageText(SyntaxText)
+  case shebang(SyntaxText)
 
-  static func hasText(kind: CTriviaKind) -> Bool {
-    switch kind {
-    case 0:
-      return false
-    case 1:
-      return false
-    case 2:
-      return false
-    case 3:
-      return false
-    case 4:
-      return false
-    case 5:
-      return false
-    case 6:
-      return false
-    case 8:
-      return true
-    case 9:
-      return true
-    case 10:
-      return true
-    case 11:
-      return true
-    case 12:
-      return true
-    case 13:
-      return true
-    default:
-      fatalError("unexpected trivia piece kind \(kind)")
+  static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {
+    switch piece {
+    case let .spaces(count): return .spaces(count)
+    case let .tabs(count): return .tabs(count)
+    case let .verticalTabs(count): return .verticalTabs(count)
+    case let .formfeeds(count): return .formfeeds(count)
+    case let .newlines(count): return .newlines(count)
+    case let .carriageReturns(count): return .carriageReturns(count)
+    case let .carriageReturnLineFeeds(count): return .carriageReturnLineFeeds(count)
+    case let .lineComment(text): return .lineComment(arena.intern(text))
+    case let .blockComment(text): return .blockComment(arena.intern(text))
+    case let .docLineComment(text): return .docLineComment(arena.intern(text))
+    case let .docBlockComment(text): return .docBlockComment(arena.intern(text))
+    case let .garbageText(text): return .garbageText(arena.intern(text))
+    case let .shebang(text): return .shebang(arena.intern(text))
     }
   }
 }
 
-/// Plain trivia piece kind value, without an associated `String` value.
-internal enum TriviaPieceKind: CTriviaKind {
-    /// A space ' ' character.
-    case spaces = 0
-    /// A tab '\t' character.
-    case tabs = 1
-    /// A vertical tab '\v' character.
-    case verticalTabs = 2
-    /// A form-feed 'f' character.
-    case formfeeds = 3
-    /// A newline '\n' character.
-    case newlines = 4
-    /// A newline '\r' character.
-    case carriageReturns = 5
-    /// A newline consists of contiguous '\r' and '\n' characters.
-    case carriageReturnLineFeeds = 6
-    /// A developer line comment, starting with '//'
-    case lineComment = 8
-    /// A developer block comment, starting with '/*' and ending with '*/'.
-    case blockComment = 9
-    /// A documentation line comment, starting with '///'.
-    case docLineComment = 10
-    /// A documentation block comment, starting with '/**' and ending with '*/'.
-    case docBlockComment = 11
-    /// Any skipped garbage text.
-    case garbageText = 12
-    /// A script command, starting with '#!'.
-    case shebang = 13
-
-  static func fromRawValue(_ rawValue: CTriviaKind) -> TriviaPieceKind {
-    return TriviaPieceKind(rawValue: rawValue)!
+extension RawTriviaPiece: TextOutputStreamable {
+  func write<Target: TextOutputStream>(to target: inout Target) {
+    TriviaPiece(raw: self).write(to: &target)
   }
 }
 
 extension TriviaPiece {
-  internal func withUnsafeTriviaPiece<Result>(
-    _ body: (UnsafeTriviaPiece) -> Result
-  ) -> Result {
+  init(raw: RawTriviaPiece) {
+    switch raw {
+    case let .spaces(count): self = .spaces(count)
+    case let .tabs(count): self = .tabs(count)
+    case let .verticalTabs(count): self = .verticalTabs(count)
+    case let .formfeeds(count): self = .formfeeds(count)
+    case let .newlines(count): self = .newlines(count)
+    case let .carriageReturns(count): self = .carriageReturns(count)
+    case let .carriageReturnLineFeeds(count): self = .carriageReturnLineFeeds(count)
+    case let .lineComment(text): self = .lineComment(String(syntaxText: text))
+    case let .blockComment(text): self = .blockComment(String(syntaxText: text))
+    case let .docLineComment(text): self = .docLineComment(String(syntaxText: text))
+    case let .docBlockComment(text): self = .docBlockComment(String(syntaxText: text))
+    case let .garbageText(text): self = .garbageText(String(syntaxText: text))
+    case let .shebang(text): self = .shebang(String(syntaxText: text))
+    }
+  }
+}
+
+extension RawTriviaPiece {
+  var byteLength: Int {
     switch self {
     case let .spaces(count):
-      let length = count
-      return body(.init(kind: .spaces, length: length))
+      return count
     case let .tabs(count):
-      let length = count
-      return body(.init(kind: .tabs, length: length))
+      return count
     case let .verticalTabs(count):
-      let length = count
-      return body(.init(kind: .verticalTabs, length: length))
+      return count
     case let .formfeeds(count):
-      let length = count
-      return body(.init(kind: .formfeeds, length: length))
+      return count
     case let .newlines(count):
-      let length = count * 1
-      return body(.init(kind: .newlines, length: length))
+      return count * 1
     case let .carriageReturns(count):
-      let length = count * 1
-      return body(.init(kind: .carriageReturns, length: length))
+      return count * 1
     case let .carriageReturnLineFeeds(count):
-      let length = count * 2
-      return body(.init(kind: .carriageReturnLineFeeds, length: length))
-    case var .lineComment(text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .lineComment, length: length, customText: buf))
-      })!
-    case var .blockComment(text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .blockComment, length: length, customText: buf))
-      })!
-    case var .docLineComment(text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .docLineComment, length: length, customText: buf))
-      })!
-    case var .docBlockComment(text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .docBlockComment, length: length, customText: buf))
-      })!
-    case var .garbageText(text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .garbageText, length: length, customText: buf))
-      })!
-    case var .shebang(text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .shebang, length: length, customText: buf))
-      })!
+      return count * 2
+    case let .lineComment(text):
+      return text.count
+    case let .blockComment(text):
+      return text.count
+    case let .docLineComment(text):
+      return text.count
+    case let .docBlockComment(text):
+      return text.count
+    case let .garbageText(text):
+      return text.count
+    case let .shebang(text):
+      return text.count
+    }
+  }
+}
+
+extension RawTriviaPiece {
+  static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {
+    switch kind {
+    case 0:
+      return .spaces(text.count)
+    case 1:
+      return .tabs(text.count)
+    case 2:
+      return .verticalTabs(text.count)
+    case 3:
+      return .formfeeds(text.count)
+    case 4:
+      return .newlines(text.count)
+    case 5:
+      return .carriageReturns(text.count)
+    case 6:
+      return .carriageReturnLineFeeds(text.count / 2)
+    case 8:
+      return .lineComment(text)
+    case 9:
+      return .blockComment(text)
+    case 10:
+      return .docLineComment(text)
+    case 11:
+      return .docBlockComment(text)
+    case 12:
+      return .garbageText(text)
+    case 13:
+      return .shebang(text)
+    default:
+      fatalError("unexpected trivia piece kind \(kind)")
     }
   }
 }

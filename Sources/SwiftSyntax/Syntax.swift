@@ -696,7 +696,11 @@ public struct SyntaxNode {
   /// `SyntaxData` objects. There's a cost associated with it that should be
   /// taken into account before used inside performance critical code.
   internal var asSyntaxData: SyntaxData {
-    return SyntaxData(absoluteRaw, parent: parent?.asSyntax)
+    if let parent = parent {
+      return SyntaxData(absoluteRaw, parent: parent.asSyntax)
+    } else {
+      return SyntaxData.forRoot(absoluteRaw.raw)
+    }
   }
 
   /// Converts this node to a `Syntax` object.

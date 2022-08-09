@@ -475,24 +475,6 @@ fileprivate extension Trivia {
   }
 }
 
-fileprivate extension TokenKind {
-  /// Walks and passes to `body` the `SourceLength` for every detected line,
-  /// with the newline character included.
-  /// - Returns: The leftover `SourceLength` at the end of the walk.
-  func forEachLineLength(
-    prefix: SourceLength = .zero, body: (SourceLength) -> ()
-  ) -> SourceLength {
-    switch self {
-      case let .stringLiteral(text),
-           let .unknown(text),
-           let .stringSegment(text):
-        return text.forEachLineLength(prefix: prefix, body: body)
-      default:
-        return prefix + self.sourceLength
-    }
-  }
-}
-
 fileprivate extension TokenSyntax {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
@@ -502,7 +484,7 @@ fileprivate extension TokenSyntax {
   ) -> SourceLength {
     var curPrefix = prefix
     curPrefix = self.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.tokenKind.forEachLineLength(prefix: curPrefix, body: body)
+    curPrefix = self.text.forEachLineLength(prefix: curPrefix, body: body)
     curPrefix = self.trailingTrivia.forEachLineLength(prefix: curPrefix, body: body)
     return curPrefix
   }

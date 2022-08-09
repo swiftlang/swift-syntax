@@ -93,9 +93,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax.createAndCalcLength(kind: tokenKind,
-      leadingTrivia: raw.formLeadingTrivia()!, trailingTrivia: raw.formTrailingTrivia()!,
-      presence: raw.presence)
+    let newRaw = raw.withTokenKind(tokenKind)
     let newData = data.replacingSelf(newRaw)
     return TokenSyntax(newData)
   }

@@ -25,6 +25,7 @@ typealias CTokenData = swiftparse_token_data_t
 typealias CLayoutData = swiftparse_layout_data_t
 typealias CTriviaPiecePtr = UnsafePointer<CTriviaPiece>
 typealias CTriviaPiece = swiftparse_trivia_piece_t
+typealias CRange = swiftparse_range_t
 
 /// Computes a hash value that describes the layout of all C nodes which are
 /// passed as opaque values between `SwiftSyntaxParser` and `SwiftSyntax`.

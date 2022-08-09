@@ -5661,7 +5661,6 @@ open class SyntaxRewriter {
     var newLayout: ContiguousArray<RawSyntax?>?
 
     let syntaxNode = node._syntaxNode
-    let parentBox = SyntaxBox(syntaxNode)
 
     // Incrementing i manually is faster than using .enumerated()
     var childIndex = 0
@@ -5678,7 +5677,7 @@ open class SyntaxRewriter {
 
       // Build the Syntax node to rewrite
       let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
-      let data = SyntaxData(absoluteRaw, parentBox: parentBox)
+      let data = SyntaxData(absoluteRaw, parent: syntaxNode)
       
       let rewritten = visit(data)
       if rewritten.data.nodeId != info.nodeId {

@@ -232,7 +232,7 @@ func f(x: Int) -> Int {
    )
    """
 
-  // CHECK: <str>"</str>\<anchor>(</anchor><int>1</int><anchor>)</anchor><str></str>\<anchor>(</anchor><int>1</int><anchor>)</anchor><str>"</str>
+  // CHECK: <str>"</str>\<anchor>(</anchor><int>1</int><anchor>)</anchor>\<anchor>(</anchor><int>1</int><anchor>)</anchor><str>"</str>
   "\(1)\(1)"
 }
 

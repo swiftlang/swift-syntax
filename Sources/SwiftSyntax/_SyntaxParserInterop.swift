@@ -15,7 +15,7 @@
 /// parser.
 public enum _SyntaxParserInterop {
   private static func getRetainedOpaque(rawSyntax: RawSyntax) -> CClientNode {
-    return Unmanaged.passRetained(rawSyntax).toOpaque()
+    return CClientNode(mutating: rawSyntax.toOpaque())
   }
 
   /// Create a `RawSyntax` node for the given `cnode` and return an opaque
@@ -25,13 +25,11 @@ public enum _SyntaxParserInterop {
   /// `CClientNode` to `nodeFromRetainedOpaqueRawSyntax` transfers ownership
   /// back to `SwiftSyntax`.
   public static func getRetainedOpaqueRawSyntax(
-    cnode: UnsafeRawPointer, source: String
+    cnode: UnsafeRawPointer, sourceBuffer: UnsafeBufferPointer<UInt8>, arena: SyntaxArena
   ) -> CClientNode {
     let cnode = cnode.assumingMemoryBound(to: CSyntaxNode.self)
-    // Transfer ownership of the object to the C parser. We get ownership back
-    // via `moveFromCRawNode()`.
-    let node = RawSyntax.create(from: cnode, source: source)
-    return getRetainedOpaque(rawSyntax: node)
+    let node = RawSyntax.createFromCSyntaxNode(cnode, in: sourceBuffer, arena: arena)
+    return CClientNode(mutating: node.toOpaque())
   }
 
   /// Return an opaque pointer to the given `node`.
@@ -49,6 +47,7 @@ public enum _SyntaxParserInterop {
   /// which is managed by `SwiftSyntax`.
   public static func nodeFromRetainedOpaqueRawSyntax(_ cRoot: CClientNode)
       -> Syntax {
-    return Syntax(SyntaxData.forRoot(RawSyntax.moveFromOpaque(cRoot)))
+
+    return Syntax(SyntaxData.forRoot(RawSyntax.fromOpaque(cRoot)))
   }
 }

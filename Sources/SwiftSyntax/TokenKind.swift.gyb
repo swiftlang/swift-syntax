@@ -96,7 +96,7 @@ public enum TokenKind: Hashable {
 % end
     }
   }
-  
+
   var kind: String {
     switch self {
     case .eof: return "eof"
@@ -142,80 +142,63 @@ extension TokenKind: Equatable {
   }
 }
 
-extension TokenKind {
-  static func fromRawValue(kind: CTokenKind,
-                           textBuffer: UnsafeBufferPointer<UInt8>) -> TokenKind {
-    switch kind {
-    case 0: return .eof
-% for token in SYNTAX_TOKENS:
-    case ${token.serialization_code}:
-%   if token.text: # The token does not have text associated with it
-      return .${token.swift_kind()}
-%   else:
-      return .${token.swift_kind()}(.fromBuffer(textBuffer))
-%   end
-% end
-    default:
-      if !textBuffer.isEmpty {
-        // Default to an unknown token with the passed text if we don't know
-        // its kind.
-        return .unknown(.fromBuffer(textBuffer))
-      } else {
-        // If we were not passed the token's text, we cannot recover since we
-        // would lose roundtripness.
-        fatalError("unexpected token kind \(kind)")
-      }
-    }
-  }
-
-  static func hasText(kind: CTokenKind) -> Bool {
-    switch kind {
-    case 0: return false
-% for token in SYNTAX_TOKENS:
-    case ${token.serialization_code}:
-%   if token.text: # The token does not have text associated with it
-      return false
-%   else:
-      return true
-%   end
-% end
-    default:
-      fatalError("unexpected token kind \(kind)")
-    }
-  }
-}
-
 /// Plain token kind value, without an associated `String` value.
-internal enum RawTokenKind: CTokenKind {
-  case eof = 0
+public enum RawTokenKind {
+  case eof
 % for token in SYNTAX_TOKENS:
-  case ${token.swift_kind()} = ${token.serialization_code}
+  case ${token.swift_kind()}
 % end
 
   static func fromRawValue(_ rawValue: CTokenKind) -> RawTokenKind {
-    return RawTokenKind(rawValue: rawValue)!
+    switch rawValue {
+    case 0: return .eof
+% for token in SYNTAX_TOKENS:
+    case ${token.serialization_code}: return .${token.swift_kind()}
+% end
+    default: fatalError("unknown raw value")
+    }
+  }
+
+  var defaultText: SyntaxText? {
+    switch self {
+    case .eof: return ""
+% for token in SYNTAX_TOKENS:
+%   if token.text:
+    case .${token.swift_kind()}: return "${token.text}"
+%   end
+% end
+    default: return nil
+    }
   }
 }
 
 extension TokenKind {
-  internal func withUnsafeTokenText<Result>(
-    _ body: (UnsafeTokenText) -> Result
-  ) -> Result {
+  /// If the `rawKind` has a `defaultText`, `text` can be empty.
+  static func fromRaw(kind rawKind: RawTokenKind, text: SyntaxText) -> TokenKind {
+    switch rawKind {
+    case .eof: return .eof
+% for token in SYNTAX_TOKENS:
+    case .${token.swift_kind()}:
+%   if token.text:
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .${token.swift_kind()}
+%   else:
+      return .${token.swift_kind()}(String(syntaxText: text))
+%   end
+% end
+    }
+  }
+
+  /// Returns the `RawTokenKind` of this `TokenKind` and, if this `TokenKind`
+  /// has associated text, the associated text, otherwise `nil`.
+  func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
     switch self {
-    case .eof:
-      return body(.init(kind: .eof, length: 0))
+    case .eof: return (.eof, nil)
 % for token in SYNTAX_TOKENS:
 %   if token.text:
-    case .${token.swift_kind()}:
-      let length = ${len(token.text.encode('utf-8').decode('unicode-escape'))}
-      return body(.init(kind: .${token.swift_kind()}, length: length))
+    case .${token.swift_kind()}: return (.${token.swift_kind()}, nil)
 %   else:
-    case .${token.swift_kind()}(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .${token.swift_kind()}, length: length, customText: buf))
-      })!
+    case .${token.swift_kind()}(let str): return (.${token.swift_kind()}, str)
 %   end
 % end
     }

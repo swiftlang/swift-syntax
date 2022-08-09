@@ -432,8 +432,7 @@ func performVerifyRoundtrip(args: CommandLineArguments) throws {
     throw TestingError.readingSourceFileFailed(sourceURL)
   }
   let versionInfo = getSwiftLanguageVersionInfo(args: args)
-  let useNewParser = args.has("-use-new-parser")
-
+  
   let tree = try SyntaxParser.parse(source: source, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral)
   if tree.description != source {
     throw TestingError.roundTripFailed

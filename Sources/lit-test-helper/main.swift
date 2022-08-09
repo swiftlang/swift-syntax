@@ -36,6 +36,10 @@ func printHelp() {
       -roundtrip
             Parse the given source file (-source-file) and print it out using
             its syntax tree.
+      -verify-roundtrip
+            Parse the given source file (-source-file) and exit with a non-zero
+            exit code if printing the tree does not result in the original
+            source file.
       -print-tree
             Parse the given source file (-source-file) and output its syntax
             tree.
@@ -343,6 +347,8 @@ func performParseIncremental(args: CommandLineArguments) throws {
 enum TestingError: Error, CustomStringConvertible {
   case reparsedRegionsVerificationFailed(ByteSourceRange)
   case classificationVerificationFailed(String, String)
+  case readingSourceFileFailed(URL)
+  case roundTripFailed
 
   public var description: String {
     switch self {
@@ -357,6 +363,10 @@ enum TestingError: Error, CustomStringConvertible {
       --- CONSTRUCTED:
       \(constructed)
       """
+    case .readingSourceFileFailed(let url):
+      return "Reading the source file at \(url) failed"
+    case .roundTripFailed:
+      return "Round-tripping the source file failed"
     }
   }
 }
@@ -413,6 +423,20 @@ func performRoundtrip(args: CommandLineArguments) throws {
     try treeText.write(to: outURL, atomically: false, encoding: .utf8)
   } else {
     print(treeText)
+  }
+}
+
+func performVerifyRoundtrip(args: CommandLineArguments) throws {
+  let sourceURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
+  guard let source = try String(data: Data(contentsOf: sourceURL), encoding: .utf8) else {
+    throw TestingError.readingSourceFileFailed(sourceURL)
+  }
+  let versionInfo = getSwiftLanguageVersionInfo(args: args)
+  let useNewParser = args.has("-use-new-parser")
+
+  let tree = try SyntaxParser.parse(source: source, languageVersion: versionInfo.languageVersion, enableBareSlashRegexLiteral: versionInfo.enableBareSlashRegexLiteral)
+  if tree.description != source {
+    throw TestingError.roundTripFailed
   }
 }
 
@@ -534,6 +558,8 @@ do {
     try performParseIncremental(args: args)
   } else if args.has("-roundtrip") {
     try performRoundtrip(args: args)
+  } else if args.has("-verify-roundtrip") {
+    try performVerifyRoundtrip(args: args)
   } else if args.has("-print-tree") {
     try printSyntaxTree(args: args)
   } else if args.has("-dump-diags") {
@@ -550,6 +576,9 @@ do {
     exit(1)
   }
   exit(0)
+} catch let error as TestingError {
+  printerr("\(error)")
+  exit(1)
 } catch {
   printerr("\(error)")
   printerr("Run lit-test-helper -help for more help.")

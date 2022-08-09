@@ -238,7 +238,6 @@ def generate_gyb_files_helper(
             pass
 
 
-
 # Generate the syntax node `.swift` files from `SyntaxNodes.swift.gyb.template`.
 # `destination_dir` is not `None`, the resulting files will be written to
 # `destination_dir/syntax_nodes`, otherwise they will be written to
@@ -286,52 +285,46 @@ def generate_syntax_node_template_gyb_files(
         )
 
 
-def generate_gyb_files(
-    gyb_exec: str, verbose: bool, add_source_locations: bool,
+# Maps directories containing .gyb files to the directories the generated files should
+# live in.
+def gyb_dir_mapping(
     swiftsyntax_destination: Optional[str] = None,
     swiftsyntaxbuilder_destination: Optional[str] = None,
     swiftsyntaxparser_destination: Optional[str] = None,
-    swiftsyntaxbuildergenerator_destination: Optional[str] = None
+    swiftsyntaxbuildergenerator_destination: Optional[str] = None,
+) -> Dict[str, Optional[str]]:
+    return {
+        SWIFTSYNTAX_DIR: swiftsyntax_destination,
+        SWIFTSYNTAXBUILDER_DIR: swiftsyntaxbuilder_destination,
+        SWIFTSYNTAXPARSER_DIR: swiftsyntaxparser_destination,
+        SWIFTSYNTAXBUILDERGENERATION_DIR: swiftsyntaxbuildergenerator_destination,
+    }
+
+
+def generate_gyb_files(
+    gyb_exec: str, gyb_dir_mapping: Dict[str, Optional[str]],
+    add_source_locations: bool, verbose: bool,
 ) -> None:
     print("** Generating gyb Files **")
 
     check_gyb_exec(gyb_exec)
     check_rsync()
 
-    generate_gyb_files_helper(
-        SWIFTSYNTAX_DIR,
-        swiftsyntax_destination,
-        gyb_exec,
-        add_source_locations,
-        verbose
-    )
-    generate_gyb_files_helper(
-        SWIFTSYNTAXBUILDER_DIR,
-        swiftsyntaxbuilder_destination,
-        gyb_exec,
-        add_source_locations,
-        verbose
-    )
-    generate_gyb_files_helper(
-        SWIFTSYNTAXPARSER_DIR,
-        swiftsyntaxparser_destination,
-        gyb_exec,
-        add_source_locations,
-        verbose
-    )
-    generate_gyb_files_helper(
-        SWIFTSYNTAXBUILDERGENERATION_DIR,
-        swiftsyntaxbuildergenerator_destination,
-        gyb_exec,
-        add_source_locations,
-        verbose
-    )
-    generate_syntax_node_template_gyb_files(
-        swiftsyntax_destination,
-        gyb_exec,
-        add_source_locations,
-        verbose
-    )
+    for source_dir, destination_dir in gyb_dir_mapping.items():
+        generate_gyb_files_helper(
+            source_dir,
+            destination_dir,
+            gyb_exec,
+            add_source_locations,
+            verbose
+        )
+        if source_dir == SWIFTSYNTAX_DIR:
+            generate_syntax_node_template_gyb_files(
+                destination_dir,
+                gyb_exec,
+                add_source_locations,
+                verbose
+            )
 
     print("** Done Generating gyb Files **")
 
@@ -459,50 +452,29 @@ class Builder(object):
 
 
 def verify_generated_files(gyb_exec: str, verbose: bool) -> None:
-    user_swiftsyntax_generated_dir = os.path.join(
-        SWIFTSYNTAX_DIR, "gyb_generated"
+    gyb_dirs = gyb_dir_mapping(
+        swiftsyntax_destination=tempfile.mkdtemp(),
+        swiftsyntaxbuilder_destination=tempfile.mkdtemp(),
+        swiftsyntaxparser_destination=tempfile.mkdtemp(),
+        swiftsyntaxbuildergenerator_destination=tempfile.mkdtemp(),
     )
-    user_swiftsyntaxbuilder_generated_dir = os.path.join(
-        SWIFTSYNTAXBUILDER_DIR, "gyb_generated"
-    )
-    user_swiftsyntaxparser_generated_dir = os.path.join(
-        SWIFTSYNTAXPARSER_DIR, "gyb_generated"
-    )
-    user_swiftsyntaxbuildergeneration_generated_dir = os.path.join(
-        SWIFTSYNTAXBUILDERGENERATION_DIR, "gyb_generated"
-    )
-
-    self_swiftsyntax_generated_dir = tempfile.mkdtemp()
-    self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
-    self_swiftsyntaxparser_generated_dir = tempfile.mkdtemp()
-    self_swiftsyntaxbuildergeneration_generated_dir = tempfile.mkdtemp()
 
     generate_gyb_files(
         gyb_exec,
-        verbose=verbose,
+        gyb_dir_mapping=gyb_dirs,
         add_source_locations=False,
-        swiftsyntax_destination=self_swiftsyntax_generated_dir,
-        swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
-        swiftsyntaxparser_destination=self_swiftsyntaxparser_generated_dir,
-        swiftsyntaxbuildergenerator_destination=self_swiftsyntaxbuildergeneration_generated_dir  # noqa: E501
+        verbose=verbose,
     )
 
-    check_generated_files_match(
-        self_swiftsyntax_generated_dir,
-        user_swiftsyntax_generated_dir
-    )
-    check_generated_files_match(
-        self_swiftsyntaxbuilder_generated_dir,
-        user_swiftsyntaxbuilder_generated_dir
-    )
-    check_generated_files_match(
-        self_swiftsyntaxparser_generated_dir,
-        user_swiftsyntaxparser_generated_dir
-    )
-    check_generated_files_match(
-        self_swiftsyntaxbuildergeneration_generated_dir,
-        user_swiftsyntaxbuildergeneration_generated_dir
-    )
+    for source_dir, destination_dir in gyb_dirs.items():
+        if destination_dir is None:
+            raise ValueError('gyb_dir_mapping should have custom temp dirs')
+
+        pre_generated_dir = os.path.join(source_dir, "gyb_generated")
+        check_generated_files_match(
+            pre_generated_dir,
+            destination_dir
+        )
 
 
 def verify_code_generated_files(
@@ -710,8 +682,9 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
     try:
         generate_gyb_files(
             args.gyb_exec,
-            verbose=args.verbose,
+            gyb_dir_mapping=gyb_dir_mapping(),
             add_source_locations=args.add_source_locations,
+            verbose=args.verbose,
         )
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Generating .gyb files failed", e)

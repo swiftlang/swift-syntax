@@ -381,7 +381,7 @@ extension RawSyntax {
   // @available(*, deprecated, message: "use 'replacingLayout(with:arena:)'")
   func replacingLayout(_ layout: [RawSyntax?]) -> RawSyntax {
     if isToken { return self }
-    return self.replacingLayout(with: layout, arena: arena)
+    return self.replacingLayout(with: layout, arena: .default)
   }
 
   func insertingChild(

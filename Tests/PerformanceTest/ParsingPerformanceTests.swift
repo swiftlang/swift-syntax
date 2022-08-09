@@ -14,9 +14,7 @@ public class ParsingPerformanceTests: XCTestCase {
   func testParsingPerformance() {
     measure {
       do {
-        for _ in 0 ..< 500 {
         _ = try SyntaxParser.parse(inputFile)
-        }
       } catch {
         XCTFail(error.localizedDescription)
       }

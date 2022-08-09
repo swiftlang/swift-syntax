@@ -25,9 +25,7 @@ public enum SyntaxTreeViewMode {
   case fixedUp
 
   /// Both missing and garbage nodes will be traversed.
-  /// Mostly useful for SwiftSyntax internal verifiers that verify the integrity
-  /// of the entire tree
-  case _all
+  case all
 
   /// Returns whether this traversal node should visit `node` or ignore it.
   func shouldTraverse(node: RawSyntax) -> Bool {
@@ -36,7 +34,7 @@ public enum SyntaxTreeViewMode {
       return node.presence == .present
     case .fixedUp:
       return node.kind != .garbageNodes
-    case ._all:
+    case .all:
       return true
     }
   }

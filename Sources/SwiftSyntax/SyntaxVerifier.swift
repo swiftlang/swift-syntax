@@ -31,7 +31,7 @@ public class SyntaxVerifier: SyntaxAnyVisitor {
   var unknownNodes: [Syntax] = []
 
   init() {
-    super.init(viewMode: ._all)
+    super.init(viewMode: .all)
   }
 
   public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {

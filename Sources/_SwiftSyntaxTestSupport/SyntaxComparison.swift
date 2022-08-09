@@ -94,8 +94,8 @@ public extension SyntaxProtocol {
       return TreeDifference(node: self, baseline: baseline, reason: reason)
     }
 
-    var iterator = children(viewMode: ._all).makeIterator()
-    var baseIterator = baseline.children(viewMode: ._all).makeIterator()
+    var iterator = children(viewMode: .all).makeIterator()
+    var baseIterator = baseline.children(viewMode: .all).makeIterator()
     while let child = iterator.next() {
       guard let baselineChild = baseIterator.next() else {
         return TreeDifference(node: child, baseline: baseline, reason: .additionalNode)

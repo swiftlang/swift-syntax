@@ -5,16 +5,18 @@ fileprivate func cannedVarDecl() -> VariableDeclSyntax {
   let identifierPattern = SyntaxFactory.makeIdentifierPattern(
     identifier: SyntaxFactory.makeIdentifier("a")
   )
-  let Pattern = SyntaxFactory.makePatternBinding(
+  let pattern = SyntaxFactory.makePatternBinding(
     pattern: PatternSyntax(identifierPattern),
     typeAnnotation: SyntaxFactory.makeTypeAnnotation(
       colon: SyntaxFactory.makeColonToken().withTrailingTrivia(.space),
       type: SyntaxFactory.makeTypeIdentifier("Int")),
     initializer: nil, accessor: nil, trailingComma: nil)
-  return VariableDeclSyntax {
-    $0.useLetOrVarKeyword(SyntaxFactory.makeLetKeyword())
-    $0.addBinding(Pattern)
-  }
+  return SyntaxFactory.makeVariableDecl(
+    attributes: nil,
+    modifiers: nil,
+    letOrVarKeyword: SyntaxFactory.makeLetKeyword(),
+    bindings: SyntaxFactory.makePatternBindingList([pattern])
+  )
 }
 
 public class SyntaxTreeModifierTests: XCTestCase {

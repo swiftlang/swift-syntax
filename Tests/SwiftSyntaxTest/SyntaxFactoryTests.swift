@@ -5,15 +5,21 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
   let structKW = SyntaxFactory.makeStructKeyword(trailingTrivia: .space)
   let fooID = SyntaxFactory.makeIdentifier("Foo")
   let rBrace = SyntaxFactory.makeRightBraceToken(leadingTrivia: .newline)
-  let members = MemberDeclBlockSyntax {
-    $0.useLeftBrace(SyntaxFactory.makeLeftBraceToken())
-    $0.useRightBrace(rBrace)
-  }
-  return StructDeclSyntax {
-    $0.useStructKeyword(structKW)
-    $0.useIdentifier(fooID)
-    $0.useMembers(members)
-  }
+  let members = SyntaxFactory.makeMemberDeclBlock(
+    leftBrace: SyntaxFactory.makeLeftBraceToken(),
+    members: SyntaxFactory.makeMemberDeclList([]),
+    rightBrace: rBrace
+  )
+  return SyntaxFactory.makeStructDecl(
+    attributes: nil,
+    modifiers: nil,
+    structKeyword: structKW,
+    identifier: fooID,
+    genericParameterClause: nil,
+    inheritanceClause: nil,
+    genericWhereClause: nil,
+    members: members
+  )
 }
 
 public class SyntaxFactoryTests: XCTestCase {
@@ -84,22 +90,28 @@ public class SyntaxFactoryTests: XCTestCase {
   public func testFunctionCallSyntaxBuilder() {
     let string = SyntaxFactory.makeStringLiteralExpr("Hello, world!")
     let printID = SyntaxFactory.makeVariableExpr("print")
-    let arg = TupleExprElementSyntax {
-      $0.useExpression(ExprSyntax(string))
-    }
-    let call = FunctionCallExprSyntax {
-      $0.useCalledExpression(ExprSyntax(printID))
-      $0.useLeftParen(SyntaxFactory.makeLeftParenToken())
-      $0.addArgument(arg)
-      $0.useRightParen(SyntaxFactory.makeRightParenToken())
-    }
+    let arg = SyntaxFactory.makeTupleExprElement(
+      label: nil,
+      colon: nil,
+      expression: ExprSyntax(string),
+      trailingComma: nil
+    )
+    let call = SyntaxFactory.makeFunctionCallExpr(
+      calledExpression: ExprSyntax(printID),
+      leftParen: SyntaxFactory.makeLeftParenToken(),
+      argumentList: SyntaxFactory.makeTupleExprElementList([arg]),
+      rightParen: SyntaxFactory.makeRightParenToken(),
+      trailingClosure: nil,
+      additionalTrailingClosures: nil
+    )
     XCTAssertEqual("\(call)", "print(\"Hello, world!\")")
 
-    let terminatorArg = TupleExprElementSyntax {
-      $0.useLabel(SyntaxFactory.makeIdentifier("terminator"))
-      $0.useColon(SyntaxFactory.makeColonToken(trailingTrivia: .space))
-      $0.useExpression(ExprSyntax(SyntaxFactory.makeStringLiteralExpr(" ")))
-    }
+    let terminatorArg = SyntaxFactory.makeTupleExprElement(
+      label: SyntaxFactory.makeIdentifier("terminator"),
+      colon: SyntaxFactory.makeColonToken(trailingTrivia: .space),
+      expression: ExprSyntax(SyntaxFactory.makeStringLiteralExpr(" ")),
+      trailingComma: nil
+    )
     let callWithTerminator = call.withArgumentList(
       SyntaxFactory.makeTupleExprElementList([
         arg.withTrailingComma(
@@ -115,15 +127,20 @@ public class SyntaxFactoryTests: XCTestCase {
   public func testWithOptionalChild() {
     let string = SyntaxFactory.makeStringLiteralExpr("Hello, world!")
     let printID = SyntaxFactory.makeVariableExpr("print")
-    let arg = TupleExprElementSyntax {
-      $0.useExpression(ExprSyntax(string))
-    }
-    let call1 = FunctionCallExprSyntax {
-      $0.useCalledExpression(ExprSyntax(printID))
-      $0.useLeftParen(SyntaxFactory.makeLeftParenToken())
-      $0.addArgument(arg)
-      $0.useRightParen(SyntaxFactory.makeRightParenToken())
-    }
+    let arg = SyntaxFactory.makeTupleExprElement(
+      label: nil,
+      colon: nil,
+      expression: ExprSyntax(string),
+      trailingComma: nil
+    )
+    let call1 = SyntaxFactory.makeFunctionCallExpr(
+      calledExpression: ExprSyntax(printID),
+      leftParen: SyntaxFactory.makeLeftParenToken(),
+      argumentList: SyntaxFactory.makeTupleExprElementList([arg]),
+      rightParen: SyntaxFactory.makeRightParenToken(),
+      trailingClosure: nil,
+      additionalTrailingClosures: nil
+    )
     XCTAssertNotNil(call1.leftParen)
     XCTAssertNotNil(call1.rightParen)
 
@@ -131,10 +148,14 @@ public class SyntaxFactoryTests: XCTestCase {
     XCTAssertNil(call2.leftParen)
     XCTAssertNil(call2.rightParen)
 
-    let call3 = FunctionCallExprSyntax {
-      $0.useCalledExpression(ExprSyntax(printID))
-      $0.addArgument(arg)
-    }
+    let call3 = SyntaxFactory.makeFunctionCallExpr(
+      calledExpression: ExprSyntax(printID),
+      leftParen: nil,
+      argumentList: SyntaxFactory.makeTupleExprElementList([arg]),
+      rightParen: nil,
+      trailingClosure: nil,
+      additionalTrailingClosures: nil
+    )
     XCTAssertNil(call3.leftParen)
     XCTAssertNil(call3.rightParen)
   }
@@ -162,18 +183,16 @@ public class SyntaxFactoryTests: XCTestCase {
   }
     
   public func testMakeBinaryOperator() {
-    let first = IntegerLiteralExprSyntax {
-      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space))
-    }
-    let second = IntegerLiteralExprSyntax {
-      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1"))
-    }
+    let first = SyntaxFactory.makeIntegerLiteralExpr(
+      digits: SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space)
+    )
+    let second = SyntaxFactory.makeIntegerLiteralExpr(
+      digits: SyntaxFactory.makeIntegerLiteral("1")
+    )
     let operatorNames = ["==", "!=", "+", "-", "*", "/", "<", ">", "<=", ">="]
     operatorNames.forEach { operatorName in
       let operatorToken = SyntaxFactory.makeBinaryOperator(operatorName, trailingTrivia: .space)
-      let operatorExpr = BinaryOperatorExprSyntax {
-        $0.useOperatorToken(operatorToken)
-      }
+      let operatorExpr = SyntaxFactory.makeBinaryOperatorExpr(operatorToken: operatorToken)
       let exprList = SyntaxFactory.makeExprList([ExprSyntax(first),
                                                  ExprSyntax(operatorExpr),
                                                  ExprSyntax(second)])

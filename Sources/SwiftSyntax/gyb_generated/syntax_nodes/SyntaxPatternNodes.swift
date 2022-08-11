@@ -47,12 +47,6 @@ public struct UnknownPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
-
-
-  public func _validateLayout() {
-    // We are verifying an unknown node. Since we don’t know anything about it
-    // we need to assume it’s valid.
-  }
 }
 
 extension UnknownPatternSyntax: CustomReflectable {
@@ -95,12 +89,6 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 0)
   }
 }
 
@@ -345,78 +333,6 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: Cursor.associatedTuple)
     return EnumCasePatternSyntax(newData)
   }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 8)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is TypeSyntax or missing
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #2 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #4 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[4].raw {
-      let info = rawChildren[4].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #5 child is TokenSyntax 
-    assert(rawChildren[5].raw != nil)
-    if let raw = rawChildren[5].raw {
-      let info = rawChildren[5].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #6 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[6].raw {
-      let info = rawChildren[6].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #7 child is TuplePatternSyntax or missing
-    if let raw = rawChildren[7].raw {
-      let info = rawChildren[7].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TuplePatternSyntax.self))
-    }
-  }
 }
 
 extension EnumCasePatternSyntax: CustomReflectable {
@@ -568,46 +484,6 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: Cursor.type)
     return IsTypePatternSyntax(newData)
   }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #3 child is TypeSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-  }
 }
 
 extension IsTypePatternSyntax: CustomReflectable {
@@ -755,46 +631,6 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: Cursor.questionMark)
     return OptionalPatternSyntax(newData)
   }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is PatternSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PatternSyntax.self))
-    }
-    // Check child #2 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-  }
 }
 
 extension OptionalPatternSyntax: CustomReflectable {
@@ -892,29 +728,6 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.selfKeyword)
     let newData = data.replacingChild(raw, at: Cursor.identifier)
     return IdentifierPatternSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
   }
 }
 
@@ -1109,63 +922,6 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return AsTypePatternSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 6)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is PatternSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PatternSyntax.self))
-    }
-    // Check child #2 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #3 child is TokenSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #4 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[4].raw {
-      let info = rawChildren[4].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #5 child is TypeSyntax 
-    assert(rawChildren[5].raw != nil)
-    if let raw = rawChildren[5].raw {
-      let info = rawChildren[5].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
   }
 }
 
@@ -1384,63 +1140,6 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return TuplePatternSyntax(newData)
   }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 6)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #3 child is TuplePatternElementListSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TuplePatternElementListSyntax.self))
-    }
-    // Check child #4 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[4].raw {
-      let info = rawChildren[4].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #5 child is TokenSyntax 
-    assert(rawChildren[5].raw != nil)
-    if let raw = rawChildren[5].raw {
-      let info = rawChildren[5].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-  }
 }
 
 extension TuplePatternSyntax: CustomReflectable {
@@ -1591,45 +1290,6 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let newData = data.replacingChild(raw, at: Cursor.typeAnnotation)
     return WildcardPatternSyntax(newData)
   }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #3 child is TypeAnnotationSyntax or missing
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeAnnotationSyntax.self))
-    }
-  }
 }
 
 extension WildcardPatternSyntax: CustomReflectable {
@@ -1727,29 +1387,6 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ExpressionPatternSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is ExprSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ExprSyntax.self))
-    }
   }
 }
 
@@ -1895,46 +1532,6 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.valuePattern)
     return ValueBindingPatternSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is GarbageNodesSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GarbageNodesSyntax.self))
-    }
-    // Check child #3 child is PatternSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PatternSyntax.self))
-    }
   }
 }
 

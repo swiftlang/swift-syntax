@@ -4,6 +4,7 @@
     "RawSyntax+CSwiftSyntax.swift",
     "RawSyntaxNodeProtocol.swift",
     "RawSyntaxNodes.swift",
+    "RawSyntaxValidation.swift",
   ],
   "Syntax": [
     "SyntaxChildren.swift",

@@ -217,13 +217,6 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(${node.collection_element_type}.self)
-    })
-  }
 }
 
 /// Conformance for `${node.name}` to the `BidirectionalCollection` protocol.

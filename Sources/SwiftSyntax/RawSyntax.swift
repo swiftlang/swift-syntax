@@ -735,6 +735,7 @@ extension RawSyntax {
     descendantCount: Int,
     arena: SyntaxArena
   ) -> RawSyntax {
+    validateLayout(layout: layout, as: kind)
     let payload = RawSyntaxData.Layout(
       kind: kind, layout: layout,
       byteLength: byteLength, descendantCount: descendantCount)
@@ -757,7 +758,6 @@ extension RawSyntax {
     // Allocate and initialize the list.
     let layoutBuffer = arena.allocateRawSyntaxBuffer(count: count)
     initializer(layoutBuffer)
-    // validateLayout(layout: RawSyntaxBuffer(layoutBuffer), as: kind)
 
     // Calculate the "byte width".
     var byteLength = 0

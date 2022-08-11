@@ -100,14 +100,17 @@ public class AbsolutePositionTests: XCTestCase {
 
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
     let items : [CodeBlockItemSyntax] =
-      [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax {
-        $0.useItem(Syntax(ReturnStmtSyntax {
-          $0.useReturnKeyword(
-            SyntaxFactory.makeReturnKeyword(
-              leadingTrivia: AbsolutePositionTests.leadingTrivia,
-              trailingTrivia: AbsolutePositionTests.trailingTrivia))
-        })
-        )}, count: count)
+    [CodeBlockItemSyntax](repeating: SyntaxFactory.makeCodeBlockItem(
+      item: Syntax(SyntaxFactory.makeReturnStmt(
+        returnKeyword: SyntaxFactory.makeReturnKeyword(
+          leadingTrivia: AbsolutePositionTests.leadingTrivia,
+          trailingTrivia: AbsolutePositionTests.trailingTrivia
+        ),
+        expression: nil
+      )),
+      semicolon: nil,
+      errorTokens: nil
+    ), count: count)
     return SyntaxFactory.makeSourceFile(
       statements: SyntaxFactory.makeCodeBlockItemList(items),
       eofToken: SyntaxFactory.makeToken(.eof, presence: .present))

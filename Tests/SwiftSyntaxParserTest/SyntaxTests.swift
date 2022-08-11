@@ -96,9 +96,9 @@ public class SyntaxTests: XCTestCase {
   }
 
   public func testCasting() {
-    let integerExpr = IntegerLiteralExprSyntax {
-      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space))
-    }
+    let integerExpr = SyntaxFactory.makeIntegerLiteralExpr(
+      digits: SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space)
+    )
 
     let expr = ExprSyntax(integerExpr)
     let node = Syntax(expr)
@@ -136,9 +136,9 @@ public class SyntaxTests: XCTestCase {
   }
 
   public func testNodeType() {
-    let integerExpr = IntegerLiteralExprSyntax {
-      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space))
-    }
+    let integerExpr = SyntaxFactory.makeIntegerLiteralExpr(
+      digits: SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space)
+    )
     let expr = ExprSyntax(integerExpr)
     let node = Syntax(expr)
 
@@ -148,9 +148,9 @@ public class SyntaxTests: XCTestCase {
   }
 
   public func testConstructFromSyntaxProtocol() {
-    let integerExpr = IntegerLiteralExprSyntax {
-      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space))
-    }
+    let integerExpr = SyntaxFactory.makeIntegerLiteralExpr(
+      digits: SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space)
+    )
 
     XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as SyntaxProtocol))
     XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as ExprSyntaxProtocol))

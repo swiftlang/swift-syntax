@@ -7,7 +7,7 @@ final class ExtensionDeclTests: XCTestCase {
     let keywords = ["associatedtype", "class"].map { keyword -> VariableDecl in
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr("SyntaxFactory.make\(keyword)Keyword")
+        FunctionCallExpr("TokenSyntax.\(keyword)Keyword")
       }
 
       return VariableDecl(
@@ -34,10 +34,10 @@ final class ExtensionDeclTests: XCTestCase {
     XCTAssertEqual(text, """
     extension TokenSyntax {
         public var `associatedtype`: TokenSyntax {
-            SyntaxFactory.makeassociatedtypeKeyword()
+            TokenSyntax.associatedtypeKeyword()
         }
         public var `class`: TokenSyntax {
-            SyntaxFactory.makeclassKeyword()
+            TokenSyntax.classKeyword()
         }
     }
     """)

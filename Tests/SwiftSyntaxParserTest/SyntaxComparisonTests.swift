@@ -9,9 +9,9 @@ private func parse(source: String) throws -> Syntax {
 
 public class SyntaxComparisonTests: XCTestCase {
   public func testSame() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let expected = Syntax(makeFunc(identifier: .identifier("f")))
 
-    let actual = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let actual = Syntax(makeFunc(identifier: .identifier("f")))
     XCTAssertNil(actual.findFirstDifference(baseline: expected))
 
     let matcher = try SubtreeMatcher("struct A { func f() { } }", parse: parse)
@@ -19,7 +19,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentType() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let expected = Syntax(makeFunc(identifier: .identifier("f")))
     let actual = Syntax(makeBody())
 
     let diff = try XCTUnwrap(actual.findFirstDifference(baseline: expected))
@@ -29,7 +29,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTokenKind() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f"), keyword: SyntaxFactory.makeClassKeyword()))
+    let expected = Syntax(makeFunc(identifier: .identifier("f"), keyword: .classKeyword()))
 
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
@@ -38,7 +38,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .funcKeyword)
     }
 
-    let actual = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let actual = Syntax(makeFunc(identifier: .identifier("f")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = try SubtreeMatcher("struct A { #^FUNC^#func f() { } }", parse: parse)
@@ -46,7 +46,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTokenText() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let expected = Syntax(makeFunc(identifier: .identifier("f")))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .token)
@@ -54,7 +54,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .identifier("g"))
     }
 
-    let actual = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("g")))
+    let actual = Syntax(makeFunc(identifier: .identifier("g")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = try SubtreeMatcher("struct A { #^FUNC^#func g() { } }", parse: parse)
@@ -62,7 +62,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTrivia() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f"), indent: 2))
+    let expected = Syntax(makeFunc(identifier: .identifier("f"), indent: 2))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .trivia)
@@ -70,7 +70,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertEqual(diff.node.leadingTrivia, [])
     }
 
-    let actual = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let actual = Syntax(makeFunc(identifier: .identifier("f")))
     XCTAssertNil(actual.findFirstDifference(baseline: expected))
     try expectations(actual.findFirstDifference(baseline: expected, includeTrivia: true))
 
@@ -80,7 +80,11 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentPresence() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f"), body: SyntaxFactory.makeBlankCodeBlock()))
+    let expected = Syntax(makeFunc(identifier: .identifier("f"), body: CodeBlockSyntax(
+      leftBrace: .leftBraceToken(presence: .missing),
+      statements: CodeBlockItemListSyntax([]),
+      rightBrace: .leftBraceToken(presence: .missing)
+    )))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .presence)
@@ -88,7 +92,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertFalse(diff.node.isMissing)
     }
 
-    let actual = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let actual = Syntax(makeFunc(identifier: .identifier("f")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = try SubtreeMatcher("struct A { func f() { } }", parse: parse)
@@ -96,13 +100,13 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testMissingNode() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f"), body: makeBody(statementCount: 1)))
+    let expected = Syntax(makeFunc(identifier: .identifier("f"), body: makeBody(statementCount: 1)))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .missingNode)
     }
 
-    let actual = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let actual = Syntax(makeFunc(identifier: .identifier("f")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = try SubtreeMatcher("struct A { func f() { } }", parse: parse)
@@ -110,13 +114,13 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testAdditionalNode() throws {
-    let expected = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let expected = Syntax(makeFunc(identifier: .identifier("f")))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .additionalNode)
     }
 
-    let actual = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f"), body: makeBody(statementCount: 1)))
+    let actual = Syntax(makeFunc(identifier: .identifier("f"), body: makeBody(statementCount: 1)))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = try SubtreeMatcher("""
@@ -130,7 +134,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testMultipleSubtreeMatches() throws {
-    let expectedFunc = Syntax(makeFunc(identifier: SyntaxFactory.makeIdentifier("f")))
+    let expectedFunc = Syntax(makeFunc(identifier: .identifier("f")))
     let expectedBody = Syntax(makeBody())
 
     let matcher = try SubtreeMatcher("""
@@ -153,7 +157,7 @@ public class SyntaxComparisonTests: XCTestCase {
   /// Generates a `FunctionDeclSyntax` with the given `identifier`, `keyword`,
   /// and `body` with some optional leading indentation (which applied only to
   /// the start, not the entire body).
-  private func makeFunc(identifier: TokenSyntax, keyword: TokenSyntax = SyntaxFactory.makeFuncKeyword(),
+  private func makeFunc(identifier: TokenSyntax, keyword: TokenSyntax = .funcKeyword(),
                         body: CodeBlockSyntax? = nil, indent: Int = 0) -> FunctionDeclSyntax {
     let funcBody: CodeBlockSyntax
     if let body {
@@ -161,13 +165,22 @@ public class SyntaxComparisonTests: XCTestCase {
     } else {
       funcBody = makeBody()
     }
-    let emptySignature = SyntaxFactory.makeFunctionSignature(input: SyntaxFactory.makeParameterClause(leftParen: SyntaxFactory.makeLeftParenToken(),
-                                                                                                      parameterList: SyntaxFactory.makeFunctionParameterList([]),
-                                                                                                      rightParen: SyntaxFactory.makeRightParenToken()),
-                                                             asyncOrReasyncKeyword: nil, throwsOrRethrowsKeyword: nil, output: nil)
-    let fd = SyntaxFactory.makeFunctionDecl(attributes: nil, modifiers: nil,
-                                            funcKeyword: keyword, identifier: identifier, genericParameterClause: nil,
-                                            signature: emptySignature, genericWhereClause: nil, body: funcBody)
+    let emptySignature = FunctionSignatureSyntax(
+      input: ParameterClauseSyntax(
+        leftParen: .leftParenToken(),
+        parameterList: FunctionParameterListSyntax([]),
+        rightParen: .rightParenToken()),
+      asyncOrReasyncKeyword: nil, throwsOrRethrowsKeyword: nil, output: nil)
+    let fd = FunctionDeclSyntax(
+      attributes: nil,
+      modifiers: nil,
+      funcKeyword: keyword,
+      identifier: identifier,
+      genericParameterClause: nil,
+      signature: emptySignature,
+      genericWhereClause: nil,
+      body: funcBody
+    )
     if indent > 0 {
       return fd.withLeadingTrivia(.spaces(indent))
     }
@@ -186,12 +199,14 @@ public class SyntaxComparisonTests: XCTestCase {
   private func makeBody(statementCount: Int = 0) -> CodeBlockSyntax {
     var items = [CodeBlockItemSyntax]()
     for i in 0..<statementCount {
-      let literal = SyntaxFactory.makeIntegerLiteralExpr(digits: SyntaxFactory.makeIntegerLiteral(String(i)))
-      items.append(SyntaxFactory.makeCodeBlockItem(item: Syntax(literal), semicolon: nil, errorTokens: nil))
+      let literal = IntegerLiteralExprSyntax(digits: .integerLiteral(String(i)))
+      items.append(CodeBlockItemSyntax(item: Syntax(literal), semicolon: nil, errorTokens: nil))
     }
-    let block = SyntaxFactory.makeCodeBlockItemList(items)
-    return SyntaxFactory.makeCodeBlock(leftBrace: SyntaxFactory.makeLeftBraceToken(),
-                                       statements: block,
-                                       rightBrace: SyntaxFactory.makeRightBraceToken())
+    let block = CodeBlockItemListSyntax(items)
+    return CodeBlockSyntax(
+      leftBrace: .leftBraceToken(),
+      statements: block,
+      rightBrace: .rightBraceToken()
+    )
   }
 }

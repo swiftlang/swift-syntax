@@ -4,7 +4,11 @@ import SwiftSyntax
 public class MultithreadingTests: XCTestCase {
 
   public func testPathological() {
-    let tuple = SyntaxFactory.makeVoidTupleType()
+    let tuple = TupleTypeSyntax(
+      leftParen: .leftParenToken(),
+      elements: TupleTypeElementListSyntax([]),
+      rightParen: .rightParenToken()
+    )
 
     DispatchQueue.concurrentPerform(iterations: 100) { _ in
       XCTAssertEqual(tuple.leftParen, tuple.leftParen)
@@ -12,7 +16,11 @@ public class MultithreadingTests: XCTestCase {
   }
 
   public func testTwoAccesses() {
-    let tuple = SyntaxFactory.makeVoidTupleType()
+    let tuple = TupleTypeSyntax(
+      leftParen: .leftParenToken(),
+      elements: TupleTypeElementListSyntax([]),
+      rightParen: .rightParenToken()
+    )
 
     let queue1 = DispatchQueue(label: "queue1")
     let queue2 = DispatchQueue(label: "queue2")

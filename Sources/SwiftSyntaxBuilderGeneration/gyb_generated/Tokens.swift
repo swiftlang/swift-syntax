@@ -23,7 +23,7 @@ class Token {
   let isKeyword: Bool
 
   var swiftKind: String {
-    let name = self.name
+    let name = lowercaseFirstWord(name: self.name)
 
     if isKeyword {
       return name + "Keyword"

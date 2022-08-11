@@ -34,6 +34,16 @@ public struct UnknownPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(
+  ) {
+    let layout: [RawSyntax?] = [
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unknownPattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -71,6 +81,16 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .missingPattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+  ) {
+    let layout: [RawSyntax?] = [
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missingPattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -120,6 +140,32 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .enumCasePattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ garbageBeforeType: GarbageNodesSyntax? = nil,
+    type: TypeSyntax?,
+    _ garbageBetweenTypeAndPeriod: GarbageNodesSyntax? = nil,
+    period: TokenSyntax,
+    _ garbageBetweenPeriodAndCaseName: GarbageNodesSyntax? = nil,
+    caseName: TokenSyntax,
+    _ garbageBetweenCaseNameAndAssociatedTuple: GarbageNodesSyntax? = nil,
+    associatedTuple: TuplePatternSyntax?
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeType?.raw,
+      type?.raw,
+      garbageBetweenTypeAndPeriod?.raw,
+      period.raw,
+      garbageBetweenPeriodAndCaseName?.raw,
+      caseName.raw,
+      garbageBetweenCaseNameAndAssociatedTuple?.raw,
+      associatedTuple?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCasePattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -415,6 +461,24 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(
+    _ garbageBeforeIsKeyword: GarbageNodesSyntax? = nil,
+    isKeyword: TokenSyntax,
+    _ garbageBetweenIsKeywordAndType: GarbageNodesSyntax? = nil,
+    type: TypeSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeIsKeyword?.raw,
+      isKeyword.raw,
+      garbageBetweenIsKeywordAndType?.raw,
+      type.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.isTypePattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -584,6 +648,24 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(
+    _ garbageBeforeSubPattern: GarbageNodesSyntax? = nil,
+    subPattern: PatternSyntax,
+    _ garbageBetweenSubPatternAndQuestionMark: GarbageNodesSyntax? = nil,
+    questionMark: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeSubPattern?.raw,
+      subPattern.raw,
+      garbageBetweenSubPatternAndQuestionMark?.raw,
+      questionMark.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalPattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -751,6 +833,20 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(
+    _ garbageBeforeIdentifier: GarbageNodesSyntax? = nil,
+    identifier: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeIdentifier?.raw,
+      identifier.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierPattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -858,6 +954,28 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .asTypePattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ garbageBeforePattern: GarbageNodesSyntax? = nil,
+    pattern: PatternSyntax,
+    _ garbageBetweenPatternAndAsKeyword: GarbageNodesSyntax? = nil,
+    asKeyword: TokenSyntax,
+    _ garbageBetweenAsKeywordAndType: GarbageNodesSyntax? = nil,
+    type: TypeSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforePattern?.raw,
+      pattern.raw,
+      garbageBetweenPatternAndAsKeyword?.raw,
+      asKeyword.raw,
+      garbageBetweenAsKeywordAndType?.raw,
+      type.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.asTypePattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -1091,6 +1209,28 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tuplePattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ garbageBeforeLeftParen: GarbageNodesSyntax? = nil,
+    leftParen: TokenSyntax,
+    _ garbageBetweenLeftParenAndElements: GarbageNodesSyntax? = nil,
+    elements: TuplePatternElementListSyntax,
+    _ garbageBetweenElementsAndRightParen: GarbageNodesSyntax? = nil,
+    rightParen: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeLeftParen?.raw,
+      leftParen.raw,
+      garbageBetweenLeftParenAndElements?.raw,
+      elements.raw,
+      garbageBetweenElementsAndRightParen?.raw,
+      rightParen.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -1343,6 +1483,24 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(
+    _ garbageBeforeWildcard: GarbageNodesSyntax? = nil,
+    wildcard: TokenSyntax,
+    _ garbageBetweenWildcardAndTypeAnnotation: GarbageNodesSyntax? = nil,
+    typeAnnotation: TypeAnnotationSyntax?
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeWildcard?.raw,
+      wildcard.raw,
+      garbageBetweenWildcardAndTypeAnnotation?.raw,
+      typeAnnotation?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.wildcardPattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -1510,6 +1668,20 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(
+    _ garbageBeforeExpression: GarbageNodesSyntax? = nil,
+    expression: ExprSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeExpression?.raw,
+      expression.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionPattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -1615,6 +1787,24 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .valueBindingPattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil,
+    letOrVarKeyword: TokenSyntax,
+    _ garbageBetweenLetOrVarKeywordAndValuePattern: GarbageNodesSyntax? = nil,
+    valuePattern: PatternSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      garbageBeforeLetOrVarKeyword?.raw,
+      letOrVarKeyword.raw,
+      garbageBetweenLetOrVarKeywordAndValuePattern?.raw,
+      valuePattern.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.valueBindingPattern,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {

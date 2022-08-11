@@ -35,7 +35,7 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     self.init(elements)
   }
   public func buildCodeBlockItemList(format: Format, leadingTrivia: Trivia? = nil ) -> CodeBlockItemListSyntax {
-    let result = SyntaxFactory.makeCodeBlockItemList(elements.map {
+    let result = CodeBlockItemListSyntax(elements.map {
       $0.buildCodeBlockItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
     if let leadingTrivia = leadingTrivia {
@@ -79,7 +79,7 @@ public struct GarbageNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildGarbageNodes(format: Format, leadingTrivia: Trivia? = nil ) -> GarbageNodesSyntax {
-    let result = SyntaxFactory.makeGarbageNodes(elements.map {
+    let result = GarbageNodesSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -128,7 +128,7 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildTupleExprElementList(format: Format, leadingTrivia: Trivia? = nil ) -> TupleExprElementListSyntax {
-    let result = SyntaxFactory.makeTupleExprElementList(elements.map {
+    let result = TupleExprElementListSyntax(elements.map {
       $0.buildTupleExprElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -177,7 +177,7 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
     self.init(elements)
   }
   public func buildArrayElementList(format: Format, leadingTrivia: Trivia? = nil ) -> ArrayElementListSyntax {
-    let result = SyntaxFactory.makeArrayElementList(elements.map {
+    let result = ArrayElementListSyntax(elements.map {
       $0.buildArrayElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -221,7 +221,7 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildDictionaryElementList(format: Format, leadingTrivia: Trivia? = nil ) -> DictionaryElementListSyntax {
-    let result = SyntaxFactory.makeDictionaryElementList(elements.map {
+    let result = DictionaryElementListSyntax(elements.map {
       $0.buildDictionaryElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -270,7 +270,7 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildStringLiteralSegments(format: Format, leadingTrivia: Trivia? = nil ) -> StringLiteralSegmentsSyntax {
-    let result = SyntaxFactory.makeStringLiteralSegments(elements.map {
+    let result = StringLiteralSegmentsSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -319,7 +319,7 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildDeclNameArgumentList(format: Format, leadingTrivia: Trivia? = nil ) -> DeclNameArgumentListSyntax {
-    let result = SyntaxFactory.makeDeclNameArgumentList(elements.map {
+    let result = DeclNameArgumentListSyntax(elements.map {
       $0.buildDeclNameArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -368,7 +368,7 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
     self.init(elements)
   }
   public func buildExprList(format: Format, leadingTrivia: Trivia? = nil ) -> ExprListSyntax {
-    let result = SyntaxFactory.makeExprList(elements.map {
+    let result = ExprListSyntax(elements.map {
       $0.buildExpr(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -412,7 +412,7 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
     self.init(elements)
   }
   public func buildClosureCaptureItemList(format: Format, leadingTrivia: Trivia? = nil ) -> ClosureCaptureItemListSyntax {
-    let result = SyntaxFactory.makeClosureCaptureItemList(elements.map {
+    let result = ClosureCaptureItemListSyntax(elements.map {
       $0.buildClosureCaptureItem(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -461,7 +461,7 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
     self.init(elements)
   }
   public func buildClosureParamList(format: Format, leadingTrivia: Trivia? = nil ) -> ClosureParamListSyntax {
-    let result = SyntaxFactory.makeClosureParamList(elements.map {
+    let result = ClosureParamListSyntax(elements.map {
       $0.buildClosureParam(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -510,7 +510,7 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
     self.init(elements)
   }
   public func buildMultipleTrailingClosureElementList(format: Format, leadingTrivia: Trivia? = nil ) -> MultipleTrailingClosureElementListSyntax {
-    let result = SyntaxFactory.makeMultipleTrailingClosureElementList(elements.map {
+    let result = MultipleTrailingClosureElementListSyntax(elements.map {
       $0.buildMultipleTrailingClosureElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -559,7 +559,7 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
     self.init(elements)
   }
   public func buildObjcName(format: Format, leadingTrivia: Trivia? = nil ) -> ObjcNameSyntax {
-    let result = SyntaxFactory.makeObjcName(elements.map {
+    let result = ObjcNameSyntax(elements.map {
       $0.buildObjcNamePiece(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -608,7 +608,7 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildFunctionParameterList(format: Format, leadingTrivia: Trivia? = nil ) -> FunctionParameterListSyntax {
-    let result = SyntaxFactory.makeFunctionParameterList(elements.map {
+    let result = FunctionParameterListSyntax(elements.map {
       $0.buildFunctionParameter(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -657,7 +657,7 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
     self.init(elements)
   }
   public func buildIfConfigClauseList(format: Format, leadingTrivia: Trivia? = nil ) -> IfConfigClauseListSyntax {
-    let result = SyntaxFactory.makeIfConfigClauseList(elements.map {
+    let result = IfConfigClauseListSyntax(elements.map {
       $0.buildIfConfigClause(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -706,7 +706,7 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     self.init(elements)
   }
   public func buildInheritedTypeList(format: Format, leadingTrivia: Trivia? = nil ) -> InheritedTypeListSyntax {
-    let result = SyntaxFactory.makeInheritedTypeList(elements.map {
+    let result = InheritedTypeListSyntax(elements.map {
       $0.buildInheritedType(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -755,7 +755,7 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     self.init(elements)
   }
   public func buildMemberDeclList(format: Format, leadingTrivia: Trivia? = nil ) -> MemberDeclListSyntax {
-    let result = SyntaxFactory.makeMemberDeclList(elements.map {
+    let result = MemberDeclListSyntax(elements.map {
       $0.buildMemberDeclListItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
     if let leadingTrivia = leadingTrivia {
@@ -799,7 +799,7 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildModifierList(format: Format, leadingTrivia: Trivia? = nil ) -> ModifierListSyntax {
-    let result = SyntaxFactory.makeModifierList(elements.map {
+    let result = ModifierListSyntax(elements.map {
       $0.buildDeclModifier(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -848,7 +848,7 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
     self.init(elements)
   }
   public func buildAccessPath(format: Format, leadingTrivia: Trivia? = nil ) -> AccessPathSyntax {
-    let result = SyntaxFactory.makeAccessPath(elements.map {
+    let result = AccessPathSyntax(elements.map {
       $0.buildAccessPathComponent(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -897,7 +897,7 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildAccessorList(format: Format, leadingTrivia: Trivia? = nil ) -> AccessorListSyntax {
-    let result = SyntaxFactory.makeAccessorList(elements.map {
+    let result = AccessorListSyntax(elements.map {
       $0.buildAccessorDecl(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -941,7 +941,7 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
     self.init(elements)
   }
   public func buildPatternBindingList(format: Format, leadingTrivia: Trivia? = nil ) -> PatternBindingListSyntax {
-    let result = SyntaxFactory.makePatternBindingList(elements.map {
+    let result = PatternBindingListSyntax(elements.map {
       $0.buildPatternBinding(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -990,7 +990,7 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
     self.init(elements)
   }
   public func buildEnumCaseElementList(format: Format, leadingTrivia: Trivia? = nil ) -> EnumCaseElementListSyntax {
-    let result = SyntaxFactory.makeEnumCaseElementList(elements.map {
+    let result = EnumCaseElementListSyntax(elements.map {
       $0.buildEnumCaseElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1037,7 +1037,7 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     self.init(elements)
   }
   public func buildIdentifierList(format: Format, leadingTrivia: Trivia? = nil ) -> IdentifierListSyntax {
-    let result = SyntaxFactory.makeIdentifierList(elements)
+    let result = IdentifierListSyntax(elements)
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
@@ -1084,7 +1084,7 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
     self.init(elements)
   }
   public func buildPrecedenceGroupAttributeList(format: Format, leadingTrivia: Trivia? = nil ) -> PrecedenceGroupAttributeListSyntax {
-    let result = SyntaxFactory.makePrecedenceGroupAttributeList(elements.map {
+    let result = PrecedenceGroupAttributeListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1133,7 +1133,7 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
     self.init(elements)
   }
   public func buildPrecedenceGroupNameList(format: Format, leadingTrivia: Trivia? = nil ) -> PrecedenceGroupNameListSyntax {
-    let result = SyntaxFactory.makePrecedenceGroupNameList(elements.map {
+    let result = PrecedenceGroupNameListSyntax(elements.map {
       $0.buildPrecedenceGroupNameElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1180,7 +1180,7 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
     self.init(elements)
   }
   public func buildTokenList(format: Format, leadingTrivia: Trivia? = nil ) -> TokenListSyntax {
-    let result = SyntaxFactory.makeTokenList(elements)
+    let result = TokenListSyntax(elements)
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
@@ -1225,7 +1225,7 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     self.init(elements)
   }
   public func buildNonEmptyTokenList(format: Format, leadingTrivia: Trivia? = nil ) -> NonEmptyTokenListSyntax {
-    let result = SyntaxFactory.makeNonEmptyTokenList(elements)
+    let result = NonEmptyTokenListSyntax(elements)
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
@@ -1272,7 +1272,7 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
     self.init(elements)
   }
   public func buildAttributeList(format: Format, leadingTrivia: Trivia? = nil ) -> AttributeListSyntax {
-    let result = SyntaxFactory.makeAttributeList(elements.map {
+    let result = AttributeListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1321,7 +1321,7 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
     self.init(elements)
   }
   public func buildSpecializeAttributeSpecList(format: Format, leadingTrivia: Trivia? = nil ) -> SpecializeAttributeSpecListSyntax {
-    let result = SyntaxFactory.makeSpecializeAttributeSpecList(elements.map {
+    let result = SpecializeAttributeSpecListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1370,7 +1370,7 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildObjCSelector(format: Format, leadingTrivia: Trivia? = nil ) -> ObjCSelectorSyntax {
-    let result = SyntaxFactory.makeObjCSelector(elements.map {
+    let result = ObjCSelectorSyntax(elements.map {
       $0.buildObjCSelectorPiece(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1419,7 +1419,7 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
     self.init(elements)
   }
   public func buildDifferentiabilityParamList(format: Format, leadingTrivia: Trivia? = nil ) -> DifferentiabilityParamListSyntax {
-    let result = SyntaxFactory.makeDifferentiabilityParamList(elements.map {
+    let result = DifferentiabilityParamListSyntax(elements.map {
       $0.buildDifferentiabilityParam(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1468,7 +1468,7 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildBackDeployVersionList(format: Format, leadingTrivia: Trivia? = nil ) -> BackDeployVersionListSyntax {
-    let result = SyntaxFactory.makeBackDeployVersionList(elements.map {
+    let result = BackDeployVersionListSyntax(elements.map {
       $0.buildBackDeployVersionArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1517,7 +1517,7 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     self.init(elements)
   }
   public func buildSwitchCaseList(format: Format, leadingTrivia: Trivia? = nil ) -> SwitchCaseListSyntax {
-    let result = SyntaxFactory.makeSwitchCaseList(elements.map {
+    let result = SwitchCaseListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
     if let leadingTrivia = leadingTrivia {
@@ -1566,7 +1566,7 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
     self.init(elements)
   }
   public func buildCatchClauseList(format: Format, leadingTrivia: Trivia? = nil ) -> CatchClauseListSyntax {
-    let result = SyntaxFactory.makeCatchClauseList(elements.map {
+    let result = CatchClauseListSyntax(elements.map {
       $0.buildCatchClause(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1615,7 +1615,7 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildCaseItemList(format: Format, leadingTrivia: Trivia? = nil ) -> CaseItemListSyntax {
-    let result = SyntaxFactory.makeCaseItemList(elements.map {
+    let result = CaseItemListSyntax(elements.map {
       $0.buildCaseItem(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1664,7 +1664,7 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
     self.init(elements)
   }
   public func buildCatchItemList(format: Format, leadingTrivia: Trivia? = nil ) -> CatchItemListSyntax {
-    let result = SyntaxFactory.makeCatchItemList(elements.map {
+    let result = CatchItemListSyntax(elements.map {
       $0.buildCatchItem(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1713,7 +1713,7 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildConditionElementList(format: Format, leadingTrivia: Trivia? = nil ) -> ConditionElementListSyntax {
-    let result = SyntaxFactory.makeConditionElementList(elements.map {
+    let result = ConditionElementListSyntax(elements.map {
       $0.buildConditionElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1762,7 +1762,7 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
     self.init(elements)
   }
   public func buildGenericRequirementList(format: Format, leadingTrivia: Trivia? = nil ) -> GenericRequirementListSyntax {
-    let result = SyntaxFactory.makeGenericRequirementList(elements.map {
+    let result = GenericRequirementListSyntax(elements.map {
       $0.buildGenericRequirement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1811,7 +1811,7 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildGenericParameterList(format: Format, leadingTrivia: Trivia? = nil ) -> GenericParameterListSyntax {
-    let result = SyntaxFactory.makeGenericParameterList(elements.map {
+    let result = GenericParameterListSyntax(elements.map {
       $0.buildGenericParameter(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1860,7 +1860,7 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
     self.init(elements)
   }
   public func buildPrimaryAssociatedTypeList(format: Format, leadingTrivia: Trivia? = nil ) -> PrimaryAssociatedTypeListSyntax {
-    let result = SyntaxFactory.makePrimaryAssociatedTypeList(elements.map {
+    let result = PrimaryAssociatedTypeListSyntax(elements.map {
       $0.buildPrimaryAssociatedType(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1909,7 +1909,7 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
     self.init(elements)
   }
   public func buildCompositionTypeElementList(format: Format, leadingTrivia: Trivia? = nil ) -> CompositionTypeElementListSyntax {
-    let result = SyntaxFactory.makeCompositionTypeElementList(elements.map {
+    let result = CompositionTypeElementListSyntax(elements.map {
       $0.buildCompositionTypeElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -1958,7 +1958,7 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildTupleTypeElementList(format: Format, leadingTrivia: Trivia? = nil ) -> TupleTypeElementListSyntax {
-    let result = SyntaxFactory.makeTupleTypeElementList(elements.map {
+    let result = TupleTypeElementListSyntax(elements.map {
       $0.buildTupleTypeElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -2007,7 +2007,7 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
     self.init(elements)
   }
   public func buildGenericArgumentList(format: Format, leadingTrivia: Trivia? = nil ) -> GenericArgumentListSyntax {
-    let result = SyntaxFactory.makeGenericArgumentList(elements.map {
+    let result = GenericArgumentListSyntax(elements.map {
       $0.buildGenericArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -2056,7 +2056,7 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
     self.init(elements)
   }
   public func buildTuplePatternElementList(format: Format, leadingTrivia: Trivia? = nil ) -> TuplePatternElementListSyntax {
-    let result = SyntaxFactory.makeTuplePatternElementList(elements.map {
+    let result = TuplePatternElementListSyntax(elements.map {
       $0.buildTuplePatternElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
@@ -2105,7 +2105,7 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildAvailabilitySpecList(format: Format, leadingTrivia: Trivia? = nil ) -> AvailabilitySpecListSyntax {
-    let result = SyntaxFactory.makeAvailabilitySpecList(elements.map {
+    let result = AvailabilitySpecListSyntax(elements.map {
       $0.buildAvailabilityArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {

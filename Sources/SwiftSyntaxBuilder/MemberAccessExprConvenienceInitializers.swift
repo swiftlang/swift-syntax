@@ -20,6 +20,6 @@ extension MemberAccessExpr {
     name: String,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
-    self.init(base: base, dot: dot, name: SyntaxFactory.makeIdentifier(name), declNameArguments: declNameArguments)
+    self.init(base: base, dot: dot, name: .identifier(name), declNameArguments: declNameArguments)
   }
 }

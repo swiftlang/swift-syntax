@@ -2,20 +2,20 @@ import XCTest
 import SwiftSyntax
 
 fileprivate func cannedVarDecl() -> VariableDeclSyntax {
-  let identifierPattern = SyntaxFactory.makeIdentifierPattern(
-    identifier: SyntaxFactory.makeIdentifier("a")
+  let identifierPattern = IdentifierPatternSyntax(
+    identifier: TokenSyntax.identifier("a")
   )
-  let pattern = SyntaxFactory.makePatternBinding(
+  let pattern = PatternBindingSyntax(
     pattern: PatternSyntax(identifierPattern),
-    typeAnnotation: SyntaxFactory.makeTypeAnnotation(
-      colon: SyntaxFactory.makeColonToken().withTrailingTrivia(.space),
-      type: SyntaxFactory.makeTypeIdentifier("Int")),
+    typeAnnotation: TypeAnnotationSyntax(
+      colon: TokenSyntax.colonToken(trailingTrivia: .space),
+      type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"), genericArgumentClause: nil))),
     initializer: nil, accessor: nil, trailingComma: nil)
-  return SyntaxFactory.makeVariableDecl(
+  return VariableDeclSyntax(
     attributes: nil,
     modifiers: nil,
-    letOrVarKeyword: SyntaxFactory.makeLetKeyword(),
-    bindings: SyntaxFactory.makePatternBindingList([pattern])
+    letOrVarKeyword: .letKeyword(),
+    bindings: PatternBindingListSyntax([pattern])
   )
 }
 
@@ -24,7 +24,7 @@ public class SyntaxTreeModifierTests: XCTestCase {
   public func testAccessorAsModifier() {
     var VD = cannedVarDecl()
     XCTAssertEqual("\(VD)", "let a: Int")
-    VD.letOrVarKeyword = SyntaxFactory.makeVarKeyword()
+    VD.letOrVarKeyword = .varKeyword()
     XCTAssertEqual("\(VD)", "var a: Int")
   }
 }

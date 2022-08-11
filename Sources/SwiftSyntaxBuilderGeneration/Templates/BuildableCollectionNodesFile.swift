@@ -184,7 +184,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
     VariableDecl(
       .let,
       name: "result",
-      initializer: FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(type.baseName)")) {
+      initializer: FunctionCallExpr("\(type.syntaxBaseName)") {
         if elementType.isToken {
           TupleExprElement(expression: "elements")
         } else {

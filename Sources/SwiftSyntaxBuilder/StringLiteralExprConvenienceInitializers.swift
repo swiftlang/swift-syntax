@@ -14,7 +14,7 @@ import SwiftSyntax
 
 extension StringLiteralExpr {
   public init(_ value: String, openQuote: TokenSyntax = .stringQuote, closeQuote: TokenSyntax = .stringQuote) {
-    let content = SyntaxFactory.makeToken(.stringSegment(value), presence: .present)
+    let content = TokenSyntax.stringSegment(value)
     let segment = StringSegment(content: content)
     let segments = StringLiteralSegments([segment])
 

@@ -1,4 +1,4 @@
-//// Automatically Generated From SyntaxFactory.swift.gyb.
+//// Automatically Generated From SyntaxRewriter.swift.gyb.
 //// Do Not Edit Directly!
 //===------------ SyntaxRewriter.swift - Syntax Rewriter class ------------===//
 //

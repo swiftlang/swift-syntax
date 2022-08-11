@@ -20,7 +20,7 @@ internal struct RawSyntaxData {
     case layout(Layout)
   }
 
-  /// Token typically created with `SyntaxFactory.makeToken()`.
+  /// Token typically created with `TokenSyntax.<someToken>`.
   struct MaterializedToken {
     var tokenKind: RawTokenKind
     var tokenText: SyntaxText

@@ -5,9 +5,9 @@ import _SwiftSyntaxTestSupport
 public class SyntaxChildrenTests: XCTestCase {
 
   public func testIterateWithAllPresent() throws {
-    let returnStmt = SyntaxFactory.makeReturnStmt(
-      returnKeyword: SyntaxFactory.makeReturnKeyword(),
-      expression: ExprSyntax(SyntaxFactory.makeBlankUnknownExpr()))
+    let returnStmt = ReturnStmtSyntax(
+      returnKeyword: .returnKeyword(),
+      expression: ExprSyntax(UnknownExprSyntax()))
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
     try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
@@ -16,8 +16,8 @@ public class SyntaxChildrenTests: XCTestCase {
   }
 
   public func testIterateWithSomeMissing() throws {
-    let returnStmt = SyntaxFactory.makeReturnStmt(
-      returnKeyword: SyntaxFactory.makeReturnKeyword(),
+    let returnStmt = ReturnStmtSyntax(
+      returnKeyword: .returnKeyword(),
       expression: nil)
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
@@ -26,15 +26,18 @@ public class SyntaxChildrenTests: XCTestCase {
   }
 
   public func testIterateWithAllMissing() {
-    let returnStmt = SyntaxFactory.makeBlankReturnStmt()
+    let returnStmt = ReturnStmtSyntax(
+      returnKeyword: TokenSyntax.returnKeyword(presence: .missing),
+      expression: nil
+    )
 
     var iterator = returnStmt.children(viewMode: .sourceAccurate).makeIterator()
     XCTAssertNextIsNil(&iterator)
   }
 
   public func testMissingTokens() throws {
-    let returnStmt = SyntaxFactory.makeReturnStmt(
-      returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .missing),
+    let returnStmt = ReturnStmtSyntax(
+      returnKeyword: .returnKeyword(presence: .missing),
       expression: nil
     )
 
@@ -47,7 +50,7 @@ public class SyntaxChildrenTests: XCTestCase {
   }
 
   public func testMissingNodes() throws {
-    let node = SyntaxFactory.makeDeclarationStmt(declaration: DeclSyntax(SyntaxFactory.makeBlankMissingDecl()))
+    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax()))
 
     var sourceAccurateIt = node.children(viewMode: .sourceAccurate).makeIterator()
     XCTAssertNextIsNil(&sourceAccurateIt)

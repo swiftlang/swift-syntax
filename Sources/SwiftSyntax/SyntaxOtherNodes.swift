@@ -41,6 +41,13 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
     assert(data.raw.kind == .unknown)
     self._syntaxNode = Syntax(data)
   }
+
+  public init(tokens: [TokenSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: .unknown,
+      layout: tokens.map { $0.raw }, presence: .present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
 }
 
 extension UnknownSyntax: CustomReflectable {
@@ -68,6 +75,18 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .token)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ kind: TokenKind,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence
+  ) {
+    let raw = RawSyntax.createAndCalcLength(kind: kind, leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia, presence: presence)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {

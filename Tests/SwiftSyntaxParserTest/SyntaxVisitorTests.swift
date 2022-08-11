@@ -54,7 +54,7 @@ public class SyntaxVisitorTests: XCTestCase {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getTestInput("near-empty.swift"))
       let rewriter = VisitAnyRewriter(transform: { _ in
-         return SyntaxFactory.makeIdentifier("")
+        return TokenSyntax.identifier("")
       })
       let rewritten = rewriter.visit(parsed)
       XCTAssertEqual(rewritten.description, "")

@@ -40,6 +40,13 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [CodeBlockItemSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItemList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -287,6 +294,13 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .garbageNodes)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [Syntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.garbageNodes,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -538,6 +552,13 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [TupleExprElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -785,6 +806,13 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .arrayElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [ArrayElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -1036,6 +1064,13 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [DictionaryElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -1283,6 +1318,13 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .stringLiteralSegments)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [Syntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringLiteralSegments,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -1534,6 +1576,13 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [DeclNameArgumentSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgumentList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -1781,6 +1830,13 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .exprList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [ExprSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.exprList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -2032,6 +2088,13 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [ClosureCaptureItemSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItemList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -2279,6 +2342,13 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .closureParamList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [ClosureParamSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParamList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -2530,6 +2600,13 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [MultipleTrailingClosureElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -2777,6 +2854,13 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .objcName)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [ObjcNamePieceSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcName,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -3028,6 +3112,13 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [FunctionParameterSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameterList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -3275,6 +3366,13 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .ifConfigClauseList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [IfConfigClauseSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClauseList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -3526,6 +3624,13 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [InheritedTypeSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedTypeList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -3773,6 +3878,13 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .memberDeclList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [MemberDeclListItemSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -4024,6 +4136,13 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [DeclModifierSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.modifierList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -4271,6 +4390,13 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .accessPath)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [AccessPathComponentSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPath,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -4522,6 +4648,13 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [AccessorDeclSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -4771,6 +4904,13 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [PatternBindingSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBindingList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -5015,6 +5155,13 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .enumCaseElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [EnumCaseElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -5266,6 +5413,13 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [TokenSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -5513,6 +5667,13 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .precedenceGroupAttributeList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [Syntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAttributeList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -5764,6 +5925,13 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [PrecedenceGroupNameElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -6011,6 +6179,13 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tokenList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [TokenSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tokenList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -6262,6 +6437,13 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [TokenSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.nonEmptyTokenList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -6511,6 +6693,13 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [Syntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attributeList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -6757,6 +6946,13 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .specializeAttributeSpecList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [Syntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.specializeAttributeSpecList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -7008,6 +7204,13 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [ObjCSelectorPieceSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelector,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -7255,6 +7458,13 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .differentiabilityParamList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [DifferentiabilityParamSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -7506,6 +7716,13 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [BackDeployVersionArgumentSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -7753,6 +7970,13 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .switchCaseList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [Syntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -8004,6 +8228,13 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [CatchClauseSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClauseList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -8251,6 +8482,13 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .caseItemList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [CaseItemSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItemList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -8502,6 +8740,13 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [CatchItemSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItemList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -8749,6 +8994,13 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .conditionElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [ConditionElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -9000,6 +9252,13 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [GenericRequirementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -9247,6 +9506,13 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .genericParameterList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [GenericParameterSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -9498,6 +9764,13 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [PrimaryAssociatedTypeSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -9745,6 +10018,13 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .compositionTypeElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [CompositionTypeElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -9996,6 +10276,13 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [TupleTypeElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -10243,6 +10530,13 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .genericArgumentList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [GenericArgumentSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -10494,6 +10788,13 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [TuplePatternElementSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElementList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
@@ -10741,6 +11042,13 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .availabilitySpecList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public init(_ children: [AvailabilityArgumentSyntax]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilitySpecList,
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {

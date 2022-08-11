@@ -1,4 +1,4 @@
-//// Automatically Generated From SyntaxFactory.swift.gyb.
+//// Automatically Generated From SyntaxVisitor.swift.gyb.
 //// Do Not Edit Directly!
 //===------------- SyntaxVisitor.swift - Syntax Visitor class -------------===//
 //

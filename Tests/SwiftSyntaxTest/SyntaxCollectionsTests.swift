@@ -3,16 +3,16 @@ import SwiftSyntax
 import _SwiftSyntaxTestSupport
 
 fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
-    let literal = SyntaxFactory.makeIntegerLiteral("\(int)")
-    return SyntaxFactory.makeArrayElement(
-        expression: ExprSyntax(SyntaxFactory.makeIntegerLiteralExpr(digits: literal)),
+    let literal = TokenSyntax.integerLiteral("\(int)")
+    return ArrayElementSyntax(
+        expression: ExprSyntax(IntegerLiteralExprSyntax(digits: literal)),
         trailingComma: nil)
 }
 
 public class SyntaxCollectionsTests: XCTestCase {
 
   public func testAppendingElement() {
-      let arrayElementList = SyntaxFactory.makeArrayElementList([
+      let arrayElementList = ArrayElementListSyntax([
           integerLiteralElement(0)
       ])
 
@@ -25,7 +25,7 @@ public class SyntaxCollectionsTests: XCTestCase {
   }
 
   public func testInsertingElement() {
-      let arrayElementList = SyntaxFactory.makeArrayElementList([
+      let arrayElementList = ArrayElementListSyntax([
           integerLiteralElement(1)
       ])
 
@@ -43,7 +43,7 @@ public class SyntaxCollectionsTests: XCTestCase {
   }
 
   public func testPrependingElement() {
-      let arrayElementList = SyntaxFactory.makeArrayElementList([
+      let arrayElementList = ArrayElementListSyntax([
           integerLiteralElement(1)
       ])
 
@@ -55,7 +55,7 @@ public class SyntaxCollectionsTests: XCTestCase {
   }
 
   public func testRemovingFirstElement() {
-      let arrayElementList = SyntaxFactory.makeArrayElementList([
+      let arrayElementList = ArrayElementListSyntax([
           integerLiteralElement(0),
           integerLiteralElement(1)
       ])
@@ -68,7 +68,7 @@ public class SyntaxCollectionsTests: XCTestCase {
   }
 
   public func testRemovingLastElement() {
-      let arrayElementList = SyntaxFactory.makeArrayElementList([
+      let arrayElementList = ArrayElementListSyntax([
           integerLiteralElement(0),
           integerLiteralElement(1)
       ])
@@ -81,7 +81,7 @@ public class SyntaxCollectionsTests: XCTestCase {
   }
 
   public func testRemovingElement() {
-      let arrayElementList = SyntaxFactory.makeArrayElementList([
+      let arrayElementList = ArrayElementListSyntax([
           integerLiteralElement(0)
       ])
 
@@ -92,7 +92,7 @@ public class SyntaxCollectionsTests: XCTestCase {
   }
 
   public func testReplacingElement() {
-      let arrayElementList = SyntaxFactory.makeArrayElementList([
+      let arrayElementList = ArrayElementListSyntax([
           integerLiteralElement(0),
           integerLiteralElement(1),
           integerLiteralElement(2)
@@ -106,7 +106,7 @@ public class SyntaxCollectionsTests: XCTestCase {
   }
 
   public func testIteration() {
-    let arrayElementList = SyntaxFactory.makeArrayElementList([
+    let arrayElementList = ArrayElementListSyntax([
         integerLiteralElement(0),
         integerLiteralElement(1),
         integerLiteralElement(2)

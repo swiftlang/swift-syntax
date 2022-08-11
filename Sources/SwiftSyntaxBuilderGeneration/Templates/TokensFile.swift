@@ -35,7 +35,7 @@ let tokensFile = SourceFile {
           // We need to use `CodeBlock` here to ensure there is braces around.
 
           let accessor = CodeBlock {
-            FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Keyword"))
+            FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "\(token.swiftKind)"))
           }
 
           createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
@@ -48,35 +48,13 @@ let tokensFile = SourceFile {
         ) {
           // We need to use `CodeBlock` here to ensure there is braces around.
           let accessor = CodeBlock {
-            FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Token"))
+            FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "\(token.swiftKind)Token"))
           }
 
           createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
         }
-      } else {
-        let signature = FunctionSignature(
-          input: ParameterClause {
-            FunctionParameter(
-              attributes: nil,
-              firstName: .wildcard,
-              secondName: .identifier("text"),
-              colon: .colon,
-              type: "String"
-            )
-          },
-          output: "TokenSyntax"
-        )
-
-        FunctionDecl(
-          modifiers: [TokenSyntax.static],
-          identifier: .identifier("`\(token.name.withFirstCharacterLowercased)`"),
-          signature: signature
-        ) {
-          FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)")) {
-            TupleExprElement(expression: IdentifierExpr("text"))
-          }
-        }
       }
+      // TokenSyntax with custom text already has a static constructor function defined in SwiftSyntax.
     }
     VariableDecl(
       leadingTrivia: .newline + .docLineComment("/// The `eof` token") + .newline,
@@ -85,9 +63,7 @@ let tokensFile = SourceFile {
     ) {
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeToken")) {
-          TupleExprElement(expression: MemberAccessExpr(name: "eof"))
-          TupleExprElement(label: "presence", expression: MemberAccessExpr(name: "present"))
+        FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "eof")) {
         }
       }
 
@@ -100,7 +76,7 @@ let tokensFile = SourceFile {
     ) {
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeContextualKeyword")) {
+        FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "contextualKeyword")) {
           TupleExprElement(expression: StringLiteralExpr("open"))
         }
 

@@ -21,7 +21,7 @@ extension CatchClause {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      catchKeyword: SyntaxFactory.makeCatchKeyword(trailingTrivia: catchItems.elements.isEmpty ? [] : .space),
+      catchKeyword: .catchKeyword(trailingTrivia: catchItems.elements.isEmpty ? [] : .space),
       catchItems: catchItems,
       body: bodyBuilder()
     )

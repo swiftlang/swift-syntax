@@ -80,6 +80,34 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(
+%     for (index, child) in enumerate(node.children):
+%       comma = ',' if index != len(node.children) - 1 else ''
+%       param_type = child.type_name
+%       if child.is_optional:
+%         param_type = param_type + "?"
+%       if child.is_garbage_nodes():
+    _ ${child.swift_name}: ${param_type} = nil${comma}
+%       else:
+    ${child.swift_name}: ${param_type}${comma}
+%       end
+%     end 
+  ) {
+    let layout: [RawSyntax?] = [
+%     for child in node.children:
+%       if child.is_optional:
+      ${child.swift_name}?.raw,
+%       else:
+      ${child.swift_name}.raw,
+%       end
+%     end
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }

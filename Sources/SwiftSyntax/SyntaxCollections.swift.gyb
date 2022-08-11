@@ -55,6 +55,13 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public init(_ children: [${node.collection_element_type}]) {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
+      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }

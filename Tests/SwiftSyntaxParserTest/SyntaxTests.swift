@@ -89,15 +89,15 @@ public class SyntaxTests: XCTestCase {
     do {
       let leading = Trivia(pieces: [ .spaces(2) ])
       let trailing = Trivia(pieces: [ .spaces(1) ])
-      let funcKW = SyntaxFactory.makeFuncKeyword(
+      let funcKW = TokenSyntax.funcKeyword(
         leadingTrivia: leading, trailingTrivia: trailing)
       testFuncKw(funcKW)
     }
   }
 
   public func testCasting() {
-    let integerExpr = SyntaxFactory.makeIntegerLiteralExpr(
-      digits: SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space)
+    let integerExpr = IntegerLiteralExprSyntax(
+      digits: .integerLiteral("1", trailingTrivia: .space)
     )
 
     let expr = ExprSyntax(integerExpr)
@@ -116,10 +116,10 @@ public class SyntaxTests: XCTestCase {
     XCTAssertFalse(expr.isProtocol(BracedSyntax.self))
     XCTAssertNil(expr.asProtocol(BracedSyntax.self))
 
-    let classDecl = SyntaxFactory.makeCodeBlock(
-      leftBrace: SyntaxFactory.makeToken(.leftBrace, presence: .present),
-      statements: SyntaxFactory.makeCodeBlockItemList([]),
-      rightBrace: SyntaxFactory.makeToken(.rightBrace, presence: .present)
+    let classDecl = CodeBlockSyntax(
+      leftBrace: TokenSyntax.leftBraceToken(),
+      statements: CodeBlockItemListSyntax([]),
+      rightBrace: TokenSyntax.rightBraceToken()
     )
 
     XCTAssertTrue(classDecl.isProtocol(BracedSyntax.self))
@@ -136,8 +136,8 @@ public class SyntaxTests: XCTestCase {
   }
 
   public func testNodeType() {
-    let integerExpr = SyntaxFactory.makeIntegerLiteralExpr(
-      digits: SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space)
+    let integerExpr = IntegerLiteralExprSyntax(
+      digits: TokenSyntax.integerLiteral("1", trailingTrivia: .space)
     )
     let expr = ExprSyntax(integerExpr)
     let node = Syntax(expr)
@@ -148,8 +148,8 @@ public class SyntaxTests: XCTestCase {
   }
 
   public func testConstructFromSyntaxProtocol() {
-    let integerExpr = SyntaxFactory.makeIntegerLiteralExpr(
-      digits: SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .space)
+    let integerExpr = IntegerLiteralExprSyntax(
+      digits: .integerLiteral("1", trailingTrivia: .space)
     )
 
     XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as SyntaxProtocol))

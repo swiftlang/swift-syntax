@@ -11,6 +11,7 @@
     "TokenKind.swift",
     "SyntaxTreeViewMode.swift",
     "Trivia.swift",
+    "Tokens.swift",
   ],
   "Syntax nodes": [
     "Syntax.swift",

@@ -86,7 +86,7 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
         create_convenience_initializer = True
         if child.type().is_optional:
           param_type = 'String?'
-          produce_expr = '%s.map(TokenSyntax.%s)' % (child.name(), child.type().token().swift_kind())
+          produce_expr = '%s.map { TokenSyntax.%s($0) }' % (child.name(), child.type().token().swift_kind())
         else:
           param_type = 'String'
           produce_expr = 'TokenSyntax.%s(%s)' % (child.type().token().swift_kind(), child.name())
@@ -116,7 +116,7 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `${type.syntax()}`.
   func build${type.base_name()}(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ${type.syntax()} {
-    let result = SyntaxFactory.make${type.base_name()}(
+    let result = ${type.syntax()}(
     % parameters = []
     % for (index, child) in enumerate(children):
     %   comma = ',' if index != len(children) - 1 else ''

@@ -18,15 +18,12 @@ public class CustomReflectableTests: XCTestCase {
     }
 
     let testCases: [UInt: TestCase] = [
-      #line: .init(syntax: SyntaxFactory.makeUnknownSyntax(tokens: []),
+      #line: .init(syntax: UnknownSyntax(tokens: []),
                    expectedDumped: """
                                    - UnknownSyntax
 
                                    """),
-      #line: .init(syntax: SyntaxFactory.makeToken(.associatedtypeKeyword,
-                                                   presence: .present,
-                                                   leadingTrivia: [],
-                                                   trailingTrivia: []),
+      #line: .init(syntax: TokenSyntax.associatedtypeKeyword(leadingTrivia: [], trailingTrivia: []),
                    expectedDumped: """
                                    ▿ associatedtypeKeyword
                                      - text: "associatedtype"
@@ -38,18 +35,12 @@ public class CustomReflectableTests: XCTestCase {
 
                                    """),
       #line: {
-        let leftToken = SyntaxFactory.makeToken(.leftSquareBracket,
-                                                presence: .present,
-                                                leadingTrivia: [],
-                                                trailingTrivia: [])
-        let elements = SyntaxFactory.makeBlankArrayElementList()
-        let rightToken = SyntaxFactory.makeToken(.rightSquareBracket,
-                                                 presence: .present,
-                                                 leadingTrivia: [],
-                                                 trailingTrivia: [])
-        let expr = SyntaxFactory.makeArrayExpr(leftSquare: leftToken,
-                                               elements: elements,
-                                               rightSquare: rightToken)
+        let leftToken = TokenSyntax.leftSquareBracketToken()
+        let elements = ArrayElementListSyntax([])
+        let rightToken = TokenSyntax.rightSquareBracketToken()
+        let expr = ArrayExprSyntax(leftSquare: leftToken,
+                                   elements: elements,
+                                   rightSquare: rightToken)
         return .init(syntax: expr.tokens(viewMode: .sourceAccurate),
                      expectedDumped: """
                                      ▿ SwiftSyntax.TokenSequence
@@ -71,18 +62,12 @@ public class CustomReflectableTests: XCTestCase {
                                      """)
       }(),
       #line: {
-        let leftToken = SyntaxFactory.makeToken(.leftSquareBracket,
-                                                presence: .present,
-                                                leadingTrivia: [],
-                                                trailingTrivia: [])
-        let elements = SyntaxFactory.makeBlankArrayElementList()
-        let rightToken = SyntaxFactory.makeToken(.rightSquareBracket,
-                                                 presence: .present,
-                                                 leadingTrivia: [],
-                                                 trailingTrivia: [])
-        let expr = SyntaxFactory.makeArrayExpr(leftSquare: leftToken,
-                                               elements: elements,
-                                               rightSquare: rightToken)
+        let leftToken = TokenSyntax.leftSquareBracketToken()
+        let elements = ArrayElementListSyntax([])
+        let rightToken = TokenSyntax.rightSquareBracketToken()
+        let expr = ArrayExprSyntax(leftSquare: leftToken,
+                                   elements: elements,
+                                   rightSquare: rightToken)
         return .init(syntax: expr.tokens(viewMode: .sourceAccurate).reversed(),
                      expectedDumped: """
                                      ▿ SwiftSyntax.ReversedTokenSequence
@@ -104,25 +89,25 @@ public class CustomReflectableTests: XCTestCase {
                                      """)
       }(),
       #line: {
-        let token1 = SyntaxFactory.makeToken(.integerLiteral("1"),
-                                             presence: .present,
-                                             leadingTrivia: [],
-                                             trailingTrivia: [])
-        let expr1 = SyntaxFactory.makeIntegerLiteralExpr(digits: token1)
-        let token2 = SyntaxFactory.makeToken(.integerLiteral("2"),
-                                             presence: .present,
-                                             leadingTrivia: [],
-                                             trailingTrivia: [])
-        let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
-        let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
-                                                       colon: nil,
-                                                       expression: ExprSyntax(expr1),
-                                                       trailingComma: nil),
-                        SyntaxFactory.makeTupleExprElement(label: nil,
-                                                       colon: nil,
-                                                       expression: ExprSyntax(expr2),
-                                                       trailingComma: nil)]
-        let tuples = SyntaxFactory.makeTupleExprElementList(elements)
+        let token1 = TokenSyntax.integerLiteral("1")
+        let expr1 = IntegerLiteralExprSyntax(digits: token1)
+        let token2 = TokenSyntax.integerLiteral("2")
+        let expr2 = IntegerLiteralExprSyntax(digits: token2)
+        let elements = [
+          TupleExprElementSyntax(
+            label: nil,
+            colon: nil,
+            expression: ExprSyntax(expr1),
+            trailingComma: nil
+          ),
+          TupleExprElementSyntax(
+            label: nil,
+            colon: nil,
+            expression: ExprSyntax(expr2),
+            trailingComma: nil
+          )
+        ]
+        let tuples = TupleExprElementListSyntax(elements)
         return .init(syntax: tuples,
                      expectedDumped: """
                                      ▿ TupleExprElementListSyntax
@@ -166,25 +151,19 @@ public class CustomReflectableTests: XCTestCase {
                                      """)
       }(),
       #line: {
-        let token1 = SyntaxFactory.makeToken(.integerLiteral("1"),
-                                             presence: .present,
-                                             leadingTrivia: [],
-                                             trailingTrivia: [])
-        let expr1 = SyntaxFactory.makeIntegerLiteralExpr(digits: token1)
-        let token2 = SyntaxFactory.makeToken(.integerLiteral("2"),
-                                             presence: .present,
-                                             leadingTrivia: [],
-                                             trailingTrivia: [])
-        let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
-        let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
+        let token1 = TokenSyntax.integerLiteral("1")
+        let expr1 = IntegerLiteralExprSyntax(digits: token1)
+        let token2 = TokenSyntax.integerLiteral("2")
+        let expr2 = IntegerLiteralExprSyntax(digits: token2)
+        let elements = [TupleExprElementSyntax(label: nil,
                                                        colon: nil,
                                                        expression: ExprSyntax(expr1),
                                                        trailingComma: nil),
-          SyntaxFactory.makeTupleExprElement(label: nil,
+          TupleExprElementSyntax(label: nil,
                                          colon: nil,
                                          expression: ExprSyntax(expr2),
                                          trailingComma: nil)]
-        let tuples = SyntaxFactory.makeTupleExprElementList(elements)
+        let tuples = TupleExprElementListSyntax(elements)
         return .init(syntax: tuples.reversed(),
                      expectedDumped: """
                                      ▿ Swift.ReversedCollection<SwiftSyntax.TupleExprElementListSyntax>

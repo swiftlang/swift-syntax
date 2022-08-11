@@ -20,604 +20,562 @@ public extension TokenSyntax {
   
   /// The `associatedtype` keyword
   static var `associatedtype`: TokenSyntax {
-    SyntaxFactory.makeAssociatedtypeKeyword()
+    TokenSyntax.associatedtypeKeyword()
   }
   
   /// The `class` keyword
   static var `class`: TokenSyntax {
-    SyntaxFactory.makeClassKeyword()
+    TokenSyntax.classKeyword()
   }
   
   /// The `deinit` keyword
   static var `deinit`: TokenSyntax {
-    SyntaxFactory.makeDeinitKeyword()
+    TokenSyntax.deinitKeyword()
   }
   
   /// The `enum` keyword
   static var `enum`: TokenSyntax {
-    SyntaxFactory.makeEnumKeyword()
+    TokenSyntax.enumKeyword()
   }
   
   /// The `extension` keyword
   static var `extension`: TokenSyntax {
-    SyntaxFactory.makeExtensionKeyword()
+    TokenSyntax.extensionKeyword()
   }
   
   /// The `func` keyword
   static var `func`: TokenSyntax {
-    SyntaxFactory.makeFuncKeyword()
+    TokenSyntax.funcKeyword()
   }
   
   /// The `import` keyword
   static var `import`: TokenSyntax {
-    SyntaxFactory.makeImportKeyword()
+    TokenSyntax.importKeyword()
   }
   
   /// The `init` keyword
   static var `init`: TokenSyntax {
-    SyntaxFactory.makeInitKeyword()
+    TokenSyntax.initKeyword()
   }
   
   /// The `inout` keyword
   static var `inout`: TokenSyntax {
-    SyntaxFactory.makeInoutKeyword()
+    TokenSyntax.inoutKeyword()
   }
   
   /// The `let` keyword
   static var `let`: TokenSyntax {
-    SyntaxFactory.makeLetKeyword()
+    TokenSyntax.letKeyword()
   }
   
   /// The `operator` keyword
   static var `operator`: TokenSyntax {
-    SyntaxFactory.makeOperatorKeyword()
+    TokenSyntax.operatorKeyword()
   }
   
   /// The `precedencegroup` keyword
   static var `precedencegroup`: TokenSyntax {
-    SyntaxFactory.makePrecedencegroupKeyword()
+    TokenSyntax.precedencegroupKeyword()
   }
   
   /// The `protocol` keyword
   static var `protocol`: TokenSyntax {
-    SyntaxFactory.makeProtocolKeyword()
+    TokenSyntax.protocolKeyword()
   }
   
   /// The `struct` keyword
   static var `struct`: TokenSyntax {
-    SyntaxFactory.makeStructKeyword()
+    TokenSyntax.structKeyword()
   }
   
   /// The `subscript` keyword
   static var `subscript`: TokenSyntax {
-    SyntaxFactory.makeSubscriptKeyword()
+    TokenSyntax.subscriptKeyword()
   }
   
   /// The `typealias` keyword
   static var `typealias`: TokenSyntax {
-    SyntaxFactory.makeTypealiasKeyword()
+    TokenSyntax.typealiasKeyword()
   }
   
   /// The `var` keyword
   static var `var`: TokenSyntax {
-    SyntaxFactory.makeVarKeyword()
+    TokenSyntax.varKeyword()
   }
   
   /// The `fileprivate` keyword
   static var `fileprivate`: TokenSyntax {
-    SyntaxFactory.makeFileprivateKeyword()
+    TokenSyntax.fileprivateKeyword()
   }
   
   /// The `internal` keyword
   static var `internal`: TokenSyntax {
-    SyntaxFactory.makeInternalKeyword()
+    TokenSyntax.internalKeyword()
   }
   
   /// The `private` keyword
   static var `private`: TokenSyntax {
-    SyntaxFactory.makePrivateKeyword()
+    TokenSyntax.privateKeyword()
   }
   
   /// The `public` keyword
   static var `public`: TokenSyntax {
-    SyntaxFactory.makePublicKeyword()
+    TokenSyntax.publicKeyword()
   }
   
   /// The `static` keyword
   static var `static`: TokenSyntax {
-    SyntaxFactory.makeStaticKeyword()
+    TokenSyntax.staticKeyword()
   }
   
   /// The `defer` keyword
   static var `defer`: TokenSyntax {
-    SyntaxFactory.makeDeferKeyword()
+    TokenSyntax.deferKeyword()
   }
   
   /// The `if` keyword
   static var `if`: TokenSyntax {
-    SyntaxFactory.makeIfKeyword()
+    TokenSyntax.ifKeyword()
   }
   
   /// The `guard` keyword
   static var `guard`: TokenSyntax {
-    SyntaxFactory.makeGuardKeyword()
+    TokenSyntax.guardKeyword()
   }
   
   /// The `do` keyword
   static var `do`: TokenSyntax {
-    SyntaxFactory.makeDoKeyword()
+    TokenSyntax.doKeyword()
   }
   
   /// The `repeat` keyword
   static var `repeat`: TokenSyntax {
-    SyntaxFactory.makeRepeatKeyword()
+    TokenSyntax.repeatKeyword()
   }
   
   /// The `else` keyword
   static var `else`: TokenSyntax {
-    SyntaxFactory.makeElseKeyword()
+    TokenSyntax.elseKeyword()
   }
   
   /// The `for` keyword
   static var `for`: TokenSyntax {
-    SyntaxFactory.makeForKeyword()
+    TokenSyntax.forKeyword()
   }
   
   /// The `in` keyword
   static var `in`: TokenSyntax {
-    SyntaxFactory.makeInKeyword()
+    TokenSyntax.inKeyword()
   }
   
   /// The `while` keyword
   static var `while`: TokenSyntax {
-    SyntaxFactory.makeWhileKeyword()
+    TokenSyntax.whileKeyword()
   }
   
   /// The `return` keyword
   static var `return`: TokenSyntax {
-    SyntaxFactory.makeReturnKeyword()
+    TokenSyntax.returnKeyword()
   }
   
   /// The `break` keyword
   static var `break`: TokenSyntax {
-    SyntaxFactory.makeBreakKeyword()
+    TokenSyntax.breakKeyword()
   }
   
   /// The `continue` keyword
   static var `continue`: TokenSyntax {
-    SyntaxFactory.makeContinueKeyword()
+    TokenSyntax.continueKeyword()
   }
   
   /// The `fallthrough` keyword
   static var `fallthrough`: TokenSyntax {
-    SyntaxFactory.makeFallthroughKeyword()
+    TokenSyntax.fallthroughKeyword()
   }
   
   /// The `switch` keyword
   static var `switch`: TokenSyntax {
-    SyntaxFactory.makeSwitchKeyword()
+    TokenSyntax.switchKeyword()
   }
   
   /// The `case` keyword
   static var `case`: TokenSyntax {
-    SyntaxFactory.makeCaseKeyword()
+    TokenSyntax.caseKeyword()
   }
   
   /// The `default` keyword
   static var `default`: TokenSyntax {
-    SyntaxFactory.makeDefaultKeyword()
+    TokenSyntax.defaultKeyword()
   }
   
   /// The `where` keyword
   static var `where`: TokenSyntax {
-    SyntaxFactory.makeWhereKeyword()
+    TokenSyntax.whereKeyword()
   }
   
   /// The `catch` keyword
   static var `catch`: TokenSyntax {
-    SyntaxFactory.makeCatchKeyword()
+    TokenSyntax.catchKeyword()
   }
   
   /// The `throw` keyword
   static var `throw`: TokenSyntax {
-    SyntaxFactory.makeThrowKeyword()
+    TokenSyntax.throwKeyword()
   }
   
   /// The `as` keyword
   static var `as`: TokenSyntax {
-    SyntaxFactory.makeAsKeyword()
+    TokenSyntax.asKeyword()
   }
   
   /// The `Any` keyword
   static var `any`: TokenSyntax {
-    SyntaxFactory.makeAnyKeyword()
+    TokenSyntax.anyKeyword()
   }
   
   /// The `false` keyword
   static var `false`: TokenSyntax {
-    SyntaxFactory.makeFalseKeyword()
+    TokenSyntax.falseKeyword()
   }
   
   /// The `is` keyword
   static var `is`: TokenSyntax {
-    SyntaxFactory.makeIsKeyword()
+    TokenSyntax.isKeyword()
   }
   
   /// The `nil` keyword
   static var `nil`: TokenSyntax {
-    SyntaxFactory.makeNilKeyword()
+    TokenSyntax.nilKeyword()
   }
   
   /// The `rethrows` keyword
   static var `rethrows`: TokenSyntax {
-    SyntaxFactory.makeRethrowsKeyword()
+    TokenSyntax.rethrowsKeyword()
   }
   
   /// The `super` keyword
   static var `super`: TokenSyntax {
-    SyntaxFactory.makeSuperKeyword()
+    TokenSyntax.superKeyword()
   }
   
   /// The `self` keyword
   static var `self`: TokenSyntax {
-    SyntaxFactory.makeSelfKeyword()
+    TokenSyntax.selfKeyword()
   }
   
   /// The `Self` keyword
   static var `capitalSelf`: TokenSyntax {
-    SyntaxFactory.makeCapitalSelfKeyword()
+    TokenSyntax.capitalSelfKeyword()
   }
   
   /// The `true` keyword
   static var `true`: TokenSyntax {
-    SyntaxFactory.makeTrueKeyword()
+    TokenSyntax.trueKeyword()
   }
   
   /// The `try` keyword
   static var `try`: TokenSyntax {
-    SyntaxFactory.makeTryKeyword()
+    TokenSyntax.tryKeyword()
   }
   
   /// The `throws` keyword
   static var `throws`: TokenSyntax {
-    SyntaxFactory.makeThrowsKeyword()
+    TokenSyntax.throwsKeyword()
   }
   
   /// The `__FILE__` keyword
   static var `__FILE__`: TokenSyntax {
-    SyntaxFactory.make__FILE__Keyword()
+    TokenSyntax.__file__Keyword()
   }
   
   /// The `__LINE__` keyword
   static var `__LINE__`: TokenSyntax {
-    SyntaxFactory.make__LINE__Keyword()
+    TokenSyntax.__line__Keyword()
   }
   
   /// The `__COLUMN__` keyword
   static var `__COLUMN__`: TokenSyntax {
-    SyntaxFactory.make__COLUMN__Keyword()
+    TokenSyntax.__column__Keyword()
   }
   
   /// The `__FUNCTION__` keyword
   static var `__FUNCTION__`: TokenSyntax {
-    SyntaxFactory.make__FUNCTION__Keyword()
+    TokenSyntax.__function__Keyword()
   }
   
   /// The `__DSO_HANDLE__` keyword
   static var `__DSO_HANDLE__`: TokenSyntax {
-    SyntaxFactory.make__DSO_HANDLE__Keyword()
+    TokenSyntax.__dso_handle__Keyword()
   }
   
   /// The `_` keyword
   static var `wildcard`: TokenSyntax {
-    SyntaxFactory.makeWildcardKeyword()
+    TokenSyntax.wildcardKeyword()
   }
   
   /// The `(` token
   static var `leftParen`: TokenSyntax {
-    SyntaxFactory.makeLeftParenToken()
+    TokenSyntax.leftParenToken()
   }
   
   /// The `)` token
   static var `rightParen`: TokenSyntax {
-    SyntaxFactory.makeRightParenToken()
+    TokenSyntax.rightParenToken()
   }
   
   /// The `{` token
   static var `leftBrace`: TokenSyntax {
-    SyntaxFactory.makeLeftBraceToken()
+    TokenSyntax.leftBraceToken()
   }
   
   /// The `}` token
   static var `rightBrace`: TokenSyntax {
-    SyntaxFactory.makeRightBraceToken()
+    TokenSyntax.rightBraceToken()
   }
   
   /// The `[` token
   static var `leftSquareBracket`: TokenSyntax {
-    SyntaxFactory.makeLeftSquareBracketToken()
+    TokenSyntax.leftSquareBracketToken()
   }
   
   /// The `]` token
   static var `rightSquareBracket`: TokenSyntax {
-    SyntaxFactory.makeRightSquareBracketToken()
+    TokenSyntax.rightSquareBracketToken()
   }
   
   /// The `<` token
   static var `leftAngle`: TokenSyntax {
-    SyntaxFactory.makeLeftAngleToken()
+    TokenSyntax.leftAngleToken()
   }
   
   /// The `>` token
   static var `rightAngle`: TokenSyntax {
-    SyntaxFactory.makeRightAngleToken()
+    TokenSyntax.rightAngleToken()
   }
   
   /// The `.` token
   static var `period`: TokenSyntax {
-    SyntaxFactory.makePeriodToken()
+    TokenSyntax.periodToken()
   }
   
   /// The `.` token
   static var `prefixPeriod`: TokenSyntax {
-    SyntaxFactory.makePrefixPeriodToken()
+    TokenSyntax.prefixPeriodToken()
   }
   
   /// The `,` token
   static var `comma`: TokenSyntax {
-    SyntaxFactory.makeCommaToken()
+    TokenSyntax.commaToken()
   }
   
   /// The `...` token
   static var `ellipsis`: TokenSyntax {
-    SyntaxFactory.makeEllipsisToken()
+    TokenSyntax.ellipsisToken()
   }
   
   /// The `:` token
   static var `colon`: TokenSyntax {
-    SyntaxFactory.makeColonToken()
+    TokenSyntax.colonToken()
   }
   
   /// The `;` token
   static var `semicolon`: TokenSyntax {
-    SyntaxFactory.makeSemicolonToken()
+    TokenSyntax.semicolonToken()
   }
   
   /// The `=` token
   static var `equal`: TokenSyntax {
-    SyntaxFactory.makeEqualToken()
+    TokenSyntax.equalToken()
   }
   
   /// The `@` token
   static var `atSign`: TokenSyntax {
-    SyntaxFactory.makeAtSignToken()
+    TokenSyntax.atSignToken()
   }
   
   /// The `#` token
   static var `pound`: TokenSyntax {
-    SyntaxFactory.makePoundToken()
+    TokenSyntax.poundToken()
   }
   
   /// The `&` token
   static var `prefixAmpersand`: TokenSyntax {
-    SyntaxFactory.makePrefixAmpersandToken()
+    TokenSyntax.prefixAmpersandToken()
   }
   
   /// The `->` token
   static var `arrow`: TokenSyntax {
-    SyntaxFactory.makeArrowToken()
+    TokenSyntax.arrowToken()
   }
   
   /// The ``` token
   static var `backtick`: TokenSyntax {
-    SyntaxFactory.makeBacktickToken()
+    TokenSyntax.backtickToken()
   }
   
   /// The `\` token
   static var `backslash`: TokenSyntax {
-    SyntaxFactory.makeBackslashToken()
+    TokenSyntax.backslashToken()
   }
   
   /// The `!` token
   static var `exclamationMark`: TokenSyntax {
-    SyntaxFactory.makeExclamationMarkToken()
+    TokenSyntax.exclamationMarkToken()
   }
   
   /// The `?` token
   static var `postfixQuestionMark`: TokenSyntax {
-    SyntaxFactory.makePostfixQuestionMarkToken()
+    TokenSyntax.postfixQuestionMarkToken()
   }
   
   /// The `?` token
   static var `infixQuestionMark`: TokenSyntax {
-    SyntaxFactory.makeInfixQuestionMarkToken()
+    TokenSyntax.infixQuestionMarkToken()
   }
   
   /// The `"` token
   static var `stringQuote`: TokenSyntax {
-    SyntaxFactory.makeStringQuoteToken()
+    TokenSyntax.stringQuoteToken()
   }
   
   /// The `'` token
   static var `singleQuote`: TokenSyntax {
-    SyntaxFactory.makeSingleQuoteToken()
+    TokenSyntax.singleQuoteToken()
   }
   
   /// The `"""` token
   static var `multilineStringQuote`: TokenSyntax {
-    SyntaxFactory.makeMultilineStringQuoteToken()
+    TokenSyntax.multilineStringQuoteToken()
   }
   
   /// The `#keyPath` keyword
   static var `poundKeyPath`: TokenSyntax {
-    SyntaxFactory.makePoundKeyPathKeyword()
+    TokenSyntax.poundKeyPathKeyword()
   }
   
   /// The `#line` keyword
   static var `poundLine`: TokenSyntax {
-    SyntaxFactory.makePoundLineKeyword()
+    TokenSyntax.poundLineKeyword()
   }
   
   /// The `#selector` keyword
   static var `poundSelector`: TokenSyntax {
-    SyntaxFactory.makePoundSelectorKeyword()
+    TokenSyntax.poundSelectorKeyword()
   }
   
   /// The `#file` keyword
   static var `poundFile`: TokenSyntax {
-    SyntaxFactory.makePoundFileKeyword()
+    TokenSyntax.poundFileKeyword()
   }
   
   /// The `#fileID` keyword
   static var `poundFileID`: TokenSyntax {
-    SyntaxFactory.makePoundFileIDKeyword()
+    TokenSyntax.poundFileIDKeyword()
   }
   
   /// The `#filePath` keyword
   static var `poundFilePath`: TokenSyntax {
-    SyntaxFactory.makePoundFilePathKeyword()
+    TokenSyntax.poundFilePathKeyword()
   }
   
   /// The `#column` keyword
   static var `poundColumn`: TokenSyntax {
-    SyntaxFactory.makePoundColumnKeyword()
+    TokenSyntax.poundColumnKeyword()
   }
   
   /// The `#function` keyword
   static var `poundFunction`: TokenSyntax {
-    SyntaxFactory.makePoundFunctionKeyword()
+    TokenSyntax.poundFunctionKeyword()
   }
   
   /// The `#dsohandle` keyword
   static var `poundDsohandle`: TokenSyntax {
-    SyntaxFactory.makePoundDsohandleKeyword()
+    TokenSyntax.poundDsohandleKeyword()
   }
   
   /// The `#assert` keyword
   static var `poundAssert`: TokenSyntax {
-    SyntaxFactory.makePoundAssertKeyword()
+    TokenSyntax.poundAssertKeyword()
   }
   
   /// The `#sourceLocation` keyword
   static var `poundSourceLocation`: TokenSyntax {
-    SyntaxFactory.makePoundSourceLocationKeyword()
+    TokenSyntax.poundSourceLocationKeyword()
   }
   
   /// The `#warning` keyword
   static var `poundWarning`: TokenSyntax {
-    SyntaxFactory.makePoundWarningKeyword()
+    TokenSyntax.poundWarningKeyword()
   }
   
   /// The `#error` keyword
   static var `poundError`: TokenSyntax {
-    SyntaxFactory.makePoundErrorKeyword()
+    TokenSyntax.poundErrorKeyword()
   }
   
   /// The `#if` keyword
   static var `poundIf`: TokenSyntax {
-    SyntaxFactory.makePoundIfKeyword()
+    TokenSyntax.poundIfKeyword()
   }
   
   /// The `#else` keyword
   static var `poundElse`: TokenSyntax {
-    SyntaxFactory.makePoundElseKeyword()
+    TokenSyntax.poundElseKeyword()
   }
   
   /// The `#elseif` keyword
   static var `poundElseif`: TokenSyntax {
-    SyntaxFactory.makePoundElseifKeyword()
+    TokenSyntax.poundElseifKeyword()
   }
   
   /// The `#endif` keyword
   static var `poundEndif`: TokenSyntax {
-    SyntaxFactory.makePoundEndifKeyword()
+    TokenSyntax.poundEndifKeyword()
   }
   
   /// The `#available` keyword
   static var `poundAvailable`: TokenSyntax {
-    SyntaxFactory.makePoundAvailableKeyword()
+    TokenSyntax.poundAvailableKeyword()
   }
   
   /// The `#unavailable` keyword
   static var `poundUnavailable`: TokenSyntax {
-    SyntaxFactory.makePoundUnavailableKeyword()
+    TokenSyntax.poundUnavailableKeyword()
   }
   
   /// The `#fileLiteral` keyword
   static var `poundFileLiteral`: TokenSyntax {
-    SyntaxFactory.makePoundFileLiteralKeyword()
+    TokenSyntax.poundFileLiteralKeyword()
   }
   
   /// The `#imageLiteral` keyword
   static var `poundImageLiteral`: TokenSyntax {
-    SyntaxFactory.makePoundImageLiteralKeyword()
+    TokenSyntax.poundImageLiteralKeyword()
   }
   
   /// The `#colorLiteral` keyword
   static var `poundColorLiteral`: TokenSyntax {
-    SyntaxFactory.makePoundColorLiteralKeyword()
-  }
-  static func `integerLiteral`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeIntegerLiteral(text)
-  }
-  static func `floatingLiteral`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeFloatingLiteral(text)
-  }
-  static func `stringLiteral`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeStringLiteral(text)
-  }
-  static func `regexLiteral`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeRegexLiteral(text)
-  }
-  static func `unknown`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeUnknown(text)
-  }
-  static func `identifier`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeIdentifier(text)
-  }
-  static func `unspacedBinaryOperator`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeUnspacedBinaryOperator(text)
-  }
-  static func `spacedBinaryOperator`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeSpacedBinaryOperator(text)
-  }
-  static func `postfixOperator`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makePostfixOperator(text)
-  }
-  static func `prefixOperator`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makePrefixOperator(text)
-  }
-  static func `dollarIdentifier`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeDollarIdentifier(text)
-  }
-  static func `contextualKeyword`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeContextualKeyword(text)
-  }
-  static func `rawStringDelimiter`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeRawStringDelimiter(text)
-  }
-  static func `stringSegment`(_ text: String) -> TokenSyntax {
-    SyntaxFactory.makeStringSegment(text)
+    TokenSyntax.poundColorLiteralKeyword()
   }
   
   /// The `)` token
   static var `stringInterpolationAnchor`: TokenSyntax {
-    SyntaxFactory.makeStringInterpolationAnchorToken()
+    TokenSyntax.stringInterpolationAnchorToken()
   }
   
   /// The `yield` token
   static var `yield`: TokenSyntax {
-    SyntaxFactory.makeYieldToken()
+    TokenSyntax.yieldToken()
   }
   
   /// The `eof` token
   static var eof: TokenSyntax {
-    SyntaxFactory.makeToken(.eof, presence: .present)
+    TokenSyntax.eof()
   }
   
   /// The `open` contextual token
   static var open: TokenSyntax {
-    SyntaxFactory.makeContextualKeyword("open")
+    TokenSyntax.contextualKeyword("open")
     .withTrailingTrivia(.space)
   }
 }

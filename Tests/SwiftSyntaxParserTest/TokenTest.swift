@@ -48,7 +48,7 @@ public class TokenTests: XCTestCase {
     XCTAssertTrue(tok.tokenKind == .multilineStringQuote)
     XCTAssertEqual(tok.contentLength.utf8Length, 3)
 
-    let tok2 = SyntaxFactory.makeMultilineStringQuoteToken()
+    let tok2 = TokenSyntax.multilineStringQuoteToken()
     XCTAssertTrue(tok2.tokenKind == .multilineStringQuote)
     XCTAssertEqual(tok2.contentLength.utf8Length, 3)
   }

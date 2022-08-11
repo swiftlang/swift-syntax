@@ -3,7 +3,7 @@ import SwiftSyntax
 
 public class VisitorTests: XCTestCase {
   public func testVisitMissingNodes() throws {
-    let node = SyntaxFactory.makeDeclarationStmt(declaration: DeclSyntax(SyntaxFactory.makeBlankMissingDecl()))
+    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax()))
 
     class MissingDeclChecker: SyntaxVisitor {
       var didSeeMissingDeclSyntax = false
@@ -26,17 +26,20 @@ public class VisitorTests: XCTestCase {
 
   public func testVisitGarbage() throws {
     // This is just bunch of garbage
-    let garbageReturnStmt = SyntaxFactory.makeReturnStmt(
-      SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("starting"), presence: .present)), Syntax(SyntaxFactory.makeToken(.identifier("garbage"), presence: .present))]),
-      returnKeyword: SyntaxFactory.makeReturnKeyword(trailingTrivia: [.spaces(1)]),
-      SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("middle"), presence: .present))]),
-      expression: ExprSyntax(SyntaxFactory.makeNilLiteralExpr(SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("end"), presence: .present))]), nilKeyword: SyntaxFactory.makeToken(.nilKeyword, presence: .present)))
+    let garbageReturnStmt = ReturnStmtSyntax(
+      GarbageNodesSyntax([Syntax(TokenSyntax.identifier("starting")), Syntax(TokenSyntax.integerLiteral("garbage"))]),
+      returnKeyword: .returnKeyword(trailingTrivia: [.spaces(1)]),
+      GarbageNodesSyntax([Syntax(TokenSyntax.identifier("middle"))]),
+      expression: ExprSyntax(NilLiteralExprSyntax(GarbageNodesSyntax([Syntax(TokenSyntax.identifier("end"))]), nilKeyword: TokenSyntax.nilKeyword(trailingTrivia: [])))
     )
 
     // This is more real-world where the user wrote null instead of nil.
-    let misspelledNil = SyntaxFactory.makeReturnStmt(
-      returnKeyword: SyntaxFactory.makeReturnKeyword(trailingTrivia: [.spaces(1)]),
-      expression: ExprSyntax(SyntaxFactory.makeNilLiteralExpr(SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("null"), presence: .present))]), nilKeyword: SyntaxFactory.makeToken(.nilKeyword, presence: .missing)))
+    let misspelledNil = ReturnStmtSyntax(
+      returnKeyword: .returnKeyword(trailingTrivia: [.spaces(1)]),
+      expression: ExprSyntax(NilLiteralExprSyntax(
+        GarbageNodesSyntax([Syntax(TokenSyntax.identifier("null"))]),
+        nilKeyword: .nilKeyword(presence: .missing)
+      ))
     )
 
     // Test SyntaxVisitor

@@ -12,7 +12,7 @@ final class StringLiteralTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (value, expected) = testCase
-      let string = SyntaxFactory.makeStringSegment(value)
+      let string = TokenSyntax.stringSegment(value)
       let segment = StringSegment(content: string)
       let builder = StringLiteralExpr(openQuote: .stringQuote,
                                       segments: StringLiteralSegments([segment]),

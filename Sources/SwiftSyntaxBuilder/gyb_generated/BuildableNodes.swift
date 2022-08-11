@@ -60,7 +60,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CodeBlockItemSyntax`.
   func buildCodeBlockItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockItemSyntax {
-    let result = SyntaxFactory.makeCodeBlockItem(
+    let result = CodeBlockItemSyntax(
       garbageBeforeItem?.buildGarbageNodes(format: format, leadingTrivia: nil),
       item: item.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenItemAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -159,7 +159,7 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CodeBlockSyntax`.
   func buildCodeBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockSyntax {
-    let result = SyntaxFactory.makeCodeBlock(
+    let result = CodeBlockSyntax(
       garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
       garbageBetweenLeftBraceAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -227,7 +227,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InOutExprSyntax`.
   func buildInOutExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InOutExprSyntax {
-    let result = SyntaxFactory.makeInOutExpr(
+    let result = InOutExprSyntax(
       garbageBeforeAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ampersand: ampersand,
       garbageBetweenAmpersandAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -291,7 +291,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundColumnExprSyntax`.
   func buildPoundColumnExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundColumnExprSyntax {
-    let result = SyntaxFactory.makePoundColumnExpr(
+    let result = PoundColumnExprSyntax(
       garbageBeforePoundColumn?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundColumn: poundColumn
     )
@@ -370,7 +370,7 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TryExprSyntax`.
   func buildTryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TryExprSyntax {
-    let result = SyntaxFactory.makeTryExpr(
+    let result = TryExprSyntax(
       garbageBeforeTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tryKeyword: tryKeyword,
       garbageBetweenTryKeywordAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -462,7 +462,7 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AwaitExprSyntax`.
   func buildAwaitExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AwaitExprSyntax {
-    let result = SyntaxFactory.makeAwaitExpr(
+    let result = AwaitExprSyntax(
       garbageBeforeAwaitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       awaitKeyword: awaitKeyword,
       garbageBetweenAwaitKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -552,7 +552,7 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MoveExprSyntax`.
   func buildMoveExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MoveExprSyntax {
-    let result = SyntaxFactory.makeMoveExpr(
+    let result = MoveExprSyntax(
       garbageBeforeMoveKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       moveKeyword: moveKeyword,
       garbageBetweenMoveKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -624,7 +624,7 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameArgumentSyntax`.
   func buildDeclNameArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentSyntax {
-    let result = SyntaxFactory.makeDeclNameArgument(
+    let result = DeclNameArgumentSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -699,7 +699,7 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameArgumentsSyntax`.
   func buildDeclNameArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
-    let result = SyntaxFactory.makeDeclNameArguments(
+    let result = DeclNameArgumentsSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -766,7 +766,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IdentifierExprSyntax`.
   func buildIdentifierExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierExprSyntax {
-    let result = SyntaxFactory.makeIdentifierExpr(
+    let result = IdentifierExprSyntax(
       garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
       garbageBetweenIdentifierAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -830,7 +830,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SuperRefExprSyntax`.
   func buildSuperRefExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SuperRefExprSyntax {
-    let result = SyntaxFactory.makeSuperRefExpr(
+    let result = SuperRefExprSyntax(
       garbageBeforeSuperKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       superKeyword: superKeyword
     )
@@ -892,7 +892,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `NilLiteralExprSyntax`.
   func buildNilLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NilLiteralExprSyntax {
-    let result = SyntaxFactory.makeNilLiteralExpr(
+    let result = NilLiteralExprSyntax(
       garbageBeforeNilKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       nilKeyword: nilKeyword
     )
@@ -954,7 +954,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DiscardAssignmentExprSyntax`.
   func buildDiscardAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DiscardAssignmentExprSyntax {
-    let result = SyntaxFactory.makeDiscardAssignmentExpr(
+    let result = DiscardAssignmentExprSyntax(
       garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wildcard: wildcard
     )
@@ -1016,7 +1016,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AssignmentExprSyntax`.
   func buildAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssignmentExprSyntax {
-    let result = SyntaxFactory.makeAssignmentExpr(
+    let result = AssignmentExprSyntax(
       garbageBeforeAssignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignToken: assignToken
     )
@@ -1091,7 +1091,7 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SequenceExprSyntax`.
   func buildSequenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SequenceExprSyntax {
-    let result = SyntaxFactory.makeSequenceExpr(
+    let result = SequenceExprSyntax(
       garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildExprList(format: format, leadingTrivia: nil)
     )
@@ -1153,7 +1153,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundLineExprSyntax`.
   func buildPoundLineExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundLineExprSyntax {
-    let result = SyntaxFactory.makePoundLineExpr(
+    let result = PoundLineExprSyntax(
       garbageBeforePoundLine?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundLine: poundLine
     )
@@ -1215,7 +1215,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFileExprSyntax`.
   func buildPoundFileExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileExprSyntax {
-    let result = SyntaxFactory.makePoundFileExpr(
+    let result = PoundFileExprSyntax(
       garbageBeforePoundFile?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFile: poundFile
     )
@@ -1277,7 +1277,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFileIDExprSyntax`.
   func buildPoundFileIDExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileIDExprSyntax {
-    let result = SyntaxFactory.makePoundFileIDExpr(
+    let result = PoundFileIDExprSyntax(
       garbageBeforePoundFileID?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFileID: poundFileID
     )
@@ -1339,7 +1339,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFilePathExprSyntax`.
   func buildPoundFilePathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFilePathExprSyntax {
-    let result = SyntaxFactory.makePoundFilePathExpr(
+    let result = PoundFilePathExprSyntax(
       garbageBeforePoundFilePath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFilePath: poundFilePath
     )
@@ -1401,7 +1401,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFunctionExprSyntax`.
   func buildPoundFunctionExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFunctionExprSyntax {
-    let result = SyntaxFactory.makePoundFunctionExpr(
+    let result = PoundFunctionExprSyntax(
       garbageBeforePoundFunction?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFunction: poundFunction
     )
@@ -1463,7 +1463,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundDsohandleExprSyntax`.
   func buildPoundDsohandleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundDsohandleExprSyntax {
-    let result = SyntaxFactory.makePoundDsohandleExpr(
+    let result = PoundDsohandleExprSyntax(
       garbageBeforePoundDsohandle?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundDsohandle: poundDsohandle
     )
@@ -1550,7 +1550,7 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SymbolicReferenceExprSyntax`.
   func buildSymbolicReferenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SymbolicReferenceExprSyntax {
-    let result = SyntaxFactory.makeSymbolicReferenceExpr(
+    let result = SymbolicReferenceExprSyntax(
       garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
       garbageBetweenIdentifierAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -1628,7 +1628,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
     self.init(
       leadingTrivia: leadingTrivia,
       garbageBeforeOperatorToken: garbageBeforeOperatorToken,
-      operatorToken: operatorToken.map(TokenSyntax.prefixOperator),
+      operatorToken: operatorToken.map { TokenSyntax.prefixOperator($0) },
       garbageBetweenOperatorTokenAndPostfixExpression: garbageBetweenOperatorTokenAndPostfixExpression,
       postfixExpression: postfixExpression
     )
@@ -1639,7 +1639,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrefixOperatorExprSyntax`.
   func buildPrefixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrefixOperatorExprSyntax {
-    let result = SyntaxFactory.makePrefixOperatorExpr(
+    let result = PrefixOperatorExprSyntax(
       garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken,
       garbageBetweenOperatorTokenAndPostfixExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -1702,7 +1702,7 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BinaryOperatorExprSyntax`.
   func buildBinaryOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BinaryOperatorExprSyntax {
-    let result = SyntaxFactory.makeBinaryOperatorExpr(
+    let result = BinaryOperatorExprSyntax(
       garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken
     )
@@ -1791,7 +1791,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
     self.init(
       leadingTrivia: leadingTrivia,
       garbageBeforeAsyncKeyword: garbageBeforeAsyncKeyword,
-      asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
+      asyncKeyword: asyncKeyword.map { TokenSyntax.contextualKeyword($0) },
       garbageBetweenAsyncKeywordAndThrowsToken: garbageBetweenAsyncKeywordAndThrowsToken,
       throwsToken: throwsToken,
       garbageBetweenThrowsTokenAndArrowToken: garbageBetweenThrowsTokenAndArrowToken,
@@ -1804,7 +1804,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrowExprSyntax`.
   func buildArrowExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrowExprSyntax {
-    let result = SyntaxFactory.makeArrowExpr(
+    let result = ArrowExprSyntax(
       garbageBeforeAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
       garbageBetweenAsyncKeywordAndThrowsToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -1885,7 +1885,7 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InfixOperatorExprSyntax`.
   func buildInfixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InfixOperatorExprSyntax {
-    let result = SyntaxFactory.makeInfixOperatorExpr(
+    let result = InfixOperatorExprSyntax(
       garbageBeforeLeftOperand?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftOperand: leftOperand.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenLeftOperandAndOperatorOperand?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -1964,7 +1964,7 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FloatLiteralExprSyntax`.
   func buildFloatLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FloatLiteralExprSyntax {
-    let result = SyntaxFactory.makeFloatLiteralExpr(
+    let result = FloatLiteralExprSyntax(
       garbageBeforeFloatingDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
       floatingDigits: floatingDigits
     )
@@ -2065,7 +2065,7 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleExprSyntax`.
   func buildTupleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprSyntax {
-    let result = SyntaxFactory.makeTupleExpr(
+    let result = TupleExprSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2170,7 +2170,7 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayExprSyntax`.
   func buildArrayExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayExprSyntax {
-    let result = SyntaxFactory.makeArrayExpr(
+    let result = ArrayExprSyntax(
       garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
       garbageBetweenLeftSquareAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2253,7 +2253,7 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryExprSyntax`.
   func buildDictionaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryExprSyntax {
-    let result = SyntaxFactory.makeDictionaryExpr(
+    let result = DictionaryExprSyntax(
       garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
       garbageBetweenLeftSquareAndContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2344,7 +2344,7 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleExprElementSyntax`.
   func buildTupleExprElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprElementSyntax {
-    let result = SyntaxFactory.makeTupleExprElement(
+    let result = TupleExprElementSyntax(
       garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
       garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2428,7 +2428,7 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayElementSyntax`.
   func buildArrayElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayElementSyntax {
-    let result = SyntaxFactory.makeArrayElement(
+    let result = ArrayElementSyntax(
       garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2521,7 +2521,7 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryElementSyntax`.
   func buildDictionaryElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryElementSyntax {
-    let result = SyntaxFactory.makeDictionaryElement(
+    let result = DictionaryElementSyntax(
       garbageBeforeKeyExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyExpression: keyExpression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenKeyExpressionAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2610,7 +2610,7 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IntegerLiteralExprSyntax`.
   func buildIntegerLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IntegerLiteralExprSyntax {
-    let result = SyntaxFactory.makeIntegerLiteralExpr(
+    let result = IntegerLiteralExprSyntax(
       garbageBeforeDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
       digits: digits
     )
@@ -2672,7 +2672,7 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BooleanLiteralExprSyntax`.
   func buildBooleanLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BooleanLiteralExprSyntax {
-    let result = SyntaxFactory.makeBooleanLiteralExpr(
+    let result = BooleanLiteralExprSyntax(
       garbageBeforeBooleanLiteral?.buildGarbageNodes(format: format, leadingTrivia: nil),
       booleanLiteral: booleanLiteral
     )
@@ -2767,7 +2767,7 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TernaryExprSyntax`.
   func buildTernaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TernaryExprSyntax {
-    let result = SyntaxFactory.makeTernaryExpr(
+    let result = TernaryExprSyntax(
       garbageBeforeConditionExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditionExpression: conditionExpression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenConditionExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2861,7 +2861,7 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberAccessExprSyntax`.
   func buildMemberAccessExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberAccessExprSyntax {
-    let result = SyntaxFactory.makeMemberAccessExpr(
+    let result = MemberAccessExprSyntax(
       garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
       base: base?.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenBaseAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -2937,7 +2937,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IsExprSyntax`.
   func buildIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsExprSyntax {
-    let result = SyntaxFactory.makeIsExpr(
+    let result = IsExprSyntax(
       garbageBeforeIsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       isTok: isTok,
       garbageBetweenIsTokAndTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3018,7 +3018,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AsExprSyntax`.
   func buildAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsExprSyntax {
-    let result = SyntaxFactory.makeAsExpr(
+    let result = AsExprSyntax(
       garbageBeforeAsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asTok: asTok,
       garbageBetweenAsTokAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3083,7 +3083,7 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeExprSyntax`.
   func buildTypeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeExprSyntax {
-    let result = SyntaxFactory.makeTypeExpr(
+    let result = TypeExprSyntax(
       garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
@@ -3193,7 +3193,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
       garbageBeforeSpecifier: garbageBeforeSpecifier,
       specifier: specifier,
       garbageBetweenSpecifierAndName: garbageBetweenSpecifierAndName,
-      name: name.map(TokenSyntax.identifier),
+      name: name.map { TokenSyntax.identifier($0) },
       garbageBetweenNameAndAssignToken: garbageBetweenNameAndAssignToken,
       assignToken: assignToken,
       garbageBetweenAssignTokenAndExpression: garbageBetweenAssignTokenAndExpression,
@@ -3208,7 +3208,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureCaptureItemSyntax`.
   func buildClosureCaptureItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
-    let result = SyntaxFactory.makeClosureCaptureItem(
+    let result = ClosureCaptureItemSyntax(
       garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       specifier: specifier?.buildTokenList(format: format, leadingTrivia: nil),
       garbageBetweenSpecifierAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3327,7 +3327,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureCaptureSignatureSyntax`.
   func buildClosureCaptureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
-    let result = SyntaxFactory.makeClosureCaptureSignature(
+    let result = ClosureCaptureSignatureSyntax(
       garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
       garbageBetweenLeftSquareAndItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3395,7 +3395,7 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureParamSyntax`.
   func buildClosureParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureParamSyntax {
-    let result = SyntaxFactory.makeClosureParam(
+    let result = ClosureParamSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3536,7 +3536,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
       garbageBetweenCaptureAndInput: garbageBetweenCaptureAndInput,
       input: input,
       garbageBetweenInputAndAsyncKeyword: garbageBetweenInputAndAsyncKeyword,
-      asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
+      asyncKeyword: asyncKeyword.map { TokenSyntax.contextualKeyword($0) },
       garbageBetweenAsyncKeywordAndThrowsTok: garbageBetweenAsyncKeywordAndThrowsTok,
       throwsTok: throwsTok,
       garbageBetweenThrowsTokAndOutput: garbageBetweenThrowsTokAndOutput,
@@ -3551,7 +3551,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureSignatureSyntax`.
   func buildClosureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
-    let result = SyntaxFactory.makeClosureSignature(
+    let result = ClosureSignatureSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndCapture?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3670,7 +3670,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureExprSyntax`.
   func buildClosureExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureExprSyntax {
-    let result = SyntaxFactory.makeClosureExpr(
+    let result = ClosureExprSyntax(
       garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
       garbageBetweenLeftBraceAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3737,7 +3737,7 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedPatternExprSyntax`.
   func buildUnresolvedPatternExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedPatternExprSyntax {
-    let result = SyntaxFactory.makeUnresolvedPatternExpr(
+    let result = UnresolvedPatternExprSyntax(
       garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil)
     )
@@ -3815,7 +3815,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MultipleTrailingClosureElementSyntax`.
   func buildMultipleTrailingClosureElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MultipleTrailingClosureElementSyntax {
-    let result = SyntaxFactory.makeMultipleTrailingClosureElement(
+    let result = MultipleTrailingClosureElementSyntax(
       garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
       garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -3950,7 +3950,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionCallExprSyntax`.
   func buildFunctionCallExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionCallExprSyntax {
-    let result = SyntaxFactory.makeFunctionCallExpr(
+    let result = FunctionCallExprSyntax(
       garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenCalledExpressionAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4097,7 +4097,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SubscriptExprSyntax`.
   func buildSubscriptExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptExprSyntax {
-    let result = SyntaxFactory.makeSubscriptExpr(
+    let result = SubscriptExprSyntax(
       garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenCalledExpressionAndLeftBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4177,7 +4177,7 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalChainingExprSyntax`.
   func buildOptionalChainingExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalChainingExprSyntax {
-    let result = SyntaxFactory.makeOptionalChainingExpr(
+    let result = OptionalChainingExprSyntax(
       garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4249,7 +4249,7 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ForcedValueExprSyntax`.
   func buildForcedValueExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForcedValueExprSyntax {
-    let result = SyntaxFactory.makeForcedValueExpr(
+    let result = ForcedValueExprSyntax(
       garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenExpressionAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4338,7 +4338,7 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PostfixUnaryExprSyntax`.
   func buildPostfixUnaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixUnaryExprSyntax {
-    let result = SyntaxFactory.makePostfixUnaryExpr(
+    let result = PostfixUnaryExprSyntax(
       garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenExpressionAndOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4409,7 +4409,7 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SpecializeExprSyntax`.
   func buildSpecializeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SpecializeExprSyntax {
-    let result = SyntaxFactory.makeSpecializeExpr(
+    let result = SpecializeExprSyntax(
       garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenExpressionAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4486,7 +4486,7 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StringSegmentSyntax`.
   func buildStringSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringSegmentSyntax {
-    let result = SyntaxFactory.makeStringSegment(
+    let result = StringSegmentSyntax(
       garbageBeforeContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
       content: content
     )
@@ -4591,7 +4591,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
       garbageBeforeBackslash: garbageBeforeBackslash,
       backslash: backslash,
       garbageBetweenBackslashAndDelimiter: garbageBetweenBackslashAndDelimiter,
-      delimiter: delimiter.map(TokenSyntax.rawStringDelimiter),
+      delimiter: delimiter.map { TokenSyntax.rawStringDelimiter($0) },
       garbageBetweenDelimiterAndLeftParen: garbageBetweenDelimiterAndLeftParen,
       leftParen: leftParen,
       garbageBetweenLeftParenAndExpressions: garbageBetweenLeftParenAndExpressions,
@@ -4606,7 +4606,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExpressionSegmentSyntax`.
   func buildExpressionSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionSegmentSyntax {
-    let result = SyntaxFactory.makeExpressionSegment(
+    let result = ExpressionSegmentSyntax(
       garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
       backslash: backslash,
       garbageBetweenBackslashAndDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4716,7 +4716,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
     self.init(
       leadingTrivia: leadingTrivia,
       garbageBeforeOpenDelimiter: garbageBeforeOpenDelimiter,
-      openDelimiter: openDelimiter.map(TokenSyntax.rawStringDelimiter),
+      openDelimiter: openDelimiter.map { TokenSyntax.rawStringDelimiter($0) },
       garbageBetweenOpenDelimiterAndOpenQuote: garbageBetweenOpenDelimiterAndOpenQuote,
       openQuote: openQuote,
       garbageBetweenOpenQuoteAndSegments: garbageBetweenOpenQuoteAndSegments,
@@ -4724,7 +4724,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
       garbageBetweenSegmentsAndCloseQuote: garbageBetweenSegmentsAndCloseQuote,
       closeQuote: closeQuote,
       garbageBetweenCloseQuoteAndCloseDelimiter: garbageBetweenCloseQuoteAndCloseDelimiter,
-      closeDelimiter: closeDelimiter.map(TokenSyntax.rawStringDelimiter)
+      closeDelimiter: closeDelimiter.map { TokenSyntax.rawStringDelimiter($0) }
     )
   }
 
@@ -4733,7 +4733,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StringLiteralExprSyntax`.
   func buildStringLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringLiteralExprSyntax {
-    let result = SyntaxFactory.makeStringLiteralExpr(
+    let result = StringLiteralExprSyntax(
       garbageBeforeOpenDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       openDelimiter: openDelimiter,
       garbageBetweenOpenDelimiterAndOpenQuote?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4816,7 +4816,7 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `RegexLiteralExprSyntax`.
   func buildRegexLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RegexLiteralExprSyntax {
-    let result = SyntaxFactory.makeRegexLiteralExpr(
+    let result = RegexLiteralExprSyntax(
       garbageBeforeRegex?.buildGarbageNodes(format: format, leadingTrivia: nil),
       regex: regex
     )
@@ -4894,7 +4894,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `KeyPathExprSyntax`.
   func buildKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathExprSyntax {
-    let result = SyntaxFactory.makeKeyPathExpr(
+    let result = KeyPathExprSyntax(
       garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
       backslash: backslash,
       garbageBetweenBackslashAndRootExpr?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -4960,7 +4960,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `KeyPathBaseExprSyntax`.
   func buildKeyPathBaseExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathBaseExprSyntax {
-    let result = SyntaxFactory.makeKeyPathBaseExpr(
+    let result = KeyPathBaseExprSyntax(
       garbageBeforePeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period
     )
@@ -5048,7 +5048,7 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcNamePieceSyntax`.
   func buildObjcNamePiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcNamePieceSyntax {
-    let result = SyntaxFactory.makeObjcNamePiece(
+    let result = ObjcNamePieceSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -5132,7 +5132,7 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcKeyPathExprSyntax`.
   func buildObjcKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
-    let result = SyntaxFactory.makeObjcKeyPathExpr(
+    let result = ObjcKeyPathExprSyntax(
       garbageBeforeKeyPath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyPath: keyPath,
       garbageBetweenKeyPathAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -5263,7 +5263,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
       garbageBetweenPoundSelectorAndLeftParen: garbageBetweenPoundSelectorAndLeftParen,
       leftParen: leftParen,
       garbageBetweenLeftParenAndKind: garbageBetweenLeftParenAndKind,
-      kind: kind.map(TokenSyntax.contextualKeyword),
+      kind: kind.map { TokenSyntax.contextualKeyword($0) },
       garbageBetweenKindAndColon: garbageBetweenKindAndColon,
       colon: colon,
       garbageBetweenColonAndName: garbageBetweenColonAndName,
@@ -5278,7 +5278,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcSelectorExprSyntax`.
   func buildObjcSelectorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcSelectorExprSyntax {
-    let result = SyntaxFactory.makeObjcSelectorExpr(
+    let result = ObjcSelectorExprSyntax(
       garbageBeforePoundSelector?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundSelector: poundSelector,
       garbageBetweenPoundSelectorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -5357,7 +5357,7 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PostfixIfConfigExprSyntax`.
   func buildPostfixIfConfigExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
-    let result = SyntaxFactory.makePostfixIfConfigExpr(
+    let result = PostfixIfConfigExprSyntax(
       garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
       base: base?.buildExpr(format: format, leadingTrivia: nil),
       garbageBetweenBaseAndConfig?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -5434,7 +5434,7 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EditorPlaceholderExprSyntax`.
   func buildEditorPlaceholderExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EditorPlaceholderExprSyntax {
-    let result = SyntaxFactory.makeEditorPlaceholderExpr(
+    let result = EditorPlaceholderExprSyntax(
       garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier
     )
@@ -5548,7 +5548,7 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjectLiteralExprSyntax`.
   func buildObjectLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjectLiteralExprSyntax {
-    let result = SyntaxFactory.makeObjectLiteralExpr(
+    let result = ObjectLiteralExprSyntax(
       garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
       garbageBetweenIdentifierAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -5624,7 +5624,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeInitializerClauseSyntax`.
   func buildTypeInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInitializerClauseSyntax {
-    let result = SyntaxFactory.makeTypeInitializerClause(
+    let result = TypeInitializerClauseSyntax(
       garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equal: equal,
       garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -5768,7 +5768,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypealiasDeclSyntax`.
   func buildTypealiasDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypealiasDeclSyntax {
-    let result = SyntaxFactory.makeTypealiasDecl(
+    let result = TypealiasDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -5928,7 +5928,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AssociatedtypeDeclSyntax`.
   func buildAssociatedtypeDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssociatedtypeDeclSyntax {
-    let result = SyntaxFactory.makeAssociatedtypeDecl(
+    let result = AssociatedtypeDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6041,7 +6041,7 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ParameterClauseSyntax`.
   func buildParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ParameterClauseSyntax {
-    let result = SyntaxFactory.makeParameterClause(
+    let result = ParameterClauseSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6109,7 +6109,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ReturnClauseSyntax`.
   func buildReturnClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnClauseSyntax {
-    let result = SyntaxFactory.makeReturnClause(
+    let result = ReturnClauseSyntax(
       garbageBeforeArrow?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arrow: arrow,
       garbageBetweenArrowAndReturnType?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6205,7 +6205,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
       garbageBeforeInput: garbageBeforeInput,
       input: input,
       garbageBetweenInputAndAsyncOrReasyncKeyword: garbageBetweenInputAndAsyncOrReasyncKeyword,
-      asyncOrReasyncKeyword: asyncOrReasyncKeyword.map(TokenSyntax.contextualKeyword),
+      asyncOrReasyncKeyword: asyncOrReasyncKeyword.map { TokenSyntax.contextualKeyword($0) },
       garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword,
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
       garbageBetweenThrowsOrRethrowsKeywordAndOutput: garbageBetweenThrowsOrRethrowsKeywordAndOutput,
@@ -6218,7 +6218,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionSignatureSyntax`.
   func buildFunctionSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionSignatureSyntax {
-    let result = SyntaxFactory.makeFunctionSignature(
+    let result = FunctionSignatureSyntax(
       garbageBeforeInput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       input: input.buildParameterClause(format: format, leadingTrivia: nil),
       garbageBetweenInputAndAsyncOrReasyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6296,7 +6296,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfConfigClauseSyntax`.
   func buildIfConfigClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigClauseSyntax {
-    let result = SyntaxFactory.makeIfConfigClause(
+    let result = IfConfigClauseSyntax(
       garbageBeforePoundKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundKeyword: poundKeyword,
       garbageBetweenPoundKeywordAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6364,7 +6364,7 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfConfigDeclSyntax`.
   func buildIfConfigDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
-    let result = SyntaxFactory.makeIfConfigDecl(
+    let result = IfConfigDeclSyntax(
       garbageBeforeClauses?.buildGarbageNodes(format: format, leadingTrivia: nil),
       clauses: clauses.buildIfConfigClauseList(format: format, leadingTrivia: nil),
       garbageBetweenClausesAndPoundEndif?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6454,7 +6454,7 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundErrorDeclSyntax`.
   func buildPoundErrorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundErrorDeclSyntax {
-    let result = SyntaxFactory.makePoundErrorDecl(
+    let result = PoundErrorDeclSyntax(
       garbageBeforePoundError?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundError: poundError,
       garbageBetweenPoundErrorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6548,7 +6548,7 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundWarningDeclSyntax`.
   func buildPoundWarningDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundWarningDeclSyntax {
-    let result = SyntaxFactory.makePoundWarningDecl(
+    let result = PoundWarningDeclSyntax(
       garbageBeforePoundWarning?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundWarning: poundWarning,
       garbageBetweenPoundWarningAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6642,7 +6642,7 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundSourceLocationSyntax`.
   func buildPoundSourceLocation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationSyntax {
-    let result = SyntaxFactory.makePoundSourceLocation(
+    let result = PoundSourceLocationSyntax(
       garbageBeforePoundSourceLocation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundSourceLocation: poundSourceLocation,
       garbageBetweenPoundSourceLocationAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6800,7 +6800,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundSourceLocationArgsSyntax`.
   func buildPoundSourceLocationArgs(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationArgsSyntax {
-    let result = SyntaxFactory.makePoundSourceLocationArgs(
+    let result = PoundSourceLocationArgsSyntax(
       garbageBeforeFileArgLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fileArgLabel: fileArgLabel,
       garbageBetweenFileArgLabelAndFileArgColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6907,7 +6907,7 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclModifierDetailSyntax`.
   func buildDeclModifierDetail(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierDetailSyntax {
-    let result = SyntaxFactory.makeDeclModifierDetail(
+    let result = DeclModifierDetailSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -6975,7 +6975,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclModifierSyntax`.
   func buildDeclModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierSyntax {
-    let result = SyntaxFactory.makeDeclModifier(
+    let result = DeclModifierSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -7041,7 +7041,7 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InheritedTypeSyntax`.
   func buildInheritedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InheritedTypeSyntax {
-    let result = SyntaxFactory.makeInheritedType(
+    let result = InheritedTypeSyntax(
       garbageBeforeTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeName: typeName.buildType(format: format, leadingTrivia: nil),
       garbageBetweenTypeNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -7135,7 +7135,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeInheritanceClauseSyntax`.
   func buildTypeInheritanceClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInheritanceClauseSyntax {
-    let result = SyntaxFactory.makeTypeInheritanceClause(
+    let result = TypeInheritanceClauseSyntax(
       garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
       garbageBetweenColonAndInheritedTypeCollection?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -7291,7 +7291,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClassDeclSyntax`.
   func buildClassDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassDeclSyntax {
-    let result = SyntaxFactory.makeClassDecl(
+    let result = ClassDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -7465,7 +7465,7 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ActorDeclSyntax`.
   func buildActorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ActorDeclSyntax {
-    let result = SyntaxFactory.makeActorDecl(
+    let result = ActorDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -7639,7 +7639,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StructDeclSyntax`.
   func buildStructDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StructDeclSyntax {
-    let result = SyntaxFactory.makeStructDecl(
+    let result = StructDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -7813,7 +7813,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ProtocolDeclSyntax`.
   func buildProtocolDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ProtocolDeclSyntax {
-    let result = SyntaxFactory.makeProtocolDecl(
+    let result = ProtocolDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -7975,7 +7975,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExtensionDeclSyntax`.
   func buildExtensionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExtensionDeclSyntax {
-    let result = SyntaxFactory.makeExtensionDecl(
+    let result = ExtensionDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8088,7 +8088,7 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberDeclBlockSyntax`.
   func buildMemberDeclBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclBlockSyntax {
-    let result = SyntaxFactory.makeMemberDeclBlock(
+    let result = MemberDeclBlockSyntax(
       garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
       garbageBetweenLeftBraceAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8157,7 +8157,7 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberDeclListItemSyntax`.
   func buildMemberDeclListItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclListItemSyntax {
-    let result = SyntaxFactory.makeMemberDeclListItem(
+    let result = MemberDeclListItemSyntax(
       garbageBeforeDecl?.buildGarbageNodes(format: format, leadingTrivia: nil),
       decl: decl.buildDecl(format: format, leadingTrivia: nil),
       garbageBetweenDeclAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8240,7 +8240,7 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SourceFileSyntax`.
   func buildSourceFile(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SourceFileSyntax {
-    let result = SyntaxFactory.makeSourceFile(
+    let result = SourceFileSyntax(
       garbageBeforeStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format, leadingTrivia: nil),
       garbageBetweenStatementsAndEOFToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8306,7 +8306,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InitializerClauseSyntax`.
   func buildInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerClauseSyntax {
-    let result = SyntaxFactory.makeInitializerClause(
+    let result = InitializerClauseSyntax(
       garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equal: equal,
       garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8422,7 +8422,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionParameterSyntax`.
   func buildFunctionParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
-    let result = SyntaxFactory.makeFunctionParameter(
+    let result = FunctionParameterSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndFirstName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8612,7 +8612,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionDeclSyntax`.
   func buildFunctionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclSyntax {
-    let result = SyntaxFactory.makeFunctionDecl(
+    let result = FunctionDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8787,7 +8787,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InitializerDeclSyntax`.
   func buildInitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerDeclSyntax {
-    let result = SyntaxFactory.makeInitializerDecl(
+    let result = InitializerDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -8913,7 +8913,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeinitializerDeclSyntax`.
   func buildDeinitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeinitializerDeclSyntax {
-    let result = SyntaxFactory.makeDeinitializerDecl(
+    let result = DeinitializerDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9037,7 +9037,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SubscriptDeclSyntax`.
   func buildSubscriptDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptDeclSyntax {
-    let result = SyntaxFactory.makeSubscriptDecl(
+    let result = SubscriptDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9138,7 +9138,7 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessLevelModifierSyntax`.
   func buildAccessLevelModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessLevelModifierSyntax {
-    let result = SyntaxFactory.makeAccessLevelModifier(
+    let result = AccessLevelModifierSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9222,7 +9222,7 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessPathComponentSyntax`.
   func buildAccessPathComponent(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessPathComponentSyntax {
-    let result = SyntaxFactory.makeAccessPathComponent(
+    let result = AccessPathComponentSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndTrailingDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9313,7 +9313,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImportDeclSyntax`.
   func buildImportDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImportDeclSyntax {
-    let result = SyntaxFactory.makeImportDecl(
+    let result = ImportDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9422,7 +9422,7 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorParameterSyntax`.
   func buildAccessorParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorParameterSyntax {
-    let result = SyntaxFactory.makeAccessorParameter(
+    let result = AccessorParameterSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9557,7 +9557,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
       garbageBetweenAccessorKindAndParameter: garbageBetweenAccessorKindAndParameter,
       parameter: parameter,
       garbageBetweenParameterAndAsyncKeyword: garbageBetweenParameterAndAsyncKeyword,
-      asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
+      asyncKeyword: asyncKeyword.map { TokenSyntax.contextualKeyword($0) },
       garbageBetweenAsyncKeywordAndThrowsKeyword: garbageBetweenAsyncKeywordAndThrowsKeyword,
       throwsKeyword: throwsKeyword,
       garbageBetweenThrowsKeywordAndBody: garbageBetweenThrowsKeywordAndBody,
@@ -9570,7 +9570,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorDeclSyntax`.
   func buildAccessorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorDeclSyntax {
-    let result = SyntaxFactory.makeAccessorDecl(
+    let result = AccessorDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9661,7 +9661,7 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorBlockSyntax`.
   func buildAccessorBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
-    let result = SyntaxFactory.makeAccessorBlock(
+    let result = AccessorBlockSyntax(
       garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
       garbageBetweenLeftBraceAndAccessors?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9753,7 +9753,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PatternBindingSyntax`.
   func buildPatternBinding(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternBindingSyntax {
-    let result = SyntaxFactory.makePatternBinding(
+    let result = PatternBindingSyntax(
       garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -9883,7 +9883,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `VariableDeclSyntax`.
   func buildVariableDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VariableDeclSyntax {
-    let result = SyntaxFactory.makeVariableDecl(
+    let result = VariableDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10002,7 +10002,7 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCaseElementSyntax`.
   func buildEnumCaseElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseElementSyntax {
-    let result = SyntaxFactory.makeEnumCaseElement(
+    let result = EnumCaseElementSyntax(
       garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
       garbageBetweenIdentifierAndAssociatedValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10129,7 +10129,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCaseDeclSyntax`.
   func buildEnumCaseDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseDeclSyntax {
-    let result = SyntaxFactory.makeEnumCaseDecl(
+    let result = EnumCaseDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10296,7 +10296,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumDeclSyntax`.
   func buildEnumDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumDeclSyntax {
-    let result = SyntaxFactory.makeEnumDecl(
+    let result = EnumDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10405,7 +10405,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorDeclSyntax`.
   func buildOperatorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorDeclSyntax {
-    let result = SyntaxFactory.makeOperatorDecl(
+    let result = OperatorDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10484,7 +10484,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
   func buildOperatorPrecedenceAndTypes(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorPrecedenceAndTypesSyntax {
-    let result = SyntaxFactory.makeOperatorPrecedenceAndTypes(
+    let result = OperatorPrecedenceAndTypesSyntax(
       garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
       garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10631,7 +10631,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupDeclSyntax`.
   func buildPrecedenceGroupDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupDeclSyntax {
-    let result = SyntaxFactory.makePrecedenceGroupDecl(
+    let result = PrecedenceGroupDeclSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10745,7 +10745,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupRelationSyntax`.
   func buildPrecedenceGroupRelation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupRelationSyntax {
-    let result = SyntaxFactory.makePrecedenceGroupRelation(
+    let result = PrecedenceGroupRelationSyntax(
       garbageBeforeHigherThanOrLowerThan?.buildGarbageNodes(format: format, leadingTrivia: nil),
       higherThanOrLowerThan: higherThanOrLowerThan,
       garbageBetweenHigherThanOrLowerThanAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10831,7 +10831,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupNameElementSyntax`.
   func buildPrecedenceGroupNameElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupNameElementSyntax {
-    let result = SyntaxFactory.makePrecedenceGroupNameElement(
+    let result = PrecedenceGroupNameElementSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -10930,7 +10930,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupAssignmentSyntax`.
   func buildPrecedenceGroupAssignment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssignmentSyntax {
-    let result = SyntaxFactory.makePrecedenceGroupAssignment(
+    let result = PrecedenceGroupAssignmentSyntax(
       garbageBeforeAssignmentKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignmentKeyword: assignmentKeyword,
       garbageBetweenAssignmentKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11031,7 +11031,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupAssociativitySyntax`.
   func buildPrecedenceGroupAssociativity(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssociativitySyntax {
-    let result = SyntaxFactory.makePrecedenceGroupAssociativity(
+    let result = PrecedenceGroupAssociativitySyntax(
       garbageBeforeAssociativityKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associativityKeyword: associativityKeyword,
       garbageBetweenAssociativityKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11156,7 +11156,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CustomAttributeSyntax`.
   func buildCustomAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CustomAttributeSyntax {
-    let result = SyntaxFactory.makeCustomAttribute(
+    let result = CustomAttributeSyntax(
       garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       atSignToken: atSignToken,
       garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11263,7 +11263,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AttributeSyntax`.
   func buildAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributeSyntax {
-    let result = SyntaxFactory.makeAttribute(
+    let result = AttributeSyntax(
       garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       atSignToken: atSignToken,
       garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11381,7 +11381,7 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityEntrySyntax`.
   func buildAvailabilityEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
-    let result = SyntaxFactory.makeAvailabilityEntry(
+    let result = AvailabilityEntrySyntax(
       garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
       garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11495,7 +11495,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LabeledSpecializeEntrySyntax`.
   func buildLabeledSpecializeEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledSpecializeEntrySyntax {
-    let result = SyntaxFactory.makeLabeledSpecializeEntry(
+    let result = LabeledSpecializeEntrySyntax(
       garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
       garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11623,7 +11623,7 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TargetFunctionEntrySyntax`.
   func buildTargetFunctionEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TargetFunctionEntrySyntax {
-    let result = SyntaxFactory.makeTargetFunctionEntry(
+    let result = TargetFunctionEntrySyntax(
       garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
       garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11716,7 +11716,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `NamedAttributeStringArgumentSyntax`.
   func buildNamedAttributeStringArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NamedAttributeStringArgumentSyntax {
-    let result = SyntaxFactory.makeNamedAttributeStringArgument(
+    let result = NamedAttributeStringArgumentSyntax(
       garbageBeforeNameTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       nameTok: nameTok,
       garbageBetweenNameTokAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11783,7 +11783,7 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameSyntax`.
   func buildDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameSyntax {
-    let result = SyntaxFactory.makeDeclName(
+    let result = DeclNameSyntax(
       garbageBeforeDeclBaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenDeclBaseNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11866,7 +11866,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImplementsAttributeArgumentsSyntax`.
   func buildImplementsAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplementsAttributeArgumentsSyntax {
-    let result = SyntaxFactory.makeImplementsAttributeArguments(
+    let result = ImplementsAttributeArgumentsSyntax(
       garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildSimpleTypeIdentifier(format: format, leadingTrivia: nil),
       garbageBetweenTypeAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -11944,7 +11944,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
     self.init(
       leadingTrivia: leadingTrivia,
       garbageBeforeName: garbageBeforeName,
-      name: name.map(TokenSyntax.identifier),
+      name: name.map { TokenSyntax.identifier($0) },
       garbageBetweenNameAndColon: garbageBetweenNameAndColon,
       colon: colon
     )
@@ -11955,7 +11955,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjCSelectorPieceSyntax`.
   func buildObjCSelectorPiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjCSelectorPieceSyntax {
-    let result = SyntaxFactory.makeObjCSelectorPiece(
+    let result = ObjCSelectorPieceSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12061,7 +12061,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
     self.init(
       leadingTrivia: leadingTrivia,
       garbageBeforeDiffKind: garbageBeforeDiffKind,
-      diffKind: diffKind.map(TokenSyntax.identifier),
+      diffKind: diffKind.map { TokenSyntax.identifier($0) },
       garbageBetweenDiffKindAndDiffKindComma: garbageBetweenDiffKindAndDiffKindComma,
       diffKindComma: diffKindComma,
       garbageBetweenDiffKindCommaAndDiffParams: garbageBetweenDiffKindCommaAndDiffParams,
@@ -12078,7 +12078,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiableAttributeArgumentsSyntax`.
   func buildDifferentiableAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiableAttributeArgumentsSyntax {
-    let result = SyntaxFactory.makeDifferentiableAttributeArguments(
+    let result = DifferentiableAttributeArgumentsSyntax(
       garbageBeforeDiffKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffKind: diffKind,
       garbageBetweenDiffKindAndDiffKindComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12182,7 +12182,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamsClauseSyntax`.
   func buildDifferentiabilityParamsClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsClauseSyntax {
-    let result = SyntaxFactory.makeDifferentiabilityParamsClause(
+    let result = DifferentiabilityParamsClauseSyntax(
       garbageBeforeWrtLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrtLabel: wrtLabel,
       garbageBetweenWrtLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12260,7 +12260,7 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamsSyntax`.
   func buildDifferentiabilityParams(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
-    let result = SyntaxFactory.makeDifferentiabilityParams(
+    let result = DifferentiabilityParamsSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12329,7 +12329,7 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamSyntax`.
   func buildDifferentiabilityParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamSyntax {
-    let result = SyntaxFactory.makeDifferentiabilityParam(
+    let result = DifferentiabilityParamSyntax(
       garbageBeforeParameter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameter: parameter.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenParameterAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12475,7 +12475,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
       garbageBetweenOriginalDeclNameAndPeriod: garbageBetweenOriginalDeclNameAndPeriod,
       period: period,
       garbageBetweenPeriodAndAccessorKind: garbageBetweenPeriodAndAccessorKind,
-      accessorKind: accessorKind.map(TokenSyntax.identifier),
+      accessorKind: accessorKind.map { TokenSyntax.identifier($0) },
       garbageBetweenAccessorKindAndComma: garbageBetweenAccessorKindAndComma,
       comma: comma,
       garbageBetweenCommaAndDiffParams: garbageBetweenCommaAndDiffParams,
@@ -12488,7 +12488,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DerivativeRegistrationAttributeArgumentsSyntax`.
   func buildDerivativeRegistrationAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let result = SyntaxFactory.makeDerivativeRegistrationAttributeArguments(
+    let result = DerivativeRegistrationAttributeArgumentsSyntax(
       garbageBeforeOfLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ofLabel: ofLabel,
       garbageBetweenOfLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12581,7 +12581,7 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `QualifiedDeclNameSyntax`.
   func buildQualifiedDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> QualifiedDeclNameSyntax {
-    let result = SyntaxFactory.makeQualifiedDeclName(
+    let result = QualifiedDeclNameSyntax(
       garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType?.buildType(format: format, leadingTrivia: nil),
       garbageBetweenBaseTypeAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12651,7 +12651,7 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionDeclNameSyntax`.
   func buildFunctionDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclNameSyntax {
-    let result = SyntaxFactory.makeFunctionDeclName(
+    let result = FunctionDeclNameSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenNameAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12749,7 +12749,7 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BackDeployAttributeSpecListSyntax`.
   func buildBackDeployAttributeSpecList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployAttributeSpecListSyntax {
-    let result = SyntaxFactory.makeBackDeployAttributeSpecList(
+    let result = BackDeployAttributeSpecListSyntax(
       garbageBeforeBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       beforeLabel: beforeLabel,
       garbageBetweenBeforeLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12818,7 +12818,7 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BackDeployVersionArgumentSyntax`.
   func buildBackDeployVersionArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployVersionArgumentSyntax {
-    let result = SyntaxFactory.makeBackDeployVersionArgument(
+    let result = BackDeployVersionArgumentSyntax(
       garbageBeforeAvailabilityVersionRestriction?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format, leadingTrivia: nil),
       garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12914,7 +12914,7 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LabeledStmtSyntax`.
   func buildLabeledStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledStmtSyntax {
-    let result = SyntaxFactory.makeLabeledStmt(
+    let result = LabeledStmtSyntax(
       garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
       garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -12997,7 +12997,7 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
       garbageBeforeContinueKeyword: garbageBeforeContinueKeyword,
       continueKeyword: continueKeyword,
       garbageBetweenContinueKeywordAndLabel: garbageBetweenContinueKeywordAndLabel,
-      label: label.map(TokenSyntax.identifier)
+      label: label.map { TokenSyntax.identifier($0) }
     )
   }
 
@@ -13006,7 +13006,7 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ContinueStmtSyntax`.
   func buildContinueStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ContinueStmtSyntax {
-    let result = SyntaxFactory.makeContinueStmt(
+    let result = ContinueStmtSyntax(
       garbageBeforeContinueKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       continueKeyword: continueKeyword,
       garbageBetweenContinueKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -13108,7 +13108,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WhileStmtSyntax`.
   func buildWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhileStmtSyntax {
-    let result = SyntaxFactory.makeWhileStmt(
+    let result = WhileStmtSyntax(
       garbageBeforeWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whileKeyword: whileKeyword,
       garbageBetweenWhileKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -13200,7 +13200,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeferStmtSyntax`.
   func buildDeferStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeferStmtSyntax {
-    let result = SyntaxFactory.makeDeferStmt(
+    let result = DeferStmtSyntax(
       garbageBeforeDeferKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       deferKeyword: deferKeyword,
       garbageBetweenDeferKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -13263,7 +13263,7 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExpressionStmtSyntax`.
   func buildExpressionStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionStmtSyntax {
-    let result = SyntaxFactory.makeExpressionStmt(
+    let result = ExpressionStmtSyntax(
       garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
@@ -13376,7 +13376,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `RepeatWhileStmtSyntax`.
   func buildRepeatWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RepeatWhileStmtSyntax {
-    let result = SyntaxFactory.makeRepeatWhileStmt(
+    let result = RepeatWhileStmtSyntax(
       garbageBeforeRepeatKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       repeatKeyword: repeatKeyword,
       garbageBetweenRepeatKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -13495,7 +13495,7 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GuardStmtSyntax`.
   func buildGuardStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GuardStmtSyntax {
-    let result = SyntaxFactory.makeGuardStmt(
+    let result = GuardStmtSyntax(
       garbageBeforeGuardKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       guardKeyword: guardKeyword,
       garbageBetweenGuardKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -13571,7 +13571,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WhereClauseSyntax`.
   func buildWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhereClauseSyntax {
-    let result = SyntaxFactory.makeWhereClause(
+    let result = WhereClauseSyntax(
       garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereKeyword: whereKeyword,
       garbageBetweenWhereKeywordAndGuardResult?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -13732,7 +13732,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
       garbageBetweenForKeywordAndTryKeyword: garbageBetweenForKeywordAndTryKeyword,
       tryKeyword: tryKeyword,
       garbageBetweenTryKeywordAndAwaitKeyword: garbageBetweenTryKeywordAndAwaitKeyword,
-      awaitKeyword: awaitKeyword.map(TokenSyntax.identifier),
+      awaitKeyword: awaitKeyword.map { TokenSyntax.identifier($0) },
       garbageBetweenAwaitKeywordAndCaseKeyword: garbageBetweenAwaitKeywordAndCaseKeyword,
       caseKeyword: caseKeyword,
       garbageBetweenCaseKeywordAndPattern: garbageBetweenCaseKeywordAndPattern,
@@ -13755,7 +13755,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ForInStmtSyntax`.
   func buildForInStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForInStmtSyntax {
-    let result = SyntaxFactory.makeForInStmt(
+    let result = ForInStmtSyntax(
       garbageBeforeForKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       forKeyword: forKeyword,
       garbageBetweenForKeywordAndTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -13899,7 +13899,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchStmtSyntax`.
   func buildSwitchStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
-    let result = SyntaxFactory.makeSwitchStmt(
+    let result = SwitchStmtSyntax(
       garbageBeforeSwitchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       switchKeyword: switchKeyword,
       garbageBetweenSwitchKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14007,7 +14007,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DoStmtSyntax`.
   func buildDoStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DoStmtSyntax {
-    let result = SyntaxFactory.makeDoStmt(
+    let result = DoStmtSyntax(
       garbageBeforeDoKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       doKeyword: doKeyword,
       garbageBetweenDoKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14081,7 +14081,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ReturnStmtSyntax`.
   func buildReturnStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnStmtSyntax {
-    let result = SyntaxFactory.makeReturnStmt(
+    let result = ReturnStmtSyntax(
       garbageBeforeReturnKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       returnKeyword: returnKeyword,
       garbageBetweenReturnKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14153,7 +14153,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `YieldStmtSyntax`.
   func buildYieldStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldStmtSyntax {
-    let result = SyntaxFactory.makeYieldStmt(
+    let result = YieldStmtSyntax(
       garbageBeforeYieldKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       yieldKeyword: yieldKeyword,
       garbageBetweenYieldKeywordAndYields?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14269,7 +14269,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `YieldListSyntax`.
   func buildYieldList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldListSyntax {
-    let result = SyntaxFactory.makeYieldList(
+    let result = YieldListSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14331,7 +14331,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FallthroughStmtSyntax`.
   func buildFallthroughStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FallthroughStmtSyntax {
-    let result = SyntaxFactory.makeFallthroughStmt(
+    let result = FallthroughStmtSyntax(
       garbageBeforeFallthroughKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fallthroughKeyword: fallthroughKeyword
     )
@@ -14410,7 +14410,7 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
       garbageBeforeBreakKeyword: garbageBeforeBreakKeyword,
       breakKeyword: breakKeyword,
       garbageBetweenBreakKeywordAndLabel: garbageBetweenBreakKeywordAndLabel,
-      label: label.map(TokenSyntax.identifier)
+      label: label.map { TokenSyntax.identifier($0) }
     )
   }
 
@@ -14419,7 +14419,7 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BreakStmtSyntax`.
   func buildBreakStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BreakStmtSyntax {
-    let result = SyntaxFactory.makeBreakStmt(
+    let result = BreakStmtSyntax(
       garbageBeforeBreakKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       breakKeyword: breakKeyword,
       garbageBetweenBreakKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14491,7 +14491,7 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConditionElementSyntax`.
   func buildConditionElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConditionElementSyntax {
-    let result = SyntaxFactory.makeConditionElement(
+    let result = ConditionElementSyntax(
       garbageBeforeCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenConditionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14585,7 +14585,7 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityConditionSyntax`.
   func buildAvailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
-    let result = SyntaxFactory.makeAvailabilityCondition(
+    let result = AvailabilityConditionSyntax(
       garbageBeforePoundAvailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundAvailableKeyword: poundAvailableKeyword,
       garbageBetweenPoundAvailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14671,7 +14671,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MatchingPatternConditionSyntax`.
   func buildMatchingPatternCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MatchingPatternConditionSyntax {
-    let result = SyntaxFactory.makeMatchingPatternCondition(
+    let result = MatchingPatternConditionSyntax(
       garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
       garbageBetweenCaseKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14757,7 +14757,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalBindingConditionSyntax`.
   func buildOptionalBindingCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalBindingConditionSyntax {
-    let result = SyntaxFactory.makeOptionalBindingCondition(
+    let result = OptionalBindingConditionSyntax(
       garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
       garbageBetweenLetOrVarKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14845,7 +14845,7 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnavailabilityConditionSyntax`.
   func buildUnavailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
-    let result = SyntaxFactory.makeUnavailabilityCondition(
+    let result = UnavailabilityConditionSyntax(
       garbageBeforePoundUnavailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundUnavailableKeyword: poundUnavailableKeyword,
       garbageBetweenPoundUnavailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -14906,7 +14906,7 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclarationStmtSyntax`.
   func buildDeclarationStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclarationStmtSyntax {
-    let result = SyntaxFactory.makeDeclarationStmt(
+    let result = DeclarationStmtSyntax(
       garbageBeforeDeclaration?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declaration: declaration.buildDecl(format: format, leadingTrivia: nil)
     )
@@ -14976,7 +14976,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ThrowStmtSyntax`.
   func buildThrowStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ThrowStmtSyntax {
-    let result = SyntaxFactory.makeThrowStmt(
+    let result = ThrowStmtSyntax(
       garbageBeforeThrowKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwKeyword: throwKeyword,
       garbageBetweenThrowKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15103,7 +15103,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfStmtSyntax`.
   func buildIfStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfStmtSyntax {
-    let result = SyntaxFactory.makeIfStmt(
+    let result = IfStmtSyntax(
       garbageBeforeIfKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ifKeyword: ifKeyword,
       garbageBetweenIfKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15172,7 +15172,7 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ElseIfContinuationSyntax`.
   func buildElseIfContinuation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseIfContinuationSyntax {
-    let result = SyntaxFactory.makeElseIfContinuation(
+    let result = ElseIfContinuationSyntax(
       garbageBeforeIfStatement?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ifStatement: ifStatement.buildIfStmt(format: format, leadingTrivia: nil)
     )
@@ -15254,7 +15254,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ElseBlockSyntax`.
   func buildElseBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseBlockSyntax {
-    let result = SyntaxFactory.makeElseBlock(
+    let result = ElseBlockSyntax(
       garbageBeforeElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
       garbageBetweenElseKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15349,7 +15349,7 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchCaseSyntax`.
   func buildSwitchCase(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseSyntax {
-    let result = SyntaxFactory.makeSwitchCase(
+    let result = SwitchCaseSyntax(
       garbageBeforeUnknownAttr?.buildGarbageNodes(format: format, leadingTrivia: nil),
       unknownAttr: unknownAttr?.buildAttribute(format: format, leadingTrivia: nil),
       garbageBetweenUnknownAttrAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15418,7 +15418,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchDefaultLabelSyntax`.
   func buildSwitchDefaultLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchDefaultLabelSyntax {
-    let result = SyntaxFactory.makeSwitchDefaultLabel(
+    let result = SwitchDefaultLabelSyntax(
       garbageBeforeDefaultKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       defaultKeyword: defaultKeyword,
       garbageBetweenDefaultKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15492,7 +15492,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CaseItemSyntax`.
   func buildCaseItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CaseItemSyntax {
-    let result = SyntaxFactory.makeCaseItem(
+    let result = CaseItemSyntax(
       garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15580,7 +15580,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CatchItemSyntax`.
   func buildCatchItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchItemSyntax {
-    let result = SyntaxFactory.makeCatchItem(
+    let result = CatchItemSyntax(
       garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern?.buildPattern(format: format, leadingTrivia: nil),
       garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15691,7 +15691,7 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchCaseLabelSyntax`.
   func buildSwitchCaseLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
-    let result = SyntaxFactory.makeSwitchCaseLabel(
+    let result = SwitchCaseLabelSyntax(
       garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
       garbageBetweenCaseKeywordAndCaseItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15789,7 +15789,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CatchClauseSyntax`.
   func buildCatchClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchClauseSyntax {
-    let result = SyntaxFactory.makeCatchClause(
+    let result = CatchClauseSyntax(
       garbageBeforeCatchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       catchKeyword: catchKeyword,
       garbageBetweenCatchKeywordAndCatchItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -15915,7 +15915,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
       garbageBetweenConditionAndComma: garbageBetweenConditionAndComma,
       comma: comma,
       garbageBetweenCommaAndMessage: garbageBetweenCommaAndMessage,
-      message: message.map(TokenSyntax.stringLiteral),
+      message: message.map { TokenSyntax.stringLiteral($0) },
       garbageBetweenMessageAndRightParen: garbageBetweenMessageAndRightParen,
       rightParen: rightParen
     )
@@ -15926,7 +15926,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundAssertStmtSyntax`.
   func buildPoundAssertStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundAssertStmtSyntax {
-    let result = SyntaxFactory.makePoundAssertStmt(
+    let result = PoundAssertStmtSyntax(
       garbageBeforePoundAssert?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundAssert: poundAssert,
       garbageBetweenPoundAssertAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16024,7 +16024,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericWhereClauseSyntax`.
   func buildGenericWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericWhereClauseSyntax {
-    let result = SyntaxFactory.makeGenericWhereClause(
+    let result = GenericWhereClauseSyntax(
       garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereKeyword: whereKeyword,
       garbageBetweenWhereKeywordAndRequirementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16090,7 +16090,7 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericRequirementSyntax`.
   func buildGenericRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericRequirementSyntax {
-    let result = SyntaxFactory.makeGenericRequirement(
+    let result = GenericRequirementSyntax(
       garbageBeforeBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenBodyAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16173,7 +16173,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SameTypeRequirementSyntax`.
   func buildSameTypeRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SameTypeRequirementSyntax {
-    let result = SyntaxFactory.makeSameTypeRequirement(
+    let result = SameTypeRequirementSyntax(
       garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
       garbageBetweenLeftTypeIdentifierAndEqualityToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16319,11 +16319,11 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
       garbageBetweenLayoutConstraintAndLeftParen: garbageBetweenLayoutConstraintAndLeftParen,
       leftParen: leftParen,
       garbageBetweenLeftParenAndSize: garbageBetweenLeftParenAndSize,
-      size: size.map(TokenSyntax.integerLiteral),
+      size: size.map { TokenSyntax.integerLiteral($0) },
       garbageBetweenSizeAndComma: garbageBetweenSizeAndComma,
       comma: comma,
       garbageBetweenCommaAndAlignment: garbageBetweenCommaAndAlignment,
-      alignment: alignment.map(TokenSyntax.integerLiteral),
+      alignment: alignment.map { TokenSyntax.integerLiteral($0) },
       garbageBetweenAlignmentAndRightParen: garbageBetweenAlignmentAndRightParen,
       rightParen: rightParen
     )
@@ -16334,7 +16334,7 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LayoutRequirementSyntax`.
   func buildLayoutRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LayoutRequirementSyntax {
-    let result = SyntaxFactory.makeLayoutRequirement(
+    let result = LayoutRequirementSyntax(
       garbageBeforeTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeIdentifier: typeIdentifier.buildType(format: format, leadingTrivia: nil),
       garbageBetweenTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16467,7 +16467,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterSyntax`.
   func buildGenericParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterSyntax {
-    let result = SyntaxFactory.makeGenericParameter(
+    let result = GenericParameterSyntax(
       garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       garbageBetweenAttributesAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16573,7 +16573,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
   func buildPrimaryAssociatedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
-    let result = SyntaxFactory.makePrimaryAssociatedType(
+    let result = PrimaryAssociatedTypeSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16680,7 +16680,7 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterClauseSyntax`.
   func buildGenericParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterClauseSyntax {
-    let result = SyntaxFactory.makeGenericParameterClause(
+    let result = GenericParameterClauseSyntax(
       garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
       garbageBetweenLeftAngleBracketAndGenericParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16756,7 +16756,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConformanceRequirementSyntax`.
   func buildConformanceRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConformanceRequirementSyntax {
-    let result = SyntaxFactory.makeConformanceRequirement(
+    let result = ConformanceRequirementSyntax(
       garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
       garbageBetweenLeftTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16833,7 +16833,7 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrimaryAssociatedTypeClauseSyntax`.
   func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
-    let result = SyntaxFactory.makePrimaryAssociatedTypeClause(
+    let result = PrimaryAssociatedTypeClauseSyntax(
       garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
       garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16900,7 +16900,7 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SimpleTypeIdentifierSyntax`.
   func buildSimpleTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SimpleTypeIdentifierSyntax {
-    let result = SyntaxFactory.makeSimpleTypeIdentifier(
+    let result = SimpleTypeIdentifierSyntax(
       garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
       garbageBetweenNameAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -16988,7 +16988,7 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberTypeIdentifierSyntax`.
   func buildMemberTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberTypeIdentifierSyntax {
-    let result = SyntaxFactory.makeMemberTypeIdentifier(
+    let result = MemberTypeIdentifierSyntax(
       garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
       garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17056,7 +17056,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClassRestrictionTypeSyntax`.
   func buildClassRestrictionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassRestrictionTypeSyntax {
-    let result = SyntaxFactory.makeClassRestrictionType(
+    let result = ClassRestrictionTypeSyntax(
       garbageBeforeClassKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       classKeyword: classKeyword
     )
@@ -17135,7 +17135,7 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayTypeSyntax`.
   func buildArrayType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayTypeSyntax {
-    let result = SyntaxFactory.makeArrayType(
+    let result = ArrayTypeSyntax(
       garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquareBracket: leftSquareBracket,
       garbageBetweenLeftSquareBracketAndElementType?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17235,7 +17235,7 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryTypeSyntax`.
   func buildDictionaryType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryTypeSyntax {
-    let result = SyntaxFactory.makeDictionaryType(
+    let result = DictionaryTypeSyntax(
       garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquareBracket: leftSquareBracket,
       garbageBetweenLeftSquareBracketAndKeyType?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17344,7 +17344,7 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MetatypeTypeSyntax`.
   func buildMetatypeType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MetatypeTypeSyntax {
-    let result = SyntaxFactory.makeMetatypeType(
+    let result = MetatypeTypeSyntax(
       garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
       garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17418,7 +17418,7 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalTypeSyntax`.
   func buildOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalTypeSyntax {
-    let result = SyntaxFactory.makeOptionalType(
+    let result = OptionalTypeSyntax(
       garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
       garbageBetweenWrappedTypeAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17508,7 +17508,7 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConstrainedSugarTypeSyntax`.
   func buildConstrainedSugarType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConstrainedSugarTypeSyntax {
-    let result = SyntaxFactory.makeConstrainedSugarType(
+    let result = ConstrainedSugarTypeSyntax(
       garbageBeforeSomeOrAnySpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       someOrAnySpecifier: someOrAnySpecifier,
       garbageBetweenSomeOrAnySpecifierAndBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17580,7 +17580,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImplicitlyUnwrappedOptionalTypeSyntax`.
   func buildImplicitlyUnwrappedOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let result = SyntaxFactory.makeImplicitlyUnwrappedOptionalType(
+    let result = ImplicitlyUnwrappedOptionalTypeSyntax(
       garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
       garbageBetweenWrappedTypeAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17652,7 +17652,7 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CompositionTypeElementSyntax`.
   func buildCompositionTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeElementSyntax {
-    let result = SyntaxFactory.makeCompositionTypeElement(
+    let result = CompositionTypeElementSyntax(
       garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil),
       garbageBetweenTypeAndAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17709,7 +17709,7 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CompositionTypeSyntax`.
   func buildCompositionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeSyntax {
-    let result = SyntaxFactory.makeCompositionType(
+    let result = CompositionTypeSyntax(
       garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildCompositionTypeElementList(format: format, leadingTrivia: nil)
     )
@@ -17830,7 +17830,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleTypeElementSyntax`.
   func buildTupleTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeElementSyntax {
-    let result = SyntaxFactory.makeTupleTypeElement(
+    let result = TupleTypeElementSyntax(
       garbageBeforeInOut?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inOut: inOut,
       garbageBetweenInOutAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -17939,7 +17939,7 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleTypeSyntax`.
   func buildTupleType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
-    let result = SyntaxFactory.makeTupleType(
+    let result = TupleTypeSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18057,7 +18057,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionTypeSyntax`.
   func buildFunctionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionTypeSyntax {
-    let result = SyntaxFactory.makeFunctionType(
+    let result = FunctionTypeSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18147,7 +18147,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AttributedTypeSyntax`.
   func buildAttributedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributedTypeSyntax {
-    let result = SyntaxFactory.makeAttributedType(
+    let result = AttributedTypeSyntax(
       garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       specifier: specifier,
       garbageBetweenSpecifierAndAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18221,7 +18221,7 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericArgumentSyntax`.
   func buildGenericArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentSyntax {
-    let result = SyntaxFactory.makeGenericArgument(
+    let result = GenericArgumentSyntax(
       garbageBeforeArgumentType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentType: argumentType.buildType(format: format, leadingTrivia: nil),
       garbageBetweenArgumentTypeAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18328,7 +18328,7 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericArgumentClauseSyntax`.
   func buildGenericArgumentClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
-    let result = SyntaxFactory.makeGenericArgumentClause(
+    let result = GenericArgumentClauseSyntax(
       garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
       garbageBetweenLeftAngleBracketAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18396,7 +18396,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeAnnotationSyntax`.
   func buildTypeAnnotation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeAnnotationSyntax {
-    let result = SyntaxFactory.makeTypeAnnotation(
+    let result = TypeAnnotationSyntax(
       garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
       garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18504,7 +18504,7 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCasePatternSyntax`.
   func buildEnumCasePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCasePatternSyntax {
-    let result = SyntaxFactory.makeEnumCasePattern(
+    let result = EnumCasePatternSyntax(
       garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type?.buildType(format: format, leadingTrivia: nil),
       garbageBetweenTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18580,7 +18580,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IsTypePatternSyntax`.
   func buildIsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsTypePatternSyntax {
-    let result = SyntaxFactory.makeIsTypePattern(
+    let result = IsTypePatternSyntax(
       garbageBeforeIsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       isKeyword: isKeyword,
       garbageBetweenIsKeywordAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18652,7 +18652,7 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalPatternSyntax`.
   func buildOptionalPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalPatternSyntax {
-    let result = SyntaxFactory.makeOptionalPattern(
+    let result = OptionalPatternSyntax(
       garbageBeforeSubPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       subPattern: subPattern.buildPattern(format: format, leadingTrivia: nil),
       garbageBetweenSubPatternAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18715,7 +18715,7 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IdentifierPatternSyntax`.
   func buildIdentifierPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierPatternSyntax {
-    let result = SyntaxFactory.makeIdentifierPattern(
+    let result = IdentifierPatternSyntax(
       garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier
     )
@@ -18793,7 +18793,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AsTypePatternSyntax`.
   func buildAsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsTypePatternSyntax {
-    let result = SyntaxFactory.makeAsTypePattern(
+    let result = AsTypePatternSyntax(
       garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       garbageBetweenPatternAndAsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18898,7 +18898,7 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TuplePatternSyntax`.
   func buildTuplePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
-    let result = SyntaxFactory.makeTuplePattern(
+    let result = TuplePatternSyntax(
       garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
       garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -18972,7 +18972,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WildcardPatternSyntax`.
   func buildWildcardPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WildcardPatternSyntax {
-    let result = SyntaxFactory.makeWildcardPattern(
+    let result = WildcardPatternSyntax(
       garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wildcard: wildcard,
       garbageBetweenWildcardAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -19072,7 +19072,7 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
     self.init(
       leadingTrivia: leadingTrivia,
       garbageBeforeLabelName: garbageBeforeLabelName,
-      labelName: labelName.map(TokenSyntax.identifier),
+      labelName: labelName.map { TokenSyntax.identifier($0) },
       garbageBetweenLabelNameAndLabelColon: garbageBetweenLabelNameAndLabelColon,
       labelColon: labelColon,
       garbageBetweenLabelColonAndPattern: garbageBetweenLabelColonAndPattern,
@@ -19087,7 +19087,7 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TuplePatternElementSyntax`.
   func buildTuplePatternElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternElementSyntax {
-    let result = SyntaxFactory.makeTuplePatternElement(
+    let result = TuplePatternElementSyntax(
       garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
       garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -19162,7 +19162,7 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExpressionPatternSyntax`.
   func buildExpressionPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionPatternSyntax {
-    let result = SyntaxFactory.makeExpressionPattern(
+    let result = ExpressionPatternSyntax(
       garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
@@ -19232,7 +19232,7 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ValueBindingPatternSyntax`.
   func buildValueBindingPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ValueBindingPatternSyntax {
-    let result = SyntaxFactory.makeValueBindingPattern(
+    let result = ValueBindingPatternSyntax(
       garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
       garbageBetweenLetOrVarKeywordAndValuePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -19305,7 +19305,7 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityArgumentSyntax`.
   func buildAvailabilityArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityArgumentSyntax {
-    let result = SyntaxFactory.makeAvailabilityArgument(
+    let result = AvailabilityArgumentSyntax(
       garbageBeforeEntry?.buildGarbageNodes(format: format, leadingTrivia: nil),
       entry: entry.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenEntryAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -19402,7 +19402,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityLabeledArgumentSyntax`.
   func buildAvailabilityLabeledArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityLabeledArgumentSyntax {
-    let result = SyntaxFactory.makeAvailabilityLabeledArgument(
+    let result = AvailabilityLabeledArgumentSyntax(
       garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
       garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -19488,7 +19488,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityVersionRestrictionSyntax`.
   func buildAvailabilityVersionRestriction(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityVersionRestrictionSyntax {
-    let result = SyntaxFactory.makeAvailabilityVersionRestriction(
+    let result = AvailabilityVersionRestrictionSyntax(
       garbageBeforePlatform?.buildGarbageNodes(format: format, leadingTrivia: nil),
       platform: platform,
       garbageBetweenPlatformAndVersion?.buildGarbageNodes(format: format, leadingTrivia: nil),
@@ -19576,7 +19576,7 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
       garbageBetweenMajorMinorAndPatchPeriod: garbageBetweenMajorMinorAndPatchPeriod,
       patchPeriod: patchPeriod,
       garbageBetweenPatchPeriodAndPatchVersion: garbageBetweenPatchPeriodAndPatchVersion,
-      patchVersion: patchVersion.map(TokenSyntax.integerLiteral)
+      patchVersion: patchVersion.map { TokenSyntax.integerLiteral($0) }
     )
   }
 
@@ -19585,7 +19585,7 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `VersionTupleSyntax`.
   func buildVersionTuple(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VersionTupleSyntax {
-    let result = SyntaxFactory.makeVersionTuple(
+    let result = VersionTupleSyntax(
       garbageBeforeMajorMinor?.buildGarbageNodes(format: format, leadingTrivia: nil),
       majorMinor: majorMinor.buildSyntax(format: format, leadingTrivia: nil),
       garbageBetweenMajorMinorAndPatchPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),

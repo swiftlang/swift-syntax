@@ -3,7 +3,7 @@
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
-//// Automatically Generated From SyntaxFactory.swift.gyb.
+//// Automatically Generated From SyntaxAnyVisitor.swift.gyb.
 //// Do Not Edit Directly!
 //===--------- SyntaxAnyVisitor.swift - Syntax any visitor class ----------===//
 //

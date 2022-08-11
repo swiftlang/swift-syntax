@@ -67,6 +67,7 @@ let package = Package(
         "SyntaxTraits.swift.gyb",
         "SyntaxVisitor.swift.gyb",
         "TokenKind.swift.gyb",
+        "Tokens.swift.gyb",
         "Trivia.swift.gyb",
       ],
       swiftSettings: swiftSyntaxSwiftSettings

@@ -7,7 +7,7 @@ fileprivate class FuncRenamer: SyntaxRewriter {
   override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
     let rewritten = super.visit(node).as(FunctionDeclSyntax.self)!
     let modifiedFunctionDecl = rewritten.withIdentifier(
-      SyntaxFactory.makeIdentifier("anotherName"))
+      .identifier("anotherName"))
     return DeclSyntax(modifiedFunctionDecl)
   }
 }
@@ -67,11 +67,10 @@ public class AbsolutePositionTests: XCTestCase {
     var l = [CodeBlockItemSyntax]()
     let idx = 2000
     for _ in 0...idx {
-      l.append(SyntaxFactory.makeCodeBlockItem(
+      l.append(CodeBlockItemSyntax(
         item: Syntax(
-          SyntaxFactory.makeReturnStmt(
-            returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
-                             .withTrailingTrivia(.newline),
+          ReturnStmtSyntax(
+            returnKeyword: .returnKeyword(trailingTrivia: .newline),
             expression: nil
           )
         ),
@@ -79,9 +78,9 @@ public class AbsolutePositionTests: XCTestCase {
         errorTokens: nil)
       )
     }
-    let root = SyntaxFactory.makeSourceFile(
-      statements: SyntaxFactory.makeCodeBlockItemList(l),
-      eofToken: SyntaxFactory.makeToken(.eof, presence: .present))
+    let root = SourceFileSyntax(
+      statements: CodeBlockItemListSyntax(l),
+      eofToken: .eof())
     _ = root.statements[idx].position
     _ = root.statements[idx].byteSize
     _ = root.statements[idx].positionAfterSkippingLeadingTrivia
@@ -100,9 +99,9 @@ public class AbsolutePositionTests: XCTestCase {
 
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
     let items : [CodeBlockItemSyntax] =
-    [CodeBlockItemSyntax](repeating: SyntaxFactory.makeCodeBlockItem(
-      item: Syntax(SyntaxFactory.makeReturnStmt(
-        returnKeyword: SyntaxFactory.makeReturnKeyword(
+    [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax(
+      item: Syntax(ReturnStmtSyntax(
+        returnKeyword: .returnKeyword(
           leadingTrivia: AbsolutePositionTests.leadingTrivia,
           trailingTrivia: AbsolutePositionTests.trailingTrivia
         ),
@@ -111,9 +110,9 @@ public class AbsolutePositionTests: XCTestCase {
       semicolon: nil,
       errorTokens: nil
     ), count: count)
-    return SyntaxFactory.makeSourceFile(
-      statements: SyntaxFactory.makeCodeBlockItemList(items),
-      eofToken: SyntaxFactory.makeToken(.eof, presence: .present))
+    return SourceFileSyntax(
+      statements: CodeBlockItemListSyntax(items),
+      eofToken: .eof())
   }
 
   public func testTrivias() {
@@ -170,12 +169,10 @@ public class AbsolutePositionTests: XCTestCase {
   }
 
   public func testWithoutSourceFileRoot() {
-    let item = SyntaxFactory.makeCodeBlockItem(
+    let item = CodeBlockItemSyntax(
       item: Syntax(
-        SyntaxFactory.makeReturnStmt(
-          returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
-                           .withLeadingTrivia(.newline)
-                           .withTrailingTrivia(.newline),
+        ReturnStmtSyntax(
+          returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline),
           expression: nil)
       ),
       semicolon: nil,

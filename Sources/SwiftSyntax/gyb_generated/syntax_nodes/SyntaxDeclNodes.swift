@@ -55,6 +55,12 @@ extension UnknownDeclSyntax: CustomReflectable {
 // MARK: - MissingDeclSyntax
 
 public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case garbageBeforeAttributes
+    case attributes
+    case garbageBetweenAttributesAndModifiers
+    case modifiers
+  }
 
   public let _syntaxNode: Syntax
 
@@ -77,16 +83,178 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
+  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBeforeAttributes(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
+  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
+  ///                   current `garbageBeforeAttributes`, if present.
+  public func withGarbageBeforeAttributes(
+    _ newChild: GarbageNodesSyntax?) -> MissingDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    return MissingDeclSyntax(newData)
+  }
+
+  public var attributes: AttributeListSyntax? {
+    get {
+      let childData = data.child(at: Cursor.attributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
+  }
+
+  /// Adds the provided `Attribute` to the node's `attributes`
+  /// collection.
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  public func addAttribute(_ element: Syntax) -> MissingDeclSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.attributes] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.attributes)
+    return MissingDeclSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `attributes` replaced.
+  /// - param newChild: The new `attributes` to replace the node's
+  ///                   current `attributes`, if present.
+  public func withAttributes(
+    _ newChild: AttributeListSyntax?) -> MissingDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return MissingDeclSyntax(newData)
+  }
+
+  public var garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.garbageBetweenAttributesAndModifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GarbageNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withGarbageBetweenAttributesAndModifiers(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndModifiers` replaced.
+  /// - param newChild: The new `garbageBetweenAttributesAndModifiers` to replace the node's
+  ///                   current `garbageBetweenAttributesAndModifiers`, if present.
+  public func withGarbageBetweenAttributesAndModifiers(
+    _ newChild: GarbageNodesSyntax?) -> MissingDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndModifiers)
+    return MissingDeclSyntax(newData)
+  }
+
+  public var modifiers: ModifierListSyntax? {
+    get {
+      let childData = data.child(at: Cursor.modifiers,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
+  }
+
+  /// Adds the provided `Modifier` to the node's `modifiers`
+  /// collection.
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  public func addModifier(_ element: DeclModifierSyntax) -> MissingDeclSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.modifiers] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.modifierList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.modifiers)
+    return MissingDeclSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `modifiers` replaced.
+  /// - param newChild: The new `modifiers` to replace the node's
+  ///                   current `modifiers`, if present.
+  public func withModifiers(
+    _ newChild: ModifierListSyntax?) -> MissingDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    return MissingDeclSyntax(newData)
+  }
+
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 0)
+    assert(rawChildren.count == 4)
+    // Check child #0 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #1 child is AttributeListSyntax or missing
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(AttributeListSyntax.self))
+    }
+    // Check child #2 child is GarbageNodesSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GarbageNodesSyntax.self))
+    }
+    // Check child #3 child is ModifierListSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ModifierListSyntax.self))
+    }
   }
 }
 
 extension MissingDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "garbageBetweenAttributesAndModifiers": garbageBetweenAttributesAndModifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

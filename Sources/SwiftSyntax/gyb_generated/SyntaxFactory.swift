@@ -88,10 +88,26 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MissingSyntax(data)
   }
+  public static func makeMissingDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?) -> MissingDeclSyntax {
+    let layout: [RawSyntax?] = [
+      garbageBeforeAttributes?.raw,
+      attributes?.raw,
+      garbageBetweenAttributesAndModifiers?.raw,
+      modifiers?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missingDecl,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return MissingDeclSyntax(data)
+  }
 
   public static func makeBlankMissingDecl(presence: SourcePresence = .missing) -> MissingDeclSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .missingDecl,
       layout: [
+      nil,
+      nil,
+      nil,
+      nil,
     ], length: .zero, presence: presence))
     return MissingDeclSyntax(data)
   }

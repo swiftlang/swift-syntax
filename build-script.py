@@ -19,8 +19,11 @@ SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
+
+GENERATION_PACKAGE_DIR = os.path.join(PACKAGE_DIR, "SwiftSyntaxGeneration")
+GENERATION_SOURCES_DIR = os.path.join(GENERATION_PACKAGE_DIR, "Sources")
 SWIFTSYNTAXBUILDERGENERATION_DIR = \
-        os.path.join(SOURCES_DIR, "SwiftSyntaxBuilderGeneration")
+        os.path.join(GENERATION_SOURCES_DIR, "swift-syntax-builder-generation")
 
 LLVM_DIR = os.path.join(WORKSPACE_DIR, "llvm-project", "llvm")
 SWIFT_DIR = os.path.join(WORKSPACE_DIR, "swift")

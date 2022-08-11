@@ -35,10 +35,10 @@ let tokensFile = SourceFile {
           // We need to use `CodeBlock` here to ensure there is braces around.
 
           let accessor = CodeBlock {
-            FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "\(token.swiftKind)"))
+            FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: token.swiftKind))
           }
 
-          createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
+          createTokenSyntaxPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
         }
       } else if let text = token.text {
         VariableDecl(
@@ -51,7 +51,7 @@ let tokensFile = SourceFile {
             FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "\(token.swiftKind)Token"))
           }
 
-          createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
+          createTokenSyntaxPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
         }
       }
       // TokenSyntax with custom text already has a static constructor function defined in SwiftSyntax.

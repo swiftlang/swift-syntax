@@ -14,4 +14,5 @@ import Foundation
 
 extension StringProtocol {
     var withFirstCharacterLowercased: String { prefix(1).lowercased() + dropFirst() }
+    var backticked: String { "`\(self)`" }
 }

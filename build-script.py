@@ -340,13 +340,14 @@ def run_code_generation(
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
         action="run",
+        package_dir=GENERATION_PACKAGE_DIR,
         build_dir=build_dir,
         multiroot_data_file=multiroot_data_file,
         release=release,
     )
 
     swiftpm_call.extend([
-        "SwiftSyntaxBuilderGeneration", swiftsyntaxbuilder_destination
+        "swift-syntax-builder-generation", swiftsyntaxbuilder_destination
     ])
 
     if verbose:
@@ -389,13 +390,13 @@ def clear_gyb_files_from_previous_run(
 
 
 def get_swiftpm_invocation(
-    toolchain: str, action: str, build_dir: Optional[str],
+    toolchain: str, action: str, package_dir: str, build_dir: Optional[str],
     multiroot_data_file: Optional[str], release: bool
 ) -> List[str]:
     swift_exec = os.path.join(toolchain, "bin", "swift")
 
     swiftpm_call = [swift_exec, action]
-    swiftpm_call.extend(["--package-path", PACKAGE_DIR])
+    swiftpm_call.extend(["--package-path", package_dir])
     if platform.system() != "Darwin":
         swiftpm_call.extend(["--enable-test-discovery"])
     if release:
@@ -416,6 +417,7 @@ class Builder(object):
     def __init__(
         self,
         toolchain: str,
+        package_dir: str,
         build_dir: Optional[str],
         multiroot_data_file: Optional[str],
         release: bool,
@@ -425,6 +427,7 @@ class Builder(object):
         self.swiftpm_call = get_swiftpm_invocation(
             toolchain=toolchain,
             action="build",
+            package_dir=package_dir,
             build_dir=build_dir,
             multiroot_data_file=multiroot_data_file,
             release=release,
@@ -603,6 +606,7 @@ def find_lit_test_helper_exec(
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
         action="build",
+        package_dir=PACKAGE_DIR,
         build_dir=build_dir,
         multiroot_data_file=None,
         release=release,
@@ -655,6 +659,7 @@ def run_xctests(toolchain: str, build_dir: Optional[str],
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
         action="test",
+        package_dir=PACKAGE_DIR,
         build_dir=build_dir,
         multiroot_data_file=multiroot_data_file,
         release=release,
@@ -735,20 +740,31 @@ def verify_source_code_command(args: argparse.Namespace) -> None:
 
 def build_command(args: argparse.Namespace) -> None:
     try:
-        builder = Builder(
-            toolchain=args.toolchain,
-            build_dir=realpath(args.build_dir),
-            multiroot_data_file=args.multiroot_data_file,
-            release=args.release,
-            verbose=args.verbose,
-            disable_sandbox=args.disable_sandbox,
-        )
-        # Until rdar://53881101 is implemented, we cannot request a build of multiple
-        # targets simultaneously. For now, just build one product after the other.
-        builder.build("SwiftSyntax")
-        builder.build("SwiftSyntaxParser")
-        builder.build("SwiftSyntaxBuilder")
-        builder.build("SwiftSyntaxBuilderGeneration")
+        package_products = [
+            (PACKAGE_DIR, [
+                'SwiftSyntax',
+                'SwiftSyntaxParser',
+                'SwiftSyntaxBuilder',
+            ]),
+            (GENERATION_PACKAGE_DIR, [
+                'swift-syntax-builder-generation',
+            ]),
+        ]
+
+        for package_dir, products in package_products:
+            builder = Builder(
+                toolchain=args.toolchain,
+                package_dir=package_dir,
+                build_dir=realpath(args.build_dir),
+                multiroot_data_file=args.multiroot_data_file,
+                release=args.release,
+                verbose=args.verbose,
+                disable_sandbox=args.disable_sandbox,
+            )
+            # Until rdar://53881101 is implemented, we cannot request a build of multiple
+            # targets simultaneously. For now, just build one product after the other.
+            for product in products:
+                builder.build(product)
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 
@@ -757,6 +773,7 @@ def test_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
             toolchain=args.toolchain,
+            package_dir=PACKAGE_DIR,
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,

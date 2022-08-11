@@ -22,6 +22,7 @@ class Node {
   let baseKind: String
   let traits: [String]
   let children: [Child]
+  let nonGarbageChildren: [Child]
   let collectionElementName: String?
   let collectionElementChoices: [String]?
   let omitWhenEmpty: Bool
@@ -84,8 +85,33 @@ class Node {
     self.description = description
 
     self.traits = traits
-    self.children = children
     self.baseKind = kind
+
+    if kind == "SyntaxCollection" {
+      self.children = children
+    } else {
+      // Add implicitly generated GarbageNodes children between
+      // any two defined children
+      self.children = children.enumerated().flatMap { (i, child) in
+        let garbageName: String
+        if i == 0 {
+          garbageName = "GarbageBefore\(child.name)"
+        } else {
+          garbageName = "GarbageBetween\(children[i - 1].name)And\(child.name)"
+        }
+        return [
+          Child(
+            name: garbageName,
+            kind: "GarbageNodes",
+            isOptional: true,
+            collectionElementName: garbageName
+          ),
+          child,
+        ]
+      }
+    }
+
+    self.nonGarbageChildren = children.filter { !$0.isGarbageNodes }
 
     if !SYNTAX_BASE_KINDS.contains(baseKind) {
       fatalError("unknown base kind '\(baseKind)' for node '\(syntaxKind)'")

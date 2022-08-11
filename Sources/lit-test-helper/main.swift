@@ -528,7 +528,7 @@ func diagnose(args: CommandLineArguments) throws {
     init(diagnosticHandler: @escaping ((Diagnostic) -> Void), _ converter: SourceLocationConverter) {
       self.diagnosticHandler = diagnosticHandler
       self.converter = converter
-      super.init(viewMode: ._all)
+      super.init(viewMode: .all)
     }
     override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
       if node.isUnknown {

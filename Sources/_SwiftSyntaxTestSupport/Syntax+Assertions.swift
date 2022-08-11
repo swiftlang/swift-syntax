@@ -237,7 +237,7 @@ fileprivate class SyntaxTypeFinder: SyntaxAnyVisitor {
     self.offset = offset
     self.type = type
     self.found = nil
-    super.init(viewMode: ._all)
+    super.init(viewMode: .all)
   }
 
   fileprivate override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {

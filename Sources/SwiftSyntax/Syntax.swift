@@ -540,7 +540,7 @@ public extension SyntaxProtocol {
       target.write(String(describing: syntaxNodeType))
     }
 
-    let allChildren = children(viewMode: ._all)
+    let allChildren = children(viewMode: .all)
     if includeChildren {
       if !allChildren.isEmpty {
         target.write(" children=\(allChildren.count)")

@@ -93,7 +93,10 @@ let COMMON_NODES: [Node] = [
          Child(name: "Semicolon",
                kind: "SemicolonToken",
                description: "If present, the trailing semicolon at the end of the item.",
-               isOptional: true),
+               isOptional: true,
+               tokenChoices: [
+                 "Semicolon"
+               ]),
          Child(name: "ErrorTokens",
                kind: "Syntax",
                isOptional: true)
@@ -113,13 +116,19 @@ let COMMON_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftBrace",
-               kind: "LeftBraceToken"),
+               kind: "LeftBraceToken",
+               tokenChoices: [
+                 "LeftBrace"
+               ]),
          Child(name: "Statements",
                kind: "CodeBlockItemList",
                collectionElementName: "Statement",
                isIndented: true),
          Child(name: "RightBrace",
                kind: "RightBraceToken",
+               tokenChoices: [
+                 "RightBrace"
+               ],
                requiresLeadingNewline: true)
        ]),
 

@@ -7371,7 +7371,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.falseKeywordKeyword instead")
   public static func makeFalseKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.falseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -7389,7 +7389,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.nilKeywordKeyword instead")
   public static func makeNilKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.nilKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -7407,7 +7407,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.superKeywordKeyword instead")
   public static func makeSuperKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.superKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -7416,7 +7416,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.selfKeywordKeyword instead")
   public static func makeSelfKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.selfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -7425,7 +7425,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.capitalSelfKeywordKeyword instead")
   public static func makeCapitalSelfKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.capitalSelfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -7434,7 +7434,7 @@ public enum SyntaxFactory {
   @available(*, deprecated, message: "Use TokenSyntax.trueKeywordKeyword instead")
   public static func makeTrueKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.trueKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,

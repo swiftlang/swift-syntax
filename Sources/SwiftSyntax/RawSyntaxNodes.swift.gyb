@@ -1,0 +1,111 @@
+%{
+  from gyb_syntax_support import *
+  NODE_MAP = create_node_map()
+  # -*- mode: Swift -*-
+  # Ignore the following admonition; it applies to the resulting .swift file only
+}%
+//// Automatically Generated From RawSyntaxNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===------ RawSyntaxNodes.swift - Typed Raw Syntax Node definitions  ------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+% for node in SYNTAX_NODES:
+%   if node.is_base():
+@_spi(RawSyntax)
+public protocol Raw${node.name}NodeProtocol: Raw${node.base_type}NodeProtocol {}
+%   end
+% end
+
+% for node in SYNTAX_NODES:
+
+@_spi(RawSyntax)
+public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_type}NodeProtocol {
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+%   if node.is_base():
+%     sub_kinds = ['.' + n.swift_syntax_kind for n in SYNTAX_NODES if n.base_kind == node.syntax_kind]
+    switch raw.kind {
+    case ${', '. join(sub_kinds)}: return true
+    default: return false
+    }
+%    else:
+    return raw.kind == .${node.swift_syntax_kind}
+%   end
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+%   if node.is_base():
+  public init<Node: Raw${node.name}NodeProtocol>(_ other: Node) {
+    self.init(raw: other.raw)
+  }
+%   end
+%
+%   if node.is_syntax_collection():
+  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == Raw${node.collection_element_type} {
+    let raw = RawSyntax.makeLayout(kind: .${node.swift_syntax_kind}, from: elements.map { $0.raw }, arena: arena)
+    self.init(raw: raw)
+  }
+
+  public var elements: [Raw${node.collection_element_type}] {
+    raw.children.map { Raw${node.collection_element_type}(raw: $0!) }
+  }
+%   end
+%
+%   if node.is_buildable() or node.is_missing():
+  public init(
+%     for child in node.children:
+%       param_label = "_ " if child.is_garbage_nodes() else ""
+%       optional_mark = "?" if child.is_optional else ""
+%       param_type = "Raw" + child.type_name + optional_mark
+%       param_default = " = nil" if child.is_garbage_nodes() else ""
+    ${param_label}${child.swift_name}: ${param_type}${param_default},
+%     end
+    arena: SyntaxArena
+  ) {
+%     if node.children:
+    let raw = RawSyntax.makeLayout(
+      kind: .${node.swift_syntax_kind}, uninitializedCount: ${len(node.children)}, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+%       for idx, child in enumerate(node.children):
+%         optional_mark = "?" if child.is_optional else ""
+      layout[${idx}] = ${child.swift_name}${optional_mark}.raw
+%       end
+    }
+%     else:
+    let raw = RawSyntax.makeEmptyLayout(kind: .${node.swift_syntax_kind}, arena: arena)
+%     end
+    self.init(raw: raw)
+  }
+
+%     for idx, child in enumerate(node.children):
+%       optional_mark = "?" if child.is_optional else ""
+%       iuo_mark = "!" if not child.is_optional else ""
+  public var ${child.swift_name}: Raw${child.type_name + optional_mark} {
+%       if child.type_name == "Syntax":
+    raw.children[${idx}]${iuo_mark}
+%       else:
+    raw.children[${idx}].map(Raw${child.type_name}.init(raw:))${iuo_mark}
+%       end
+  }
+%     end
+%   end
+}
+% end

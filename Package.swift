@@ -55,6 +55,7 @@ let package = Package(
       dependencies: ["_CSwiftSyntax"],
       exclude: [
         "Misc.swift.gyb",
+        "RawSyntaxNodes.swift.gyb",
         "SyntaxAnyVisitor.swift.gyb",
         "SyntaxBaseNodes.swift.gyb",
         "SyntaxClassification.swift.gyb",

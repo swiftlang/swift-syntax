@@ -31,7 +31,7 @@ import Glibc
 /// buffer regardless of whether it is a valid UTF8. When creating
 /// `Swift.String`, ill-formed UTF8 sequences are replaced with the Unicode
 /// replacement character (`\u{FFFD}`).
-@_spi(Testing) // SPI name is subject to change
+@_spi(RawSyntax)
 public struct SyntaxText {
   var buffer: UnsafeBufferPointer<UInt8>
 
@@ -178,7 +178,7 @@ extension String {
   ///
   /// Ill-formed UTF-8 sequences in `syntaxText` are replaced with the Unicode
   /// replacement character `\u{FFFD}`.
-  @_spi(Testing)
+  @_spi(RawSyntax)
   public init(syntaxText: SyntaxText) {
     guard !syntaxText.isEmpty else {
       self = ""
@@ -196,7 +196,7 @@ extension String {
   /// Runs `body` with a `SyntaxText` that refers the contiguous memory of this
   /// string. Like `String.withUTF8(_:)`, this may mutates the string if this
   /// string was not contiguous.
-  @_spi(Testing)
+  @_spi(RawSyntax)
   public mutating func withSyntaxText<R>(
     _ body: (SyntaxText) throws -> R
   ) rethrows -> R {

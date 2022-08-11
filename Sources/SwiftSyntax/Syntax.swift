@@ -24,6 +24,11 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self.data = data
   }
 
+  @_spi(RawSyntax)
+  public init(raw: RawSyntax) {
+    self.init(.forRoot(raw))
+  }
+
   public func _validateLayout() {
     // Check the layout of the concrete type
     return self.asProtocol(SyntaxProtocol.self)._validateLayout()

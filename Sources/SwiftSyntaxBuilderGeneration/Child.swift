@@ -26,6 +26,7 @@ class Child {
   let classification: SyntaxClassification?
   /// A restricted set of token kinds that will be accepted for this child.
   let tokenChoices: [Token]
+  let tokenCanContainArbitraryText: Bool
 
   var swiftName: String {
     return lowercaseFirstWord(name: name)
@@ -95,14 +96,18 @@ class Child {
     self.requiresLeadingNewline = requiresLeadingNewline
     self.isOptional = isOptional
 
+    let isToken = syntaxKind.hasSuffix("Token")
     var mappedTokenChoices = [Token]()
     
-    if syntaxKind.hasSuffix("Token"), let token = SYNTAX_TOKEN_MAP[syntaxKind] {
+    if isToken, let token = SYNTAX_TOKEN_MAP[syntaxKind] {
       mappedTokenChoices.append(token)
     }
 
-    mappedTokenChoices.append(contentsOf: tokenChoices.compactMap { SYNTAX_TOKEN_MAP[$0] })
+    mappedTokenChoices.append(contentsOf: tokenChoices.compactMap { SYNTAX_TOKEN_MAP["\($0)Token"] })
     self.tokenChoices = mappedTokenChoices
+
+    // If mappedTokenChoices contains `nil`, the token can contain arbitrary text
+    self.tokenCanContainArbitraryText = mappedTokenChoices.contains { $0.text == nil }
     
     // A list of valid text for tokens, if specified.
     // This will force validation logic to check the text passed into the

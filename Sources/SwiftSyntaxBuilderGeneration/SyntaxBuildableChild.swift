@@ -79,14 +79,11 @@ extension Child {
     let choices: [String]
     if !textChoices.isEmpty {
       choices = textChoices
+    } else if tokenCanContainArbitraryText {
+      // Don't generate an assert statement if token can contain arbitrary text.
+      return nil
     } else if !tokenChoices.isEmpty {
-      let optionalChoices = tokenChoices.map { SYNTAX_TOKEN_MAP["\($0.name)Token"]?.text }
-      choices = optionalChoices.compactMap { $0 }
-      guard choices.count == optionalChoices.count else {
-        // If `nil` is in the text choices, one of the token options can contain arbitrary
-        // text. Don't generate an assert statement.
-        return nil
-      }
+      choices = tokenChoices.compactMap(\.text)
     } else {
       return nil
     }

@@ -96,6 +96,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MissingSyntax(data)
   }
+  @available(*, deprecated, message: "Use initializer on MissingDeclSyntax")
   public static func makeMissingDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?) -> MissingDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,

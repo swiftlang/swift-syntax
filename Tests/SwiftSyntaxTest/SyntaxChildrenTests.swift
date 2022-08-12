@@ -50,7 +50,10 @@ public class SyntaxChildrenTests: XCTestCase {
   }
 
   public func testMissingNodes() throws {
-    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax()))
+    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax(
+      attributes: nil,
+      modifiers: nil
+    )))
 
     var sourceAccurateIt = node.children(viewMode: .sourceAccurate).makeIterator()
     XCTAssertNextIsNil(&sourceAccurateIt)

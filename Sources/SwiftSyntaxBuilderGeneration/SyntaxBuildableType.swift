@@ -256,6 +256,15 @@ struct SyntaxBuildableType: Hashable {
     }
   }
 
+  /// Wraps a type in a force unwrap expression depending on whether `isOptional` is true.
+  func forceUnwrappedIfNeeded(expr: ExpressibleAsExprBuildable) -> ExpressibleAsExprBuildable {
+    if isOptional {
+      return ForcedValueExpr(expression: expr)
+    } else {
+      return expr
+    }
+  }
+
   /// Generate an expression that converts a variable named `varName`
   /// which is of `expressibleAs` type to an object of type `buildable`.
   func generateExprConvertParamTypeToStorageType(varName: String) -> ExpressibleAsExprBuildable {

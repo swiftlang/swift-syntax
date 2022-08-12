@@ -56,13 +56,8 @@ def make_swift_child(child, spaces):
     parameters += ['isOptional: true']
 
   if child.token_choices:
-    mapped_token_choices = child.token_choices
-    if child.token:
-      mapped_token_choices.remove(child.token)
-
-    if mapped_token_choices:
-      mapped_token_choices = list(map(lambda x: (' ' * (spaces + parameter_spaces)) + '"%s"' % x.name, mapped_token_choices))
-      parameters += ['tokenChoices: [\n%s\n'  % ',\n'.join(mapped_token_choices) + (' ' * (spaces + parameter_spaces - 2)) + ']']
+    mapped_token_choices = list(map(lambda x: (' ' * (spaces + parameter_spaces)) + '"%s"' % x.name, child.token_choices))
+    parameters += ['tokenChoices: [\n%s\n'  % ',\n'.join(mapped_token_choices) + (' ' * (spaces + parameter_spaces - 2)) + ']']
 
   if child.text_choices:
     mapped_text_choices = map(lambda x: (' ' * (spaces + parameter_spaces)) + '"%s"' % x, child.text_choices)

@@ -27,11 +27,17 @@ let AVAILABILITY_NODES: [Node] = [
                nodeChoices: [
                  Child(name: "Star",
                        kind: "SpacedBinaryOperatorToken",
+                       tokenChoices: [
+                         "SpacedBinaryOperator"
+                       ],
                        textChoices: [
                          "*"
                        ]),
                  Child(name: "IdentifierRestriction",
-                       kind: "IdentifierToken"),
+                       kind: "IdentifierToken",
+                       tokenChoices: [
+                         "Identifier"
+                       ]),
                  Child(name: "AvailabilityVersionRestriction",
                        kind: "AvailabilityVersionRestriction"),
                  Child(name: "AvailabilityLabeledArgument",
@@ -40,7 +46,10 @@ let AVAILABILITY_NODES: [Node] = [
          Child(name: "TrailingComma",
                kind: "CommaToken",
                description: "A trailing comma if the argument is followed by anotherargument",
-               isOptional: true)
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ])
        ]),
 
   Node(name: "AvailabilityLabeledArgument",
@@ -49,16 +58,25 @@ let AVAILABILITY_NODES: [Node] = [
        children: [
          Child(name: "Label",
                kind: "IdentifierToken",
-               description: "The label of the argument"),
+               description: "The label of the argument",
+               tokenChoices: [
+                 "Identifier"
+               ]),
          Child(name: "Colon",
                kind: "ColonToken",
-               description: "The colon separating label and value"),
+               description: "The colon separating label and value",
+               tokenChoices: [
+                 "Colon"
+               ]),
          Child(name: "Value",
                kind: "Syntax",
                description: "The value of this labeled argument",
                nodeChoices: [
                  Child(name: "String",
-                       kind: "StringLiteralToken"),
+                       kind: "StringLiteralToken",
+                       tokenChoices: [
+                         "StringLiteral"
+                       ]),
                  Child(name: "Version",
                        kind: "VersionTuple")
                ])
@@ -71,6 +89,9 @@ let AVAILABILITY_NODES: [Node] = [
          Child(name: "Platform",
                kind: "IdentifierToken",
                description: "The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.",
+               tokenChoices: [
+                 "Identifier"
+               ],
                classification: "Keyword"),
          Child(name: "Version",
                kind: "VersionTuple",
@@ -86,18 +107,30 @@ let AVAILABILITY_NODES: [Node] = [
                description: "In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version.",
                nodeChoices: [
                  Child(name: "Major",
-                       kind: "IntegerLiteralToken"),
+                       kind: "IntegerLiteralToken",
+                       tokenChoices: [
+                         "IntegerLiteral"
+                       ]),
                  Child(name: "MajorMinor",
-                       kind: "FloatingLiteralToken")
+                       kind: "FloatingLiteralToken",
+                       tokenChoices: [
+                         "FloatingLiteral"
+                       ])
                ]),
          Child(name: "PatchPeriod",
                kind: "PeriodToken",
                description: "If the version contains a patch number, the periodseparating the minor from the patch number.",
-               isOptional: true),
+               isOptional: true,
+               tokenChoices: [
+                 "Period"
+               ]),
          Child(name: "PatchVersion",
                kind: "IntegerLiteralToken",
                description: "The patch version if specified.",
-               isOptional: true)
+               isOptional: true,
+               tokenChoices: [
+                 "IntegerLiteral"
+               ])
        ]),
 
 ]

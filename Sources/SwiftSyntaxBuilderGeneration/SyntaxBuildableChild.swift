@@ -71,7 +71,7 @@ extension Child {
   /// If this node is a token that can't contain arbitrary text, generate a Swift
   /// `assert` statement that verifies the variable with name var_name and of type
   /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.
-  func generateAssertStmtTextChoices(varName: String) -> String? {
+  func generateAssertStmtTextChoices(varName: String) -> ExpressibleAsExprBuildable? {
     guard type.isToken else {
       return nil
     }
@@ -79,26 +79,33 @@ extension Child {
     let choices: [String]
     if !textChoices.isEmpty {
       choices = textChoices
+    } else if tokenCanContainArbitraryText {
+      // Don't generate an assert statement if token can contain arbitrary text.
+      return nil
     } else if !tokenChoices.isEmpty {
-      let optionalChoices = tokenChoices.map { SYNTAX_TOKEN_MAP["\($0.name)Token"]?.text }
-      choices = optionalChoices.compactMap { $0 }
-      guard choices.count == optionalChoices.count else {
-        // If `nil` is in the text choices, one of the token options can contain arbitrary
-        // text. Don't generate an assert statement.
-        return nil
-      }
+      choices = tokenChoices.compactMap(\.text)
     } else {
       return nil
     }
 
-    var assertChoices: [String] = []
+    var assertChoices: [ExpressibleAsExprBuildable] = []
     if type.isOptional {
-      assertChoices.append("\(varName) == nil")
+      assertChoices.append(SequenceExpr {
+        varName
+        BinaryOperatorExpr("==")
+        NilLiteralExpr()
+      })
     }
-    let unwrap = type.isOptional ? "!" : ""
     for textChoice in choices {
-      assertChoices.append("\(varName)\(unwrap) == \"\(textChoice)\"")
+      assertChoices.append(SequenceExpr {
+        MemberAccessExpr(base: type.forceUnwrappedIfNeeded(expr: varName), name: "text")
+        BinaryOperatorExpr("==")
+        StringLiteralExpr(raw: textChoice)
+      })
     }
-    return "assert(\(assertChoices.joined(separator: " || ")))"
+    let disjunction = ExprList(assertChoices.flatMap { [$0, BinaryOperatorExpr("||")] }.dropLast())
+    return FunctionCallExpr("assert") {
+      SequenceExpr(elements: disjunction)
+    }
   }
 }

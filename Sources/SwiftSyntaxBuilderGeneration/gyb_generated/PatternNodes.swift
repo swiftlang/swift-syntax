@@ -17,7 +17,10 @@ let PATTERN_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Colon",
-               kind: "ColonToken"),
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ]),
          Child(name: "Type",
                kind: "Type")
        ]),
@@ -29,9 +32,15 @@ let PATTERN_NODES: [Node] = [
                kind: "Type",
                isOptional: true),
          Child(name: "Period",
-               kind: "PeriodToken"),
+               kind: "PeriodToken",
+               tokenChoices: [
+                 "Period"
+               ]),
          Child(name: "CaseName",
-               kind: "IdentifierToken"),
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ]),
          Child(name: "AssociatedTuple",
                kind: "TuplePattern",
                isOptional: true)
@@ -41,7 +50,10 @@ let PATTERN_NODES: [Node] = [
        kind: "Pattern",
        children: [
          Child(name: "IsKeyword",
-               kind: "IsToken"),
+               kind: "IsToken",
+               tokenChoices: [
+                 "Is"
+               ]),
          Child(name: "Type",
                kind: "Type")
        ]),
@@ -52,7 +64,10 @@ let PATTERN_NODES: [Node] = [
          Child(name: "SubPattern",
                kind: "Pattern"),
          Child(name: "QuestionMark",
-               kind: "PostfixQuestionMarkToken")
+               kind: "PostfixQuestionMarkToken",
+               tokenChoices: [
+                 "PostfixQuestionMark"
+               ])
        ]),
 
   Node(name: "IdentifierPattern",
@@ -72,7 +87,10 @@ let PATTERN_NODES: [Node] = [
          Child(name: "Pattern",
                kind: "Pattern"),
          Child(name: "AsKeyword",
-               kind: "AsToken"),
+               kind: "AsToken",
+               tokenChoices: [
+                 "As"
+               ]),
          Child(name: "Type",
                kind: "Type")
        ]),
@@ -84,19 +102,28 @@ let PATTERN_NODES: [Node] = [
        ],
        children: [
          Child(name: "LeftParen",
-               kind: "LeftParenToken"),
+               kind: "LeftParenToken",
+               tokenChoices: [
+                 "LeftParen"
+               ]),
          Child(name: "Elements",
                kind: "TuplePatternElementList",
                collectionElementName: "Element"),
          Child(name: "RightParen",
-               kind: "RightParenToken")
+               kind: "RightParenToken",
+               tokenChoices: [
+                 "RightParen"
+               ])
        ]),
 
   Node(name: "WildcardPattern",
        kind: "Pattern",
        children: [
          Child(name: "Wildcard",
-               kind: "WildcardToken"),
+               kind: "WildcardToken",
+               tokenChoices: [
+                 "Wildcard"
+               ]),
          Child(name: "TypeAnnotation",
                kind: "TypeAnnotation",
                isOptional: true)
@@ -110,15 +137,24 @@ let PATTERN_NODES: [Node] = [
        children: [
          Child(name: "LabelName",
                kind: "IdentifierToken",
-               isOptional: true),
+               isOptional: true,
+               tokenChoices: [
+                 "Identifier"
+               ]),
          Child(name: "LabelColon",
                kind: "ColonToken",
-               isOptional: true),
+               isOptional: true,
+               tokenChoices: [
+                 "Colon"
+               ]),
          Child(name: "Pattern",
                kind: "Pattern"),
          Child(name: "TrailingComma",
                kind: "CommaToken",
-               isOptional: true)
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ])
        ]),
 
   Node(name: "ExpressionPattern",

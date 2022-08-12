@@ -30,6 +30,7 @@ struct GenerateSwiftSyntaxBuilder: ParsableCommand {
         (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
         (buildableNodesFile, "BuildableNodes.swift"),
         (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
+        (resultBuildersFile, "ResultBuildersFile.swift"),
         (tokenFile, "Token.swift"),
       ],
       destination: URL(fileURLWithPath: generatedPath),

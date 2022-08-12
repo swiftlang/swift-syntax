@@ -92,7 +92,7 @@ class Node {
     } else {
       // Add implicitly generated GarbageNodes children between
       // any two defined children
-      self.children = children.enumerated().flatMap { (i, child) in
+      self.children = children.enumerated().flatMap { (i, child) -> [Child] in
         let garbageName: String
         if i == 0 {
           garbageName = "GarbageBefore\(child.name)"

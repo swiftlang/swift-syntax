@@ -47,7 +47,17 @@ let COMMON_NODES: [Node] = [
        kind: "Syntax"),
 
   Node(name: "MissingDecl",
-       kind: "Decl"),
+       kind: "Decl",
+       children: [
+         Child(name: "Attributes",
+               kind: "AttributeList",
+               isOptional: true,
+               collectionElementName: "Attribute"),
+         Child(name: "Modifiers",
+               kind: "ModifierList",
+               isOptional: true,
+               collectionElementName: "Modifier")
+       ]),
 
   Node(name: "MissingExpr",
        kind: "Expr"),

@@ -90,8 +90,16 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
+    _ garbageBeforeAttributes: GarbageNodesSyntax? = nil,
+    attributes: AttributeListSyntax?,
+    _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil,
+    modifiers: ModifierListSyntax?
   ) {
     let layout: [RawSyntax?] = [
+      garbageBeforeAttributes?.raw,
+      attributes?.raw,
+      garbageBetweenAttributesAndModifiers?.raw,
+      modifiers?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missingDecl,
       layout: layout, presence: SourcePresence.present)

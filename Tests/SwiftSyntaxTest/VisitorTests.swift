@@ -3,7 +3,10 @@ import SwiftSyntax
 
 public class VisitorTests: XCTestCase {
   public func testVisitMissingNodes() throws {
-    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax()))
+    let node = DeclarationStmtSyntax(declaration: DeclSyntax(MissingDeclSyntax(
+      attributes: nil,
+      modifiers: nil
+    )))
 
     class MissingDeclChecker: SyntaxVisitor {
       var didSeeMissingDeclSyntax = false

@@ -10,7 +10,7 @@ final class IfStmtTests: XCTestCase {
     let buildable = IfStmt(conditions: ExprList([BooleanLiteralExpr(false)])) {}
     let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, """
-      if false  {
+      if false {
       }
       """)
   }
@@ -29,7 +29,7 @@ final class IfStmtTests: XCTestCase {
     }
     let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, """
-      if true  {
+      if true {
           print("Hello from the if-branch!")
       } else {
           print("Hello from the else-branch!")

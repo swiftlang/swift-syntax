@@ -34,7 +34,7 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public init (arrayLiteral elements: ExpressibleAsCodeBlockItem...) {
     self.init(elements)
   }
-  public func buildCodeBlockItemList(format: Format, leadingTrivia: Trivia? = nil ) -> CodeBlockItemListSyntax {
+  public func buildCodeBlockItemList(format: Format, leadingTrivia: Trivia? = nil) -> CodeBlockItemListSyntax {
     let result = CodeBlockItemListSyntax(elements.map {
       $0.buildCodeBlockItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
@@ -44,7 +44,7 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCodeBlockItemList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsCodeBlockItemList`
@@ -78,7 +78,7 @@ public struct GarbageNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
-  public func buildGarbageNodes(format: Format, leadingTrivia: Trivia? = nil ) -> GarbageNodesSyntax {
+  public func buildGarbageNodes(format: Format, leadingTrivia: Trivia? = nil) -> GarbageNodesSyntax {
     let result = GarbageNodesSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
@@ -88,7 +88,7 @@ public struct GarbageNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildGarbageNodes(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsGarbageNodes`
@@ -127,7 +127,7 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init (arrayLiteral elements: ExpressibleAsTupleExprElement...) {
     self.init(elements)
   }
-  public func buildTupleExprElementList(format: Format, leadingTrivia: Trivia? = nil ) -> TupleExprElementListSyntax {
+  public func buildTupleExprElementList(format: Format, leadingTrivia: Trivia? = nil) -> TupleExprElementListSyntax {
     let result = TupleExprElementListSyntax(elements.map {
       $0.buildTupleExprElement(format: format, leadingTrivia: nil)
     })
@@ -137,7 +137,7 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTupleExprElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsTupleExprElementList`
@@ -176,7 +176,7 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public init (arrayLiteral elements: ExpressibleAsArrayElement...) {
     self.init(elements)
   }
-  public func buildArrayElementList(format: Format, leadingTrivia: Trivia? = nil ) -> ArrayElementListSyntax {
+  public func buildArrayElementList(format: Format, leadingTrivia: Trivia? = nil) -> ArrayElementListSyntax {
     let result = ArrayElementListSyntax(elements.map {
       $0.buildArrayElement(format: format, leadingTrivia: nil)
     })
@@ -186,7 +186,7 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildArrayElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsArrayElementList`
@@ -220,7 +220,7 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public init (arrayLiteral elements: ExpressibleAsDictionaryElement...) {
     self.init(elements)
   }
-  public func buildDictionaryElementList(format: Format, leadingTrivia: Trivia? = nil ) -> DictionaryElementListSyntax {
+  public func buildDictionaryElementList(format: Format, leadingTrivia: Trivia? = nil) -> DictionaryElementListSyntax {
     let result = DictionaryElementListSyntax(elements.map {
       $0.buildDictionaryElement(format: format, leadingTrivia: nil)
     })
@@ -230,7 +230,7 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildDictionaryElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsDictionaryElementList`
@@ -269,7 +269,7 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
   public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
-  public func buildStringLiteralSegments(format: Format, leadingTrivia: Trivia? = nil ) -> StringLiteralSegmentsSyntax {
+  public func buildStringLiteralSegments(format: Format, leadingTrivia: Trivia? = nil) -> StringLiteralSegmentsSyntax {
     let result = StringLiteralSegmentsSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
@@ -279,7 +279,7 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildStringLiteralSegments(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsStringLiteralSegments`
@@ -318,7 +318,7 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init (arrayLiteral elements: ExpressibleAsDeclNameArgument...) {
     self.init(elements)
   }
-  public func buildDeclNameArgumentList(format: Format, leadingTrivia: Trivia? = nil ) -> DeclNameArgumentListSyntax {
+  public func buildDeclNameArgumentList(format: Format, leadingTrivia: Trivia? = nil) -> DeclNameArgumentListSyntax {
     let result = DeclNameArgumentListSyntax(elements.map {
       $0.buildDeclNameArgument(format: format, leadingTrivia: nil)
     })
@@ -328,7 +328,7 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildDeclNameArgumentList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsDeclNameArgumentList`
@@ -367,7 +367,7 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public init (arrayLiteral elements: ExpressibleAsExprBuildable...) {
     self.init(elements)
   }
-  public func buildExprList(format: Format, leadingTrivia: Trivia? = nil ) -> ExprListSyntax {
+  public func buildExprList(format: Format, leadingTrivia: Trivia? = nil) -> ExprListSyntax {
     let result = ExprListSyntax(elements.map {
       $0.buildExpr(format: format, leadingTrivia: nil)
     })
@@ -377,7 +377,7 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildExprList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsExprList`
@@ -411,7 +411,7 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
   public init (arrayLiteral elements: ExpressibleAsClosureCaptureItem...) {
     self.init(elements)
   }
-  public func buildClosureCaptureItemList(format: Format, leadingTrivia: Trivia? = nil ) -> ClosureCaptureItemListSyntax {
+  public func buildClosureCaptureItemList(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureItemListSyntax {
     let result = ClosureCaptureItemListSyntax(elements.map {
       $0.buildClosureCaptureItem(format: format, leadingTrivia: nil)
     })
@@ -421,7 +421,7 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildClosureCaptureItemList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsClosureCaptureItemList`
@@ -460,7 +460,7 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public init (arrayLiteral elements: ExpressibleAsClosureParam...) {
     self.init(elements)
   }
-  public func buildClosureParamList(format: Format, leadingTrivia: Trivia? = nil ) -> ClosureParamListSyntax {
+  public func buildClosureParamList(format: Format, leadingTrivia: Trivia? = nil) -> ClosureParamListSyntax {
     let result = ClosureParamListSyntax(elements.map {
       $0.buildClosureParam(format: format, leadingTrivia: nil)
     })
@@ -470,7 +470,7 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildClosureParamList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsClosureParamList`
@@ -509,7 +509,7 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
   public init (arrayLiteral elements: ExpressibleAsMultipleTrailingClosureElement...) {
     self.init(elements)
   }
-  public func buildMultipleTrailingClosureElementList(format: Format, leadingTrivia: Trivia? = nil ) -> MultipleTrailingClosureElementListSyntax {
+  public func buildMultipleTrailingClosureElementList(format: Format, leadingTrivia: Trivia? = nil) -> MultipleTrailingClosureElementListSyntax {
     let result = MultipleTrailingClosureElementListSyntax(elements.map {
       $0.buildMultipleTrailingClosureElement(format: format, leadingTrivia: nil)
     })
@@ -519,7 +519,7 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildMultipleTrailingClosureElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsMultipleTrailingClosureElementList`
@@ -558,7 +558,7 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public init (arrayLiteral elements: ExpressibleAsObjcNamePiece...) {
     self.init(elements)
   }
-  public func buildObjcName(format: Format, leadingTrivia: Trivia? = nil ) -> ObjcNameSyntax {
+  public func buildObjcName(format: Format, leadingTrivia: Trivia? = nil) -> ObjcNameSyntax {
     let result = ObjcNameSyntax(elements.map {
       $0.buildObjcNamePiece(format: format, leadingTrivia: nil)
     })
@@ -568,7 +568,7 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildObjcName(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsObjcName`
@@ -607,7 +607,7 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public init (arrayLiteral elements: ExpressibleAsFunctionParameter...) {
     self.init(elements)
   }
-  public func buildFunctionParameterList(format: Format, leadingTrivia: Trivia? = nil ) -> FunctionParameterListSyntax {
+  public func buildFunctionParameterList(format: Format, leadingTrivia: Trivia? = nil) -> FunctionParameterListSyntax {
     let result = FunctionParameterListSyntax(elements.map {
       $0.buildFunctionParameter(format: format, leadingTrivia: nil)
     })
@@ -617,7 +617,7 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildFunctionParameterList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsFunctionParameterList`
@@ -656,7 +656,7 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   public init (arrayLiteral elements: ExpressibleAsIfConfigClause...) {
     self.init(elements)
   }
-  public func buildIfConfigClauseList(format: Format, leadingTrivia: Trivia? = nil ) -> IfConfigClauseListSyntax {
+  public func buildIfConfigClauseList(format: Format, leadingTrivia: Trivia? = nil) -> IfConfigClauseListSyntax {
     let result = IfConfigClauseListSyntax(elements.map {
       $0.buildIfConfigClause(format: format, leadingTrivia: nil)
     })
@@ -666,7 +666,7 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildIfConfigClauseList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsIfConfigClauseList`
@@ -705,7 +705,7 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public init (arrayLiteral elements: ExpressibleAsInheritedType...) {
     self.init(elements)
   }
-  public func buildInheritedTypeList(format: Format, leadingTrivia: Trivia? = nil ) -> InheritedTypeListSyntax {
+  public func buildInheritedTypeList(format: Format, leadingTrivia: Trivia? = nil) -> InheritedTypeListSyntax {
     let result = InheritedTypeListSyntax(elements.map {
       $0.buildInheritedType(format: format, leadingTrivia: nil)
     })
@@ -715,7 +715,7 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildInheritedTypeList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsInheritedTypeList`
@@ -754,7 +754,7 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public init (arrayLiteral elements: ExpressibleAsMemberDeclListItem...) {
     self.init(elements)
   }
-  public func buildMemberDeclList(format: Format, leadingTrivia: Trivia? = nil ) -> MemberDeclListSyntax {
+  public func buildMemberDeclList(format: Format, leadingTrivia: Trivia? = nil) -> MemberDeclListSyntax {
     let result = MemberDeclListSyntax(elements.map {
       $0.buildMemberDeclListItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
@@ -764,7 +764,7 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildMemberDeclList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsMemberDeclList`
@@ -798,7 +798,7 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public init (arrayLiteral elements: ExpressibleAsDeclModifier...) {
     self.init(elements)
   }
-  public func buildModifierList(format: Format, leadingTrivia: Trivia? = nil ) -> ModifierListSyntax {
+  public func buildModifierList(format: Format, leadingTrivia: Trivia? = nil) -> ModifierListSyntax {
     let result = ModifierListSyntax(elements.map {
       $0.buildDeclModifier(format: format, leadingTrivia: nil)
     })
@@ -808,7 +808,7 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildModifierList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsModifierList`
@@ -847,7 +847,7 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
   public init (arrayLiteral elements: ExpressibleAsAccessPathComponent...) {
     self.init(elements)
   }
-  public func buildAccessPath(format: Format, leadingTrivia: Trivia? = nil ) -> AccessPathSyntax {
+  public func buildAccessPath(format: Format, leadingTrivia: Trivia? = nil) -> AccessPathSyntax {
     let result = AccessPathSyntax(elements.map {
       $0.buildAccessPathComponent(format: format, leadingTrivia: nil)
     })
@@ -857,7 +857,7 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAccessPath(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsAccessPath`
@@ -896,7 +896,7 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public init (arrayLiteral elements: ExpressibleAsAccessorDecl...) {
     self.init(elements)
   }
-  public func buildAccessorList(format: Format, leadingTrivia: Trivia? = nil ) -> AccessorListSyntax {
+  public func buildAccessorList(format: Format, leadingTrivia: Trivia? = nil) -> AccessorListSyntax {
     let result = AccessorListSyntax(elements.map {
       $0.buildAccessorDecl(format: format, leadingTrivia: nil)
     })
@@ -906,7 +906,7 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAccessorList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsAccessorList`
@@ -940,7 +940,7 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   public init (arrayLiteral elements: ExpressibleAsPatternBinding...) {
     self.init(elements)
   }
-  public func buildPatternBindingList(format: Format, leadingTrivia: Trivia? = nil ) -> PatternBindingListSyntax {
+  public func buildPatternBindingList(format: Format, leadingTrivia: Trivia? = nil) -> PatternBindingListSyntax {
     let result = PatternBindingListSyntax(elements.map {
       $0.buildPatternBinding(format: format, leadingTrivia: nil)
     })
@@ -950,7 +950,7 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPatternBindingList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsPatternBindingList`
@@ -989,7 +989,7 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public init (arrayLiteral elements: ExpressibleAsEnumCaseElement...) {
     self.init(elements)
   }
-  public func buildEnumCaseElementList(format: Format, leadingTrivia: Trivia? = nil ) -> EnumCaseElementListSyntax {
+  public func buildEnumCaseElementList(format: Format, leadingTrivia: Trivia? = nil) -> EnumCaseElementListSyntax {
     let result = EnumCaseElementListSyntax(elements.map {
       $0.buildEnumCaseElement(format: format, leadingTrivia: nil)
     })
@@ -999,7 +999,7 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildEnumCaseElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsEnumCaseElementList`
@@ -1036,7 +1036,7 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public init (arrayLiteral elements: TokenSyntax...) {
     self.init(elements)
   }
-  public func buildIdentifierList(format: Format, leadingTrivia: Trivia? = nil ) -> IdentifierListSyntax {
+  public func buildIdentifierList(format: Format, leadingTrivia: Trivia? = nil) -> IdentifierListSyntax {
     let result = IdentifierListSyntax(elements)
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
@@ -1044,7 +1044,7 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildIdentifierList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsIdentifierList`
@@ -1083,7 +1083,7 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
   public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
-  public func buildPrecedenceGroupAttributeList(format: Format, leadingTrivia: Trivia? = nil ) -> PrecedenceGroupAttributeListSyntax {
+  public func buildPrecedenceGroupAttributeList(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupAttributeListSyntax {
     let result = PrecedenceGroupAttributeListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
@@ -1093,7 +1093,7 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPrecedenceGroupAttributeList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupAttributeList`
@@ -1132,7 +1132,7 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public init (arrayLiteral elements: ExpressibleAsPrecedenceGroupNameElement...) {
     self.init(elements)
   }
-  public func buildPrecedenceGroupNameList(format: Format, leadingTrivia: Trivia? = nil ) -> PrecedenceGroupNameListSyntax {
+  public func buildPrecedenceGroupNameList(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupNameListSyntax {
     let result = PrecedenceGroupNameListSyntax(elements.map {
       $0.buildPrecedenceGroupNameElement(format: format, leadingTrivia: nil)
     })
@@ -1142,7 +1142,7 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPrecedenceGroupNameList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupNameList`
@@ -1179,7 +1179,7 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   public init (arrayLiteral elements: TokenSyntax...) {
     self.init(elements)
   }
-  public func buildTokenList(format: Format, leadingTrivia: Trivia? = nil ) -> TokenListSyntax {
+  public func buildTokenList(format: Format, leadingTrivia: Trivia? = nil) -> TokenListSyntax {
     let result = TokenListSyntax(elements)
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
@@ -1187,7 +1187,7 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTokenList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsTokenList`
@@ -1224,7 +1224,7 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public init (arrayLiteral elements: TokenSyntax...) {
     self.init(elements)
   }
-  public func buildNonEmptyTokenList(format: Format, leadingTrivia: Trivia? = nil ) -> NonEmptyTokenListSyntax {
+  public func buildNonEmptyTokenList(format: Format, leadingTrivia: Trivia? = nil) -> NonEmptyTokenListSyntax {
     let result = NonEmptyTokenListSyntax(elements)
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
@@ -1232,7 +1232,7 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildNonEmptyTokenList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsNonEmptyTokenList`
@@ -1271,7 +1271,7 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
-  public func buildAttributeList(format: Format, leadingTrivia: Trivia? = nil ) -> AttributeListSyntax {
+  public func buildAttributeList(format: Format, leadingTrivia: Trivia? = nil) -> AttributeListSyntax {
     let result = AttributeListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
@@ -1281,7 +1281,7 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAttributeList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsAttributeList`
@@ -1320,7 +1320,7 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
   public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
-  public func buildSpecializeAttributeSpecList(format: Format, leadingTrivia: Trivia? = nil ) -> SpecializeAttributeSpecListSyntax {
+  public func buildSpecializeAttributeSpecList(format: Format, leadingTrivia: Trivia? = nil) -> SpecializeAttributeSpecListSyntax {
     let result = SpecializeAttributeSpecListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
@@ -1330,7 +1330,7 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildSpecializeAttributeSpecList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsSpecializeAttributeSpecList`
@@ -1369,7 +1369,7 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public init (arrayLiteral elements: ExpressibleAsObjCSelectorPiece...) {
     self.init(elements)
   }
-  public func buildObjCSelector(format: Format, leadingTrivia: Trivia? = nil ) -> ObjCSelectorSyntax {
+  public func buildObjCSelector(format: Format, leadingTrivia: Trivia? = nil) -> ObjCSelectorSyntax {
     let result = ObjCSelectorSyntax(elements.map {
       $0.buildObjCSelectorPiece(format: format, leadingTrivia: nil)
     })
@@ -1379,7 +1379,7 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildObjCSelector(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsObjCSelector`
@@ -1418,7 +1418,7 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   public init (arrayLiteral elements: ExpressibleAsDifferentiabilityParam...) {
     self.init(elements)
   }
-  public func buildDifferentiabilityParamList(format: Format, leadingTrivia: Trivia? = nil ) -> DifferentiabilityParamListSyntax {
+  public func buildDifferentiabilityParamList(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiabilityParamListSyntax {
     let result = DifferentiabilityParamListSyntax(elements.map {
       $0.buildDifferentiabilityParam(format: format, leadingTrivia: nil)
     })
@@ -1428,7 +1428,7 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildDifferentiabilityParamList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsDifferentiabilityParamList`
@@ -1467,7 +1467,7 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public init (arrayLiteral elements: ExpressibleAsBackDeployVersionArgument...) {
     self.init(elements)
   }
-  public func buildBackDeployVersionList(format: Format, leadingTrivia: Trivia? = nil ) -> BackDeployVersionListSyntax {
+  public func buildBackDeployVersionList(format: Format, leadingTrivia: Trivia? = nil) -> BackDeployVersionListSyntax {
     let result = BackDeployVersionListSyntax(elements.map {
       $0.buildBackDeployVersionArgument(format: format, leadingTrivia: nil)
     })
@@ -1477,7 +1477,7 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildBackDeployVersionList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsBackDeployVersionList`
@@ -1516,7 +1516,7 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public init (arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
   }
-  public func buildSwitchCaseList(format: Format, leadingTrivia: Trivia? = nil ) -> SwitchCaseListSyntax {
+  public func buildSwitchCaseList(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseListSyntax {
     let result = SwitchCaseListSyntax(elements.map {
       $0.buildSyntax(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
@@ -1526,7 +1526,7 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildSwitchCaseList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsSwitchCaseList`
@@ -1565,7 +1565,7 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   public init (arrayLiteral elements: ExpressibleAsCatchClause...) {
     self.init(elements)
   }
-  public func buildCatchClauseList(format: Format, leadingTrivia: Trivia? = nil ) -> CatchClauseListSyntax {
+  public func buildCatchClauseList(format: Format, leadingTrivia: Trivia? = nil) -> CatchClauseListSyntax {
     let result = CatchClauseListSyntax(elements.map {
       $0.buildCatchClause(format: format, leadingTrivia: nil)
     })
@@ -1575,7 +1575,7 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCatchClauseList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsCatchClauseList`
@@ -1614,7 +1614,7 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public init (arrayLiteral elements: ExpressibleAsCaseItem...) {
     self.init(elements)
   }
-  public func buildCaseItemList(format: Format, leadingTrivia: Trivia? = nil ) -> CaseItemListSyntax {
+  public func buildCaseItemList(format: Format, leadingTrivia: Trivia? = nil) -> CaseItemListSyntax {
     let result = CaseItemListSyntax(elements.map {
       $0.buildCaseItem(format: format, leadingTrivia: nil)
     })
@@ -1624,7 +1624,7 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCaseItemList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsCaseItemList`
@@ -1663,7 +1663,7 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   public init (arrayLiteral elements: ExpressibleAsCatchItem...) {
     self.init(elements)
   }
-  public func buildCatchItemList(format: Format, leadingTrivia: Trivia? = nil ) -> CatchItemListSyntax {
+  public func buildCatchItemList(format: Format, leadingTrivia: Trivia? = nil) -> CatchItemListSyntax {
     let result = CatchItemListSyntax(elements.map {
       $0.buildCatchItem(format: format, leadingTrivia: nil)
     })
@@ -1673,7 +1673,7 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCatchItemList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsCatchItemList`
@@ -1712,7 +1712,7 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init (arrayLiteral elements: ExpressibleAsConditionElement...) {
     self.init(elements)
   }
-  public func buildConditionElementList(format: Format, leadingTrivia: Trivia? = nil ) -> ConditionElementListSyntax {
+  public func buildConditionElementList(format: Format, leadingTrivia: Trivia? = nil) -> ConditionElementListSyntax {
     let result = ConditionElementListSyntax(elements.map {
       $0.buildConditionElement(format: format, leadingTrivia: nil)
     })
@@ -1722,7 +1722,7 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildConditionElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsConditionElementList`
@@ -1761,7 +1761,7 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
   public init (arrayLiteral elements: ExpressibleAsGenericRequirement...) {
     self.init(elements)
   }
-  public func buildGenericRequirementList(format: Format, leadingTrivia: Trivia? = nil ) -> GenericRequirementListSyntax {
+  public func buildGenericRequirementList(format: Format, leadingTrivia: Trivia? = nil) -> GenericRequirementListSyntax {
     let result = GenericRequirementListSyntax(elements.map {
       $0.buildGenericRequirement(format: format, leadingTrivia: nil)
     })
@@ -1771,7 +1771,7 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildGenericRequirementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsGenericRequirementList`
@@ -1810,7 +1810,7 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init (arrayLiteral elements: ExpressibleAsGenericParameter...) {
     self.init(elements)
   }
-  public func buildGenericParameterList(format: Format, leadingTrivia: Trivia? = nil ) -> GenericParameterListSyntax {
+  public func buildGenericParameterList(format: Format, leadingTrivia: Trivia? = nil) -> GenericParameterListSyntax {
     let result = GenericParameterListSyntax(elements.map {
       $0.buildGenericParameter(format: format, leadingTrivia: nil)
     })
@@ -1820,7 +1820,7 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildGenericParameterList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsGenericParameterList`
@@ -1859,7 +1859,7 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
   public init (arrayLiteral elements: ExpressibleAsPrimaryAssociatedType...) {
     self.init(elements)
   }
-  public func buildPrimaryAssociatedTypeList(format: Format, leadingTrivia: Trivia? = nil ) -> PrimaryAssociatedTypeListSyntax {
+  public func buildPrimaryAssociatedTypeList(format: Format, leadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeListSyntax {
     let result = PrimaryAssociatedTypeListSyntax(elements.map {
       $0.buildPrimaryAssociatedType(format: format, leadingTrivia: nil)
     })
@@ -1869,7 +1869,7 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPrimaryAssociatedTypeList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsPrimaryAssociatedTypeList`
@@ -1908,7 +1908,7 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
   public init (arrayLiteral elements: ExpressibleAsCompositionTypeElement...) {
     self.init(elements)
   }
-  public func buildCompositionTypeElementList(format: Format, leadingTrivia: Trivia? = nil ) -> CompositionTypeElementListSyntax {
+  public func buildCompositionTypeElementList(format: Format, leadingTrivia: Trivia? = nil) -> CompositionTypeElementListSyntax {
     let result = CompositionTypeElementListSyntax(elements.map {
       $0.buildCompositionTypeElement(format: format, leadingTrivia: nil)
     })
@@ -1918,7 +1918,7 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCompositionTypeElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsCompositionTypeElementList`
@@ -1957,7 +1957,7 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init (arrayLiteral elements: ExpressibleAsTupleTypeElement...) {
     self.init(elements)
   }
-  public func buildTupleTypeElementList(format: Format, leadingTrivia: Trivia? = nil ) -> TupleTypeElementListSyntax {
+  public func buildTupleTypeElementList(format: Format, leadingTrivia: Trivia? = nil) -> TupleTypeElementListSyntax {
     let result = TupleTypeElementListSyntax(elements.map {
       $0.buildTupleTypeElement(format: format, leadingTrivia: nil)
     })
@@ -1967,7 +1967,7 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTupleTypeElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsTupleTypeElementList`
@@ -2006,7 +2006,7 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public init (arrayLiteral elements: ExpressibleAsGenericArgument...) {
     self.init(elements)
   }
-  public func buildGenericArgumentList(format: Format, leadingTrivia: Trivia? = nil ) -> GenericArgumentListSyntax {
+  public func buildGenericArgumentList(format: Format, leadingTrivia: Trivia? = nil) -> GenericArgumentListSyntax {
     let result = GenericArgumentListSyntax(elements.map {
       $0.buildGenericArgument(format: format, leadingTrivia: nil)
     })
@@ -2016,7 +2016,7 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildGenericArgumentList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsGenericArgumentList`
@@ -2055,7 +2055,7 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public init (arrayLiteral elements: ExpressibleAsTuplePatternElement...) {
     self.init(elements)
   }
-  public func buildTuplePatternElementList(format: Format, leadingTrivia: Trivia? = nil ) -> TuplePatternElementListSyntax {
+  public func buildTuplePatternElementList(format: Format, leadingTrivia: Trivia? = nil) -> TuplePatternElementListSyntax {
     let result = TuplePatternElementListSyntax(elements.map {
       $0.buildTuplePatternElement(format: format, leadingTrivia: nil)
     })
@@ -2065,7 +2065,7 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTuplePatternElementList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsTuplePatternElementList`
@@ -2104,7 +2104,7 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init (arrayLiteral elements: ExpressibleAsAvailabilityArgument...) {
     self.init(elements)
   }
-  public func buildAvailabilitySpecList(format: Format, leadingTrivia: Trivia? = nil ) -> AvailabilitySpecListSyntax {
+  public func buildAvailabilitySpecList(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilitySpecListSyntax {
     let result = AvailabilitySpecListSyntax(elements.map {
       $0.buildAvailabilityArgument(format: format, leadingTrivia: nil)
     })
@@ -2114,7 +2114,7 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       return result
     }
   }
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil ) -> Syntax {
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAvailabilitySpecList(format: format, leadingTrivia: leadingTrivia))
   }
   /// Conformance to `ExpressibleAsAvailabilitySpecList`

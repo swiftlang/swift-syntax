@@ -546,7 +546,7 @@ extension TokenSyntax {
     return TokenSyntax(
       .falseKeyword,
       leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: []),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: .space),
+      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: []),
       presence: presence
     )
   }
@@ -570,7 +570,7 @@ extension TokenSyntax {
     return TokenSyntax(
       .nilKeyword,
       leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: []),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: .space),
+      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: []),
       presence: presence
     )
   }
@@ -594,7 +594,7 @@ extension TokenSyntax {
     return TokenSyntax(
       .superKeyword,
       leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: []),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: .space),
+      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: []),
       presence: presence
     )
   }
@@ -606,7 +606,7 @@ extension TokenSyntax {
     return TokenSyntax(
       .selfKeyword,
       leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: []),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: .space),
+      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: []),
       presence: presence
     )
   }
@@ -618,7 +618,7 @@ extension TokenSyntax {
     return TokenSyntax(
       .capitalSelfKeyword,
       leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: []),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: .space),
+      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: []),
       presence: presence
     )
   }
@@ -630,7 +630,7 @@ extension TokenSyntax {
     return TokenSyntax(
       .trueKeyword,
       leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: []),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: .space),
+      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: []),
       presence: presence
     )
   }

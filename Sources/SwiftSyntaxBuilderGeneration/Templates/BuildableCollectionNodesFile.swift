@@ -200,7 +200,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
                         BinaryOperatorExpr("+")
                         FunctionCallExpr(MemberAccessExpr(base: "format", name: "_makeIndent"))
                       }
-                    : "nil"
+                    : NilLiteralExpr()
                 )
               }
             })

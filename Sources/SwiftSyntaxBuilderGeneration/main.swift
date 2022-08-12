@@ -40,7 +40,7 @@ let format = Format(indentWidth: 2)
 
 for (sourceFile, name) in sourceTemplates {
   let filePath = generatedPath.appendingPathComponent(name)
-  let tokenSyntax = sourceFile.buildSyntax(format: format)
-  try tokenSyntax.description.write(to: filePath, atomically: true, encoding: .utf8)
+  let syntax = sourceFile.buildSyntax(format: format)
+  try "\(syntax)\n".write(to: filePath, atomically: true, encoding: .utf8)
 }
 

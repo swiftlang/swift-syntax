@@ -189,33 +189,6 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     return ${node.name}(newData)
   }
 %     end
-
-%     # ===================
-%     # Validate layout
-%     # ===================
-
-  public func _validateLayout() {
-%     if node.is_unknown():
-    // We are verifying an unknown node. Since we don’t know anything about it
-    // we need to assume it’s valid.
-%     else:
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == ${len(node.children)})
-%       for i, child in enumerate(node.children):
-    // Check child #${i} child is ${child.type_name} ${"or missing" if child.is_optional else ""}
-%         if not child.is_optional:
-    assert(rawChildren[${i}].raw != nil)
-%         end
-    if let raw = rawChildren[${i}].raw {
-      let info = rawChildren[${i}].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(${child.type_name}.self))
-    }
-%       end
-%     end
-  }
 }
 
 extension ${node.name}: CustomReflectable {

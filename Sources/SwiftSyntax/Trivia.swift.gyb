@@ -235,7 +235,8 @@ extension TriviaPiece {
 ///
 /// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
 /// text of a the trivia.
-enum RawTriviaPiece {
+@_spi(RawSyntax)
+public enum RawTriviaPiece {
 % for trivia in TRIVIAS:
 %   if trivia.is_collection():
   case ${trivia.lower_name}s(Int)
@@ -258,7 +259,7 @@ enum RawTriviaPiece {
 }
 
 extension RawTriviaPiece: TextOutputStreamable {
-  func write<Target: TextOutputStream>(to target: inout Target) {
+  public func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)
   }
 }
@@ -278,7 +279,7 @@ extension TriviaPiece {
 }
 
 extension RawTriviaPiece {
-  var byteLength: Int {
+  public var byteLength: Int {
     switch self {
 % for trivia in TRIVIAS:
 %   if trivia.is_new_line:
@@ -290,6 +291,18 @@ extension RawTriviaPiece {
 %   else:
     case let .${trivia.lower_name}(text):
       return text.count
+%   end
+% end
+    }
+  }
+
+  var storedText: SyntaxText? {
+    switch self {
+% for trivia in TRIVIAS:
+%   if trivia.is_collection():
+    case .${trivia.lower_name}s(_): return nil
+%   else:
+    case .${trivia.lower_name}(let text): return text
 %   end
 % end
     }

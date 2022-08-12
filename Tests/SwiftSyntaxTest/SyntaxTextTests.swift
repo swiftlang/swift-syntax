@@ -1,5 +1,5 @@
 import XCTest
-@_spi(Testing) import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 final class SyntaxTextTests: XCTestCase {
   func testLiteral() throws {

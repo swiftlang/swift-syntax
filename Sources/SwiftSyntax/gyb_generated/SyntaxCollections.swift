@@ -202,13 +202,6 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(CodeBlockItemSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `CodeBlockItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -457,13 +450,6 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(Syntax.self)
-    })
   }
 }
 
@@ -714,13 +700,6 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(TupleExprElementSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `TupleExprElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -969,13 +948,6 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(ArrayElementSyntax.self)
-    })
   }
 }
 
@@ -1226,13 +1198,6 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(DictionaryElementSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `DictionaryElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -1481,13 +1446,6 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(Syntax.self)
-    })
   }
 }
 
@@ -1738,13 +1696,6 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(DeclNameArgumentSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `DeclNameArgumentListSyntax` to the `BidirectionalCollection` protocol.
@@ -1993,13 +1944,6 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(ExprSyntax.self)
-    })
   }
 }
 
@@ -2250,13 +2194,6 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(ClosureCaptureItemSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `ClosureCaptureItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -2505,13 +2442,6 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(ClosureParamSyntax.self)
-    })
   }
 }
 
@@ -2762,13 +2692,6 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(MultipleTrailingClosureElementSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `MultipleTrailingClosureElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -3017,13 +2940,6 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(ObjcNamePieceSyntax.self)
-    })
   }
 }
 
@@ -3274,13 +3190,6 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(FunctionParameterSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `FunctionParameterListSyntax` to the `BidirectionalCollection` protocol.
@@ -3529,13 +3438,6 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(IfConfigClauseSyntax.self)
-    })
   }
 }
 
@@ -3786,13 +3688,6 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(InheritedTypeSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `InheritedTypeListSyntax` to the `BidirectionalCollection` protocol.
@@ -4041,13 +3936,6 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(MemberDeclListItemSyntax.self)
-    })
   }
 }
 
@@ -4298,13 +4186,6 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(DeclModifierSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `ModifierListSyntax` to the `BidirectionalCollection` protocol.
@@ -4553,13 +4434,6 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(AccessPathComponentSyntax.self)
-    })
   }
 }
 
@@ -4810,13 +4684,6 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(AccessorDeclSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `AccessorListSyntax` to the `BidirectionalCollection` protocol.
@@ -5066,13 +4933,6 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(PatternBindingSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `PatternBindingListSyntax` to the `BidirectionalCollection` protocol.
@@ -5318,13 +5178,6 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(EnumCaseElementSyntax.self)
-    })
   }
 }
 
@@ -5575,13 +5428,6 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(TokenSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `IdentifierListSyntax` to the `BidirectionalCollection` protocol.
@@ -5830,13 +5676,6 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(Syntax.self)
-    })
   }
 }
 
@@ -6087,13 +5926,6 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(PrecedenceGroupNameElementSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `PrecedenceGroupNameListSyntax` to the `BidirectionalCollection` protocol.
@@ -6342,13 +6174,6 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(TokenSyntax.self)
-    })
   }
 }
 
@@ -6599,13 +6424,6 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(TokenSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `NonEmptyTokenListSyntax` to the `BidirectionalCollection` protocol.
@@ -6855,13 +6673,6 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(Syntax.self)
-    })
-  }
 }
 
 /// Conformance for `AttributeListSyntax` to the `BidirectionalCollection` protocol.
@@ -7109,13 +6920,6 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(Syntax.self)
-    })
   }
 }
 
@@ -7366,13 +7170,6 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(ObjCSelectorPieceSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `ObjCSelectorSyntax` to the `BidirectionalCollection` protocol.
@@ -7621,13 +7418,6 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(DifferentiabilityParamSyntax.self)
-    })
   }
 }
 
@@ -7878,13 +7668,6 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(BackDeployVersionArgumentSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `BackDeployVersionListSyntax` to the `BidirectionalCollection` protocol.
@@ -8133,13 +7916,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(Syntax.self)
-    })
   }
 }
 
@@ -8390,13 +8166,6 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(CatchClauseSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `CatchClauseListSyntax` to the `BidirectionalCollection` protocol.
@@ -8645,13 +8414,6 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(CaseItemSyntax.self)
-    })
   }
 }
 
@@ -8902,13 +8664,6 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(CatchItemSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `CatchItemListSyntax` to the `BidirectionalCollection` protocol.
@@ -9157,13 +8912,6 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(ConditionElementSyntax.self)
-    })
   }
 }
 
@@ -9414,13 +9162,6 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(GenericRequirementSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `GenericRequirementListSyntax` to the `BidirectionalCollection` protocol.
@@ -9669,13 +9410,6 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(GenericParameterSyntax.self)
-    })
   }
 }
 
@@ -9926,13 +9660,6 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(PrimaryAssociatedTypeSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `PrimaryAssociatedTypeListSyntax` to the `BidirectionalCollection` protocol.
@@ -10181,13 +9908,6 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(CompositionTypeElementSyntax.self)
-    })
   }
 }
 
@@ -10438,13 +10158,6 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(TupleTypeElementSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `TupleTypeElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -10693,13 +10406,6 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(GenericArgumentSyntax.self)
-    })
   }
 }
 
@@ -10950,13 +10656,6 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(TuplePatternElementSyntax.self)
-    })
-  }
 }
 
 /// Conformance for `TuplePatternElementListSyntax` to the `BidirectionalCollection` protocol.
@@ -11205,13 +10904,6 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
-  }
-
-  public func _validateLayout() {
-    // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
-      return Syntax(node).is(AvailabilityArgumentSyntax.self)
-    })
   }
 }
 

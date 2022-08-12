@@ -1,7 +1,12 @@
 {
-  "Syntax": [
+  "RawSyntax": [
     "RawSyntax.swift",
     "RawSyntax+CSwiftSyntax.swift",
+    "RawSyntaxNodeProtocol.swift",
+    "RawSyntaxNodes.swift",
+    "RawSyntaxValidation.swift",
+  ],
+  "Syntax": [
     "SyntaxChildren.swift",
     "SyntaxData.swift",
     "SyntaxEnum.swift",

@@ -54,7 +54,8 @@ extension RawSyntaxData.MaterializedToken {
 /// Represents the raw tree structure underlying the syntax tree. These nodes
 /// have no notion of identity and only provide structure to the tree. They
 /// are immutable and can be freely shared between syntax nodes.
-struct RawSyntax {
+@_spi(RawSyntax)
+public struct RawSyntax {
 
   /// Pointer to the actual data which resides in a SyntaxArena.
   var pointer: UnsafePointer<RawSyntaxData>
@@ -514,7 +515,7 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   /// Prints the RawSyntax node, and all of its children, to the provided
   /// stream. This implementation must be source-accurate.
   /// - Parameter stream: The stream on which to output this node.
-  func write<Target: TextOutputStream>(to target: inout Target) {
+  public func write<Target: TextOutputStream>(to target: inout Target) {
     switch rawData.payload {
     case .materializedToken(let dat):
       for p in dat.leadingTrivia { p.write(to: &target) }
@@ -530,7 +531,7 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   }
 
   /// A source-accurate description of this node.
-  var description: String {
+  public var description: String {
     var s = ""
     self.write(to: &s)
     return s
@@ -734,6 +735,7 @@ extension RawSyntax {
     descendantCount: Int,
     arena: SyntaxArena
   ) -> RawSyntax {
+    validateLayout(layout: layout, as: kind)
     let payload = RawSyntaxData.Layout(
       kind: kind, layout: layout,
       byteLength: byteLength, descendantCount: descendantCount)
@@ -756,7 +758,6 @@ extension RawSyntax {
     // Allocate and initialize the list.
     let layoutBuffer = arena.allocateRawSyntaxBuffer(count: count)
     initializer(layoutBuffer)
-    // validateLayout(layout: RawSyntaxBuffer(layoutBuffer), as: kind)
 
     // Calculate the "byte width".
     var byteLength = 0
@@ -892,7 +893,7 @@ extension RawSyntax: CustomDebugStringConvertible {
     target.write(")")
   }
 
-  var debugDescription: String {
+  public var debugDescription: String {
     var string = ""
     debugWrite(to: &string, indent: 0, withChildren: false)
     return string
@@ -900,7 +901,7 @@ extension RawSyntax: CustomDebugStringConvertible {
 }
 
 extension RawSyntax: CustomReflectable {
-  var customMirror: Mirror {
+  public var customMirror: Mirror {
     let mirrorChildren: [Any] = children.map {
       child in child ?? (nil as Any?) as Any
     }

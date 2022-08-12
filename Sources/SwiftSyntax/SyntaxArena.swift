@@ -76,13 +76,10 @@ public class SyntaxArena {
 
   /// Copies the contents of a `SyntaxText` to the memory this arena manages,
   /// and return the `SyntaxText` in the destiation.
-  func intern(_ value: SyntaxText) -> SyntaxText {
-    // Return the passed-in value if it's
-    // * empty,
-    // * a part of "source buffer", or
-    // * in the memory allocated by this arena
-    if (value.isEmpty || sourceBufferContains(value.baseAddress!) ||
-        allocator.contains(address: value.baseAddress!)) {
+  @_spi(RawSyntax)
+  public func intern(_ value: SyntaxText) -> SyntaxText {
+    // Return the passed-in value if it's already managed by this arena.
+    if (self.contains(text: value)) {
       return value
     }
 
@@ -140,6 +137,16 @@ public class SyntaxArena {
     return children.contains { child in
       child === arena  || child.contains(arena: arena)
     }
+  }
+
+  /// Checks if the given syntax text is managed by this arena.
+  ///
+  /// "managed" means it's empty, a part of "source buffer", or in the memory
+  /// allocated by the underlying arena.
+  func contains(text: SyntaxText) -> Bool {
+    return (text.isEmpty ||
+            sourceBufferContains(text.baseAddress!) ||
+            allocator.contains(address: text.baseAddress!))
   }
 }
 

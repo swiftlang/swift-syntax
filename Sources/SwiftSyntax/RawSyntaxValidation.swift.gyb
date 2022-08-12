@@ -1,0 +1,55 @@
+%{
+  from gyb_syntax_support import *
+  # -*- mode: Swift -*-
+  # Ignore the following admonition; it applies to the resulting .swift file only
+}%
+//// Automatically Generated From RawSyntaxValidation.swift.gyb.
+//// Do Not Edit Directly!
+//===----------- RawSyntaxValidation.swift - Layout validation ------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+
+/// Check that the `layout` is valid for the given 'SyntaxKind'.
+///
+/// Note that this only validates the immediate children.
+/// Results in an assertion failure if the layout is invalid.
+func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
+#if DEBUG
+  func _verify<Node: RawSyntaxNodeProtocol>(_ raw: RawSyntax?, as _: Node.Type, file: StaticString = #file, line: UInt = #line) {
+    assert(raw != nil, file: file, line: line)
+    assert(Node.isKindOf(raw!), file: file, line: line)
+  }
+  func _verify<Node: RawSyntaxNodeProtocol>(_ raw: RawSyntax?, as _: Node?.Type, file: StaticString = #file, line: UInt = #line) {
+    raw.map { assert(Node.isKindOf($0), file: file, line: line) }
+  }
+  switch kind {
+  case .unknown:
+    break
+  case .token:
+    assertionFailure("validateLayout for .token kind is not supported")
+% for node in NON_BASE_SYNTAX_NODES:
+  case .${node.swift_syntax_kind}:
+%   if node.is_buildable() or node.is_missing():
+    assert(layout.count == ${len(node.children)})
+%     for (idx, child) in enumerate(node.children):
+    _verify(layout[${idx}], as: Raw${child.type_name}${"?" if child.is_optional else ""}.self)
+%     end
+%   elif node.is_syntax_collection():
+    for element in layout {
+      _verify(element, as: Raw${node.collection_element_type}.self)
+    }
+%   end
+    break
+% end
+  }
+#endif
+}

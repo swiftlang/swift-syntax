@@ -375,7 +375,8 @@ extension TriviaPiece {
 ///
 /// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
 /// text of a the trivia.
-enum RawTriviaPiece {
+@_spi(RawSyntax)
+public enum RawTriviaPiece {
   case spaces(Int)
   case tabs(Int)
   case verticalTabs(Int)
@@ -410,7 +411,7 @@ enum RawTriviaPiece {
 }
 
 extension RawTriviaPiece: TextOutputStreamable {
-  func write<Target: TextOutputStream>(to target: inout Target) {
+  public func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)
   }
 }
@@ -436,7 +437,7 @@ extension TriviaPiece {
 }
 
 extension RawTriviaPiece {
-  var byteLength: Int {
+  public var byteLength: Int {
     switch self {
     case let .spaces(count):
       return count
@@ -464,6 +465,24 @@ extension RawTriviaPiece {
       return text.count
     case let .shebang(text):
       return text.count
+    }
+  }
+
+  var storedText: SyntaxText? {
+    switch self {
+    case .spaces(_): return nil
+    case .tabs(_): return nil
+    case .verticalTabs(_): return nil
+    case .formfeeds(_): return nil
+    case .newlines(_): return nil
+    case .carriageReturns(_): return nil
+    case .carriageReturnLineFeeds(_): return nil
+    case .lineComment(let text): return text
+    case .blockComment(let text): return text
+    case .docLineComment(let text): return text
+    case .docBlockComment(let text): return text
+    case .garbageText(let text): return text
+    case .shebang(let text): return text
     }
   }
 }

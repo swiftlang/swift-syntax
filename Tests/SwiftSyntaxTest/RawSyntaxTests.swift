@@ -36,30 +36,49 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
 
 final class RawSyntaxTests: XCTestCase {
 
-    func testFactory() throws {
-      withExtendedLifetime(SyntaxArena()) { arena in
-        let structDecl = cannedStructDecl(arena: arena)
-        XCTAssertEqual("\(structDecl.raw)",
+  func testFactory() throws {
+    withExtendedLifetime(SyntaxArena()) { arena in
+      let structDecl = cannedStructDecl(arena: arena)
+      XCTAssertEqual("\(structDecl.raw)",
                        """
                        struct Foo {
                        }
                        """)
-      }
     }
+  }
 
-    func testAccessor() throws {
-      withExtendedLifetime(SyntaxArena()) { arena in
-        let structDecl = cannedStructDecl(arena: arena)
-        XCTAssertEqual(structDecl.identifier.tokenKind, .identifier)
-        XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
-        XCTAssertEqual(structDecl.members.leftBrace.tokenText, "{")
-        XCTAssertEqual(structDecl.members.members.elements.count, 0)
+  func testAccessor() throws {
+    withExtendedLifetime(SyntaxArena()) { arena in
+      let structDecl = cannedStructDecl(arena: arena)
+      XCTAssertEqual(structDecl.identifier.tokenKind, .identifier)
+      XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
+      XCTAssertEqual(structDecl.members.leftBrace.tokenText, "{")
+      XCTAssertEqual(structDecl.members.members.elements.count, 0)
 
-        XCTAssert(structDecl.is(RawDeclSyntax.self))
-        XCTAssertNotNil(structDecl.as(RawDeclSyntax.self))
-        XCTAssertNil(structDecl.as(RawClassDeclSyntax.self))
-        XCTAssertFalse(structDecl.is(RawTypeSyntax.self))
-      }
+      XCTAssert(structDecl.is(RawDeclSyntax.self))
+      XCTAssertNotNil(structDecl.as(RawDeclSyntax.self))
+      XCTAssertNil(structDecl.as(RawClassDeclSyntax.self))
+      XCTAssertFalse(structDecl.is(RawTypeSyntax.self))
     }
+  }
+
+  func testMaterializedToken() throws {
+    withExtendedLifetime(SyntaxArena()) { arena in
+      let ident = RawTokenSyntax(
+        kind: .identifier, text: arena.intern("foo"),
+        leadingTriviaPieces: [], trailingTriviaPieces: [],
+        arena: arena)
+      XCTAssertEqual(ident.tokenKind, .identifier)
+      XCTAssertEqual(ident.tokenText, "foo")
+      XCTAssertEqual(ident.presence, .present)
+      XCTAssertEqual(ident.description, "foo")
+
+      let missingIdent = RawTokenSyntax(missing: .identifier, arena: arena)
+      XCTAssertEqual(missingIdent.presence, .missing)
+      XCTAssertEqual(missingIdent.tokenText, "")
+      XCTAssertEqual(missingIdent.description, "")
+    }
+  }
+
 
 }

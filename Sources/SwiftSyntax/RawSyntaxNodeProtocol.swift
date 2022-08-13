@@ -13,7 +13,7 @@
 /// All typed raw syntax nodes conform to this protocol.
 /// `RawXXXSyntax` is a typed wrappeer of `RawSyntax`.
 @_spi(RawSyntax)
-public protocol RawSyntaxNodeProtocol {
+public protocol RawSyntaxNodeProtocol: CustomStringConvertible, TextOutputStreamable {
   /// Returns `true` if `raw` can be cast to this concrete raw syntax type.
   static func isKindOf(_ raw: RawSyntax) -> Bool
 
@@ -33,6 +33,14 @@ public extension RawSyntaxNodeProtocol {
   /// Check if this instance can be cast to the specified syntax type.
   func `is`<Node: RawSyntaxNodeProtocol>(_: Node.Type) -> Bool {
     Node.isKindOf(self.raw)
+  }
+
+  var description: String {
+    raw.description
+  }
+
+  func write<Target>(to target: inout Target) where Target : TextOutputStream {
+    raw.write(to: &target)
   }
 }
 
@@ -98,7 +106,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     assert(arena.contains(text: text), "token text must be managed by the arena")
     let totalTriviaCount = leadingTriviaPieces.count + trailingTriviaPieces.count
     let buffer = arena.allocateRawTriviaPieceBuffer(count: totalTriviaCount)
-    var byteLength = 0
+    var byteLength = text.count
     if totalTriviaCount != 0 {
       var ptr = buffer.baseAddress!
       for piece in leadingTriviaPieces + trailingTriviaPieces {

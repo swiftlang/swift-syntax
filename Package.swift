@@ -41,7 +41,7 @@ let package = Package(
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
-    .executable(name: "SwiftSyntaxBuilderGeneration", targets: ["SwiftSyntaxBuilderGeneration"])
+    .executable(name: "generate-swift-syntax-builder", targets: ["generate-swift-syntax-builder"])
   ],
   targets: [
     .target(
@@ -100,7 +100,7 @@ let package = Package(
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
     ),
     .executableTarget(
-        name: "SwiftSyntaxBuilderGeneration",
+        name: "generate-swift-syntax-builder",
         dependencies: ["SwiftSyntaxBuilder"],
         exclude: [
           "gyb_helpers",

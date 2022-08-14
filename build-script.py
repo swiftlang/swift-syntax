@@ -19,8 +19,8 @@ SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
-SWIFTSYNTAXBUILDERGENERATION_DIR = \
-        os.path.join(SOURCES_DIR, "SwiftSyntaxBuilderGeneration")
+GENERATESWIFTSYNTAXBUILDER_DIR = \
+        os.path.join(SOURCES_DIR, "generate-swift-syntax-builder")
 
 LLVM_DIR = os.path.join(WORKSPACE_DIR, "llvm-project", "llvm")
 SWIFT_DIR = os.path.join(WORKSPACE_DIR, "swift")
@@ -291,13 +291,13 @@ def gyb_dir_mapping(
     swiftsyntax_destination: Optional[str] = None,
     swiftsyntaxbuilder_destination: Optional[str] = None,
     swiftsyntaxparser_destination: Optional[str] = None,
-    swiftsyntaxbuildergenerator_destination: Optional[str] = None,
+    generateswiftsyntaxbuilder_destination: Optional[str] = None,
 ) -> Dict[str, Optional[str]]:
     return {
         SWIFTSYNTAX_DIR: swiftsyntax_destination,
         SWIFTSYNTAXBUILDER_DIR: swiftsyntaxbuilder_destination,
         SWIFTSYNTAXPARSER_DIR: swiftsyntaxparser_destination,
-        SWIFTSYNTAXBUILDERGENERATION_DIR: swiftsyntaxbuildergenerator_destination,
+        GENERATESWIFTSYNTAXBUILDER_DIR: generateswiftsyntaxbuilder_destination,
     }
 
 
@@ -343,7 +343,7 @@ def run_code_generation(
     )
 
     swiftpm_call.extend([
-        "SwiftSyntaxBuilderGeneration", swiftsyntaxbuilder_destination
+        "generate-swift-syntax-builder", swiftsyntaxbuilder_destination
     ])
 
     if verbose:
@@ -456,7 +456,7 @@ def verify_generated_files(gyb_exec: str, verbose: bool) -> None:
         swiftsyntax_destination=tempfile.mkdtemp(),
         swiftsyntaxbuilder_destination=tempfile.mkdtemp(),
         swiftsyntaxparser_destination=tempfile.mkdtemp(),
-        swiftsyntaxbuildergenerator_destination=tempfile.mkdtemp(),
+        generateswiftsyntaxbuilder_destination=tempfile.mkdtemp(),
     )
 
     generate_gyb_files(
@@ -745,7 +745,7 @@ def build_command(args: argparse.Namespace) -> None:
         builder.build("SwiftSyntax")
         builder.build("SwiftSyntaxParser")
         builder.build("SwiftSyntaxBuilder")
-        builder.build("SwiftSyntaxBuilderGeneration")
+        builder.build("generate-swift-syntax-builder")
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 
@@ -875,7 +875,7 @@ def parse_args() -> argparse.Namespace:
         "--gyb-only",
         action="store_true",
         help="""
-        Only generate gyb templates (and not SwiftSyntaxBuilderGeneration's templates)
+        Only generate gyb templates (and not generate-swift-syntax-builder's templates)
         """,
     )
 

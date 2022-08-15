@@ -376,7 +376,7 @@ extension TriviaPiece {
 /// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
 /// text of a the trivia.
 @_spi(RawSyntax)
-public enum RawTriviaPiece {
+public enum RawTriviaPiece: Equatable {
   case spaces(Int)
   case tabs(Int)
   case verticalTabs(Int)
@@ -518,6 +518,20 @@ extension RawTriviaPiece {
       return .shebang(text)
     default:
       fatalError("unexpected trivia piece kind \(kind)")
+    }
+  }
+}
+
+extension RawTriviaPiece {
+  /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
+  public var isNewline: Bool {
+    switch self {
+    case .newlines,
+         .carriageReturns,
+         .carriageReturnLineFeeds:
+      return true
+    default:
+      return false
     }
   }
 }

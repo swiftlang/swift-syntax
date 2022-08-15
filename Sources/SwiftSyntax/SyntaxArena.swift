@@ -143,7 +143,8 @@ public class SyntaxArena {
   ///
   /// "managed" means it's empty, a part of "source buffer", or in the memory
   /// allocated by the underlying arena.
-  func contains(text: SyntaxText) -> Bool {
+  @_spi(RawSyntax)
+  public func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty ||
             sourceBufferContains(text.baseAddress!) ||
             allocator.contains(address: text.baseAddress!))

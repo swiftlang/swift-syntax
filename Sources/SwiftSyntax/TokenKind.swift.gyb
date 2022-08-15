@@ -170,6 +170,64 @@ public enum RawTokenKind {
     default: return nil
     }
   }
+
+  /// Returns `true` if the token is a Swift keyword.
+  ///
+  /// Keywords are reserved unconditionally for use by Swift and may not
+  /// appear as identifiers in any position without being escaped. For example,
+  /// `class`, `func`, or `import`.
+  public var isKeyword: Bool {
+    switch self {
+    case .eof: return false
+% for token in SYNTAX_TOKENS:
+%   if token.is_keyword:
+    case .${token.swift_kind()}: return true
+%   else:
+    case .${token.swift_kind()}: return false
+%   end
+% end
+    }
+  }
+
+  /// Returns `true` if the token is a Swift punctuator.
+  ///
+  /// Punctuation tokens generally separate identifiers from each other. For
+  /// example, the '<' and '>' characters in a generic parameter list, or the
+  /// quote characters in a string literal.
+  public var isPunctuation: Bool {
+    switch self {
+    case .eof: return false
+% for token in SYNTAX_TOKENS:
+%   if type(token).__name__ == 'Punctuator':
+    case .${token.swift_kind()}: return true
+%   else:
+    case .${token.swift_kind()}: return false
+%   end
+% end
+    }
+  }
+  
+  @_spi(RawSyntax)
+  public init?(keyword text: SyntaxText) {
+%{
+tokens_by_length = {}
+for token in SYNTAX_TOKENS:
+  if token.is_keyword:
+    tokens_by_length.setdefault(len(token.text), []).append(token)
+}%
+    switch text.count {
+% for len, tokens in sorted(tokens_by_length.items()):
+    case ${len}:
+      switch text {
+%   for token in tokens:
+      case "${token.text}": self = .${token.swift_kind()}
+%   end
+      default: return nil
+      }
+% end
+    default: return nil
+    }
+  }
 }
 
 extension TokenKind {

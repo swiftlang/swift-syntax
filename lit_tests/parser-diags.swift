@@ -1,7 +1,5 @@
 // RUN: %lit-test-helper -source-file %s -dump-diags 2>&1 | %FileCheck %s
 
-// REQUIRES: rdar71046813
-
 // CHECK: [[@LINE+2]]:11 error: consecutive statements on a line must be separated by ';'
 // CHECK-NEXT: Fixit: ([[@LINE+1]]:11,[[@LINE+1]]:11) Text: ";"
 let number⁚ Int

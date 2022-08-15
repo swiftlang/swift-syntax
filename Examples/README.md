@@ -29,6 +29,8 @@
 
 [**swift-format**](https://github.com/apple/swift-format): formatting technology for Swift source code.
 
+[**SwiftLint**](https://github.com/realm/SwiftLint): A tool to enforce Swift style and conventions.
+
 [**SwiftPack**](https://github.com/omochi/SwiftPack): a tool for automatically embedding Swift library source.
 
 [**SwiftRewriter**](https://github.com/inamiy/SwiftRewriter): a Swift code formatter.

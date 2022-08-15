@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class ArrayExprTests: XCTestCase {
   func testArrayExpr() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     
     let testCases: [UInt: (ExpressibleAsArrayExpr, String)] = [
       #line: (ArrayElementList(), "␣[]"),

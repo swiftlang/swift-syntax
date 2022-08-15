@@ -153,8 +153,8 @@ public class AbsolutePositionTests: XCTestCase {
     var modifiedStatements1 = root.withLeadingTrivia([.carriageReturnLineFeeds(3)])
     XCTAssertEqual([.carriageReturnLineFeeds(3)], modifiedStatements1.leadingTrivia)
     XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.statements.leadingTrivia)
-    modifiedStatements1.leadingTrivia = [.garbageText("GARBAGE")]
-    XCTAssertEqual([.garbageText("GARBAGE")], modifiedStatements1.leadingTrivia)
+    modifiedStatements1.leadingTrivia = [.unexpectedText("UNEXPECTED")]
+    XCTAssertEqual([.unexpectedText("UNEXPECTED")], modifiedStatements1.leadingTrivia)
 
     var modifiedStatements2 = root.withTrailingTrivia([.formfeeds(1), .carriageReturns(3)])
     XCTAssertEqual([.formfeeds(1), .carriageReturns(3)], modifiedStatements2.trailingTrivia)

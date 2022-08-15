@@ -64,11 +64,11 @@ extension MissingSyntax: CustomReflectable {
 /// 
 public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeItem
+    case unexpectedBeforeItem
     case item
-    case garbageBetweenItemAndSemicolon
+    case unexpectedBetweenItemAndSemicolon
     case semicolon
-    case garbageBetweenSemicolonAndErrorTokens
+    case unexpectedBetweenSemicolonAndErrorTokens
     case errorTokens
   }
 
@@ -90,19 +90,19 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeItem: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil,
     item: Syntax,
-    _ garbageBetweenItemAndSemicolon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
     semicolon: TokenSyntax?,
-    _ garbageBetweenSemicolonAndErrorTokens: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? = nil,
     errorTokens: Syntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeItem?.raw,
+      unexpectedBeforeItem?.raw,
       item.raw,
-      garbageBetweenItemAndSemicolon?.raw,
+      unexpectedBetweenItemAndSemicolon?.raw,
       semicolon?.raw,
-      garbageBetweenSemicolonAndErrorTokens?.raw,
+      unexpectedBetweenSemicolonAndErrorTokens?.raw,
       errorTokens?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItem,
@@ -115,25 +115,25 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeItem: GarbageNodesSyntax? {
+  public var unexpectedBeforeItem: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeItem,
+      let childData = data.child(at: Cursor.unexpectedBeforeItem,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeItem(value)
+      self = withUnexpectedBeforeItem(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeItem` replaced.
-  /// - param newChild: The new `garbageBeforeItem` to replace the node's
-  ///                   current `garbageBeforeItem`, if present.
-  public func withGarbageBeforeItem(
-    _ newChild: GarbageNodesSyntax?) -> CodeBlockItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeItem` replaced.
+  /// - param newChild: The new `unexpectedBeforeItem` to replace the node's
+  ///                   current `unexpectedBeforeItem`, if present.
+  public func withUnexpectedBeforeItem(
+    _ newChild: UnexpectedNodesSyntax?) -> CodeBlockItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeItem)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeItem)
     return CodeBlockItemSyntax(newData)
   }
 
@@ -159,25 +159,25 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     return CodeBlockItemSyntax(newData)
   }
 
-  public var garbageBetweenItemAndSemicolon: GarbageNodesSyntax? {
+  public var unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenItemAndSemicolon,
+      let childData = data.child(at: Cursor.unexpectedBetweenItemAndSemicolon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenItemAndSemicolon(value)
+      self = withUnexpectedBetweenItemAndSemicolon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenItemAndSemicolon` replaced.
-  /// - param newChild: The new `garbageBetweenItemAndSemicolon` to replace the node's
-  ///                   current `garbageBetweenItemAndSemicolon`, if present.
-  public func withGarbageBetweenItemAndSemicolon(
-    _ newChild: GarbageNodesSyntax?) -> CodeBlockItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenItemAndSemicolon` replaced.
+  /// - param newChild: The new `unexpectedBetweenItemAndSemicolon` to replace the node's
+  ///                   current `unexpectedBetweenItemAndSemicolon`, if present.
+  public func withUnexpectedBetweenItemAndSemicolon(
+    _ newChild: UnexpectedNodesSyntax?) -> CodeBlockItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenItemAndSemicolon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenItemAndSemicolon)
     return CodeBlockItemSyntax(newData)
   }
 
@@ -206,25 +206,25 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     return CodeBlockItemSyntax(newData)
   }
 
-  public var garbageBetweenSemicolonAndErrorTokens: GarbageNodesSyntax? {
+  public var unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenSemicolonAndErrorTokens,
+      let childData = data.child(at: Cursor.unexpectedBetweenSemicolonAndErrorTokens,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenSemicolonAndErrorTokens(value)
+      self = withUnexpectedBetweenSemicolonAndErrorTokens(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenSemicolonAndErrorTokens` replaced.
-  /// - param newChild: The new `garbageBetweenSemicolonAndErrorTokens` to replace the node's
-  ///                   current `garbageBetweenSemicolonAndErrorTokens`, if present.
-  public func withGarbageBetweenSemicolonAndErrorTokens(
-    _ newChild: GarbageNodesSyntax?) -> CodeBlockItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenSemicolonAndErrorTokens` replaced.
+  /// - param newChild: The new `unexpectedBetweenSemicolonAndErrorTokens` to replace the node's
+  ///                   current `unexpectedBetweenSemicolonAndErrorTokens`, if present.
+  public func withUnexpectedBetweenSemicolonAndErrorTokens(
+    _ newChild: UnexpectedNodesSyntax?) -> CodeBlockItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSemicolonAndErrorTokens)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSemicolonAndErrorTokens)
     return CodeBlockItemSyntax(newData)
   }
 
@@ -254,11 +254,11 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension CodeBlockItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeItem": garbageBeforeItem.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeItem": unexpectedBeforeItem.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "item": Syntax(item).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenItemAndSemicolon": garbageBetweenItemAndSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenItemAndSemicolon": unexpectedBetweenItemAndSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "semicolon": semicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenSemicolonAndErrorTokens": garbageBetweenSemicolonAndErrorTokens.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenSemicolonAndErrorTokens": unexpectedBetweenSemicolonAndErrorTokens.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "errorTokens": errorTokens.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -268,11 +268,11 @@ extension CodeBlockItemSyntax: CustomReflectable {
 
 public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftBrace
+    case unexpectedBeforeLeftBrace
     case leftBrace
-    case garbageBetweenLeftBraceAndStatements
+    case unexpectedBetweenLeftBraceAndStatements
     case statements
-    case garbageBetweenStatementsAndRightBrace
+    case unexpectedBetweenStatementsAndRightBrace
     case rightBrace
   }
 
@@ -294,19 +294,19 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
     leftBrace: TokenSyntax,
-    _ garbageBetweenLeftBraceAndStatements: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil,
     statements: CodeBlockItemListSyntax,
-    _ garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
     rightBrace: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftBrace?.raw,
+      unexpectedBeforeLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndStatements?.raw,
+      unexpectedBetweenLeftBraceAndStatements?.raw,
       statements.raw,
-      garbageBetweenStatementsAndRightBrace?.raw,
+      unexpectedBetweenStatementsAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlock,
@@ -319,25 +319,25 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftBrace: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftBrace,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftBrace,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftBrace(value)
+      self = withUnexpectedBeforeLeftBrace(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftBrace` replaced.
-  /// - param newChild: The new `garbageBeforeLeftBrace` to replace the node's
-  ///                   current `garbageBeforeLeftBrace`, if present.
-  public func withGarbageBeforeLeftBrace(
-    _ newChild: GarbageNodesSyntax?) -> CodeBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftBrace` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftBrace` to replace the node's
+  ///                   current `unexpectedBeforeLeftBrace`, if present.
+  public func withUnexpectedBeforeLeftBrace(
+    _ newChild: UnexpectedNodesSyntax?) -> CodeBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftBrace)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftBrace)
     return CodeBlockSyntax(newData)
   }
 
@@ -362,25 +362,25 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return CodeBlockSyntax(newData)
   }
 
-  public var garbageBetweenLeftBraceAndStatements: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftBraceAndStatements,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftBraceAndStatements,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftBraceAndStatements(value)
+      self = withUnexpectedBetweenLeftBraceAndStatements(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftBraceAndStatements` replaced.
-  /// - param newChild: The new `garbageBetweenLeftBraceAndStatements` to replace the node's
-  ///                   current `garbageBetweenLeftBraceAndStatements`, if present.
-  public func withGarbageBetweenLeftBraceAndStatements(
-    _ newChild: GarbageNodesSyntax?) -> CodeBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftBraceAndStatements` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftBraceAndStatements` to replace the node's
+  ///                   current `unexpectedBetweenLeftBraceAndStatements`, if present.
+  public func withUnexpectedBetweenLeftBraceAndStatements(
+    _ newChild: UnexpectedNodesSyntax?) -> CodeBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftBraceAndStatements)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftBraceAndStatements)
     return CodeBlockSyntax(newData)
   }
 
@@ -424,25 +424,25 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return CodeBlockSyntax(newData)
   }
 
-  public var garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? {
+  public var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenStatementsAndRightBrace,
+      let childData = data.child(at: Cursor.unexpectedBetweenStatementsAndRightBrace,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenStatementsAndRightBrace(value)
+      self = withUnexpectedBetweenStatementsAndRightBrace(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenStatementsAndRightBrace` replaced.
-  /// - param newChild: The new `garbageBetweenStatementsAndRightBrace` to replace the node's
-  ///                   current `garbageBetweenStatementsAndRightBrace`, if present.
-  public func withGarbageBetweenStatementsAndRightBrace(
-    _ newChild: GarbageNodesSyntax?) -> CodeBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenStatementsAndRightBrace` replaced.
+  /// - param newChild: The new `unexpectedBetweenStatementsAndRightBrace` to replace the node's
+  ///                   current `unexpectedBetweenStatementsAndRightBrace`, if present.
+  public func withUnexpectedBetweenStatementsAndRightBrace(
+    _ newChild: UnexpectedNodesSyntax?) -> CodeBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenStatementsAndRightBrace)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenStatementsAndRightBrace)
     return CodeBlockSyntax(newData)
   }
 
@@ -471,11 +471,11 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension CodeBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftBrace": garbageBeforeLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftBrace": unexpectedBeforeLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftBraceAndStatements": garbageBetweenLeftBraceAndStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftBraceAndStatements": unexpectedBetweenLeftBraceAndStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "statements": Syntax(statements).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenStatementsAndRightBrace": garbageBetweenStatementsAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenStatementsAndRightBrace": unexpectedBetweenStatementsAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -485,9 +485,9 @@ extension CodeBlockSyntax: CustomReflectable {
 
 public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndColon
+    case unexpectedBetweenNameAndColon
     case colon
   }
 
@@ -509,15 +509,15 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndColon?.raw,
       colon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgument,
@@ -530,25 +530,25 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> DeclNameArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclNameArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return DeclNameArgumentSyntax(newData)
   }
 
@@ -573,25 +573,25 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclNameArgumentSyntax(newData)
   }
 
-  public var garbageBetweenNameAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndColon(value)
+      self = withUnexpectedBetweenNameAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndColon` to replace the node's
-  ///                   current `garbageBetweenNameAndColon`, if present.
-  public func withGarbageBetweenNameAndColon(
-    _ newChild: GarbageNodesSyntax?) -> DeclNameArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndColon` to replace the node's
+  ///                   current `unexpectedBetweenNameAndColon`, if present.
+  public func withUnexpectedBetweenNameAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclNameArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndColon)
     return DeclNameArgumentSyntax(newData)
   }
 
@@ -620,9 +620,9 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclNameArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndColon": garbageBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndColon": unexpectedBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -632,11 +632,11 @@ extension DeclNameArgumentSyntax: CustomReflectable {
 
 public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftParen
+    case unexpectedBeforeLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndArguments
+    case unexpectedBetweenLeftParenAndArguments
     case arguments
-    case garbageBetweenArgumentsAndRightParen
+    case unexpectedBetweenArgumentsAndRightParen
     case rightParen
   }
 
@@ -658,19 +658,19 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
     arguments: DeclNameArgumentListSyntax,
-    _ garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndArguments?.raw,
+      unexpectedBetweenLeftParenAndArguments?.raw,
       arguments.raw,
-      garbageBetweenArgumentsAndRightParen?.raw,
+      unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArguments,
@@ -683,25 +683,25 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftParen(value)
+      self = withUnexpectedBeforeLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftParen` replaced.
-  /// - param newChild: The new `garbageBeforeLeftParen` to replace the node's
-  ///                   current `garbageBeforeLeftParen`, if present.
-  public func withGarbageBeforeLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> DeclNameArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
+  ///                   current `unexpectedBeforeLeftParen`, if present.
+  public func withUnexpectedBeforeLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclNameArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftParen)
     return DeclNameArgumentsSyntax(newData)
   }
 
@@ -726,25 +726,25 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclNameArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndArguments,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndArguments,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndArguments(value)
+      self = withUnexpectedBetweenLeftParenAndArguments(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndArguments` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndArguments` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndArguments`, if present.
-  public func withGarbageBetweenLeftParenAndArguments(
-    _ newChild: GarbageNodesSyntax?) -> DeclNameArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndArguments` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndArguments`, if present.
+  public func withUnexpectedBetweenLeftParenAndArguments(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclNameArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndArguments)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndArguments)
     return DeclNameArgumentsSyntax(newData)
   }
 
@@ -788,25 +788,25 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclNameArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenArgumentsAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenArgumentsAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenArgumentsAndRightParen(value)
+      self = withUnexpectedBetweenArgumentsAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenArgumentsAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenArgumentsAndRightParen` to replace the node's
-  ///                   current `garbageBetweenArgumentsAndRightParen`, if present.
-  public func withGarbageBetweenArgumentsAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> DeclNameArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentsAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenArgumentsAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenArgumentsAndRightParen`, if present.
+  public func withUnexpectedBetweenArgumentsAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclNameArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenArgumentsAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenArgumentsAndRightParen)
     return DeclNameArgumentsSyntax(newData)
   }
 
@@ -835,11 +835,11 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclNameArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftParen": garbageBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndArguments": garbageBetweenLeftParenAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndArguments": unexpectedBetweenLeftParenAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arguments": Syntax(arguments).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenArgumentsAndRightParen": garbageBetweenArgumentsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenArgumentsAndRightParen": unexpectedBetweenArgumentsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -849,13 +849,13 @@ extension DeclNameArgumentsSyntax: CustomReflectable {
 
 public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabel
+    case unexpectedBeforeLabel
     case label
-    case garbageBetweenLabelAndColon
+    case unexpectedBetweenLabelAndColon
     case colon
-    case garbageBetweenColonAndExpression
+    case unexpectedBetweenColonAndExpression
     case expression
-    case garbageBetweenExpressionAndTrailingComma
+    case unexpectedBetweenExpressionAndTrailingComma
     case trailingComma
   }
 
@@ -877,23 +877,23 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax?,
-    _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax?,
-    _ garbageBetweenColonAndExpression: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? = nil,
     expression: ExprSyntax,
-    _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label?.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndExpression?.raw,
+      unexpectedBetweenColonAndExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndTrailingComma?.raw,
+      unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElement,
@@ -906,25 +906,25 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabel(value)
+      self = withUnexpectedBeforeLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabel` replaced.
-  /// - param newChild: The new `garbageBeforeLabel` to replace the node's
-  ///                   current `garbageBeforeLabel`, if present.
-  public func withGarbageBeforeLabel(
-    _ newChild: GarbageNodesSyntax?) -> TupleExprElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeLabel` to replace the node's
+  ///                   current `unexpectedBeforeLabel`, if present.
+  public func withUnexpectedBeforeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleExprElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLabel)
     return TupleExprElementSyntax(newData)
   }
 
@@ -950,25 +950,25 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleExprElementSyntax(newData)
   }
 
-  public var garbageBetweenLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelAndColon(value)
+      self = withUnexpectedBetweenLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenLabelAndColon`, if present.
-  public func withGarbageBetweenLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> TupleExprElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenLabelAndColon`, if present.
+  public func withUnexpectedBetweenLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleExprElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelAndColon)
     return TupleExprElementSyntax(newData)
   }
 
@@ -994,25 +994,25 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleExprElementSyntax(newData)
   }
 
-  public var garbageBetweenColonAndExpression: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndExpression,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndExpression,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndExpression(value)
+      self = withUnexpectedBetweenColonAndExpression(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndExpression` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndExpression` to replace the node's
-  ///                   current `garbageBetweenColonAndExpression`, if present.
-  public func withGarbageBetweenColonAndExpression(
-    _ newChild: GarbageNodesSyntax?) -> TupleExprElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndExpression` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndExpression` to replace the node's
+  ///                   current `unexpectedBetweenColonAndExpression`, if present.
+  public func withUnexpectedBetweenColonAndExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleExprElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndExpression)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndExpression)
     return TupleExprElementSyntax(newData)
   }
 
@@ -1037,25 +1037,25 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleExprElementSyntax(newData)
   }
 
-  public var garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenExpressionAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenExpressionAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenExpressionAndTrailingComma(value)
+      self = withUnexpectedBetweenExpressionAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenExpressionAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenExpressionAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenExpressionAndTrailingComma`, if present.
-  public func withGarbageBetweenExpressionAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> TupleExprElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenExpressionAndTrailingComma`, if present.
+  public func withUnexpectedBetweenExpressionAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleExprElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenExpressionAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenExpressionAndTrailingComma)
     return TupleExprElementSyntax(newData)
   }
 
@@ -1085,13 +1085,13 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension TupleExprElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabel": garbageBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "label": label.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelAndColon": garbageBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenColonAndExpression": garbageBetweenColonAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndExpression": unexpectedBetweenColonAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenExpressionAndTrailingComma": garbageBetweenExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenExpressionAndTrailingComma": unexpectedBetweenExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -1101,9 +1101,9 @@ extension TupleExprElementSyntax: CustomReflectable {
 
 public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeExpression
+    case unexpectedBeforeExpression
     case expression
-    case garbageBetweenExpressionAndTrailingComma
+    case unexpectedBetweenExpressionAndTrailingComma
     case trailingComma
   }
 
@@ -1125,15 +1125,15 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeExpression: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
     expression: ExprSyntax,
-    _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndTrailingComma?.raw,
+      unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElement,
@@ -1146,25 +1146,25 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeExpression: GarbageNodesSyntax? {
+  public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeExpression,
+      let childData = data.child(at: Cursor.unexpectedBeforeExpression,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeExpression(value)
+      self = withUnexpectedBeforeExpression(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeExpression` replaced.
-  /// - param newChild: The new `garbageBeforeExpression` to replace the node's
-  ///                   current `garbageBeforeExpression`, if present.
-  public func withGarbageBeforeExpression(
-    _ newChild: GarbageNodesSyntax?) -> ArrayElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeExpression` replaced.
+  /// - param newChild: The new `unexpectedBeforeExpression` to replace the node's
+  ///                   current `unexpectedBeforeExpression`, if present.
+  public func withUnexpectedBeforeExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> ArrayElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeExpression)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeExpression)
     return ArrayElementSyntax(newData)
   }
 
@@ -1189,25 +1189,25 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
     return ArrayElementSyntax(newData)
   }
 
-  public var garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenExpressionAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenExpressionAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenExpressionAndTrailingComma(value)
+      self = withUnexpectedBetweenExpressionAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenExpressionAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenExpressionAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenExpressionAndTrailingComma`, if present.
-  public func withGarbageBetweenExpressionAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> ArrayElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenExpressionAndTrailingComma`, if present.
+  public func withUnexpectedBetweenExpressionAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> ArrayElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenExpressionAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenExpressionAndTrailingComma)
     return ArrayElementSyntax(newData)
   }
 
@@ -1237,9 +1237,9 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension ArrayElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeExpression": garbageBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenExpressionAndTrailingComma": garbageBetweenExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenExpressionAndTrailingComma": unexpectedBetweenExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -1249,13 +1249,13 @@ extension ArrayElementSyntax: CustomReflectable {
 
 public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeKeyExpression
+    case unexpectedBeforeKeyExpression
     case keyExpression
-    case garbageBetweenKeyExpressionAndColon
+    case unexpectedBetweenKeyExpressionAndColon
     case colon
-    case garbageBetweenColonAndValueExpression
+    case unexpectedBetweenColonAndValueExpression
     case valueExpression
-    case garbageBetweenValueExpressionAndTrailingComma
+    case unexpectedBetweenValueExpressionAndTrailingComma
     case trailingComma
   }
 
@@ -1277,23 +1277,23 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeKeyExpression: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeKeyExpression: UnexpectedNodesSyntax? = nil,
     keyExpression: ExprSyntax,
-    _ garbageBetweenKeyExpressionAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenKeyExpressionAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndValueExpression: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValueExpression: UnexpectedNodesSyntax? = nil,
     valueExpression: ExprSyntax,
-    _ garbageBetweenValueExpressionAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeKeyExpression?.raw,
+      unexpectedBeforeKeyExpression?.raw,
       keyExpression.raw,
-      garbageBetweenKeyExpressionAndColon?.raw,
+      unexpectedBetweenKeyExpressionAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValueExpression?.raw,
+      unexpectedBetweenColonAndValueExpression?.raw,
       valueExpression.raw,
-      garbageBetweenValueExpressionAndTrailingComma?.raw,
+      unexpectedBetweenValueExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElement,
@@ -1306,25 +1306,25 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeKeyExpression: GarbageNodesSyntax? {
+  public var unexpectedBeforeKeyExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeKeyExpression,
+      let childData = data.child(at: Cursor.unexpectedBeforeKeyExpression,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeKeyExpression(value)
+      self = withUnexpectedBeforeKeyExpression(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeKeyExpression` replaced.
-  /// - param newChild: The new `garbageBeforeKeyExpression` to replace the node's
-  ///                   current `garbageBeforeKeyExpression`, if present.
-  public func withGarbageBeforeKeyExpression(
-    _ newChild: GarbageNodesSyntax?) -> DictionaryElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeKeyExpression` replaced.
+  /// - param newChild: The new `unexpectedBeforeKeyExpression` to replace the node's
+  ///                   current `unexpectedBeforeKeyExpression`, if present.
+  public func withUnexpectedBeforeKeyExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> DictionaryElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeKeyExpression)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeKeyExpression)
     return DictionaryElementSyntax(newData)
   }
 
@@ -1349,25 +1349,25 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
     return DictionaryElementSyntax(newData)
   }
 
-  public var garbageBetweenKeyExpressionAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenKeyExpressionAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenKeyExpressionAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenKeyExpressionAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenKeyExpressionAndColon(value)
+      self = withUnexpectedBetweenKeyExpressionAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenKeyExpressionAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenKeyExpressionAndColon` to replace the node's
-  ///                   current `garbageBetweenKeyExpressionAndColon`, if present.
-  public func withGarbageBetweenKeyExpressionAndColon(
-    _ newChild: GarbageNodesSyntax?) -> DictionaryElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenKeyExpressionAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenKeyExpressionAndColon` to replace the node's
+  ///                   current `unexpectedBetweenKeyExpressionAndColon`, if present.
+  public func withUnexpectedBetweenKeyExpressionAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> DictionaryElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenKeyExpressionAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenKeyExpressionAndColon)
     return DictionaryElementSyntax(newData)
   }
 
@@ -1392,25 +1392,25 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
     return DictionaryElementSyntax(newData)
   }
 
-  public var garbageBetweenColonAndValueExpression: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndValueExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndValueExpression,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndValueExpression,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndValueExpression(value)
+      self = withUnexpectedBetweenColonAndValueExpression(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndValueExpression` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndValueExpression` to replace the node's
-  ///                   current `garbageBetweenColonAndValueExpression`, if present.
-  public func withGarbageBetweenColonAndValueExpression(
-    _ newChild: GarbageNodesSyntax?) -> DictionaryElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndValueExpression` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndValueExpression` to replace the node's
+  ///                   current `unexpectedBetweenColonAndValueExpression`, if present.
+  public func withUnexpectedBetweenColonAndValueExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> DictionaryElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndValueExpression)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndValueExpression)
     return DictionaryElementSyntax(newData)
   }
 
@@ -1435,25 +1435,25 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
     return DictionaryElementSyntax(newData)
   }
 
-  public var garbageBetweenValueExpressionAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenValueExpressionAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenValueExpressionAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenValueExpressionAndTrailingComma(value)
+      self = withUnexpectedBetweenValueExpressionAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenValueExpressionAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenValueExpressionAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenValueExpressionAndTrailingComma`, if present.
-  public func withGarbageBetweenValueExpressionAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> DictionaryElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenValueExpressionAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenValueExpressionAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenValueExpressionAndTrailingComma`, if present.
+  public func withUnexpectedBetweenValueExpressionAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> DictionaryElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenValueExpressionAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenValueExpressionAndTrailingComma)
     return DictionaryElementSyntax(newData)
   }
 
@@ -1483,13 +1483,13 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension DictionaryElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeKeyExpression": garbageBeforeKeyExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeKeyExpression": unexpectedBeforeKeyExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "keyExpression": Syntax(keyExpression).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenKeyExpressionAndColon": garbageBetweenKeyExpressionAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenKeyExpressionAndColon": unexpectedBetweenKeyExpressionAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndValueExpression": garbageBetweenColonAndValueExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndValueExpression": unexpectedBetweenColonAndValueExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "valueExpression": Syntax(valueExpression).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenValueExpressionAndTrailingComma": garbageBetweenValueExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenValueExpressionAndTrailingComma": unexpectedBetweenValueExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -1499,15 +1499,15 @@ extension DictionaryElementSyntax: CustomReflectable {
 
 public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeSpecifier
+    case unexpectedBeforeSpecifier
     case specifier
-    case garbageBetweenSpecifierAndName
+    case unexpectedBetweenSpecifierAndName
     case name
-    case garbageBetweenNameAndAssignToken
+    case unexpectedBetweenNameAndAssignToken
     case assignToken
-    case garbageBetweenAssignTokenAndExpression
+    case unexpectedBetweenAssignTokenAndExpression
     case expression
-    case garbageBetweenExpressionAndTrailingComma
+    case unexpectedBetweenExpressionAndTrailingComma
     case trailingComma
   }
 
@@ -1529,27 +1529,27 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeSpecifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
     specifier: TokenListSyntax?,
-    _ garbageBetweenSpecifierAndName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax?,
-    _ garbageBetweenNameAndAssignToken: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil,
     assignToken: TokenSyntax?,
-    _ garbageBetweenAssignTokenAndExpression: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? = nil,
     expression: ExprSyntax,
-    _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeSpecifier?.raw,
+      unexpectedBeforeSpecifier?.raw,
       specifier?.raw,
-      garbageBetweenSpecifierAndName?.raw,
+      unexpectedBetweenSpecifierAndName?.raw,
       name?.raw,
-      garbageBetweenNameAndAssignToken?.raw,
+      unexpectedBetweenNameAndAssignToken?.raw,
       assignToken?.raw,
-      garbageBetweenAssignTokenAndExpression?.raw,
+      unexpectedBetweenAssignTokenAndExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndTrailingComma?.raw,
+      unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItem,
@@ -1562,25 +1562,25 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeSpecifier: GarbageNodesSyntax? {
+  public var unexpectedBeforeSpecifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeSpecifier,
+      let childData = data.child(at: Cursor.unexpectedBeforeSpecifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeSpecifier(value)
+      self = withUnexpectedBeforeSpecifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeSpecifier` replaced.
-  /// - param newChild: The new `garbageBeforeSpecifier` to replace the node's
-  ///                   current `garbageBeforeSpecifier`, if present.
-  public func withGarbageBeforeSpecifier(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeSpecifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeSpecifier` to replace the node's
+  ///                   current `unexpectedBeforeSpecifier`, if present.
+  public func withUnexpectedBeforeSpecifier(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeSpecifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeSpecifier)
     return ClosureCaptureItemSyntax(newData)
   }
 
@@ -1625,25 +1625,25 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureCaptureItemSyntax(newData)
   }
 
-  public var garbageBetweenSpecifierAndName: GarbageNodesSyntax? {
+  public var unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenSpecifierAndName,
+      let childData = data.child(at: Cursor.unexpectedBetweenSpecifierAndName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenSpecifierAndName(value)
+      self = withUnexpectedBetweenSpecifierAndName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenSpecifierAndName` replaced.
-  /// - param newChild: The new `garbageBetweenSpecifierAndName` to replace the node's
-  ///                   current `garbageBetweenSpecifierAndName`, if present.
-  public func withGarbageBetweenSpecifierAndName(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenSpecifierAndName` replaced.
+  /// - param newChild: The new `unexpectedBetweenSpecifierAndName` to replace the node's
+  ///                   current `unexpectedBetweenSpecifierAndName`, if present.
+  public func withUnexpectedBetweenSpecifierAndName(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSpecifierAndName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSpecifierAndName)
     return ClosureCaptureItemSyntax(newData)
   }
 
@@ -1669,25 +1669,25 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureCaptureItemSyntax(newData)
   }
 
-  public var garbageBetweenNameAndAssignToken: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndAssignToken,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndAssignToken,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndAssignToken(value)
+      self = withUnexpectedBetweenNameAndAssignToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndAssignToken` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndAssignToken` to replace the node's
-  ///                   current `garbageBetweenNameAndAssignToken`, if present.
-  public func withGarbageBetweenNameAndAssignToken(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndAssignToken` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndAssignToken` to replace the node's
+  ///                   current `unexpectedBetweenNameAndAssignToken`, if present.
+  public func withUnexpectedBetweenNameAndAssignToken(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndAssignToken)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndAssignToken)
     return ClosureCaptureItemSyntax(newData)
   }
 
@@ -1713,25 +1713,25 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureCaptureItemSyntax(newData)
   }
 
-  public var garbageBetweenAssignTokenAndExpression: GarbageNodesSyntax? {
+  public var unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAssignTokenAndExpression,
+      let childData = data.child(at: Cursor.unexpectedBetweenAssignTokenAndExpression,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAssignTokenAndExpression(value)
+      self = withUnexpectedBetweenAssignTokenAndExpression(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAssignTokenAndExpression` replaced.
-  /// - param newChild: The new `garbageBetweenAssignTokenAndExpression` to replace the node's
-  ///                   current `garbageBetweenAssignTokenAndExpression`, if present.
-  public func withGarbageBetweenAssignTokenAndExpression(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAssignTokenAndExpression` replaced.
+  /// - param newChild: The new `unexpectedBetweenAssignTokenAndExpression` to replace the node's
+  ///                   current `unexpectedBetweenAssignTokenAndExpression`, if present.
+  public func withUnexpectedBetweenAssignTokenAndExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAssignTokenAndExpression)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAssignTokenAndExpression)
     return ClosureCaptureItemSyntax(newData)
   }
 
@@ -1756,25 +1756,25 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureCaptureItemSyntax(newData)
   }
 
-  public var garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenExpressionAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenExpressionAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenExpressionAndTrailingComma(value)
+      self = withUnexpectedBetweenExpressionAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenExpressionAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenExpressionAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenExpressionAndTrailingComma`, if present.
-  public func withGarbageBetweenExpressionAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenExpressionAndTrailingComma`, if present.
+  public func withUnexpectedBetweenExpressionAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenExpressionAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenExpressionAndTrailingComma)
     return ClosureCaptureItemSyntax(newData)
   }
 
@@ -1804,15 +1804,15 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureCaptureItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeSpecifier": garbageBeforeSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeSpecifier": unexpectedBeforeSpecifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "specifier": specifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenSpecifierAndName": garbageBetweenSpecifierAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenSpecifierAndName": unexpectedBetweenSpecifierAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": name.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenNameAndAssignToken": garbageBetweenNameAndAssignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndAssignToken": unexpectedBetweenNameAndAssignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "assignToken": assignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAssignTokenAndExpression": garbageBetweenAssignTokenAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAssignTokenAndExpression": unexpectedBetweenAssignTokenAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenExpressionAndTrailingComma": garbageBetweenExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenExpressionAndTrailingComma": unexpectedBetweenExpressionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -1822,11 +1822,11 @@ extension ClosureCaptureItemSyntax: CustomReflectable {
 
 public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftSquare
+    case unexpectedBeforeLeftSquare
     case leftSquare
-    case garbageBetweenLeftSquareAndItems
+    case unexpectedBetweenLeftSquareAndItems
     case items
-    case garbageBetweenItemsAndRightSquare
+    case unexpectedBetweenItemsAndRightSquare
     case rightSquare
   }
 
@@ -1848,19 +1848,19 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftSquare: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
     leftSquare: TokenSyntax,
-    _ garbageBetweenLeftSquareAndItems: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil,
     items: ClosureCaptureItemListSyntax?,
-    _ garbageBetweenItemsAndRightSquare: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil,
     rightSquare: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftSquare?.raw,
+      unexpectedBeforeLeftSquare?.raw,
       leftSquare.raw,
-      garbageBetweenLeftSquareAndItems?.raw,
+      unexpectedBetweenLeftSquareAndItems?.raw,
       items?.raw,
-      garbageBetweenItemsAndRightSquare?.raw,
+      unexpectedBetweenItemsAndRightSquare?.raw,
       rightSquare.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureSignature,
@@ -1873,25 +1873,25 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftSquare: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftSquare,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftSquare,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftSquare(value)
+      self = withUnexpectedBeforeLeftSquare(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftSquare` replaced.
-  /// - param newChild: The new `garbageBeforeLeftSquare` to replace the node's
-  ///                   current `garbageBeforeLeftSquare`, if present.
-  public func withGarbageBeforeLeftSquare(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftSquare` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftSquare` to replace the node's
+  ///                   current `unexpectedBeforeLeftSquare`, if present.
+  public func withUnexpectedBeforeLeftSquare(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftSquare)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftSquare)
     return ClosureCaptureSignatureSyntax(newData)
   }
 
@@ -1916,25 +1916,25 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureCaptureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenLeftSquareAndItems: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftSquareAndItems,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftSquareAndItems,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftSquareAndItems(value)
+      self = withUnexpectedBetweenLeftSquareAndItems(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftSquareAndItems` replaced.
-  /// - param newChild: The new `garbageBetweenLeftSquareAndItems` to replace the node's
-  ///                   current `garbageBetweenLeftSquareAndItems`, if present.
-  public func withGarbageBetweenLeftSquareAndItems(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftSquareAndItems` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftSquareAndItems` to replace the node's
+  ///                   current `unexpectedBetweenLeftSquareAndItems`, if present.
+  public func withUnexpectedBetweenLeftSquareAndItems(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftSquareAndItems)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftSquareAndItems)
     return ClosureCaptureSignatureSyntax(newData)
   }
 
@@ -1979,25 +1979,25 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureCaptureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenItemsAndRightSquare: GarbageNodesSyntax? {
+  public var unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenItemsAndRightSquare,
+      let childData = data.child(at: Cursor.unexpectedBetweenItemsAndRightSquare,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenItemsAndRightSquare(value)
+      self = withUnexpectedBetweenItemsAndRightSquare(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenItemsAndRightSquare` replaced.
-  /// - param newChild: The new `garbageBetweenItemsAndRightSquare` to replace the node's
-  ///                   current `garbageBetweenItemsAndRightSquare`, if present.
-  public func withGarbageBetweenItemsAndRightSquare(
-    _ newChild: GarbageNodesSyntax?) -> ClosureCaptureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenItemsAndRightSquare` replaced.
+  /// - param newChild: The new `unexpectedBetweenItemsAndRightSquare` to replace the node's
+  ///                   current `unexpectedBetweenItemsAndRightSquare`, if present.
+  public func withUnexpectedBetweenItemsAndRightSquare(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureCaptureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenItemsAndRightSquare)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenItemsAndRightSquare)
     return ClosureCaptureSignatureSyntax(newData)
   }
 
@@ -2026,11 +2026,11 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureCaptureSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftSquare": garbageBeforeLeftSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftSquare": unexpectedBeforeLeftSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftSquare": Syntax(leftSquare).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftSquareAndItems": garbageBetweenLeftSquareAndItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftSquareAndItems": unexpectedBetweenLeftSquareAndItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "items": items.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenItemsAndRightSquare": garbageBetweenItemsAndRightSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenItemsAndRightSquare": unexpectedBetweenItemsAndRightSquare.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightSquare": Syntax(rightSquare).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2040,9 +2040,9 @@ extension ClosureCaptureSignatureSyntax: CustomReflectable {
 
 public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndTrailingComma
+    case unexpectedBetweenNameAndTrailingComma
     case trailingComma
   }
 
@@ -2064,15 +2064,15 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingComma?.raw,
+      unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParam,
@@ -2085,25 +2085,25 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> ClosureParamSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureParamSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return ClosureParamSyntax(newData)
   }
 
@@ -2128,25 +2128,25 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureParamSyntax(newData)
   }
 
-  public var garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndTrailingComma(value)
+      self = withUnexpectedBetweenNameAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenNameAndTrailingComma`, if present.
-  public func withGarbageBetweenNameAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> ClosureParamSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenNameAndTrailingComma`, if present.
+  public func withUnexpectedBetweenNameAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureParamSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndTrailingComma)
     return ClosureParamSyntax(newData)
   }
 
@@ -2176,9 +2176,9 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureParamSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndTrailingComma": garbageBetweenNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndTrailingComma": unexpectedBetweenNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -2188,19 +2188,19 @@ extension ClosureParamSyntax: CustomReflectable {
 
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAttributes
+    case unexpectedBeforeAttributes
     case attributes
-    case garbageBetweenAttributesAndCapture
+    case unexpectedBetweenAttributesAndCapture
     case capture
-    case garbageBetweenCaptureAndInput
+    case unexpectedBetweenCaptureAndInput
     case input
-    case garbageBetweenInputAndAsyncKeyword
+    case unexpectedBetweenInputAndAsyncKeyword
     case asyncKeyword
-    case garbageBetweenAsyncKeywordAndThrowsTok
+    case unexpectedBetweenAsyncKeywordAndThrowsTok
     case throwsTok
-    case garbageBetweenThrowsTokAndOutput
+    case unexpectedBetweenThrowsTokAndOutput
     case output
-    case garbageBetweenOutputAndInTok
+    case unexpectedBetweenOutputAndInTok
     case inTok
   }
 
@@ -2222,35 +2222,35 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeAttributes: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax?,
-    _ garbageBetweenAttributesAndCapture: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
     capture: ClosureCaptureSignatureSyntax?,
-    _ garbageBetweenCaptureAndInput: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil,
     input: Syntax?,
-    _ garbageBetweenInputAndAsyncKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodesSyntax? = nil,
     asyncKeyword: TokenSyntax?,
-    _ garbageBetweenAsyncKeywordAndThrowsTok: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodesSyntax? = nil,
     throwsTok: TokenSyntax?,
-    _ garbageBetweenThrowsTokAndOutput: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowsTokAndOutput: UnexpectedNodesSyntax? = nil,
     output: ReturnClauseSyntax?,
-    _ garbageBetweenOutputAndInTok: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil,
     inTok: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndCapture?.raw,
+      unexpectedBetweenAttributesAndCapture?.raw,
       capture?.raw,
-      garbageBetweenCaptureAndInput?.raw,
+      unexpectedBetweenCaptureAndInput?.raw,
       input?.raw,
-      garbageBetweenInputAndAsyncKeyword?.raw,
+      unexpectedBetweenInputAndAsyncKeyword?.raw,
       asyncKeyword?.raw,
-      garbageBetweenAsyncKeywordAndThrowsTok?.raw,
+      unexpectedBetweenAsyncKeywordAndThrowsTok?.raw,
       throwsTok?.raw,
-      garbageBetweenThrowsTokAndOutput?.raw,
+      unexpectedBetweenThrowsTokAndOutput?.raw,
       output?.raw,
-      garbageBetweenOutputAndInTok?.raw,
+      unexpectedBetweenOutputAndInTok?.raw,
       inTok.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureSignature,
@@ -2263,25 +2263,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAttributes(value)
+      self = withUnexpectedBeforeAttributes(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
-  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
-  ///                   current `garbageBeforeAttributes`, if present.
-  public func withGarbageBeforeAttributes(
-    _ newChild: GarbageNodesSyntax?) -> ClosureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
+  /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
+  ///                   current `unexpectedBeforeAttributes`, if present.
+  public func withUnexpectedBeforeAttributes(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
     return ClosureSignatureSyntax(newData)
   }
 
@@ -2326,25 +2326,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenAttributesAndCapture: GarbageNodesSyntax? {
+  public var unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAttributesAndCapture,
+      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndCapture,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAttributesAndCapture(value)
+      self = withUnexpectedBetweenAttributesAndCapture(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndCapture` replaced.
-  /// - param newChild: The new `garbageBetweenAttributesAndCapture` to replace the node's
-  ///                   current `garbageBetweenAttributesAndCapture`, if present.
-  public func withGarbageBetweenAttributesAndCapture(
-    _ newChild: GarbageNodesSyntax?) -> ClosureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndCapture` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributesAndCapture` to replace the node's
+  ///                   current `unexpectedBetweenAttributesAndCapture`, if present.
+  public func withUnexpectedBetweenAttributesAndCapture(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndCapture)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndCapture)
     return ClosureSignatureSyntax(newData)
   }
 
@@ -2370,25 +2370,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenCaptureAndInput: GarbageNodesSyntax? {
+  public var unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCaptureAndInput,
+      let childData = data.child(at: Cursor.unexpectedBetweenCaptureAndInput,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCaptureAndInput(value)
+      self = withUnexpectedBetweenCaptureAndInput(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCaptureAndInput` replaced.
-  /// - param newChild: The new `garbageBetweenCaptureAndInput` to replace the node's
-  ///                   current `garbageBetweenCaptureAndInput`, if present.
-  public func withGarbageBetweenCaptureAndInput(
-    _ newChild: GarbageNodesSyntax?) -> ClosureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCaptureAndInput` replaced.
+  /// - param newChild: The new `unexpectedBetweenCaptureAndInput` to replace the node's
+  ///                   current `unexpectedBetweenCaptureAndInput`, if present.
+  public func withUnexpectedBetweenCaptureAndInput(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCaptureAndInput)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCaptureAndInput)
     return ClosureSignatureSyntax(newData)
   }
 
@@ -2414,25 +2414,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenInputAndAsyncKeyword: GarbageNodesSyntax? {
+  public var unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenInputAndAsyncKeyword,
+      let childData = data.child(at: Cursor.unexpectedBetweenInputAndAsyncKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenInputAndAsyncKeyword(value)
+      self = withUnexpectedBetweenInputAndAsyncKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenInputAndAsyncKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenInputAndAsyncKeyword` to replace the node's
-  ///                   current `garbageBetweenInputAndAsyncKeyword`, if present.
-  public func withGarbageBetweenInputAndAsyncKeyword(
-    _ newChild: GarbageNodesSyntax?) -> ClosureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenInputAndAsyncKeyword` replaced.
+  /// - param newChild: The new `unexpectedBetweenInputAndAsyncKeyword` to replace the node's
+  ///                   current `unexpectedBetweenInputAndAsyncKeyword`, if present.
+  public func withUnexpectedBetweenInputAndAsyncKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInputAndAsyncKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInputAndAsyncKeyword)
     return ClosureSignatureSyntax(newData)
   }
 
@@ -2458,25 +2458,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenAsyncKeywordAndThrowsTok: GarbageNodesSyntax? {
+  public var unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAsyncKeywordAndThrowsTok,
+      let childData = data.child(at: Cursor.unexpectedBetweenAsyncKeywordAndThrowsTok,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAsyncKeywordAndThrowsTok(value)
+      self = withUnexpectedBetweenAsyncKeywordAndThrowsTok(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAsyncKeywordAndThrowsTok` replaced.
-  /// - param newChild: The new `garbageBetweenAsyncKeywordAndThrowsTok` to replace the node's
-  ///                   current `garbageBetweenAsyncKeywordAndThrowsTok`, if present.
-  public func withGarbageBetweenAsyncKeywordAndThrowsTok(
-    _ newChild: GarbageNodesSyntax?) -> ClosureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAsyncKeywordAndThrowsTok` replaced.
+  /// - param newChild: The new `unexpectedBetweenAsyncKeywordAndThrowsTok` to replace the node's
+  ///                   current `unexpectedBetweenAsyncKeywordAndThrowsTok`, if present.
+  public func withUnexpectedBetweenAsyncKeywordAndThrowsTok(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAsyncKeywordAndThrowsTok)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAsyncKeywordAndThrowsTok)
     return ClosureSignatureSyntax(newData)
   }
 
@@ -2502,25 +2502,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenThrowsTokAndOutput: GarbageNodesSyntax? {
+  public var unexpectedBetweenThrowsTokAndOutput: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenThrowsTokAndOutput,
+      let childData = data.child(at: Cursor.unexpectedBetweenThrowsTokAndOutput,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenThrowsTokAndOutput(value)
+      self = withUnexpectedBetweenThrowsTokAndOutput(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenThrowsTokAndOutput` replaced.
-  /// - param newChild: The new `garbageBetweenThrowsTokAndOutput` to replace the node's
-  ///                   current `garbageBetweenThrowsTokAndOutput`, if present.
-  public func withGarbageBetweenThrowsTokAndOutput(
-    _ newChild: GarbageNodesSyntax?) -> ClosureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenThrowsTokAndOutput` replaced.
+  /// - param newChild: The new `unexpectedBetweenThrowsTokAndOutput` to replace the node's
+  ///                   current `unexpectedBetweenThrowsTokAndOutput`, if present.
+  public func withUnexpectedBetweenThrowsTokAndOutput(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenThrowsTokAndOutput)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenThrowsTokAndOutput)
     return ClosureSignatureSyntax(newData)
   }
 
@@ -2546,25 +2546,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureSignatureSyntax(newData)
   }
 
-  public var garbageBetweenOutputAndInTok: GarbageNodesSyntax? {
+  public var unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenOutputAndInTok,
+      let childData = data.child(at: Cursor.unexpectedBetweenOutputAndInTok,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenOutputAndInTok(value)
+      self = withUnexpectedBetweenOutputAndInTok(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenOutputAndInTok` replaced.
-  /// - param newChild: The new `garbageBetweenOutputAndInTok` to replace the node's
-  ///                   current `garbageBetweenOutputAndInTok`, if present.
-  public func withGarbageBetweenOutputAndInTok(
-    _ newChild: GarbageNodesSyntax?) -> ClosureSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenOutputAndInTok` replaced.
+  /// - param newChild: The new `unexpectedBetweenOutputAndInTok` to replace the node's
+  ///                   current `unexpectedBetweenOutputAndInTok`, if present.
+  public func withUnexpectedBetweenOutputAndInTok(
+    _ newChild: UnexpectedNodesSyntax?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenOutputAndInTok)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenOutputAndInTok)
     return ClosureSignatureSyntax(newData)
   }
 
@@ -2593,19 +2593,19 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAttributesAndCapture": garbageBetweenAttributesAndCapture.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributesAndCapture": unexpectedBetweenAttributesAndCapture.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "capture": capture.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenCaptureAndInput": garbageBetweenCaptureAndInput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCaptureAndInput": unexpectedBetweenCaptureAndInput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "input": input.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenInputAndAsyncKeyword": garbageBetweenInputAndAsyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenInputAndAsyncKeyword": unexpectedBetweenInputAndAsyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAsyncKeywordAndThrowsTok": garbageBetweenAsyncKeywordAndThrowsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAsyncKeywordAndThrowsTok": unexpectedBetweenAsyncKeywordAndThrowsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsTok": throwsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenThrowsTokAndOutput": garbageBetweenThrowsTokAndOutput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenThrowsTokAndOutput": unexpectedBetweenThrowsTokAndOutput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "output": output.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenOutputAndInTok": garbageBetweenOutputAndInTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenOutputAndInTok": unexpectedBetweenOutputAndInTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inTok": Syntax(inTok).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2615,11 +2615,11 @@ extension ClosureSignatureSyntax: CustomReflectable {
 
 public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabel
+    case unexpectedBeforeLabel
     case label
-    case garbageBetweenLabelAndColon
+    case unexpectedBetweenLabelAndColon
     case colon
-    case garbageBetweenColonAndClosure
+    case unexpectedBetweenColonAndClosure
     case closure
   }
 
@@ -2641,19 +2641,19 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   }
 
   public init(
-    _ garbageBeforeLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax,
-    _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndClosure: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndClosure: UnexpectedNodesSyntax? = nil,
     closure: ClosureExprSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndClosure?.raw,
+      unexpectedBetweenColonAndClosure?.raw,
       closure.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElement,
@@ -2666,25 +2666,25 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabel(value)
+      self = withUnexpectedBeforeLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabel` replaced.
-  /// - param newChild: The new `garbageBeforeLabel` to replace the node's
-  ///                   current `garbageBeforeLabel`, if present.
-  public func withGarbageBeforeLabel(
-    _ newChild: GarbageNodesSyntax?) -> MultipleTrailingClosureElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeLabel` to replace the node's
+  ///                   current `unexpectedBeforeLabel`, if present.
+  public func withUnexpectedBeforeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> MultipleTrailingClosureElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLabel)
     return MultipleTrailingClosureElementSyntax(newData)
   }
 
@@ -2709,25 +2709,25 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
     return MultipleTrailingClosureElementSyntax(newData)
   }
 
-  public var garbageBetweenLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelAndColon(value)
+      self = withUnexpectedBetweenLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenLabelAndColon`, if present.
-  public func withGarbageBetweenLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> MultipleTrailingClosureElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenLabelAndColon`, if present.
+  public func withUnexpectedBetweenLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> MultipleTrailingClosureElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelAndColon)
     return MultipleTrailingClosureElementSyntax(newData)
   }
 
@@ -2752,25 +2752,25 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
     return MultipleTrailingClosureElementSyntax(newData)
   }
 
-  public var garbageBetweenColonAndClosure: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndClosure: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndClosure,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndClosure,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndClosure(value)
+      self = withUnexpectedBetweenColonAndClosure(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndClosure` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndClosure` to replace the node's
-  ///                   current `garbageBetweenColonAndClosure`, if present.
-  public func withGarbageBetweenColonAndClosure(
-    _ newChild: GarbageNodesSyntax?) -> MultipleTrailingClosureElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndClosure` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndClosure` to replace the node's
+  ///                   current `unexpectedBetweenColonAndClosure`, if present.
+  public func withUnexpectedBetweenColonAndClosure(
+    _ newChild: UnexpectedNodesSyntax?) -> MultipleTrailingClosureElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndClosure)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndClosure)
     return MultipleTrailingClosureElementSyntax(newData)
   }
 
@@ -2799,11 +2799,11 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
 extension MultipleTrailingClosureElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabel": garbageBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "label": Syntax(label).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLabelAndColon": garbageBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndClosure": garbageBetweenColonAndClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndClosure": unexpectedBetweenColonAndClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "closure": Syntax(closure).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2813,7 +2813,7 @@ extension MultipleTrailingClosureElementSyntax: CustomReflectable {
 
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeContent
+    case unexpectedBeforeContent
     case content
   }
 
@@ -2835,11 +2835,11 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeContent: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeContent: UnexpectedNodesSyntax? = nil,
     content: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeContent?.raw,
+      unexpectedBeforeContent?.raw,
       content.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringSegment,
@@ -2852,25 +2852,25 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeContent: GarbageNodesSyntax? {
+  public var unexpectedBeforeContent: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeContent,
+      let childData = data.child(at: Cursor.unexpectedBeforeContent,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeContent(value)
+      self = withUnexpectedBeforeContent(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeContent` replaced.
-  /// - param newChild: The new `garbageBeforeContent` to replace the node's
-  ///                   current `garbageBeforeContent`, if present.
-  public func withGarbageBeforeContent(
-    _ newChild: GarbageNodesSyntax?) -> StringSegmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeContent` replaced.
+  /// - param newChild: The new `unexpectedBeforeContent` to replace the node's
+  ///                   current `unexpectedBeforeContent`, if present.
+  public func withUnexpectedBeforeContent(
+    _ newChild: UnexpectedNodesSyntax?) -> StringSegmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeContent)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeContent)
     return StringSegmentSyntax(newData)
   }
 
@@ -2899,7 +2899,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 extension StringSegmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeContent": garbageBeforeContent.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeContent": unexpectedBeforeContent.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "content": Syntax(content).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -2909,15 +2909,15 @@ extension StringSegmentSyntax: CustomReflectable {
 
 public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeBackslash
+    case unexpectedBeforeBackslash
     case backslash
-    case garbageBetweenBackslashAndDelimiter
+    case unexpectedBetweenBackslashAndDelimiter
     case delimiter
-    case garbageBetweenDelimiterAndLeftParen
+    case unexpectedBetweenDelimiterAndLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndExpressions
+    case unexpectedBetweenLeftParenAndExpressions
     case expressions
-    case garbageBetweenExpressionsAndRightParen
+    case unexpectedBetweenExpressionsAndRightParen
     case rightParen
   }
 
@@ -2939,27 +2939,27 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeBackslash: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil,
     backslash: TokenSyntax,
-    _ garbageBetweenBackslashAndDelimiter: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? = nil,
     delimiter: TokenSyntax?,
-    _ garbageBetweenDelimiterAndLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndExpressions: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil,
     expressions: TupleExprElementListSyntax,
-    _ garbageBetweenExpressionsAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeBackslash?.raw,
+      unexpectedBeforeBackslash?.raw,
       backslash.raw,
-      garbageBetweenBackslashAndDelimiter?.raw,
+      unexpectedBetweenBackslashAndDelimiter?.raw,
       delimiter?.raw,
-      garbageBetweenDelimiterAndLeftParen?.raw,
+      unexpectedBetweenDelimiterAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndExpressions?.raw,
+      unexpectedBetweenLeftParenAndExpressions?.raw,
       expressions.raw,
-      garbageBetweenExpressionsAndRightParen?.raw,
+      unexpectedBetweenExpressionsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionSegment,
@@ -2972,25 +2972,25 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeBackslash: GarbageNodesSyntax? {
+  public var unexpectedBeforeBackslash: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeBackslash,
+      let childData = data.child(at: Cursor.unexpectedBeforeBackslash,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeBackslash(value)
+      self = withUnexpectedBeforeBackslash(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeBackslash` replaced.
-  /// - param newChild: The new `garbageBeforeBackslash` to replace the node's
-  ///                   current `garbageBeforeBackslash`, if present.
-  public func withGarbageBeforeBackslash(
-    _ newChild: GarbageNodesSyntax?) -> ExpressionSegmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeBackslash` replaced.
+  /// - param newChild: The new `unexpectedBeforeBackslash` to replace the node's
+  ///                   current `unexpectedBeforeBackslash`, if present.
+  public func withUnexpectedBeforeBackslash(
+    _ newChild: UnexpectedNodesSyntax?) -> ExpressionSegmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeBackslash)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeBackslash)
     return ExpressionSegmentSyntax(newData)
   }
 
@@ -3015,25 +3015,25 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     return ExpressionSegmentSyntax(newData)
   }
 
-  public var garbageBetweenBackslashAndDelimiter: GarbageNodesSyntax? {
+  public var unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenBackslashAndDelimiter,
+      let childData = data.child(at: Cursor.unexpectedBetweenBackslashAndDelimiter,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenBackslashAndDelimiter(value)
+      self = withUnexpectedBetweenBackslashAndDelimiter(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenBackslashAndDelimiter` replaced.
-  /// - param newChild: The new `garbageBetweenBackslashAndDelimiter` to replace the node's
-  ///                   current `garbageBetweenBackslashAndDelimiter`, if present.
-  public func withGarbageBetweenBackslashAndDelimiter(
-    _ newChild: GarbageNodesSyntax?) -> ExpressionSegmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenBackslashAndDelimiter` replaced.
+  /// - param newChild: The new `unexpectedBetweenBackslashAndDelimiter` to replace the node's
+  ///                   current `unexpectedBetweenBackslashAndDelimiter`, if present.
+  public func withUnexpectedBetweenBackslashAndDelimiter(
+    _ newChild: UnexpectedNodesSyntax?) -> ExpressionSegmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenBackslashAndDelimiter)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenBackslashAndDelimiter)
     return ExpressionSegmentSyntax(newData)
   }
 
@@ -3059,25 +3059,25 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     return ExpressionSegmentSyntax(newData)
   }
 
-  public var garbageBetweenDelimiterAndLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDelimiterAndLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenDelimiterAndLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDelimiterAndLeftParen(value)
+      self = withUnexpectedBetweenDelimiterAndLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDelimiterAndLeftParen` replaced.
-  /// - param newChild: The new `garbageBetweenDelimiterAndLeftParen` to replace the node's
-  ///                   current `garbageBetweenDelimiterAndLeftParen`, if present.
-  public func withGarbageBetweenDelimiterAndLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> ExpressionSegmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDelimiterAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenDelimiterAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenDelimiterAndLeftParen`, if present.
+  public func withUnexpectedBetweenDelimiterAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> ExpressionSegmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDelimiterAndLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDelimiterAndLeftParen)
     return ExpressionSegmentSyntax(newData)
   }
 
@@ -3102,25 +3102,25 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     return ExpressionSegmentSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndExpressions: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndExpressions,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndExpressions,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndExpressions(value)
+      self = withUnexpectedBetweenLeftParenAndExpressions(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndExpressions` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndExpressions` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndExpressions`, if present.
-  public func withGarbageBetweenLeftParenAndExpressions(
-    _ newChild: GarbageNodesSyntax?) -> ExpressionSegmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndExpressions` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndExpressions` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndExpressions`, if present.
+  public func withUnexpectedBetweenLeftParenAndExpressions(
+    _ newChild: UnexpectedNodesSyntax?) -> ExpressionSegmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndExpressions)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndExpressions)
     return ExpressionSegmentSyntax(newData)
   }
 
@@ -3164,25 +3164,25 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     return ExpressionSegmentSyntax(newData)
   }
 
-  public var garbageBetweenExpressionsAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenExpressionsAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenExpressionsAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenExpressionsAndRightParen(value)
+      self = withUnexpectedBetweenExpressionsAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenExpressionsAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenExpressionsAndRightParen` to replace the node's
-  ///                   current `garbageBetweenExpressionsAndRightParen`, if present.
-  public func withGarbageBetweenExpressionsAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> ExpressionSegmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionsAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionsAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenExpressionsAndRightParen`, if present.
+  public func withUnexpectedBetweenExpressionsAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> ExpressionSegmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenExpressionsAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenExpressionsAndRightParen)
     return ExpressionSegmentSyntax(newData)
   }
 
@@ -3211,15 +3211,15 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 extension ExpressionSegmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeBackslash": garbageBeforeBackslash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeBackslash": unexpectedBeforeBackslash.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "backslash": Syntax(backslash).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenBackslashAndDelimiter": garbageBetweenBackslashAndDelimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenBackslashAndDelimiter": unexpectedBetweenBackslashAndDelimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "delimiter": delimiter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenDelimiterAndLeftParen": garbageBetweenDelimiterAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDelimiterAndLeftParen": unexpectedBetweenDelimiterAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndExpressions": garbageBetweenLeftParenAndExpressions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndExpressions": unexpectedBetweenLeftParenAndExpressions.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "expressions": Syntax(expressions).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenExpressionsAndRightParen": garbageBetweenExpressionsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenExpressionsAndRightParen": unexpectedBetweenExpressionsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -3229,9 +3229,9 @@ extension ExpressionSegmentSyntax: CustomReflectable {
 
 public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndDot
+    case unexpectedBetweenNameAndDot
     case dot
   }
 
@@ -3253,15 +3253,15 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndDot: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndDot: UnexpectedNodesSyntax? = nil,
     dot: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndDot?.raw,
+      unexpectedBetweenNameAndDot?.raw,
       dot?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcNamePiece,
@@ -3274,25 +3274,25 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> ObjcNamePieceSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> ObjcNamePieceSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return ObjcNamePieceSyntax(newData)
   }
 
@@ -3317,25 +3317,25 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
     return ObjcNamePieceSyntax(newData)
   }
 
-  public var garbageBetweenNameAndDot: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndDot: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndDot,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndDot,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndDot(value)
+      self = withUnexpectedBetweenNameAndDot(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndDot` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndDot` to replace the node's
-  ///                   current `garbageBetweenNameAndDot`, if present.
-  public func withGarbageBetweenNameAndDot(
-    _ newChild: GarbageNodesSyntax?) -> ObjcNamePieceSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndDot` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndDot` to replace the node's
+  ///                   current `unexpectedBetweenNameAndDot`, if present.
+  public func withUnexpectedBetweenNameAndDot(
+    _ newChild: UnexpectedNodesSyntax?) -> ObjcNamePieceSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndDot)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndDot)
     return ObjcNamePieceSyntax(newData)
   }
 
@@ -3365,9 +3365,9 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
 extension ObjcNamePieceSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndDot": garbageBetweenNameAndDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndDot": unexpectedBetweenNameAndDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "dot": dot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -3377,9 +3377,9 @@ extension ObjcNamePieceSyntax: CustomReflectable {
 
 public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeEqual
+    case unexpectedBeforeEqual
     case equal
-    case garbageBetweenEqualAndValue
+    case unexpectedBetweenEqualAndValue
     case value
   }
 
@@ -3401,15 +3401,15 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeEqual: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil,
     equal: TokenSyntax,
-    _ garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil,
     value: TypeSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeEqual?.raw,
+      unexpectedBeforeEqual?.raw,
       equal.raw,
-      garbageBetweenEqualAndValue?.raw,
+      unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInitializerClause,
@@ -3422,25 +3422,25 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeEqual: GarbageNodesSyntax? {
+  public var unexpectedBeforeEqual: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeEqual,
+      let childData = data.child(at: Cursor.unexpectedBeforeEqual,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeEqual(value)
+      self = withUnexpectedBeforeEqual(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeEqual` replaced.
-  /// - param newChild: The new `garbageBeforeEqual` to replace the node's
-  ///                   current `garbageBeforeEqual`, if present.
-  public func withGarbageBeforeEqual(
-    _ newChild: GarbageNodesSyntax?) -> TypeInitializerClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeEqual` replaced.
+  /// - param newChild: The new `unexpectedBeforeEqual` to replace the node's
+  ///                   current `unexpectedBeforeEqual`, if present.
+  public func withUnexpectedBeforeEqual(
+    _ newChild: UnexpectedNodesSyntax?) -> TypeInitializerClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeEqual)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeEqual)
     return TypeInitializerClauseSyntax(newData)
   }
 
@@ -3465,25 +3465,25 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return TypeInitializerClauseSyntax(newData)
   }
 
-  public var garbageBetweenEqualAndValue: GarbageNodesSyntax? {
+  public var unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenEqualAndValue,
+      let childData = data.child(at: Cursor.unexpectedBetweenEqualAndValue,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenEqualAndValue(value)
+      self = withUnexpectedBetweenEqualAndValue(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenEqualAndValue` replaced.
-  /// - param newChild: The new `garbageBetweenEqualAndValue` to replace the node's
-  ///                   current `garbageBetweenEqualAndValue`, if present.
-  public func withGarbageBetweenEqualAndValue(
-    _ newChild: GarbageNodesSyntax?) -> TypeInitializerClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEqualAndValue` replaced.
+  /// - param newChild: The new `unexpectedBetweenEqualAndValue` to replace the node's
+  ///                   current `unexpectedBetweenEqualAndValue`, if present.
+  public func withUnexpectedBetweenEqualAndValue(
+    _ newChild: UnexpectedNodesSyntax?) -> TypeInitializerClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenEqualAndValue)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenEqualAndValue)
     return TypeInitializerClauseSyntax(newData)
   }
 
@@ -3512,9 +3512,9 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension TypeInitializerClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeEqual": garbageBeforeEqual.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeEqual": unexpectedBeforeEqual.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "equal": Syntax(equal).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenEqualAndValue": garbageBetweenEqualAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEqualAndValue": unexpectedBetweenEqualAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "value": Syntax(value).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -3524,11 +3524,11 @@ extension TypeInitializerClauseSyntax: CustomReflectable {
 
 public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftParen
+    case unexpectedBeforeLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndParameterList
+    case unexpectedBetweenLeftParenAndParameterList
     case parameterList
-    case garbageBetweenParameterListAndRightParen
+    case unexpectedBetweenParameterListAndRightParen
     case rightParen
   }
 
@@ -3550,19 +3550,19 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndParameterList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
     parameterList: FunctionParameterListSyntax,
-    _ garbageBetweenParameterListAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndParameterList?.raw,
+      unexpectedBetweenLeftParenAndParameterList?.raw,
       parameterList.raw,
-      garbageBetweenParameterListAndRightParen?.raw,
+      unexpectedBetweenParameterListAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.parameterClause,
@@ -3575,25 +3575,25 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftParen(value)
+      self = withUnexpectedBeforeLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftParen` replaced.
-  /// - param newChild: The new `garbageBeforeLeftParen` to replace the node's
-  ///                   current `garbageBeforeLeftParen`, if present.
-  public func withGarbageBeforeLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> ParameterClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
+  ///                   current `unexpectedBeforeLeftParen`, if present.
+  public func withUnexpectedBeforeLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> ParameterClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftParen)
     return ParameterClauseSyntax(newData)
   }
 
@@ -3618,25 +3618,25 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return ParameterClauseSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndParameterList: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndParameterList,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndParameterList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndParameterList(value)
+      self = withUnexpectedBetweenLeftParenAndParameterList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndParameterList` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndParameterList` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndParameterList`, if present.
-  public func withGarbageBetweenLeftParenAndParameterList(
-    _ newChild: GarbageNodesSyntax?) -> ParameterClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndParameterList` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndParameterList` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndParameterList`, if present.
+  public func withUnexpectedBetweenLeftParenAndParameterList(
+    _ newChild: UnexpectedNodesSyntax?) -> ParameterClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndParameterList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndParameterList)
     return ParameterClauseSyntax(newData)
   }
 
@@ -3680,25 +3680,25 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return ParameterClauseSyntax(newData)
   }
 
-  public var garbageBetweenParameterListAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenParameterListAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenParameterListAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenParameterListAndRightParen(value)
+      self = withUnexpectedBetweenParameterListAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenParameterListAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenParameterListAndRightParen` to replace the node's
-  ///                   current `garbageBetweenParameterListAndRightParen`, if present.
-  public func withGarbageBetweenParameterListAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> ParameterClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenParameterListAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenParameterListAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenParameterListAndRightParen`, if present.
+  public func withUnexpectedBetweenParameterListAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> ParameterClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenParameterListAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenParameterListAndRightParen)
     return ParameterClauseSyntax(newData)
   }
 
@@ -3727,11 +3727,11 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension ParameterClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftParen": garbageBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndParameterList": garbageBetweenLeftParenAndParameterList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndParameterList": unexpectedBetweenLeftParenAndParameterList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "parameterList": Syntax(parameterList).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenParameterListAndRightParen": garbageBetweenParameterListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenParameterListAndRightParen": unexpectedBetweenParameterListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -3741,9 +3741,9 @@ extension ParameterClauseSyntax: CustomReflectable {
 
 public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeArrow
+    case unexpectedBeforeArrow
     case arrow
-    case garbageBetweenArrowAndReturnType
+    case unexpectedBetweenArrowAndReturnType
     case returnType
   }
 
@@ -3765,15 +3765,15 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeArrow: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeArrow: UnexpectedNodesSyntax? = nil,
     arrow: TokenSyntax,
-    _ garbageBetweenArrowAndReturnType: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil,
     returnType: TypeSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeArrow?.raw,
+      unexpectedBeforeArrow?.raw,
       arrow.raw,
-      garbageBetweenArrowAndReturnType?.raw,
+      unexpectedBetweenArrowAndReturnType?.raw,
       returnType.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.returnClause,
@@ -3786,25 +3786,25 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeArrow: GarbageNodesSyntax? {
+  public var unexpectedBeforeArrow: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeArrow,
+      let childData = data.child(at: Cursor.unexpectedBeforeArrow,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeArrow(value)
+      self = withUnexpectedBeforeArrow(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeArrow` replaced.
-  /// - param newChild: The new `garbageBeforeArrow` to replace the node's
-  ///                   current `garbageBeforeArrow`, if present.
-  public func withGarbageBeforeArrow(
-    _ newChild: GarbageNodesSyntax?) -> ReturnClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeArrow` replaced.
+  /// - param newChild: The new `unexpectedBeforeArrow` to replace the node's
+  ///                   current `unexpectedBeforeArrow`, if present.
+  public func withUnexpectedBeforeArrow(
+    _ newChild: UnexpectedNodesSyntax?) -> ReturnClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeArrow)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeArrow)
     return ReturnClauseSyntax(newData)
   }
 
@@ -3829,25 +3829,25 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return ReturnClauseSyntax(newData)
   }
 
-  public var garbageBetweenArrowAndReturnType: GarbageNodesSyntax? {
+  public var unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenArrowAndReturnType,
+      let childData = data.child(at: Cursor.unexpectedBetweenArrowAndReturnType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenArrowAndReturnType(value)
+      self = withUnexpectedBetweenArrowAndReturnType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenArrowAndReturnType` replaced.
-  /// - param newChild: The new `garbageBetweenArrowAndReturnType` to replace the node's
-  ///                   current `garbageBetweenArrowAndReturnType`, if present.
-  public func withGarbageBetweenArrowAndReturnType(
-    _ newChild: GarbageNodesSyntax?) -> ReturnClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenArrowAndReturnType` replaced.
+  /// - param newChild: The new `unexpectedBetweenArrowAndReturnType` to replace the node's
+  ///                   current `unexpectedBetweenArrowAndReturnType`, if present.
+  public func withUnexpectedBetweenArrowAndReturnType(
+    _ newChild: UnexpectedNodesSyntax?) -> ReturnClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenArrowAndReturnType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenArrowAndReturnType)
     return ReturnClauseSyntax(newData)
   }
 
@@ -3876,9 +3876,9 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension ReturnClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeArrow": garbageBeforeArrow.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeArrow": unexpectedBeforeArrow.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arrow": Syntax(arrow).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenArrowAndReturnType": garbageBetweenArrowAndReturnType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenArrowAndReturnType": unexpectedBetweenArrowAndReturnType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "returnType": Syntax(returnType).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -3888,13 +3888,13 @@ extension ReturnClauseSyntax: CustomReflectable {
 
 public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeInput
+    case unexpectedBeforeInput
     case input
-    case garbageBetweenInputAndAsyncOrReasyncKeyword
+    case unexpectedBetweenInputAndAsyncOrReasyncKeyword
     case asyncOrReasyncKeyword
-    case garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword
+    case unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword
     case throwsOrRethrowsKeyword
-    case garbageBetweenThrowsOrRethrowsKeywordAndOutput
+    case unexpectedBetweenThrowsOrRethrowsKeywordAndOutput
     case output
   }
 
@@ -3916,23 +3916,23 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeInput: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil,
     input: ParameterClauseSyntax,
-    _ garbageBetweenInputAndAsyncOrReasyncKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInputAndAsyncOrReasyncKeyword: UnexpectedNodesSyntax? = nil,
     asyncOrReasyncKeyword: TokenSyntax?,
-    _ garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodesSyntax? = nil,
     throwsOrRethrowsKeyword: TokenSyntax?,
-    _ garbageBetweenThrowsOrRethrowsKeywordAndOutput: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: UnexpectedNodesSyntax? = nil,
     output: ReturnClauseSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeInput?.raw,
+      unexpectedBeforeInput?.raw,
       input.raw,
-      garbageBetweenInputAndAsyncOrReasyncKeyword?.raw,
+      unexpectedBetweenInputAndAsyncOrReasyncKeyword?.raw,
       asyncOrReasyncKeyword?.raw,
-      garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.raw,
+      unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.raw,
       throwsOrRethrowsKeyword?.raw,
-      garbageBetweenThrowsOrRethrowsKeywordAndOutput?.raw,
+      unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.raw,
       output?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionSignature,
@@ -3945,25 +3945,25 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeInput: GarbageNodesSyntax? {
+  public var unexpectedBeforeInput: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeInput,
+      let childData = data.child(at: Cursor.unexpectedBeforeInput,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeInput(value)
+      self = withUnexpectedBeforeInput(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeInput` replaced.
-  /// - param newChild: The new `garbageBeforeInput` to replace the node's
-  ///                   current `garbageBeforeInput`, if present.
-  public func withGarbageBeforeInput(
-    _ newChild: GarbageNodesSyntax?) -> FunctionSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeInput` replaced.
+  /// - param newChild: The new `unexpectedBeforeInput` to replace the node's
+  ///                   current `unexpectedBeforeInput`, if present.
+  public func withUnexpectedBeforeInput(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeInput)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeInput)
     return FunctionSignatureSyntax(newData)
   }
 
@@ -3988,25 +3988,25 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionSignatureSyntax(newData)
   }
 
-  public var garbageBetweenInputAndAsyncOrReasyncKeyword: GarbageNodesSyntax? {
+  public var unexpectedBetweenInputAndAsyncOrReasyncKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenInputAndAsyncOrReasyncKeyword,
+      let childData = data.child(at: Cursor.unexpectedBetweenInputAndAsyncOrReasyncKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenInputAndAsyncOrReasyncKeyword(value)
+      self = withUnexpectedBetweenInputAndAsyncOrReasyncKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenInputAndAsyncOrReasyncKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenInputAndAsyncOrReasyncKeyword` to replace the node's
-  ///                   current `garbageBetweenInputAndAsyncOrReasyncKeyword`, if present.
-  public func withGarbageBetweenInputAndAsyncOrReasyncKeyword(
-    _ newChild: GarbageNodesSyntax?) -> FunctionSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenInputAndAsyncOrReasyncKeyword` replaced.
+  /// - param newChild: The new `unexpectedBetweenInputAndAsyncOrReasyncKeyword` to replace the node's
+  ///                   current `unexpectedBetweenInputAndAsyncOrReasyncKeyword`, if present.
+  public func withUnexpectedBetweenInputAndAsyncOrReasyncKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInputAndAsyncOrReasyncKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInputAndAsyncOrReasyncKeyword)
     return FunctionSignatureSyntax(newData)
   }
 
@@ -4032,25 +4032,25 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionSignatureSyntax(newData)
   }
 
-  public var garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? {
+  public var unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword,
+      let childData = data.child(at: Cursor.unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword(value)
+      self = withUnexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword` replaced.
-  /// - param newChild: The new `garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword` to replace the node's
-  ///                   current `garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword`, if present.
-  public func withGarbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword(
-    _ newChild: GarbageNodesSyntax?) -> FunctionSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword` replaced.
+  /// - param newChild: The new `unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword` to replace the node's
+  ///                   current `unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword`, if present.
+  public func withUnexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword)
     return FunctionSignatureSyntax(newData)
   }
 
@@ -4076,25 +4076,25 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionSignatureSyntax(newData)
   }
 
-  public var garbageBetweenThrowsOrRethrowsKeywordAndOutput: GarbageNodesSyntax? {
+  public var unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenThrowsOrRethrowsKeywordAndOutput,
+      let childData = data.child(at: Cursor.unexpectedBetweenThrowsOrRethrowsKeywordAndOutput,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenThrowsOrRethrowsKeywordAndOutput(value)
+      self = withUnexpectedBetweenThrowsOrRethrowsKeywordAndOutput(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenThrowsOrRethrowsKeywordAndOutput` replaced.
-  /// - param newChild: The new `garbageBetweenThrowsOrRethrowsKeywordAndOutput` to replace the node's
-  ///                   current `garbageBetweenThrowsOrRethrowsKeywordAndOutput`, if present.
-  public func withGarbageBetweenThrowsOrRethrowsKeywordAndOutput(
-    _ newChild: GarbageNodesSyntax?) -> FunctionSignatureSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenThrowsOrRethrowsKeywordAndOutput` replaced.
+  /// - param newChild: The new `unexpectedBetweenThrowsOrRethrowsKeywordAndOutput` to replace the node's
+  ///                   current `unexpectedBetweenThrowsOrRethrowsKeywordAndOutput`, if present.
+  public func withUnexpectedBetweenThrowsOrRethrowsKeywordAndOutput(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenThrowsOrRethrowsKeywordAndOutput)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenThrowsOrRethrowsKeywordAndOutput)
     return FunctionSignatureSyntax(newData)
   }
 
@@ -4124,13 +4124,13 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 extension FunctionSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeInput": garbageBeforeInput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeInput": unexpectedBeforeInput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "input": Syntax(input).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenInputAndAsyncOrReasyncKeyword": garbageBetweenInputAndAsyncOrReasyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenInputAndAsyncOrReasyncKeyword": unexpectedBetweenInputAndAsyncOrReasyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "asyncOrReasyncKeyword": asyncOrReasyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword": garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword": unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenThrowsOrRethrowsKeywordAndOutput": garbageBetweenThrowsOrRethrowsKeywordAndOutput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenThrowsOrRethrowsKeywordAndOutput": unexpectedBetweenThrowsOrRethrowsKeywordAndOutput.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "output": output.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -4140,11 +4140,11 @@ extension FunctionSignatureSyntax: CustomReflectable {
 
 public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforePoundKeyword
+    case unexpectedBeforePoundKeyword
     case poundKeyword
-    case garbageBetweenPoundKeywordAndCondition
+    case unexpectedBetweenPoundKeywordAndCondition
     case condition
-    case garbageBetweenConditionAndElements
+    case unexpectedBetweenConditionAndElements
     case elements
   }
 
@@ -4166,19 +4166,19 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforePoundKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil,
     poundKeyword: TokenSyntax,
-    _ garbageBetweenPoundKeywordAndCondition: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil,
     condition: ExprSyntax?,
-    _ garbageBetweenConditionAndElements: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil,
     elements: Syntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundKeyword?.raw,
+      unexpectedBeforePoundKeyword?.raw,
       poundKeyword.raw,
-      garbageBetweenPoundKeywordAndCondition?.raw,
+      unexpectedBetweenPoundKeywordAndCondition?.raw,
       condition?.raw,
-      garbageBetweenConditionAndElements?.raw,
+      unexpectedBetweenConditionAndElements?.raw,
       elements.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClause,
@@ -4191,25 +4191,25 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforePoundKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforePoundKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforePoundKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforePoundKeyword(value)
+      self = withUnexpectedBeforePoundKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforePoundKeyword` replaced.
-  /// - param newChild: The new `garbageBeforePoundKeyword` to replace the node's
-  ///                   current `garbageBeforePoundKeyword`, if present.
-  public func withGarbageBeforePoundKeyword(
-    _ newChild: GarbageNodesSyntax?) -> IfConfigClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforePoundKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforePoundKeyword` to replace the node's
+  ///                   current `unexpectedBeforePoundKeyword`, if present.
+  public func withUnexpectedBeforePoundKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> IfConfigClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePoundKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePoundKeyword)
     return IfConfigClauseSyntax(newData)
   }
 
@@ -4234,25 +4234,25 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return IfConfigClauseSyntax(newData)
   }
 
-  public var garbageBetweenPoundKeywordAndCondition: GarbageNodesSyntax? {
+  public var unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPoundKeywordAndCondition,
+      let childData = data.child(at: Cursor.unexpectedBetweenPoundKeywordAndCondition,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPoundKeywordAndCondition(value)
+      self = withUnexpectedBetweenPoundKeywordAndCondition(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPoundKeywordAndCondition` replaced.
-  /// - param newChild: The new `garbageBetweenPoundKeywordAndCondition` to replace the node's
-  ///                   current `garbageBetweenPoundKeywordAndCondition`, if present.
-  public func withGarbageBetweenPoundKeywordAndCondition(
-    _ newChild: GarbageNodesSyntax?) -> IfConfigClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPoundKeywordAndCondition` replaced.
+  /// - param newChild: The new `unexpectedBetweenPoundKeywordAndCondition` to replace the node's
+  ///                   current `unexpectedBetweenPoundKeywordAndCondition`, if present.
+  public func withUnexpectedBetweenPoundKeywordAndCondition(
+    _ newChild: UnexpectedNodesSyntax?) -> IfConfigClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPoundKeywordAndCondition)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPoundKeywordAndCondition)
     return IfConfigClauseSyntax(newData)
   }
 
@@ -4278,25 +4278,25 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return IfConfigClauseSyntax(newData)
   }
 
-  public var garbageBetweenConditionAndElements: GarbageNodesSyntax? {
+  public var unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenConditionAndElements,
+      let childData = data.child(at: Cursor.unexpectedBetweenConditionAndElements,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenConditionAndElements(value)
+      self = withUnexpectedBetweenConditionAndElements(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenConditionAndElements` replaced.
-  /// - param newChild: The new `garbageBetweenConditionAndElements` to replace the node's
-  ///                   current `garbageBetweenConditionAndElements`, if present.
-  public func withGarbageBetweenConditionAndElements(
-    _ newChild: GarbageNodesSyntax?) -> IfConfigClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenConditionAndElements` replaced.
+  /// - param newChild: The new `unexpectedBetweenConditionAndElements` to replace the node's
+  ///                   current `unexpectedBetweenConditionAndElements`, if present.
+  public func withUnexpectedBetweenConditionAndElements(
+    _ newChild: UnexpectedNodesSyntax?) -> IfConfigClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenConditionAndElements)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenConditionAndElements)
     return IfConfigClauseSyntax(newData)
   }
 
@@ -4325,11 +4325,11 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension IfConfigClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforePoundKeyword": garbageBeforePoundKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePoundKeyword": unexpectedBeforePoundKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundKeyword": Syntax(poundKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPoundKeywordAndCondition": garbageBetweenPoundKeywordAndCondition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPoundKeywordAndCondition": unexpectedBetweenPoundKeywordAndCondition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "condition": condition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenConditionAndElements": garbageBetweenConditionAndElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenConditionAndElements": unexpectedBetweenConditionAndElements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -4339,19 +4339,19 @@ extension IfConfigClauseSyntax: CustomReflectable {
 
 public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeFileArgLabel
+    case unexpectedBeforeFileArgLabel
     case fileArgLabel
-    case garbageBetweenFileArgLabelAndFileArgColon
+    case unexpectedBetweenFileArgLabelAndFileArgColon
     case fileArgColon
-    case garbageBetweenFileArgColonAndFileName
+    case unexpectedBetweenFileArgColonAndFileName
     case fileName
-    case garbageBetweenFileNameAndComma
+    case unexpectedBetweenFileNameAndComma
     case comma
-    case garbageBetweenCommaAndLineArgLabel
+    case unexpectedBetweenCommaAndLineArgLabel
     case lineArgLabel
-    case garbageBetweenLineArgLabelAndLineArgColon
+    case unexpectedBetweenLineArgLabelAndLineArgColon
     case lineArgColon
-    case garbageBetweenLineArgColonAndLineNumber
+    case unexpectedBetweenLineArgColonAndLineNumber
     case lineNumber
   }
 
@@ -4373,35 +4373,35 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeFileArgLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? = nil,
     fileArgLabel: TokenSyntax,
-    _ garbageBetweenFileArgLabelAndFileArgColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil,
     fileArgColon: TokenSyntax,
-    _ garbageBetweenFileArgColonAndFileName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil,
     fileName: TokenSyntax,
-    _ garbageBetweenFileNameAndComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax,
-    _ garbageBetweenCommaAndLineArgLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil,
     lineArgLabel: TokenSyntax,
-    _ garbageBetweenLineArgLabelAndLineArgColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil,
     lineArgColon: TokenSyntax,
-    _ garbageBetweenLineArgColonAndLineNumber: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil,
     lineNumber: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeFileArgLabel?.raw,
+      unexpectedBeforeFileArgLabel?.raw,
       fileArgLabel.raw,
-      garbageBetweenFileArgLabelAndFileArgColon?.raw,
+      unexpectedBetweenFileArgLabelAndFileArgColon?.raw,
       fileArgColon.raw,
-      garbageBetweenFileArgColonAndFileName?.raw,
+      unexpectedBetweenFileArgColonAndFileName?.raw,
       fileName.raw,
-      garbageBetweenFileNameAndComma?.raw,
+      unexpectedBetweenFileNameAndComma?.raw,
       comma.raw,
-      garbageBetweenCommaAndLineArgLabel?.raw,
+      unexpectedBetweenCommaAndLineArgLabel?.raw,
       lineArgLabel.raw,
-      garbageBetweenLineArgLabelAndLineArgColon?.raw,
+      unexpectedBetweenLineArgLabelAndLineArgColon?.raw,
       lineArgColon.raw,
-      garbageBetweenLineArgColonAndLineNumber?.raw,
+      unexpectedBetweenLineArgColonAndLineNumber?.raw,
       lineNumber.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundSourceLocationArgs,
@@ -4414,25 +4414,25 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeFileArgLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeFileArgLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeFileArgLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeFileArgLabel(value)
+      self = withUnexpectedBeforeFileArgLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeFileArgLabel` replaced.
-  /// - param newChild: The new `garbageBeforeFileArgLabel` to replace the node's
-  ///                   current `garbageBeforeFileArgLabel`, if present.
-  public func withGarbageBeforeFileArgLabel(
-    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationArgsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeFileArgLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeFileArgLabel` to replace the node's
+  ///                   current `unexpectedBeforeFileArgLabel`, if present.
+  public func withUnexpectedBeforeFileArgLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationArgsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeFileArgLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeFileArgLabel)
     return PoundSourceLocationArgsSyntax(newData)
   }
 
@@ -4457,25 +4457,25 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
 
-  public var garbageBetweenFileArgLabelAndFileArgColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenFileArgLabelAndFileArgColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenFileArgLabelAndFileArgColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenFileArgLabelAndFileArgColon(value)
+      self = withUnexpectedBetweenFileArgLabelAndFileArgColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenFileArgLabelAndFileArgColon` replaced.
-  /// - param newChild: The new `garbageBetweenFileArgLabelAndFileArgColon` to replace the node's
-  ///                   current `garbageBetweenFileArgLabelAndFileArgColon`, if present.
-  public func withGarbageBetweenFileArgLabelAndFileArgColon(
-    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationArgsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenFileArgLabelAndFileArgColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenFileArgLabelAndFileArgColon` to replace the node's
+  ///                   current `unexpectedBetweenFileArgLabelAndFileArgColon`, if present.
+  public func withUnexpectedBetweenFileArgLabelAndFileArgColon(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationArgsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenFileArgLabelAndFileArgColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenFileArgLabelAndFileArgColon)
     return PoundSourceLocationArgsSyntax(newData)
   }
 
@@ -4500,25 +4500,25 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
 
-  public var garbageBetweenFileArgColonAndFileName: GarbageNodesSyntax? {
+  public var unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenFileArgColonAndFileName,
+      let childData = data.child(at: Cursor.unexpectedBetweenFileArgColonAndFileName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenFileArgColonAndFileName(value)
+      self = withUnexpectedBetweenFileArgColonAndFileName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenFileArgColonAndFileName` replaced.
-  /// - param newChild: The new `garbageBetweenFileArgColonAndFileName` to replace the node's
-  ///                   current `garbageBetweenFileArgColonAndFileName`, if present.
-  public func withGarbageBetweenFileArgColonAndFileName(
-    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationArgsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenFileArgColonAndFileName` replaced.
+  /// - param newChild: The new `unexpectedBetweenFileArgColonAndFileName` to replace the node's
+  ///                   current `unexpectedBetweenFileArgColonAndFileName`, if present.
+  public func withUnexpectedBetweenFileArgColonAndFileName(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationArgsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenFileArgColonAndFileName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenFileArgColonAndFileName)
     return PoundSourceLocationArgsSyntax(newData)
   }
 
@@ -4543,25 +4543,25 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
 
-  public var garbageBetweenFileNameAndComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenFileNameAndComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenFileNameAndComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenFileNameAndComma(value)
+      self = withUnexpectedBetweenFileNameAndComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenFileNameAndComma` replaced.
-  /// - param newChild: The new `garbageBetweenFileNameAndComma` to replace the node's
-  ///                   current `garbageBetweenFileNameAndComma`, if present.
-  public func withGarbageBetweenFileNameAndComma(
-    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationArgsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenFileNameAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenFileNameAndComma` to replace the node's
+  ///                   current `unexpectedBetweenFileNameAndComma`, if present.
+  public func withUnexpectedBetweenFileNameAndComma(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationArgsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenFileNameAndComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenFileNameAndComma)
     return PoundSourceLocationArgsSyntax(newData)
   }
 
@@ -4586,25 +4586,25 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
 
-  public var garbageBetweenCommaAndLineArgLabel: GarbageNodesSyntax? {
+  public var unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCommaAndLineArgLabel,
+      let childData = data.child(at: Cursor.unexpectedBetweenCommaAndLineArgLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCommaAndLineArgLabel(value)
+      self = withUnexpectedBetweenCommaAndLineArgLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCommaAndLineArgLabel` replaced.
-  /// - param newChild: The new `garbageBetweenCommaAndLineArgLabel` to replace the node's
-  ///                   current `garbageBetweenCommaAndLineArgLabel`, if present.
-  public func withGarbageBetweenCommaAndLineArgLabel(
-    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationArgsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndLineArgLabel` replaced.
+  /// - param newChild: The new `unexpectedBetweenCommaAndLineArgLabel` to replace the node's
+  ///                   current `unexpectedBetweenCommaAndLineArgLabel`, if present.
+  public func withUnexpectedBetweenCommaAndLineArgLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationArgsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCommaAndLineArgLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCommaAndLineArgLabel)
     return PoundSourceLocationArgsSyntax(newData)
   }
 
@@ -4629,25 +4629,25 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
 
-  public var garbageBetweenLineArgLabelAndLineArgColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLineArgLabelAndLineArgColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLineArgLabelAndLineArgColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLineArgLabelAndLineArgColon(value)
+      self = withUnexpectedBetweenLineArgLabelAndLineArgColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLineArgLabelAndLineArgColon` replaced.
-  /// - param newChild: The new `garbageBetweenLineArgLabelAndLineArgColon` to replace the node's
-  ///                   current `garbageBetweenLineArgLabelAndLineArgColon`, if present.
-  public func withGarbageBetweenLineArgLabelAndLineArgColon(
-    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationArgsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLineArgLabelAndLineArgColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLineArgLabelAndLineArgColon` to replace the node's
+  ///                   current `unexpectedBetweenLineArgLabelAndLineArgColon`, if present.
+  public func withUnexpectedBetweenLineArgLabelAndLineArgColon(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationArgsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLineArgLabelAndLineArgColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLineArgLabelAndLineArgColon)
     return PoundSourceLocationArgsSyntax(newData)
   }
 
@@ -4672,25 +4672,25 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
 
-  public var garbageBetweenLineArgColonAndLineNumber: GarbageNodesSyntax? {
+  public var unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLineArgColonAndLineNumber,
+      let childData = data.child(at: Cursor.unexpectedBetweenLineArgColonAndLineNumber,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLineArgColonAndLineNumber(value)
+      self = withUnexpectedBetweenLineArgColonAndLineNumber(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLineArgColonAndLineNumber` replaced.
-  /// - param newChild: The new `garbageBetweenLineArgColonAndLineNumber` to replace the node's
-  ///                   current `garbageBetweenLineArgColonAndLineNumber`, if present.
-  public func withGarbageBetweenLineArgColonAndLineNumber(
-    _ newChild: GarbageNodesSyntax?) -> PoundSourceLocationArgsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLineArgColonAndLineNumber` replaced.
+  /// - param newChild: The new `unexpectedBetweenLineArgColonAndLineNumber` to replace the node's
+  ///                   current `unexpectedBetweenLineArgColonAndLineNumber`, if present.
+  public func withUnexpectedBetweenLineArgColonAndLineNumber(
+    _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationArgsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLineArgColonAndLineNumber)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLineArgColonAndLineNumber)
     return PoundSourceLocationArgsSyntax(newData)
   }
 
@@ -4719,19 +4719,19 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
 extension PoundSourceLocationArgsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeFileArgLabel": garbageBeforeFileArgLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeFileArgLabel": unexpectedBeforeFileArgLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "fileArgLabel": Syntax(fileArgLabel).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenFileArgLabelAndFileArgColon": garbageBetweenFileArgLabelAndFileArgColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenFileArgLabelAndFileArgColon": unexpectedBetweenFileArgLabelAndFileArgColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "fileArgColon": Syntax(fileArgColon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenFileArgColonAndFileName": garbageBetweenFileArgColonAndFileName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenFileArgColonAndFileName": unexpectedBetweenFileArgColonAndFileName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "fileName": Syntax(fileName).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenFileNameAndComma": garbageBetweenFileNameAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenFileNameAndComma": unexpectedBetweenFileNameAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "comma": Syntax(comma).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenCommaAndLineArgLabel": garbageBetweenCommaAndLineArgLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCommaAndLineArgLabel": unexpectedBetweenCommaAndLineArgLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "lineArgLabel": Syntax(lineArgLabel).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLineArgLabelAndLineArgColon": garbageBetweenLineArgLabelAndLineArgColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLineArgLabelAndLineArgColon": unexpectedBetweenLineArgLabelAndLineArgColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "lineArgColon": Syntax(lineArgColon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLineArgColonAndLineNumber": garbageBetweenLineArgColonAndLineNumber.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLineArgColonAndLineNumber": unexpectedBetweenLineArgColonAndLineNumber.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "lineNumber": Syntax(lineNumber).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -4741,11 +4741,11 @@ extension PoundSourceLocationArgsSyntax: CustomReflectable {
 
 public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftParen
+    case unexpectedBeforeLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndDetail
+    case unexpectedBetweenLeftParenAndDetail
     case detail
-    case garbageBetweenDetailAndRightParen
+    case unexpectedBetweenDetailAndRightParen
     case rightParen
   }
 
@@ -4767,19 +4767,19 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndDetail: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil,
     detail: TokenSyntax,
-    _ garbageBetweenDetailAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndDetail?.raw,
+      unexpectedBetweenLeftParenAndDetail?.raw,
       detail.raw,
-      garbageBetweenDetailAndRightParen?.raw,
+      unexpectedBetweenDetailAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifierDetail,
@@ -4792,25 +4792,25 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftParen(value)
+      self = withUnexpectedBeforeLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftParen` replaced.
-  /// - param newChild: The new `garbageBeforeLeftParen` to replace the node's
-  ///                   current `garbageBeforeLeftParen`, if present.
-  public func withGarbageBeforeLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> DeclModifierDetailSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
+  ///                   current `unexpectedBeforeLeftParen`, if present.
+  public func withUnexpectedBeforeLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclModifierDetailSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftParen)
     return DeclModifierDetailSyntax(newData)
   }
 
@@ -4835,25 +4835,25 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclModifierDetailSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndDetail: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndDetail,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndDetail,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndDetail(value)
+      self = withUnexpectedBetweenLeftParenAndDetail(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndDetail` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndDetail` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndDetail`, if present.
-  public func withGarbageBetweenLeftParenAndDetail(
-    _ newChild: GarbageNodesSyntax?) -> DeclModifierDetailSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndDetail` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndDetail` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndDetail`, if present.
+  public func withUnexpectedBetweenLeftParenAndDetail(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclModifierDetailSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndDetail)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndDetail)
     return DeclModifierDetailSyntax(newData)
   }
 
@@ -4878,25 +4878,25 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclModifierDetailSyntax(newData)
   }
 
-  public var garbageBetweenDetailAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDetailAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenDetailAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDetailAndRightParen(value)
+      self = withUnexpectedBetweenDetailAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDetailAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenDetailAndRightParen` to replace the node's
-  ///                   current `garbageBetweenDetailAndRightParen`, if present.
-  public func withGarbageBetweenDetailAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> DeclModifierDetailSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDetailAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenDetailAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenDetailAndRightParen`, if present.
+  public func withUnexpectedBetweenDetailAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclModifierDetailSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDetailAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDetailAndRightParen)
     return DeclModifierDetailSyntax(newData)
   }
 
@@ -4925,11 +4925,11 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclModifierDetailSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftParen": garbageBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndDetail": garbageBetweenLeftParenAndDetail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndDetail": unexpectedBetweenLeftParenAndDetail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "detail": Syntax(detail).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenDetailAndRightParen": garbageBetweenDetailAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDetailAndRightParen": unexpectedBetweenDetailAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -4939,9 +4939,9 @@ extension DeclModifierDetailSyntax: CustomReflectable {
 
 public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndDetail
+    case unexpectedBetweenNameAndDetail
     case detail
   }
 
@@ -4963,15 +4963,15 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndDetail: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndDetail: UnexpectedNodesSyntax? = nil,
     detail: DeclModifierDetailSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndDetail?.raw,
+      unexpectedBetweenNameAndDetail?.raw,
       detail?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifier,
@@ -4984,25 +4984,25 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> DeclModifierSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclModifierSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return DeclModifierSyntax(newData)
   }
 
@@ -5027,25 +5027,25 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclModifierSyntax(newData)
   }
 
-  public var garbageBetweenNameAndDetail: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndDetail: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndDetail,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndDetail,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndDetail(value)
+      self = withUnexpectedBetweenNameAndDetail(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndDetail` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndDetail` to replace the node's
-  ///                   current `garbageBetweenNameAndDetail`, if present.
-  public func withGarbageBetweenNameAndDetail(
-    _ newChild: GarbageNodesSyntax?) -> DeclModifierSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndDetail` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndDetail` to replace the node's
+  ///                   current `unexpectedBetweenNameAndDetail`, if present.
+  public func withUnexpectedBetweenNameAndDetail(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclModifierSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndDetail)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndDetail)
     return DeclModifierSyntax(newData)
   }
 
@@ -5075,9 +5075,9 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndDetail": garbageBetweenNameAndDetail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndDetail": unexpectedBetweenNameAndDetail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "detail": detail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -5087,9 +5087,9 @@ extension DeclModifierSyntax: CustomReflectable {
 
 public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeTypeName
+    case unexpectedBeforeTypeName
     case typeName
-    case garbageBetweenTypeNameAndTrailingComma
+    case unexpectedBetweenTypeNameAndTrailingComma
     case trailingComma
   }
 
@@ -5111,15 +5111,15 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeTypeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeTypeName: UnexpectedNodesSyntax? = nil,
     typeName: TypeSyntax,
-    _ garbageBetweenTypeNameAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeTypeName?.raw,
+      unexpectedBeforeTypeName?.raw,
       typeName.raw,
-      garbageBetweenTypeNameAndTrailingComma?.raw,
+      unexpectedBetweenTypeNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedType,
@@ -5132,25 +5132,25 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeTypeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeTypeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeTypeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeTypeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeTypeName(value)
+      self = withUnexpectedBeforeTypeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeTypeName` replaced.
-  /// - param newChild: The new `garbageBeforeTypeName` to replace the node's
-  ///                   current `garbageBeforeTypeName`, if present.
-  public func withGarbageBeforeTypeName(
-    _ newChild: GarbageNodesSyntax?) -> InheritedTypeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeTypeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeTypeName` to replace the node's
+  ///                   current `unexpectedBeforeTypeName`, if present.
+  public func withUnexpectedBeforeTypeName(
+    _ newChild: UnexpectedNodesSyntax?) -> InheritedTypeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeTypeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeTypeName)
     return InheritedTypeSyntax(newData)
   }
 
@@ -5175,25 +5175,25 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     return InheritedTypeSyntax(newData)
   }
 
-  public var garbageBetweenTypeNameAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeNameAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeNameAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeNameAndTrailingComma(value)
+      self = withUnexpectedBetweenTypeNameAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeNameAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenTypeNameAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenTypeNameAndTrailingComma`, if present.
-  public func withGarbageBetweenTypeNameAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> InheritedTypeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeNameAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeNameAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenTypeNameAndTrailingComma`, if present.
+  public func withUnexpectedBetweenTypeNameAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> InheritedTypeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeNameAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeNameAndTrailingComma)
     return InheritedTypeSyntax(newData)
   }
 
@@ -5223,9 +5223,9 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 extension InheritedTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeTypeName": garbageBeforeTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeTypeName": unexpectedBeforeTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typeName": Syntax(typeName).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenTypeNameAndTrailingComma": garbageBetweenTypeNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeNameAndTrailingComma": unexpectedBetweenTypeNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -5235,9 +5235,9 @@ extension InheritedTypeSyntax: CustomReflectable {
 
 public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeColon
+    case unexpectedBeforeColon
     case colon
-    case garbageBetweenColonAndInheritedTypeCollection
+    case unexpectedBetweenColonAndInheritedTypeCollection
     case inheritedTypeCollection
   }
 
@@ -5259,15 +5259,15 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndInheritedTypeCollection: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
     inheritedTypeCollection: InheritedTypeListSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeColon?.raw,
+      unexpectedBeforeColon?.raw,
       colon.raw,
-      garbageBetweenColonAndInheritedTypeCollection?.raw,
+      unexpectedBetweenColonAndInheritedTypeCollection?.raw,
       inheritedTypeCollection.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInheritanceClause,
@@ -5280,25 +5280,25 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeColon: GarbageNodesSyntax? {
+  public var unexpectedBeforeColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeColon,
+      let childData = data.child(at: Cursor.unexpectedBeforeColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeColon(value)
+      self = withUnexpectedBeforeColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeColon` replaced.
-  /// - param newChild: The new `garbageBeforeColon` to replace the node's
-  ///                   current `garbageBeforeColon`, if present.
-  public func withGarbageBeforeColon(
-    _ newChild: GarbageNodesSyntax?) -> TypeInheritanceClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeColon` replaced.
+  /// - param newChild: The new `unexpectedBeforeColon` to replace the node's
+  ///                   current `unexpectedBeforeColon`, if present.
+  public func withUnexpectedBeforeColon(
+    _ newChild: UnexpectedNodesSyntax?) -> TypeInheritanceClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeColon)
     return TypeInheritanceClauseSyntax(newData)
   }
 
@@ -5323,25 +5323,25 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return TypeInheritanceClauseSyntax(newData)
   }
 
-  public var garbageBetweenColonAndInheritedTypeCollection: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndInheritedTypeCollection,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndInheritedTypeCollection,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndInheritedTypeCollection(value)
+      self = withUnexpectedBetweenColonAndInheritedTypeCollection(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndInheritedTypeCollection` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndInheritedTypeCollection` to replace the node's
-  ///                   current `garbageBetweenColonAndInheritedTypeCollection`, if present.
-  public func withGarbageBetweenColonAndInheritedTypeCollection(
-    _ newChild: GarbageNodesSyntax?) -> TypeInheritanceClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndInheritedTypeCollection` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndInheritedTypeCollection` to replace the node's
+  ///                   current `unexpectedBetweenColonAndInheritedTypeCollection`, if present.
+  public func withUnexpectedBetweenColonAndInheritedTypeCollection(
+    _ newChild: UnexpectedNodesSyntax?) -> TypeInheritanceClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndInheritedTypeCollection)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndInheritedTypeCollection)
     return TypeInheritanceClauseSyntax(newData)
   }
 
@@ -5389,9 +5389,9 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension TypeInheritanceClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeColon": garbageBeforeColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeColon": unexpectedBeforeColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndInheritedTypeCollection": garbageBetweenColonAndInheritedTypeCollection.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndInheritedTypeCollection": unexpectedBetweenColonAndInheritedTypeCollection.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritedTypeCollection": Syntax(inheritedTypeCollection).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -5401,11 +5401,11 @@ extension TypeInheritanceClauseSyntax: CustomReflectable {
 
 public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftBrace
+    case unexpectedBeforeLeftBrace
     case leftBrace
-    case garbageBetweenLeftBraceAndMembers
+    case unexpectedBetweenLeftBraceAndMembers
     case members
-    case garbageBetweenMembersAndRightBrace
+    case unexpectedBetweenMembersAndRightBrace
     case rightBrace
   }
 
@@ -5427,19 +5427,19 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
     leftBrace: TokenSyntax,
-    _ garbageBetweenLeftBraceAndMembers: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? = nil,
     members: MemberDeclListSyntax,
-    _ garbageBetweenMembersAndRightBrace: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? = nil,
     rightBrace: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftBrace?.raw,
+      unexpectedBeforeLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndMembers?.raw,
+      unexpectedBetweenLeftBraceAndMembers?.raw,
       members.raw,
-      garbageBetweenMembersAndRightBrace?.raw,
+      unexpectedBetweenMembersAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclBlock,
@@ -5452,25 +5452,25 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftBrace: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftBrace,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftBrace,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftBrace(value)
+      self = withUnexpectedBeforeLeftBrace(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftBrace` replaced.
-  /// - param newChild: The new `garbageBeforeLeftBrace` to replace the node's
-  ///                   current `garbageBeforeLeftBrace`, if present.
-  public func withGarbageBeforeLeftBrace(
-    _ newChild: GarbageNodesSyntax?) -> MemberDeclBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftBrace` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftBrace` to replace the node's
+  ///                   current `unexpectedBeforeLeftBrace`, if present.
+  public func withUnexpectedBeforeLeftBrace(
+    _ newChild: UnexpectedNodesSyntax?) -> MemberDeclBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftBrace)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftBrace)
     return MemberDeclBlockSyntax(newData)
   }
 
@@ -5495,25 +5495,25 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return MemberDeclBlockSyntax(newData)
   }
 
-  public var garbageBetweenLeftBraceAndMembers: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftBraceAndMembers,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftBraceAndMembers,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftBraceAndMembers(value)
+      self = withUnexpectedBetweenLeftBraceAndMembers(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftBraceAndMembers` replaced.
-  /// - param newChild: The new `garbageBetweenLeftBraceAndMembers` to replace the node's
-  ///                   current `garbageBetweenLeftBraceAndMembers`, if present.
-  public func withGarbageBetweenLeftBraceAndMembers(
-    _ newChild: GarbageNodesSyntax?) -> MemberDeclBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftBraceAndMembers` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftBraceAndMembers` to replace the node's
+  ///                   current `unexpectedBetweenLeftBraceAndMembers`, if present.
+  public func withUnexpectedBetweenLeftBraceAndMembers(
+    _ newChild: UnexpectedNodesSyntax?) -> MemberDeclBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftBraceAndMembers)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftBraceAndMembers)
     return MemberDeclBlockSyntax(newData)
   }
 
@@ -5557,25 +5557,25 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return MemberDeclBlockSyntax(newData)
   }
 
-  public var garbageBetweenMembersAndRightBrace: GarbageNodesSyntax? {
+  public var unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenMembersAndRightBrace,
+      let childData = data.child(at: Cursor.unexpectedBetweenMembersAndRightBrace,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenMembersAndRightBrace(value)
+      self = withUnexpectedBetweenMembersAndRightBrace(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenMembersAndRightBrace` replaced.
-  /// - param newChild: The new `garbageBetweenMembersAndRightBrace` to replace the node's
-  ///                   current `garbageBetweenMembersAndRightBrace`, if present.
-  public func withGarbageBetweenMembersAndRightBrace(
-    _ newChild: GarbageNodesSyntax?) -> MemberDeclBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenMembersAndRightBrace` replaced.
+  /// - param newChild: The new `unexpectedBetweenMembersAndRightBrace` to replace the node's
+  ///                   current `unexpectedBetweenMembersAndRightBrace`, if present.
+  public func withUnexpectedBetweenMembersAndRightBrace(
+    _ newChild: UnexpectedNodesSyntax?) -> MemberDeclBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenMembersAndRightBrace)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenMembersAndRightBrace)
     return MemberDeclBlockSyntax(newData)
   }
 
@@ -5604,11 +5604,11 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension MemberDeclBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftBrace": garbageBeforeLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftBrace": unexpectedBeforeLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftBraceAndMembers": garbageBetweenLeftBraceAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftBraceAndMembers": unexpectedBetweenLeftBraceAndMembers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenMembersAndRightBrace": garbageBetweenMembersAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenMembersAndRightBrace": unexpectedBetweenMembersAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -5622,9 +5622,9 @@ extension MemberDeclBlockSyntax: CustomReflectable {
 /// 
 public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeDecl
+    case unexpectedBeforeDecl
     case decl
-    case garbageBetweenDeclAndSemicolon
+    case unexpectedBetweenDeclAndSemicolon
     case semicolon
   }
 
@@ -5646,15 +5646,15 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeDecl: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDecl: UnexpectedNodesSyntax? = nil,
     decl: DeclSyntax,
-    _ garbageBetweenDeclAndSemicolon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclAndSemicolon: UnexpectedNodesSyntax? = nil,
     semicolon: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeDecl?.raw,
+      unexpectedBeforeDecl?.raw,
       decl.raw,
-      garbageBetweenDeclAndSemicolon?.raw,
+      unexpectedBetweenDeclAndSemicolon?.raw,
       semicolon?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclListItem,
@@ -5667,25 +5667,25 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeDecl: GarbageNodesSyntax? {
+  public var unexpectedBeforeDecl: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeDecl,
+      let childData = data.child(at: Cursor.unexpectedBeforeDecl,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeDecl(value)
+      self = withUnexpectedBeforeDecl(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeDecl` replaced.
-  /// - param newChild: The new `garbageBeforeDecl` to replace the node's
-  ///                   current `garbageBeforeDecl`, if present.
-  public func withGarbageBeforeDecl(
-    _ newChild: GarbageNodesSyntax?) -> MemberDeclListItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeDecl` replaced.
+  /// - param newChild: The new `unexpectedBeforeDecl` to replace the node's
+  ///                   current `unexpectedBeforeDecl`, if present.
+  public func withUnexpectedBeforeDecl(
+    _ newChild: UnexpectedNodesSyntax?) -> MemberDeclListItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeDecl)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeDecl)
     return MemberDeclListItemSyntax(newData)
   }
 
@@ -5711,25 +5711,25 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
     return MemberDeclListItemSyntax(newData)
   }
 
-  public var garbageBetweenDeclAndSemicolon: GarbageNodesSyntax? {
+  public var unexpectedBetweenDeclAndSemicolon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDeclAndSemicolon,
+      let childData = data.child(at: Cursor.unexpectedBetweenDeclAndSemicolon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDeclAndSemicolon(value)
+      self = withUnexpectedBetweenDeclAndSemicolon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDeclAndSemicolon` replaced.
-  /// - param newChild: The new `garbageBetweenDeclAndSemicolon` to replace the node's
-  ///                   current `garbageBetweenDeclAndSemicolon`, if present.
-  public func withGarbageBetweenDeclAndSemicolon(
-    _ newChild: GarbageNodesSyntax?) -> MemberDeclListItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDeclAndSemicolon` replaced.
+  /// - param newChild: The new `unexpectedBetweenDeclAndSemicolon` to replace the node's
+  ///                   current `unexpectedBetweenDeclAndSemicolon`, if present.
+  public func withUnexpectedBetweenDeclAndSemicolon(
+    _ newChild: UnexpectedNodesSyntax?) -> MemberDeclListItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDeclAndSemicolon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDeclAndSemicolon)
     return MemberDeclListItemSyntax(newData)
   }
 
@@ -5760,9 +5760,9 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension MemberDeclListItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeDecl": garbageBeforeDecl.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeDecl": unexpectedBeforeDecl.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "decl": Syntax(decl).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenDeclAndSemicolon": garbageBetweenDeclAndSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDeclAndSemicolon": unexpectedBetweenDeclAndSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "semicolon": semicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -5772,9 +5772,9 @@ extension MemberDeclListItemSyntax: CustomReflectable {
 
 public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeStatements
+    case unexpectedBeforeStatements
     case statements
-    case garbageBetweenStatementsAndEOFToken
+    case unexpectedBetweenStatementsAndEOFToken
     case eofToken
   }
 
@@ -5796,15 +5796,15 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeStatements: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil,
     statements: CodeBlockItemListSyntax,
-    _ garbageBetweenStatementsAndEOFToken: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil,
     eofToken: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeStatements?.raw,
+      unexpectedBeforeStatements?.raw,
       statements.raw,
-      garbageBetweenStatementsAndEOFToken?.raw,
+      unexpectedBetweenStatementsAndEOFToken?.raw,
       eofToken.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sourceFile,
@@ -5817,25 +5817,25 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeStatements: GarbageNodesSyntax? {
+  public var unexpectedBeforeStatements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeStatements,
+      let childData = data.child(at: Cursor.unexpectedBeforeStatements,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeStatements(value)
+      self = withUnexpectedBeforeStatements(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeStatements` replaced.
-  /// - param newChild: The new `garbageBeforeStatements` to replace the node's
-  ///                   current `garbageBeforeStatements`, if present.
-  public func withGarbageBeforeStatements(
-    _ newChild: GarbageNodesSyntax?) -> SourceFileSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeStatements` replaced.
+  /// - param newChild: The new `unexpectedBeforeStatements` to replace the node's
+  ///                   current `unexpectedBeforeStatements`, if present.
+  public func withUnexpectedBeforeStatements(
+    _ newChild: UnexpectedNodesSyntax?) -> SourceFileSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeStatements)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeStatements)
     return SourceFileSyntax(newData)
   }
 
@@ -5879,25 +5879,25 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     return SourceFileSyntax(newData)
   }
 
-  public var garbageBetweenStatementsAndEOFToken: GarbageNodesSyntax? {
+  public var unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenStatementsAndEOFToken,
+      let childData = data.child(at: Cursor.unexpectedBetweenStatementsAndEOFToken,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenStatementsAndEOFToken(value)
+      self = withUnexpectedBetweenStatementsAndEOFToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenStatementsAndEOFToken` replaced.
-  /// - param newChild: The new `garbageBetweenStatementsAndEOFToken` to replace the node's
-  ///                   current `garbageBetweenStatementsAndEOFToken`, if present.
-  public func withGarbageBetweenStatementsAndEOFToken(
-    _ newChild: GarbageNodesSyntax?) -> SourceFileSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenStatementsAndEOFToken` replaced.
+  /// - param newChild: The new `unexpectedBetweenStatementsAndEOFToken` to replace the node's
+  ///                   current `unexpectedBetweenStatementsAndEOFToken`, if present.
+  public func withUnexpectedBetweenStatementsAndEOFToken(
+    _ newChild: UnexpectedNodesSyntax?) -> SourceFileSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenStatementsAndEOFToken)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenStatementsAndEOFToken)
     return SourceFileSyntax(newData)
   }
 
@@ -5926,9 +5926,9 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
 extension SourceFileSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeStatements": garbageBeforeStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeStatements": unexpectedBeforeStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "statements": Syntax(statements).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenStatementsAndEOFToken": garbageBetweenStatementsAndEOFToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenStatementsAndEOFToken": unexpectedBetweenStatementsAndEOFToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "eofToken": Syntax(eofToken).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -5938,9 +5938,9 @@ extension SourceFileSyntax: CustomReflectable {
 
 public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeEqual
+    case unexpectedBeforeEqual
     case equal
-    case garbageBetweenEqualAndValue
+    case unexpectedBetweenEqualAndValue
     case value
   }
 
@@ -5962,15 +5962,15 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeEqual: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil,
     equal: TokenSyntax,
-    _ garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil,
     value: ExprSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeEqual?.raw,
+      unexpectedBeforeEqual?.raw,
       equal.raw,
-      garbageBetweenEqualAndValue?.raw,
+      unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.initializerClause,
@@ -5983,25 +5983,25 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeEqual: GarbageNodesSyntax? {
+  public var unexpectedBeforeEqual: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeEqual,
+      let childData = data.child(at: Cursor.unexpectedBeforeEqual,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeEqual(value)
+      self = withUnexpectedBeforeEqual(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeEqual` replaced.
-  /// - param newChild: The new `garbageBeforeEqual` to replace the node's
-  ///                   current `garbageBeforeEqual`, if present.
-  public func withGarbageBeforeEqual(
-    _ newChild: GarbageNodesSyntax?) -> InitializerClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeEqual` replaced.
+  /// - param newChild: The new `unexpectedBeforeEqual` to replace the node's
+  ///                   current `unexpectedBeforeEqual`, if present.
+  public func withUnexpectedBeforeEqual(
+    _ newChild: UnexpectedNodesSyntax?) -> InitializerClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeEqual)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeEqual)
     return InitializerClauseSyntax(newData)
   }
 
@@ -6026,25 +6026,25 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return InitializerClauseSyntax(newData)
   }
 
-  public var garbageBetweenEqualAndValue: GarbageNodesSyntax? {
+  public var unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenEqualAndValue,
+      let childData = data.child(at: Cursor.unexpectedBetweenEqualAndValue,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenEqualAndValue(value)
+      self = withUnexpectedBetweenEqualAndValue(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenEqualAndValue` replaced.
-  /// - param newChild: The new `garbageBetweenEqualAndValue` to replace the node's
-  ///                   current `garbageBetweenEqualAndValue`, if present.
-  public func withGarbageBetweenEqualAndValue(
-    _ newChild: GarbageNodesSyntax?) -> InitializerClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEqualAndValue` replaced.
+  /// - param newChild: The new `unexpectedBetweenEqualAndValue` to replace the node's
+  ///                   current `unexpectedBetweenEqualAndValue`, if present.
+  public func withUnexpectedBetweenEqualAndValue(
+    _ newChild: UnexpectedNodesSyntax?) -> InitializerClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenEqualAndValue)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenEqualAndValue)
     return InitializerClauseSyntax(newData)
   }
 
@@ -6073,9 +6073,9 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension InitializerClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeEqual": garbageBeforeEqual.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeEqual": unexpectedBeforeEqual.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "equal": Syntax(equal).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenEqualAndValue": garbageBetweenEqualAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEqualAndValue": unexpectedBetweenEqualAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "value": Syntax(value).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -6085,21 +6085,21 @@ extension InitializerClauseSyntax: CustomReflectable {
 
 public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAttributes
+    case unexpectedBeforeAttributes
     case attributes
-    case garbageBetweenAttributesAndFirstName
+    case unexpectedBetweenAttributesAndFirstName
     case firstName
-    case garbageBetweenFirstNameAndSecondName
+    case unexpectedBetweenFirstNameAndSecondName
     case secondName
-    case garbageBetweenSecondNameAndColon
+    case unexpectedBetweenSecondNameAndColon
     case colon
-    case garbageBetweenColonAndType
+    case unexpectedBetweenColonAndType
     case type
-    case garbageBetweenTypeAndEllipsis
+    case unexpectedBetweenTypeAndEllipsis
     case ellipsis
-    case garbageBetweenEllipsisAndDefaultArgument
+    case unexpectedBetweenEllipsisAndDefaultArgument
     case defaultArgument
-    case garbageBetweenDefaultArgumentAndTrailingComma
+    case unexpectedBetweenDefaultArgumentAndTrailingComma
     case trailingComma
   }
 
@@ -6121,39 +6121,39 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeAttributes: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax?,
-    _ garbageBetweenAttributesAndFirstName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndFirstName: UnexpectedNodesSyntax? = nil,
     firstName: TokenSyntax?,
-    _ garbageBetweenFirstNameAndSecondName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
     secondName: TokenSyntax?,
-    _ garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax?,
-    _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
     type: TypeSyntax?,
-    _ garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
     ellipsis: TokenSyntax?,
-    _ garbageBetweenEllipsisAndDefaultArgument: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil,
     defaultArgument: InitializerClauseSyntax?,
-    _ garbageBetweenDefaultArgumentAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndFirstName?.raw,
+      unexpectedBetweenAttributesAndFirstName?.raw,
       firstName?.raw,
-      garbageBetweenFirstNameAndSecondName?.raw,
+      unexpectedBetweenFirstNameAndSecondName?.raw,
       secondName?.raw,
-      garbageBetweenSecondNameAndColon?.raw,
+      unexpectedBetweenSecondNameAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndType?.raw,
+      unexpectedBetweenColonAndType?.raw,
       type?.raw,
-      garbageBetweenTypeAndEllipsis?.raw,
+      unexpectedBetweenTypeAndEllipsis?.raw,
       ellipsis?.raw,
-      garbageBetweenEllipsisAndDefaultArgument?.raw,
+      unexpectedBetweenEllipsisAndDefaultArgument?.raw,
       defaultArgument?.raw,
-      garbageBetweenDefaultArgumentAndTrailingComma?.raw,
+      unexpectedBetweenDefaultArgumentAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameter,
@@ -6166,25 +6166,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAttributes(value)
+      self = withUnexpectedBeforeAttributes(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
-  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
-  ///                   current `garbageBeforeAttributes`, if present.
-  public func withGarbageBeforeAttributes(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
+  /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
+  ///                   current `unexpectedBeforeAttributes`, if present.
+  public func withUnexpectedBeforeAttributes(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6229,25 +6229,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var garbageBetweenAttributesAndFirstName: GarbageNodesSyntax? {
+  public var unexpectedBetweenAttributesAndFirstName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAttributesAndFirstName,
+      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndFirstName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAttributesAndFirstName(value)
+      self = withUnexpectedBetweenAttributesAndFirstName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndFirstName` replaced.
-  /// - param newChild: The new `garbageBetweenAttributesAndFirstName` to replace the node's
-  ///                   current `garbageBetweenAttributesAndFirstName`, if present.
-  public func withGarbageBetweenAttributesAndFirstName(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndFirstName` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributesAndFirstName` to replace the node's
+  ///                   current `unexpectedBetweenAttributesAndFirstName`, if present.
+  public func withUnexpectedBetweenAttributesAndFirstName(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndFirstName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndFirstName)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6273,25 +6273,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var garbageBetweenFirstNameAndSecondName: GarbageNodesSyntax? {
+  public var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenFirstNameAndSecondName,
+      let childData = data.child(at: Cursor.unexpectedBetweenFirstNameAndSecondName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenFirstNameAndSecondName(value)
+      self = withUnexpectedBetweenFirstNameAndSecondName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenFirstNameAndSecondName` replaced.
-  /// - param newChild: The new `garbageBetweenFirstNameAndSecondName` to replace the node's
-  ///                   current `garbageBetweenFirstNameAndSecondName`, if present.
-  public func withGarbageBetweenFirstNameAndSecondName(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenFirstNameAndSecondName` replaced.
+  /// - param newChild: The new `unexpectedBetweenFirstNameAndSecondName` to replace the node's
+  ///                   current `unexpectedBetweenFirstNameAndSecondName`, if present.
+  public func withUnexpectedBetweenFirstNameAndSecondName(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenFirstNameAndSecondName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenFirstNameAndSecondName)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6317,25 +6317,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var garbageBetweenSecondNameAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenSecondNameAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenSecondNameAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenSecondNameAndColon(value)
+      self = withUnexpectedBetweenSecondNameAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenSecondNameAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenSecondNameAndColon` to replace the node's
-  ///                   current `garbageBetweenSecondNameAndColon`, if present.
-  public func withGarbageBetweenSecondNameAndColon(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenSecondNameAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenSecondNameAndColon` to replace the node's
+  ///                   current `unexpectedBetweenSecondNameAndColon`, if present.
+  public func withUnexpectedBetweenSecondNameAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSecondNameAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSecondNameAndColon)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6361,25 +6361,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var garbageBetweenColonAndType: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndType,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndType(value)
+      self = withUnexpectedBetweenColonAndType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndType` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndType` to replace the node's
-  ///                   current `garbageBetweenColonAndType`, if present.
-  public func withGarbageBetweenColonAndType(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndType` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndType` to replace the node's
+  ///                   current `unexpectedBetweenColonAndType`, if present.
+  public func withUnexpectedBetweenColonAndType(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndType)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6405,25 +6405,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeAndEllipsis,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeAndEllipsis,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeAndEllipsis(value)
+      self = withUnexpectedBetweenTypeAndEllipsis(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeAndEllipsis` replaced.
-  /// - param newChild: The new `garbageBetweenTypeAndEllipsis` to replace the node's
-  ///                   current `garbageBetweenTypeAndEllipsis`, if present.
-  public func withGarbageBetweenTypeAndEllipsis(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeAndEllipsis` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeAndEllipsis` to replace the node's
+  ///                   current `unexpectedBetweenTypeAndEllipsis`, if present.
+  public func withUnexpectedBetweenTypeAndEllipsis(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeAndEllipsis)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAndEllipsis)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6449,25 +6449,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var garbageBetweenEllipsisAndDefaultArgument: GarbageNodesSyntax? {
+  public var unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenEllipsisAndDefaultArgument,
+      let childData = data.child(at: Cursor.unexpectedBetweenEllipsisAndDefaultArgument,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenEllipsisAndDefaultArgument(value)
+      self = withUnexpectedBetweenEllipsisAndDefaultArgument(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenEllipsisAndDefaultArgument` replaced.
-  /// - param newChild: The new `garbageBetweenEllipsisAndDefaultArgument` to replace the node's
-  ///                   current `garbageBetweenEllipsisAndDefaultArgument`, if present.
-  public func withGarbageBetweenEllipsisAndDefaultArgument(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEllipsisAndDefaultArgument` replaced.
+  /// - param newChild: The new `unexpectedBetweenEllipsisAndDefaultArgument` to replace the node's
+  ///                   current `unexpectedBetweenEllipsisAndDefaultArgument`, if present.
+  public func withUnexpectedBetweenEllipsisAndDefaultArgument(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenEllipsisAndDefaultArgument)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenEllipsisAndDefaultArgument)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6493,25 +6493,25 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionParameterSyntax(newData)
   }
 
-  public var garbageBetweenDefaultArgumentAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDefaultArgumentAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenDefaultArgumentAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDefaultArgumentAndTrailingComma(value)
+      self = withUnexpectedBetweenDefaultArgumentAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDefaultArgumentAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenDefaultArgumentAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenDefaultArgumentAndTrailingComma`, if present.
-  public func withGarbageBetweenDefaultArgumentAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> FunctionParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDefaultArgumentAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenDefaultArgumentAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenDefaultArgumentAndTrailingComma`, if present.
+  public func withUnexpectedBetweenDefaultArgumentAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDefaultArgumentAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDefaultArgumentAndTrailingComma)
     return FunctionParameterSyntax(newData)
   }
 
@@ -6541,21 +6541,21 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
 extension FunctionParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAttributesAndFirstName": garbageBetweenAttributesAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributesAndFirstName": unexpectedBetweenAttributesAndFirstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "firstName": firstName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenFirstNameAndSecondName": garbageBetweenFirstNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenFirstNameAndSecondName": unexpectedBetweenFirstNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "secondName": secondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenSecondNameAndColon": garbageBetweenSecondNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenSecondNameAndColon": unexpectedBetweenSecondNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenColonAndType": garbageBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndType": unexpectedBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "type": type.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenTypeAndEllipsis": garbageBetweenTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeAndEllipsis": unexpectedBetweenTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "ellipsis": ellipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenEllipsisAndDefaultArgument": garbageBetweenEllipsisAndDefaultArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEllipsisAndDefaultArgument": unexpectedBetweenEllipsisAndDefaultArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "defaultArgument": defaultArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenDefaultArgumentAndTrailingComma": garbageBetweenDefaultArgumentAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDefaultArgumentAndTrailingComma": unexpectedBetweenDefaultArgumentAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -6565,9 +6565,9 @@ extension FunctionParameterSyntax: CustomReflectable {
 
 public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndModifier
+    case unexpectedBetweenNameAndModifier
     case modifier
   }
 
@@ -6589,15 +6589,15 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndModifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndModifier: UnexpectedNodesSyntax? = nil,
     modifier: DeclModifierDetailSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndModifier?.raw,
+      unexpectedBetweenNameAndModifier?.raw,
       modifier?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessLevelModifier,
@@ -6610,25 +6610,25 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> AccessLevelModifierSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessLevelModifierSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return AccessLevelModifierSyntax(newData)
   }
 
@@ -6653,25 +6653,25 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
     return AccessLevelModifierSyntax(newData)
   }
 
-  public var garbageBetweenNameAndModifier: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndModifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndModifier,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndModifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndModifier(value)
+      self = withUnexpectedBetweenNameAndModifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndModifier` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndModifier` to replace the node's
-  ///                   current `garbageBetweenNameAndModifier`, if present.
-  public func withGarbageBetweenNameAndModifier(
-    _ newChild: GarbageNodesSyntax?) -> AccessLevelModifierSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndModifier` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndModifier` to replace the node's
+  ///                   current `unexpectedBetweenNameAndModifier`, if present.
+  public func withUnexpectedBetweenNameAndModifier(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessLevelModifierSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndModifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndModifier)
     return AccessLevelModifierSyntax(newData)
   }
 
@@ -6701,9 +6701,9 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessLevelModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndModifier": garbageBetweenNameAndModifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndModifier": unexpectedBetweenNameAndModifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifier": modifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -6713,9 +6713,9 @@ extension AccessLevelModifierSyntax: CustomReflectable {
 
 public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndTrailingDot
+    case unexpectedBetweenNameAndTrailingDot
     case trailingDot
   }
 
@@ -6737,15 +6737,15 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndTrailingDot: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil,
     trailingDot: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingDot?.raw,
+      unexpectedBetweenNameAndTrailingDot?.raw,
       trailingDot?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPathComponent,
@@ -6758,25 +6758,25 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> AccessPathComponentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessPathComponentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return AccessPathComponentSyntax(newData)
   }
 
@@ -6801,25 +6801,25 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
     return AccessPathComponentSyntax(newData)
   }
 
-  public var garbageBetweenNameAndTrailingDot: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndTrailingDot,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndTrailingDot,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndTrailingDot(value)
+      self = withUnexpectedBetweenNameAndTrailingDot(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndTrailingDot` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndTrailingDot` to replace the node's
-  ///                   current `garbageBetweenNameAndTrailingDot`, if present.
-  public func withGarbageBetweenNameAndTrailingDot(
-    _ newChild: GarbageNodesSyntax?) -> AccessPathComponentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndTrailingDot` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndTrailingDot` to replace the node's
+  ///                   current `unexpectedBetweenNameAndTrailingDot`, if present.
+  public func withUnexpectedBetweenNameAndTrailingDot(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessPathComponentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndTrailingDot)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndTrailingDot)
     return AccessPathComponentSyntax(newData)
   }
 
@@ -6849,9 +6849,9 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessPathComponentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndTrailingDot": garbageBetweenNameAndTrailingDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndTrailingDot": unexpectedBetweenNameAndTrailingDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingDot": trailingDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -6861,11 +6861,11 @@ extension AccessPathComponentSyntax: CustomReflectable {
 
 public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftParen
+    case unexpectedBeforeLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndName
+    case unexpectedBetweenLeftParenAndName
     case name
-    case garbageBetweenNameAndRightParen
+    case unexpectedBetweenNameAndRightParen
     case rightParen
   }
 
@@ -6887,19 +6887,19 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndName?.raw,
+      unexpectedBetweenLeftParenAndName?.raw,
       name.raw,
-      garbageBetweenNameAndRightParen?.raw,
+      unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorParameter,
@@ -6912,25 +6912,25 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftParen(value)
+      self = withUnexpectedBeforeLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftParen` replaced.
-  /// - param newChild: The new `garbageBeforeLeftParen` to replace the node's
-  ///                   current `garbageBeforeLeftParen`, if present.
-  public func withGarbageBeforeLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> AccessorParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
+  ///                   current `unexpectedBeforeLeftParen`, if present.
+  public func withUnexpectedBeforeLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessorParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftParen)
     return AccessorParameterSyntax(newData)
   }
 
@@ -6955,25 +6955,25 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return AccessorParameterSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndName: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndName,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndName(value)
+      self = withUnexpectedBetweenLeftParenAndName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndName` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndName` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndName`, if present.
-  public func withGarbageBetweenLeftParenAndName(
-    _ newChild: GarbageNodesSyntax?) -> AccessorParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndName` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndName` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndName`, if present.
+  public func withUnexpectedBetweenLeftParenAndName(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessorParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndName)
     return AccessorParameterSyntax(newData)
   }
 
@@ -6998,25 +6998,25 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return AccessorParameterSyntax(newData)
   }
 
-  public var garbageBetweenNameAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndRightParen(value)
+      self = withUnexpectedBetweenNameAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndRightParen` to replace the node's
-  ///                   current `garbageBetweenNameAndRightParen`, if present.
-  public func withGarbageBetweenNameAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> AccessorParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenNameAndRightParen`, if present.
+  public func withUnexpectedBetweenNameAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessorParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndRightParen)
     return AccessorParameterSyntax(newData)
   }
 
@@ -7045,11 +7045,11 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessorParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftParen": garbageBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndName": garbageBetweenLeftParenAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndName": unexpectedBetweenLeftParenAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndRightParen": garbageBetweenNameAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndRightParen": unexpectedBetweenNameAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -7059,11 +7059,11 @@ extension AccessorParameterSyntax: CustomReflectable {
 
 public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftBrace
+    case unexpectedBeforeLeftBrace
     case leftBrace
-    case garbageBetweenLeftBraceAndAccessors
+    case unexpectedBetweenLeftBraceAndAccessors
     case accessors
-    case garbageBetweenAccessorsAndRightBrace
+    case unexpectedBetweenAccessorsAndRightBrace
     case rightBrace
   }
 
@@ -7085,19 +7085,19 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
     leftBrace: TokenSyntax,
-    _ garbageBetweenLeftBraceAndAccessors: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodesSyntax? = nil,
     accessors: AccessorListSyntax,
-    _ garbageBetweenAccessorsAndRightBrace: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodesSyntax? = nil,
     rightBrace: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftBrace?.raw,
+      unexpectedBeforeLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndAccessors?.raw,
+      unexpectedBetweenLeftBraceAndAccessors?.raw,
       accessors.raw,
-      garbageBetweenAccessorsAndRightBrace?.raw,
+      unexpectedBetweenAccessorsAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorBlock,
@@ -7110,25 +7110,25 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftBrace: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftBrace,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftBrace,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftBrace(value)
+      self = withUnexpectedBeforeLeftBrace(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftBrace` replaced.
-  /// - param newChild: The new `garbageBeforeLeftBrace` to replace the node's
-  ///                   current `garbageBeforeLeftBrace`, if present.
-  public func withGarbageBeforeLeftBrace(
-    _ newChild: GarbageNodesSyntax?) -> AccessorBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftBrace` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftBrace` to replace the node's
+  ///                   current `unexpectedBeforeLeftBrace`, if present.
+  public func withUnexpectedBeforeLeftBrace(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessorBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftBrace)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftBrace)
     return AccessorBlockSyntax(newData)
   }
 
@@ -7153,25 +7153,25 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return AccessorBlockSyntax(newData)
   }
 
-  public var garbageBetweenLeftBraceAndAccessors: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftBraceAndAccessors,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftBraceAndAccessors,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftBraceAndAccessors(value)
+      self = withUnexpectedBetweenLeftBraceAndAccessors(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftBraceAndAccessors` replaced.
-  /// - param newChild: The new `garbageBetweenLeftBraceAndAccessors` to replace the node's
-  ///                   current `garbageBetweenLeftBraceAndAccessors`, if present.
-  public func withGarbageBetweenLeftBraceAndAccessors(
-    _ newChild: GarbageNodesSyntax?) -> AccessorBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftBraceAndAccessors` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftBraceAndAccessors` to replace the node's
+  ///                   current `unexpectedBetweenLeftBraceAndAccessors`, if present.
+  public func withUnexpectedBetweenLeftBraceAndAccessors(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessorBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftBraceAndAccessors)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftBraceAndAccessors)
     return AccessorBlockSyntax(newData)
   }
 
@@ -7215,25 +7215,25 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return AccessorBlockSyntax(newData)
   }
 
-  public var garbageBetweenAccessorsAndRightBrace: GarbageNodesSyntax? {
+  public var unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAccessorsAndRightBrace,
+      let childData = data.child(at: Cursor.unexpectedBetweenAccessorsAndRightBrace,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAccessorsAndRightBrace(value)
+      self = withUnexpectedBetweenAccessorsAndRightBrace(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAccessorsAndRightBrace` replaced.
-  /// - param newChild: The new `garbageBetweenAccessorsAndRightBrace` to replace the node's
-  ///                   current `garbageBetweenAccessorsAndRightBrace`, if present.
-  public func withGarbageBetweenAccessorsAndRightBrace(
-    _ newChild: GarbageNodesSyntax?) -> AccessorBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAccessorsAndRightBrace` replaced.
+  /// - param newChild: The new `unexpectedBetweenAccessorsAndRightBrace` to replace the node's
+  ///                   current `unexpectedBetweenAccessorsAndRightBrace`, if present.
+  public func withUnexpectedBetweenAccessorsAndRightBrace(
+    _ newChild: UnexpectedNodesSyntax?) -> AccessorBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAccessorsAndRightBrace)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAccessorsAndRightBrace)
     return AccessorBlockSyntax(newData)
   }
 
@@ -7262,11 +7262,11 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessorBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftBrace": garbageBeforeLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftBrace": unexpectedBeforeLeftBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftBraceAndAccessors": garbageBetweenLeftBraceAndAccessors.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftBraceAndAccessors": unexpectedBetweenLeftBraceAndAccessors.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "accessors": Syntax(accessors).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAccessorsAndRightBrace": garbageBetweenAccessorsAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAccessorsAndRightBrace": unexpectedBetweenAccessorsAndRightBrace.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -7276,15 +7276,15 @@ extension AccessorBlockSyntax: CustomReflectable {
 
 public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforePattern
+    case unexpectedBeforePattern
     case pattern
-    case garbageBetweenPatternAndTypeAnnotation
+    case unexpectedBetweenPatternAndTypeAnnotation
     case typeAnnotation
-    case garbageBetweenTypeAnnotationAndInitializer
+    case unexpectedBetweenTypeAnnotationAndInitializer
     case initializer
-    case garbageBetweenInitializerAndAccessor
+    case unexpectedBetweenInitializerAndAccessor
     case accessor
-    case garbageBetweenAccessorAndTrailingComma
+    case unexpectedBetweenAccessorAndTrailingComma
     case trailingComma
   }
 
@@ -7306,27 +7306,27 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforePattern: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
     pattern: PatternSyntax,
-    _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
     typeAnnotation: TypeAnnotationSyntax?,
-    _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: InitializerClauseSyntax?,
-    _ garbageBetweenInitializerAndAccessor: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? = nil,
     accessor: Syntax?,
-    _ garbageBetweenAccessorAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTypeAnnotation?.raw,
+      unexpectedBetweenPatternAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
-      garbageBetweenTypeAnnotationAndInitializer?.raw,
+      unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer?.raw,
-      garbageBetweenInitializerAndAccessor?.raw,
+      unexpectedBetweenInitializerAndAccessor?.raw,
       accessor?.raw,
-      garbageBetweenAccessorAndTrailingComma?.raw,
+      unexpectedBetweenAccessorAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBinding,
@@ -7339,25 +7339,25 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforePattern: GarbageNodesSyntax? {
+  public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforePattern,
+      let childData = data.child(at: Cursor.unexpectedBeforePattern,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforePattern(value)
+      self = withUnexpectedBeforePattern(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforePattern` replaced.
-  /// - param newChild: The new `garbageBeforePattern` to replace the node's
-  ///                   current `garbageBeforePattern`, if present.
-  public func withGarbageBeforePattern(
-    _ newChild: GarbageNodesSyntax?) -> PatternBindingSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforePattern` replaced.
+  /// - param newChild: The new `unexpectedBeforePattern` to replace the node's
+  ///                   current `unexpectedBeforePattern`, if present.
+  public func withUnexpectedBeforePattern(
+    _ newChild: UnexpectedNodesSyntax?) -> PatternBindingSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePattern)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePattern)
     return PatternBindingSyntax(newData)
   }
 
@@ -7382,25 +7382,25 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     return PatternBindingSyntax(newData)
   }
 
-  public var garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? {
+  public var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPatternAndTypeAnnotation,
+      let childData = data.child(at: Cursor.unexpectedBetweenPatternAndTypeAnnotation,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPatternAndTypeAnnotation(value)
+      self = withUnexpectedBetweenPatternAndTypeAnnotation(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPatternAndTypeAnnotation` replaced.
-  /// - param newChild: The new `garbageBetweenPatternAndTypeAnnotation` to replace the node's
-  ///                   current `garbageBetweenPatternAndTypeAnnotation`, if present.
-  public func withGarbageBetweenPatternAndTypeAnnotation(
-    _ newChild: GarbageNodesSyntax?) -> PatternBindingSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPatternAndTypeAnnotation` replaced.
+  /// - param newChild: The new `unexpectedBetweenPatternAndTypeAnnotation` to replace the node's
+  ///                   current `unexpectedBetweenPatternAndTypeAnnotation`, if present.
+  public func withUnexpectedBetweenPatternAndTypeAnnotation(
+    _ newChild: UnexpectedNodesSyntax?) -> PatternBindingSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPatternAndTypeAnnotation)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatternAndTypeAnnotation)
     return PatternBindingSyntax(newData)
   }
 
@@ -7426,25 +7426,25 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     return PatternBindingSyntax(newData)
   }
 
-  public var garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeAnnotationAndInitializer,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeAnnotationAndInitializer,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeAnnotationAndInitializer(value)
+      self = withUnexpectedBetweenTypeAnnotationAndInitializer(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeAnnotationAndInitializer` replaced.
-  /// - param newChild: The new `garbageBetweenTypeAnnotationAndInitializer` to replace the node's
-  ///                   current `garbageBetweenTypeAnnotationAndInitializer`, if present.
-  public func withGarbageBetweenTypeAnnotationAndInitializer(
-    _ newChild: GarbageNodesSyntax?) -> PatternBindingSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeAnnotationAndInitializer` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeAnnotationAndInitializer` to replace the node's
+  ///                   current `unexpectedBetweenTypeAnnotationAndInitializer`, if present.
+  public func withUnexpectedBetweenTypeAnnotationAndInitializer(
+    _ newChild: UnexpectedNodesSyntax?) -> PatternBindingSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeAnnotationAndInitializer)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAnnotationAndInitializer)
     return PatternBindingSyntax(newData)
   }
 
@@ -7470,25 +7470,25 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     return PatternBindingSyntax(newData)
   }
 
-  public var garbageBetweenInitializerAndAccessor: GarbageNodesSyntax? {
+  public var unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenInitializerAndAccessor,
+      let childData = data.child(at: Cursor.unexpectedBetweenInitializerAndAccessor,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenInitializerAndAccessor(value)
+      self = withUnexpectedBetweenInitializerAndAccessor(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenInitializerAndAccessor` replaced.
-  /// - param newChild: The new `garbageBetweenInitializerAndAccessor` to replace the node's
-  ///                   current `garbageBetweenInitializerAndAccessor`, if present.
-  public func withGarbageBetweenInitializerAndAccessor(
-    _ newChild: GarbageNodesSyntax?) -> PatternBindingSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenInitializerAndAccessor` replaced.
+  /// - param newChild: The new `unexpectedBetweenInitializerAndAccessor` to replace the node's
+  ///                   current `unexpectedBetweenInitializerAndAccessor`, if present.
+  public func withUnexpectedBetweenInitializerAndAccessor(
+    _ newChild: UnexpectedNodesSyntax?) -> PatternBindingSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInitializerAndAccessor)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInitializerAndAccessor)
     return PatternBindingSyntax(newData)
   }
 
@@ -7514,25 +7514,25 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     return PatternBindingSyntax(newData)
   }
 
-  public var garbageBetweenAccessorAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAccessorAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenAccessorAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAccessorAndTrailingComma(value)
+      self = withUnexpectedBetweenAccessorAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAccessorAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenAccessorAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenAccessorAndTrailingComma`, if present.
-  public func withGarbageBetweenAccessorAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> PatternBindingSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAccessorAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenAccessorAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenAccessorAndTrailingComma`, if present.
+  public func withUnexpectedBetweenAccessorAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> PatternBindingSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAccessorAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAccessorAndTrailingComma)
     return PatternBindingSyntax(newData)
   }
 
@@ -7562,15 +7562,15 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
 extension PatternBindingSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforePattern": garbageBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePattern": unexpectedBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPatternAndTypeAnnotation": garbageBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatternAndTypeAnnotation": unexpectedBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenTypeAnnotationAndInitializer": garbageBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeAnnotationAndInitializer": unexpectedBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenInitializerAndAccessor": garbageBetweenInitializerAndAccessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenInitializerAndAccessor": unexpectedBetweenInitializerAndAccessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "accessor": accessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAccessorAndTrailingComma": garbageBetweenAccessorAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAccessorAndTrailingComma": unexpectedBetweenAccessorAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -7584,13 +7584,13 @@ extension PatternBindingSyntax: CustomReflectable {
 /// 
 public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeIdentifier
+    case unexpectedBeforeIdentifier
     case identifier
-    case garbageBetweenIdentifierAndAssociatedValue
+    case unexpectedBetweenIdentifierAndAssociatedValue
     case associatedValue
-    case garbageBetweenAssociatedValueAndRawValue
+    case unexpectedBetweenAssociatedValueAndRawValue
     case rawValue
-    case garbageBetweenRawValueAndTrailingComma
+    case unexpectedBetweenRawValueAndTrailingComma
     case trailingComma
   }
 
@@ -7612,23 +7612,23 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeIdentifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
-    _ garbageBetweenIdentifierAndAssociatedValue: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? = nil,
     associatedValue: ParameterClauseSyntax?,
-    _ garbageBetweenAssociatedValueAndRawValue: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? = nil,
     rawValue: InitializerClauseSyntax?,
-    _ garbageBetweenRawValueAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeIdentifier?.raw,
+      unexpectedBeforeIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndAssociatedValue?.raw,
+      unexpectedBetweenIdentifierAndAssociatedValue?.raw,
       associatedValue?.raw,
-      garbageBetweenAssociatedValueAndRawValue?.raw,
+      unexpectedBetweenAssociatedValueAndRawValue?.raw,
       rawValue?.raw,
-      garbageBetweenRawValueAndTrailingComma?.raw,
+      unexpectedBetweenRawValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElement,
@@ -7641,25 +7641,25 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeIdentifier: GarbageNodesSyntax? {
+  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeIdentifier,
+      let childData = data.child(at: Cursor.unexpectedBeforeIdentifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeIdentifier(value)
+      self = withUnexpectedBeforeIdentifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeIdentifier` replaced.
-  /// - param newChild: The new `garbageBeforeIdentifier` to replace the node's
-  ///                   current `garbageBeforeIdentifier`, if present.
-  public func withGarbageBeforeIdentifier(
-    _ newChild: GarbageNodesSyntax?) -> EnumCaseElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeIdentifier` to replace the node's
+  ///                   current `unexpectedBeforeIdentifier`, if present.
+  public func withUnexpectedBeforeIdentifier(
+    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeIdentifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeIdentifier)
     return EnumCaseElementSyntax(newData)
   }
 
@@ -7685,25 +7685,25 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     return EnumCaseElementSyntax(newData)
   }
 
-  public var garbageBetweenIdentifierAndAssociatedValue: GarbageNodesSyntax? {
+  public var unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenIdentifierAndAssociatedValue,
+      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndAssociatedValue,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenIdentifierAndAssociatedValue(value)
+      self = withUnexpectedBetweenIdentifierAndAssociatedValue(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenIdentifierAndAssociatedValue` replaced.
-  /// - param newChild: The new `garbageBetweenIdentifierAndAssociatedValue` to replace the node's
-  ///                   current `garbageBetweenIdentifierAndAssociatedValue`, if present.
-  public func withGarbageBetweenIdentifierAndAssociatedValue(
-    _ newChild: GarbageNodesSyntax?) -> EnumCaseElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenIdentifierAndAssociatedValue` replaced.
+  /// - param newChild: The new `unexpectedBetweenIdentifierAndAssociatedValue` to replace the node's
+  ///                   current `unexpectedBetweenIdentifierAndAssociatedValue`, if present.
+  public func withUnexpectedBetweenIdentifierAndAssociatedValue(
+    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenIdentifierAndAssociatedValue)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndAssociatedValue)
     return EnumCaseElementSyntax(newData)
   }
 
@@ -7730,25 +7730,25 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     return EnumCaseElementSyntax(newData)
   }
 
-  public var garbageBetweenAssociatedValueAndRawValue: GarbageNodesSyntax? {
+  public var unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAssociatedValueAndRawValue,
+      let childData = data.child(at: Cursor.unexpectedBetweenAssociatedValueAndRawValue,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAssociatedValueAndRawValue(value)
+      self = withUnexpectedBetweenAssociatedValueAndRawValue(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAssociatedValueAndRawValue` replaced.
-  /// - param newChild: The new `garbageBetweenAssociatedValueAndRawValue` to replace the node's
-  ///                   current `garbageBetweenAssociatedValueAndRawValue`, if present.
-  public func withGarbageBetweenAssociatedValueAndRawValue(
-    _ newChild: GarbageNodesSyntax?) -> EnumCaseElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAssociatedValueAndRawValue` replaced.
+  /// - param newChild: The new `unexpectedBetweenAssociatedValueAndRawValue` to replace the node's
+  ///                   current `unexpectedBetweenAssociatedValueAndRawValue`, if present.
+  public func withUnexpectedBetweenAssociatedValueAndRawValue(
+    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAssociatedValueAndRawValue)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAssociatedValueAndRawValue)
     return EnumCaseElementSyntax(newData)
   }
 
@@ -7777,25 +7777,25 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     return EnumCaseElementSyntax(newData)
   }
 
-  public var garbageBetweenRawValueAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenRawValueAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenRawValueAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenRawValueAndTrailingComma(value)
+      self = withUnexpectedBetweenRawValueAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenRawValueAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenRawValueAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenRawValueAndTrailingComma`, if present.
-  public func withGarbageBetweenRawValueAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> EnumCaseElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenRawValueAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenRawValueAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenRawValueAndTrailingComma`, if present.
+  public func withUnexpectedBetweenRawValueAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> EnumCaseElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenRawValueAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenRawValueAndTrailingComma)
     return EnumCaseElementSyntax(newData)
   }
 
@@ -7829,13 +7829,13 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension EnumCaseElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeIdentifier": garbageBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeIdentifier": unexpectedBeforeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenIdentifierAndAssociatedValue": garbageBetweenIdentifierAndAssociatedValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenIdentifierAndAssociatedValue": unexpectedBetweenIdentifierAndAssociatedValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "associatedValue": associatedValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAssociatedValueAndRawValue": garbageBetweenAssociatedValueAndRawValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAssociatedValueAndRawValue": unexpectedBetweenAssociatedValueAndRawValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rawValue": rawValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenRawValueAndTrailingComma": garbageBetweenRawValueAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenRawValueAndTrailingComma": unexpectedBetweenRawValueAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -7848,9 +7848,9 @@ extension EnumCaseElementSyntax: CustomReflectable {
 /// 
 public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeColon
+    case unexpectedBeforeColon
     case colon
-    case garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes
+    case unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes
     case precedenceGroupAndDesignatedTypes
   }
 
@@ -7872,15 +7872,15 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil,
     precedenceGroupAndDesignatedTypes: IdentifierListSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeColon?.raw,
+      unexpectedBeforeColon?.raw,
       colon.raw,
-      garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
+      unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
       precedenceGroupAndDesignatedTypes.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.operatorPrecedenceAndTypes,
@@ -7893,25 +7893,25 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeColon: GarbageNodesSyntax? {
+  public var unexpectedBeforeColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeColon,
+      let childData = data.child(at: Cursor.unexpectedBeforeColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeColon(value)
+      self = withUnexpectedBeforeColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeColon` replaced.
-  /// - param newChild: The new `garbageBeforeColon` to replace the node's
-  ///                   current `garbageBeforeColon`, if present.
-  public func withGarbageBeforeColon(
-    _ newChild: GarbageNodesSyntax?) -> OperatorPrecedenceAndTypesSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeColon` replaced.
+  /// - param newChild: The new `unexpectedBeforeColon` to replace the node's
+  ///                   current `unexpectedBeforeColon`, if present.
+  public func withUnexpectedBeforeColon(
+    _ newChild: UnexpectedNodesSyntax?) -> OperatorPrecedenceAndTypesSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeColon)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
 
@@ -7936,25 +7936,25 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
 
-  public var garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndPrecedenceGroupAndDesignatedTypes(value)
+      self = withUnexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes` to replace the node's
-  ///                   current `garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes`, if present.
-  public func withGarbageBetweenColonAndPrecedenceGroupAndDesignatedTypes(
-    _ newChild: GarbageNodesSyntax?) -> OperatorPrecedenceAndTypesSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes` to replace the node's
+  ///                   current `unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes`, if present.
+  public func withUnexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes(
+    _ newChild: UnexpectedNodesSyntax?) -> OperatorPrecedenceAndTypesSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
 
@@ -8005,9 +8005,9 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
 extension OperatorPrecedenceAndTypesSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeColon": garbageBeforeColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeColon": unexpectedBeforeColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes": garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes": unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "precedenceGroupAndDesignatedTypes": Syntax(precedenceGroupAndDesignatedTypes).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -8021,11 +8021,11 @@ extension OperatorPrecedenceAndTypesSyntax: CustomReflectable {
 /// 
 public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeHigherThanOrLowerThan
+    case unexpectedBeforeHigherThanOrLowerThan
     case higherThanOrLowerThan
-    case garbageBetweenHigherThanOrLowerThanAndColon
+    case unexpectedBetweenHigherThanOrLowerThanAndColon
     case colon
-    case garbageBetweenColonAndOtherNames
+    case unexpectedBetweenColonAndOtherNames
     case otherNames
   }
 
@@ -8047,19 +8047,19 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeHigherThanOrLowerThan: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? = nil,
     higherThanOrLowerThan: TokenSyntax,
-    _ garbageBetweenHigherThanOrLowerThanAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndOtherNames: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil,
     otherNames: PrecedenceGroupNameListSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeHigherThanOrLowerThan?.raw,
+      unexpectedBeforeHigherThanOrLowerThan?.raw,
       higherThanOrLowerThan.raw,
-      garbageBetweenHigherThanOrLowerThanAndColon?.raw,
+      unexpectedBetweenHigherThanOrLowerThanAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndOtherNames?.raw,
+      unexpectedBetweenColonAndOtherNames?.raw,
       otherNames.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupRelation,
@@ -8072,25 +8072,25 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeHigherThanOrLowerThan: GarbageNodesSyntax? {
+  public var unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeHigherThanOrLowerThan,
+      let childData = data.child(at: Cursor.unexpectedBeforeHigherThanOrLowerThan,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeHigherThanOrLowerThan(value)
+      self = withUnexpectedBeforeHigherThanOrLowerThan(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeHigherThanOrLowerThan` replaced.
-  /// - param newChild: The new `garbageBeforeHigherThanOrLowerThan` to replace the node's
-  ///                   current `garbageBeforeHigherThanOrLowerThan`, if present.
-  public func withGarbageBeforeHigherThanOrLowerThan(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupRelationSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeHigherThanOrLowerThan` replaced.
+  /// - param newChild: The new `unexpectedBeforeHigherThanOrLowerThan` to replace the node's
+  ///                   current `unexpectedBeforeHigherThanOrLowerThan`, if present.
+  public func withUnexpectedBeforeHigherThanOrLowerThan(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupRelationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeHigherThanOrLowerThan)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeHigherThanOrLowerThan)
     return PrecedenceGroupRelationSyntax(newData)
   }
 
@@ -8118,25 +8118,25 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupRelationSyntax(newData)
   }
 
-  public var garbageBetweenHigherThanOrLowerThanAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenHigherThanOrLowerThanAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenHigherThanOrLowerThanAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenHigherThanOrLowerThanAndColon(value)
+      self = withUnexpectedBetweenHigherThanOrLowerThanAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenHigherThanOrLowerThanAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenHigherThanOrLowerThanAndColon` to replace the node's
-  ///                   current `garbageBetweenHigherThanOrLowerThanAndColon`, if present.
-  public func withGarbageBetweenHigherThanOrLowerThanAndColon(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupRelationSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenHigherThanOrLowerThanAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenHigherThanOrLowerThanAndColon` to replace the node's
+  ///                   current `unexpectedBetweenHigherThanOrLowerThanAndColon`, if present.
+  public func withUnexpectedBetweenHigherThanOrLowerThanAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupRelationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenHigherThanOrLowerThanAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenHigherThanOrLowerThanAndColon)
     return PrecedenceGroupRelationSyntax(newData)
   }
 
@@ -8161,25 +8161,25 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupRelationSyntax(newData)
   }
 
-  public var garbageBetweenColonAndOtherNames: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndOtherNames,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndOtherNames,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndOtherNames(value)
+      self = withUnexpectedBetweenColonAndOtherNames(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndOtherNames` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndOtherNames` to replace the node's
-  ///                   current `garbageBetweenColonAndOtherNames`, if present.
-  public func withGarbageBetweenColonAndOtherNames(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupRelationSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndOtherNames` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndOtherNames` to replace the node's
+  ///                   current `unexpectedBetweenColonAndOtherNames`, if present.
+  public func withUnexpectedBetweenColonAndOtherNames(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupRelationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndOtherNames)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndOtherNames)
     return PrecedenceGroupRelationSyntax(newData)
   }
 
@@ -8231,11 +8231,11 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupRelationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeHigherThanOrLowerThan": garbageBeforeHigherThanOrLowerThan.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeHigherThanOrLowerThan": unexpectedBeforeHigherThanOrLowerThan.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "higherThanOrLowerThan": Syntax(higherThanOrLowerThan).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenHigherThanOrLowerThanAndColon": garbageBetweenHigherThanOrLowerThanAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenHigherThanOrLowerThanAndColon": unexpectedBetweenHigherThanOrLowerThanAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndOtherNames": garbageBetweenColonAndOtherNames.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndOtherNames": unexpectedBetweenColonAndOtherNames.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "otherNames": Syntax(otherNames).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -8245,9 +8245,9 @@ extension PrecedenceGroupRelationSyntax: CustomReflectable {
 
 public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndTrailingComma
+    case unexpectedBetweenNameAndTrailingComma
     case trailingComma
   }
 
@@ -8269,15 +8269,15 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingComma?.raw,
+      unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameElement,
@@ -8290,25 +8290,25 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupNameElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupNameElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return PrecedenceGroupNameElementSyntax(newData)
   }
 
@@ -8333,25 +8333,25 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupNameElementSyntax(newData)
   }
 
-  public var garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndTrailingComma(value)
+      self = withUnexpectedBetweenNameAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenNameAndTrailingComma`, if present.
-  public func withGarbageBetweenNameAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupNameElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenNameAndTrailingComma`, if present.
+  public func withUnexpectedBetweenNameAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupNameElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndTrailingComma)
     return PrecedenceGroupNameElementSyntax(newData)
   }
 
@@ -8381,9 +8381,9 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupNameElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndTrailingComma": garbageBetweenNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndTrailingComma": unexpectedBetweenNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -8397,11 +8397,11 @@ extension PrecedenceGroupNameElementSyntax: CustomReflectable {
 /// 
 public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAssignmentKeyword
+    case unexpectedBeforeAssignmentKeyword
     case assignmentKeyword
-    case garbageBetweenAssignmentKeywordAndColon
+    case unexpectedBetweenAssignmentKeywordAndColon
     case colon
-    case garbageBetweenColonAndFlag
+    case unexpectedBetweenColonAndFlag
     case flag
   }
 
@@ -8423,19 +8423,19 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeAssignmentKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAssignmentKeyword: UnexpectedNodesSyntax? = nil,
     assignmentKeyword: TokenSyntax,
-    _ garbageBetweenAssignmentKeywordAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndFlag: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndFlag: UnexpectedNodesSyntax? = nil,
     flag: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAssignmentKeyword?.raw,
+      unexpectedBeforeAssignmentKeyword?.raw,
       assignmentKeyword.raw,
-      garbageBetweenAssignmentKeywordAndColon?.raw,
+      unexpectedBetweenAssignmentKeywordAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndFlag?.raw,
+      unexpectedBetweenColonAndFlag?.raw,
       flag.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssignment,
@@ -8448,25 +8448,25 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAssignmentKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeAssignmentKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAssignmentKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeAssignmentKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAssignmentKeyword(value)
+      self = withUnexpectedBeforeAssignmentKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAssignmentKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeAssignmentKeyword` to replace the node's
-  ///                   current `garbageBeforeAssignmentKeyword`, if present.
-  public func withGarbageBeforeAssignmentKeyword(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupAssignmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAssignmentKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeAssignmentKeyword` to replace the node's
+  ///                   current `unexpectedBeforeAssignmentKeyword`, if present.
+  public func withUnexpectedBeforeAssignmentKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupAssignmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAssignmentKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAssignmentKeyword)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
 
@@ -8491,25 +8491,25 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupAssignmentSyntax(newData)
   }
 
-  public var garbageBetweenAssignmentKeywordAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAssignmentKeywordAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenAssignmentKeywordAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAssignmentKeywordAndColon(value)
+      self = withUnexpectedBetweenAssignmentKeywordAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAssignmentKeywordAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenAssignmentKeywordAndColon` to replace the node's
-  ///                   current `garbageBetweenAssignmentKeywordAndColon`, if present.
-  public func withGarbageBetweenAssignmentKeywordAndColon(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupAssignmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAssignmentKeywordAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenAssignmentKeywordAndColon` to replace the node's
+  ///                   current `unexpectedBetweenAssignmentKeywordAndColon`, if present.
+  public func withUnexpectedBetweenAssignmentKeywordAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupAssignmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAssignmentKeywordAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAssignmentKeywordAndColon)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
 
@@ -8534,25 +8534,25 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupAssignmentSyntax(newData)
   }
 
-  public var garbageBetweenColonAndFlag: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndFlag: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndFlag,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndFlag,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndFlag(value)
+      self = withUnexpectedBetweenColonAndFlag(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndFlag` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndFlag` to replace the node's
-  ///                   current `garbageBetweenColonAndFlag`, if present.
-  public func withGarbageBetweenColonAndFlag(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupAssignmentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndFlag` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndFlag` to replace the node's
+  ///                   current `unexpectedBetweenColonAndFlag`, if present.
+  public func withUnexpectedBetweenColonAndFlag(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupAssignmentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndFlag)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndFlag)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
 
@@ -8588,11 +8588,11 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupAssignmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAssignmentKeyword": garbageBeforeAssignmentKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAssignmentKeyword": unexpectedBeforeAssignmentKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "assignmentKeyword": Syntax(assignmentKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAssignmentKeywordAndColon": garbageBetweenAssignmentKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAssignmentKeywordAndColon": unexpectedBetweenAssignmentKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndFlag": garbageBetweenColonAndFlag.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndFlag": unexpectedBetweenColonAndFlag.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "flag": Syntax(flag).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -8606,11 +8606,11 @@ extension PrecedenceGroupAssignmentSyntax: CustomReflectable {
 /// 
 public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAssociativityKeyword
+    case unexpectedBeforeAssociativityKeyword
     case associativityKeyword
-    case garbageBetweenAssociativityKeywordAndColon
+    case unexpectedBetweenAssociativityKeywordAndColon
     case colon
-    case garbageBetweenColonAndValue
+    case unexpectedBetweenColonAndValue
     case value
   }
 
@@ -8632,19 +8632,19 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   }
 
   public init(
-    _ garbageBeforeAssociativityKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAssociativityKeyword: UnexpectedNodesSyntax? = nil,
     associativityKeyword: TokenSyntax,
-    _ garbageBetweenAssociativityKeywordAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
     value: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAssociativityKeyword?.raw,
+      unexpectedBeforeAssociativityKeyword?.raw,
       associativityKeyword.raw,
-      garbageBetweenAssociativityKeywordAndColon?.raw,
+      unexpectedBetweenAssociativityKeywordAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValue?.raw,
+      unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssociativity,
@@ -8657,25 +8657,25 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAssociativityKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeAssociativityKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAssociativityKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeAssociativityKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAssociativityKeyword(value)
+      self = withUnexpectedBeforeAssociativityKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAssociativityKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeAssociativityKeyword` to replace the node's
-  ///                   current `garbageBeforeAssociativityKeyword`, if present.
-  public func withGarbageBeforeAssociativityKeyword(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupAssociativitySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAssociativityKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeAssociativityKeyword` to replace the node's
+  ///                   current `unexpectedBeforeAssociativityKeyword`, if present.
+  public func withUnexpectedBeforeAssociativityKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupAssociativitySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAssociativityKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAssociativityKeyword)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
 
@@ -8700,25 +8700,25 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
     return PrecedenceGroupAssociativitySyntax(newData)
   }
 
-  public var garbageBetweenAssociativityKeywordAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAssociativityKeywordAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenAssociativityKeywordAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAssociativityKeywordAndColon(value)
+      self = withUnexpectedBetweenAssociativityKeywordAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAssociativityKeywordAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenAssociativityKeywordAndColon` to replace the node's
-  ///                   current `garbageBetweenAssociativityKeywordAndColon`, if present.
-  public func withGarbageBetweenAssociativityKeywordAndColon(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupAssociativitySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAssociativityKeywordAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenAssociativityKeywordAndColon` to replace the node's
+  ///                   current `unexpectedBetweenAssociativityKeywordAndColon`, if present.
+  public func withUnexpectedBetweenAssociativityKeywordAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupAssociativitySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAssociativityKeywordAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAssociativityKeywordAndColon)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
 
@@ -8743,25 +8743,25 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
     return PrecedenceGroupAssociativitySyntax(newData)
   }
 
-  public var garbageBetweenColonAndValue: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndValue,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndValue,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndValue(value)
+      self = withUnexpectedBetweenColonAndValue(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndValue` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndValue` to replace the node's
-  ///                   current `garbageBetweenColonAndValue`, if present.
-  public func withGarbageBetweenColonAndValue(
-    _ newChild: GarbageNodesSyntax?) -> PrecedenceGroupAssociativitySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndValue` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndValue` to replace the node's
+  ///                   current `unexpectedBetweenColonAndValue`, if present.
+  public func withUnexpectedBetweenColonAndValue(
+    _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupAssociativitySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndValue)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndValue)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
 
@@ -8796,11 +8796,11 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
 extension PrecedenceGroupAssociativitySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAssociativityKeyword": garbageBeforeAssociativityKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAssociativityKeyword": unexpectedBeforeAssociativityKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "associativityKeyword": Syntax(associativityKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAssociativityKeywordAndColon": garbageBetweenAssociativityKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAssociativityKeywordAndColon": unexpectedBetweenAssociativityKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndValue": garbageBetweenColonAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndValue": unexpectedBetweenColonAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "value": Syntax(value).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -8813,15 +8813,15 @@ extension PrecedenceGroupAssociativitySyntax: CustomReflectable {
 /// 
 public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAtSignToken
+    case unexpectedBeforeAtSignToken
     case atSignToken
-    case garbageBetweenAtSignTokenAndAttributeName
+    case unexpectedBetweenAtSignTokenAndAttributeName
     case attributeName
-    case garbageBetweenAttributeNameAndLeftParen
+    case unexpectedBetweenAttributeNameAndLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndArgumentList
+    case unexpectedBetweenLeftParenAndArgumentList
     case argumentList
-    case garbageBetweenArgumentListAndRightParen
+    case unexpectedBetweenArgumentListAndRightParen
     case rightParen
   }
 
@@ -8843,27 +8843,27 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeAtSignToken: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil,
     atSignToken: TokenSyntax,
-    _ garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil,
     attributeName: TypeSyntax,
-    _ garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax?,
-    _ garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
     argumentList: TupleExprElementListSyntax?,
-    _ garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAtSignToken?.raw,
+      unexpectedBeforeAtSignToken?.raw,
       atSignToken.raw,
-      garbageBetweenAtSignTokenAndAttributeName?.raw,
+      unexpectedBetweenAtSignTokenAndAttributeName?.raw,
       attributeName.raw,
-      garbageBetweenAttributeNameAndLeftParen?.raw,
+      unexpectedBetweenAttributeNameAndLeftParen?.raw,
       leftParen?.raw,
-      garbageBetweenLeftParenAndArgumentList?.raw,
+      unexpectedBetweenLeftParenAndArgumentList?.raw,
       argumentList?.raw,
-      garbageBetweenArgumentListAndRightParen?.raw,
+      unexpectedBetweenArgumentListAndRightParen?.raw,
       rightParen?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.customAttribute,
@@ -8876,25 +8876,25 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAtSignToken: GarbageNodesSyntax? {
+  public var unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAtSignToken,
+      let childData = data.child(at: Cursor.unexpectedBeforeAtSignToken,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAtSignToken(value)
+      self = withUnexpectedBeforeAtSignToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAtSignToken` replaced.
-  /// - param newChild: The new `garbageBeforeAtSignToken` to replace the node's
-  ///                   current `garbageBeforeAtSignToken`, if present.
-  public func withGarbageBeforeAtSignToken(
-    _ newChild: GarbageNodesSyntax?) -> CustomAttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAtSignToken` replaced.
+  /// - param newChild: The new `unexpectedBeforeAtSignToken` to replace the node's
+  ///                   current `unexpectedBeforeAtSignToken`, if present.
+  public func withUnexpectedBeforeAtSignToken(
+    _ newChild: UnexpectedNodesSyntax?) -> CustomAttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAtSignToken)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAtSignToken)
     return CustomAttributeSyntax(newData)
   }
 
@@ -8920,25 +8920,25 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return CustomAttributeSyntax(newData)
   }
 
-  public var garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? {
+  public var unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAtSignTokenAndAttributeName,
+      let childData = data.child(at: Cursor.unexpectedBetweenAtSignTokenAndAttributeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAtSignTokenAndAttributeName(value)
+      self = withUnexpectedBetweenAtSignTokenAndAttributeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAtSignTokenAndAttributeName` replaced.
-  /// - param newChild: The new `garbageBetweenAtSignTokenAndAttributeName` to replace the node's
-  ///                   current `garbageBetweenAtSignTokenAndAttributeName`, if present.
-  public func withGarbageBetweenAtSignTokenAndAttributeName(
-    _ newChild: GarbageNodesSyntax?) -> CustomAttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAtSignTokenAndAttributeName` replaced.
+  /// - param newChild: The new `unexpectedBetweenAtSignTokenAndAttributeName` to replace the node's
+  ///                   current `unexpectedBetweenAtSignTokenAndAttributeName`, if present.
+  public func withUnexpectedBetweenAtSignTokenAndAttributeName(
+    _ newChild: UnexpectedNodesSyntax?) -> CustomAttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAtSignTokenAndAttributeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAtSignTokenAndAttributeName)
     return CustomAttributeSyntax(newData)
   }
 
@@ -8964,25 +8964,25 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return CustomAttributeSyntax(newData)
   }
 
-  public var garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAttributeNameAndLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenAttributeNameAndLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAttributeNameAndLeftParen(value)
+      self = withUnexpectedBetweenAttributeNameAndLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAttributeNameAndLeftParen` replaced.
-  /// - param newChild: The new `garbageBetweenAttributeNameAndLeftParen` to replace the node's
-  ///                   current `garbageBetweenAttributeNameAndLeftParen`, if present.
-  public func withGarbageBetweenAttributeNameAndLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> CustomAttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributeNameAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributeNameAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenAttributeNameAndLeftParen`, if present.
+  public func withUnexpectedBetweenAttributeNameAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> CustomAttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributeNameAndLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributeNameAndLeftParen)
     return CustomAttributeSyntax(newData)
   }
 
@@ -9008,25 +9008,25 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return CustomAttributeSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndArgumentList,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndArgumentList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndArgumentList(value)
+      self = withUnexpectedBetweenLeftParenAndArgumentList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndArgumentList` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndArgumentList` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndArgumentList`, if present.
-  public func withGarbageBetweenLeftParenAndArgumentList(
-    _ newChild: GarbageNodesSyntax?) -> CustomAttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndArgumentList` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndArgumentList` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndArgumentList`, if present.
+  public func withUnexpectedBetweenLeftParenAndArgumentList(
+    _ newChild: UnexpectedNodesSyntax?) -> CustomAttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndArgumentList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndArgumentList)
     return CustomAttributeSyntax(newData)
   }
 
@@ -9071,25 +9071,25 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return CustomAttributeSyntax(newData)
   }
 
-  public var garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenArgumentListAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenArgumentListAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenArgumentListAndRightParen(value)
+      self = withUnexpectedBetweenArgumentListAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenArgumentListAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenArgumentListAndRightParen` to replace the node's
-  ///                   current `garbageBetweenArgumentListAndRightParen`, if present.
-  public func withGarbageBetweenArgumentListAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> CustomAttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentListAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenArgumentListAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenArgumentListAndRightParen`, if present.
+  public func withUnexpectedBetweenArgumentListAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> CustomAttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenArgumentListAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenArgumentListAndRightParen)
     return CustomAttributeSyntax(newData)
   }
 
@@ -9119,15 +9119,15 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
 extension CustomAttributeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAtSignToken": garbageBeforeAtSignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAtSignToken": unexpectedBeforeAtSignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "atSignToken": Syntax(atSignToken).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAtSignTokenAndAttributeName": garbageBetweenAtSignTokenAndAttributeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAtSignTokenAndAttributeName": unexpectedBetweenAtSignTokenAndAttributeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributeName": Syntax(attributeName).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAttributeNameAndLeftParen": garbageBetweenAttributeNameAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributeNameAndLeftParen": unexpectedBetweenAttributeNameAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLeftParenAndArgumentList": garbageBetweenLeftParenAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndArgumentList": unexpectedBetweenLeftParenAndArgumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "argumentList": argumentList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenArgumentListAndRightParen": garbageBetweenArgumentListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenArgumentListAndRightParen": unexpectedBetweenArgumentListAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -9140,17 +9140,17 @@ extension CustomAttributeSyntax: CustomReflectable {
 /// 
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAtSignToken
+    case unexpectedBeforeAtSignToken
     case atSignToken
-    case garbageBetweenAtSignTokenAndAttributeName
+    case unexpectedBetweenAtSignTokenAndAttributeName
     case attributeName
-    case garbageBetweenAttributeNameAndLeftParen
+    case unexpectedBetweenAttributeNameAndLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndArgument
+    case unexpectedBetweenLeftParenAndArgument
     case argument
-    case garbageBetweenArgumentAndRightParen
+    case unexpectedBetweenArgumentAndRightParen
     case rightParen
-    case garbageBetweenRightParenAndTokenList
+    case unexpectedBetweenRightParenAndTokenList
     case tokenList
   }
 
@@ -9172,31 +9172,31 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeAtSignToken: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil,
     atSignToken: TokenSyntax,
-    _ garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil,
     attributeName: TokenSyntax,
-    _ garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax?,
-    _ garbageBetweenLeftParenAndArgument: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil,
     argument: Syntax?,
-    _ garbageBetweenArgumentAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax?,
-    _ garbageBetweenRightParenAndTokenList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTokenList: UnexpectedNodesSyntax? = nil,
     tokenList: TokenListSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAtSignToken?.raw,
+      unexpectedBeforeAtSignToken?.raw,
       atSignToken.raw,
-      garbageBetweenAtSignTokenAndAttributeName?.raw,
+      unexpectedBetweenAtSignTokenAndAttributeName?.raw,
       attributeName.raw,
-      garbageBetweenAttributeNameAndLeftParen?.raw,
+      unexpectedBetweenAttributeNameAndLeftParen?.raw,
       leftParen?.raw,
-      garbageBetweenLeftParenAndArgument?.raw,
+      unexpectedBetweenLeftParenAndArgument?.raw,
       argument?.raw,
-      garbageBetweenArgumentAndRightParen?.raw,
+      unexpectedBetweenArgumentAndRightParen?.raw,
       rightParen?.raw,
-      garbageBetweenRightParenAndTokenList?.raw,
+      unexpectedBetweenRightParenAndTokenList?.raw,
       tokenList?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attribute,
@@ -9209,25 +9209,25 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAtSignToken: GarbageNodesSyntax? {
+  public var unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAtSignToken,
+      let childData = data.child(at: Cursor.unexpectedBeforeAtSignToken,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAtSignToken(value)
+      self = withUnexpectedBeforeAtSignToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAtSignToken` replaced.
-  /// - param newChild: The new `garbageBeforeAtSignToken` to replace the node's
-  ///                   current `garbageBeforeAtSignToken`, if present.
-  public func withGarbageBeforeAtSignToken(
-    _ newChild: GarbageNodesSyntax?) -> AttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAtSignToken` replaced.
+  /// - param newChild: The new `unexpectedBeforeAtSignToken` to replace the node's
+  ///                   current `unexpectedBeforeAtSignToken`, if present.
+  public func withUnexpectedBeforeAtSignToken(
+    _ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAtSignToken)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAtSignToken)
     return AttributeSyntax(newData)
   }
 
@@ -9253,25 +9253,25 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return AttributeSyntax(newData)
   }
 
-  public var garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? {
+  public var unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAtSignTokenAndAttributeName,
+      let childData = data.child(at: Cursor.unexpectedBetweenAtSignTokenAndAttributeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAtSignTokenAndAttributeName(value)
+      self = withUnexpectedBetweenAtSignTokenAndAttributeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAtSignTokenAndAttributeName` replaced.
-  /// - param newChild: The new `garbageBetweenAtSignTokenAndAttributeName` to replace the node's
-  ///                   current `garbageBetweenAtSignTokenAndAttributeName`, if present.
-  public func withGarbageBetweenAtSignTokenAndAttributeName(
-    _ newChild: GarbageNodesSyntax?) -> AttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAtSignTokenAndAttributeName` replaced.
+  /// - param newChild: The new `unexpectedBetweenAtSignTokenAndAttributeName` to replace the node's
+  ///                   current `unexpectedBetweenAtSignTokenAndAttributeName`, if present.
+  public func withUnexpectedBetweenAtSignTokenAndAttributeName(
+    _ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAtSignTokenAndAttributeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAtSignTokenAndAttributeName)
     return AttributeSyntax(newData)
   }
 
@@ -9297,25 +9297,25 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return AttributeSyntax(newData)
   }
 
-  public var garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAttributeNameAndLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenAttributeNameAndLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAttributeNameAndLeftParen(value)
+      self = withUnexpectedBetweenAttributeNameAndLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAttributeNameAndLeftParen` replaced.
-  /// - param newChild: The new `garbageBetweenAttributeNameAndLeftParen` to replace the node's
-  ///                   current `garbageBetweenAttributeNameAndLeftParen`, if present.
-  public func withGarbageBetweenAttributeNameAndLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> AttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributeNameAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributeNameAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenAttributeNameAndLeftParen`, if present.
+  public func withUnexpectedBetweenAttributeNameAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributeNameAndLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributeNameAndLeftParen)
     return AttributeSyntax(newData)
   }
 
@@ -9344,25 +9344,25 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return AttributeSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndArgument: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndArgument,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndArgument,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndArgument(value)
+      self = withUnexpectedBetweenLeftParenAndArgument(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndArgument` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndArgument` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndArgument`, if present.
-  public func withGarbageBetweenLeftParenAndArgument(
-    _ newChild: GarbageNodesSyntax?) -> AttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndArgument` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndArgument` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndArgument`, if present.
+  public func withUnexpectedBetweenLeftParenAndArgument(
+    _ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndArgument)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndArgument)
     return AttributeSyntax(newData)
   }
 
@@ -9393,25 +9393,25 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return AttributeSyntax(newData)
   }
 
-  public var garbageBetweenArgumentAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenArgumentAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenArgumentAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenArgumentAndRightParen(value)
+      self = withUnexpectedBetweenArgumentAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenArgumentAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenArgumentAndRightParen` to replace the node's
-  ///                   current `garbageBetweenArgumentAndRightParen`, if present.
-  public func withGarbageBetweenArgumentAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> AttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenArgumentAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenArgumentAndRightParen`, if present.
+  public func withUnexpectedBetweenArgumentAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenArgumentAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenArgumentAndRightParen)
     return AttributeSyntax(newData)
   }
 
@@ -9440,25 +9440,25 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     return AttributeSyntax(newData)
   }
 
-  public var garbageBetweenRightParenAndTokenList: GarbageNodesSyntax? {
+  public var unexpectedBetweenRightParenAndTokenList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenRightParenAndTokenList,
+      let childData = data.child(at: Cursor.unexpectedBetweenRightParenAndTokenList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenRightParenAndTokenList(value)
+      self = withUnexpectedBetweenRightParenAndTokenList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenRightParenAndTokenList` replaced.
-  /// - param newChild: The new `garbageBetweenRightParenAndTokenList` to replace the node's
-  ///                   current `garbageBetweenRightParenAndTokenList`, if present.
-  public func withGarbageBetweenRightParenAndTokenList(
-    _ newChild: GarbageNodesSyntax?) -> AttributeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenRightParenAndTokenList` replaced.
+  /// - param newChild: The new `unexpectedBetweenRightParenAndTokenList` to replace the node's
+  ///                   current `unexpectedBetweenRightParenAndTokenList`, if present.
+  public func withUnexpectedBetweenRightParenAndTokenList(
+    _ newChild: UnexpectedNodesSyntax?) -> AttributeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenRightParenAndTokenList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenRightParenAndTokenList)
     return AttributeSyntax(newData)
   }
 
@@ -9507,17 +9507,17 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
 extension AttributeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAtSignToken": garbageBeforeAtSignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAtSignToken": unexpectedBeforeAtSignToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "atSignToken": Syntax(atSignToken).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAtSignTokenAndAttributeName": garbageBetweenAtSignTokenAndAttributeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAtSignTokenAndAttributeName": unexpectedBetweenAtSignTokenAndAttributeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributeName": Syntax(attributeName).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAttributeNameAndLeftParen": garbageBetweenAttributeNameAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributeNameAndLeftParen": unexpectedBetweenAttributeNameAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLeftParenAndArgument": garbageBetweenLeftParenAndArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndArgument": unexpectedBetweenLeftParenAndArgument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "argument": argument.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenArgumentAndRightParen": garbageBetweenArgumentAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenArgumentAndRightParen": unexpectedBetweenArgumentAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenRightParenAndTokenList": garbageBetweenRightParenAndTokenList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenRightParenAndTokenList": unexpectedBetweenRightParenAndTokenList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "tokenList": tokenList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -9530,13 +9530,13 @@ extension AttributeSyntax: CustomReflectable {
 /// 
 public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabel
+    case unexpectedBeforeLabel
     case label
-    case garbageBetweenLabelAndColon
+    case unexpectedBetweenLabelAndColon
     case colon
-    case garbageBetweenColonAndAvailabilityList
+    case unexpectedBetweenColonAndAvailabilityList
     case availabilityList
-    case garbageBetweenAvailabilityListAndSemicolon
+    case unexpectedBetweenAvailabilityListAndSemicolon
     case semicolon
   }
 
@@ -9558,23 +9558,23 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax,
-    _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndAvailabilityList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil,
     availabilityList: AvailabilitySpecListSyntax,
-    _ garbageBetweenAvailabilityListAndSemicolon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil,
     semicolon: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndAvailabilityList?.raw,
+      unexpectedBetweenColonAndAvailabilityList?.raw,
       availabilityList.raw,
-      garbageBetweenAvailabilityListAndSemicolon?.raw,
+      unexpectedBetweenAvailabilityListAndSemicolon?.raw,
       semicolon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityEntry,
@@ -9587,25 +9587,25 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabel(value)
+      self = withUnexpectedBeforeLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabel` replaced.
-  /// - param newChild: The new `garbageBeforeLabel` to replace the node's
-  ///                   current `garbageBeforeLabel`, if present.
-  public func withGarbageBeforeLabel(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeLabel` to replace the node's
+  ///                   current `unexpectedBeforeLabel`, if present.
+  public func withUnexpectedBeforeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLabel)
     return AvailabilityEntrySyntax(newData)
   }
 
@@ -9631,25 +9631,25 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityEntrySyntax(newData)
   }
 
-  public var garbageBetweenLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelAndColon(value)
+      self = withUnexpectedBetweenLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenLabelAndColon`, if present.
-  public func withGarbageBetweenLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenLabelAndColon`, if present.
+  public func withUnexpectedBetweenLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelAndColon)
     return AvailabilityEntrySyntax(newData)
   }
 
@@ -9675,25 +9675,25 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityEntrySyntax(newData)
   }
 
-  public var garbageBetweenColonAndAvailabilityList: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndAvailabilityList,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndAvailabilityList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndAvailabilityList(value)
+      self = withUnexpectedBetweenColonAndAvailabilityList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndAvailabilityList` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndAvailabilityList` to replace the node's
-  ///                   current `garbageBetweenColonAndAvailabilityList`, if present.
-  public func withGarbageBetweenColonAndAvailabilityList(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndAvailabilityList` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndAvailabilityList` to replace the node's
+  ///                   current `unexpectedBetweenColonAndAvailabilityList`, if present.
+  public func withUnexpectedBetweenColonAndAvailabilityList(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndAvailabilityList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndAvailabilityList)
     return AvailabilityEntrySyntax(newData)
   }
 
@@ -9737,25 +9737,25 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityEntrySyntax(newData)
   }
 
-  public var garbageBetweenAvailabilityListAndSemicolon: GarbageNodesSyntax? {
+  public var unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAvailabilityListAndSemicolon,
+      let childData = data.child(at: Cursor.unexpectedBetweenAvailabilityListAndSemicolon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAvailabilityListAndSemicolon(value)
+      self = withUnexpectedBetweenAvailabilityListAndSemicolon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAvailabilityListAndSemicolon` replaced.
-  /// - param newChild: The new `garbageBetweenAvailabilityListAndSemicolon` to replace the node's
-  ///                   current `garbageBetweenAvailabilityListAndSemicolon`, if present.
-  public func withGarbageBetweenAvailabilityListAndSemicolon(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAvailabilityListAndSemicolon` replaced.
+  /// - param newChild: The new `unexpectedBetweenAvailabilityListAndSemicolon` to replace the node's
+  ///                   current `unexpectedBetweenAvailabilityListAndSemicolon`, if present.
+  public func withUnexpectedBetweenAvailabilityListAndSemicolon(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAvailabilityListAndSemicolon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAvailabilityListAndSemicolon)
     return AvailabilityEntrySyntax(newData)
   }
 
@@ -9784,13 +9784,13 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
 extension AvailabilityEntrySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabel": garbageBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "label": Syntax(label).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLabelAndColon": garbageBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndAvailabilityList": garbageBetweenColonAndAvailabilityList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndAvailabilityList": unexpectedBetweenColonAndAvailabilityList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "availabilityList": Syntax(availabilityList).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAvailabilityListAndSemicolon": garbageBetweenAvailabilityListAndSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAvailabilityListAndSemicolon": unexpectedBetweenAvailabilityListAndSemicolon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "semicolon": Syntax(semicolon).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -9804,13 +9804,13 @@ extension AvailabilityEntrySyntax: CustomReflectable {
 /// 
 public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabel
+    case unexpectedBeforeLabel
     case label
-    case garbageBetweenLabelAndColon
+    case unexpectedBetweenLabelAndColon
     case colon
-    case garbageBetweenColonAndValue
+    case unexpectedBetweenColonAndValue
     case value
-    case garbageBetweenValueAndTrailingComma
+    case unexpectedBetweenValueAndTrailingComma
     case trailingComma
   }
 
@@ -9832,23 +9832,23 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax,
-    _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
     value: TokenSyntax,
-    _ garbageBetweenValueAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValue?.raw,
+      unexpectedBetweenColonAndValue?.raw,
       value.raw,
-      garbageBetweenValueAndTrailingComma?.raw,
+      unexpectedBetweenValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.labeledSpecializeEntry,
@@ -9861,25 +9861,25 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabel(value)
+      self = withUnexpectedBeforeLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabel` replaced.
-  /// - param newChild: The new `garbageBeforeLabel` to replace the node's
-  ///                   current `garbageBeforeLabel`, if present.
-  public func withGarbageBeforeLabel(
-    _ newChild: GarbageNodesSyntax?) -> LabeledSpecializeEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeLabel` to replace the node's
+  ///                   current `unexpectedBeforeLabel`, if present.
+  public func withUnexpectedBeforeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> LabeledSpecializeEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLabel)
     return LabeledSpecializeEntrySyntax(newData)
   }
 
@@ -9905,25 +9905,25 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return LabeledSpecializeEntrySyntax(newData)
   }
 
-  public var garbageBetweenLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelAndColon(value)
+      self = withUnexpectedBetweenLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenLabelAndColon`, if present.
-  public func withGarbageBetweenLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> LabeledSpecializeEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenLabelAndColon`, if present.
+  public func withUnexpectedBetweenLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> LabeledSpecializeEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelAndColon)
     return LabeledSpecializeEntrySyntax(newData)
   }
 
@@ -9949,25 +9949,25 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return LabeledSpecializeEntrySyntax(newData)
   }
 
-  public var garbageBetweenColonAndValue: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndValue,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndValue,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndValue(value)
+      self = withUnexpectedBetweenColonAndValue(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndValue` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndValue` to replace the node's
-  ///                   current `garbageBetweenColonAndValue`, if present.
-  public func withGarbageBetweenColonAndValue(
-    _ newChild: GarbageNodesSyntax?) -> LabeledSpecializeEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndValue` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndValue` to replace the node's
+  ///                   current `unexpectedBetweenColonAndValue`, if present.
+  public func withUnexpectedBetweenColonAndValue(
+    _ newChild: UnexpectedNodesSyntax?) -> LabeledSpecializeEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndValue)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndValue)
     return LabeledSpecializeEntrySyntax(newData)
   }
 
@@ -9993,25 +9993,25 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return LabeledSpecializeEntrySyntax(newData)
   }
 
-  public var garbageBetweenValueAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenValueAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenValueAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenValueAndTrailingComma(value)
+      self = withUnexpectedBetweenValueAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenValueAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenValueAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenValueAndTrailingComma`, if present.
-  public func withGarbageBetweenValueAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> LabeledSpecializeEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenValueAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenValueAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenValueAndTrailingComma`, if present.
+  public func withUnexpectedBetweenValueAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> LabeledSpecializeEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenValueAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenValueAndTrailingComma)
     return LabeledSpecializeEntrySyntax(newData)
   }
 
@@ -10044,13 +10044,13 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
 extension LabeledSpecializeEntrySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabel": garbageBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "label": Syntax(label).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLabelAndColon": garbageBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndValue": garbageBetweenColonAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndValue": unexpectedBetweenColonAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "value": Syntax(value).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenValueAndTrailingComma": garbageBetweenValueAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenValueAndTrailingComma": unexpectedBetweenValueAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -10065,13 +10065,13 @@ extension LabeledSpecializeEntrySyntax: CustomReflectable {
 /// 
 public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabel
+    case unexpectedBeforeLabel
     case label
-    case garbageBetweenLabelAndColon
+    case unexpectedBetweenLabelAndColon
     case colon
-    case garbageBetweenColonAndDeclname
+    case unexpectedBetweenColonAndDeclname
     case declname
-    case garbageBetweenDeclnameAndTrailingComma
+    case unexpectedBetweenDeclnameAndTrailingComma
     case trailingComma
   }
 
@@ -10093,23 +10093,23 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax,
-    _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndDeclname: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
     declname: DeclNameSyntax,
-    _ garbageBetweenDeclnameAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndDeclname?.raw,
+      unexpectedBetweenColonAndDeclname?.raw,
       declname.raw,
-      garbageBetweenDeclnameAndTrailingComma?.raw,
+      unexpectedBetweenDeclnameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.targetFunctionEntry,
@@ -10122,25 +10122,25 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabel(value)
+      self = withUnexpectedBeforeLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabel` replaced.
-  /// - param newChild: The new `garbageBeforeLabel` to replace the node's
-  ///                   current `garbageBeforeLabel`, if present.
-  public func withGarbageBeforeLabel(
-    _ newChild: GarbageNodesSyntax?) -> TargetFunctionEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeLabel` to replace the node's
+  ///                   current `unexpectedBeforeLabel`, if present.
+  public func withUnexpectedBeforeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> TargetFunctionEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLabel)
     return TargetFunctionEntrySyntax(newData)
   }
 
@@ -10166,25 +10166,25 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return TargetFunctionEntrySyntax(newData)
   }
 
-  public var garbageBetweenLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelAndColon(value)
+      self = withUnexpectedBetweenLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenLabelAndColon`, if present.
-  public func withGarbageBetweenLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> TargetFunctionEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenLabelAndColon`, if present.
+  public func withUnexpectedBetweenLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> TargetFunctionEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelAndColon)
     return TargetFunctionEntrySyntax(newData)
   }
 
@@ -10210,25 +10210,25 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return TargetFunctionEntrySyntax(newData)
   }
 
-  public var garbageBetweenColonAndDeclname: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndDeclname,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndDeclname,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndDeclname(value)
+      self = withUnexpectedBetweenColonAndDeclname(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndDeclname` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndDeclname` to replace the node's
-  ///                   current `garbageBetweenColonAndDeclname`, if present.
-  public func withGarbageBetweenColonAndDeclname(
-    _ newChild: GarbageNodesSyntax?) -> TargetFunctionEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndDeclname` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndDeclname` to replace the node's
+  ///                   current `unexpectedBetweenColonAndDeclname`, if present.
+  public func withUnexpectedBetweenColonAndDeclname(
+    _ newChild: UnexpectedNodesSyntax?) -> TargetFunctionEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndDeclname)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndDeclname)
     return TargetFunctionEntrySyntax(newData)
   }
 
@@ -10254,25 +10254,25 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return TargetFunctionEntrySyntax(newData)
   }
 
-  public var garbageBetweenDeclnameAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDeclnameAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenDeclnameAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDeclnameAndTrailingComma(value)
+      self = withUnexpectedBetweenDeclnameAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDeclnameAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenDeclnameAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenDeclnameAndTrailingComma`, if present.
-  public func withGarbageBetweenDeclnameAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> TargetFunctionEntrySyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDeclnameAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenDeclnameAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenDeclnameAndTrailingComma`, if present.
+  public func withUnexpectedBetweenDeclnameAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> TargetFunctionEntrySyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDeclnameAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDeclnameAndTrailingComma)
     return TargetFunctionEntrySyntax(newData)
   }
 
@@ -10305,13 +10305,13 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
 extension TargetFunctionEntrySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabel": garbageBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "label": Syntax(label).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLabelAndColon": garbageBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndDeclname": garbageBetweenColonAndDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndDeclname": unexpectedBetweenColonAndDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "declname": Syntax(declname).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenDeclnameAndTrailingComma": garbageBetweenDeclnameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDeclnameAndTrailingComma": unexpectedBetweenDeclnameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -10326,11 +10326,11 @@ extension TargetFunctionEntrySyntax: CustomReflectable {
 /// 
 public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeNameTok
+    case unexpectedBeforeNameTok
     case nameTok
-    case garbageBetweenNameTokAndColon
+    case unexpectedBetweenNameTokAndColon
     case colon
-    case garbageBetweenColonAndStringOrDeclname
+    case unexpectedBetweenColonAndStringOrDeclname
     case stringOrDeclname
   }
 
@@ -10352,19 +10352,19 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   }
 
   public init(
-    _ garbageBeforeNameTok: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeNameTok: UnexpectedNodesSyntax? = nil,
     nameTok: TokenSyntax,
-    _ garbageBetweenNameTokAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameTokAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndStringOrDeclname: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodesSyntax? = nil,
     stringOrDeclname: Syntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeNameTok?.raw,
+      unexpectedBeforeNameTok?.raw,
       nameTok.raw,
-      garbageBetweenNameTokAndColon?.raw,
+      unexpectedBetweenNameTokAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndStringOrDeclname?.raw,
+      unexpectedBetweenColonAndStringOrDeclname?.raw,
       stringOrDeclname.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.namedAttributeStringArgument,
@@ -10377,25 +10377,25 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeNameTok: GarbageNodesSyntax? {
+  public var unexpectedBeforeNameTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeNameTok,
+      let childData = data.child(at: Cursor.unexpectedBeforeNameTok,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeNameTok(value)
+      self = withUnexpectedBeforeNameTok(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeNameTok` replaced.
-  /// - param newChild: The new `garbageBeforeNameTok` to replace the node's
-  ///                   current `garbageBeforeNameTok`, if present.
-  public func withGarbageBeforeNameTok(
-    _ newChild: GarbageNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeNameTok` replaced.
+  /// - param newChild: The new `unexpectedBeforeNameTok` to replace the node's
+  ///                   current `unexpectedBeforeNameTok`, if present.
+  public func withUnexpectedBeforeNameTok(
+    _ newChild: UnexpectedNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeNameTok)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeNameTok)
     return NamedAttributeStringArgumentSyntax(newData)
   }
 
@@ -10421,25 +10421,25 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
     return NamedAttributeStringArgumentSyntax(newData)
   }
 
-  public var garbageBetweenNameTokAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameTokAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameTokAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameTokAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameTokAndColon(value)
+      self = withUnexpectedBetweenNameTokAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameTokAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenNameTokAndColon` to replace the node's
-  ///                   current `garbageBetweenNameTokAndColon`, if present.
-  public func withGarbageBetweenNameTokAndColon(
-    _ newChild: GarbageNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameTokAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameTokAndColon` to replace the node's
+  ///                   current `unexpectedBetweenNameTokAndColon`, if present.
+  public func withUnexpectedBetweenNameTokAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameTokAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameTokAndColon)
     return NamedAttributeStringArgumentSyntax(newData)
   }
 
@@ -10465,25 +10465,25 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
     return NamedAttributeStringArgumentSyntax(newData)
   }
 
-  public var garbageBetweenColonAndStringOrDeclname: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndStringOrDeclname,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndStringOrDeclname,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndStringOrDeclname(value)
+      self = withUnexpectedBetweenColonAndStringOrDeclname(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndStringOrDeclname` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndStringOrDeclname` to replace the node's
-  ///                   current `garbageBetweenColonAndStringOrDeclname`, if present.
-  public func withGarbageBetweenColonAndStringOrDeclname(
-    _ newChild: GarbageNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndStringOrDeclname` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndStringOrDeclname` to replace the node's
+  ///                   current `unexpectedBetweenColonAndStringOrDeclname`, if present.
+  public func withUnexpectedBetweenColonAndStringOrDeclname(
+    _ newChild: UnexpectedNodesSyntax?) -> NamedAttributeStringArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndStringOrDeclname)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndStringOrDeclname)
     return NamedAttributeStringArgumentSyntax(newData)
   }
 
@@ -10512,11 +10512,11 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
 extension NamedAttributeStringArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeNameTok": garbageBeforeNameTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeNameTok": unexpectedBeforeNameTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "nameTok": Syntax(nameTok).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameTokAndColon": garbageBetweenNameTokAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameTokAndColon": unexpectedBetweenNameTokAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndStringOrDeclname": garbageBetweenColonAndStringOrDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndStringOrDeclname": unexpectedBetweenColonAndStringOrDeclname.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "stringOrDeclname": Syntax(stringOrDeclname).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -10526,9 +10526,9 @@ extension NamedAttributeStringArgumentSyntax: CustomReflectable {
 
 public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeDeclBaseName
+    case unexpectedBeforeDeclBaseName
     case declBaseName
-    case garbageBetweenDeclBaseNameAndDeclNameArguments
+    case unexpectedBetweenDeclBaseNameAndDeclNameArguments
     case declNameArguments
   }
 
@@ -10550,15 +10550,15 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeDeclBaseName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil,
     declBaseName: Syntax,
-    _ garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
     declNameArguments: DeclNameArgumentsSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeDeclBaseName?.raw,
+      unexpectedBeforeDeclBaseName?.raw,
       declBaseName.raw,
-      garbageBetweenDeclBaseNameAndDeclNameArguments?.raw,
+      unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declName,
@@ -10571,25 +10571,25 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeDeclBaseName: GarbageNodesSyntax? {
+  public var unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeDeclBaseName,
+      let childData = data.child(at: Cursor.unexpectedBeforeDeclBaseName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeDeclBaseName(value)
+      self = withUnexpectedBeforeDeclBaseName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeDeclBaseName` replaced.
-  /// - param newChild: The new `garbageBeforeDeclBaseName` to replace the node's
-  ///                   current `garbageBeforeDeclBaseName`, if present.
-  public func withGarbageBeforeDeclBaseName(
-    _ newChild: GarbageNodesSyntax?) -> DeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeDeclBaseName` replaced.
+  /// - param newChild: The new `unexpectedBeforeDeclBaseName` to replace the node's
+  ///                   current `unexpectedBeforeDeclBaseName`, if present.
+  public func withUnexpectedBeforeDeclBaseName(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeDeclBaseName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeDeclBaseName)
     return DeclNameSyntax(newData)
   }
 
@@ -10617,25 +10617,25 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclNameSyntax(newData)
   }
 
-  public var garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? {
+  public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDeclBaseNameAndDeclNameArguments,
+      let childData = data.child(at: Cursor.unexpectedBetweenDeclBaseNameAndDeclNameArguments,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDeclBaseNameAndDeclNameArguments(value)
+      self = withUnexpectedBetweenDeclBaseNameAndDeclNameArguments(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDeclBaseNameAndDeclNameArguments` replaced.
-  /// - param newChild: The new `garbageBetweenDeclBaseNameAndDeclNameArguments` to replace the node's
-  ///                   current `garbageBetweenDeclBaseNameAndDeclNameArguments`, if present.
-  public func withGarbageBetweenDeclBaseNameAndDeclNameArguments(
-    _ newChild: GarbageNodesSyntax?) -> DeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDeclBaseNameAndDeclNameArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenDeclBaseNameAndDeclNameArguments` to replace the node's
+  ///                   current `unexpectedBetweenDeclBaseNameAndDeclNameArguments`, if present.
+  public func withUnexpectedBetweenDeclBaseNameAndDeclNameArguments(
+    _ newChild: UnexpectedNodesSyntax?) -> DeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDeclBaseNameAndDeclNameArguments)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDeclBaseNameAndDeclNameArguments)
     return DeclNameSyntax(newData)
   }
 
@@ -10669,9 +10669,9 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclNameSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeDeclBaseName": garbageBeforeDeclBaseName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeDeclBaseName": unexpectedBeforeDeclBaseName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "declBaseName": Syntax(declBaseName).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenDeclBaseNameAndDeclNameArguments": garbageBetweenDeclBaseNameAndDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDeclBaseNameAndDeclNameArguments": unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "declNameArguments": declNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -10685,13 +10685,13 @@ extension DeclNameSyntax: CustomReflectable {
 /// 
 public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeType
+    case unexpectedBeforeType
     case type
-    case garbageBetweenTypeAndComma
+    case unexpectedBetweenTypeAndComma
     case comma
-    case garbageBetweenCommaAndDeclBaseName
+    case unexpectedBetweenCommaAndDeclBaseName
     case declBaseName
-    case garbageBetweenDeclBaseNameAndDeclNameArguments
+    case unexpectedBetweenDeclBaseNameAndDeclNameArguments
     case declNameArguments
   }
 
@@ -10713,23 +10713,23 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
 
   public init(
-    _ garbageBeforeType: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
     type: SimpleTypeIdentifierSyntax,
-    _ garbageBetweenTypeAndComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax,
-    _ garbageBetweenCommaAndDeclBaseName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil,
     declBaseName: Syntax,
-    _ garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
     declNameArguments: DeclNameArgumentsSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeType?.raw,
+      unexpectedBeforeType?.raw,
       type.raw,
-      garbageBetweenTypeAndComma?.raw,
+      unexpectedBetweenTypeAndComma?.raw,
       comma.raw,
-      garbageBetweenCommaAndDeclBaseName?.raw,
+      unexpectedBetweenCommaAndDeclBaseName?.raw,
       declBaseName.raw,
-      garbageBetweenDeclBaseNameAndDeclNameArguments?.raw,
+      unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implementsAttributeArguments,
@@ -10742,25 +10742,25 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeType: GarbageNodesSyntax? {
+  public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeType,
+      let childData = data.child(at: Cursor.unexpectedBeforeType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeType(value)
+      self = withUnexpectedBeforeType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeType` replaced.
-  /// - param newChild: The new `garbageBeforeType` to replace the node's
-  ///                   current `garbageBeforeType`, if present.
-  public func withGarbageBeforeType(
-    _ newChild: GarbageNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeType` replaced.
+  /// - param newChild: The new `unexpectedBeforeType` to replace the node's
+  ///                   current `unexpectedBeforeType`, if present.
+  public func withUnexpectedBeforeType(
+    _ newChild: UnexpectedNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeType)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
 
@@ -10789,25 +10789,25 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     return ImplementsAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenTypeAndComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeAndComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeAndComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeAndComma(value)
+      self = withUnexpectedBetweenTypeAndComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeAndComma` replaced.
-  /// - param newChild: The new `garbageBetweenTypeAndComma` to replace the node's
-  ///                   current `garbageBetweenTypeAndComma`, if present.
-  public func withGarbageBetweenTypeAndComma(
-    _ newChild: GarbageNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeAndComma` to replace the node's
+  ///                   current `unexpectedBetweenTypeAndComma`, if present.
+  public func withUnexpectedBetweenTypeAndComma(
+    _ newChild: UnexpectedNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeAndComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAndComma)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
 
@@ -10835,25 +10835,25 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     return ImplementsAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenCommaAndDeclBaseName: GarbageNodesSyntax? {
+  public var unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCommaAndDeclBaseName,
+      let childData = data.child(at: Cursor.unexpectedBetweenCommaAndDeclBaseName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCommaAndDeclBaseName(value)
+      self = withUnexpectedBetweenCommaAndDeclBaseName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCommaAndDeclBaseName` replaced.
-  /// - param newChild: The new `garbageBetweenCommaAndDeclBaseName` to replace the node's
-  ///                   current `garbageBetweenCommaAndDeclBaseName`, if present.
-  public func withGarbageBetweenCommaAndDeclBaseName(
-    _ newChild: GarbageNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndDeclBaseName` replaced.
+  /// - param newChild: The new `unexpectedBetweenCommaAndDeclBaseName` to replace the node's
+  ///                   current `unexpectedBetweenCommaAndDeclBaseName`, if present.
+  public func withUnexpectedBetweenCommaAndDeclBaseName(
+    _ newChild: UnexpectedNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCommaAndDeclBaseName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCommaAndDeclBaseName)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
 
@@ -10881,25 +10881,25 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     return ImplementsAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? {
+  public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDeclBaseNameAndDeclNameArguments,
+      let childData = data.child(at: Cursor.unexpectedBetweenDeclBaseNameAndDeclNameArguments,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDeclBaseNameAndDeclNameArguments(value)
+      self = withUnexpectedBetweenDeclBaseNameAndDeclNameArguments(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDeclBaseNameAndDeclNameArguments` replaced.
-  /// - param newChild: The new `garbageBetweenDeclBaseNameAndDeclNameArguments` to replace the node's
-  ///                   current `garbageBetweenDeclBaseNameAndDeclNameArguments`, if present.
-  public func withGarbageBetweenDeclBaseNameAndDeclNameArguments(
-    _ newChild: GarbageNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDeclBaseNameAndDeclNameArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenDeclBaseNameAndDeclNameArguments` to replace the node's
+  ///                   current `unexpectedBetweenDeclBaseNameAndDeclNameArguments`, if present.
+  public func withUnexpectedBetweenDeclBaseNameAndDeclNameArguments(
+    _ newChild: UnexpectedNodesSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDeclBaseNameAndDeclNameArguments)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDeclBaseNameAndDeclNameArguments)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
 
@@ -10933,13 +10933,13 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeType": garbageBeforeType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeType": unexpectedBeforeType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "type": Syntax(type).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenTypeAndComma": garbageBetweenTypeAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeAndComma": unexpectedBetweenTypeAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "comma": Syntax(comma).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenCommaAndDeclBaseName": garbageBetweenCommaAndDeclBaseName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCommaAndDeclBaseName": unexpectedBetweenCommaAndDeclBaseName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "declBaseName": Syntax(declBaseName).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenDeclBaseNameAndDeclNameArguments": garbageBetweenDeclBaseNameAndDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDeclBaseNameAndDeclNameArguments": unexpectedBetweenDeclBaseNameAndDeclNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "declNameArguments": declNameArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -10954,9 +10954,9 @@ extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
 /// 
 public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndColon
+    case unexpectedBetweenNameAndColon
     case colon
   }
 
@@ -10978,15 +10978,15 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax?,
-    _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name?.raw,
-      garbageBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndColon?.raw,
       colon?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelectorPiece,
@@ -10999,25 +10999,25 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> ObjCSelectorPieceSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> ObjCSelectorPieceSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return ObjCSelectorPieceSyntax(newData)
   }
 
@@ -11043,25 +11043,25 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
     return ObjCSelectorPieceSyntax(newData)
   }
 
-  public var garbageBetweenNameAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndColon(value)
+      self = withUnexpectedBetweenNameAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndColon` to replace the node's
-  ///                   current `garbageBetweenNameAndColon`, if present.
-  public func withGarbageBetweenNameAndColon(
-    _ newChild: GarbageNodesSyntax?) -> ObjCSelectorPieceSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndColon` to replace the node's
+  ///                   current `unexpectedBetweenNameAndColon`, if present.
+  public func withUnexpectedBetweenNameAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> ObjCSelectorPieceSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndColon)
     return ObjCSelectorPieceSyntax(newData)
   }
 
@@ -11091,9 +11091,9 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
 extension ObjCSelectorPieceSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": name.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenNameAndColon": garbageBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndColon": unexpectedBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -11108,15 +11108,15 @@ extension ObjCSelectorPieceSyntax: CustomReflectable {
 /// 
 public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeDiffKind
+    case unexpectedBeforeDiffKind
     case diffKind
-    case garbageBetweenDiffKindAndDiffKindComma
+    case unexpectedBetweenDiffKindAndDiffKindComma
     case diffKindComma
-    case garbageBetweenDiffKindCommaAndDiffParams
+    case unexpectedBetweenDiffKindCommaAndDiffParams
     case diffParams
-    case garbageBetweenDiffParamsAndDiffParamsComma
+    case unexpectedBetweenDiffParamsAndDiffParamsComma
     case diffParamsComma
-    case garbageBetweenDiffParamsCommaAndWhereClause
+    case unexpectedBetweenDiffParamsCommaAndWhereClause
     case whereClause
   }
 
@@ -11138,27 +11138,27 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
   }
 
   public init(
-    _ garbageBeforeDiffKind: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDiffKind: UnexpectedNodesSyntax? = nil,
     diffKind: TokenSyntax?,
-    _ garbageBetweenDiffKindAndDiffKindComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodesSyntax? = nil,
     diffKindComma: TokenSyntax?,
-    _ garbageBetweenDiffKindCommaAndDiffParams: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodesSyntax? = nil,
     diffParams: DifferentiabilityParamsClauseSyntax?,
-    _ garbageBetweenDiffParamsAndDiffParamsComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodesSyntax? = nil,
     diffParamsComma: TokenSyntax?,
-    _ garbageBetweenDiffParamsCommaAndWhereClause: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? = nil,
     whereClause: GenericWhereClauseSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeDiffKind?.raw,
+      unexpectedBeforeDiffKind?.raw,
       diffKind?.raw,
-      garbageBetweenDiffKindAndDiffKindComma?.raw,
+      unexpectedBetweenDiffKindAndDiffKindComma?.raw,
       diffKindComma?.raw,
-      garbageBetweenDiffKindCommaAndDiffParams?.raw,
+      unexpectedBetweenDiffKindCommaAndDiffParams?.raw,
       diffParams?.raw,
-      garbageBetweenDiffParamsAndDiffParamsComma?.raw,
+      unexpectedBetweenDiffParamsAndDiffParamsComma?.raw,
       diffParamsComma?.raw,
-      garbageBetweenDiffParamsCommaAndWhereClause?.raw,
+      unexpectedBetweenDiffParamsCommaAndWhereClause?.raw,
       whereClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiableAttributeArguments,
@@ -11171,25 +11171,25 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeDiffKind: GarbageNodesSyntax? {
+  public var unexpectedBeforeDiffKind: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeDiffKind,
+      let childData = data.child(at: Cursor.unexpectedBeforeDiffKind,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeDiffKind(value)
+      self = withUnexpectedBeforeDiffKind(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeDiffKind` replaced.
-  /// - param newChild: The new `garbageBeforeDiffKind` to replace the node's
-  ///                   current `garbageBeforeDiffKind`, if present.
-  public func withGarbageBeforeDiffKind(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeDiffKind` replaced.
+  /// - param newChild: The new `unexpectedBeforeDiffKind` to replace the node's
+  ///                   current `unexpectedBeforeDiffKind`, if present.
+  public func withUnexpectedBeforeDiffKind(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeDiffKind)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeDiffKind)
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
@@ -11215,25 +11215,25 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenDiffKindAndDiffKindComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDiffKindAndDiffKindComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenDiffKindAndDiffKindComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDiffKindAndDiffKindComma(value)
+      self = withUnexpectedBetweenDiffKindAndDiffKindComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDiffKindAndDiffKindComma` replaced.
-  /// - param newChild: The new `garbageBetweenDiffKindAndDiffKindComma` to replace the node's
-  ///                   current `garbageBetweenDiffKindAndDiffKindComma`, if present.
-  public func withGarbageBetweenDiffKindAndDiffKindComma(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDiffKindAndDiffKindComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenDiffKindAndDiffKindComma` to replace the node's
+  ///                   current `unexpectedBetweenDiffKindAndDiffKindComma`, if present.
+  public func withUnexpectedBetweenDiffKindAndDiffKindComma(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDiffKindAndDiffKindComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDiffKindAndDiffKindComma)
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
@@ -11262,25 +11262,25 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenDiffKindCommaAndDiffParams: GarbageNodesSyntax? {
+  public var unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDiffKindCommaAndDiffParams,
+      let childData = data.child(at: Cursor.unexpectedBetweenDiffKindCommaAndDiffParams,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDiffKindCommaAndDiffParams(value)
+      self = withUnexpectedBetweenDiffKindCommaAndDiffParams(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDiffKindCommaAndDiffParams` replaced.
-  /// - param newChild: The new `garbageBetweenDiffKindCommaAndDiffParams` to replace the node's
-  ///                   current `garbageBetweenDiffKindCommaAndDiffParams`, if present.
-  public func withGarbageBetweenDiffKindCommaAndDiffParams(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDiffKindCommaAndDiffParams` replaced.
+  /// - param newChild: The new `unexpectedBetweenDiffKindCommaAndDiffParams` to replace the node's
+  ///                   current `unexpectedBetweenDiffKindCommaAndDiffParams`, if present.
+  public func withUnexpectedBetweenDiffKindCommaAndDiffParams(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDiffKindCommaAndDiffParams)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDiffKindCommaAndDiffParams)
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
@@ -11306,25 +11306,25 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenDiffParamsAndDiffParamsComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDiffParamsAndDiffParamsComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenDiffParamsAndDiffParamsComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDiffParamsAndDiffParamsComma(value)
+      self = withUnexpectedBetweenDiffParamsAndDiffParamsComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDiffParamsAndDiffParamsComma` replaced.
-  /// - param newChild: The new `garbageBetweenDiffParamsAndDiffParamsComma` to replace the node's
-  ///                   current `garbageBetweenDiffParamsAndDiffParamsComma`, if present.
-  public func withGarbageBetweenDiffParamsAndDiffParamsComma(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDiffParamsAndDiffParamsComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenDiffParamsAndDiffParamsComma` to replace the node's
+  ///                   current `unexpectedBetweenDiffParamsAndDiffParamsComma`, if present.
+  public func withUnexpectedBetweenDiffParamsAndDiffParamsComma(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDiffParamsAndDiffParamsComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDiffParamsAndDiffParamsComma)
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
@@ -11354,25 +11354,25 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenDiffParamsCommaAndWhereClause: GarbageNodesSyntax? {
+  public var unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDiffParamsCommaAndWhereClause,
+      let childData = data.child(at: Cursor.unexpectedBetweenDiffParamsCommaAndWhereClause,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDiffParamsCommaAndWhereClause(value)
+      self = withUnexpectedBetweenDiffParamsCommaAndWhereClause(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDiffParamsCommaAndWhereClause` replaced.
-  /// - param newChild: The new `garbageBetweenDiffParamsCommaAndWhereClause` to replace the node's
-  ///                   current `garbageBetweenDiffParamsCommaAndWhereClause`, if present.
-  public func withGarbageBetweenDiffParamsCommaAndWhereClause(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDiffParamsCommaAndWhereClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenDiffParamsCommaAndWhereClause` to replace the node's
+  ///                   current `unexpectedBetweenDiffParamsCommaAndWhereClause`, if present.
+  public func withUnexpectedBetweenDiffParamsCommaAndWhereClause(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDiffParamsCommaAndWhereClause)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDiffParamsCommaAndWhereClause)
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
@@ -11402,15 +11402,15 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 extension DifferentiableAttributeArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeDiffKind": garbageBeforeDiffKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeDiffKind": unexpectedBeforeDiffKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffKind": diffKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenDiffKindAndDiffKindComma": garbageBetweenDiffKindAndDiffKindComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDiffKindAndDiffKindComma": unexpectedBetweenDiffKindAndDiffKindComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffKindComma": diffKindComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenDiffKindCommaAndDiffParams": garbageBetweenDiffKindCommaAndDiffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDiffKindCommaAndDiffParams": unexpectedBetweenDiffKindCommaAndDiffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParams": diffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenDiffParamsAndDiffParamsComma": garbageBetweenDiffParamsAndDiffParamsComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDiffParamsAndDiffParamsComma": unexpectedBetweenDiffParamsAndDiffParamsComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParamsComma": diffParamsComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenDiffParamsCommaAndWhereClause": garbageBetweenDiffParamsCommaAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDiffParamsCommaAndWhereClause": unexpectedBetweenDiffParamsCommaAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -11421,11 +11421,11 @@ extension DifferentiableAttributeArgumentsSyntax: CustomReflectable {
 /// A clause containing differentiability parameters.
 public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeWrtLabel
+    case unexpectedBeforeWrtLabel
     case wrtLabel
-    case garbageBetweenWrtLabelAndColon
+    case unexpectedBetweenWrtLabelAndColon
     case colon
-    case garbageBetweenColonAndParameters
+    case unexpectedBetweenColonAndParameters
     case parameters
   }
 
@@ -11447,19 +11447,19 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   }
 
   public init(
-    _ garbageBeforeWrtLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? = nil,
     wrtLabel: TokenSyntax,
-    _ garbageBetweenWrtLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndParameters: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil,
     parameters: Syntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeWrtLabel?.raw,
+      unexpectedBeforeWrtLabel?.raw,
       wrtLabel.raw,
-      garbageBetweenWrtLabelAndColon?.raw,
+      unexpectedBetweenWrtLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndParameters?.raw,
+      unexpectedBetweenColonAndParameters?.raw,
       parameters.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamsClause,
@@ -11472,25 +11472,25 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeWrtLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeWrtLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeWrtLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeWrtLabel(value)
+      self = withUnexpectedBeforeWrtLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeWrtLabel` replaced.
-  /// - param newChild: The new `garbageBeforeWrtLabel` to replace the node's
-  ///                   current `garbageBeforeWrtLabel`, if present.
-  public func withGarbageBeforeWrtLabel(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamsClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeWrtLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeWrtLabel` to replace the node's
+  ///                   current `unexpectedBeforeWrtLabel`, if present.
+  public func withUnexpectedBeforeWrtLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamsClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeWrtLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeWrtLabel)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
 
@@ -11516,25 +11516,25 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     return DifferentiabilityParamsClauseSyntax(newData)
   }
 
-  public var garbageBetweenWrtLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenWrtLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenWrtLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenWrtLabelAndColon(value)
+      self = withUnexpectedBetweenWrtLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenWrtLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenWrtLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenWrtLabelAndColon`, if present.
-  public func withGarbageBetweenWrtLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamsClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenWrtLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenWrtLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenWrtLabelAndColon`, if present.
+  public func withUnexpectedBetweenWrtLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamsClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenWrtLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenWrtLabelAndColon)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
 
@@ -11562,25 +11562,25 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     return DifferentiabilityParamsClauseSyntax(newData)
   }
 
-  public var garbageBetweenColonAndParameters: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndParameters,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndParameters,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndParameters(value)
+      self = withUnexpectedBetweenColonAndParameters(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndParameters` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndParameters` to replace the node's
-  ///                   current `garbageBetweenColonAndParameters`, if present.
-  public func withGarbageBetweenColonAndParameters(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamsClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndParameters` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndParameters` to replace the node's
+  ///                   current `unexpectedBetweenColonAndParameters`, if present.
+  public func withUnexpectedBetweenColonAndParameters(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamsClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndParameters)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndParameters)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
 
@@ -11609,11 +11609,11 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
 extension DifferentiabilityParamsClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeWrtLabel": garbageBeforeWrtLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeWrtLabel": unexpectedBeforeWrtLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "wrtLabel": Syntax(wrtLabel).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenWrtLabelAndColon": garbageBetweenWrtLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenWrtLabelAndColon": unexpectedBetweenWrtLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndParameters": garbageBetweenColonAndParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndParameters": unexpectedBetweenColonAndParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "parameters": Syntax(parameters).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -11624,11 +11624,11 @@ extension DifferentiabilityParamsClauseSyntax: CustomReflectable {
 /// The differentiability parameters.
 public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftParen
+    case unexpectedBeforeLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndDiffParams
+    case unexpectedBetweenLeftParenAndDiffParams
     case diffParams
-    case garbageBetweenDiffParamsAndRightParen
+    case unexpectedBetweenDiffParamsAndRightParen
     case rightParen
   }
 
@@ -11650,19 +11650,19 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndDiffParams: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodesSyntax? = nil,
     diffParams: DifferentiabilityParamListSyntax,
-    _ garbageBetweenDiffParamsAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndDiffParams?.raw,
+      unexpectedBetweenLeftParenAndDiffParams?.raw,
       diffParams.raw,
-      garbageBetweenDiffParamsAndRightParen?.raw,
+      unexpectedBetweenDiffParamsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParams,
@@ -11675,25 +11675,25 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftParen(value)
+      self = withUnexpectedBeforeLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftParen` replaced.
-  /// - param newChild: The new `garbageBeforeLeftParen` to replace the node's
-  ///                   current `garbageBeforeLeftParen`, if present.
-  public func withGarbageBeforeLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
+  ///                   current `unexpectedBeforeLeftParen`, if present.
+  public func withUnexpectedBeforeLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftParen)
     return DifferentiabilityParamsSyntax(newData)
   }
 
@@ -11718,25 +11718,25 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     return DifferentiabilityParamsSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndDiffParams: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndDiffParams,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndDiffParams,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndDiffParams(value)
+      self = withUnexpectedBetweenLeftParenAndDiffParams(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndDiffParams` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndDiffParams` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndDiffParams`, if present.
-  public func withGarbageBetweenLeftParenAndDiffParams(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndDiffParams` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndDiffParams` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndDiffParams`, if present.
+  public func withUnexpectedBetweenLeftParenAndDiffParams(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndDiffParams)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndDiffParams)
     return DifferentiabilityParamsSyntax(newData)
   }
 
@@ -11781,25 +11781,25 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     return DifferentiabilityParamsSyntax(newData)
   }
 
-  public var garbageBetweenDiffParamsAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDiffParamsAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenDiffParamsAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDiffParamsAndRightParen(value)
+      self = withUnexpectedBetweenDiffParamsAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDiffParamsAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenDiffParamsAndRightParen` to replace the node's
-  ///                   current `garbageBetweenDiffParamsAndRightParen`, if present.
-  public func withGarbageBetweenDiffParamsAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDiffParamsAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenDiffParamsAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenDiffParamsAndRightParen`, if present.
+  public func withUnexpectedBetweenDiffParamsAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDiffParamsAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDiffParamsAndRightParen)
     return DifferentiabilityParamsSyntax(newData)
   }
 
@@ -11828,11 +11828,11 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
 extension DifferentiabilityParamsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftParen": garbageBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndDiffParams": garbageBetweenLeftParenAndDiffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndDiffParams": unexpectedBetweenLeftParenAndDiffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParams": Syntax(diffParams).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenDiffParamsAndRightParen": garbageBetweenDiffParamsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDiffParamsAndRightParen": unexpectedBetweenDiffParamsAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -11846,9 +11846,9 @@ extension DifferentiabilityParamsSyntax: CustomReflectable {
 /// 
 public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeParameter
+    case unexpectedBeforeParameter
     case parameter
-    case garbageBetweenParameterAndTrailingComma
+    case unexpectedBetweenParameterAndTrailingComma
     case trailingComma
   }
 
@@ -11870,15 +11870,15 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeParameter: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil,
     parameter: Syntax,
-    _ garbageBetweenParameterAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeParameter?.raw,
+      unexpectedBeforeParameter?.raw,
       parameter.raw,
-      garbageBetweenParameterAndTrailingComma?.raw,
+      unexpectedBetweenParameterAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParam,
@@ -11891,25 +11891,25 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeParameter: GarbageNodesSyntax? {
+  public var unexpectedBeforeParameter: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeParameter,
+      let childData = data.child(at: Cursor.unexpectedBeforeParameter,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeParameter(value)
+      self = withUnexpectedBeforeParameter(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeParameter` replaced.
-  /// - param newChild: The new `garbageBeforeParameter` to replace the node's
-  ///                   current `garbageBeforeParameter`, if present.
-  public func withGarbageBeforeParameter(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeParameter` replaced.
+  /// - param newChild: The new `unexpectedBeforeParameter` to replace the node's
+  ///                   current `unexpectedBeforeParameter`, if present.
+  public func withUnexpectedBeforeParameter(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeParameter)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeParameter)
     return DifferentiabilityParamSyntax(newData)
   }
 
@@ -11934,25 +11934,25 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
     return DifferentiabilityParamSyntax(newData)
   }
 
-  public var garbageBetweenParameterAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenParameterAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenParameterAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenParameterAndTrailingComma(value)
+      self = withUnexpectedBetweenParameterAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenParameterAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenParameterAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenParameterAndTrailingComma`, if present.
-  public func withGarbageBetweenParameterAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> DifferentiabilityParamSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenParameterAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenParameterAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenParameterAndTrailingComma`, if present.
+  public func withUnexpectedBetweenParameterAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> DifferentiabilityParamSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenParameterAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenParameterAndTrailingComma)
     return DifferentiabilityParamSyntax(newData)
   }
 
@@ -11982,9 +11982,9 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
 extension DifferentiabilityParamSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeParameter": garbageBeforeParameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeParameter": unexpectedBeforeParameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "parameter": Syntax(parameter).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenParameterAndTrailingComma": garbageBetweenParameterAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenParameterAndTrailingComma": unexpectedBetweenParameterAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -11999,19 +11999,19 @@ extension DifferentiabilityParamSyntax: CustomReflectable {
 /// 
 public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeOfLabel
+    case unexpectedBeforeOfLabel
     case ofLabel
-    case garbageBetweenOfLabelAndColon
+    case unexpectedBetweenOfLabelAndColon
     case colon
-    case garbageBetweenColonAndOriginalDeclName
+    case unexpectedBetweenColonAndOriginalDeclName
     case originalDeclName
-    case garbageBetweenOriginalDeclNameAndPeriod
+    case unexpectedBetweenOriginalDeclNameAndPeriod
     case period
-    case garbageBetweenPeriodAndAccessorKind
+    case unexpectedBetweenPeriodAndAccessorKind
     case accessorKind
-    case garbageBetweenAccessorKindAndComma
+    case unexpectedBetweenAccessorKindAndComma
     case comma
-    case garbageBetweenCommaAndDiffParams
+    case unexpectedBetweenCommaAndDiffParams
     case diffParams
   }
 
@@ -12033,35 +12033,35 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   }
 
   public init(
-    _ garbageBeforeOfLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeOfLabel: UnexpectedNodesSyntax? = nil,
     ofLabel: TokenSyntax,
-    _ garbageBetweenOfLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndOriginalDeclName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? = nil,
     originalDeclName: QualifiedDeclNameSyntax,
-    _ garbageBetweenOriginalDeclNameAndPeriod: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodesSyntax? = nil,
     period: TokenSyntax?,
-    _ garbageBetweenPeriodAndAccessorKind: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? = nil,
     accessorKind: TokenSyntax?,
-    _ garbageBetweenAccessorKindAndComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAccessorKindAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax?,
-    _ garbageBetweenCommaAndDiffParams: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? = nil,
     diffParams: DifferentiabilityParamsClauseSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeOfLabel?.raw,
+      unexpectedBeforeOfLabel?.raw,
       ofLabel.raw,
-      garbageBetweenOfLabelAndColon?.raw,
+      unexpectedBetweenOfLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndOriginalDeclName?.raw,
+      unexpectedBetweenColonAndOriginalDeclName?.raw,
       originalDeclName.raw,
-      garbageBetweenOriginalDeclNameAndPeriod?.raw,
+      unexpectedBetweenOriginalDeclNameAndPeriod?.raw,
       period?.raw,
-      garbageBetweenPeriodAndAccessorKind?.raw,
+      unexpectedBetweenPeriodAndAccessorKind?.raw,
       accessorKind?.raw,
-      garbageBetweenAccessorKindAndComma?.raw,
+      unexpectedBetweenAccessorKindAndComma?.raw,
       comma?.raw,
-      garbageBetweenCommaAndDiffParams?.raw,
+      unexpectedBetweenCommaAndDiffParams?.raw,
       diffParams?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
@@ -12074,25 +12074,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeOfLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeOfLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeOfLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeOfLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeOfLabel(value)
+      self = withUnexpectedBeforeOfLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeOfLabel` replaced.
-  /// - param newChild: The new `garbageBeforeOfLabel` to replace the node's
-  ///                   current `garbageBeforeOfLabel`, if present.
-  public func withGarbageBeforeOfLabel(
-    _ newChild: GarbageNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeOfLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeOfLabel` to replace the node's
+  ///                   current `unexpectedBeforeOfLabel`, if present.
+  public func withUnexpectedBeforeOfLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeOfLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeOfLabel)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -12118,25 +12118,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenOfLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenOfLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenOfLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenOfLabelAndColon(value)
+      self = withUnexpectedBetweenOfLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenOfLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenOfLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenOfLabelAndColon`, if present.
-  public func withGarbageBetweenOfLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenOfLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenOfLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenOfLabelAndColon`, if present.
+  public func withUnexpectedBetweenOfLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenOfLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenOfLabelAndColon)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -12165,25 +12165,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenColonAndOriginalDeclName: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndOriginalDeclName,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndOriginalDeclName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndOriginalDeclName(value)
+      self = withUnexpectedBetweenColonAndOriginalDeclName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndOriginalDeclName` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndOriginalDeclName` to replace the node's
-  ///                   current `garbageBetweenColonAndOriginalDeclName`, if present.
-  public func withGarbageBetweenColonAndOriginalDeclName(
-    _ newChild: GarbageNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndOriginalDeclName` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndOriginalDeclName` to replace the node's
+  ///                   current `unexpectedBetweenColonAndOriginalDeclName`, if present.
+  public func withUnexpectedBetweenColonAndOriginalDeclName(
+    _ newChild: UnexpectedNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndOriginalDeclName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndOriginalDeclName)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -12209,25 +12209,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenOriginalDeclNameAndPeriod: GarbageNodesSyntax? {
+  public var unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenOriginalDeclNameAndPeriod,
+      let childData = data.child(at: Cursor.unexpectedBetweenOriginalDeclNameAndPeriod,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenOriginalDeclNameAndPeriod(value)
+      self = withUnexpectedBetweenOriginalDeclNameAndPeriod(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenOriginalDeclNameAndPeriod` replaced.
-  /// - param newChild: The new `garbageBetweenOriginalDeclNameAndPeriod` to replace the node's
-  ///                   current `garbageBetweenOriginalDeclNameAndPeriod`, if present.
-  public func withGarbageBetweenOriginalDeclNameAndPeriod(
-    _ newChild: GarbageNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenOriginalDeclNameAndPeriod` replaced.
+  /// - param newChild: The new `unexpectedBetweenOriginalDeclNameAndPeriod` to replace the node's
+  ///                   current `unexpectedBetweenOriginalDeclNameAndPeriod`, if present.
+  public func withUnexpectedBetweenOriginalDeclNameAndPeriod(
+    _ newChild: UnexpectedNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenOriginalDeclNameAndPeriod)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenOriginalDeclNameAndPeriod)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -12257,25 +12257,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenPeriodAndAccessorKind: GarbageNodesSyntax? {
+  public var unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPeriodAndAccessorKind,
+      let childData = data.child(at: Cursor.unexpectedBetweenPeriodAndAccessorKind,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPeriodAndAccessorKind(value)
+      self = withUnexpectedBetweenPeriodAndAccessorKind(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPeriodAndAccessorKind` replaced.
-  /// - param newChild: The new `garbageBetweenPeriodAndAccessorKind` to replace the node's
-  ///                   current `garbageBetweenPeriodAndAccessorKind`, if present.
-  public func withGarbageBetweenPeriodAndAccessorKind(
-    _ newChild: GarbageNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPeriodAndAccessorKind` replaced.
+  /// - param newChild: The new `unexpectedBetweenPeriodAndAccessorKind` to replace the node's
+  ///                   current `unexpectedBetweenPeriodAndAccessorKind`, if present.
+  public func withUnexpectedBetweenPeriodAndAccessorKind(
+    _ newChild: UnexpectedNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPeriodAndAccessorKind)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPeriodAndAccessorKind)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -12302,25 +12302,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenAccessorKindAndComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenAccessorKindAndComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAccessorKindAndComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenAccessorKindAndComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAccessorKindAndComma(value)
+      self = withUnexpectedBetweenAccessorKindAndComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAccessorKindAndComma` replaced.
-  /// - param newChild: The new `garbageBetweenAccessorKindAndComma` to replace the node's
-  ///                   current `garbageBetweenAccessorKindAndComma`, if present.
-  public func withGarbageBetweenAccessorKindAndComma(
-    _ newChild: GarbageNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAccessorKindAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenAccessorKindAndComma` to replace the node's
+  ///                   current `unexpectedBetweenAccessorKindAndComma`, if present.
+  public func withUnexpectedBetweenAccessorKindAndComma(
+    _ newChild: UnexpectedNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAccessorKindAndComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAccessorKindAndComma)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -12346,25 +12346,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
-  public var garbageBetweenCommaAndDiffParams: GarbageNodesSyntax? {
+  public var unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCommaAndDiffParams,
+      let childData = data.child(at: Cursor.unexpectedBetweenCommaAndDiffParams,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCommaAndDiffParams(value)
+      self = withUnexpectedBetweenCommaAndDiffParams(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCommaAndDiffParams` replaced.
-  /// - param newChild: The new `garbageBetweenCommaAndDiffParams` to replace the node's
-  ///                   current `garbageBetweenCommaAndDiffParams`, if present.
-  public func withGarbageBetweenCommaAndDiffParams(
-    _ newChild: GarbageNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndDiffParams` replaced.
+  /// - param newChild: The new `unexpectedBetweenCommaAndDiffParams` to replace the node's
+  ///                   current `unexpectedBetweenCommaAndDiffParams`, if present.
+  public func withUnexpectedBetweenCommaAndDiffParams(
+    _ newChild: UnexpectedNodesSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCommaAndDiffParams)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCommaAndDiffParams)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -12394,19 +12394,19 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
 extension DerivativeRegistrationAttributeArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeOfLabel": garbageBeforeOfLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeOfLabel": unexpectedBeforeOfLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "ofLabel": Syntax(ofLabel).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenOfLabelAndColon": garbageBetweenOfLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenOfLabelAndColon": unexpectedBetweenOfLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndOriginalDeclName": garbageBetweenColonAndOriginalDeclName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndOriginalDeclName": unexpectedBetweenColonAndOriginalDeclName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "originalDeclName": Syntax(originalDeclName).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenOriginalDeclNameAndPeriod": garbageBetweenOriginalDeclNameAndPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenOriginalDeclNameAndPeriod": unexpectedBetweenOriginalDeclNameAndPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "period": period.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenPeriodAndAccessorKind": garbageBetweenPeriodAndAccessorKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPeriodAndAccessorKind": unexpectedBetweenPeriodAndAccessorKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "accessorKind": accessorKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAccessorKindAndComma": garbageBetweenAccessorKindAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAccessorKindAndComma": unexpectedBetweenAccessorKindAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenCommaAndDiffParams": garbageBetweenCommaAndDiffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCommaAndDiffParams": unexpectedBetweenCommaAndDiffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParams": diffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -12420,13 +12420,13 @@ extension DerivativeRegistrationAttributeArgumentsSyntax: CustomReflectable {
 /// 
 public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeBaseType
+    case unexpectedBeforeBaseType
     case baseType
-    case garbageBetweenBaseTypeAndDot
+    case unexpectedBetweenBaseTypeAndDot
     case dot
-    case garbageBetweenDotAndName
+    case unexpectedBetweenDotAndName
     case name
-    case garbageBetweenNameAndArguments
+    case unexpectedBetweenNameAndArguments
     case arguments
   }
 
@@ -12448,23 +12448,23 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeBaseType: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
     baseType: TypeSyntax?,
-    _ garbageBetweenBaseTypeAndDot: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil,
     dot: TokenSyntax?,
-    _ garbageBetweenDotAndName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
     arguments: DeclNameArgumentsSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeBaseType?.raw,
+      unexpectedBeforeBaseType?.raw,
       baseType?.raw,
-      garbageBetweenBaseTypeAndDot?.raw,
+      unexpectedBetweenBaseTypeAndDot?.raw,
       dot?.raw,
-      garbageBetweenDotAndName?.raw,
+      unexpectedBetweenDotAndName?.raw,
       name.raw,
-      garbageBetweenNameAndArguments?.raw,
+      unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.qualifiedDeclName,
@@ -12477,25 +12477,25 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeBaseType: GarbageNodesSyntax? {
+  public var unexpectedBeforeBaseType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeBaseType,
+      let childData = data.child(at: Cursor.unexpectedBeforeBaseType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeBaseType(value)
+      self = withUnexpectedBeforeBaseType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeBaseType` replaced.
-  /// - param newChild: The new `garbageBeforeBaseType` to replace the node's
-  ///                   current `garbageBeforeBaseType`, if present.
-  public func withGarbageBeforeBaseType(
-    _ newChild: GarbageNodesSyntax?) -> QualifiedDeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeBaseType` replaced.
+  /// - param newChild: The new `unexpectedBeforeBaseType` to replace the node's
+  ///                   current `unexpectedBeforeBaseType`, if present.
+  public func withUnexpectedBeforeBaseType(
+    _ newChild: UnexpectedNodesSyntax?) -> QualifiedDeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeBaseType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeBaseType)
     return QualifiedDeclNameSyntax(newData)
   }
 
@@ -12524,25 +12524,25 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return QualifiedDeclNameSyntax(newData)
   }
 
-  public var garbageBetweenBaseTypeAndDot: GarbageNodesSyntax? {
+  public var unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenBaseTypeAndDot,
+      let childData = data.child(at: Cursor.unexpectedBetweenBaseTypeAndDot,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenBaseTypeAndDot(value)
+      self = withUnexpectedBetweenBaseTypeAndDot(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenBaseTypeAndDot` replaced.
-  /// - param newChild: The new `garbageBetweenBaseTypeAndDot` to replace the node's
-  ///                   current `garbageBetweenBaseTypeAndDot`, if present.
-  public func withGarbageBetweenBaseTypeAndDot(
-    _ newChild: GarbageNodesSyntax?) -> QualifiedDeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenBaseTypeAndDot` replaced.
+  /// - param newChild: The new `unexpectedBetweenBaseTypeAndDot` to replace the node's
+  ///                   current `unexpectedBetweenBaseTypeAndDot`, if present.
+  public func withUnexpectedBetweenBaseTypeAndDot(
+    _ newChild: UnexpectedNodesSyntax?) -> QualifiedDeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenBaseTypeAndDot)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenBaseTypeAndDot)
     return QualifiedDeclNameSyntax(newData)
   }
 
@@ -12568,25 +12568,25 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return QualifiedDeclNameSyntax(newData)
   }
 
-  public var garbageBetweenDotAndName: GarbageNodesSyntax? {
+  public var unexpectedBetweenDotAndName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDotAndName,
+      let childData = data.child(at: Cursor.unexpectedBetweenDotAndName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDotAndName(value)
+      self = withUnexpectedBetweenDotAndName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDotAndName` replaced.
-  /// - param newChild: The new `garbageBetweenDotAndName` to replace the node's
-  ///                   current `garbageBetweenDotAndName`, if present.
-  public func withGarbageBetweenDotAndName(
-    _ newChild: GarbageNodesSyntax?) -> QualifiedDeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDotAndName` replaced.
+  /// - param newChild: The new `unexpectedBetweenDotAndName` to replace the node's
+  ///                   current `unexpectedBetweenDotAndName`, if present.
+  public func withUnexpectedBetweenDotAndName(
+    _ newChild: UnexpectedNodesSyntax?) -> QualifiedDeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDotAndName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDotAndName)
     return QualifiedDeclNameSyntax(newData)
   }
 
@@ -12614,25 +12614,25 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return QualifiedDeclNameSyntax(newData)
   }
 
-  public var garbageBetweenNameAndArguments: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndArguments,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndArguments,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndArguments(value)
+      self = withUnexpectedBetweenNameAndArguments(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndArguments` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndArguments` to replace the node's
-  ///                   current `garbageBetweenNameAndArguments`, if present.
-  public func withGarbageBetweenNameAndArguments(
-    _ newChild: GarbageNodesSyntax?) -> QualifiedDeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndArguments` to replace the node's
+  ///                   current `unexpectedBetweenNameAndArguments`, if present.
+  public func withUnexpectedBetweenNameAndArguments(
+    _ newChild: UnexpectedNodesSyntax?) -> QualifiedDeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndArguments)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndArguments)
     return QualifiedDeclNameSyntax(newData)
   }
 
@@ -12666,13 +12666,13 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 extension QualifiedDeclNameSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeBaseType": garbageBeforeBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeBaseType": unexpectedBeforeBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "baseType": baseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenBaseTypeAndDot": garbageBetweenBaseTypeAndDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenBaseTypeAndDot": unexpectedBetweenBaseTypeAndDot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "dot": dot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenDotAndName": garbageBetweenDotAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDotAndName": unexpectedBetweenDotAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndArguments": garbageBetweenNameAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndArguments": unexpectedBetweenNameAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arguments": arguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -12683,9 +12683,9 @@ extension QualifiedDeclNameSyntax: CustomReflectable {
 /// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndArguments
+    case unexpectedBetweenNameAndArguments
     case arguments
   }
 
@@ -12707,15 +12707,15 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: Syntax,
-    _ garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
     arguments: DeclNameArgumentsSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndArguments?.raw,
+      unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDeclName,
@@ -12728,25 +12728,25 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> FunctionDeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return FunctionDeclNameSyntax(newData)
   }
 
@@ -12774,25 +12774,25 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionDeclNameSyntax(newData)
   }
 
-  public var garbageBetweenNameAndArguments: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndArguments,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndArguments,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndArguments(value)
+      self = withUnexpectedBetweenNameAndArguments(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndArguments` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndArguments` to replace the node's
-  ///                   current `garbageBetweenNameAndArguments`, if present.
-  public func withGarbageBetweenNameAndArguments(
-    _ newChild: GarbageNodesSyntax?) -> FunctionDeclNameSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndArguments` to replace the node's
+  ///                   current `unexpectedBetweenNameAndArguments`, if present.
+  public func withUnexpectedBetweenNameAndArguments(
+    _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclNameSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndArguments)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndArguments)
     return FunctionDeclNameSyntax(newData)
   }
 
@@ -12826,9 +12826,9 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 extension FunctionDeclNameSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndArguments": garbageBetweenNameAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndArguments": unexpectedBetweenNameAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arguments": arguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -12841,11 +12841,11 @@ extension FunctionDeclNameSyntax: CustomReflectable {
 /// 
 public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeBeforeLabel
+    case unexpectedBeforeBeforeLabel
     case beforeLabel
-    case garbageBetweenBeforeLabelAndColon
+    case unexpectedBetweenBeforeLabelAndColon
     case colon
-    case garbageBetweenColonAndVersionList
+    case unexpectedBetweenColonAndVersionList
     case versionList
   }
 
@@ -12867,19 +12867,19 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   }
 
   public init(
-    _ garbageBeforeBeforeLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? = nil,
     beforeLabel: TokenSyntax,
-    _ garbageBetweenBeforeLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndVersionList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil,
     versionList: BackDeployVersionListSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeBeforeLabel?.raw,
+      unexpectedBeforeBeforeLabel?.raw,
       beforeLabel.raw,
-      garbageBetweenBeforeLabelAndColon?.raw,
+      unexpectedBetweenBeforeLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndVersionList?.raw,
+      unexpectedBetweenColonAndVersionList?.raw,
       versionList.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployAttributeSpecList,
@@ -12892,25 +12892,25 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeBeforeLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeBeforeLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeBeforeLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeBeforeLabel(value)
+      self = withUnexpectedBeforeBeforeLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeBeforeLabel` replaced.
-  /// - param newChild: The new `garbageBeforeBeforeLabel` to replace the node's
-  ///                   current `garbageBeforeBeforeLabel`, if present.
-  public func withGarbageBeforeBeforeLabel(
-    _ newChild: GarbageNodesSyntax?) -> BackDeployAttributeSpecListSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeBeforeLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeBeforeLabel` to replace the node's
+  ///                   current `unexpectedBeforeBeforeLabel`, if present.
+  public func withUnexpectedBeforeBeforeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> BackDeployAttributeSpecListSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeBeforeLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeBeforeLabel)
     return BackDeployAttributeSpecListSyntax(newData)
   }
 
@@ -12936,25 +12936,25 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
     return BackDeployAttributeSpecListSyntax(newData)
   }
 
-  public var garbageBetweenBeforeLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenBeforeLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenBeforeLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenBeforeLabelAndColon(value)
+      self = withUnexpectedBetweenBeforeLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenBeforeLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenBeforeLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenBeforeLabelAndColon`, if present.
-  public func withGarbageBetweenBeforeLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> BackDeployAttributeSpecListSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenBeforeLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenBeforeLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenBeforeLabelAndColon`, if present.
+  public func withUnexpectedBetweenBeforeLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> BackDeployAttributeSpecListSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenBeforeLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenBeforeLabelAndColon)
     return BackDeployAttributeSpecListSyntax(newData)
   }
 
@@ -12982,25 +12982,25 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
     return BackDeployAttributeSpecListSyntax(newData)
   }
 
-  public var garbageBetweenColonAndVersionList: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndVersionList,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndVersionList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndVersionList(value)
+      self = withUnexpectedBetweenColonAndVersionList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndVersionList` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndVersionList` to replace the node's
-  ///                   current `garbageBetweenColonAndVersionList`, if present.
-  public func withGarbageBetweenColonAndVersionList(
-    _ newChild: GarbageNodesSyntax?) -> BackDeployAttributeSpecListSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndVersionList` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndVersionList` to replace the node's
+  ///                   current `unexpectedBetweenColonAndVersionList`, if present.
+  public func withUnexpectedBetweenColonAndVersionList(
+    _ newChild: UnexpectedNodesSyntax?) -> BackDeployAttributeSpecListSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndVersionList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndVersionList)
     return BackDeployAttributeSpecListSyntax(newData)
   }
 
@@ -13052,11 +13052,11 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
 extension BackDeployAttributeSpecListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeBeforeLabel": garbageBeforeBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeBeforeLabel": unexpectedBeforeBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "beforeLabel": Syntax(beforeLabel).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenBeforeLabelAndColon": garbageBetweenBeforeLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenBeforeLabelAndColon": unexpectedBetweenBeforeLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndVersionList": garbageBetweenColonAndVersionList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndVersionList": unexpectedBetweenColonAndVersionList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "versionList": Syntax(versionList).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -13070,9 +13070,9 @@ extension BackDeployAttributeSpecListSyntax: CustomReflectable {
 /// 
 public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAvailabilityVersionRestriction
+    case unexpectedBeforeAvailabilityVersionRestriction
     case availabilityVersionRestriction
-    case garbageBetweenAvailabilityVersionRestrictionAndTrailingComma
+    case unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma
     case trailingComma
   }
 
@@ -13094,15 +13094,15 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeAvailabilityVersionRestriction: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? = nil,
     availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax,
-    _ garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAvailabilityVersionRestriction?.raw,
+      unexpectedBeforeAvailabilityVersionRestriction?.raw,
       availabilityVersionRestriction.raw,
-      garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw,
+      unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionArgument,
@@ -13115,25 +13115,25 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAvailabilityVersionRestriction: GarbageNodesSyntax? {
+  public var unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAvailabilityVersionRestriction,
+      let childData = data.child(at: Cursor.unexpectedBeforeAvailabilityVersionRestriction,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAvailabilityVersionRestriction(value)
+      self = withUnexpectedBeforeAvailabilityVersionRestriction(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAvailabilityVersionRestriction` replaced.
-  /// - param newChild: The new `garbageBeforeAvailabilityVersionRestriction` to replace the node's
-  ///                   current `garbageBeforeAvailabilityVersionRestriction`, if present.
-  public func withGarbageBeforeAvailabilityVersionRestriction(
-    _ newChild: GarbageNodesSyntax?) -> BackDeployVersionArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAvailabilityVersionRestriction` replaced.
+  /// - param newChild: The new `unexpectedBeforeAvailabilityVersionRestriction` to replace the node's
+  ///                   current `unexpectedBeforeAvailabilityVersionRestriction`, if present.
+  public func withUnexpectedBeforeAvailabilityVersionRestriction(
+    _ newChild: UnexpectedNodesSyntax?) -> BackDeployVersionArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAvailabilityVersionRestriction)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAvailabilityVersionRestriction)
     return BackDeployVersionArgumentSyntax(newData)
   }
 
@@ -13158,25 +13158,25 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return BackDeployVersionArgumentSyntax(newData)
   }
 
-  public var garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAvailabilityVersionRestrictionAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAvailabilityVersionRestrictionAndTrailingComma(value)
+      self = withUnexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAvailabilityVersionRestrictionAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenAvailabilityVersionRestrictionAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenAvailabilityVersionRestrictionAndTrailingComma`, if present.
-  public func withGarbageBetweenAvailabilityVersionRestrictionAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> BackDeployVersionArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma`, if present.
+  public func withUnexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> BackDeployVersionArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAvailabilityVersionRestrictionAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma)
     return BackDeployVersionArgumentSyntax(newData)
   }
 
@@ -13210,9 +13210,9 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 extension BackDeployVersionArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAvailabilityVersionRestriction": garbageBeforeAvailabilityVersionRestriction.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAvailabilityVersionRestriction": unexpectedBeforeAvailabilityVersionRestriction.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "availabilityVersionRestriction": Syntax(availabilityVersionRestriction).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAvailabilityVersionRestrictionAndTrailingComma": garbageBetweenAvailabilityVersionRestrictionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma": unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -13222,9 +13222,9 @@ extension BackDeployVersionArgumentSyntax: CustomReflectable {
 
 public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeWhereKeyword
+    case unexpectedBeforeWhereKeyword
     case whereKeyword
-    case garbageBetweenWhereKeywordAndGuardResult
+    case unexpectedBetweenWhereKeywordAndGuardResult
     case guardResult
   }
 
@@ -13246,15 +13246,15 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
     whereKeyword: TokenSyntax,
-    _ garbageBetweenWhereKeywordAndGuardResult: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil,
     guardResult: ExprSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeWhereKeyword?.raw,
+      unexpectedBeforeWhereKeyword?.raw,
       whereKeyword.raw,
-      garbageBetweenWhereKeywordAndGuardResult?.raw,
+      unexpectedBetweenWhereKeywordAndGuardResult?.raw,
       guardResult.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.whereClause,
@@ -13267,25 +13267,25 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeWhereKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeWhereKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeWhereKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeWhereKeyword(value)
+      self = withUnexpectedBeforeWhereKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeWhereKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeWhereKeyword` to replace the node's
-  ///                   current `garbageBeforeWhereKeyword`, if present.
-  public func withGarbageBeforeWhereKeyword(
-    _ newChild: GarbageNodesSyntax?) -> WhereClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeWhereKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeWhereKeyword` to replace the node's
+  ///                   current `unexpectedBeforeWhereKeyword`, if present.
+  public func withUnexpectedBeforeWhereKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> WhereClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeWhereKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeWhereKeyword)
     return WhereClauseSyntax(newData)
   }
 
@@ -13310,25 +13310,25 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return WhereClauseSyntax(newData)
   }
 
-  public var garbageBetweenWhereKeywordAndGuardResult: GarbageNodesSyntax? {
+  public var unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenWhereKeywordAndGuardResult,
+      let childData = data.child(at: Cursor.unexpectedBetweenWhereKeywordAndGuardResult,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenWhereKeywordAndGuardResult(value)
+      self = withUnexpectedBetweenWhereKeywordAndGuardResult(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenWhereKeywordAndGuardResult` replaced.
-  /// - param newChild: The new `garbageBetweenWhereKeywordAndGuardResult` to replace the node's
-  ///                   current `garbageBetweenWhereKeywordAndGuardResult`, if present.
-  public func withGarbageBetweenWhereKeywordAndGuardResult(
-    _ newChild: GarbageNodesSyntax?) -> WhereClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenWhereKeywordAndGuardResult` replaced.
+  /// - param newChild: The new `unexpectedBetweenWhereKeywordAndGuardResult` to replace the node's
+  ///                   current `unexpectedBetweenWhereKeywordAndGuardResult`, if present.
+  public func withUnexpectedBetweenWhereKeywordAndGuardResult(
+    _ newChild: UnexpectedNodesSyntax?) -> WhereClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenWhereKeywordAndGuardResult)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenWhereKeywordAndGuardResult)
     return WhereClauseSyntax(newData)
   }
 
@@ -13357,9 +13357,9 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension WhereClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeWhereKeyword": garbageBeforeWhereKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeWhereKeyword": unexpectedBeforeWhereKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "whereKeyword": Syntax(whereKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenWhereKeywordAndGuardResult": garbageBetweenWhereKeywordAndGuardResult.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenWhereKeywordAndGuardResult": unexpectedBetweenWhereKeywordAndGuardResult.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "guardResult": Syntax(guardResult).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -13369,13 +13369,13 @@ extension WhereClauseSyntax: CustomReflectable {
 
 public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftParen
+    case unexpectedBeforeLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndElementList
+    case unexpectedBetweenLeftParenAndElementList
     case elementList
-    case garbageBetweenElementListAndTrailingComma
+    case unexpectedBetweenElementListAndTrailingComma
     case trailingComma
-    case garbageBetweenTrailingCommaAndRightParen
+    case unexpectedBetweenTrailingCommaAndRightParen
     case rightParen
   }
 
@@ -13397,23 +13397,23 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
     elementList: ExprListSyntax,
-    _ garbageBetweenElementListAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElementListAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?,
-    _ garbageBetweenTrailingCommaAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndElementList?.raw,
+      unexpectedBetweenLeftParenAndElementList?.raw,
       elementList.raw,
-      garbageBetweenElementListAndTrailingComma?.raw,
+      unexpectedBetweenElementListAndTrailingComma?.raw,
       trailingComma?.raw,
-      garbageBetweenTrailingCommaAndRightParen?.raw,
+      unexpectedBetweenTrailingCommaAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.yieldList,
@@ -13426,25 +13426,25 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftParen(value)
+      self = withUnexpectedBeforeLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftParen` replaced.
-  /// - param newChild: The new `garbageBeforeLeftParen` to replace the node's
-  ///                   current `garbageBeforeLeftParen`, if present.
-  public func withGarbageBeforeLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> YieldListSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftParen` to replace the node's
+  ///                   current `unexpectedBeforeLeftParen`, if present.
+  public func withUnexpectedBeforeLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> YieldListSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftParen)
     return YieldListSyntax(newData)
   }
 
@@ -13469,25 +13469,25 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
     return YieldListSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndElementList,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndElementList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndElementList(value)
+      self = withUnexpectedBetweenLeftParenAndElementList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndElementList` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndElementList` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndElementList`, if present.
-  public func withGarbageBetweenLeftParenAndElementList(
-    _ newChild: GarbageNodesSyntax?) -> YieldListSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndElementList` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndElementList` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndElementList`, if present.
+  public func withUnexpectedBetweenLeftParenAndElementList(
+    _ newChild: UnexpectedNodesSyntax?) -> YieldListSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndElementList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndElementList)
     return YieldListSyntax(newData)
   }
 
@@ -13531,25 +13531,25 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
     return YieldListSyntax(newData)
   }
 
-  public var garbageBetweenElementListAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenElementListAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenElementListAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenElementListAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenElementListAndTrailingComma(value)
+      self = withUnexpectedBetweenElementListAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenElementListAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenElementListAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenElementListAndTrailingComma`, if present.
-  public func withGarbageBetweenElementListAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> YieldListSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenElementListAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenElementListAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenElementListAndTrailingComma`, if present.
+  public func withUnexpectedBetweenElementListAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> YieldListSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenElementListAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenElementListAndTrailingComma)
     return YieldListSyntax(newData)
   }
 
@@ -13575,25 +13575,25 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
     return YieldListSyntax(newData)
   }
 
-  public var garbageBetweenTrailingCommaAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTrailingCommaAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenTrailingCommaAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTrailingCommaAndRightParen(value)
+      self = withUnexpectedBetweenTrailingCommaAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTrailingCommaAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenTrailingCommaAndRightParen` to replace the node's
-  ///                   current `garbageBetweenTrailingCommaAndRightParen`, if present.
-  public func withGarbageBetweenTrailingCommaAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> YieldListSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTrailingCommaAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenTrailingCommaAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenTrailingCommaAndRightParen`, if present.
+  public func withUnexpectedBetweenTrailingCommaAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> YieldListSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTrailingCommaAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTrailingCommaAndRightParen)
     return YieldListSyntax(newData)
   }
 
@@ -13622,13 +13622,13 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
 extension YieldListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftParen": garbageBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftParen": unexpectedBeforeLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndElementList": garbageBetweenLeftParenAndElementList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndElementList": unexpectedBetweenLeftParenAndElementList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "elementList": Syntax(elementList).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenElementListAndTrailingComma": garbageBetweenElementListAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenElementListAndTrailingComma": unexpectedBetweenElementListAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenTrailingCommaAndRightParen": garbageBetweenTrailingCommaAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTrailingCommaAndRightParen": unexpectedBetweenTrailingCommaAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -13638,9 +13638,9 @@ extension YieldListSyntax: CustomReflectable {
 
 public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeCondition
+    case unexpectedBeforeCondition
     case condition
-    case garbageBetweenConditionAndTrailingComma
+    case unexpectedBetweenConditionAndTrailingComma
     case trailingComma
   }
 
@@ -13662,15 +13662,15 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeCondition: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCondition: UnexpectedNodesSyntax? = nil,
     condition: Syntax,
-    _ garbageBetweenConditionAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeCondition?.raw,
+      unexpectedBeforeCondition?.raw,
       condition.raw,
-      garbageBetweenConditionAndTrailingComma?.raw,
+      unexpectedBetweenConditionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElement,
@@ -13683,25 +13683,25 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeCondition: GarbageNodesSyntax? {
+  public var unexpectedBeforeCondition: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeCondition,
+      let childData = data.child(at: Cursor.unexpectedBeforeCondition,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeCondition(value)
+      self = withUnexpectedBeforeCondition(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeCondition` replaced.
-  /// - param newChild: The new `garbageBeforeCondition` to replace the node's
-  ///                   current `garbageBeforeCondition`, if present.
-  public func withGarbageBeforeCondition(
-    _ newChild: GarbageNodesSyntax?) -> ConditionElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeCondition` replaced.
+  /// - param newChild: The new `unexpectedBeforeCondition` to replace the node's
+  ///                   current `unexpectedBeforeCondition`, if present.
+  public func withUnexpectedBeforeCondition(
+    _ newChild: UnexpectedNodesSyntax?) -> ConditionElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeCondition)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeCondition)
     return ConditionElementSyntax(newData)
   }
 
@@ -13726,25 +13726,25 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     return ConditionElementSyntax(newData)
   }
 
-  public var garbageBetweenConditionAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenConditionAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenConditionAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenConditionAndTrailingComma(value)
+      self = withUnexpectedBetweenConditionAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenConditionAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenConditionAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenConditionAndTrailingComma`, if present.
-  public func withGarbageBetweenConditionAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> ConditionElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenConditionAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenConditionAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenConditionAndTrailingComma`, if present.
+  public func withUnexpectedBetweenConditionAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> ConditionElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenConditionAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenConditionAndTrailingComma)
     return ConditionElementSyntax(newData)
   }
 
@@ -13774,9 +13774,9 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension ConditionElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeCondition": garbageBeforeCondition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeCondition": unexpectedBeforeCondition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "condition": Syntax(condition).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenConditionAndTrailingComma": garbageBetweenConditionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenConditionAndTrailingComma": unexpectedBetweenConditionAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -13786,13 +13786,13 @@ extension ConditionElementSyntax: CustomReflectable {
 
 public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforePoundAvailableKeyword
+    case unexpectedBeforePoundAvailableKeyword
     case poundAvailableKeyword
-    case garbageBetweenPoundAvailableKeywordAndLeftParen
+    case unexpectedBetweenPoundAvailableKeywordAndLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndAvailabilitySpec
+    case unexpectedBetweenLeftParenAndAvailabilitySpec
     case availabilitySpec
-    case garbageBetweenAvailabilitySpecAndRightParen
+    case unexpectedBetweenAvailabilitySpecAndRightParen
     case rightParen
   }
 
@@ -13814,23 +13814,23 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforePoundAvailableKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundAvailableKeyword: UnexpectedNodesSyntax? = nil,
     poundAvailableKeyword: TokenSyntax,
-    _ garbageBetweenPoundAvailableKeywordAndLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
     availabilitySpec: AvailabilitySpecListSyntax,
-    _ garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundAvailableKeyword?.raw,
+      unexpectedBeforePoundAvailableKeyword?.raw,
       poundAvailableKeyword.raw,
-      garbageBetweenPoundAvailableKeywordAndLeftParen?.raw,
+      unexpectedBetweenPoundAvailableKeywordAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndAvailabilitySpec?.raw,
+      unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
       availabilitySpec.raw,
-      garbageBetweenAvailabilitySpecAndRightParen?.raw,
+      unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityCondition,
@@ -13843,25 +13843,25 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforePoundAvailableKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforePoundAvailableKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforePoundAvailableKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforePoundAvailableKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforePoundAvailableKeyword(value)
+      self = withUnexpectedBeforePoundAvailableKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforePoundAvailableKeyword` replaced.
-  /// - param newChild: The new `garbageBeforePoundAvailableKeyword` to replace the node's
-  ///                   current `garbageBeforePoundAvailableKeyword`, if present.
-  public func withGarbageBeforePoundAvailableKeyword(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforePoundAvailableKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforePoundAvailableKeyword` to replace the node's
+  ///                   current `unexpectedBeforePoundAvailableKeyword`, if present.
+  public func withUnexpectedBeforePoundAvailableKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePoundAvailableKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePoundAvailableKeyword)
     return AvailabilityConditionSyntax(newData)
   }
 
@@ -13886,25 +13886,25 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityConditionSyntax(newData)
   }
 
-  public var garbageBetweenPoundAvailableKeywordAndLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPoundAvailableKeywordAndLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenPoundAvailableKeywordAndLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPoundAvailableKeywordAndLeftParen(value)
+      self = withUnexpectedBetweenPoundAvailableKeywordAndLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPoundAvailableKeywordAndLeftParen` replaced.
-  /// - param newChild: The new `garbageBetweenPoundAvailableKeywordAndLeftParen` to replace the node's
-  ///                   current `garbageBetweenPoundAvailableKeywordAndLeftParen`, if present.
-  public func withGarbageBetweenPoundAvailableKeywordAndLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPoundAvailableKeywordAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenPoundAvailableKeywordAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenPoundAvailableKeywordAndLeftParen`, if present.
+  public func withUnexpectedBetweenPoundAvailableKeywordAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPoundAvailableKeywordAndLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPoundAvailableKeywordAndLeftParen)
     return AvailabilityConditionSyntax(newData)
   }
 
@@ -13929,25 +13929,25 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityConditionSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndAvailabilitySpec,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndAvailabilitySpec,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndAvailabilitySpec(value)
+      self = withUnexpectedBetweenLeftParenAndAvailabilitySpec(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndAvailabilitySpec` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndAvailabilitySpec` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndAvailabilitySpec`, if present.
-  public func withGarbageBetweenLeftParenAndAvailabilitySpec(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndAvailabilitySpec` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndAvailabilitySpec` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndAvailabilitySpec`, if present.
+  public func withUnexpectedBetweenLeftParenAndAvailabilitySpec(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndAvailabilitySpec)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndAvailabilitySpec)
     return AvailabilityConditionSyntax(newData)
   }
 
@@ -13991,25 +13991,25 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityConditionSyntax(newData)
   }
 
-  public var garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAvailabilitySpecAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenAvailabilitySpecAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAvailabilitySpecAndRightParen(value)
+      self = withUnexpectedBetweenAvailabilitySpecAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAvailabilitySpecAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenAvailabilitySpecAndRightParen` to replace the node's
-  ///                   current `garbageBetweenAvailabilitySpecAndRightParen`, if present.
-  public func withGarbageBetweenAvailabilitySpecAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAvailabilitySpecAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenAvailabilitySpecAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenAvailabilitySpecAndRightParen`, if present.
+  public func withUnexpectedBetweenAvailabilitySpecAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAvailabilitySpecAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAvailabilitySpecAndRightParen)
     return AvailabilityConditionSyntax(newData)
   }
 
@@ -14038,13 +14038,13 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension AvailabilityConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforePoundAvailableKeyword": garbageBeforePoundAvailableKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePoundAvailableKeyword": unexpectedBeforePoundAvailableKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundAvailableKeyword": Syntax(poundAvailableKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPoundAvailableKeywordAndLeftParen": garbageBetweenPoundAvailableKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPoundAvailableKeywordAndLeftParen": unexpectedBetweenPoundAvailableKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndAvailabilitySpec": garbageBetweenLeftParenAndAvailabilitySpec.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndAvailabilitySpec": unexpectedBetweenLeftParenAndAvailabilitySpec.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "availabilitySpec": Syntax(availabilitySpec).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAvailabilitySpecAndRightParen": garbageBetweenAvailabilitySpecAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAvailabilitySpecAndRightParen": unexpectedBetweenAvailabilitySpecAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -14054,13 +14054,13 @@ extension AvailabilityConditionSyntax: CustomReflectable {
 
 public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeCaseKeyword
+    case unexpectedBeforeCaseKeyword
     case caseKeyword
-    case garbageBetweenCaseKeywordAndPattern
+    case unexpectedBetweenCaseKeywordAndPattern
     case pattern
-    case garbageBetweenPatternAndTypeAnnotation
+    case unexpectedBetweenPatternAndTypeAnnotation
     case typeAnnotation
-    case garbageBetweenTypeAnnotationAndInitializer
+    case unexpectedBetweenTypeAnnotationAndInitializer
     case initializer
   }
 
@@ -14082,23 +14082,23 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
     caseKeyword: TokenSyntax,
-    _ garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil,
     pattern: PatternSyntax,
-    _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
     typeAnnotation: TypeAnnotationSyntax?,
-    _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: InitializerClauseSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeCaseKeyword?.raw,
+      unexpectedBeforeCaseKeyword?.raw,
       caseKeyword.raw,
-      garbageBetweenCaseKeywordAndPattern?.raw,
+      unexpectedBetweenCaseKeywordAndPattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTypeAnnotation?.raw,
+      unexpectedBetweenPatternAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
-      garbageBetweenTypeAnnotationAndInitializer?.raw,
+      unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.matchingPatternCondition,
@@ -14111,25 +14111,25 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeCaseKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeCaseKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeCaseKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeCaseKeyword(value)
+      self = withUnexpectedBeforeCaseKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeCaseKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeCaseKeyword` to replace the node's
-  ///                   current `garbageBeforeCaseKeyword`, if present.
-  public func withGarbageBeforeCaseKeyword(
-    _ newChild: GarbageNodesSyntax?) -> MatchingPatternConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeCaseKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeCaseKeyword` to replace the node's
+  ///                   current `unexpectedBeforeCaseKeyword`, if present.
+  public func withUnexpectedBeforeCaseKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> MatchingPatternConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeCaseKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeCaseKeyword)
     return MatchingPatternConditionSyntax(newData)
   }
 
@@ -14154,25 +14154,25 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return MatchingPatternConditionSyntax(newData)
   }
 
-  public var garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? {
+  public var unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCaseKeywordAndPattern,
+      let childData = data.child(at: Cursor.unexpectedBetweenCaseKeywordAndPattern,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCaseKeywordAndPattern(value)
+      self = withUnexpectedBetweenCaseKeywordAndPattern(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCaseKeywordAndPattern` replaced.
-  /// - param newChild: The new `garbageBetweenCaseKeywordAndPattern` to replace the node's
-  ///                   current `garbageBetweenCaseKeywordAndPattern`, if present.
-  public func withGarbageBetweenCaseKeywordAndPattern(
-    _ newChild: GarbageNodesSyntax?) -> MatchingPatternConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCaseKeywordAndPattern` replaced.
+  /// - param newChild: The new `unexpectedBetweenCaseKeywordAndPattern` to replace the node's
+  ///                   current `unexpectedBetweenCaseKeywordAndPattern`, if present.
+  public func withUnexpectedBetweenCaseKeywordAndPattern(
+    _ newChild: UnexpectedNodesSyntax?) -> MatchingPatternConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCaseKeywordAndPattern)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCaseKeywordAndPattern)
     return MatchingPatternConditionSyntax(newData)
   }
 
@@ -14197,25 +14197,25 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return MatchingPatternConditionSyntax(newData)
   }
 
-  public var garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? {
+  public var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPatternAndTypeAnnotation,
+      let childData = data.child(at: Cursor.unexpectedBetweenPatternAndTypeAnnotation,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPatternAndTypeAnnotation(value)
+      self = withUnexpectedBetweenPatternAndTypeAnnotation(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPatternAndTypeAnnotation` replaced.
-  /// - param newChild: The new `garbageBetweenPatternAndTypeAnnotation` to replace the node's
-  ///                   current `garbageBetweenPatternAndTypeAnnotation`, if present.
-  public func withGarbageBetweenPatternAndTypeAnnotation(
-    _ newChild: GarbageNodesSyntax?) -> MatchingPatternConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPatternAndTypeAnnotation` replaced.
+  /// - param newChild: The new `unexpectedBetweenPatternAndTypeAnnotation` to replace the node's
+  ///                   current `unexpectedBetweenPatternAndTypeAnnotation`, if present.
+  public func withUnexpectedBetweenPatternAndTypeAnnotation(
+    _ newChild: UnexpectedNodesSyntax?) -> MatchingPatternConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPatternAndTypeAnnotation)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatternAndTypeAnnotation)
     return MatchingPatternConditionSyntax(newData)
   }
 
@@ -14241,25 +14241,25 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return MatchingPatternConditionSyntax(newData)
   }
 
-  public var garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeAnnotationAndInitializer,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeAnnotationAndInitializer,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeAnnotationAndInitializer(value)
+      self = withUnexpectedBetweenTypeAnnotationAndInitializer(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeAnnotationAndInitializer` replaced.
-  /// - param newChild: The new `garbageBetweenTypeAnnotationAndInitializer` to replace the node's
-  ///                   current `garbageBetweenTypeAnnotationAndInitializer`, if present.
-  public func withGarbageBetweenTypeAnnotationAndInitializer(
-    _ newChild: GarbageNodesSyntax?) -> MatchingPatternConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeAnnotationAndInitializer` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeAnnotationAndInitializer` to replace the node's
+  ///                   current `unexpectedBetweenTypeAnnotationAndInitializer`, if present.
+  public func withUnexpectedBetweenTypeAnnotationAndInitializer(
+    _ newChild: UnexpectedNodesSyntax?) -> MatchingPatternConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeAnnotationAndInitializer)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAnnotationAndInitializer)
     return MatchingPatternConditionSyntax(newData)
   }
 
@@ -14288,13 +14288,13 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension MatchingPatternConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeCaseKeyword": garbageBeforeCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeCaseKeyword": unexpectedBeforeCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenCaseKeywordAndPattern": garbageBetweenCaseKeywordAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCaseKeywordAndPattern": unexpectedBetweenCaseKeywordAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPatternAndTypeAnnotation": garbageBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatternAndTypeAnnotation": unexpectedBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenTypeAnnotationAndInitializer": garbageBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeAnnotationAndInitializer": unexpectedBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": Syntax(initializer).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -14304,13 +14304,13 @@ extension MatchingPatternConditionSyntax: CustomReflectable {
 
 public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLetOrVarKeyword
+    case unexpectedBeforeLetOrVarKeyword
     case letOrVarKeyword
-    case garbageBetweenLetOrVarKeywordAndPattern
+    case unexpectedBetweenLetOrVarKeywordAndPattern
     case pattern
-    case garbageBetweenPatternAndTypeAnnotation
+    case unexpectedBetweenPatternAndTypeAnnotation
     case typeAnnotation
-    case garbageBetweenTypeAnnotationAndInitializer
+    case unexpectedBetweenTypeAnnotationAndInitializer
     case initializer
   }
 
@@ -14332,23 +14332,23 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? = nil,
     letOrVarKeyword: TokenSyntax,
-    _ garbageBetweenLetOrVarKeywordAndPattern: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodesSyntax? = nil,
     pattern: PatternSyntax,
-    _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
     typeAnnotation: TypeAnnotationSyntax?,
-    _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: InitializerClauseSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLetOrVarKeyword?.raw,
+      unexpectedBeforeLetOrVarKeyword?.raw,
       letOrVarKeyword.raw,
-      garbageBetweenLetOrVarKeywordAndPattern?.raw,
+      unexpectedBetweenLetOrVarKeywordAndPattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTypeAnnotation?.raw,
+      unexpectedBetweenPatternAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
-      garbageBetweenTypeAnnotationAndInitializer?.raw,
+      unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalBindingCondition,
@@ -14361,25 +14361,25 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLetOrVarKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeLetOrVarKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLetOrVarKeyword(value)
+      self = withUnexpectedBeforeLetOrVarKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLetOrVarKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeLetOrVarKeyword` to replace the node's
-  ///                   current `garbageBeforeLetOrVarKeyword`, if present.
-  public func withGarbageBeforeLetOrVarKeyword(
-    _ newChild: GarbageNodesSyntax?) -> OptionalBindingConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLetOrVarKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeLetOrVarKeyword` to replace the node's
+  ///                   current `unexpectedBeforeLetOrVarKeyword`, if present.
+  public func withUnexpectedBeforeLetOrVarKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> OptionalBindingConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLetOrVarKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLetOrVarKeyword)
     return OptionalBindingConditionSyntax(newData)
   }
 
@@ -14404,25 +14404,25 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return OptionalBindingConditionSyntax(newData)
   }
 
-  public var garbageBetweenLetOrVarKeywordAndPattern: GarbageNodesSyntax? {
+  public var unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLetOrVarKeywordAndPattern,
+      let childData = data.child(at: Cursor.unexpectedBetweenLetOrVarKeywordAndPattern,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLetOrVarKeywordAndPattern(value)
+      self = withUnexpectedBetweenLetOrVarKeywordAndPattern(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLetOrVarKeywordAndPattern` replaced.
-  /// - param newChild: The new `garbageBetweenLetOrVarKeywordAndPattern` to replace the node's
-  ///                   current `garbageBetweenLetOrVarKeywordAndPattern`, if present.
-  public func withGarbageBetweenLetOrVarKeywordAndPattern(
-    _ newChild: GarbageNodesSyntax?) -> OptionalBindingConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLetOrVarKeywordAndPattern` replaced.
+  /// - param newChild: The new `unexpectedBetweenLetOrVarKeywordAndPattern` to replace the node's
+  ///                   current `unexpectedBetweenLetOrVarKeywordAndPattern`, if present.
+  public func withUnexpectedBetweenLetOrVarKeywordAndPattern(
+    _ newChild: UnexpectedNodesSyntax?) -> OptionalBindingConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLetOrVarKeywordAndPattern)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLetOrVarKeywordAndPattern)
     return OptionalBindingConditionSyntax(newData)
   }
 
@@ -14447,25 +14447,25 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return OptionalBindingConditionSyntax(newData)
   }
 
-  public var garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? {
+  public var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPatternAndTypeAnnotation,
+      let childData = data.child(at: Cursor.unexpectedBetweenPatternAndTypeAnnotation,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPatternAndTypeAnnotation(value)
+      self = withUnexpectedBetweenPatternAndTypeAnnotation(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPatternAndTypeAnnotation` replaced.
-  /// - param newChild: The new `garbageBetweenPatternAndTypeAnnotation` to replace the node's
-  ///                   current `garbageBetweenPatternAndTypeAnnotation`, if present.
-  public func withGarbageBetweenPatternAndTypeAnnotation(
-    _ newChild: GarbageNodesSyntax?) -> OptionalBindingConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPatternAndTypeAnnotation` replaced.
+  /// - param newChild: The new `unexpectedBetweenPatternAndTypeAnnotation` to replace the node's
+  ///                   current `unexpectedBetweenPatternAndTypeAnnotation`, if present.
+  public func withUnexpectedBetweenPatternAndTypeAnnotation(
+    _ newChild: UnexpectedNodesSyntax?) -> OptionalBindingConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPatternAndTypeAnnotation)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatternAndTypeAnnotation)
     return OptionalBindingConditionSyntax(newData)
   }
 
@@ -14491,25 +14491,25 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return OptionalBindingConditionSyntax(newData)
   }
 
-  public var garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeAnnotationAndInitializer,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeAnnotationAndInitializer,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeAnnotationAndInitializer(value)
+      self = withUnexpectedBetweenTypeAnnotationAndInitializer(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeAnnotationAndInitializer` replaced.
-  /// - param newChild: The new `garbageBetweenTypeAnnotationAndInitializer` to replace the node's
-  ///                   current `garbageBetweenTypeAnnotationAndInitializer`, if present.
-  public func withGarbageBetweenTypeAnnotationAndInitializer(
-    _ newChild: GarbageNodesSyntax?) -> OptionalBindingConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeAnnotationAndInitializer` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeAnnotationAndInitializer` to replace the node's
+  ///                   current `unexpectedBetweenTypeAnnotationAndInitializer`, if present.
+  public func withUnexpectedBetweenTypeAnnotationAndInitializer(
+    _ newChild: UnexpectedNodesSyntax?) -> OptionalBindingConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeAnnotationAndInitializer)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAnnotationAndInitializer)
     return OptionalBindingConditionSyntax(newData)
   }
 
@@ -14539,13 +14539,13 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension OptionalBindingConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLetOrVarKeyword": garbageBeforeLetOrVarKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLetOrVarKeyword": unexpectedBeforeLetOrVarKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLetOrVarKeywordAndPattern": garbageBetweenLetOrVarKeywordAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLetOrVarKeywordAndPattern": unexpectedBetweenLetOrVarKeywordAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPatternAndTypeAnnotation": garbageBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatternAndTypeAnnotation": unexpectedBetweenPatternAndTypeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenTypeAnnotationAndInitializer": garbageBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeAnnotationAndInitializer": unexpectedBetweenTypeAnnotationAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -14555,13 +14555,13 @@ extension OptionalBindingConditionSyntax: CustomReflectable {
 
 public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforePoundUnavailableKeyword
+    case unexpectedBeforePoundUnavailableKeyword
     case poundUnavailableKeyword
-    case garbageBetweenPoundUnavailableKeywordAndLeftParen
+    case unexpectedBetweenPoundUnavailableKeywordAndLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndAvailabilitySpec
+    case unexpectedBetweenLeftParenAndAvailabilitySpec
     case availabilitySpec
-    case garbageBetweenAvailabilitySpecAndRightParen
+    case unexpectedBetweenAvailabilitySpecAndRightParen
     case rightParen
   }
 
@@ -14583,23 +14583,23 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforePoundUnavailableKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundUnavailableKeyword: UnexpectedNodesSyntax? = nil,
     poundUnavailableKeyword: TokenSyntax,
-    _ garbageBetweenPoundUnavailableKeywordAndLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax,
-    _ garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
     availabilitySpec: AvailabilitySpecListSyntax,
-    _ garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundUnavailableKeyword?.raw,
+      unexpectedBeforePoundUnavailableKeyword?.raw,
       poundUnavailableKeyword.raw,
-      garbageBetweenPoundUnavailableKeywordAndLeftParen?.raw,
+      unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndAvailabilitySpec?.raw,
+      unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
       availabilitySpec.raw,
-      garbageBetweenAvailabilitySpecAndRightParen?.raw,
+      unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unavailabilityCondition,
@@ -14612,25 +14612,25 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforePoundUnavailableKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforePoundUnavailableKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforePoundUnavailableKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforePoundUnavailableKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforePoundUnavailableKeyword(value)
+      self = withUnexpectedBeforePoundUnavailableKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforePoundUnavailableKeyword` replaced.
-  /// - param newChild: The new `garbageBeforePoundUnavailableKeyword` to replace the node's
-  ///                   current `garbageBeforePoundUnavailableKeyword`, if present.
-  public func withGarbageBeforePoundUnavailableKeyword(
-    _ newChild: GarbageNodesSyntax?) -> UnavailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforePoundUnavailableKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforePoundUnavailableKeyword` to replace the node's
+  ///                   current `unexpectedBeforePoundUnavailableKeyword`, if present.
+  public func withUnexpectedBeforePoundUnavailableKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePoundUnavailableKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePoundUnavailableKeyword)
     return UnavailabilityConditionSyntax(newData)
   }
 
@@ -14655,25 +14655,25 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return UnavailabilityConditionSyntax(newData)
   }
 
-  public var garbageBetweenPoundUnavailableKeywordAndLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPoundUnavailableKeywordAndLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenPoundUnavailableKeywordAndLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPoundUnavailableKeywordAndLeftParen(value)
+      self = withUnexpectedBetweenPoundUnavailableKeywordAndLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPoundUnavailableKeywordAndLeftParen` replaced.
-  /// - param newChild: The new `garbageBetweenPoundUnavailableKeywordAndLeftParen` to replace the node's
-  ///                   current `garbageBetweenPoundUnavailableKeywordAndLeftParen`, if present.
-  public func withGarbageBetweenPoundUnavailableKeywordAndLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> UnavailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPoundUnavailableKeywordAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenPoundUnavailableKeywordAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenPoundUnavailableKeywordAndLeftParen`, if present.
+  public func withUnexpectedBetweenPoundUnavailableKeywordAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPoundUnavailableKeywordAndLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPoundUnavailableKeywordAndLeftParen)
     return UnavailabilityConditionSyntax(newData)
   }
 
@@ -14698,25 +14698,25 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return UnavailabilityConditionSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndAvailabilitySpec,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndAvailabilitySpec,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndAvailabilitySpec(value)
+      self = withUnexpectedBetweenLeftParenAndAvailabilitySpec(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndAvailabilitySpec` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndAvailabilitySpec` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndAvailabilitySpec`, if present.
-  public func withGarbageBetweenLeftParenAndAvailabilitySpec(
-    _ newChild: GarbageNodesSyntax?) -> UnavailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndAvailabilitySpec` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndAvailabilitySpec` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndAvailabilitySpec`, if present.
+  public func withUnexpectedBetweenLeftParenAndAvailabilitySpec(
+    _ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndAvailabilitySpec)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndAvailabilitySpec)
     return UnavailabilityConditionSyntax(newData)
   }
 
@@ -14760,25 +14760,25 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return UnavailabilityConditionSyntax(newData)
   }
 
-  public var garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAvailabilitySpecAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenAvailabilitySpecAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAvailabilitySpecAndRightParen(value)
+      self = withUnexpectedBetweenAvailabilitySpecAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAvailabilitySpecAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenAvailabilitySpecAndRightParen` to replace the node's
-  ///                   current `garbageBetweenAvailabilitySpecAndRightParen`, if present.
-  public func withGarbageBetweenAvailabilitySpecAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> UnavailabilityConditionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAvailabilitySpecAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenAvailabilitySpecAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenAvailabilitySpecAndRightParen`, if present.
+  public func withUnexpectedBetweenAvailabilitySpecAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> UnavailabilityConditionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAvailabilitySpecAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAvailabilitySpecAndRightParen)
     return UnavailabilityConditionSyntax(newData)
   }
 
@@ -14807,13 +14807,13 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension UnavailabilityConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforePoundUnavailableKeyword": garbageBeforePoundUnavailableKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePoundUnavailableKeyword": unexpectedBeforePoundUnavailableKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "poundUnavailableKeyword": Syntax(poundUnavailableKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPoundUnavailableKeywordAndLeftParen": garbageBetweenPoundUnavailableKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPoundUnavailableKeywordAndLeftParen": unexpectedBetweenPoundUnavailableKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftParenAndAvailabilitySpec": garbageBetweenLeftParenAndAvailabilitySpec.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndAvailabilitySpec": unexpectedBetweenLeftParenAndAvailabilitySpec.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "availabilitySpec": Syntax(availabilitySpec).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenAvailabilitySpecAndRightParen": garbageBetweenAvailabilitySpecAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAvailabilitySpecAndRightParen": unexpectedBetweenAvailabilitySpecAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -14823,7 +14823,7 @@ extension UnavailabilityConditionSyntax: CustomReflectable {
 
 public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeIfStatement
+    case unexpectedBeforeIfStatement
     case ifStatement
   }
 
@@ -14845,11 +14845,11 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeIfStatement: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIfStatement: UnexpectedNodesSyntax? = nil,
     ifStatement: IfStmtSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeIfStatement?.raw,
+      unexpectedBeforeIfStatement?.raw,
       ifStatement.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseIfContinuation,
@@ -14862,25 +14862,25 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeIfStatement: GarbageNodesSyntax? {
+  public var unexpectedBeforeIfStatement: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeIfStatement,
+      let childData = data.child(at: Cursor.unexpectedBeforeIfStatement,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeIfStatement(value)
+      self = withUnexpectedBeforeIfStatement(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeIfStatement` replaced.
-  /// - param newChild: The new `garbageBeforeIfStatement` to replace the node's
-  ///                   current `garbageBeforeIfStatement`, if present.
-  public func withGarbageBeforeIfStatement(
-    _ newChild: GarbageNodesSyntax?) -> ElseIfContinuationSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeIfStatement` replaced.
+  /// - param newChild: The new `unexpectedBeforeIfStatement` to replace the node's
+  ///                   current `unexpectedBeforeIfStatement`, if present.
+  public func withUnexpectedBeforeIfStatement(
+    _ newChild: UnexpectedNodesSyntax?) -> ElseIfContinuationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeIfStatement)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeIfStatement)
     return ElseIfContinuationSyntax(newData)
   }
 
@@ -14909,7 +14909,7 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
 extension ElseIfContinuationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeIfStatement": garbageBeforeIfStatement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeIfStatement": unexpectedBeforeIfStatement.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "ifStatement": Syntax(ifStatement).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -14919,9 +14919,9 @@ extension ElseIfContinuationSyntax: CustomReflectable {
 
 public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeElseKeyword
+    case unexpectedBeforeElseKeyword
     case elseKeyword
-    case garbageBetweenElseKeywordAndBody
+    case unexpectedBetweenElseKeywordAndBody
     case body
   }
 
@@ -14943,15 +14943,15 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeElseKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeElseKeyword: UnexpectedNodesSyntax? = nil,
     elseKeyword: TokenSyntax,
-    _ garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil,
     body: CodeBlockSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeElseKeyword?.raw,
+      unexpectedBeforeElseKeyword?.raw,
       elseKeyword.raw,
-      garbageBetweenElseKeywordAndBody?.raw,
+      unexpectedBetweenElseKeywordAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseBlock,
@@ -14964,25 +14964,25 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeElseKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeElseKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeElseKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeElseKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeElseKeyword(value)
+      self = withUnexpectedBeforeElseKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeElseKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeElseKeyword` to replace the node's
-  ///                   current `garbageBeforeElseKeyword`, if present.
-  public func withGarbageBeforeElseKeyword(
-    _ newChild: GarbageNodesSyntax?) -> ElseBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeElseKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeElseKeyword` to replace the node's
+  ///                   current `unexpectedBeforeElseKeyword`, if present.
+  public func withUnexpectedBeforeElseKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> ElseBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeElseKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeElseKeyword)
     return ElseBlockSyntax(newData)
   }
 
@@ -15007,25 +15007,25 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
     return ElseBlockSyntax(newData)
   }
 
-  public var garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? {
+  public var unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenElseKeywordAndBody,
+      let childData = data.child(at: Cursor.unexpectedBetweenElseKeywordAndBody,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenElseKeywordAndBody(value)
+      self = withUnexpectedBetweenElseKeywordAndBody(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenElseKeywordAndBody` replaced.
-  /// - param newChild: The new `garbageBetweenElseKeywordAndBody` to replace the node's
-  ///                   current `garbageBetweenElseKeywordAndBody`, if present.
-  public func withGarbageBetweenElseKeywordAndBody(
-    _ newChild: GarbageNodesSyntax?) -> ElseBlockSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenElseKeywordAndBody` replaced.
+  /// - param newChild: The new `unexpectedBetweenElseKeywordAndBody` to replace the node's
+  ///                   current `unexpectedBetweenElseKeywordAndBody`, if present.
+  public func withUnexpectedBetweenElseKeywordAndBody(
+    _ newChild: UnexpectedNodesSyntax?) -> ElseBlockSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenElseKeywordAndBody)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenElseKeywordAndBody)
     return ElseBlockSyntax(newData)
   }
 
@@ -15054,9 +15054,9 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension ElseBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeElseKeyword": garbageBeforeElseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeElseKeyword": unexpectedBeforeElseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "elseKeyword": Syntax(elseKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenElseKeywordAndBody": garbageBetweenElseKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenElseKeywordAndBody": unexpectedBetweenElseKeywordAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -15066,11 +15066,11 @@ extension ElseBlockSyntax: CustomReflectable {
 
 public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeUnknownAttr
+    case unexpectedBeforeUnknownAttr
     case unknownAttr
-    case garbageBetweenUnknownAttrAndLabel
+    case unexpectedBetweenUnknownAttrAndLabel
     case label
-    case garbageBetweenLabelAndStatements
+    case unexpectedBetweenLabelAndStatements
     case statements
   }
 
@@ -15092,19 +15092,19 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeUnknownAttr: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil,
     unknownAttr: AttributeSyntax?,
-    _ garbageBetweenUnknownAttrAndLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil,
     label: Syntax,
-    _ garbageBetweenLabelAndStatements: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
     statements: CodeBlockItemListSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeUnknownAttr?.raw,
+      unexpectedBeforeUnknownAttr?.raw,
       unknownAttr?.raw,
-      garbageBetweenUnknownAttrAndLabel?.raw,
+      unexpectedBetweenUnknownAttrAndLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndStatements?.raw,
+      unexpectedBetweenLabelAndStatements?.raw,
       statements.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCase,
@@ -15117,25 +15117,25 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeUnknownAttr: GarbageNodesSyntax? {
+  public var unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeUnknownAttr,
+      let childData = data.child(at: Cursor.unexpectedBeforeUnknownAttr,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeUnknownAttr(value)
+      self = withUnexpectedBeforeUnknownAttr(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeUnknownAttr` replaced.
-  /// - param newChild: The new `garbageBeforeUnknownAttr` to replace the node's
-  ///                   current `garbageBeforeUnknownAttr`, if present.
-  public func withGarbageBeforeUnknownAttr(
-    _ newChild: GarbageNodesSyntax?) -> SwitchCaseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeUnknownAttr` replaced.
+  /// - param newChild: The new `unexpectedBeforeUnknownAttr` to replace the node's
+  ///                   current `unexpectedBeforeUnknownAttr`, if present.
+  public func withUnexpectedBeforeUnknownAttr(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchCaseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeUnknownAttr)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeUnknownAttr)
     return SwitchCaseSyntax(newData)
   }
 
@@ -15161,25 +15161,25 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     return SwitchCaseSyntax(newData)
   }
 
-  public var garbageBetweenUnknownAttrAndLabel: GarbageNodesSyntax? {
+  public var unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenUnknownAttrAndLabel,
+      let childData = data.child(at: Cursor.unexpectedBetweenUnknownAttrAndLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenUnknownAttrAndLabel(value)
+      self = withUnexpectedBetweenUnknownAttrAndLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenUnknownAttrAndLabel` replaced.
-  /// - param newChild: The new `garbageBetweenUnknownAttrAndLabel` to replace the node's
-  ///                   current `garbageBetweenUnknownAttrAndLabel`, if present.
-  public func withGarbageBetweenUnknownAttrAndLabel(
-    _ newChild: GarbageNodesSyntax?) -> SwitchCaseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenUnknownAttrAndLabel` replaced.
+  /// - param newChild: The new `unexpectedBetweenUnknownAttrAndLabel` to replace the node's
+  ///                   current `unexpectedBetweenUnknownAttrAndLabel`, if present.
+  public func withUnexpectedBetweenUnknownAttrAndLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchCaseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenUnknownAttrAndLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenUnknownAttrAndLabel)
     return SwitchCaseSyntax(newData)
   }
 
@@ -15204,25 +15204,25 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     return SwitchCaseSyntax(newData)
   }
 
-  public var garbageBetweenLabelAndStatements: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelAndStatements,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelAndStatements,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelAndStatements(value)
+      self = withUnexpectedBetweenLabelAndStatements(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelAndStatements` replaced.
-  /// - param newChild: The new `garbageBetweenLabelAndStatements` to replace the node's
-  ///                   current `garbageBetweenLabelAndStatements`, if present.
-  public func withGarbageBetweenLabelAndStatements(
-    _ newChild: GarbageNodesSyntax?) -> SwitchCaseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelAndStatements` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelAndStatements` to replace the node's
+  ///                   current `unexpectedBetweenLabelAndStatements`, if present.
+  public func withUnexpectedBetweenLabelAndStatements(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchCaseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelAndStatements)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelAndStatements)
     return SwitchCaseSyntax(newData)
   }
 
@@ -15270,11 +15270,11 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
 extension SwitchCaseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeUnknownAttr": garbageBeforeUnknownAttr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeUnknownAttr": unexpectedBeforeUnknownAttr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "unknownAttr": unknownAttr.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenUnknownAttrAndLabel": garbageBetweenUnknownAttrAndLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenUnknownAttrAndLabel": unexpectedBetweenUnknownAttrAndLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "label": Syntax(label).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLabelAndStatements": garbageBetweenLabelAndStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelAndStatements": unexpectedBetweenLabelAndStatements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "statements": Syntax(statements).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -15284,9 +15284,9 @@ extension SwitchCaseSyntax: CustomReflectable {
 
 public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeDefaultKeyword
+    case unexpectedBeforeDefaultKeyword
     case defaultKeyword
-    case garbageBetweenDefaultKeywordAndColon
+    case unexpectedBetweenDefaultKeywordAndColon
     case colon
   }
 
@@ -15308,15 +15308,15 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeDefaultKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil,
     defaultKeyword: TokenSyntax,
-    _ garbageBetweenDefaultKeywordAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeDefaultKeyword?.raw,
+      unexpectedBeforeDefaultKeyword?.raw,
       defaultKeyword.raw,
-      garbageBetweenDefaultKeywordAndColon?.raw,
+      unexpectedBetweenDefaultKeywordAndColon?.raw,
       colon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchDefaultLabel,
@@ -15329,25 +15329,25 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeDefaultKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeDefaultKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeDefaultKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeDefaultKeyword(value)
+      self = withUnexpectedBeforeDefaultKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeDefaultKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeDefaultKeyword` to replace the node's
-  ///                   current `garbageBeforeDefaultKeyword`, if present.
-  public func withGarbageBeforeDefaultKeyword(
-    _ newChild: GarbageNodesSyntax?) -> SwitchDefaultLabelSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeDefaultKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeDefaultKeyword` to replace the node's
+  ///                   current `unexpectedBeforeDefaultKeyword`, if present.
+  public func withUnexpectedBeforeDefaultKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchDefaultLabelSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeDefaultKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeDefaultKeyword)
     return SwitchDefaultLabelSyntax(newData)
   }
 
@@ -15372,25 +15372,25 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
     return SwitchDefaultLabelSyntax(newData)
   }
 
-  public var garbageBetweenDefaultKeywordAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenDefaultKeywordAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenDefaultKeywordAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenDefaultKeywordAndColon(value)
+      self = withUnexpectedBetweenDefaultKeywordAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenDefaultKeywordAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenDefaultKeywordAndColon` to replace the node's
-  ///                   current `garbageBetweenDefaultKeywordAndColon`, if present.
-  public func withGarbageBetweenDefaultKeywordAndColon(
-    _ newChild: GarbageNodesSyntax?) -> SwitchDefaultLabelSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenDefaultKeywordAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenDefaultKeywordAndColon` to replace the node's
+  ///                   current `unexpectedBetweenDefaultKeywordAndColon`, if present.
+  public func withUnexpectedBetweenDefaultKeywordAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchDefaultLabelSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenDefaultKeywordAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDefaultKeywordAndColon)
     return SwitchDefaultLabelSyntax(newData)
   }
 
@@ -15419,9 +15419,9 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
 extension SwitchDefaultLabelSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeDefaultKeyword": garbageBeforeDefaultKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeDefaultKeyword": unexpectedBeforeDefaultKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "defaultKeyword": Syntax(defaultKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenDefaultKeywordAndColon": garbageBetweenDefaultKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenDefaultKeywordAndColon": unexpectedBetweenDefaultKeywordAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -15431,11 +15431,11 @@ extension SwitchDefaultLabelSyntax: CustomReflectable {
 
 public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforePattern
+    case unexpectedBeforePattern
     case pattern
-    case garbageBetweenPatternAndWhereClause
+    case unexpectedBetweenPatternAndWhereClause
     case whereClause
-    case garbageBetweenWhereClauseAndTrailingComma
+    case unexpectedBetweenWhereClauseAndTrailingComma
     case trailingComma
   }
 
@@ -15457,19 +15457,19 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforePattern: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
     pattern: PatternSyntax,
-    _ garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
     whereClause: WhereClauseSyntax?,
-    _ garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndWhereClause?.raw,
+      unexpectedBetweenPatternAndWhereClause?.raw,
       whereClause?.raw,
-      garbageBetweenWhereClauseAndTrailingComma?.raw,
+      unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItem,
@@ -15482,25 +15482,25 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforePattern: GarbageNodesSyntax? {
+  public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforePattern,
+      let childData = data.child(at: Cursor.unexpectedBeforePattern,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforePattern(value)
+      self = withUnexpectedBeforePattern(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforePattern` replaced.
-  /// - param newChild: The new `garbageBeforePattern` to replace the node's
-  ///                   current `garbageBeforePattern`, if present.
-  public func withGarbageBeforePattern(
-    _ newChild: GarbageNodesSyntax?) -> CaseItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforePattern` replaced.
+  /// - param newChild: The new `unexpectedBeforePattern` to replace the node's
+  ///                   current `unexpectedBeforePattern`, if present.
+  public func withUnexpectedBeforePattern(
+    _ newChild: UnexpectedNodesSyntax?) -> CaseItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePattern)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePattern)
     return CaseItemSyntax(newData)
   }
 
@@ -15525,25 +15525,25 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
     return CaseItemSyntax(newData)
   }
 
-  public var garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? {
+  public var unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPatternAndWhereClause,
+      let childData = data.child(at: Cursor.unexpectedBetweenPatternAndWhereClause,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPatternAndWhereClause(value)
+      self = withUnexpectedBetweenPatternAndWhereClause(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPatternAndWhereClause` replaced.
-  /// - param newChild: The new `garbageBetweenPatternAndWhereClause` to replace the node's
-  ///                   current `garbageBetweenPatternAndWhereClause`, if present.
-  public func withGarbageBetweenPatternAndWhereClause(
-    _ newChild: GarbageNodesSyntax?) -> CaseItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPatternAndWhereClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenPatternAndWhereClause` to replace the node's
+  ///                   current `unexpectedBetweenPatternAndWhereClause`, if present.
+  public func withUnexpectedBetweenPatternAndWhereClause(
+    _ newChild: UnexpectedNodesSyntax?) -> CaseItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPatternAndWhereClause)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatternAndWhereClause)
     return CaseItemSyntax(newData)
   }
 
@@ -15569,25 +15569,25 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
     return CaseItemSyntax(newData)
   }
 
-  public var garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenWhereClauseAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenWhereClauseAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenWhereClauseAndTrailingComma(value)
+      self = withUnexpectedBetweenWhereClauseAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenWhereClauseAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenWhereClauseAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenWhereClauseAndTrailingComma`, if present.
-  public func withGarbageBetweenWhereClauseAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> CaseItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenWhereClauseAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenWhereClauseAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenWhereClauseAndTrailingComma`, if present.
+  public func withUnexpectedBetweenWhereClauseAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> CaseItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenWhereClauseAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenWhereClauseAndTrailingComma)
     return CaseItemSyntax(newData)
   }
 
@@ -15617,11 +15617,11 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension CaseItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforePattern": garbageBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePattern": unexpectedBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPatternAndWhereClause": garbageBetweenPatternAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatternAndWhereClause": unexpectedBetweenPatternAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenWhereClauseAndTrailingComma": garbageBetweenWhereClauseAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenWhereClauseAndTrailingComma": unexpectedBetweenWhereClauseAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -15631,11 +15631,11 @@ extension CaseItemSyntax: CustomReflectable {
 
 public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforePattern
+    case unexpectedBeforePattern
     case pattern
-    case garbageBetweenPatternAndWhereClause
+    case unexpectedBetweenPatternAndWhereClause
     case whereClause
-    case garbageBetweenWhereClauseAndTrailingComma
+    case unexpectedBetweenWhereClauseAndTrailingComma
     case trailingComma
   }
 
@@ -15657,19 +15657,19 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforePattern: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
     pattern: PatternSyntax?,
-    _ garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
     whereClause: WhereClauseSyntax?,
-    _ garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern?.raw,
-      garbageBetweenPatternAndWhereClause?.raw,
+      unexpectedBetweenPatternAndWhereClause?.raw,
       whereClause?.raw,
-      garbageBetweenWhereClauseAndTrailingComma?.raw,
+      unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItem,
@@ -15682,25 +15682,25 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforePattern: GarbageNodesSyntax? {
+  public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforePattern,
+      let childData = data.child(at: Cursor.unexpectedBeforePattern,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforePattern(value)
+      self = withUnexpectedBeforePattern(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforePattern` replaced.
-  /// - param newChild: The new `garbageBeforePattern` to replace the node's
-  ///                   current `garbageBeforePattern`, if present.
-  public func withGarbageBeforePattern(
-    _ newChild: GarbageNodesSyntax?) -> CatchItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforePattern` replaced.
+  /// - param newChild: The new `unexpectedBeforePattern` to replace the node's
+  ///                   current `unexpectedBeforePattern`, if present.
+  public func withUnexpectedBeforePattern(
+    _ newChild: UnexpectedNodesSyntax?) -> CatchItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePattern)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePattern)
     return CatchItemSyntax(newData)
   }
 
@@ -15726,25 +15726,25 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
     return CatchItemSyntax(newData)
   }
 
-  public var garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? {
+  public var unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPatternAndWhereClause,
+      let childData = data.child(at: Cursor.unexpectedBetweenPatternAndWhereClause,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPatternAndWhereClause(value)
+      self = withUnexpectedBetweenPatternAndWhereClause(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPatternAndWhereClause` replaced.
-  /// - param newChild: The new `garbageBetweenPatternAndWhereClause` to replace the node's
-  ///                   current `garbageBetweenPatternAndWhereClause`, if present.
-  public func withGarbageBetweenPatternAndWhereClause(
-    _ newChild: GarbageNodesSyntax?) -> CatchItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPatternAndWhereClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenPatternAndWhereClause` to replace the node's
+  ///                   current `unexpectedBetweenPatternAndWhereClause`, if present.
+  public func withUnexpectedBetweenPatternAndWhereClause(
+    _ newChild: UnexpectedNodesSyntax?) -> CatchItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPatternAndWhereClause)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatternAndWhereClause)
     return CatchItemSyntax(newData)
   }
 
@@ -15770,25 +15770,25 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
     return CatchItemSyntax(newData)
   }
 
-  public var garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenWhereClauseAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenWhereClauseAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenWhereClauseAndTrailingComma(value)
+      self = withUnexpectedBetweenWhereClauseAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenWhereClauseAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenWhereClauseAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenWhereClauseAndTrailingComma`, if present.
-  public func withGarbageBetweenWhereClauseAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> CatchItemSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenWhereClauseAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenWhereClauseAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenWhereClauseAndTrailingComma`, if present.
+  public func withUnexpectedBetweenWhereClauseAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> CatchItemSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenWhereClauseAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenWhereClauseAndTrailingComma)
     return CatchItemSyntax(newData)
   }
 
@@ -15818,11 +15818,11 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension CatchItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforePattern": garbageBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePattern": unexpectedBeforePattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "pattern": pattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenPatternAndWhereClause": garbageBetweenPatternAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatternAndWhereClause": unexpectedBetweenPatternAndWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenWhereClauseAndTrailingComma": garbageBetweenWhereClauseAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenWhereClauseAndTrailingComma": unexpectedBetweenWhereClauseAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -15832,11 +15832,11 @@ extension CatchItemSyntax: CustomReflectable {
 
 public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeCaseKeyword
+    case unexpectedBeforeCaseKeyword
     case caseKeyword
-    case garbageBetweenCaseKeywordAndCaseItems
+    case unexpectedBetweenCaseKeywordAndCaseItems
     case caseItems
-    case garbageBetweenCaseItemsAndColon
+    case unexpectedBetweenCaseItemsAndColon
     case colon
   }
 
@@ -15858,19 +15858,19 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil,
     caseKeyword: TokenSyntax,
-    _ garbageBetweenCaseKeywordAndCaseItems: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil,
     caseItems: CaseItemListSyntax,
-    _ garbageBetweenCaseItemsAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeCaseKeyword?.raw,
+      unexpectedBeforeCaseKeyword?.raw,
       caseKeyword.raw,
-      garbageBetweenCaseKeywordAndCaseItems?.raw,
+      unexpectedBetweenCaseKeywordAndCaseItems?.raw,
       caseItems.raw,
-      garbageBetweenCaseItemsAndColon?.raw,
+      unexpectedBetweenCaseItemsAndColon?.raw,
       colon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseLabel,
@@ -15883,25 +15883,25 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeCaseKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeCaseKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeCaseKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeCaseKeyword(value)
+      self = withUnexpectedBeforeCaseKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeCaseKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeCaseKeyword` to replace the node's
-  ///                   current `garbageBeforeCaseKeyword`, if present.
-  public func withGarbageBeforeCaseKeyword(
-    _ newChild: GarbageNodesSyntax?) -> SwitchCaseLabelSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeCaseKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeCaseKeyword` to replace the node's
+  ///                   current `unexpectedBeforeCaseKeyword`, if present.
+  public func withUnexpectedBeforeCaseKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchCaseLabelSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeCaseKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeCaseKeyword)
     return SwitchCaseLabelSyntax(newData)
   }
 
@@ -15926,25 +15926,25 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
     return SwitchCaseLabelSyntax(newData)
   }
 
-  public var garbageBetweenCaseKeywordAndCaseItems: GarbageNodesSyntax? {
+  public var unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCaseKeywordAndCaseItems,
+      let childData = data.child(at: Cursor.unexpectedBetweenCaseKeywordAndCaseItems,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCaseKeywordAndCaseItems(value)
+      self = withUnexpectedBetweenCaseKeywordAndCaseItems(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCaseKeywordAndCaseItems` replaced.
-  /// - param newChild: The new `garbageBetweenCaseKeywordAndCaseItems` to replace the node's
-  ///                   current `garbageBetweenCaseKeywordAndCaseItems`, if present.
-  public func withGarbageBetweenCaseKeywordAndCaseItems(
-    _ newChild: GarbageNodesSyntax?) -> SwitchCaseLabelSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCaseKeywordAndCaseItems` replaced.
+  /// - param newChild: The new `unexpectedBetweenCaseKeywordAndCaseItems` to replace the node's
+  ///                   current `unexpectedBetweenCaseKeywordAndCaseItems`, if present.
+  public func withUnexpectedBetweenCaseKeywordAndCaseItems(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchCaseLabelSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCaseKeywordAndCaseItems)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCaseKeywordAndCaseItems)
     return SwitchCaseLabelSyntax(newData)
   }
 
@@ -15988,25 +15988,25 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
     return SwitchCaseLabelSyntax(newData)
   }
 
-  public var garbageBetweenCaseItemsAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCaseItemsAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenCaseItemsAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCaseItemsAndColon(value)
+      self = withUnexpectedBetweenCaseItemsAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCaseItemsAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenCaseItemsAndColon` to replace the node's
-  ///                   current `garbageBetweenCaseItemsAndColon`, if present.
-  public func withGarbageBetweenCaseItemsAndColon(
-    _ newChild: GarbageNodesSyntax?) -> SwitchCaseLabelSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCaseItemsAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenCaseItemsAndColon` to replace the node's
+  ///                   current `unexpectedBetweenCaseItemsAndColon`, if present.
+  public func withUnexpectedBetweenCaseItemsAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> SwitchCaseLabelSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCaseItemsAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCaseItemsAndColon)
     return SwitchCaseLabelSyntax(newData)
   }
 
@@ -16035,11 +16035,11 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
 extension SwitchCaseLabelSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeCaseKeyword": garbageBeforeCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeCaseKeyword": unexpectedBeforeCaseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenCaseKeywordAndCaseItems": garbageBetweenCaseKeywordAndCaseItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCaseKeywordAndCaseItems": unexpectedBetweenCaseKeywordAndCaseItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "caseItems": Syntax(caseItems).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenCaseItemsAndColon": garbageBetweenCaseItemsAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCaseItemsAndColon": unexpectedBetweenCaseItemsAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -16049,11 +16049,11 @@ extension SwitchCaseLabelSyntax: CustomReflectable {
 
 public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeCatchKeyword
+    case unexpectedBeforeCatchKeyword
     case catchKeyword
-    case garbageBetweenCatchKeywordAndCatchItems
+    case unexpectedBetweenCatchKeywordAndCatchItems
     case catchItems
-    case garbageBetweenCatchItemsAndBody
+    case unexpectedBetweenCatchItemsAndBody
     case body
   }
 
@@ -16075,19 +16075,19 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeCatchKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil,
     catchKeyword: TokenSyntax,
-    _ garbageBetweenCatchKeywordAndCatchItems: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil,
     catchItems: CatchItemListSyntax?,
-    _ garbageBetweenCatchItemsAndBody: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil,
     body: CodeBlockSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeCatchKeyword?.raw,
+      unexpectedBeforeCatchKeyword?.raw,
       catchKeyword.raw,
-      garbageBetweenCatchKeywordAndCatchItems?.raw,
+      unexpectedBetweenCatchKeywordAndCatchItems?.raw,
       catchItems?.raw,
-      garbageBetweenCatchItemsAndBody?.raw,
+      unexpectedBetweenCatchItemsAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClause,
@@ -16100,25 +16100,25 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeCatchKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeCatchKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeCatchKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeCatchKeyword(value)
+      self = withUnexpectedBeforeCatchKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeCatchKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeCatchKeyword` to replace the node's
-  ///                   current `garbageBeforeCatchKeyword`, if present.
-  public func withGarbageBeforeCatchKeyword(
-    _ newChild: GarbageNodesSyntax?) -> CatchClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeCatchKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeCatchKeyword` to replace the node's
+  ///                   current `unexpectedBeforeCatchKeyword`, if present.
+  public func withUnexpectedBeforeCatchKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> CatchClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeCatchKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeCatchKeyword)
     return CatchClauseSyntax(newData)
   }
 
@@ -16143,25 +16143,25 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return CatchClauseSyntax(newData)
   }
 
-  public var garbageBetweenCatchKeywordAndCatchItems: GarbageNodesSyntax? {
+  public var unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCatchKeywordAndCatchItems,
+      let childData = data.child(at: Cursor.unexpectedBetweenCatchKeywordAndCatchItems,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCatchKeywordAndCatchItems(value)
+      self = withUnexpectedBetweenCatchKeywordAndCatchItems(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCatchKeywordAndCatchItems` replaced.
-  /// - param newChild: The new `garbageBetweenCatchKeywordAndCatchItems` to replace the node's
-  ///                   current `garbageBetweenCatchKeywordAndCatchItems`, if present.
-  public func withGarbageBetweenCatchKeywordAndCatchItems(
-    _ newChild: GarbageNodesSyntax?) -> CatchClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCatchKeywordAndCatchItems` replaced.
+  /// - param newChild: The new `unexpectedBetweenCatchKeywordAndCatchItems` to replace the node's
+  ///                   current `unexpectedBetweenCatchKeywordAndCatchItems`, if present.
+  public func withUnexpectedBetweenCatchKeywordAndCatchItems(
+    _ newChild: UnexpectedNodesSyntax?) -> CatchClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCatchKeywordAndCatchItems)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCatchKeywordAndCatchItems)
     return CatchClauseSyntax(newData)
   }
 
@@ -16206,25 +16206,25 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return CatchClauseSyntax(newData)
   }
 
-  public var garbageBetweenCatchItemsAndBody: GarbageNodesSyntax? {
+  public var unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCatchItemsAndBody,
+      let childData = data.child(at: Cursor.unexpectedBetweenCatchItemsAndBody,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCatchItemsAndBody(value)
+      self = withUnexpectedBetweenCatchItemsAndBody(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCatchItemsAndBody` replaced.
-  /// - param newChild: The new `garbageBetweenCatchItemsAndBody` to replace the node's
-  ///                   current `garbageBetweenCatchItemsAndBody`, if present.
-  public func withGarbageBetweenCatchItemsAndBody(
-    _ newChild: GarbageNodesSyntax?) -> CatchClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCatchItemsAndBody` replaced.
+  /// - param newChild: The new `unexpectedBetweenCatchItemsAndBody` to replace the node's
+  ///                   current `unexpectedBetweenCatchItemsAndBody`, if present.
+  public func withUnexpectedBetweenCatchItemsAndBody(
+    _ newChild: UnexpectedNodesSyntax?) -> CatchClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCatchItemsAndBody)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCatchItemsAndBody)
     return CatchClauseSyntax(newData)
   }
 
@@ -16253,11 +16253,11 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension CatchClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeCatchKeyword": garbageBeforeCatchKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeCatchKeyword": unexpectedBeforeCatchKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "catchKeyword": Syntax(catchKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenCatchKeywordAndCatchItems": garbageBetweenCatchKeywordAndCatchItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCatchKeywordAndCatchItems": unexpectedBetweenCatchKeywordAndCatchItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "catchItems": catchItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenCatchItemsAndBody": garbageBetweenCatchItemsAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCatchItemsAndBody": unexpectedBetweenCatchItemsAndBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -16267,9 +16267,9 @@ extension CatchClauseSyntax: CustomReflectable {
 
 public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeWhereKeyword
+    case unexpectedBeforeWhereKeyword
     case whereKeyword
-    case garbageBetweenWhereKeywordAndRequirementList
+    case unexpectedBetweenWhereKeywordAndRequirementList
     case requirementList
   }
 
@@ -16291,15 +16291,15 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
     whereKeyword: TokenSyntax,
-    _ garbageBetweenWhereKeywordAndRequirementList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil,
     requirementList: GenericRequirementListSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeWhereKeyword?.raw,
+      unexpectedBeforeWhereKeyword?.raw,
       whereKeyword.raw,
-      garbageBetweenWhereKeywordAndRequirementList?.raw,
+      unexpectedBetweenWhereKeywordAndRequirementList?.raw,
       requirementList.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericWhereClause,
@@ -16312,25 +16312,25 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeWhereKeyword: GarbageNodesSyntax? {
+  public var unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeWhereKeyword,
+      let childData = data.child(at: Cursor.unexpectedBeforeWhereKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeWhereKeyword(value)
+      self = withUnexpectedBeforeWhereKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeWhereKeyword` replaced.
-  /// - param newChild: The new `garbageBeforeWhereKeyword` to replace the node's
-  ///                   current `garbageBeforeWhereKeyword`, if present.
-  public func withGarbageBeforeWhereKeyword(
-    _ newChild: GarbageNodesSyntax?) -> GenericWhereClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeWhereKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeWhereKeyword` to replace the node's
+  ///                   current `unexpectedBeforeWhereKeyword`, if present.
+  public func withUnexpectedBeforeWhereKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericWhereClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeWhereKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeWhereKeyword)
     return GenericWhereClauseSyntax(newData)
   }
 
@@ -16355,25 +16355,25 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericWhereClauseSyntax(newData)
   }
 
-  public var garbageBetweenWhereKeywordAndRequirementList: GarbageNodesSyntax? {
+  public var unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenWhereKeywordAndRequirementList,
+      let childData = data.child(at: Cursor.unexpectedBetweenWhereKeywordAndRequirementList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenWhereKeywordAndRequirementList(value)
+      self = withUnexpectedBetweenWhereKeywordAndRequirementList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenWhereKeywordAndRequirementList` replaced.
-  /// - param newChild: The new `garbageBetweenWhereKeywordAndRequirementList` to replace the node's
-  ///                   current `garbageBetweenWhereKeywordAndRequirementList`, if present.
-  public func withGarbageBetweenWhereKeywordAndRequirementList(
-    _ newChild: GarbageNodesSyntax?) -> GenericWhereClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenWhereKeywordAndRequirementList` replaced.
+  /// - param newChild: The new `unexpectedBetweenWhereKeywordAndRequirementList` to replace the node's
+  ///                   current `unexpectedBetweenWhereKeywordAndRequirementList`, if present.
+  public func withUnexpectedBetweenWhereKeywordAndRequirementList(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericWhereClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenWhereKeywordAndRequirementList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenWhereKeywordAndRequirementList)
     return GenericWhereClauseSyntax(newData)
   }
 
@@ -16421,9 +16421,9 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericWhereClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeWhereKeyword": garbageBeforeWhereKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeWhereKeyword": unexpectedBeforeWhereKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "whereKeyword": Syntax(whereKeyword).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenWhereKeywordAndRequirementList": garbageBetweenWhereKeywordAndRequirementList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenWhereKeywordAndRequirementList": unexpectedBetweenWhereKeywordAndRequirementList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "requirementList": Syntax(requirementList).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -16433,9 +16433,9 @@ extension GenericWhereClauseSyntax: CustomReflectable {
 
 public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeBody
+    case unexpectedBeforeBody
     case body
-    case garbageBetweenBodyAndTrailingComma
+    case unexpectedBetweenBodyAndTrailingComma
     case trailingComma
   }
 
@@ -16457,15 +16457,15 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeBody: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBody: UnexpectedNodesSyntax? = nil,
     body: Syntax,
-    _ garbageBetweenBodyAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeBody?.raw,
+      unexpectedBeforeBody?.raw,
       body.raw,
-      garbageBetweenBodyAndTrailingComma?.raw,
+      unexpectedBetweenBodyAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirement,
@@ -16478,25 +16478,25 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeBody: GarbageNodesSyntax? {
+  public var unexpectedBeforeBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeBody,
+      let childData = data.child(at: Cursor.unexpectedBeforeBody,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeBody(value)
+      self = withUnexpectedBeforeBody(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeBody` replaced.
-  /// - param newChild: The new `garbageBeforeBody` to replace the node's
-  ///                   current `garbageBeforeBody`, if present.
-  public func withGarbageBeforeBody(
-    _ newChild: GarbageNodesSyntax?) -> GenericRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeBody` replaced.
+  /// - param newChild: The new `unexpectedBeforeBody` to replace the node's
+  ///                   current `unexpectedBeforeBody`, if present.
+  public func withUnexpectedBeforeBody(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeBody)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeBody)
     return GenericRequirementSyntax(newData)
   }
 
@@ -16521,25 +16521,25 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericRequirementSyntax(newData)
   }
 
-  public var garbageBetweenBodyAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenBodyAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenBodyAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenBodyAndTrailingComma(value)
+      self = withUnexpectedBetweenBodyAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenBodyAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenBodyAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenBodyAndTrailingComma`, if present.
-  public func withGarbageBetweenBodyAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> GenericRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenBodyAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenBodyAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenBodyAndTrailingComma`, if present.
+  public func withUnexpectedBetweenBodyAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenBodyAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenBodyAndTrailingComma)
     return GenericRequirementSyntax(newData)
   }
 
@@ -16569,9 +16569,9 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeBody": garbageBeforeBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeBody": unexpectedBeforeBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": Syntax(body).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenBodyAndTrailingComma": garbageBetweenBodyAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenBodyAndTrailingComma": unexpectedBetweenBodyAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -16581,11 +16581,11 @@ extension GenericRequirementSyntax: CustomReflectable {
 
 public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftTypeIdentifier
+    case unexpectedBeforeLeftTypeIdentifier
     case leftTypeIdentifier
-    case garbageBetweenLeftTypeIdentifierAndEqualityToken
+    case unexpectedBetweenLeftTypeIdentifierAndEqualityToken
     case equalityToken
-    case garbageBetweenEqualityTokenAndRightTypeIdentifier
+    case unexpectedBetweenEqualityTokenAndRightTypeIdentifier
     case rightTypeIdentifier
   }
 
@@ -16607,19 +16607,19 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
     leftTypeIdentifier: TypeSyntax,
-    _ garbageBetweenLeftTypeIdentifierAndEqualityToken: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil,
     equalityToken: TokenSyntax,
-    _ garbageBetweenEqualityTokenAndRightTypeIdentifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
     rightTypeIdentifier: TypeSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftTypeIdentifier?.raw,
+      unexpectedBeforeLeftTypeIdentifier?.raw,
       leftTypeIdentifier.raw,
-      garbageBetweenLeftTypeIdentifierAndEqualityToken?.raw,
+      unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.raw,
       equalityToken.raw,
-      garbageBetweenEqualityTokenAndRightTypeIdentifier?.raw,
+      unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sameTypeRequirement,
@@ -16632,25 +16632,25 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftTypeIdentifier,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftTypeIdentifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftTypeIdentifier(value)
+      self = withUnexpectedBeforeLeftTypeIdentifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftTypeIdentifier` replaced.
-  /// - param newChild: The new `garbageBeforeLeftTypeIdentifier` to replace the node's
-  ///                   current `garbageBeforeLeftTypeIdentifier`, if present.
-  public func withGarbageBeforeLeftTypeIdentifier(
-    _ newChild: GarbageNodesSyntax?) -> SameTypeRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftTypeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftTypeIdentifier` to replace the node's
+  ///                   current `unexpectedBeforeLeftTypeIdentifier`, if present.
+  public func withUnexpectedBeforeLeftTypeIdentifier(
+    _ newChild: UnexpectedNodesSyntax?) -> SameTypeRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftTypeIdentifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftTypeIdentifier)
     return SameTypeRequirementSyntax(newData)
   }
 
@@ -16675,25 +16675,25 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return SameTypeRequirementSyntax(newData)
   }
 
-  public var garbageBetweenLeftTypeIdentifierAndEqualityToken: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftTypeIdentifierAndEqualityToken,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftTypeIdentifierAndEqualityToken,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftTypeIdentifierAndEqualityToken(value)
+      self = withUnexpectedBetweenLeftTypeIdentifierAndEqualityToken(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftTypeIdentifierAndEqualityToken` replaced.
-  /// - param newChild: The new `garbageBetweenLeftTypeIdentifierAndEqualityToken` to replace the node's
-  ///                   current `garbageBetweenLeftTypeIdentifierAndEqualityToken`, if present.
-  public func withGarbageBetweenLeftTypeIdentifierAndEqualityToken(
-    _ newChild: GarbageNodesSyntax?) -> SameTypeRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftTypeIdentifierAndEqualityToken` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftTypeIdentifierAndEqualityToken` to replace the node's
+  ///                   current `unexpectedBetweenLeftTypeIdentifierAndEqualityToken`, if present.
+  public func withUnexpectedBetweenLeftTypeIdentifierAndEqualityToken(
+    _ newChild: UnexpectedNodesSyntax?) -> SameTypeRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftTypeIdentifierAndEqualityToken)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftTypeIdentifierAndEqualityToken)
     return SameTypeRequirementSyntax(newData)
   }
 
@@ -16718,25 +16718,25 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return SameTypeRequirementSyntax(newData)
   }
 
-  public var garbageBetweenEqualityTokenAndRightTypeIdentifier: GarbageNodesSyntax? {
+  public var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenEqualityTokenAndRightTypeIdentifier,
+      let childData = data.child(at: Cursor.unexpectedBetweenEqualityTokenAndRightTypeIdentifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenEqualityTokenAndRightTypeIdentifier(value)
+      self = withUnexpectedBetweenEqualityTokenAndRightTypeIdentifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenEqualityTokenAndRightTypeIdentifier` replaced.
-  /// - param newChild: The new `garbageBetweenEqualityTokenAndRightTypeIdentifier` to replace the node's
-  ///                   current `garbageBetweenEqualityTokenAndRightTypeIdentifier`, if present.
-  public func withGarbageBetweenEqualityTokenAndRightTypeIdentifier(
-    _ newChild: GarbageNodesSyntax?) -> SameTypeRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEqualityTokenAndRightTypeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBetweenEqualityTokenAndRightTypeIdentifier` to replace the node's
+  ///                   current `unexpectedBetweenEqualityTokenAndRightTypeIdentifier`, if present.
+  public func withUnexpectedBetweenEqualityTokenAndRightTypeIdentifier(
+    _ newChild: UnexpectedNodesSyntax?) -> SameTypeRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenEqualityTokenAndRightTypeIdentifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenEqualityTokenAndRightTypeIdentifier)
     return SameTypeRequirementSyntax(newData)
   }
 
@@ -16765,11 +16765,11 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 extension SameTypeRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftTypeIdentifier": garbageBeforeLeftTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftTypeIdentifier": unexpectedBeforeLeftTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftTypeIdentifier": Syntax(leftTypeIdentifier).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftTypeIdentifierAndEqualityToken": garbageBetweenLeftTypeIdentifierAndEqualityToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftTypeIdentifierAndEqualityToken": unexpectedBetweenLeftTypeIdentifierAndEqualityToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "equalityToken": Syntax(equalityToken).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenEqualityTokenAndRightTypeIdentifier": garbageBetweenEqualityTokenAndRightTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEqualityTokenAndRightTypeIdentifier": unexpectedBetweenEqualityTokenAndRightTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightTypeIdentifier": Syntax(rightTypeIdentifier).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -16779,21 +16779,21 @@ extension SameTypeRequirementSyntax: CustomReflectable {
 
 public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeTypeIdentifier
+    case unexpectedBeforeTypeIdentifier
     case typeIdentifier
-    case garbageBetweenTypeIdentifierAndColon
+    case unexpectedBetweenTypeIdentifierAndColon
     case colon
-    case garbageBetweenColonAndLayoutConstraint
+    case unexpectedBetweenColonAndLayoutConstraint
     case layoutConstraint
-    case garbageBetweenLayoutConstraintAndLeftParen
+    case unexpectedBetweenLayoutConstraintAndLeftParen
     case leftParen
-    case garbageBetweenLeftParenAndSize
+    case unexpectedBetweenLeftParenAndSize
     case size
-    case garbageBetweenSizeAndComma
+    case unexpectedBetweenSizeAndComma
     case comma
-    case garbageBetweenCommaAndAlignment
+    case unexpectedBetweenCommaAndAlignment
     case alignment
-    case garbageBetweenAlignmentAndRightParen
+    case unexpectedBetweenAlignmentAndRightParen
     case rightParen
   }
 
@@ -16815,39 +16815,39 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeTypeIdentifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? = nil,
     typeIdentifier: TypeSyntax,
-    _ garbageBetweenTypeIdentifierAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndLayoutConstraint: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodesSyntax? = nil,
     layoutConstraint: TokenSyntax,
-    _ garbageBetweenLayoutConstraintAndLeftParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax?,
-    _ garbageBetweenLeftParenAndSize: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndSize: UnexpectedNodesSyntax? = nil,
     size: TokenSyntax?,
-    _ garbageBetweenSizeAndComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSizeAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax?,
-    _ garbageBetweenCommaAndAlignment: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndAlignment: UnexpectedNodesSyntax? = nil,
     alignment: TokenSyntax?,
-    _ garbageBetweenAlignmentAndRightParen: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeTypeIdentifier?.raw,
+      unexpectedBeforeTypeIdentifier?.raw,
       typeIdentifier.raw,
-      garbageBetweenTypeIdentifierAndColon?.raw,
+      unexpectedBetweenTypeIdentifierAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndLayoutConstraint?.raw,
+      unexpectedBetweenColonAndLayoutConstraint?.raw,
       layoutConstraint.raw,
-      garbageBetweenLayoutConstraintAndLeftParen?.raw,
+      unexpectedBetweenLayoutConstraintAndLeftParen?.raw,
       leftParen?.raw,
-      garbageBetweenLeftParenAndSize?.raw,
+      unexpectedBetweenLeftParenAndSize?.raw,
       size?.raw,
-      garbageBetweenSizeAndComma?.raw,
+      unexpectedBetweenSizeAndComma?.raw,
       comma?.raw,
-      garbageBetweenCommaAndAlignment?.raw,
+      unexpectedBetweenCommaAndAlignment?.raw,
       alignment?.raw,
-      garbageBetweenAlignmentAndRightParen?.raw,
+      unexpectedBetweenAlignmentAndRightParen?.raw,
       rightParen?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.layoutRequirement,
@@ -16860,25 +16860,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeTypeIdentifier: GarbageNodesSyntax? {
+  public var unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeTypeIdentifier,
+      let childData = data.child(at: Cursor.unexpectedBeforeTypeIdentifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeTypeIdentifier(value)
+      self = withUnexpectedBeforeTypeIdentifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeTypeIdentifier` replaced.
-  /// - param newChild: The new `garbageBeforeTypeIdentifier` to replace the node's
-  ///                   current `garbageBeforeTypeIdentifier`, if present.
-  public func withGarbageBeforeTypeIdentifier(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeTypeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeTypeIdentifier` to replace the node's
+  ///                   current `unexpectedBeforeTypeIdentifier`, if present.
+  public func withUnexpectedBeforeTypeIdentifier(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeTypeIdentifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeTypeIdentifier)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -16903,25 +16903,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return LayoutRequirementSyntax(newData)
   }
 
-  public var garbageBetweenTypeIdentifierAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeIdentifierAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeIdentifierAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeIdentifierAndColon(value)
+      self = withUnexpectedBetweenTypeIdentifierAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeIdentifierAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenTypeIdentifierAndColon` to replace the node's
-  ///                   current `garbageBetweenTypeIdentifierAndColon`, if present.
-  public func withGarbageBetweenTypeIdentifierAndColon(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeIdentifierAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeIdentifierAndColon` to replace the node's
+  ///                   current `unexpectedBetweenTypeIdentifierAndColon`, if present.
+  public func withUnexpectedBetweenTypeIdentifierAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeIdentifierAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeIdentifierAndColon)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -16946,25 +16946,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return LayoutRequirementSyntax(newData)
   }
 
-  public var garbageBetweenColonAndLayoutConstraint: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndLayoutConstraint,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndLayoutConstraint,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndLayoutConstraint(value)
+      self = withUnexpectedBetweenColonAndLayoutConstraint(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndLayoutConstraint` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndLayoutConstraint` to replace the node's
-  ///                   current `garbageBetweenColonAndLayoutConstraint`, if present.
-  public func withGarbageBetweenColonAndLayoutConstraint(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndLayoutConstraint` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndLayoutConstraint` to replace the node's
+  ///                   current `unexpectedBetweenColonAndLayoutConstraint`, if present.
+  public func withUnexpectedBetweenColonAndLayoutConstraint(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndLayoutConstraint)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndLayoutConstraint)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -16989,25 +16989,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return LayoutRequirementSyntax(newData)
   }
 
-  public var garbageBetweenLayoutConstraintAndLeftParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLayoutConstraintAndLeftParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenLayoutConstraintAndLeftParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLayoutConstraintAndLeftParen(value)
+      self = withUnexpectedBetweenLayoutConstraintAndLeftParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLayoutConstraintAndLeftParen` replaced.
-  /// - param newChild: The new `garbageBetweenLayoutConstraintAndLeftParen` to replace the node's
-  ///                   current `garbageBetweenLayoutConstraintAndLeftParen`, if present.
-  public func withGarbageBetweenLayoutConstraintAndLeftParen(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLayoutConstraintAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenLayoutConstraintAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenLayoutConstraintAndLeftParen`, if present.
+  public func withUnexpectedBetweenLayoutConstraintAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLayoutConstraintAndLeftParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLayoutConstraintAndLeftParen)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -17033,25 +17033,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return LayoutRequirementSyntax(newData)
   }
 
-  public var garbageBetweenLeftParenAndSize: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndSize: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftParenAndSize,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndSize,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftParenAndSize(value)
+      self = withUnexpectedBetweenLeftParenAndSize(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftParenAndSize` replaced.
-  /// - param newChild: The new `garbageBetweenLeftParenAndSize` to replace the node's
-  ///                   current `garbageBetweenLeftParenAndSize`, if present.
-  public func withGarbageBetweenLeftParenAndSize(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndSize` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndSize` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndSize`, if present.
+  public func withUnexpectedBetweenLeftParenAndSize(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftParenAndSize)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndSize)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -17077,25 +17077,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return LayoutRequirementSyntax(newData)
   }
 
-  public var garbageBetweenSizeAndComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenSizeAndComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenSizeAndComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenSizeAndComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenSizeAndComma(value)
+      self = withUnexpectedBetweenSizeAndComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenSizeAndComma` replaced.
-  /// - param newChild: The new `garbageBetweenSizeAndComma` to replace the node's
-  ///                   current `garbageBetweenSizeAndComma`, if present.
-  public func withGarbageBetweenSizeAndComma(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenSizeAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenSizeAndComma` to replace the node's
+  ///                   current `unexpectedBetweenSizeAndComma`, if present.
+  public func withUnexpectedBetweenSizeAndComma(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSizeAndComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSizeAndComma)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -17121,25 +17121,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return LayoutRequirementSyntax(newData)
   }
 
-  public var garbageBetweenCommaAndAlignment: GarbageNodesSyntax? {
+  public var unexpectedBetweenCommaAndAlignment: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenCommaAndAlignment,
+      let childData = data.child(at: Cursor.unexpectedBetweenCommaAndAlignment,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenCommaAndAlignment(value)
+      self = withUnexpectedBetweenCommaAndAlignment(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenCommaAndAlignment` replaced.
-  /// - param newChild: The new `garbageBetweenCommaAndAlignment` to replace the node's
-  ///                   current `garbageBetweenCommaAndAlignment`, if present.
-  public func withGarbageBetweenCommaAndAlignment(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndAlignment` replaced.
+  /// - param newChild: The new `unexpectedBetweenCommaAndAlignment` to replace the node's
+  ///                   current `unexpectedBetweenCommaAndAlignment`, if present.
+  public func withUnexpectedBetweenCommaAndAlignment(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenCommaAndAlignment)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCommaAndAlignment)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -17165,25 +17165,25 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return LayoutRequirementSyntax(newData)
   }
 
-  public var garbageBetweenAlignmentAndRightParen: GarbageNodesSyntax? {
+  public var unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAlignmentAndRightParen,
+      let childData = data.child(at: Cursor.unexpectedBetweenAlignmentAndRightParen,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAlignmentAndRightParen(value)
+      self = withUnexpectedBetweenAlignmentAndRightParen(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAlignmentAndRightParen` replaced.
-  /// - param newChild: The new `garbageBetweenAlignmentAndRightParen` to replace the node's
-  ///                   current `garbageBetweenAlignmentAndRightParen`, if present.
-  public func withGarbageBetweenAlignmentAndRightParen(
-    _ newChild: GarbageNodesSyntax?) -> LayoutRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAlignmentAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenAlignmentAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenAlignmentAndRightParen`, if present.
+  public func withUnexpectedBetweenAlignmentAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> LayoutRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAlignmentAndRightParen)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAlignmentAndRightParen)
     return LayoutRequirementSyntax(newData)
   }
 
@@ -17213,21 +17213,21 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 extension LayoutRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeTypeIdentifier": garbageBeforeTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeTypeIdentifier": unexpectedBeforeTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typeIdentifier": Syntax(typeIdentifier).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenTypeIdentifierAndColon": garbageBetweenTypeIdentifierAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeIdentifierAndColon": unexpectedBetweenTypeIdentifierAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndLayoutConstraint": garbageBetweenColonAndLayoutConstraint.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndLayoutConstraint": unexpectedBetweenColonAndLayoutConstraint.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "layoutConstraint": Syntax(layoutConstraint).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLayoutConstraintAndLeftParen": garbageBetweenLayoutConstraintAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLayoutConstraintAndLeftParen": unexpectedBetweenLayoutConstraintAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLeftParenAndSize": garbageBetweenLeftParenAndSize.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftParenAndSize": unexpectedBetweenLeftParenAndSize.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "size": size.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenSizeAndComma": garbageBetweenSizeAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenSizeAndComma": unexpectedBetweenSizeAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenCommaAndAlignment": garbageBetweenCommaAndAlignment.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCommaAndAlignment": unexpectedBetweenCommaAndAlignment.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "alignment": alignment.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAlignmentAndRightParen": garbageBetweenAlignmentAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAlignmentAndRightParen": unexpectedBetweenAlignmentAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -17237,15 +17237,15 @@ extension LayoutRequirementSyntax: CustomReflectable {
 
 public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeAttributes
+    case unexpectedBeforeAttributes
     case attributes
-    case garbageBetweenAttributesAndName
+    case unexpectedBetweenAttributesAndName
     case name
-    case garbageBetweenNameAndColon
+    case unexpectedBetweenNameAndColon
     case colon
-    case garbageBetweenColonAndInheritedType
+    case unexpectedBetweenColonAndInheritedType
     case inheritedType
-    case garbageBetweenInheritedTypeAndTrailingComma
+    case unexpectedBetweenInheritedTypeAndTrailingComma
     case trailingComma
   }
 
@@ -17267,27 +17267,27 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeAttributes: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax?,
-    _ garbageBetweenAttributesAndName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax?,
-    _ garbageBetweenColonAndInheritedType: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
     inheritedType: TypeSyntax?,
-    _ garbageBetweenInheritedTypeAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndName?.raw,
+      unexpectedBetweenAttributesAndName?.raw,
       name.raw,
-      garbageBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndInheritedType?.raw,
+      unexpectedBetweenColonAndInheritedType?.raw,
       inheritedType?.raw,
-      garbageBetweenInheritedTypeAndTrailingComma?.raw,
+      unexpectedBetweenInheritedTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameter,
@@ -17300,25 +17300,25 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeAttributes: GarbageNodesSyntax? {
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeAttributes,
+      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeAttributes(value)
+      self = withUnexpectedBeforeAttributes(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeAttributes` replaced.
-  /// - param newChild: The new `garbageBeforeAttributes` to replace the node's
-  ///                   current `garbageBeforeAttributes`, if present.
-  public func withGarbageBeforeAttributes(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeAttributes` replaced.
+  /// - param newChild: The new `unexpectedBeforeAttributes` to replace the node's
+  ///                   current `unexpectedBeforeAttributes`, if present.
+  public func withUnexpectedBeforeAttributes(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeAttributes)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
     return GenericParameterSyntax(newData)
   }
 
@@ -17363,25 +17363,25 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterSyntax(newData)
   }
 
-  public var garbageBetweenAttributesAndName: GarbageNodesSyntax? {
+  public var unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenAttributesAndName,
+      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenAttributesAndName(value)
+      self = withUnexpectedBetweenAttributesAndName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenAttributesAndName` replaced.
-  /// - param newChild: The new `garbageBetweenAttributesAndName` to replace the node's
-  ///                   current `garbageBetweenAttributesAndName`, if present.
-  public func withGarbageBetweenAttributesAndName(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenAttributesAndName` replaced.
+  /// - param newChild: The new `unexpectedBetweenAttributesAndName` to replace the node's
+  ///                   current `unexpectedBetweenAttributesAndName`, if present.
+  public func withUnexpectedBetweenAttributesAndName(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenAttributesAndName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndName)
     return GenericParameterSyntax(newData)
   }
 
@@ -17406,25 +17406,25 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterSyntax(newData)
   }
 
-  public var garbageBetweenNameAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndColon(value)
+      self = withUnexpectedBetweenNameAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndColon` to replace the node's
-  ///                   current `garbageBetweenNameAndColon`, if present.
-  public func withGarbageBetweenNameAndColon(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndColon` to replace the node's
+  ///                   current `unexpectedBetweenNameAndColon`, if present.
+  public func withUnexpectedBetweenNameAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndColon)
     return GenericParameterSyntax(newData)
   }
 
@@ -17450,25 +17450,25 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterSyntax(newData)
   }
 
-  public var garbageBetweenColonAndInheritedType: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndInheritedType,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndInheritedType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndInheritedType(value)
+      self = withUnexpectedBetweenColonAndInheritedType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndInheritedType` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndInheritedType` to replace the node's
-  ///                   current `garbageBetweenColonAndInheritedType`, if present.
-  public func withGarbageBetweenColonAndInheritedType(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndInheritedType` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndInheritedType` to replace the node's
+  ///                   current `unexpectedBetweenColonAndInheritedType`, if present.
+  public func withUnexpectedBetweenColonAndInheritedType(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndInheritedType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndInheritedType)
     return GenericParameterSyntax(newData)
   }
 
@@ -17494,25 +17494,25 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterSyntax(newData)
   }
 
-  public var garbageBetweenInheritedTypeAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenInheritedTypeAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenInheritedTypeAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenInheritedTypeAndTrailingComma(value)
+      self = withUnexpectedBetweenInheritedTypeAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenInheritedTypeAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenInheritedTypeAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenInheritedTypeAndTrailingComma`, if present.
-  public func withGarbageBetweenInheritedTypeAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenInheritedTypeAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenInheritedTypeAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenInheritedTypeAndTrailingComma`, if present.
+  public func withUnexpectedBetweenInheritedTypeAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInheritedTypeAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritedTypeAndTrailingComma)
     return GenericParameterSyntax(newData)
   }
 
@@ -17542,15 +17542,15 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeAttributes": garbageBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeAttributes": unexpectedBeforeAttributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenAttributesAndName": garbageBetweenAttributesAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenAttributesAndName": unexpectedBetweenAttributesAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndColon": garbageBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndColon": unexpectedBetweenNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenColonAndInheritedType": garbageBetweenColonAndInheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndInheritedType": unexpectedBetweenColonAndInheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritedType": inheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenInheritedTypeAndTrailingComma": garbageBetweenInheritedTypeAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenInheritedTypeAndTrailingComma": unexpectedBetweenInheritedTypeAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -17560,9 +17560,9 @@ extension GenericParameterSyntax: CustomReflectable {
 
 public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeName
+    case unexpectedBeforeName
     case name
-    case garbageBetweenNameAndTrailingComma
+    case unexpectedBetweenNameAndTrailingComma
     case trailingComma
   }
 
@@ -17584,15 +17584,15 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
-    _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingComma?.raw,
+      unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
@@ -17605,25 +17605,25 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeName: GarbageNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeName,
+      let childData = data.child(at: Cursor.unexpectedBeforeName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeName(value)
+      self = withUnexpectedBeforeName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeName` replaced.
-  /// - param newChild: The new `garbageBeforeName` to replace the node's
-  ///                   current `garbageBeforeName`, if present.
-  public func withGarbageBeforeName(
-    _ newChild: GarbageNodesSyntax?) -> PrimaryAssociatedTypeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeName` replaced.
+  /// - param newChild: The new `unexpectedBeforeName` to replace the node's
+  ///                   current `unexpectedBeforeName`, if present.
+  public func withUnexpectedBeforeName(
+    _ newChild: UnexpectedNodesSyntax?) -> PrimaryAssociatedTypeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeName)
     return PrimaryAssociatedTypeSyntax(newData)
   }
 
@@ -17648,25 +17648,25 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     return PrimaryAssociatedTypeSyntax(newData)
   }
 
-  public var garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndTrailingComma(value)
+      self = withUnexpectedBetweenNameAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenNameAndTrailingComma`, if present.
-  public func withGarbageBetweenNameAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> PrimaryAssociatedTypeSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenNameAndTrailingComma`, if present.
+  public func withUnexpectedBetweenNameAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> PrimaryAssociatedTypeSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndTrailingComma)
     return PrimaryAssociatedTypeSyntax(newData)
   }
 
@@ -17696,9 +17696,9 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 extension PrimaryAssociatedTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeName": garbageBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeName": unexpectedBeforeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenNameAndTrailingComma": garbageBetweenNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndTrailingComma": unexpectedBetweenNameAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -17708,11 +17708,11 @@ extension PrimaryAssociatedTypeSyntax: CustomReflectable {
 
 public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftAngleBracket
+    case unexpectedBeforeLeftAngleBracket
     case leftAngleBracket
-    case garbageBetweenLeftAngleBracketAndGenericParameterList
+    case unexpectedBetweenLeftAngleBracketAndGenericParameterList
     case genericParameterList
-    case garbageBetweenGenericParameterListAndRightAngleBracket
+    case unexpectedBetweenGenericParameterListAndRightAngleBracket
     case rightAngleBracket
   }
 
@@ -17734,19 +17734,19 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil,
     leftAngleBracket: TokenSyntax,
-    _ garbageBetweenLeftAngleBracketAndGenericParameterList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil,
     genericParameterList: GenericParameterListSyntax,
-    _ garbageBetweenGenericParameterListAndRightAngleBracket: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
     rightAngleBracket: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftAngleBracket?.raw,
+      unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
-      garbageBetweenLeftAngleBracketAndGenericParameterList?.raw,
+      unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw,
       genericParameterList.raw,
-      garbageBetweenGenericParameterListAndRightAngleBracket?.raw,
+      unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterClause,
@@ -17759,25 +17759,25 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftAngleBracket: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftAngleBracket,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftAngleBracket,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftAngleBracket(value)
+      self = withUnexpectedBeforeLeftAngleBracket(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftAngleBracket` replaced.
-  /// - param newChild: The new `garbageBeforeLeftAngleBracket` to replace the node's
-  ///                   current `garbageBeforeLeftAngleBracket`, if present.
-  public func withGarbageBeforeLeftAngleBracket(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftAngleBracket` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftAngleBracket` to replace the node's
+  ///                   current `unexpectedBeforeLeftAngleBracket`, if present.
+  public func withUnexpectedBeforeLeftAngleBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftAngleBracket)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftAngleBracket)
     return GenericParameterClauseSyntax(newData)
   }
 
@@ -17802,25 +17802,25 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterClauseSyntax(newData)
   }
 
-  public var garbageBetweenLeftAngleBracketAndGenericParameterList: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftAngleBracketAndGenericParameterList,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftAngleBracketAndGenericParameterList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftAngleBracketAndGenericParameterList(value)
+      self = withUnexpectedBetweenLeftAngleBracketAndGenericParameterList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftAngleBracketAndGenericParameterList` replaced.
-  /// - param newChild: The new `garbageBetweenLeftAngleBracketAndGenericParameterList` to replace the node's
-  ///                   current `garbageBetweenLeftAngleBracketAndGenericParameterList`, if present.
-  public func withGarbageBetweenLeftAngleBracketAndGenericParameterList(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftAngleBracketAndGenericParameterList` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftAngleBracketAndGenericParameterList` to replace the node's
+  ///                   current `unexpectedBetweenLeftAngleBracketAndGenericParameterList`, if present.
+  public func withUnexpectedBetweenLeftAngleBracketAndGenericParameterList(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftAngleBracketAndGenericParameterList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftAngleBracketAndGenericParameterList)
     return GenericParameterClauseSyntax(newData)
   }
 
@@ -17864,25 +17864,25 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterClauseSyntax(newData)
   }
 
-  public var garbageBetweenGenericParameterListAndRightAngleBracket: GarbageNodesSyntax? {
+  public var unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenGenericParameterListAndRightAngleBracket,
+      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterListAndRightAngleBracket,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenGenericParameterListAndRightAngleBracket(value)
+      self = withUnexpectedBetweenGenericParameterListAndRightAngleBracket(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenGenericParameterListAndRightAngleBracket` replaced.
-  /// - param newChild: The new `garbageBetweenGenericParameterListAndRightAngleBracket` to replace the node's
-  ///                   current `garbageBetweenGenericParameterListAndRightAngleBracket`, if present.
-  public func withGarbageBetweenGenericParameterListAndRightAngleBracket(
-    _ newChild: GarbageNodesSyntax?) -> GenericParameterClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterListAndRightAngleBracket` replaced.
+  /// - param newChild: The new `unexpectedBetweenGenericParameterListAndRightAngleBracket` to replace the node's
+  ///                   current `unexpectedBetweenGenericParameterListAndRightAngleBracket`, if present.
+  public func withUnexpectedBetweenGenericParameterListAndRightAngleBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenGenericParameterListAndRightAngleBracket)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterListAndRightAngleBracket)
     return GenericParameterClauseSyntax(newData)
   }
 
@@ -17911,11 +17911,11 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericParameterClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftAngleBracket": garbageBeforeLeftAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftAngleBracket": unexpectedBeforeLeftAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftAngleBracket": Syntax(leftAngleBracket).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftAngleBracketAndGenericParameterList": garbageBetweenLeftAngleBracketAndGenericParameterList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftAngleBracketAndGenericParameterList": unexpectedBetweenLeftAngleBracketAndGenericParameterList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterList": Syntax(genericParameterList).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenGenericParameterListAndRightAngleBracket": garbageBetweenGenericParameterListAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenGenericParameterListAndRightAngleBracket": unexpectedBetweenGenericParameterListAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightAngleBracket": Syntax(rightAngleBracket).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -17925,11 +17925,11 @@ extension GenericParameterClauseSyntax: CustomReflectable {
 
 public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftTypeIdentifier
+    case unexpectedBeforeLeftTypeIdentifier
     case leftTypeIdentifier
-    case garbageBetweenLeftTypeIdentifierAndColon
+    case unexpectedBetweenLeftTypeIdentifierAndColon
     case colon
-    case garbageBetweenColonAndRightTypeIdentifier
+    case unexpectedBetweenColonAndRightTypeIdentifier
     case rightTypeIdentifier
   }
 
@@ -17951,19 +17951,19 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
     leftTypeIdentifier: TypeSyntax,
-    _ garbageBetweenLeftTypeIdentifierAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndRightTypeIdentifier: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
     rightTypeIdentifier: TypeSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftTypeIdentifier?.raw,
+      unexpectedBeforeLeftTypeIdentifier?.raw,
       leftTypeIdentifier.raw,
-      garbageBetweenLeftTypeIdentifierAndColon?.raw,
+      unexpectedBetweenLeftTypeIdentifierAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndRightTypeIdentifier?.raw,
+      unexpectedBetweenColonAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conformanceRequirement,
@@ -17976,25 +17976,25 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftTypeIdentifier,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftTypeIdentifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftTypeIdentifier(value)
+      self = withUnexpectedBeforeLeftTypeIdentifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftTypeIdentifier` replaced.
-  /// - param newChild: The new `garbageBeforeLeftTypeIdentifier` to replace the node's
-  ///                   current `garbageBeforeLeftTypeIdentifier`, if present.
-  public func withGarbageBeforeLeftTypeIdentifier(
-    _ newChild: GarbageNodesSyntax?) -> ConformanceRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftTypeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftTypeIdentifier` to replace the node's
+  ///                   current `unexpectedBeforeLeftTypeIdentifier`, if present.
+  public func withUnexpectedBeforeLeftTypeIdentifier(
+    _ newChild: UnexpectedNodesSyntax?) -> ConformanceRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftTypeIdentifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftTypeIdentifier)
     return ConformanceRequirementSyntax(newData)
   }
 
@@ -18019,25 +18019,25 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return ConformanceRequirementSyntax(newData)
   }
 
-  public var garbageBetweenLeftTypeIdentifierAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftTypeIdentifierAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftTypeIdentifierAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftTypeIdentifierAndColon(value)
+      self = withUnexpectedBetweenLeftTypeIdentifierAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftTypeIdentifierAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenLeftTypeIdentifierAndColon` to replace the node's
-  ///                   current `garbageBetweenLeftTypeIdentifierAndColon`, if present.
-  public func withGarbageBetweenLeftTypeIdentifierAndColon(
-    _ newChild: GarbageNodesSyntax?) -> ConformanceRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftTypeIdentifierAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftTypeIdentifierAndColon` to replace the node's
+  ///                   current `unexpectedBetweenLeftTypeIdentifierAndColon`, if present.
+  public func withUnexpectedBetweenLeftTypeIdentifierAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> ConformanceRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftTypeIdentifierAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftTypeIdentifierAndColon)
     return ConformanceRequirementSyntax(newData)
   }
 
@@ -18062,25 +18062,25 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return ConformanceRequirementSyntax(newData)
   }
 
-  public var garbageBetweenColonAndRightTypeIdentifier: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndRightTypeIdentifier,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndRightTypeIdentifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndRightTypeIdentifier(value)
+      self = withUnexpectedBetweenColonAndRightTypeIdentifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndRightTypeIdentifier` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndRightTypeIdentifier` to replace the node's
-  ///                   current `garbageBetweenColonAndRightTypeIdentifier`, if present.
-  public func withGarbageBetweenColonAndRightTypeIdentifier(
-    _ newChild: GarbageNodesSyntax?) -> ConformanceRequirementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndRightTypeIdentifier` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndRightTypeIdentifier` to replace the node's
+  ///                   current `unexpectedBetweenColonAndRightTypeIdentifier`, if present.
+  public func withUnexpectedBetweenColonAndRightTypeIdentifier(
+    _ newChild: UnexpectedNodesSyntax?) -> ConformanceRequirementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndRightTypeIdentifier)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndRightTypeIdentifier)
     return ConformanceRequirementSyntax(newData)
   }
 
@@ -18109,11 +18109,11 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 extension ConformanceRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftTypeIdentifier": garbageBeforeLeftTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftTypeIdentifier": unexpectedBeforeLeftTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftTypeIdentifier": Syntax(leftTypeIdentifier).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftTypeIdentifierAndColon": garbageBetweenLeftTypeIdentifierAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftTypeIdentifierAndColon": unexpectedBetweenLeftTypeIdentifierAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndRightTypeIdentifier": garbageBetweenColonAndRightTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndRightTypeIdentifier": unexpectedBetweenColonAndRightTypeIdentifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightTypeIdentifier": Syntax(rightTypeIdentifier).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -18123,11 +18123,11 @@ extension ConformanceRequirementSyntax: CustomReflectable {
 
 public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftAngleBracket
+    case unexpectedBeforeLeftAngleBracket
     case leftAngleBracket
-    case garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList
+    case unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList
     case primaryAssociatedTypeList
-    case garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket
+    case unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket
     case rightAngleBracket
   }
 
@@ -18149,19 +18149,19 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   }
 
   public init(
-    _ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil,
     leftAngleBracket: TokenSyntax,
-    _ garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodesSyntax? = nil,
     primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax,
-    _ garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
     rightAngleBracket: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftAngleBracket?.raw,
+      unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
-      garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.raw,
+      unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.raw,
       primaryAssociatedTypeList.raw,
-      garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw,
+      unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeClause,
@@ -18174,25 +18174,25 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftAngleBracket: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftAngleBracket,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftAngleBracket,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftAngleBracket(value)
+      self = withUnexpectedBeforeLeftAngleBracket(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftAngleBracket` replaced.
-  /// - param newChild: The new `garbageBeforeLeftAngleBracket` to replace the node's
-  ///                   current `garbageBeforeLeftAngleBracket`, if present.
-  public func withGarbageBeforeLeftAngleBracket(
-    _ newChild: GarbageNodesSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftAngleBracket` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftAngleBracket` to replace the node's
+  ///                   current `unexpectedBeforeLeftAngleBracket`, if present.
+  public func withUnexpectedBeforeLeftAngleBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftAngleBracket)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftAngleBracket)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
 
@@ -18217,25 +18217,25 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
 
-  public var garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList(value)
+      self = withUnexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList` replaced.
-  /// - param newChild: The new `garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList` to replace the node's
-  ///                   current `garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList`, if present.
-  public func withGarbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList(
-    _ newChild: GarbageNodesSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList` to replace the node's
+  ///                   current `unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList`, if present.
+  public func withUnexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList(
+    _ newChild: UnexpectedNodesSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
 
@@ -18279,25 +18279,25 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
 
-  public var garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: GarbageNodesSyntax? {
+  public var unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket,
+      let childData = data.child(at: Cursor.unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket(value)
+      self = withUnexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket` replaced.
-  /// - param newChild: The new `garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket` to replace the node's
-  ///                   current `garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket`, if present.
-  public func withGarbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket(
-    _ newChild: GarbageNodesSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket` replaced.
+  /// - param newChild: The new `unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket` to replace the node's
+  ///                   current `unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket`, if present.
+  public func withUnexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
 
@@ -18326,11 +18326,11 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
 extension PrimaryAssociatedTypeClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftAngleBracket": garbageBeforeLeftAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftAngleBracket": unexpectedBeforeLeftAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftAngleBracket": Syntax(leftAngleBracket).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList": garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList": unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "primaryAssociatedTypeList": Syntax(primaryAssociatedTypeList).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket": garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket": unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightAngleBracket": Syntax(rightAngleBracket).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -18340,9 +18340,9 @@ extension PrimaryAssociatedTypeClauseSyntax: CustomReflectable {
 
 public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeType
+    case unexpectedBeforeType
     case type
-    case garbageBetweenTypeAndAmpersand
+    case unexpectedBetweenTypeAndAmpersand
     case ampersand
   }
 
@@ -18364,15 +18364,15 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeType: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
     type: TypeSyntax,
-    _ garbageBetweenTypeAndAmpersand: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? = nil,
     ampersand: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeType?.raw,
+      unexpectedBeforeType?.raw,
       type.raw,
-      garbageBetweenTypeAndAmpersand?.raw,
+      unexpectedBetweenTypeAndAmpersand?.raw,
       ampersand?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElement,
@@ -18385,25 +18385,25 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeType: GarbageNodesSyntax? {
+  public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeType,
+      let childData = data.child(at: Cursor.unexpectedBeforeType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeType(value)
+      self = withUnexpectedBeforeType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeType` replaced.
-  /// - param newChild: The new `garbageBeforeType` to replace the node's
-  ///                   current `garbageBeforeType`, if present.
-  public func withGarbageBeforeType(
-    _ newChild: GarbageNodesSyntax?) -> CompositionTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeType` replaced.
+  /// - param newChild: The new `unexpectedBeforeType` to replace the node's
+  ///                   current `unexpectedBeforeType`, if present.
+  public func withUnexpectedBeforeType(
+    _ newChild: UnexpectedNodesSyntax?) -> CompositionTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeType)
     return CompositionTypeElementSyntax(newData)
   }
 
@@ -18428,25 +18428,25 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return CompositionTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenTypeAndAmpersand: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeAndAmpersand,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeAndAmpersand,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeAndAmpersand(value)
+      self = withUnexpectedBetweenTypeAndAmpersand(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeAndAmpersand` replaced.
-  /// - param newChild: The new `garbageBetweenTypeAndAmpersand` to replace the node's
-  ///                   current `garbageBetweenTypeAndAmpersand`, if present.
-  public func withGarbageBetweenTypeAndAmpersand(
-    _ newChild: GarbageNodesSyntax?) -> CompositionTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeAndAmpersand` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeAndAmpersand` to replace the node's
+  ///                   current `unexpectedBetweenTypeAndAmpersand`, if present.
+  public func withUnexpectedBetweenTypeAndAmpersand(
+    _ newChild: UnexpectedNodesSyntax?) -> CompositionTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeAndAmpersand)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAndAmpersand)
     return CompositionTypeElementSyntax(newData)
   }
 
@@ -18476,9 +18476,9 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension CompositionTypeElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeType": garbageBeforeType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeType": unexpectedBeforeType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "type": Syntax(type).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenTypeAndAmpersand": garbageBetweenTypeAndAmpersand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeAndAmpersand": unexpectedBetweenTypeAndAmpersand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "ampersand": ampersand.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -18488,21 +18488,21 @@ extension CompositionTypeElementSyntax: CustomReflectable {
 
 public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeInOut
+    case unexpectedBeforeInOut
     case inOut
-    case garbageBetweenInOutAndName
+    case unexpectedBetweenInOutAndName
     case name
-    case garbageBetweenNameAndSecondName
+    case unexpectedBetweenNameAndSecondName
     case secondName
-    case garbageBetweenSecondNameAndColon
+    case unexpectedBetweenSecondNameAndColon
     case colon
-    case garbageBetweenColonAndType
+    case unexpectedBetweenColonAndType
     case type
-    case garbageBetweenTypeAndEllipsis
+    case unexpectedBetweenTypeAndEllipsis
     case ellipsis
-    case garbageBetweenEllipsisAndInitializer
+    case unexpectedBetweenEllipsisAndInitializer
     case initializer
-    case garbageBetweenInitializerAndTrailingComma
+    case unexpectedBetweenInitializerAndTrailingComma
     case trailingComma
   }
 
@@ -18524,39 +18524,39 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeInOut: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeInOut: UnexpectedNodesSyntax? = nil,
     inOut: TokenSyntax?,
-    _ garbageBetweenInOutAndName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInOutAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax?,
-    _ garbageBetweenNameAndSecondName: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndSecondName: UnexpectedNodesSyntax? = nil,
     secondName: TokenSyntax?,
-    _ garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax?,
-    _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
     type: TypeSyntax,
-    _ garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
     ellipsis: TokenSyntax?,
-    _ garbageBetweenEllipsisAndInitializer: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: InitializerClauseSyntax?,
-    _ garbageBetweenInitializerAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeInOut?.raw,
+      unexpectedBeforeInOut?.raw,
       inOut?.raw,
-      garbageBetweenInOutAndName?.raw,
+      unexpectedBetweenInOutAndName?.raw,
       name?.raw,
-      garbageBetweenNameAndSecondName?.raw,
+      unexpectedBetweenNameAndSecondName?.raw,
       secondName?.raw,
-      garbageBetweenSecondNameAndColon?.raw,
+      unexpectedBetweenSecondNameAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndType?.raw,
+      unexpectedBetweenColonAndType?.raw,
       type.raw,
-      garbageBetweenTypeAndEllipsis?.raw,
+      unexpectedBetweenTypeAndEllipsis?.raw,
       ellipsis?.raw,
-      garbageBetweenEllipsisAndInitializer?.raw,
+      unexpectedBetweenEllipsisAndInitializer?.raw,
       initializer?.raw,
-      garbageBetweenInitializerAndTrailingComma?.raw,
+      unexpectedBetweenInitializerAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElement,
@@ -18569,25 +18569,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeInOut: GarbageNodesSyntax? {
+  public var unexpectedBeforeInOut: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeInOut,
+      let childData = data.child(at: Cursor.unexpectedBeforeInOut,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeInOut(value)
+      self = withUnexpectedBeforeInOut(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeInOut` replaced.
-  /// - param newChild: The new `garbageBeforeInOut` to replace the node's
-  ///                   current `garbageBeforeInOut`, if present.
-  public func withGarbageBeforeInOut(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeInOut` replaced.
+  /// - param newChild: The new `unexpectedBeforeInOut` to replace the node's
+  ///                   current `unexpectedBeforeInOut`, if present.
+  public func withUnexpectedBeforeInOut(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeInOut)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeInOut)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18613,25 +18613,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenInOutAndName: GarbageNodesSyntax? {
+  public var unexpectedBetweenInOutAndName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenInOutAndName,
+      let childData = data.child(at: Cursor.unexpectedBetweenInOutAndName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenInOutAndName(value)
+      self = withUnexpectedBetweenInOutAndName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenInOutAndName` replaced.
-  /// - param newChild: The new `garbageBetweenInOutAndName` to replace the node's
-  ///                   current `garbageBetweenInOutAndName`, if present.
-  public func withGarbageBetweenInOutAndName(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenInOutAndName` replaced.
+  /// - param newChild: The new `unexpectedBetweenInOutAndName` to replace the node's
+  ///                   current `unexpectedBetweenInOutAndName`, if present.
+  public func withUnexpectedBetweenInOutAndName(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInOutAndName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInOutAndName)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18657,25 +18657,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenNameAndSecondName: GarbageNodesSyntax? {
+  public var unexpectedBetweenNameAndSecondName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenNameAndSecondName,
+      let childData = data.child(at: Cursor.unexpectedBetweenNameAndSecondName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenNameAndSecondName(value)
+      self = withUnexpectedBetweenNameAndSecondName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenNameAndSecondName` replaced.
-  /// - param newChild: The new `garbageBetweenNameAndSecondName` to replace the node's
-  ///                   current `garbageBetweenNameAndSecondName`, if present.
-  public func withGarbageBetweenNameAndSecondName(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenNameAndSecondName` replaced.
+  /// - param newChild: The new `unexpectedBetweenNameAndSecondName` to replace the node's
+  ///                   current `unexpectedBetweenNameAndSecondName`, if present.
+  public func withUnexpectedBetweenNameAndSecondName(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenNameAndSecondName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenNameAndSecondName)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18701,25 +18701,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenSecondNameAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenSecondNameAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenSecondNameAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenSecondNameAndColon(value)
+      self = withUnexpectedBetweenSecondNameAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenSecondNameAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenSecondNameAndColon` to replace the node's
-  ///                   current `garbageBetweenSecondNameAndColon`, if present.
-  public func withGarbageBetweenSecondNameAndColon(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenSecondNameAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenSecondNameAndColon` to replace the node's
+  ///                   current `unexpectedBetweenSecondNameAndColon`, if present.
+  public func withUnexpectedBetweenSecondNameAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenSecondNameAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSecondNameAndColon)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18745,25 +18745,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenColonAndType: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndType,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndType(value)
+      self = withUnexpectedBetweenColonAndType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndType` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndType` to replace the node's
-  ///                   current `garbageBetweenColonAndType`, if present.
-  public func withGarbageBetweenColonAndType(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndType` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndType` to replace the node's
+  ///                   current `unexpectedBetweenColonAndType`, if present.
+  public func withUnexpectedBetweenColonAndType(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndType)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18788,25 +18788,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? {
+  public var unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenTypeAndEllipsis,
+      let childData = data.child(at: Cursor.unexpectedBetweenTypeAndEllipsis,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenTypeAndEllipsis(value)
+      self = withUnexpectedBetweenTypeAndEllipsis(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenTypeAndEllipsis` replaced.
-  /// - param newChild: The new `garbageBetweenTypeAndEllipsis` to replace the node's
-  ///                   current `garbageBetweenTypeAndEllipsis`, if present.
-  public func withGarbageBetweenTypeAndEllipsis(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenTypeAndEllipsis` replaced.
+  /// - param newChild: The new `unexpectedBetweenTypeAndEllipsis` to replace the node's
+  ///                   current `unexpectedBetweenTypeAndEllipsis`, if present.
+  public func withUnexpectedBetweenTypeAndEllipsis(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenTypeAndEllipsis)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAndEllipsis)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18832,25 +18832,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenEllipsisAndInitializer: GarbageNodesSyntax? {
+  public var unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenEllipsisAndInitializer,
+      let childData = data.child(at: Cursor.unexpectedBetweenEllipsisAndInitializer,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenEllipsisAndInitializer(value)
+      self = withUnexpectedBetweenEllipsisAndInitializer(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenEllipsisAndInitializer` replaced.
-  /// - param newChild: The new `garbageBetweenEllipsisAndInitializer` to replace the node's
-  ///                   current `garbageBetweenEllipsisAndInitializer`, if present.
-  public func withGarbageBetweenEllipsisAndInitializer(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEllipsisAndInitializer` replaced.
+  /// - param newChild: The new `unexpectedBetweenEllipsisAndInitializer` to replace the node's
+  ///                   current `unexpectedBetweenEllipsisAndInitializer`, if present.
+  public func withUnexpectedBetweenEllipsisAndInitializer(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenEllipsisAndInitializer)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenEllipsisAndInitializer)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18876,25 +18876,25 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TupleTypeElementSyntax(newData)
   }
 
-  public var garbageBetweenInitializerAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenInitializerAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenInitializerAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenInitializerAndTrailingComma(value)
+      self = withUnexpectedBetweenInitializerAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenInitializerAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenInitializerAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenInitializerAndTrailingComma`, if present.
-  public func withGarbageBetweenInitializerAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> TupleTypeElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenInitializerAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenInitializerAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenInitializerAndTrailingComma`, if present.
+  public func withUnexpectedBetweenInitializerAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> TupleTypeElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenInitializerAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInitializerAndTrailingComma)
     return TupleTypeElementSyntax(newData)
   }
 
@@ -18924,21 +18924,21 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension TupleTypeElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeInOut": garbageBeforeInOut.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeInOut": unexpectedBeforeInOut.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inOut": inOut.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenInOutAndName": garbageBetweenInOutAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenInOutAndName": unexpectedBetweenInOutAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "name": name.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenNameAndSecondName": garbageBetweenNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenNameAndSecondName": unexpectedBetweenNameAndSecondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "secondName": secondName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenSecondNameAndColon": garbageBetweenSecondNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenSecondNameAndColon": unexpectedBetweenSecondNameAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenColonAndType": garbageBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndType": unexpectedBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "type": Syntax(type).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenTypeAndEllipsis": garbageBetweenTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenTypeAndEllipsis": unexpectedBetweenTypeAndEllipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "ellipsis": ellipsis.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenEllipsisAndInitializer": garbageBetweenEllipsisAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEllipsisAndInitializer": unexpectedBetweenEllipsisAndInitializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenInitializerAndTrailingComma": garbageBetweenInitializerAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenInitializerAndTrailingComma": unexpectedBetweenInitializerAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -18948,9 +18948,9 @@ extension TupleTypeElementSyntax: CustomReflectable {
 
 public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeArgumentType
+    case unexpectedBeforeArgumentType
     case argumentType
-    case garbageBetweenArgumentTypeAndTrailingComma
+    case unexpectedBetweenArgumentTypeAndTrailingComma
     case trailingComma
   }
 
@@ -18972,15 +18972,15 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeArgumentType: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeArgumentType: UnexpectedNodesSyntax? = nil,
     argumentType: TypeSyntax,
-    _ garbageBetweenArgumentTypeAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeArgumentType?.raw,
+      unexpectedBeforeArgumentType?.raw,
       argumentType.raw,
-      garbageBetweenArgumentTypeAndTrailingComma?.raw,
+      unexpectedBetweenArgumentTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgument,
@@ -18993,25 +18993,25 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeArgumentType: GarbageNodesSyntax? {
+  public var unexpectedBeforeArgumentType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeArgumentType,
+      let childData = data.child(at: Cursor.unexpectedBeforeArgumentType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeArgumentType(value)
+      self = withUnexpectedBeforeArgumentType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeArgumentType` replaced.
-  /// - param newChild: The new `garbageBeforeArgumentType` to replace the node's
-  ///                   current `garbageBeforeArgumentType`, if present.
-  public func withGarbageBeforeArgumentType(
-    _ newChild: GarbageNodesSyntax?) -> GenericArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeArgumentType` replaced.
+  /// - param newChild: The new `unexpectedBeforeArgumentType` to replace the node's
+  ///                   current `unexpectedBeforeArgumentType`, if present.
+  public func withUnexpectedBeforeArgumentType(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeArgumentType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeArgumentType)
     return GenericArgumentSyntax(newData)
   }
 
@@ -19036,25 +19036,25 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericArgumentSyntax(newData)
   }
 
-  public var garbageBetweenArgumentTypeAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenArgumentTypeAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenArgumentTypeAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenArgumentTypeAndTrailingComma(value)
+      self = withUnexpectedBetweenArgumentTypeAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenArgumentTypeAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenArgumentTypeAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenArgumentTypeAndTrailingComma`, if present.
-  public func withGarbageBetweenArgumentTypeAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> GenericArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentTypeAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenArgumentTypeAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenArgumentTypeAndTrailingComma`, if present.
+  public func withUnexpectedBetweenArgumentTypeAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenArgumentTypeAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenArgumentTypeAndTrailingComma)
     return GenericArgumentSyntax(newData)
   }
 
@@ -19084,9 +19084,9 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeArgumentType": garbageBeforeArgumentType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeArgumentType": unexpectedBeforeArgumentType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "argumentType": Syntax(argumentType).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenArgumentTypeAndTrailingComma": garbageBetweenArgumentTypeAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenArgumentTypeAndTrailingComma": unexpectedBetweenArgumentTypeAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -19096,11 +19096,11 @@ extension GenericArgumentSyntax: CustomReflectable {
 
 public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLeftAngleBracket
+    case unexpectedBeforeLeftAngleBracket
     case leftAngleBracket
-    case garbageBetweenLeftAngleBracketAndArguments
+    case unexpectedBetweenLeftAngleBracketAndArguments
     case arguments
-    case garbageBetweenArgumentsAndRightAngleBracket
+    case unexpectedBetweenArgumentsAndRightAngleBracket
     case rightAngleBracket
   }
 
@@ -19122,19 +19122,19 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil,
     leftAngleBracket: TokenSyntax,
-    _ garbageBetweenLeftAngleBracketAndArguments: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil,
     arguments: GenericArgumentListSyntax,
-    _ garbageBetweenArgumentsAndRightAngleBracket: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
     rightAngleBracket: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftAngleBracket?.raw,
+      unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
-      garbageBetweenLeftAngleBracketAndArguments?.raw,
+      unexpectedBetweenLeftAngleBracketAndArguments?.raw,
       arguments.raw,
-      garbageBetweenArgumentsAndRightAngleBracket?.raw,
+      unexpectedBetweenArgumentsAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentClause,
@@ -19147,25 +19147,25 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLeftAngleBracket: GarbageNodesSyntax? {
+  public var unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLeftAngleBracket,
+      let childData = data.child(at: Cursor.unexpectedBeforeLeftAngleBracket,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLeftAngleBracket(value)
+      self = withUnexpectedBeforeLeftAngleBracket(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLeftAngleBracket` replaced.
-  /// - param newChild: The new `garbageBeforeLeftAngleBracket` to replace the node's
-  ///                   current `garbageBeforeLeftAngleBracket`, if present.
-  public func withGarbageBeforeLeftAngleBracket(
-    _ newChild: GarbageNodesSyntax?) -> GenericArgumentClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeftAngleBracket` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeftAngleBracket` to replace the node's
+  ///                   current `unexpectedBeforeLeftAngleBracket`, if present.
+  public func withUnexpectedBeforeLeftAngleBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericArgumentClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLeftAngleBracket)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftAngleBracket)
     return GenericArgumentClauseSyntax(newData)
   }
 
@@ -19190,25 +19190,25 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericArgumentClauseSyntax(newData)
   }
 
-  public var garbageBetweenLeftAngleBracketAndArguments: GarbageNodesSyntax? {
+  public var unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLeftAngleBracketAndArguments,
+      let childData = data.child(at: Cursor.unexpectedBetweenLeftAngleBracketAndArguments,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLeftAngleBracketAndArguments(value)
+      self = withUnexpectedBetweenLeftAngleBracketAndArguments(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLeftAngleBracketAndArguments` replaced.
-  /// - param newChild: The new `garbageBetweenLeftAngleBracketAndArguments` to replace the node's
-  ///                   current `garbageBetweenLeftAngleBracketAndArguments`, if present.
-  public func withGarbageBetweenLeftAngleBracketAndArguments(
-    _ newChild: GarbageNodesSyntax?) -> GenericArgumentClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftAngleBracketAndArguments` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftAngleBracketAndArguments` to replace the node's
+  ///                   current `unexpectedBetweenLeftAngleBracketAndArguments`, if present.
+  public func withUnexpectedBetweenLeftAngleBracketAndArguments(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericArgumentClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLeftAngleBracketAndArguments)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftAngleBracketAndArguments)
     return GenericArgumentClauseSyntax(newData)
   }
 
@@ -19252,25 +19252,25 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericArgumentClauseSyntax(newData)
   }
 
-  public var garbageBetweenArgumentsAndRightAngleBracket: GarbageNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenArgumentsAndRightAngleBracket,
+      let childData = data.child(at: Cursor.unexpectedBetweenArgumentsAndRightAngleBracket,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenArgumentsAndRightAngleBracket(value)
+      self = withUnexpectedBetweenArgumentsAndRightAngleBracket(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenArgumentsAndRightAngleBracket` replaced.
-  /// - param newChild: The new `garbageBetweenArgumentsAndRightAngleBracket` to replace the node's
-  ///                   current `garbageBetweenArgumentsAndRightAngleBracket`, if present.
-  public func withGarbageBetweenArgumentsAndRightAngleBracket(
-    _ newChild: GarbageNodesSyntax?) -> GenericArgumentClauseSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenArgumentsAndRightAngleBracket` replaced.
+  /// - param newChild: The new `unexpectedBetweenArgumentsAndRightAngleBracket` to replace the node's
+  ///                   current `unexpectedBetweenArgumentsAndRightAngleBracket`, if present.
+  public func withUnexpectedBetweenArgumentsAndRightAngleBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericArgumentClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenArgumentsAndRightAngleBracket)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenArgumentsAndRightAngleBracket)
     return GenericArgumentClauseSyntax(newData)
   }
 
@@ -19299,11 +19299,11 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericArgumentClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLeftAngleBracket": garbageBeforeLeftAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLeftAngleBracket": unexpectedBeforeLeftAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "leftAngleBracket": Syntax(leftAngleBracket).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLeftAngleBracketAndArguments": garbageBetweenLeftAngleBracketAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLeftAngleBracketAndArguments": unexpectedBetweenLeftAngleBracketAndArguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arguments": Syntax(arguments).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenArgumentsAndRightAngleBracket": garbageBetweenArgumentsAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenArgumentsAndRightAngleBracket": unexpectedBetweenArgumentsAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightAngleBracket": Syntax(rightAngleBracket).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -19313,9 +19313,9 @@ extension GenericArgumentClauseSyntax: CustomReflectable {
 
 public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeColon
+    case unexpectedBeforeColon
     case colon
-    case garbageBetweenColonAndType
+    case unexpectedBetweenColonAndType
     case type
   }
 
@@ -19337,15 +19337,15 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
     type: TypeSyntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeColon?.raw,
+      unexpectedBeforeColon?.raw,
       colon.raw,
-      garbageBetweenColonAndType?.raw,
+      unexpectedBetweenColonAndType?.raw,
       type.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeAnnotation,
@@ -19358,25 +19358,25 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeColon: GarbageNodesSyntax? {
+  public var unexpectedBeforeColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeColon,
+      let childData = data.child(at: Cursor.unexpectedBeforeColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeColon(value)
+      self = withUnexpectedBeforeColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeColon` replaced.
-  /// - param newChild: The new `garbageBeforeColon` to replace the node's
-  ///                   current `garbageBeforeColon`, if present.
-  public func withGarbageBeforeColon(
-    _ newChild: GarbageNodesSyntax?) -> TypeAnnotationSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeColon` replaced.
+  /// - param newChild: The new `unexpectedBeforeColon` to replace the node's
+  ///                   current `unexpectedBeforeColon`, if present.
+  public func withUnexpectedBeforeColon(
+    _ newChild: UnexpectedNodesSyntax?) -> TypeAnnotationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeColon)
     return TypeAnnotationSyntax(newData)
   }
 
@@ -19401,25 +19401,25 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
     return TypeAnnotationSyntax(newData)
   }
 
-  public var garbageBetweenColonAndType: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndType,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndType,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndType(value)
+      self = withUnexpectedBetweenColonAndType(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndType` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndType` to replace the node's
-  ///                   current `garbageBetweenColonAndType`, if present.
-  public func withGarbageBetweenColonAndType(
-    _ newChild: GarbageNodesSyntax?) -> TypeAnnotationSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndType` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndType` to replace the node's
+  ///                   current `unexpectedBetweenColonAndType`, if present.
+  public func withUnexpectedBetweenColonAndType(
+    _ newChild: UnexpectedNodesSyntax?) -> TypeAnnotationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndType)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndType)
     return TypeAnnotationSyntax(newData)
   }
 
@@ -19448,9 +19448,9 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
 extension TypeAnnotationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeColon": garbageBeforeColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeColon": unexpectedBeforeColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndType": garbageBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndType": unexpectedBetweenColonAndType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "type": Syntax(type).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -19460,13 +19460,13 @@ extension TypeAnnotationSyntax: CustomReflectable {
 
 public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabelName
+    case unexpectedBeforeLabelName
     case labelName
-    case garbageBetweenLabelNameAndLabelColon
+    case unexpectedBetweenLabelNameAndLabelColon
     case labelColon
-    case garbageBetweenLabelColonAndPattern
+    case unexpectedBetweenLabelColonAndPattern
     case pattern
-    case garbageBetweenPatternAndTrailingComma
+    case unexpectedBetweenPatternAndTrailingComma
     case trailingComma
   }
 
@@ -19488,23 +19488,23 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeLabelName: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil,
     labelName: TokenSyntax?,
-    _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil,
     labelColon: TokenSyntax?,
-    _ garbageBetweenLabelColonAndPattern: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelColonAndPattern: UnexpectedNodesSyntax? = nil,
     pattern: PatternSyntax,
-    _ garbageBetweenPatternAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
+      unexpectedBeforeLabelName?.raw,
       labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
+      unexpectedBetweenLabelNameAndLabelColon?.raw,
       labelColon?.raw,
-      garbageBetweenLabelColonAndPattern?.raw,
+      unexpectedBetweenLabelColonAndPattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTrailingComma?.raw,
+      unexpectedBetweenPatternAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElement,
@@ -19517,25 +19517,25 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabelName: GarbageNodesSyntax? {
+  public var unexpectedBeforeLabelName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabelName,
+      let childData = data.child(at: Cursor.unexpectedBeforeLabelName,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabelName(value)
+      self = withUnexpectedBeforeLabelName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabelName` replaced.
-  /// - param newChild: The new `garbageBeforeLabelName` to replace the node's
-  ///                   current `garbageBeforeLabelName`, if present.
-  public func withGarbageBeforeLabelName(
-    _ newChild: GarbageNodesSyntax?) -> TuplePatternElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLabelName` replaced.
+  /// - param newChild: The new `unexpectedBeforeLabelName` to replace the node's
+  ///                   current `unexpectedBeforeLabelName`, if present.
+  public func withUnexpectedBeforeLabelName(
+    _ newChild: UnexpectedNodesSyntax?) -> TuplePatternElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabelName)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLabelName)
     return TuplePatternElementSyntax(newData)
   }
 
@@ -19561,25 +19561,25 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TuplePatternElementSyntax(newData)
   }
 
-  public var garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelNameAndLabelColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelNameAndLabelColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelNameAndLabelColon(value)
+      self = withUnexpectedBetweenLabelNameAndLabelColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelNameAndLabelColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelNameAndLabelColon` to replace the node's
-  ///                   current `garbageBetweenLabelNameAndLabelColon`, if present.
-  public func withGarbageBetweenLabelNameAndLabelColon(
-    _ newChild: GarbageNodesSyntax?) -> TuplePatternElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelNameAndLabelColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelNameAndLabelColon` to replace the node's
+  ///                   current `unexpectedBetweenLabelNameAndLabelColon`, if present.
+  public func withUnexpectedBetweenLabelNameAndLabelColon(
+    _ newChild: UnexpectedNodesSyntax?) -> TuplePatternElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelNameAndLabelColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelNameAndLabelColon)
     return TuplePatternElementSyntax(newData)
   }
 
@@ -19605,25 +19605,25 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TuplePatternElementSyntax(newData)
   }
 
-  public var garbageBetweenLabelColonAndPattern: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelColonAndPattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelColonAndPattern,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelColonAndPattern,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelColonAndPattern(value)
+      self = withUnexpectedBetweenLabelColonAndPattern(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelColonAndPattern` replaced.
-  /// - param newChild: The new `garbageBetweenLabelColonAndPattern` to replace the node's
-  ///                   current `garbageBetweenLabelColonAndPattern`, if present.
-  public func withGarbageBetweenLabelColonAndPattern(
-    _ newChild: GarbageNodesSyntax?) -> TuplePatternElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelColonAndPattern` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelColonAndPattern` to replace the node's
+  ///                   current `unexpectedBetweenLabelColonAndPattern`, if present.
+  public func withUnexpectedBetweenLabelColonAndPattern(
+    _ newChild: UnexpectedNodesSyntax?) -> TuplePatternElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelColonAndPattern)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelColonAndPattern)
     return TuplePatternElementSyntax(newData)
   }
 
@@ -19648,25 +19648,25 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
     return TuplePatternElementSyntax(newData)
   }
 
-  public var garbageBetweenPatternAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenPatternAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPatternAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenPatternAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPatternAndTrailingComma(value)
+      self = withUnexpectedBetweenPatternAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPatternAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenPatternAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenPatternAndTrailingComma`, if present.
-  public func withGarbageBetweenPatternAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> TuplePatternElementSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPatternAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenPatternAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenPatternAndTrailingComma`, if present.
+  public func withUnexpectedBetweenPatternAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> TuplePatternElementSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPatternAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatternAndTrailingComma)
     return TuplePatternElementSyntax(newData)
   }
 
@@ -19696,13 +19696,13 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension TuplePatternElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabelName": garbageBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLabelName": unexpectedBeforeLabelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelNameAndLabelColon": garbageBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelNameAndLabelColon": unexpectedBetweenLabelNameAndLabelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenLabelColonAndPattern": garbageBetweenLabelColonAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelColonAndPattern": unexpectedBetweenLabelColonAndPattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPatternAndTrailingComma": garbageBetweenPatternAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatternAndTrailingComma": unexpectedBetweenPatternAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -19716,9 +19716,9 @@ extension TuplePatternElementSyntax: CustomReflectable {
 /// 
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeEntry
+    case unexpectedBeforeEntry
     case entry
-    case garbageBetweenEntryAndTrailingComma
+    case unexpectedBetweenEntryAndTrailingComma
     case trailingComma
   }
 
@@ -19740,15 +19740,15 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeEntry: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeEntry: UnexpectedNodesSyntax? = nil,
     entry: Syntax,
-    _ garbageBetweenEntryAndTrailingComma: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeEntry?.raw,
+      unexpectedBeforeEntry?.raw,
       entry.raw,
-      garbageBetweenEntryAndTrailingComma?.raw,
+      unexpectedBetweenEntryAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityArgument,
@@ -19761,25 +19761,25 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeEntry: GarbageNodesSyntax? {
+  public var unexpectedBeforeEntry: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeEntry,
+      let childData = data.child(at: Cursor.unexpectedBeforeEntry,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeEntry(value)
+      self = withUnexpectedBeforeEntry(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeEntry` replaced.
-  /// - param newChild: The new `garbageBeforeEntry` to replace the node's
-  ///                   current `garbageBeforeEntry`, if present.
-  public func withGarbageBeforeEntry(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeEntry` replaced.
+  /// - param newChild: The new `unexpectedBeforeEntry` to replace the node's
+  ///                   current `unexpectedBeforeEntry`, if present.
+  public func withUnexpectedBeforeEntry(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeEntry)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeEntry)
     return AvailabilityArgumentSyntax(newData)
   }
 
@@ -19805,25 +19805,25 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityArgumentSyntax(newData)
   }
 
-  public var garbageBetweenEntryAndTrailingComma: GarbageNodesSyntax? {
+  public var unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenEntryAndTrailingComma,
+      let childData = data.child(at: Cursor.unexpectedBetweenEntryAndTrailingComma,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenEntryAndTrailingComma(value)
+      self = withUnexpectedBetweenEntryAndTrailingComma(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenEntryAndTrailingComma` replaced.
-  /// - param newChild: The new `garbageBetweenEntryAndTrailingComma` to replace the node's
-  ///                   current `garbageBetweenEntryAndTrailingComma`, if present.
-  public func withGarbageBetweenEntryAndTrailingComma(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenEntryAndTrailingComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenEntryAndTrailingComma` to replace the node's
+  ///                   current `unexpectedBetweenEntryAndTrailingComma`, if present.
+  public func withUnexpectedBetweenEntryAndTrailingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenEntryAndTrailingComma)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenEntryAndTrailingComma)
     return AvailabilityArgumentSyntax(newData)
   }
 
@@ -19857,9 +19857,9 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 extension AvailabilityArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeEntry": garbageBeforeEntry.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeEntry": unexpectedBeforeEntry.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "entry": Syntax(entry).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenEntryAndTrailingComma": garbageBetweenEntryAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenEntryAndTrailingComma": unexpectedBetweenEntryAndTrailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -19873,11 +19873,11 @@ extension AvailabilityArgumentSyntax: CustomReflectable {
 /// 
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeLabel
+    case unexpectedBeforeLabel
     case label
-    case garbageBetweenLabelAndColon
+    case unexpectedBetweenLabelAndColon
     case colon
-    case garbageBetweenColonAndValue
+    case unexpectedBetweenColonAndValue
     case value
   }
 
@@ -19899,19 +19899,19 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   }
 
   public init(
-    _ garbageBeforeLabel: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
     label: TokenSyntax,
-    _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
-    _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
     value: Syntax
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValue?.raw,
+      unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityLabeledArgument,
@@ -19924,25 +19924,25 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeLabel: GarbageNodesSyntax? {
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeLabel,
+      let childData = data.child(at: Cursor.unexpectedBeforeLabel,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeLabel(value)
+      self = withUnexpectedBeforeLabel(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeLabel` replaced.
-  /// - param newChild: The new `garbageBeforeLabel` to replace the node's
-  ///                   current `garbageBeforeLabel`, if present.
-  public func withGarbageBeforeLabel(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityLabeledArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeLabel` to replace the node's
+  ///                   current `unexpectedBeforeLabel`, if present.
+  public func withUnexpectedBeforeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityLabeledArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeLabel)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLabel)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
 
@@ -19968,25 +19968,25 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     return AvailabilityLabeledArgumentSyntax(newData)
   }
 
-  public var garbageBetweenLabelAndColon: GarbageNodesSyntax? {
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenLabelAndColon,
+      let childData = data.child(at: Cursor.unexpectedBetweenLabelAndColon,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenLabelAndColon(value)
+      self = withUnexpectedBetweenLabelAndColon(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenLabelAndColon` replaced.
-  /// - param newChild: The new `garbageBetweenLabelAndColon` to replace the node's
-  ///                   current `garbageBetweenLabelAndColon`, if present.
-  public func withGarbageBetweenLabelAndColon(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityLabeledArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenLabelAndColon`, if present.
+  public func withUnexpectedBetweenLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityLabeledArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenLabelAndColon)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLabelAndColon)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
 
@@ -20012,25 +20012,25 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     return AvailabilityLabeledArgumentSyntax(newData)
   }
 
-  public var garbageBetweenColonAndValue: GarbageNodesSyntax? {
+  public var unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenColonAndValue,
+      let childData = data.child(at: Cursor.unexpectedBetweenColonAndValue,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenColonAndValue(value)
+      self = withUnexpectedBetweenColonAndValue(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenColonAndValue` replaced.
-  /// - param newChild: The new `garbageBetweenColonAndValue` to replace the node's
-  ///                   current `garbageBetweenColonAndValue`, if present.
-  public func withGarbageBetweenColonAndValue(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityLabeledArgumentSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndValue` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndValue` to replace the node's
+  ///                   current `unexpectedBetweenColonAndValue`, if present.
+  public func withUnexpectedBetweenColonAndValue(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityLabeledArgumentSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenColonAndValue)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenColonAndValue)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
 
@@ -20060,11 +20060,11 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
 extension AvailabilityLabeledArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeLabel": garbageBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeLabel": unexpectedBeforeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "label": Syntax(label).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenLabelAndColon": garbageBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenLabelAndColon": unexpectedBetweenLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenColonAndValue": garbageBetweenColonAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndValue": unexpectedBetweenColonAndValue.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "value": Syntax(value).asProtocol(SyntaxProtocol.self),
     ])
   }
@@ -20078,9 +20078,9 @@ extension AvailabilityLabeledArgumentSyntax: CustomReflectable {
 /// 
 public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforePlatform
+    case unexpectedBeforePlatform
     case platform
-    case garbageBetweenPlatformAndVersion
+    case unexpectedBetweenPlatformAndVersion
     case version
   }
 
@@ -20102,15 +20102,15 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   }
 
   public init(
-    _ garbageBeforePlatform: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil,
     platform: TokenSyntax,
-    _ garbageBetweenPlatformAndVersion: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil,
     version: VersionTupleSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforePlatform?.raw,
+      unexpectedBeforePlatform?.raw,
       platform.raw,
-      garbageBetweenPlatformAndVersion?.raw,
+      unexpectedBetweenPlatformAndVersion?.raw,
       version?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityVersionRestriction,
@@ -20123,25 +20123,25 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
     return Swift.type(of: self)
   }
 
-  public var garbageBeforePlatform: GarbageNodesSyntax? {
+  public var unexpectedBeforePlatform: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforePlatform,
+      let childData = data.child(at: Cursor.unexpectedBeforePlatform,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforePlatform(value)
+      self = withUnexpectedBeforePlatform(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforePlatform` replaced.
-  /// - param newChild: The new `garbageBeforePlatform` to replace the node's
-  ///                   current `garbageBeforePlatform`, if present.
-  public func withGarbageBeforePlatform(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityVersionRestrictionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforePlatform` replaced.
+  /// - param newChild: The new `unexpectedBeforePlatform` to replace the node's
+  ///                   current `unexpectedBeforePlatform`, if present.
+  public func withUnexpectedBeforePlatform(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityVersionRestrictionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforePlatform)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePlatform)
     return AvailabilityVersionRestrictionSyntax(newData)
   }
 
@@ -20171,25 +20171,25 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
     return AvailabilityVersionRestrictionSyntax(newData)
   }
 
-  public var garbageBetweenPlatformAndVersion: GarbageNodesSyntax? {
+  public var unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPlatformAndVersion,
+      let childData = data.child(at: Cursor.unexpectedBetweenPlatformAndVersion,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPlatformAndVersion(value)
+      self = withUnexpectedBetweenPlatformAndVersion(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPlatformAndVersion` replaced.
-  /// - param newChild: The new `garbageBetweenPlatformAndVersion` to replace the node's
-  ///                   current `garbageBetweenPlatformAndVersion`, if present.
-  public func withGarbageBetweenPlatformAndVersion(
-    _ newChild: GarbageNodesSyntax?) -> AvailabilityVersionRestrictionSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPlatformAndVersion` replaced.
+  /// - param newChild: The new `unexpectedBetweenPlatformAndVersion` to replace the node's
+  ///                   current `unexpectedBetweenPlatformAndVersion`, if present.
+  public func withUnexpectedBetweenPlatformAndVersion(
+    _ newChild: UnexpectedNodesSyntax?) -> AvailabilityVersionRestrictionSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPlatformAndVersion)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPlatformAndVersion)
     return AvailabilityVersionRestrictionSyntax(newData)
   }
 
@@ -20219,9 +20219,9 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
 extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforePlatform": garbageBeforePlatform.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforePlatform": unexpectedBeforePlatform.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "platform": Syntax(platform).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenPlatformAndVersion": garbageBetweenPlatformAndVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPlatformAndVersion": unexpectedBetweenPlatformAndVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "version": version.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -20235,11 +20235,11 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
 /// 
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case garbageBeforeMajorMinor
+    case unexpectedBeforeMajorMinor
     case majorMinor
-    case garbageBetweenMajorMinorAndPatchPeriod
+    case unexpectedBetweenMajorMinorAndPatchPeriod
     case patchPeriod
-    case garbageBetweenPatchPeriodAndPatchVersion
+    case unexpectedBetweenPatchPeriodAndPatchVersion
     case patchVersion
   }
 
@@ -20261,19 +20261,19 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ garbageBeforeMajorMinor: GarbageNodesSyntax? = nil,
+    _ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil,
     majorMinor: Syntax,
-    _ garbageBetweenMajorMinorAndPatchPeriod: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil,
     patchPeriod: TokenSyntax?,
-    _ garbageBetweenPatchPeriodAndPatchVersion: GarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil,
     patchVersion: TokenSyntax?
   ) {
     let layout: [RawSyntax?] = [
-      garbageBeforeMajorMinor?.raw,
+      unexpectedBeforeMajorMinor?.raw,
       majorMinor.raw,
-      garbageBetweenMajorMinorAndPatchPeriod?.raw,
+      unexpectedBetweenMajorMinorAndPatchPeriod?.raw,
       patchPeriod?.raw,
-      garbageBetweenPatchPeriodAndPatchVersion?.raw,
+      unexpectedBetweenPatchPeriodAndPatchVersion?.raw,
       patchVersion?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.versionTuple,
@@ -20286,25 +20286,25 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var garbageBeforeMajorMinor: GarbageNodesSyntax? {
+  public var unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBeforeMajorMinor,
+      let childData = data.child(at: Cursor.unexpectedBeforeMajorMinor,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBeforeMajorMinor(value)
+      self = withUnexpectedBeforeMajorMinor(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBeforeMajorMinor` replaced.
-  /// - param newChild: The new `garbageBeforeMajorMinor` to replace the node's
-  ///                   current `garbageBeforeMajorMinor`, if present.
-  public func withGarbageBeforeMajorMinor(
-    _ newChild: GarbageNodesSyntax?) -> VersionTupleSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBeforeMajorMinor` replaced.
+  /// - param newChild: The new `unexpectedBeforeMajorMinor` to replace the node's
+  ///                   current `unexpectedBeforeMajorMinor`, if present.
+  public func withUnexpectedBeforeMajorMinor(
+    _ newChild: UnexpectedNodesSyntax?) -> VersionTupleSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBeforeMajorMinor)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeMajorMinor)
     return VersionTupleSyntax(newData)
   }
 
@@ -20336,25 +20336,25 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     return VersionTupleSyntax(newData)
   }
 
-  public var garbageBetweenMajorMinorAndPatchPeriod: GarbageNodesSyntax? {
+  public var unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenMajorMinorAndPatchPeriod,
+      let childData = data.child(at: Cursor.unexpectedBetweenMajorMinorAndPatchPeriod,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenMajorMinorAndPatchPeriod(value)
+      self = withUnexpectedBetweenMajorMinorAndPatchPeriod(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenMajorMinorAndPatchPeriod` replaced.
-  /// - param newChild: The new `garbageBetweenMajorMinorAndPatchPeriod` to replace the node's
-  ///                   current `garbageBetweenMajorMinorAndPatchPeriod`, if present.
-  public func withGarbageBetweenMajorMinorAndPatchPeriod(
-    _ newChild: GarbageNodesSyntax?) -> VersionTupleSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenMajorMinorAndPatchPeriod` replaced.
+  /// - param newChild: The new `unexpectedBetweenMajorMinorAndPatchPeriod` to replace the node's
+  ///                   current `unexpectedBetweenMajorMinorAndPatchPeriod`, if present.
+  public func withUnexpectedBetweenMajorMinorAndPatchPeriod(
+    _ newChild: UnexpectedNodesSyntax?) -> VersionTupleSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenMajorMinorAndPatchPeriod)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenMajorMinorAndPatchPeriod)
     return VersionTupleSyntax(newData)
   }
 
@@ -20384,25 +20384,25 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     return VersionTupleSyntax(newData)
   }
 
-  public var garbageBetweenPatchPeriodAndPatchVersion: GarbageNodesSyntax? {
+  public var unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.garbageBetweenPatchPeriodAndPatchVersion,
+      let childData = data.child(at: Cursor.unexpectedBetweenPatchPeriodAndPatchVersion,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return GarbageNodesSyntax(childData!)
+      return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withGarbageBetweenPatchPeriodAndPatchVersion(value)
+      self = withUnexpectedBetweenPatchPeriodAndPatchVersion(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `garbageBetweenPatchPeriodAndPatchVersion` replaced.
-  /// - param newChild: The new `garbageBetweenPatchPeriodAndPatchVersion` to replace the node's
-  ///                   current `garbageBetweenPatchPeriodAndPatchVersion`, if present.
-  public func withGarbageBetweenPatchPeriodAndPatchVersion(
-    _ newChild: GarbageNodesSyntax?) -> VersionTupleSyntax {
+  /// Returns a copy of the receiver with its `unexpectedBetweenPatchPeriodAndPatchVersion` replaced.
+  /// - param newChild: The new `unexpectedBetweenPatchPeriodAndPatchVersion` to replace the node's
+  ///                   current `unexpectedBetweenPatchPeriodAndPatchVersion`, if present.
+  public func withUnexpectedBetweenPatchPeriodAndPatchVersion(
+    _ newChild: UnexpectedNodesSyntax?) -> VersionTupleSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.garbageBetweenPatchPeriodAndPatchVersion)
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatchPeriodAndPatchVersion)
     return VersionTupleSyntax(newData)
   }
 
@@ -20435,11 +20435,11 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 extension VersionTupleSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "garbageBeforeMajorMinor": garbageBeforeMajorMinor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeMajorMinor": unexpectedBeforeMajorMinor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "majorMinor": Syntax(majorMinor).asProtocol(SyntaxProtocol.self),
-      "garbageBetweenMajorMinorAndPatchPeriod": garbageBetweenMajorMinorAndPatchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenMajorMinorAndPatchPeriod": unexpectedBetweenMajorMinorAndPatchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "patchPeriod": patchPeriod.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "garbageBetweenPatchPeriodAndPatchVersion": garbageBetweenPatchPeriodAndPatchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPatchPeriodAndPatchVersion": unexpectedBetweenPatchPeriodAndPatchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "patchVersion": patchVersion.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }

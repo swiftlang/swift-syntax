@@ -288,31 +288,31 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .missingDecl, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
@@ -441,41 +441,41 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeItem: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeItem: RawUnexpectedNodesSyntax? = nil,
     item: RawSyntax,
-    _ garbageBetweenItemAndSemicolon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenItemAndSemicolon: RawUnexpectedNodesSyntax? = nil,
     semicolon: RawTokenSyntax?,
-    _ garbageBetweenSemicolonAndErrorTokens: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSemicolonAndErrorTokens: RawUnexpectedNodesSyntax? = nil,
     errorTokens: RawSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .codeBlockItem, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeItem?.raw
+      layout[0] = unexpectedBeforeItem?.raw
       layout[1] = item.raw
-      layout[2] = garbageBetweenItemAndSemicolon?.raw
+      layout[2] = unexpectedBetweenItemAndSemicolon?.raw
       layout[3] = semicolon?.raw
-      layout[4] = garbageBetweenSemicolonAndErrorTokens?.raw
+      layout[4] = unexpectedBetweenSemicolonAndErrorTokens?.raw
       layout[5] = errorTokens?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeItem: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeItem: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var item: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenItemAndSemicolon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenItemAndSemicolon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var semicolon: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenSemicolonAndErrorTokens: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSemicolonAndErrorTokens: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var errorTokens: RawSyntax? {
     raw.children[5]
@@ -527,41 +527,41 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? = nil,
     leftBrace: RawTokenSyntax,
-    _ garbageBetweenLeftBraceAndStatements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndStatements: RawUnexpectedNodesSyntax? = nil,
     statements: RawCodeBlockItemListSyntax,
-    _ garbageBetweenStatementsAndRightBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax? = nil,
     rightBrace: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .codeBlock, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftBrace?.raw
+      layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
-      layout[2] = garbageBetweenLeftBraceAndStatements?.raw
+      layout[2] = unexpectedBetweenLeftBraceAndStatements?.raw
       layout[3] = statements.raw
-      layout[4] = garbageBetweenStatementsAndRightBrace?.raw
+      layout[4] = unexpectedBetweenStatementsAndRightBrace?.raw
       layout[5] = rightBrace.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftBrace: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftBrace: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftBraceAndStatements: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftBraceAndStatements: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var statements: RawCodeBlockItemListSyntax {
     raw.children[3].map(RawCodeBlockItemListSyntax.init(raw:))!
   }
-  public var garbageBetweenStatementsAndRightBrace: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightBrace: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -569,9 +569,9 @@ public struct RawCodeBlockSyntax: RawSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawGarbageNodesSyntax: RawSyntaxNodeProtocol {
+public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .garbageNodes
+    return raw.kind == .unexpectedNodes
   }
 
   public var raw: RawSyntax
@@ -586,7 +586,7 @@ public struct RawGarbageNodesSyntax: RawSyntaxNodeProtocol {
   }
 
   public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawSyntax {
-    let raw = RawSyntax.makeLayout(kind: .garbageNodes, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(kind: .unexpectedNodes, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
 
@@ -613,31 +613,31 @@ public struct RawInOutExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAmpersand: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAmpersand: RawUnexpectedNodesSyntax? = nil,
     ampersand: RawTokenSyntax,
-    _ garbageBetweenAmpersandAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAmpersandAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .inOutExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAmpersand?.raw
+      layout[0] = unexpectedBeforeAmpersand?.raw
       layout[1] = ampersand.raw
-      layout[2] = garbageBetweenAmpersandAndExpression?.raw
+      layout[2] = unexpectedBetweenAmpersandAndExpression?.raw
       layout[3] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAmpersand: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAmpersand: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var ampersand: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAmpersandAndExpression: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAmpersandAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
@@ -662,21 +662,21 @@ public struct RawPoundColumnExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundColumn: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundColumn: RawUnexpectedNodesSyntax? = nil,
     poundColumn: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundColumnExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundColumn?.raw
+      layout[0] = unexpectedBeforePoundColumn?.raw
       layout[1] = poundColumn.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundColumn: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundColumn: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundColumn: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -809,41 +809,41 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeTryKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeTryKeyword: RawUnexpectedNodesSyntax? = nil,
     tryKeyword: RawTokenSyntax,
-    _ garbageBetweenTryKeywordAndQuestionOrExclamationMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? = nil,
     questionOrExclamationMark: RawTokenSyntax?,
-    _ garbageBetweenQuestionOrExclamationMarkAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenQuestionOrExclamationMarkAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tryExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeTryKeyword?.raw
+      layout[0] = unexpectedBeforeTryKeyword?.raw
       layout[1] = tryKeyword.raw
-      layout[2] = garbageBetweenTryKeywordAndQuestionOrExclamationMark?.raw
+      layout[2] = unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.raw
       layout[3] = questionOrExclamationMark?.raw
-      layout[4] = garbageBetweenQuestionOrExclamationMarkAndExpression?.raw
+      layout[4] = unexpectedBetweenQuestionOrExclamationMarkAndExpression?.raw
       layout[5] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeTryKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeTryKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var tryKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenTryKeywordAndQuestionOrExclamationMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var questionOrExclamationMark: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenQuestionOrExclamationMarkAndExpression: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenQuestionOrExclamationMarkAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[5].map(RawExprSyntax.init(raw:))!
@@ -868,31 +868,31 @@ public struct RawAwaitExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAwaitKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAwaitKeyword: RawUnexpectedNodesSyntax? = nil,
     awaitKeyword: RawTokenSyntax,
-    _ garbageBetweenAwaitKeywordAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAwaitKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .awaitExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAwaitKeyword?.raw
+      layout[0] = unexpectedBeforeAwaitKeyword?.raw
       layout[1] = awaitKeyword.raw
-      layout[2] = garbageBetweenAwaitKeywordAndExpression?.raw
+      layout[2] = unexpectedBetweenAwaitKeywordAndExpression?.raw
       layout[3] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAwaitKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAwaitKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var awaitKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAwaitKeywordAndExpression: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAwaitKeywordAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
@@ -917,31 +917,31 @@ public struct RawMoveExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeMoveKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeMoveKeyword: RawUnexpectedNodesSyntax? = nil,
     moveKeyword: RawTokenSyntax,
-    _ garbageBetweenMoveKeywordAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMoveKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .moveExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeMoveKeyword?.raw
+      layout[0] = unexpectedBeforeMoveKeyword?.raw
       layout[1] = moveKeyword.raw
-      layout[2] = garbageBetweenMoveKeywordAndExpression?.raw
+      layout[2] = unexpectedBetweenMoveKeywordAndExpression?.raw
       layout[3] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeMoveKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeMoveKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var moveKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenMoveKeywordAndExpression: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenMoveKeywordAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
@@ -966,31 +966,31 @@ public struct RawDeclNameArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .declNameArgument, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndColon?.raw
+      layout[2] = unexpectedBetweenNameAndColon?.raw
       layout[3] = colon.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -1042,41 +1042,41 @@ public struct RawDeclNameArgumentsSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawDeclNameArgumentListSyntax,
-    _ garbageBetweenArgumentsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .declNameArguments, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndArguments?.raw
+      layout[2] = unexpectedBetweenLeftParenAndArguments?.raw
       layout[3] = arguments.raw
-      layout[4] = garbageBetweenArgumentsAndRightParen?.raw
+      layout[4] = unexpectedBetweenArgumentsAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndArguments: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arguments: RawDeclNameArgumentListSyntax {
     raw.children[3].map(RawDeclNameArgumentListSyntax.init(raw:))!
   }
-  public var garbageBetweenArgumentsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -1101,31 +1101,31 @@ public struct RawIdentifierExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndDeclNameArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .identifierExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIdentifier?.raw
+      layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
-      layout[2] = garbageBetweenIdentifierAndDeclNameArguments?.raw
+      layout[2] = unexpectedBetweenIdentifierAndDeclNameArguments?.raw
       layout[3] = declNameArguments?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndDeclNameArguments: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndDeclNameArguments: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     raw.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
@@ -1150,21 +1150,21 @@ public struct RawSuperRefExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeSuperKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeSuperKeyword: RawUnexpectedNodesSyntax? = nil,
     superKeyword: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .superRefExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeSuperKeyword?.raw
+      layout[0] = unexpectedBeforeSuperKeyword?.raw
       layout[1] = superKeyword.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeSuperKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeSuperKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var superKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1189,21 +1189,21 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeNilKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeNilKeyword: RawUnexpectedNodesSyntax? = nil,
     nilKeyword: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .nilLiteralExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeNilKeyword?.raw
+      layout[0] = unexpectedBeforeNilKeyword?.raw
       layout[1] = nilKeyword.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeNilKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeNilKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var nilKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1228,21 +1228,21 @@ public struct RawDiscardAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeWildcard: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? = nil,
     wildcard: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .discardAssignmentExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWildcard?.raw
+      layout[0] = unexpectedBeforeWildcard?.raw
       layout[1] = wildcard.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWildcard: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var wildcard: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1267,21 +1267,21 @@ public struct RawAssignmentExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAssignToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax? = nil,
     assignToken: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .assignmentExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAssignToken?.raw
+      layout[0] = unexpectedBeforeAssignToken?.raw
       layout[1] = assignToken.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAssignToken: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var assignToken: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1306,21 +1306,21 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeElements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeElements: RawUnexpectedNodesSyntax? = nil,
     elements: RawExprListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .sequenceExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeElements?.raw
+      layout[0] = unexpectedBeforeElements?.raw
       layout[1] = elements.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeElements: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeElements: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elements: RawExprListSyntax {
     raw.children[1].map(RawExprListSyntax.init(raw:))!
@@ -1372,21 +1372,21 @@ public struct RawPoundLineExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundLine: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundLine: RawUnexpectedNodesSyntax? = nil,
     poundLine: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundLineExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundLine?.raw
+      layout[0] = unexpectedBeforePoundLine?.raw
       layout[1] = poundLine.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundLine: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundLine: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundLine: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1411,21 +1411,21 @@ public struct RawPoundFileExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundFile: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundFile: RawUnexpectedNodesSyntax? = nil,
     poundFile: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundFileExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundFile?.raw
+      layout[0] = unexpectedBeforePoundFile?.raw
       layout[1] = poundFile.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundFile: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundFile: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundFile: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1450,21 +1450,21 @@ public struct RawPoundFileIDExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundFileID: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundFileID: RawUnexpectedNodesSyntax? = nil,
     poundFileID: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundFileIDExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundFileID?.raw
+      layout[0] = unexpectedBeforePoundFileID?.raw
       layout[1] = poundFileID.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundFileID: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundFileID: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundFileID: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1489,21 +1489,21 @@ public struct RawPoundFilePathExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundFilePath: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundFilePath: RawUnexpectedNodesSyntax? = nil,
     poundFilePath: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundFilePathExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundFilePath?.raw
+      layout[0] = unexpectedBeforePoundFilePath?.raw
       layout[1] = poundFilePath.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundFilePath: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundFilePath: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundFilePath: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1528,21 +1528,21 @@ public struct RawPoundFunctionExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundFunction: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundFunction: RawUnexpectedNodesSyntax? = nil,
     poundFunction: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundFunctionExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundFunction?.raw
+      layout[0] = unexpectedBeforePoundFunction?.raw
       layout[1] = poundFunction.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundFunction: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundFunction: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundFunction: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1567,21 +1567,21 @@ public struct RawPoundDsohandleExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundDsohandle: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundDsohandle: RawUnexpectedNodesSyntax? = nil,
     poundDsohandle: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundDsohandleExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundDsohandle?.raw
+      layout[0] = unexpectedBeforePoundDsohandle?.raw
       layout[1] = poundDsohandle.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundDsohandle: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundDsohandle: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundDsohandle: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1606,31 +1606,31 @@ public struct RawSymbolicReferenceExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndGenericArgumentClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     genericArgumentClause: RawGenericArgumentClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .symbolicReferenceExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIdentifier?.raw
+      layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
-      layout[2] = garbageBetweenIdentifierAndGenericArgumentClause?.raw
+      layout[2] = unexpectedBetweenIdentifierAndGenericArgumentClause?.raw
       layout[3] = genericArgumentClause?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndGenericArgumentClause: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
     raw.children[3].map(RawGenericArgumentClauseSyntax.init(raw:))
@@ -1655,31 +1655,31 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeOperatorToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax? = nil,
     operatorToken: RawTokenSyntax?,
-    _ garbageBetweenOperatorTokenAndPostfixExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOperatorTokenAndPostfixExpression: RawUnexpectedNodesSyntax? = nil,
     postfixExpression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .prefixOperatorExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeOperatorToken?.raw
+      layout[0] = unexpectedBeforeOperatorToken?.raw
       layout[1] = operatorToken?.raw
-      layout[2] = garbageBetweenOperatorTokenAndPostfixExpression?.raw
+      layout[2] = unexpectedBetweenOperatorTokenAndPostfixExpression?.raw
       layout[3] = postfixExpression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeOperatorToken: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var operatorToken: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenOperatorTokenAndPostfixExpression: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOperatorTokenAndPostfixExpression: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var postfixExpression: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
@@ -1704,21 +1704,21 @@ public struct RawBinaryOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeOperatorToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax? = nil,
     operatorToken: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .binaryOperatorExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeOperatorToken?.raw
+      layout[0] = unexpectedBeforeOperatorToken?.raw
       layout[1] = operatorToken.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeOperatorToken: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeOperatorToken: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var operatorToken: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1743,41 +1743,41 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAsyncKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAsyncKeyword: RawUnexpectedNodesSyntax? = nil,
     asyncKeyword: RawTokenSyntax?,
-    _ garbageBetweenAsyncKeywordAndThrowsToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsyncKeywordAndThrowsToken: RawUnexpectedNodesSyntax? = nil,
     throwsToken: RawTokenSyntax?,
-    _ garbageBetweenThrowsTokenAndArrowToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowsTokenAndArrowToken: RawUnexpectedNodesSyntax? = nil,
     arrowToken: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .arrowExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAsyncKeyword?.raw
+      layout[0] = unexpectedBeforeAsyncKeyword?.raw
       layout[1] = asyncKeyword?.raw
-      layout[2] = garbageBetweenAsyncKeywordAndThrowsToken?.raw
+      layout[2] = unexpectedBetweenAsyncKeywordAndThrowsToken?.raw
       layout[3] = throwsToken?.raw
-      layout[4] = garbageBetweenThrowsTokenAndArrowToken?.raw
+      layout[4] = unexpectedBetweenThrowsTokenAndArrowToken?.raw
       layout[5] = arrowToken.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAsyncKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAsyncKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var asyncKeyword: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAsyncKeywordAndThrowsToken: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAsyncKeywordAndThrowsToken: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var throwsToken: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenThrowsTokenAndArrowToken: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenThrowsTokenAndArrowToken: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arrowToken: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -1802,41 +1802,41 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftOperand: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftOperand: RawUnexpectedNodesSyntax? = nil,
     leftOperand: RawExprSyntax,
-    _ garbageBetweenLeftOperandAndOperatorOperand: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftOperandAndOperatorOperand: RawUnexpectedNodesSyntax? = nil,
     operatorOperand: RawExprSyntax,
-    _ garbageBetweenOperatorOperandAndRightOperand: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOperatorOperandAndRightOperand: RawUnexpectedNodesSyntax? = nil,
     rightOperand: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .infixOperatorExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftOperand?.raw
+      layout[0] = unexpectedBeforeLeftOperand?.raw
       layout[1] = leftOperand.raw
-      layout[2] = garbageBetweenLeftOperandAndOperatorOperand?.raw
+      layout[2] = unexpectedBetweenLeftOperandAndOperatorOperand?.raw
       layout[3] = operatorOperand.raw
-      layout[4] = garbageBetweenOperatorOperandAndRightOperand?.raw
+      layout[4] = unexpectedBetweenOperatorOperandAndRightOperand?.raw
       layout[5] = rightOperand.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftOperand: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftOperand: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftOperand: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftOperandAndOperatorOperand: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftOperandAndOperatorOperand: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var operatorOperand: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenOperatorOperandAndRightOperand: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOperatorOperandAndRightOperand: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightOperand: RawExprSyntax {
     raw.children[5].map(RawExprSyntax.init(raw:))!
@@ -1861,21 +1861,21 @@ public struct RawFloatLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeFloatingDigits: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeFloatingDigits: RawUnexpectedNodesSyntax? = nil,
     floatingDigits: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .floatLiteralExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeFloatingDigits?.raw
+      layout[0] = unexpectedBeforeFloatingDigits?.raw
       layout[1] = floatingDigits.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeFloatingDigits: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeFloatingDigits: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var floatingDigits: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -1900,41 +1900,41 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndElementList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? = nil,
     elementList: RawTupleExprElementListSyntax,
-    _ garbageBetweenElementListAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndElementList?.raw
+      layout[2] = unexpectedBetweenLeftParenAndElementList?.raw
       layout[3] = elementList.raw
-      layout[4] = garbageBetweenElementListAndRightParen?.raw
+      layout[4] = unexpectedBetweenElementListAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndElementList: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elementList: RawTupleExprElementListSyntax {
     raw.children[3].map(RawTupleExprElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenElementListAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -1959,41 +1959,41 @@ public struct RawArrayExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftSquare: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? = nil,
     leftSquare: RawTokenSyntax,
-    _ garbageBetweenLeftSquareAndElements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftSquareAndElements: RawUnexpectedNodesSyntax? = nil,
     elements: RawArrayElementListSyntax,
-    _ garbageBetweenElementsAndRightSquare: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElementsAndRightSquare: RawUnexpectedNodesSyntax? = nil,
     rightSquare: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .arrayExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftSquare?.raw
+      layout[0] = unexpectedBeforeLeftSquare?.raw
       layout[1] = leftSquare.raw
-      layout[2] = garbageBetweenLeftSquareAndElements?.raw
+      layout[2] = unexpectedBetweenLeftSquareAndElements?.raw
       layout[3] = elements.raw
-      layout[4] = garbageBetweenElementsAndRightSquare?.raw
+      layout[4] = unexpectedBetweenElementsAndRightSquare?.raw
       layout[5] = rightSquare.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftSquare: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftSquare: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftSquareAndElements: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftSquareAndElements: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elements: RawArrayElementListSyntax {
     raw.children[3].map(RawArrayElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenElementsAndRightSquare: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElementsAndRightSquare: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightSquare: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -2018,41 +2018,41 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftSquare: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? = nil,
     leftSquare: RawTokenSyntax,
-    _ garbageBetweenLeftSquareAndContent: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftSquareAndContent: RawUnexpectedNodesSyntax? = nil,
     content: RawSyntax,
-    _ garbageBetweenContentAndRightSquare: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenContentAndRightSquare: RawUnexpectedNodesSyntax? = nil,
     rightSquare: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .dictionaryExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftSquare?.raw
+      layout[0] = unexpectedBeforeLeftSquare?.raw
       layout[1] = leftSquare.raw
-      layout[2] = garbageBetweenLeftSquareAndContent?.raw
+      layout[2] = unexpectedBetweenLeftSquareAndContent?.raw
       layout[3] = content.raw
-      layout[4] = garbageBetweenContentAndRightSquare?.raw
+      layout[4] = unexpectedBetweenContentAndRightSquare?.raw
       layout[5] = rightSquare.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftSquare: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftSquare: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftSquareAndContent: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftSquareAndContent: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var content: RawSyntax {
     raw.children[3]!
   }
-  public var garbageBetweenContentAndRightSquare: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenContentAndRightSquare: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightSquare: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -2077,51 +2077,51 @@ public struct RawTupleExprElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax?,
-    _ garbageBetweenLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax?,
-    _ garbageBetweenColonAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleExprElement, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabel?.raw
+      layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label?.raw
-      layout[2] = garbageBetweenLabelAndColon?.raw
+      layout[2] = unexpectedBetweenLabelAndColon?.raw
       layout[3] = colon?.raw
-      layout[4] = garbageBetweenColonAndExpression?.raw
+      layout[4] = unexpectedBetweenColonAndExpression?.raw
       layout[5] = expression.raw
-      layout[6] = garbageBetweenExpressionAndTrailingComma?.raw
+      layout[6] = unexpectedBetweenExpressionAndTrailingComma?.raw
       layout[7] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenColonAndExpression: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[5].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
@@ -2146,31 +2146,31 @@ public struct RawArrayElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .arrayElement, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeExpression?.raw
+      layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
-      layout[2] = garbageBetweenExpressionAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenExpressionAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -2195,51 +2195,51 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeKeyExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeKeyExpression: RawUnexpectedNodesSyntax? = nil,
     keyExpression: RawExprSyntax,
-    _ garbageBetweenKeyExpressionAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenKeyExpressionAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndValueExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValueExpression: RawUnexpectedNodesSyntax? = nil,
     valueExpression: RawExprSyntax,
-    _ garbageBetweenValueExpressionAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenValueExpressionAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .dictionaryElement, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeKeyExpression?.raw
+      layout[0] = unexpectedBeforeKeyExpression?.raw
       layout[1] = keyExpression.raw
-      layout[2] = garbageBetweenKeyExpressionAndColon?.raw
+      layout[2] = unexpectedBetweenKeyExpressionAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndValueExpression?.raw
+      layout[4] = unexpectedBetweenColonAndValueExpression?.raw
       layout[5] = valueExpression.raw
-      layout[6] = garbageBetweenValueExpressionAndTrailingComma?.raw
+      layout[6] = unexpectedBetweenValueExpressionAndTrailingComma?.raw
       layout[7] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeKeyExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeKeyExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var keyExpression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenKeyExpressionAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenKeyExpressionAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndValueExpression: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndValueExpression: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var valueExpression: RawExprSyntax {
     raw.children[5].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenValueExpressionAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenValueExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
@@ -2264,21 +2264,21 @@ public struct RawIntegerLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDigits: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDigits: RawUnexpectedNodesSyntax? = nil,
     digits: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .integerLiteralExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDigits?.raw
+      layout[0] = unexpectedBeforeDigits?.raw
       layout[1] = digits.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDigits: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDigits: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var digits: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -2303,21 +2303,21 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBooleanLiteral: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBooleanLiteral: RawUnexpectedNodesSyntax? = nil,
     booleanLiteral: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .booleanLiteralExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBooleanLiteral?.raw
+      layout[0] = unexpectedBeforeBooleanLiteral?.raw
       layout[1] = booleanLiteral.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBooleanLiteral: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBooleanLiteral: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var booleanLiteral: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -2342,61 +2342,61 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeConditionExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeConditionExpression: RawUnexpectedNodesSyntax? = nil,
     conditionExpression: RawExprSyntax,
-    _ garbageBetweenConditionExpressionAndQuestionMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionExpressionAndQuestionMark: RawUnexpectedNodesSyntax? = nil,
     questionMark: RawTokenSyntax,
-    _ garbageBetweenQuestionMarkAndFirstChoice: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax? = nil,
     firstChoice: RawExprSyntax,
-    _ garbageBetweenFirstChoiceAndColonMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax? = nil,
     colonMark: RawTokenSyntax,
-    _ garbageBetweenColonMarkAndSecondChoice: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonMarkAndSecondChoice: RawUnexpectedNodesSyntax? = nil,
     secondChoice: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .ternaryExpr, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeConditionExpression?.raw
+      layout[0] = unexpectedBeforeConditionExpression?.raw
       layout[1] = conditionExpression.raw
-      layout[2] = garbageBetweenConditionExpressionAndQuestionMark?.raw
+      layout[2] = unexpectedBetweenConditionExpressionAndQuestionMark?.raw
       layout[3] = questionMark.raw
-      layout[4] = garbageBetweenQuestionMarkAndFirstChoice?.raw
+      layout[4] = unexpectedBetweenQuestionMarkAndFirstChoice?.raw
       layout[5] = firstChoice.raw
-      layout[6] = garbageBetweenFirstChoiceAndColonMark?.raw
+      layout[6] = unexpectedBetweenFirstChoiceAndColonMark?.raw
       layout[7] = colonMark.raw
-      layout[8] = garbageBetweenColonMarkAndSecondChoice?.raw
+      layout[8] = unexpectedBetweenColonMarkAndSecondChoice?.raw
       layout[9] = secondChoice.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeConditionExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeConditionExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var conditionExpression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenConditionExpressionAndQuestionMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenConditionExpressionAndQuestionMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var questionMark: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenQuestionMarkAndFirstChoice: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var firstChoice: RawExprSyntax {
     raw.children[5].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenFirstChoiceAndColonMark: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colonMark: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonMarkAndSecondChoice: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonMarkAndSecondChoice: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var secondChoice: RawExprSyntax {
     raw.children[9].map(RawExprSyntax.init(raw:))!
@@ -2421,51 +2421,51 @@ public struct RawMemberAccessExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBase: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBase: RawUnexpectedNodesSyntax? = nil,
     base: RawExprSyntax?,
-    _ garbageBetweenBaseAndDot: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBaseAndDot: RawUnexpectedNodesSyntax? = nil,
     dot: RawTokenSyntax,
-    _ garbageBetweenDotAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndDeclNameArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .memberAccessExpr, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBase?.raw
+      layout[0] = unexpectedBeforeBase?.raw
       layout[1] = base?.raw
-      layout[2] = garbageBetweenBaseAndDot?.raw
+      layout[2] = unexpectedBetweenBaseAndDot?.raw
       layout[3] = dot.raw
-      layout[4] = garbageBetweenDotAndName?.raw
+      layout[4] = unexpectedBetweenDotAndName?.raw
       layout[5] = name.raw
-      layout[6] = garbageBetweenNameAndDeclNameArguments?.raw
+      layout[6] = unexpectedBetweenNameAndDeclNameArguments?.raw
       layout[7] = declNameArguments?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBase: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBase: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var base: RawExprSyntax? {
     raw.children[1].map(RawExprSyntax.init(raw:))
   }
-  public var garbageBetweenBaseAndDot: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBaseAndDot: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var dot: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenDotAndName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndDeclNameArguments: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     raw.children[7].map(RawDeclNameArgumentsSyntax.init(raw:))
@@ -2490,31 +2490,31 @@ public struct RawIsExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIsTok: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIsTok: RawUnexpectedNodesSyntax? = nil,
     isTok: RawTokenSyntax,
-    _ garbageBetweenIsTokAndTypeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIsTokAndTypeName: RawUnexpectedNodesSyntax? = nil,
     typeName: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .isExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIsTok?.raw
+      layout[0] = unexpectedBeforeIsTok?.raw
       layout[1] = isTok.raw
-      layout[2] = garbageBetweenIsTokAndTypeName?.raw
+      layout[2] = unexpectedBetweenIsTokAndTypeName?.raw
       layout[3] = typeName.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIsTok: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIsTok: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var isTok: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIsTokAndTypeName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIsTokAndTypeName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeName: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
@@ -2539,41 +2539,41 @@ public struct RawAsExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAsTok: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAsTok: RawUnexpectedNodesSyntax? = nil,
     asTok: RawTokenSyntax,
-    _ garbageBetweenAsTokAndQuestionOrExclamationMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? = nil,
     questionOrExclamationMark: RawTokenSyntax?,
-    _ garbageBetweenQuestionOrExclamationMarkAndTypeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: RawUnexpectedNodesSyntax? = nil,
     typeName: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .asExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAsTok?.raw
+      layout[0] = unexpectedBeforeAsTok?.raw
       layout[1] = asTok.raw
-      layout[2] = garbageBetweenAsTokAndQuestionOrExclamationMark?.raw
+      layout[2] = unexpectedBetweenAsTokAndQuestionOrExclamationMark?.raw
       layout[3] = questionOrExclamationMark?.raw
-      layout[4] = garbageBetweenQuestionOrExclamationMarkAndTypeName?.raw
+      layout[4] = unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.raw
       layout[5] = typeName.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAsTok: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAsTok: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var asTok: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAsTokAndQuestionOrExclamationMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAsTokAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var questionOrExclamationMark: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenQuestionOrExclamationMarkAndTypeName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenQuestionOrExclamationMarkAndTypeName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeName: RawTypeSyntax {
     raw.children[5].map(RawTypeSyntax.init(raw:))!
@@ -2598,21 +2598,21 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeType?.raw
+      layout[0] = unexpectedBeforeType?.raw
       layout[1] = type.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
@@ -2637,61 +2637,61 @@ public struct RawClosureCaptureItemSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeSpecifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? = nil,
     specifier: RawTokenListSyntax?,
-    _ garbageBetweenSpecifierAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSpecifierAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax?,
-    _ garbageBetweenNameAndAssignToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndAssignToken: RawUnexpectedNodesSyntax? = nil,
     assignToken: RawTokenSyntax?,
-    _ garbageBetweenAssignTokenAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssignTokenAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .closureCaptureItem, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeSpecifier?.raw
+      layout[0] = unexpectedBeforeSpecifier?.raw
       layout[1] = specifier?.raw
-      layout[2] = garbageBetweenSpecifierAndName?.raw
+      layout[2] = unexpectedBetweenSpecifierAndName?.raw
       layout[3] = name?.raw
-      layout[4] = garbageBetweenNameAndAssignToken?.raw
+      layout[4] = unexpectedBetweenNameAndAssignToken?.raw
       layout[5] = assignToken?.raw
-      layout[6] = garbageBetweenAssignTokenAndExpression?.raw
+      layout[6] = unexpectedBetweenAssignTokenAndExpression?.raw
       layout[7] = expression.raw
-      layout[8] = garbageBetweenExpressionAndTrailingComma?.raw
+      layout[8] = unexpectedBetweenExpressionAndTrailingComma?.raw
       layout[9] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeSpecifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var specifier: RawTokenListSyntax? {
     raw.children[1].map(RawTokenListSyntax.init(raw:))
   }
-  public var garbageBetweenSpecifierAndName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSpecifierAndName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenNameAndAssignToken: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndAssignToken: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var assignToken: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAssignTokenAndExpression: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAssignTokenAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[7].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
@@ -2743,41 +2743,41 @@ public struct RawClosureCaptureSignatureSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftSquare: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? = nil,
     leftSquare: RawTokenSyntax,
-    _ garbageBetweenLeftSquareAndItems: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftSquareAndItems: RawUnexpectedNodesSyntax? = nil,
     items: RawClosureCaptureItemListSyntax?,
-    _ garbageBetweenItemsAndRightSquare: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenItemsAndRightSquare: RawUnexpectedNodesSyntax? = nil,
     rightSquare: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .closureCaptureSignature, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftSquare?.raw
+      layout[0] = unexpectedBeforeLeftSquare?.raw
       layout[1] = leftSquare.raw
-      layout[2] = garbageBetweenLeftSquareAndItems?.raw
+      layout[2] = unexpectedBetweenLeftSquareAndItems?.raw
       layout[3] = items?.raw
-      layout[4] = garbageBetweenItemsAndRightSquare?.raw
+      layout[4] = unexpectedBetweenItemsAndRightSquare?.raw
       layout[5] = rightSquare.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftSquare: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftSquare: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftSquareAndItems: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftSquareAndItems: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var items: RawClosureCaptureItemListSyntax? {
     raw.children[3].map(RawClosureCaptureItemListSyntax.init(raw:))
   }
-  public var garbageBetweenItemsAndRightSquare: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenItemsAndRightSquare: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightSquare: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -2802,31 +2802,31 @@ public struct RawClosureParamSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .closureParam, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenNameAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -2878,81 +2878,81 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndCapture: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndCapture: RawUnexpectedNodesSyntax? = nil,
     capture: RawClosureCaptureSignatureSyntax?,
-    _ garbageBetweenCaptureAndInput: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaptureAndInput: RawUnexpectedNodesSyntax? = nil,
     input: RawSyntax?,
-    _ garbageBetweenInputAndAsyncKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInputAndAsyncKeyword: RawUnexpectedNodesSyntax? = nil,
     asyncKeyword: RawTokenSyntax?,
-    _ garbageBetweenAsyncKeywordAndThrowsTok: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsyncKeywordAndThrowsTok: RawUnexpectedNodesSyntax? = nil,
     throwsTok: RawTokenSyntax?,
-    _ garbageBetweenThrowsTokAndOutput: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowsTokAndOutput: RawUnexpectedNodesSyntax? = nil,
     output: RawReturnClauseSyntax?,
-    _ garbageBetweenOutputAndInTok: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOutputAndInTok: RawUnexpectedNodesSyntax? = nil,
     inTok: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .closureSignature, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndCapture?.raw
+      layout[2] = unexpectedBetweenAttributesAndCapture?.raw
       layout[3] = capture?.raw
-      layout[4] = garbageBetweenCaptureAndInput?.raw
+      layout[4] = unexpectedBetweenCaptureAndInput?.raw
       layout[5] = input?.raw
-      layout[6] = garbageBetweenInputAndAsyncKeyword?.raw
+      layout[6] = unexpectedBetweenInputAndAsyncKeyword?.raw
       layout[7] = asyncKeyword?.raw
-      layout[8] = garbageBetweenAsyncKeywordAndThrowsTok?.raw
+      layout[8] = unexpectedBetweenAsyncKeywordAndThrowsTok?.raw
       layout[9] = throwsTok?.raw
-      layout[10] = garbageBetweenThrowsTokAndOutput?.raw
+      layout[10] = unexpectedBetweenThrowsTokAndOutput?.raw
       layout[11] = output?.raw
-      layout[12] = garbageBetweenOutputAndInTok?.raw
+      layout[12] = unexpectedBetweenOutputAndInTok?.raw
       layout[13] = inTok.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndCapture: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndCapture: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var capture: RawClosureCaptureSignatureSyntax? {
     raw.children[3].map(RawClosureCaptureSignatureSyntax.init(raw:))
   }
-  public var garbageBetweenCaptureAndInput: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCaptureAndInput: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var input: RawSyntax? {
     raw.children[5]
   }
-  public var garbageBetweenInputAndAsyncKeyword: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInputAndAsyncKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var asyncKeyword: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAsyncKeywordAndThrowsTok: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAsyncKeywordAndThrowsTok: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var throwsTok: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenThrowsTokAndOutput: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenThrowsTokAndOutput: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var output: RawReturnClauseSyntax? {
     raw.children[11].map(RawReturnClauseSyntax.init(raw:))
   }
-  public var garbageBetweenOutputAndInTok: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOutputAndInTok: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inTok: RawTokenSyntax {
     raw.children[13].map(RawTokenSyntax.init(raw:))!
@@ -2977,51 +2977,51 @@ public struct RawClosureExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? = nil,
     leftBrace: RawTokenSyntax,
-    _ garbageBetweenLeftBraceAndSignature: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndSignature: RawUnexpectedNodesSyntax? = nil,
     signature: RawClosureSignatureSyntax?,
-    _ garbageBetweenSignatureAndStatements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSignatureAndStatements: RawUnexpectedNodesSyntax? = nil,
     statements: RawCodeBlockItemListSyntax,
-    _ garbageBetweenStatementsAndRightBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax? = nil,
     rightBrace: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .closureExpr, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftBrace?.raw
+      layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
-      layout[2] = garbageBetweenLeftBraceAndSignature?.raw
+      layout[2] = unexpectedBetweenLeftBraceAndSignature?.raw
       layout[3] = signature?.raw
-      layout[4] = garbageBetweenSignatureAndStatements?.raw
+      layout[4] = unexpectedBetweenSignatureAndStatements?.raw
       layout[5] = statements.raw
-      layout[6] = garbageBetweenStatementsAndRightBrace?.raw
+      layout[6] = unexpectedBetweenStatementsAndRightBrace?.raw
       layout[7] = rightBrace.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftBrace: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftBrace: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftBraceAndSignature: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftBraceAndSignature: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var signature: RawClosureSignatureSyntax? {
     raw.children[3].map(RawClosureSignatureSyntax.init(raw:))
   }
-  public var garbageBetweenSignatureAndStatements: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSignatureAndStatements: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var statements: RawCodeBlockItemListSyntax {
     raw.children[5].map(RawCodeBlockItemListSyntax.init(raw:))!
   }
-  public var garbageBetweenStatementsAndRightBrace: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenStatementsAndRightBrace: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightBrace: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -3046,21 +3046,21 @@ public struct RawUnresolvedPatternExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .unresolvedPatternExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePattern?.raw
+      layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePattern: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[1].map(RawPatternSyntax.init(raw:))!
@@ -3085,41 +3085,41 @@ public struct RawMultipleTrailingClosureElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax,
-    _ garbageBetweenLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndClosure: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndClosure: RawUnexpectedNodesSyntax? = nil,
     closure: RawClosureExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .multipleTrailingClosureElement, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabel?.raw
+      layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
-      layout[2] = garbageBetweenLabelAndColon?.raw
+      layout[2] = unexpectedBetweenLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndClosure?.raw
+      layout[4] = unexpectedBetweenColonAndClosure?.raw
       layout[5] = closure.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndClosure: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndClosure: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var closure: RawClosureExprSyntax {
     raw.children[5].map(RawClosureExprSyntax.init(raw:))!
@@ -3171,71 +3171,71 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeCalledExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? = nil,
     calledExpression: RawExprSyntax,
-    _ garbageBetweenCalledExpressionAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCalledExpressionAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax?,
-    _ garbageBetweenLeftParenAndArgumentList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? = nil,
     argumentList: RawTupleExprElementListSyntax,
-    _ garbageBetweenArgumentListAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax?,
-    _ garbageBetweenRightParenAndTrailingClosure: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? = nil,
     trailingClosure: RawClosureExprSyntax?,
-    _ garbageBetweenTrailingClosureAndAdditionalTrailingClosures: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
     additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .functionCallExpr, uninitializedCount: 12, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeCalledExpression?.raw
+      layout[0] = unexpectedBeforeCalledExpression?.raw
       layout[1] = calledExpression.raw
-      layout[2] = garbageBetweenCalledExpressionAndLeftParen?.raw
+      layout[2] = unexpectedBetweenCalledExpressionAndLeftParen?.raw
       layout[3] = leftParen?.raw
-      layout[4] = garbageBetweenLeftParenAndArgumentList?.raw
+      layout[4] = unexpectedBetweenLeftParenAndArgumentList?.raw
       layout[5] = argumentList.raw
-      layout[6] = garbageBetweenArgumentListAndRightParen?.raw
+      layout[6] = unexpectedBetweenArgumentListAndRightParen?.raw
       layout[7] = rightParen?.raw
-      layout[8] = garbageBetweenRightParenAndTrailingClosure?.raw
+      layout[8] = unexpectedBetweenRightParenAndTrailingClosure?.raw
       layout[9] = trailingClosure?.raw
-      layout[10] = garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
+      layout[10] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
       layout[11] = additionalTrailingClosures?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeCalledExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var calledExpression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenCalledExpressionAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCalledExpressionAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenLeftParenAndArgumentList: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var argumentList: RawTupleExprElementListSyntax {
     raw.children[5].map(RawTupleExprElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenArgumentListAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenRightParenAndTrailingClosure: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingClosure: RawClosureExprSyntax? {
     raw.children[9].map(RawClosureExprSyntax.init(raw:))
   }
-  public var garbageBetweenTrailingClosureAndAdditionalTrailingClosures: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
     raw.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
@@ -3260,71 +3260,71 @@ public struct RawSubscriptExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeCalledExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? = nil,
     calledExpression: RawExprSyntax,
-    _ garbageBetweenCalledExpressionAndLeftBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCalledExpressionAndLeftBracket: RawUnexpectedNodesSyntax? = nil,
     leftBracket: RawTokenSyntax,
-    _ garbageBetweenLeftBracketAndArgumentList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBracketAndArgumentList: RawUnexpectedNodesSyntax? = nil,
     argumentList: RawTupleExprElementListSyntax,
-    _ garbageBetweenArgumentListAndRightBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentListAndRightBracket: RawUnexpectedNodesSyntax? = nil,
     rightBracket: RawTokenSyntax,
-    _ garbageBetweenRightBracketAndTrailingClosure: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRightBracketAndTrailingClosure: RawUnexpectedNodesSyntax? = nil,
     trailingClosure: RawClosureExprSyntax?,
-    _ garbageBetweenTrailingClosureAndAdditionalTrailingClosures: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil,
     additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .subscriptExpr, uninitializedCount: 12, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeCalledExpression?.raw
+      layout[0] = unexpectedBeforeCalledExpression?.raw
       layout[1] = calledExpression.raw
-      layout[2] = garbageBetweenCalledExpressionAndLeftBracket?.raw
+      layout[2] = unexpectedBetweenCalledExpressionAndLeftBracket?.raw
       layout[3] = leftBracket.raw
-      layout[4] = garbageBetweenLeftBracketAndArgumentList?.raw
+      layout[4] = unexpectedBetweenLeftBracketAndArgumentList?.raw
       layout[5] = argumentList.raw
-      layout[6] = garbageBetweenArgumentListAndRightBracket?.raw
+      layout[6] = unexpectedBetweenArgumentListAndRightBracket?.raw
       layout[7] = rightBracket.raw
-      layout[8] = garbageBetweenRightBracketAndTrailingClosure?.raw
+      layout[8] = unexpectedBetweenRightBracketAndTrailingClosure?.raw
       layout[9] = trailingClosure?.raw
-      layout[10] = garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
+      layout[10] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
       layout[11] = additionalTrailingClosures?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeCalledExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var calledExpression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenCalledExpressionAndLeftBracket: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCalledExpressionAndLeftBracket: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftBracket: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftBracketAndArgumentList: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftBracketAndArgumentList: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var argumentList: RawTupleExprElementListSyntax {
     raw.children[5].map(RawTupleExprElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenArgumentListAndRightBracket: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentListAndRightBracket: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightBracket: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenRightBracketAndTrailingClosure: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenRightBracketAndTrailingClosure: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingClosure: RawClosureExprSyntax? {
     raw.children[9].map(RawClosureExprSyntax.init(raw:))
   }
-  public var garbageBetweenTrailingClosureAndAdditionalTrailingClosures: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
     raw.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
@@ -3349,31 +3349,31 @@ public struct RawOptionalChainingExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndQuestionMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndQuestionMark: RawUnexpectedNodesSyntax? = nil,
     questionMark: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .optionalChainingExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeExpression?.raw
+      layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
-      layout[2] = garbageBetweenExpressionAndQuestionMark?.raw
+      layout[2] = unexpectedBetweenExpressionAndQuestionMark?.raw
       layout[3] = questionMark.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndQuestionMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndQuestionMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var questionMark: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -3398,31 +3398,31 @@ public struct RawForcedValueExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndExclamationMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndExclamationMark: RawUnexpectedNodesSyntax? = nil,
     exclamationMark: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .forcedValueExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeExpression?.raw
+      layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
-      layout[2] = garbageBetweenExpressionAndExclamationMark?.raw
+      layout[2] = unexpectedBetweenExpressionAndExclamationMark?.raw
       layout[3] = exclamationMark.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndExclamationMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndExclamationMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var exclamationMark: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -3447,31 +3447,31 @@ public struct RawPostfixUnaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndOperatorToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndOperatorToken: RawUnexpectedNodesSyntax? = nil,
     operatorToken: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .postfixUnaryExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeExpression?.raw
+      layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
-      layout[2] = garbageBetweenExpressionAndOperatorToken?.raw
+      layout[2] = unexpectedBetweenExpressionAndOperatorToken?.raw
       layout[3] = operatorToken.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndOperatorToken: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndOperatorToken: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var operatorToken: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -3496,31 +3496,31 @@ public struct RawSpecializeExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndGenericArgumentClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     genericArgumentClause: RawGenericArgumentClauseSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .specializeExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeExpression?.raw
+      layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
-      layout[2] = garbageBetweenExpressionAndGenericArgumentClause?.raw
+      layout[2] = unexpectedBetweenExpressionAndGenericArgumentClause?.raw
       layout[3] = genericArgumentClause.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndGenericArgumentClause: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax {
     raw.children[3].map(RawGenericArgumentClauseSyntax.init(raw:))!
@@ -3545,21 +3545,21 @@ public struct RawStringSegmentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeContent: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeContent: RawUnexpectedNodesSyntax? = nil,
     content: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .stringSegment, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeContent?.raw
+      layout[0] = unexpectedBeforeContent?.raw
       layout[1] = content.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeContent: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeContent: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var content: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -3584,61 +3584,61 @@ public struct RawExpressionSegmentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBackslash: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? = nil,
     backslash: RawTokenSyntax,
-    _ garbageBetweenBackslashAndDelimiter: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBackslashAndDelimiter: RawUnexpectedNodesSyntax? = nil,
     delimiter: RawTokenSyntax?,
-    _ garbageBetweenDelimiterAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDelimiterAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndExpressions: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndExpressions: RawUnexpectedNodesSyntax? = nil,
     expressions: RawTupleExprElementListSyntax,
-    _ garbageBetweenExpressionsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .expressionSegment, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBackslash?.raw
+      layout[0] = unexpectedBeforeBackslash?.raw
       layout[1] = backslash.raw
-      layout[2] = garbageBetweenBackslashAndDelimiter?.raw
+      layout[2] = unexpectedBetweenBackslashAndDelimiter?.raw
       layout[3] = delimiter?.raw
-      layout[4] = garbageBetweenDelimiterAndLeftParen?.raw
+      layout[4] = unexpectedBetweenDelimiterAndLeftParen?.raw
       layout[5] = leftParen.raw
-      layout[6] = garbageBetweenLeftParenAndExpressions?.raw
+      layout[6] = unexpectedBetweenLeftParenAndExpressions?.raw
       layout[7] = expressions.raw
-      layout[8] = garbageBetweenExpressionsAndRightParen?.raw
+      layout[8] = unexpectedBetweenExpressionsAndRightParen?.raw
       layout[9] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBackslash: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var backslash: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenBackslashAndDelimiter: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBackslashAndDelimiter: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var delimiter: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenDelimiterAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDelimiterAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndExpressions: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndExpressions: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expressions: RawTupleExprElementListSyntax {
     raw.children[7].map(RawTupleExprElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[9].map(RawTokenSyntax.init(raw:))!
@@ -3663,61 +3663,61 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeOpenDelimiter: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeOpenDelimiter: RawUnexpectedNodesSyntax? = nil,
     openDelimiter: RawTokenSyntax?,
-    _ garbageBetweenOpenDelimiterAndOpenQuote: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOpenDelimiterAndOpenQuote: RawUnexpectedNodesSyntax? = nil,
     openQuote: RawTokenSyntax,
-    _ garbageBetweenOpenQuoteAndSegments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOpenQuoteAndSegments: RawUnexpectedNodesSyntax? = nil,
     segments: RawStringLiteralSegmentsSyntax,
-    _ garbageBetweenSegmentsAndCloseQuote: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSegmentsAndCloseQuote: RawUnexpectedNodesSyntax? = nil,
     closeQuote: RawTokenSyntax,
-    _ garbageBetweenCloseQuoteAndCloseDelimiter: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCloseQuoteAndCloseDelimiter: RawUnexpectedNodesSyntax? = nil,
     closeDelimiter: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .stringLiteralExpr, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeOpenDelimiter?.raw
+      layout[0] = unexpectedBeforeOpenDelimiter?.raw
       layout[1] = openDelimiter?.raw
-      layout[2] = garbageBetweenOpenDelimiterAndOpenQuote?.raw
+      layout[2] = unexpectedBetweenOpenDelimiterAndOpenQuote?.raw
       layout[3] = openQuote.raw
-      layout[4] = garbageBetweenOpenQuoteAndSegments?.raw
+      layout[4] = unexpectedBetweenOpenQuoteAndSegments?.raw
       layout[5] = segments.raw
-      layout[6] = garbageBetweenSegmentsAndCloseQuote?.raw
+      layout[6] = unexpectedBetweenSegmentsAndCloseQuote?.raw
       layout[7] = closeQuote.raw
-      layout[8] = garbageBetweenCloseQuoteAndCloseDelimiter?.raw
+      layout[8] = unexpectedBetweenCloseQuoteAndCloseDelimiter?.raw
       layout[9] = closeDelimiter?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeOpenDelimiter: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeOpenDelimiter: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var openDelimiter: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenOpenDelimiterAndOpenQuote: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOpenDelimiterAndOpenQuote: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var openQuote: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenOpenQuoteAndSegments: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOpenQuoteAndSegments: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var segments: RawStringLiteralSegmentsSyntax {
     raw.children[5].map(RawStringLiteralSegmentsSyntax.init(raw:))!
   }
-  public var garbageBetweenSegmentsAndCloseQuote: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSegmentsAndCloseQuote: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var closeQuote: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCloseQuoteAndCloseDelimiter: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCloseQuoteAndCloseDelimiter: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var closeDelimiter: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
@@ -3742,21 +3742,21 @@ public struct RawRegexLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeRegex: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeRegex: RawUnexpectedNodesSyntax? = nil,
     regex: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .regexLiteralExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeRegex?.raw
+      layout[0] = unexpectedBeforeRegex?.raw
       layout[1] = regex.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeRegex: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeRegex: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var regex: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -3781,41 +3781,41 @@ public struct RawKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBackslash: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? = nil,
     backslash: RawTokenSyntax,
-    _ garbageBetweenBackslashAndRootExpr: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBackslashAndRootExpr: RawUnexpectedNodesSyntax? = nil,
     rootExpr: RawExprSyntax?,
-    _ garbageBetweenRootExprAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRootExprAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .keyPathExpr, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBackslash?.raw
+      layout[0] = unexpectedBeforeBackslash?.raw
       layout[1] = backslash.raw
-      layout[2] = garbageBetweenBackslashAndRootExpr?.raw
+      layout[2] = unexpectedBetweenBackslashAndRootExpr?.raw
       layout[3] = rootExpr?.raw
-      layout[4] = garbageBetweenRootExprAndExpression?.raw
+      layout[4] = unexpectedBetweenRootExprAndExpression?.raw
       layout[5] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBackslash: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBackslash: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var backslash: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenBackslashAndRootExpr: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBackslashAndRootExpr: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rootExpr: RawExprSyntax? {
     raw.children[3].map(RawExprSyntax.init(raw:))
   }
-  public var garbageBetweenRootExprAndExpression: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenRootExprAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[5].map(RawExprSyntax.init(raw:))!
@@ -3840,21 +3840,21 @@ public struct RawKeyPathBaseExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePeriod: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax? = nil,
     period: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .keyPathBaseExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePeriod?.raw
+      layout[0] = unexpectedBeforePeriod?.raw
       layout[1] = period.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePeriod: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePeriod: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var period: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -3879,31 +3879,31 @@ public struct RawObjcNamePieceSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndDot: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndDot: RawUnexpectedNodesSyntax? = nil,
     dot: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .objcNamePiece, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndDot?.raw
+      layout[2] = unexpectedBetweenNameAndDot?.raw
       layout[3] = dot?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndDot: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndDot: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var dot: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -3955,51 +3955,51 @@ public struct RawObjcKeyPathExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeKeyPath: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeKeyPath: RawUnexpectedNodesSyntax? = nil,
     keyPath: RawTokenSyntax,
-    _ garbageBetweenKeyPathAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenKeyPathAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawObjcNameSyntax,
-    _ garbageBetweenNameAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .objcKeyPathExpr, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeKeyPath?.raw
+      layout[0] = unexpectedBeforeKeyPath?.raw
       layout[1] = keyPath.raw
-      layout[2] = garbageBetweenKeyPathAndLeftParen?.raw
+      layout[2] = unexpectedBetweenKeyPathAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndName?.raw
+      layout[4] = unexpectedBetweenLeftParenAndName?.raw
       layout[5] = name.raw
-      layout[6] = garbageBetweenNameAndRightParen?.raw
+      layout[6] = unexpectedBetweenNameAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeKeyPath: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeKeyPath: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var keyPath: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenKeyPathAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenKeyPathAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawObjcNameSyntax {
     raw.children[5].map(RawObjcNameSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -4024,71 +4024,71 @@ public struct RawObjcSelectorExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundSelector: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundSelector: RawUnexpectedNodesSyntax? = nil,
     poundSelector: RawTokenSyntax,
-    _ garbageBetweenPoundSelectorAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundSelectorAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndKind: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndKind: RawUnexpectedNodesSyntax? = nil,
     kind: RawTokenSyntax?,
-    _ garbageBetweenKindAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenKindAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax?,
-    _ garbageBetweenColonAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawExprSyntax,
-    _ garbageBetweenNameAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .objcSelectorExpr, uninitializedCount: 12, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundSelector?.raw
+      layout[0] = unexpectedBeforePoundSelector?.raw
       layout[1] = poundSelector.raw
-      layout[2] = garbageBetweenPoundSelectorAndLeftParen?.raw
+      layout[2] = unexpectedBetweenPoundSelectorAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndKind?.raw
+      layout[4] = unexpectedBetweenLeftParenAndKind?.raw
       layout[5] = kind?.raw
-      layout[6] = garbageBetweenKindAndColon?.raw
+      layout[6] = unexpectedBetweenKindAndColon?.raw
       layout[7] = colon?.raw
-      layout[8] = garbageBetweenColonAndName?.raw
+      layout[8] = unexpectedBetweenColonAndName?.raw
       layout[9] = name.raw
-      layout[10] = garbageBetweenNameAndRightParen?.raw
+      layout[10] = unexpectedBetweenNameAndRightParen?.raw
       layout[11] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundSelector: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundSelector: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundSelector: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundSelectorAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundSelectorAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndKind: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndKind: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var kind: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenKindAndColon: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenKindAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenColonAndName: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndName: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawExprSyntax {
     raw.children[9].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[11].map(RawTokenSyntax.init(raw:))!
@@ -4113,31 +4113,31 @@ public struct RawPostfixIfConfigExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBase: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBase: RawUnexpectedNodesSyntax? = nil,
     base: RawExprSyntax?,
-    _ garbageBetweenBaseAndConfig: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBaseAndConfig: RawUnexpectedNodesSyntax? = nil,
     config: RawIfConfigDeclSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .postfixIfConfigExpr, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBase?.raw
+      layout[0] = unexpectedBeforeBase?.raw
       layout[1] = base?.raw
-      layout[2] = garbageBetweenBaseAndConfig?.raw
+      layout[2] = unexpectedBetweenBaseAndConfig?.raw
       layout[3] = config.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBase: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBase: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var base: RawExprSyntax? {
     raw.children[1].map(RawExprSyntax.init(raw:))
   }
-  public var garbageBetweenBaseAndConfig: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBaseAndConfig: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var config: RawIfConfigDeclSyntax {
     raw.children[3].map(RawIfConfigDeclSyntax.init(raw:))!
@@ -4162,21 +4162,21 @@ public struct RawEditorPlaceholderExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .editorPlaceholderExpr, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIdentifier?.raw
+      layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -4201,51 +4201,51 @@ public struct RawObjectLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawTupleExprElementListSyntax,
-    _ garbageBetweenArgumentsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .objectLiteralExpr, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIdentifier?.raw
+      layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
-      layout[2] = garbageBetweenIdentifierAndLeftParen?.raw
+      layout[2] = unexpectedBetweenIdentifierAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndArguments?.raw
+      layout[4] = unexpectedBetweenLeftParenAndArguments?.raw
       layout[5] = arguments.raw
-      layout[6] = garbageBetweenArgumentsAndRightParen?.raw
+      layout[6] = unexpectedBetweenArgumentsAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndArguments: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arguments: RawTupleExprElementListSyntax {
     raw.children[5].map(RawTupleExprElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenArgumentsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -4270,31 +4270,31 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeEqual: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeEqual: RawUnexpectedNodesSyntax? = nil,
     equal: RawTokenSyntax,
-    _ garbageBetweenEqualAndValue: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax? = nil,
     value: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeInitializerClause, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeEqual?.raw
+      layout[0] = unexpectedBeforeEqual?.raw
       layout[1] = equal.raw
-      layout[2] = garbageBetweenEqualAndValue?.raw
+      layout[2] = unexpectedBetweenEqualAndValue?.raw
       layout[3] = value.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeEqual: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeEqual: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var equal: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenEqualAndValue: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var value: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
@@ -4319,81 +4319,81 @@ public struct RawTypealiasDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndTypealiasKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndTypealiasKeyword: RawUnexpectedNodesSyntax? = nil,
     typealiasKeyword: RawTokenSyntax,
-    _ garbageBetweenTypealiasKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypealiasKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParameterClauseAndInitializer: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInitializer: RawUnexpectedNodesSyntax? = nil,
     initializer: RawTypeInitializerClauseSyntax,
-    _ garbageBetweenInitializerAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typealiasDecl, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndTypealiasKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndTypealiasKeyword?.raw
       layout[5] = typealiasKeyword.raw
-      layout[6] = garbageBetweenTypealiasKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenTypealiasKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndGenericParameterClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndGenericParameterClause?.raw
       layout[9] = genericParameterClause?.raw
-      layout[10] = garbageBetweenGenericParameterClauseAndInitializer?.raw
+      layout[10] = unexpectedBetweenGenericParameterClauseAndInitializer?.raw
       layout[11] = initializer.raw
-      layout[12] = garbageBetweenInitializerAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenInitializerAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndTypealiasKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndTypealiasKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typealiasKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenTypealiasKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypealiasKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     raw.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParameterClauseAndInitializer: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterClauseAndInitializer: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var initializer: RawTypeInitializerClauseSyntax {
     raw.children[11].map(RawTypeInitializerClauseSyntax.init(raw:))!
   }
-  public var garbageBetweenInitializerAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
@@ -4418,81 +4418,81 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndAssociatedtypeKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: RawUnexpectedNodesSyntax? = nil,
     associatedtypeKeyword: RawTokenSyntax,
-    _ garbageBetweenAssociatedtypeKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndInheritanceClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
-    _ garbageBetweenInheritanceClauseAndInitializer: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndInitializer: RawUnexpectedNodesSyntax? = nil,
     initializer: RawTypeInitializerClauseSyntax?,
-    _ garbageBetweenInitializerAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .associatedtypeDecl, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndAssociatedtypeKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndAssociatedtypeKeyword?.raw
       layout[5] = associatedtypeKeyword.raw
-      layout[6] = garbageBetweenAssociatedtypeKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndInheritanceClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndInheritanceClause?.raw
       layout[9] = inheritanceClause?.raw
-      layout[10] = garbageBetweenInheritanceClauseAndInitializer?.raw
+      layout[10] = unexpectedBetweenInheritanceClauseAndInitializer?.raw
       layout[11] = initializer?.raw
-      layout[12] = garbageBetweenInitializerAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenInitializerAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndAssociatedtypeKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndAssociatedtypeKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var associatedtypeKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAssociatedtypeKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAssociatedtypeKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndInheritanceClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     raw.children[9].map(RawTypeInheritanceClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInheritanceClauseAndInitializer: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritanceClauseAndInitializer: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var initializer: RawTypeInitializerClauseSyntax? {
     raw.children[11].map(RawTypeInitializerClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInitializerAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
@@ -4544,41 +4544,41 @@ public struct RawParameterClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndParameterList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndParameterList: RawUnexpectedNodesSyntax? = nil,
     parameterList: RawFunctionParameterListSyntax,
-    _ garbageBetweenParameterListAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenParameterListAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .parameterClause, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndParameterList?.raw
+      layout[2] = unexpectedBetweenLeftParenAndParameterList?.raw
       layout[3] = parameterList.raw
-      layout[4] = garbageBetweenParameterListAndRightParen?.raw
+      layout[4] = unexpectedBetweenParameterListAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndParameterList: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndParameterList: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var parameterList: RawFunctionParameterListSyntax {
     raw.children[3].map(RawFunctionParameterListSyntax.init(raw:))!
   }
-  public var garbageBetweenParameterListAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenParameterListAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -4603,31 +4603,31 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeArrow: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeArrow: RawUnexpectedNodesSyntax? = nil,
     arrow: RawTokenSyntax,
-    _ garbageBetweenArrowAndReturnType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax? = nil,
     returnType: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .returnClause, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeArrow?.raw
+      layout[0] = unexpectedBeforeArrow?.raw
       layout[1] = arrow.raw
-      layout[2] = garbageBetweenArrowAndReturnType?.raw
+      layout[2] = unexpectedBetweenArrowAndReturnType?.raw
       layout[3] = returnType.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeArrow: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeArrow: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arrow: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenArrowAndReturnType: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var returnType: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
@@ -4652,51 +4652,51 @@ public struct RawFunctionSignatureSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeInput: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeInput: RawUnexpectedNodesSyntax? = nil,
     input: RawParameterClauseSyntax,
-    _ garbageBetweenInputAndAsyncOrReasyncKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInputAndAsyncOrReasyncKeyword: RawUnexpectedNodesSyntax? = nil,
     asyncOrReasyncKeyword: RawTokenSyntax?,
-    _ garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax? = nil,
     throwsOrRethrowsKeyword: RawTokenSyntax?,
-    _ garbageBetweenThrowsOrRethrowsKeywordAndOutput: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: RawUnexpectedNodesSyntax? = nil,
     output: RawReturnClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .functionSignature, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeInput?.raw
+      layout[0] = unexpectedBeforeInput?.raw
       layout[1] = input.raw
-      layout[2] = garbageBetweenInputAndAsyncOrReasyncKeyword?.raw
+      layout[2] = unexpectedBetweenInputAndAsyncOrReasyncKeyword?.raw
       layout[3] = asyncOrReasyncKeyword?.raw
-      layout[4] = garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.raw
+      layout[4] = unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.raw
       layout[5] = throwsOrRethrowsKeyword?.raw
-      layout[6] = garbageBetweenThrowsOrRethrowsKeywordAndOutput?.raw
+      layout[6] = unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.raw
       layout[7] = output?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeInput: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeInput: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var input: RawParameterClauseSyntax {
     raw.children[1].map(RawParameterClauseSyntax.init(raw:))!
   }
-  public var garbageBetweenInputAndAsyncOrReasyncKeyword: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInputAndAsyncOrReasyncKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var asyncOrReasyncKeyword: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var throwsOrRethrowsKeyword: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenThrowsOrRethrowsKeywordAndOutput: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var output: RawReturnClauseSyntax? {
     raw.children[7].map(RawReturnClauseSyntax.init(raw:))
@@ -4721,41 +4721,41 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundKeyword: RawUnexpectedNodesSyntax? = nil,
     poundKeyword: RawTokenSyntax,
-    _ garbageBetweenPoundKeywordAndCondition: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundKeywordAndCondition: RawUnexpectedNodesSyntax? = nil,
     condition: RawExprSyntax?,
-    _ garbageBetweenConditionAndElements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax? = nil,
     elements: RawSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .ifConfigClause, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundKeyword?.raw
+      layout[0] = unexpectedBeforePoundKeyword?.raw
       layout[1] = poundKeyword.raw
-      layout[2] = garbageBetweenPoundKeywordAndCondition?.raw
+      layout[2] = unexpectedBetweenPoundKeywordAndCondition?.raw
       layout[3] = condition?.raw
-      layout[4] = garbageBetweenConditionAndElements?.raw
+      layout[4] = unexpectedBetweenConditionAndElements?.raw
       layout[5] = elements.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundKeywordAndCondition: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundKeywordAndCondition: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var condition: RawExprSyntax? {
     raw.children[3].map(RawExprSyntax.init(raw:))
   }
-  public var garbageBetweenConditionAndElements: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elements: RawSyntax {
     raw.children[5]!
@@ -4807,31 +4807,31 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeClauses: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeClauses: RawUnexpectedNodesSyntax? = nil,
     clauses: RawIfConfigClauseListSyntax,
-    _ garbageBetweenClausesAndPoundEndif: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenClausesAndPoundEndif: RawUnexpectedNodesSyntax? = nil,
     poundEndif: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .ifConfigDecl, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeClauses?.raw
+      layout[0] = unexpectedBeforeClauses?.raw
       layout[1] = clauses.raw
-      layout[2] = garbageBetweenClausesAndPoundEndif?.raw
+      layout[2] = unexpectedBetweenClausesAndPoundEndif?.raw
       layout[3] = poundEndif.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeClauses: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeClauses: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var clauses: RawIfConfigClauseListSyntax {
     raw.children[1].map(RawIfConfigClauseListSyntax.init(raw:))!
   }
-  public var garbageBetweenClausesAndPoundEndif: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenClausesAndPoundEndif: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundEndif: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -4856,51 +4856,51 @@ public struct RawPoundErrorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundError: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundError: RawUnexpectedNodesSyntax? = nil,
     poundError: RawTokenSyntax,
-    _ garbageBetweenPoundErrorAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundErrorAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndMessage: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax? = nil,
     message: RawStringLiteralExprSyntax,
-    _ garbageBetweenMessageAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundErrorDecl, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundError?.raw
+      layout[0] = unexpectedBeforePoundError?.raw
       layout[1] = poundError.raw
-      layout[2] = garbageBetweenPoundErrorAndLeftParen?.raw
+      layout[2] = unexpectedBetweenPoundErrorAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndMessage?.raw
+      layout[4] = unexpectedBetweenLeftParenAndMessage?.raw
       layout[5] = message.raw
-      layout[6] = garbageBetweenMessageAndRightParen?.raw
+      layout[6] = unexpectedBetweenMessageAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundError: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundError: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundError: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundErrorAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundErrorAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndMessage: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var message: RawStringLiteralExprSyntax {
     raw.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
   }
-  public var garbageBetweenMessageAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -4925,51 +4925,51 @@ public struct RawPoundWarningDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundWarning: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundWarning: RawUnexpectedNodesSyntax? = nil,
     poundWarning: RawTokenSyntax,
-    _ garbageBetweenPoundWarningAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundWarningAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndMessage: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax? = nil,
     message: RawStringLiteralExprSyntax,
-    _ garbageBetweenMessageAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundWarningDecl, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundWarning?.raw
+      layout[0] = unexpectedBeforePoundWarning?.raw
       layout[1] = poundWarning.raw
-      layout[2] = garbageBetweenPoundWarningAndLeftParen?.raw
+      layout[2] = unexpectedBetweenPoundWarningAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndMessage?.raw
+      layout[4] = unexpectedBetweenLeftParenAndMessage?.raw
       layout[5] = message.raw
-      layout[6] = garbageBetweenMessageAndRightParen?.raw
+      layout[6] = unexpectedBetweenMessageAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundWarning: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundWarning: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundWarning: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundWarningAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundWarningAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndMessage: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndMessage: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var message: RawStringLiteralExprSyntax {
     raw.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
   }
-  public var garbageBetweenMessageAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -4994,51 +4994,51 @@ public struct RawPoundSourceLocationSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundSourceLocation: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundSourceLocation: RawUnexpectedNodesSyntax? = nil,
     poundSourceLocation: RawTokenSyntax,
-    _ garbageBetweenPoundSourceLocationAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundSourceLocationAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndArgs: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgs: RawUnexpectedNodesSyntax? = nil,
     args: RawPoundSourceLocationArgsSyntax?,
-    _ garbageBetweenArgsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundSourceLocation, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundSourceLocation?.raw
+      layout[0] = unexpectedBeforePoundSourceLocation?.raw
       layout[1] = poundSourceLocation.raw
-      layout[2] = garbageBetweenPoundSourceLocationAndLeftParen?.raw
+      layout[2] = unexpectedBetweenPoundSourceLocationAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndArgs?.raw
+      layout[4] = unexpectedBetweenLeftParenAndArgs?.raw
       layout[5] = args?.raw
-      layout[6] = garbageBetweenArgsAndRightParen?.raw
+      layout[6] = unexpectedBetweenArgsAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundSourceLocation: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundSourceLocation: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundSourceLocation: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundSourceLocationAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundSourceLocationAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndArgs: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndArgs: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var args: RawPoundSourceLocationArgsSyntax? {
     raw.children[5].map(RawPoundSourceLocationArgsSyntax.init(raw:))
   }
-  public var garbageBetweenArgsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -5063,81 +5063,81 @@ public struct RawPoundSourceLocationArgsSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeFileArgLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeFileArgLabel: RawUnexpectedNodesSyntax? = nil,
     fileArgLabel: RawTokenSyntax,
-    _ garbageBetweenFileArgLabelAndFileArgColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFileArgLabelAndFileArgColon: RawUnexpectedNodesSyntax? = nil,
     fileArgColon: RawTokenSyntax,
-    _ garbageBetweenFileArgColonAndFileName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFileArgColonAndFileName: RawUnexpectedNodesSyntax? = nil,
     fileName: RawTokenSyntax,
-    _ garbageBetweenFileNameAndComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFileNameAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax,
-    _ garbageBetweenCommaAndLineArgLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndLineArgLabel: RawUnexpectedNodesSyntax? = nil,
     lineArgLabel: RawTokenSyntax,
-    _ garbageBetweenLineArgLabelAndLineArgColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLineArgLabelAndLineArgColon: RawUnexpectedNodesSyntax? = nil,
     lineArgColon: RawTokenSyntax,
-    _ garbageBetweenLineArgColonAndLineNumber: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLineArgColonAndLineNumber: RawUnexpectedNodesSyntax? = nil,
     lineNumber: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundSourceLocationArgs, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeFileArgLabel?.raw
+      layout[0] = unexpectedBeforeFileArgLabel?.raw
       layout[1] = fileArgLabel.raw
-      layout[2] = garbageBetweenFileArgLabelAndFileArgColon?.raw
+      layout[2] = unexpectedBetweenFileArgLabelAndFileArgColon?.raw
       layout[3] = fileArgColon.raw
-      layout[4] = garbageBetweenFileArgColonAndFileName?.raw
+      layout[4] = unexpectedBetweenFileArgColonAndFileName?.raw
       layout[5] = fileName.raw
-      layout[6] = garbageBetweenFileNameAndComma?.raw
+      layout[6] = unexpectedBetweenFileNameAndComma?.raw
       layout[7] = comma.raw
-      layout[8] = garbageBetweenCommaAndLineArgLabel?.raw
+      layout[8] = unexpectedBetweenCommaAndLineArgLabel?.raw
       layout[9] = lineArgLabel.raw
-      layout[10] = garbageBetweenLineArgLabelAndLineArgColon?.raw
+      layout[10] = unexpectedBetweenLineArgLabelAndLineArgColon?.raw
       layout[11] = lineArgColon.raw
-      layout[12] = garbageBetweenLineArgColonAndLineNumber?.raw
+      layout[12] = unexpectedBetweenLineArgColonAndLineNumber?.raw
       layout[13] = lineNumber.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeFileArgLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeFileArgLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var fileArgLabel: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenFileArgLabelAndFileArgColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenFileArgLabelAndFileArgColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var fileArgColon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenFileArgColonAndFileName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenFileArgColonAndFileName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var fileName: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenFileNameAndComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenFileNameAndComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var comma: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCommaAndLineArgLabel: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCommaAndLineArgLabel: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var lineArgLabel: RawTokenSyntax {
     raw.children[9].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLineArgLabelAndLineArgColon: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLineArgLabelAndLineArgColon: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var lineArgColon: RawTokenSyntax {
     raw.children[11].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLineArgColonAndLineNumber: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLineArgColonAndLineNumber: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var lineNumber: RawTokenSyntax {
     raw.children[13].map(RawTokenSyntax.init(raw:))!
@@ -5162,41 +5162,41 @@ public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndDetail: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndDetail: RawUnexpectedNodesSyntax? = nil,
     detail: RawTokenSyntax,
-    _ garbageBetweenDetailAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDetailAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .declModifierDetail, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndDetail?.raw
+      layout[2] = unexpectedBetweenLeftParenAndDetail?.raw
       layout[3] = detail.raw
-      layout[4] = garbageBetweenDetailAndRightParen?.raw
+      layout[4] = unexpectedBetweenDetailAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndDetail: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndDetail: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var detail: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenDetailAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDetailAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -5221,31 +5221,31 @@ public struct RawDeclModifierSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndDetail: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndDetail: RawUnexpectedNodesSyntax? = nil,
     detail: RawDeclModifierDetailSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .declModifier, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndDetail?.raw
+      layout[2] = unexpectedBetweenNameAndDetail?.raw
       layout[3] = detail?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndDetail: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndDetail: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var detail: RawDeclModifierDetailSyntax? {
     raw.children[3].map(RawDeclModifierDetailSyntax.init(raw:))
@@ -5270,31 +5270,31 @@ public struct RawInheritedTypeSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeTypeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeTypeName: RawUnexpectedNodesSyntax? = nil,
     typeName: RawTypeSyntax,
-    _ garbageBetweenTypeNameAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .inheritedType, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeTypeName?.raw
+      layout[0] = unexpectedBeforeTypeName?.raw
       layout[1] = typeName.raw
-      layout[2] = garbageBetweenTypeNameAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenTypeNameAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeTypeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeTypeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeName: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenTypeNameAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeNameAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -5346,31 +5346,31 @@ public struct RawTypeInheritanceClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndInheritedTypeCollection: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndInheritedTypeCollection: RawUnexpectedNodesSyntax? = nil,
     inheritedTypeCollection: RawInheritedTypeListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeInheritanceClause, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeColon?.raw
+      layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
-      layout[2] = garbageBetweenColonAndInheritedTypeCollection?.raw
+      layout[2] = unexpectedBetweenColonAndInheritedTypeCollection?.raw
       layout[3] = inheritedTypeCollection.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeColon: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeColon: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndInheritedTypeCollection: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndInheritedTypeCollection: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritedTypeCollection: RawInheritedTypeListSyntax {
     raw.children[3].map(RawInheritedTypeListSyntax.init(raw:))!
@@ -5395,91 +5395,91 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndClassKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndClassKeyword: RawUnexpectedNodesSyntax? = nil,
     classKeyword: RawTokenSyntax,
-    _ garbageBetweenClassKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenClassKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParameterClauseAndInheritanceClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
-    _ garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil,
     members: RawMemberDeclBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .classDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndClassKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndClassKeyword?.raw
       layout[5] = classKeyword.raw
-      layout[6] = garbageBetweenClassKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenClassKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndGenericParameterClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndGenericParameterClause?.raw
       layout[9] = genericParameterClause?.raw
-      layout[10] = garbageBetweenGenericParameterClauseAndInheritanceClause?.raw
+      layout[10] = unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw
       layout[11] = inheritanceClause?.raw
-      layout[12] = garbageBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
       layout[15] = members.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndClassKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndClassKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var classKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenClassKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenClassKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     raw.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParameterClauseAndInheritanceClause: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     raw.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var members: RawMemberDeclBlockSyntax {
     raw.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
@@ -5504,91 +5504,91 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndActorKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndActorKeyword: RawUnexpectedNodesSyntax? = nil,
     actorKeyword: RawTokenSyntax,
-    _ garbageBetweenActorKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenActorKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParameterClauseAndInheritanceClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
-    _ garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil,
     members: RawMemberDeclBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .actorDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndActorKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndActorKeyword?.raw
       layout[5] = actorKeyword.raw
-      layout[6] = garbageBetweenActorKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenActorKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndGenericParameterClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndGenericParameterClause?.raw
       layout[9] = genericParameterClause?.raw
-      layout[10] = garbageBetweenGenericParameterClauseAndInheritanceClause?.raw
+      layout[10] = unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw
       layout[11] = inheritanceClause?.raw
-      layout[12] = garbageBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
       layout[15] = members.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndActorKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndActorKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var actorKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenActorKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenActorKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     raw.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParameterClauseAndInheritanceClause: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     raw.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var members: RawMemberDeclBlockSyntax {
     raw.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
@@ -5613,91 +5613,91 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndStructKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndStructKeyword: RawUnexpectedNodesSyntax? = nil,
     structKeyword: RawTokenSyntax,
-    _ garbageBetweenStructKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenStructKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParameterClauseAndInheritanceClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
-    _ garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil,
     members: RawMemberDeclBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .structDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndStructKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndStructKeyword?.raw
       layout[5] = structKeyword.raw
-      layout[6] = garbageBetweenStructKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenStructKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndGenericParameterClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndGenericParameterClause?.raw
       layout[9] = genericParameterClause?.raw
-      layout[10] = garbageBetweenGenericParameterClauseAndInheritanceClause?.raw
+      layout[10] = unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw
       layout[11] = inheritanceClause?.raw
-      layout[12] = garbageBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
       layout[15] = members.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndStructKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndStructKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var structKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenStructKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenStructKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     raw.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParameterClauseAndInheritanceClause: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     raw.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var members: RawMemberDeclBlockSyntax {
     raw.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
@@ -5722,91 +5722,91 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndProtocolKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndProtocolKeyword: RawUnexpectedNodesSyntax? = nil,
     protocolKeyword: RawTokenSyntax,
-    _ garbageBetweenProtocolKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenProtocolKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: RawUnexpectedNodesSyntax? = nil,
     primaryAssociatedTypeClause: RawPrimaryAssociatedTypeClauseSyntax?,
-    _ garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
-    _ garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil,
     members: RawMemberDeclBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .protocolDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndProtocolKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndProtocolKeyword?.raw
       layout[5] = protocolKeyword.raw
-      layout[6] = garbageBetweenProtocolKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenProtocolKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndPrimaryAssociatedTypeClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.raw
       layout[9] = primaryAssociatedTypeClause?.raw
-      layout[10] = garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.raw
+      layout[10] = unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.raw
       layout[11] = inheritanceClause?.raw
-      layout[12] = garbageBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
       layout[15] = members.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndProtocolKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndProtocolKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var protocolKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenProtocolKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenProtocolKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var primaryAssociatedTypeClause: RawPrimaryAssociatedTypeClauseSyntax? {
     raw.children[9].map(RawPrimaryAssociatedTypeClauseSyntax.init(raw:))
   }
-  public var garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     raw.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var members: RawMemberDeclBlockSyntax {
     raw.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
@@ -5831,81 +5831,81 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndExtensionKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndExtensionKeyword: RawUnexpectedNodesSyntax? = nil,
     extensionKeyword: RawTokenSyntax,
-    _ garbageBetweenExtensionKeywordAndExtendedType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExtensionKeywordAndExtendedType: RawUnexpectedNodesSyntax? = nil,
     extendedType: RawTypeSyntax,
-    _ garbageBetweenExtendedTypeAndInheritanceClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExtendedTypeAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
-    _ garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil,
     members: RawMemberDeclBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .extensionDecl, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndExtensionKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndExtensionKeyword?.raw
       layout[5] = extensionKeyword.raw
-      layout[6] = garbageBetweenExtensionKeywordAndExtendedType?.raw
+      layout[6] = unexpectedBetweenExtensionKeywordAndExtendedType?.raw
       layout[7] = extendedType.raw
-      layout[8] = garbageBetweenExtendedTypeAndInheritanceClause?.raw
+      layout[8] = unexpectedBetweenExtendedTypeAndInheritanceClause?.raw
       layout[9] = inheritanceClause?.raw
-      layout[10] = garbageBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[10] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[11] = genericWhereClause?.raw
-      layout[12] = garbageBetweenGenericWhereClauseAndMembers?.raw
+      layout[12] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
       layout[13] = members.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndExtensionKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndExtensionKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var extensionKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenExtensionKeywordAndExtendedType: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExtensionKeywordAndExtendedType: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var extendedType: RawTypeSyntax {
     raw.children[7].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenExtendedTypeAndInheritanceClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExtendedTypeAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     raw.children[9].map(RawTypeInheritanceClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[11].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var members: RawMemberDeclBlockSyntax {
     raw.children[13].map(RawMemberDeclBlockSyntax.init(raw:))!
@@ -5930,41 +5930,41 @@ public struct RawMemberDeclBlockSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? = nil,
     leftBrace: RawTokenSyntax,
-    _ garbageBetweenLeftBraceAndMembers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndMembers: RawUnexpectedNodesSyntax? = nil,
     members: RawMemberDeclListSyntax,
-    _ garbageBetweenMembersAndRightBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMembersAndRightBrace: RawUnexpectedNodesSyntax? = nil,
     rightBrace: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .memberDeclBlock, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftBrace?.raw
+      layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
-      layout[2] = garbageBetweenLeftBraceAndMembers?.raw
+      layout[2] = unexpectedBetweenLeftBraceAndMembers?.raw
       layout[3] = members.raw
-      layout[4] = garbageBetweenMembersAndRightBrace?.raw
+      layout[4] = unexpectedBetweenMembersAndRightBrace?.raw
       layout[5] = rightBrace.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftBrace: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftBrace: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftBraceAndMembers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftBraceAndMembers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var members: RawMemberDeclListSyntax {
     raw.children[3].map(RawMemberDeclListSyntax.init(raw:))!
   }
-  public var garbageBetweenMembersAndRightBrace: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenMembersAndRightBrace: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightBrace: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -6016,31 +6016,31 @@ public struct RawMemberDeclListItemSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDecl: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDecl: RawUnexpectedNodesSyntax? = nil,
     decl: RawDeclSyntax,
-    _ garbageBetweenDeclAndSemicolon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclAndSemicolon: RawUnexpectedNodesSyntax? = nil,
     semicolon: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .memberDeclListItem, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDecl?.raw
+      layout[0] = unexpectedBeforeDecl?.raw
       layout[1] = decl.raw
-      layout[2] = garbageBetweenDeclAndSemicolon?.raw
+      layout[2] = unexpectedBetweenDeclAndSemicolon?.raw
       layout[3] = semicolon?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDecl: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDecl: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var decl: RawDeclSyntax {
     raw.children[1].map(RawDeclSyntax.init(raw:))!
   }
-  public var garbageBetweenDeclAndSemicolon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDeclAndSemicolon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var semicolon: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -6065,31 +6065,31 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeStatements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeStatements: RawUnexpectedNodesSyntax? = nil,
     statements: RawCodeBlockItemListSyntax,
-    _ garbageBetweenStatementsAndEOFToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenStatementsAndEOFToken: RawUnexpectedNodesSyntax? = nil,
     eofToken: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .sourceFile, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeStatements?.raw
+      layout[0] = unexpectedBeforeStatements?.raw
       layout[1] = statements.raw
-      layout[2] = garbageBetweenStatementsAndEOFToken?.raw
+      layout[2] = unexpectedBetweenStatementsAndEOFToken?.raw
       layout[3] = eofToken.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeStatements: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeStatements: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var statements: RawCodeBlockItemListSyntax {
     raw.children[1].map(RawCodeBlockItemListSyntax.init(raw:))!
   }
-  public var garbageBetweenStatementsAndEOFToken: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenStatementsAndEOFToken: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var eofToken: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -6114,31 +6114,31 @@ public struct RawInitializerClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeEqual: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeEqual: RawUnexpectedNodesSyntax? = nil,
     equal: RawTokenSyntax,
-    _ garbageBetweenEqualAndValue: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax? = nil,
     value: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .initializerClause, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeEqual?.raw
+      layout[0] = unexpectedBeforeEqual?.raw
       layout[1] = equal.raw
-      layout[2] = garbageBetweenEqualAndValue?.raw
+      layout[2] = unexpectedBetweenEqualAndValue?.raw
       layout[3] = value.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeEqual: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeEqual: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var equal: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenEqualAndValue: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var value: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
@@ -6163,91 +6163,91 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndFirstName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndFirstName: RawUnexpectedNodesSyntax? = nil,
     firstName: RawTokenSyntax?,
-    _ garbageBetweenFirstNameAndSecondName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? = nil,
     secondName: RawTokenSyntax?,
-    _ garbageBetweenSecondNameAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax?,
-    _ garbageBetweenColonAndType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax?,
-    _ garbageBetweenTypeAndEllipsis: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? = nil,
     ellipsis: RawTokenSyntax?,
-    _ garbageBetweenEllipsisAndDefaultArgument: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEllipsisAndDefaultArgument: RawUnexpectedNodesSyntax? = nil,
     defaultArgument: RawInitializerClauseSyntax?,
-    _ garbageBetweenDefaultArgumentAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDefaultArgumentAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .functionParameter, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndFirstName?.raw
+      layout[2] = unexpectedBetweenAttributesAndFirstName?.raw
       layout[3] = firstName?.raw
-      layout[4] = garbageBetweenFirstNameAndSecondName?.raw
+      layout[4] = unexpectedBetweenFirstNameAndSecondName?.raw
       layout[5] = secondName?.raw
-      layout[6] = garbageBetweenSecondNameAndColon?.raw
+      layout[6] = unexpectedBetweenSecondNameAndColon?.raw
       layout[7] = colon?.raw
-      layout[8] = garbageBetweenColonAndType?.raw
+      layout[8] = unexpectedBetweenColonAndType?.raw
       layout[9] = type?.raw
-      layout[10] = garbageBetweenTypeAndEllipsis?.raw
+      layout[10] = unexpectedBetweenTypeAndEllipsis?.raw
       layout[11] = ellipsis?.raw
-      layout[12] = garbageBetweenEllipsisAndDefaultArgument?.raw
+      layout[12] = unexpectedBetweenEllipsisAndDefaultArgument?.raw
       layout[13] = defaultArgument?.raw
-      layout[14] = garbageBetweenDefaultArgumentAndTrailingComma?.raw
+      layout[14] = unexpectedBetweenDefaultArgumentAndTrailingComma?.raw
       layout[15] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndFirstName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndFirstName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var firstName: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenFirstNameAndSecondName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var secondName: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenSecondNameAndColon: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenColonAndType: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax? {
     raw.children[9].map(RawTypeSyntax.init(raw:))
   }
-  public var garbageBetweenTypeAndEllipsis: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var ellipsis: RawTokenSyntax? {
     raw.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenEllipsisAndDefaultArgument: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenEllipsisAndDefaultArgument: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var defaultArgument: RawInitializerClauseSyntax? {
     raw.children[13].map(RawInitializerClauseSyntax.init(raw:))
   }
-  public var garbageBetweenDefaultArgumentAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDefaultArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[15].map(RawTokenSyntax.init(raw:))
@@ -6299,91 +6299,91 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndFuncKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndFuncKeyword: RawUnexpectedNodesSyntax? = nil,
     funcKeyword: RawTokenSyntax,
-    _ garbageBetweenFuncKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenFuncKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParameterClauseAndSignature: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax? = nil,
     signature: RawFunctionSignatureSyntax,
-    _ garbageBetweenSignatureAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .functionDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndFuncKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndFuncKeyword?.raw
       layout[5] = funcKeyword.raw
-      layout[6] = garbageBetweenFuncKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenFuncKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndGenericParameterClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndGenericParameterClause?.raw
       layout[9] = genericParameterClause?.raw
-      layout[10] = garbageBetweenGenericParameterClauseAndSignature?.raw
+      layout[10] = unexpectedBetweenGenericParameterClauseAndSignature?.raw
       layout[11] = signature.raw
-      layout[12] = garbageBetweenSignatureAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenSignatureAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndBody?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndBody?.raw
       layout[15] = body?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndFuncKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndFuncKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var funcKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenFuncKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenFuncKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndGenericParameterClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     raw.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParameterClauseAndSignature: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var signature: RawFunctionSignatureSyntax {
     raw.children[11].map(RawFunctionSignatureSyntax.init(raw:))!
   }
-  public var garbageBetweenSignatureAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndBody: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax? {
     raw.children[15].map(RawCodeBlockSyntax.init(raw:))
@@ -6408,91 +6408,91 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndInitKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndInitKeyword: RawUnexpectedNodesSyntax? = nil,
     initKeyword: RawTokenSyntax,
-    _ garbageBetweenInitKeywordAndOptionalMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInitKeywordAndOptionalMark: RawUnexpectedNodesSyntax? = nil,
     optionalMark: RawTokenSyntax?,
-    _ garbageBetweenOptionalMarkAndGenericParameterClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOptionalMarkAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParameterClauseAndSignature: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax? = nil,
     signature: RawFunctionSignatureSyntax,
-    _ garbageBetweenSignatureAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .initializerDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndInitKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndInitKeyword?.raw
       layout[5] = initKeyword.raw
-      layout[6] = garbageBetweenInitKeywordAndOptionalMark?.raw
+      layout[6] = unexpectedBetweenInitKeywordAndOptionalMark?.raw
       layout[7] = optionalMark?.raw
-      layout[8] = garbageBetweenOptionalMarkAndGenericParameterClause?.raw
+      layout[8] = unexpectedBetweenOptionalMarkAndGenericParameterClause?.raw
       layout[9] = genericParameterClause?.raw
-      layout[10] = garbageBetweenGenericParameterClauseAndSignature?.raw
+      layout[10] = unexpectedBetweenGenericParameterClauseAndSignature?.raw
       layout[11] = signature.raw
-      layout[12] = garbageBetweenSignatureAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenSignatureAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndBody?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndBody?.raw
       layout[15] = body?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndInitKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndInitKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var initKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenInitKeywordAndOptionalMark: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInitKeywordAndOptionalMark: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var optionalMark: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenOptionalMarkAndGenericParameterClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOptionalMarkAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     raw.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParameterClauseAndSignature: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterClauseAndSignature: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var signature: RawFunctionSignatureSyntax {
     raw.children[11].map(RawFunctionSignatureSyntax.init(raw:))!
   }
-  public var garbageBetweenSignatureAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSignatureAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndBody: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax? {
     raw.children[15].map(RawCodeBlockSyntax.init(raw:))
@@ -6517,51 +6517,51 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndDeinitKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndDeinitKeyword: RawUnexpectedNodesSyntax? = nil,
     deinitKeyword: RawTokenSyntax,
-    _ garbageBetweenDeinitKeywordAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeinitKeywordAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .deinitializerDecl, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndDeinitKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndDeinitKeyword?.raw
       layout[5] = deinitKeyword.raw
-      layout[6] = garbageBetweenDeinitKeywordAndBody?.raw
+      layout[6] = unexpectedBetweenDeinitKeywordAndBody?.raw
       layout[7] = body?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndDeinitKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndDeinitKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var deinitKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenDeinitKeywordAndBody: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDeinitKeywordAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax? {
     raw.children[7].map(RawCodeBlockSyntax.init(raw:))
@@ -6586,91 +6586,91 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndSubscriptKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndSubscriptKeyword: RawUnexpectedNodesSyntax? = nil,
     subscriptKeyword: RawTokenSyntax,
-    _ garbageBetweenSubscriptKeywordAndGenericParameterClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParameterClauseAndIndices: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndIndices: RawUnexpectedNodesSyntax? = nil,
     indices: RawParameterClauseSyntax,
-    _ garbageBetweenIndicesAndResult: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIndicesAndResult: RawUnexpectedNodesSyntax? = nil,
     result: RawReturnClauseSyntax,
-    _ garbageBetweenResultAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenResultAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndAccessor: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndAccessor: RawUnexpectedNodesSyntax? = nil,
     accessor: RawSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .subscriptDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndSubscriptKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndSubscriptKeyword?.raw
       layout[5] = subscriptKeyword.raw
-      layout[6] = garbageBetweenSubscriptKeywordAndGenericParameterClause?.raw
+      layout[6] = unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.raw
       layout[7] = genericParameterClause?.raw
-      layout[8] = garbageBetweenGenericParameterClauseAndIndices?.raw
+      layout[8] = unexpectedBetweenGenericParameterClauseAndIndices?.raw
       layout[9] = indices.raw
-      layout[10] = garbageBetweenIndicesAndResult?.raw
+      layout[10] = unexpectedBetweenIndicesAndResult?.raw
       layout[11] = result.raw
-      layout[12] = garbageBetweenResultAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenResultAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndAccessor?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndAccessor?.raw
       layout[15] = accessor?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndSubscriptKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndSubscriptKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var subscriptKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenSubscriptKeywordAndGenericParameterClause: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSubscriptKeywordAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterClause: RawGenericParameterClauseSyntax? {
     raw.children[7].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParameterClauseAndIndices: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterClauseAndIndices: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var indices: RawParameterClauseSyntax {
     raw.children[9].map(RawParameterClauseSyntax.init(raw:))!
   }
-  public var garbageBetweenIndicesAndResult: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIndicesAndResult: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var result: RawReturnClauseSyntax {
     raw.children[11].map(RawReturnClauseSyntax.init(raw:))!
   }
-  public var garbageBetweenResultAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenResultAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndAccessor: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndAccessor: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var accessor: RawSyntax? {
     raw.children[15]
@@ -6695,31 +6695,31 @@ public struct RawAccessLevelModifierSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndModifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndModifier: RawUnexpectedNodesSyntax? = nil,
     modifier: RawDeclModifierDetailSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .accessLevelModifier, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndModifier?.raw
+      layout[2] = unexpectedBetweenNameAndModifier?.raw
       layout[3] = modifier?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndModifier: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndModifier: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifier: RawDeclModifierDetailSyntax? {
     raw.children[3].map(RawDeclModifierDetailSyntax.init(raw:))
@@ -6744,31 +6744,31 @@ public struct RawAccessPathComponentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndTrailingDot: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax? = nil,
     trailingDot: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .accessPathComponent, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndTrailingDot?.raw
+      layout[2] = unexpectedBetweenNameAndTrailingDot?.raw
       layout[3] = trailingDot?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndTrailingDot: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndTrailingDot: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingDot: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -6820,61 +6820,61 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndImportTok: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndImportTok: RawUnexpectedNodesSyntax? = nil,
     importTok: RawTokenSyntax,
-    _ garbageBetweenImportTokAndImportKind: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenImportTokAndImportKind: RawUnexpectedNodesSyntax? = nil,
     importKind: RawTokenSyntax?,
-    _ garbageBetweenImportKindAndPath: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenImportKindAndPath: RawUnexpectedNodesSyntax? = nil,
     path: RawAccessPathSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .importDecl, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndImportTok?.raw
+      layout[4] = unexpectedBetweenModifiersAndImportTok?.raw
       layout[5] = importTok.raw
-      layout[6] = garbageBetweenImportTokAndImportKind?.raw
+      layout[6] = unexpectedBetweenImportTokAndImportKind?.raw
       layout[7] = importKind?.raw
-      layout[8] = garbageBetweenImportKindAndPath?.raw
+      layout[8] = unexpectedBetweenImportKindAndPath?.raw
       layout[9] = path.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndImportTok: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndImportTok: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var importTok: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenImportTokAndImportKind: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenImportTokAndImportKind: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var importKind: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenImportKindAndPath: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenImportKindAndPath: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var path: RawAccessPathSyntax {
     raw.children[9].map(RawAccessPathSyntax.init(raw:))!
@@ -6899,41 +6899,41 @@ public struct RawAccessorParameterSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .accessorParameter, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndName?.raw
+      layout[2] = unexpectedBetweenLeftParenAndName?.raw
       layout[3] = name.raw
-      layout[4] = garbageBetweenNameAndRightParen?.raw
+      layout[4] = unexpectedBetweenNameAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -6958,81 +6958,81 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifier: RawUnexpectedNodesSyntax? = nil,
     modifier: RawDeclModifierSyntax?,
-    _ garbageBetweenModifierAndAccessorKind: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifierAndAccessorKind: RawUnexpectedNodesSyntax? = nil,
     accessorKind: RawTokenSyntax,
-    _ garbageBetweenAccessorKindAndParameter: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAccessorKindAndParameter: RawUnexpectedNodesSyntax? = nil,
     parameter: RawAccessorParameterSyntax?,
-    _ garbageBetweenParameterAndAsyncKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenParameterAndAsyncKeyword: RawUnexpectedNodesSyntax? = nil,
     asyncKeyword: RawTokenSyntax?,
-    _ garbageBetweenAsyncKeywordAndThrowsKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsyncKeywordAndThrowsKeyword: RawUnexpectedNodesSyntax? = nil,
     throwsKeyword: RawTokenSyntax?,
-    _ garbageBetweenThrowsKeywordAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowsKeywordAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .accessorDecl, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifier?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifier?.raw
       layout[3] = modifier?.raw
-      layout[4] = garbageBetweenModifierAndAccessorKind?.raw
+      layout[4] = unexpectedBetweenModifierAndAccessorKind?.raw
       layout[5] = accessorKind.raw
-      layout[6] = garbageBetweenAccessorKindAndParameter?.raw
+      layout[6] = unexpectedBetweenAccessorKindAndParameter?.raw
       layout[7] = parameter?.raw
-      layout[8] = garbageBetweenParameterAndAsyncKeyword?.raw
+      layout[8] = unexpectedBetweenParameterAndAsyncKeyword?.raw
       layout[9] = asyncKeyword?.raw
-      layout[10] = garbageBetweenAsyncKeywordAndThrowsKeyword?.raw
+      layout[10] = unexpectedBetweenAsyncKeywordAndThrowsKeyword?.raw
       layout[11] = throwsKeyword?.raw
-      layout[12] = garbageBetweenThrowsKeywordAndBody?.raw
+      layout[12] = unexpectedBetweenThrowsKeywordAndBody?.raw
       layout[13] = body?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifier: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifier: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifier: RawDeclModifierSyntax? {
     raw.children[3].map(RawDeclModifierSyntax.init(raw:))
   }
-  public var garbageBetweenModifierAndAccessorKind: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifierAndAccessorKind: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var accessorKind: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAccessorKindAndParameter: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAccessorKindAndParameter: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var parameter: RawAccessorParameterSyntax? {
     raw.children[7].map(RawAccessorParameterSyntax.init(raw:))
   }
-  public var garbageBetweenParameterAndAsyncKeyword: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenParameterAndAsyncKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var asyncKeyword: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAsyncKeywordAndThrowsKeyword: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAsyncKeywordAndThrowsKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var throwsKeyword: RawTokenSyntax? {
     raw.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenThrowsKeywordAndBody: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenThrowsKeywordAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax? {
     raw.children[13].map(RawCodeBlockSyntax.init(raw:))
@@ -7084,41 +7084,41 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? = nil,
     leftBrace: RawTokenSyntax,
-    _ garbageBetweenLeftBraceAndAccessors: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndAccessors: RawUnexpectedNodesSyntax? = nil,
     accessors: RawAccessorListSyntax,
-    _ garbageBetweenAccessorsAndRightBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAccessorsAndRightBrace: RawUnexpectedNodesSyntax? = nil,
     rightBrace: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .accessorBlock, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftBrace?.raw
+      layout[0] = unexpectedBeforeLeftBrace?.raw
       layout[1] = leftBrace.raw
-      layout[2] = garbageBetweenLeftBraceAndAccessors?.raw
+      layout[2] = unexpectedBetweenLeftBraceAndAccessors?.raw
       layout[3] = accessors.raw
-      layout[4] = garbageBetweenAccessorsAndRightBrace?.raw
+      layout[4] = unexpectedBetweenAccessorsAndRightBrace?.raw
       layout[5] = rightBrace.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftBrace: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftBrace: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftBraceAndAccessors: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftBraceAndAccessors: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var accessors: RawAccessorListSyntax {
     raw.children[3].map(RawAccessorListSyntax.init(raw:))!
   }
-  public var garbageBetweenAccessorsAndRightBrace: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAccessorsAndRightBrace: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightBrace: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -7143,61 +7143,61 @@ public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
-    _ garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil,
     typeAnnotation: RawTypeAnnotationSyntax?,
-    _ garbageBetweenTypeAnnotationAndInitializer: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? = nil,
     initializer: RawInitializerClauseSyntax?,
-    _ garbageBetweenInitializerAndAccessor: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInitializerAndAccessor: RawUnexpectedNodesSyntax? = nil,
     accessor: RawSyntax?,
-    _ garbageBetweenAccessorAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAccessorAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .patternBinding, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePattern?.raw
+      layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern.raw
-      layout[2] = garbageBetweenPatternAndTypeAnnotation?.raw
+      layout[2] = unexpectedBetweenPatternAndTypeAnnotation?.raw
       layout[3] = typeAnnotation?.raw
-      layout[4] = garbageBetweenTypeAnnotationAndInitializer?.raw
+      layout[4] = unexpectedBetweenTypeAnnotationAndInitializer?.raw
       layout[5] = initializer?.raw
-      layout[6] = garbageBetweenInitializerAndAccessor?.raw
+      layout[6] = unexpectedBetweenInitializerAndAccessor?.raw
       layout[7] = accessor?.raw
-      layout[8] = garbageBetweenAccessorAndTrailingComma?.raw
+      layout[8] = unexpectedBetweenAccessorAndTrailingComma?.raw
       layout[9] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePattern: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[1].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     raw.children[3].map(RawTypeAnnotationSyntax.init(raw:))
   }
-  public var garbageBetweenTypeAnnotationAndInitializer: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var initializer: RawInitializerClauseSyntax? {
     raw.children[5].map(RawInitializerClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInitializerAndAccessor: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInitializerAndAccessor: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var accessor: RawSyntax? {
     raw.children[7]
   }
-  public var garbageBetweenAccessorAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAccessorAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
@@ -7249,51 +7249,51 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndLetOrVarKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndLetOrVarKeyword: RawUnexpectedNodesSyntax? = nil,
     letOrVarKeyword: RawTokenSyntax,
-    _ garbageBetweenLetOrVarKeywordAndBindings: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLetOrVarKeywordAndBindings: RawUnexpectedNodesSyntax? = nil,
     bindings: RawPatternBindingListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .variableDecl, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndLetOrVarKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndLetOrVarKeyword?.raw
       layout[5] = letOrVarKeyword.raw
-      layout[6] = garbageBetweenLetOrVarKeywordAndBindings?.raw
+      layout[6] = unexpectedBetweenLetOrVarKeywordAndBindings?.raw
       layout[7] = bindings.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndLetOrVarKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndLetOrVarKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var letOrVarKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLetOrVarKeywordAndBindings: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLetOrVarKeywordAndBindings: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var bindings: RawPatternBindingListSyntax {
     raw.children[7].map(RawPatternBindingListSyntax.init(raw:))!
@@ -7318,51 +7318,51 @@ public struct RawEnumCaseElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndAssociatedValue: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndAssociatedValue: RawUnexpectedNodesSyntax? = nil,
     associatedValue: RawParameterClauseSyntax?,
-    _ garbageBetweenAssociatedValueAndRawValue: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssociatedValueAndRawValue: RawUnexpectedNodesSyntax? = nil,
     rawValue: RawInitializerClauseSyntax?,
-    _ garbageBetweenRawValueAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRawValueAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .enumCaseElement, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIdentifier?.raw
+      layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
-      layout[2] = garbageBetweenIdentifierAndAssociatedValue?.raw
+      layout[2] = unexpectedBetweenIdentifierAndAssociatedValue?.raw
       layout[3] = associatedValue?.raw
-      layout[4] = garbageBetweenAssociatedValueAndRawValue?.raw
+      layout[4] = unexpectedBetweenAssociatedValueAndRawValue?.raw
       layout[5] = rawValue?.raw
-      layout[6] = garbageBetweenRawValueAndTrailingComma?.raw
+      layout[6] = unexpectedBetweenRawValueAndTrailingComma?.raw
       layout[7] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndAssociatedValue: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndAssociatedValue: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var associatedValue: RawParameterClauseSyntax? {
     raw.children[3].map(RawParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenAssociatedValueAndRawValue: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAssociatedValueAndRawValue: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rawValue: RawInitializerClauseSyntax? {
     raw.children[5].map(RawInitializerClauseSyntax.init(raw:))
   }
-  public var garbageBetweenRawValueAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenRawValueAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
@@ -7414,51 +7414,51 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndCaseKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndCaseKeyword: RawUnexpectedNodesSyntax? = nil,
     caseKeyword: RawTokenSyntax,
-    _ garbageBetweenCaseKeywordAndElements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseKeywordAndElements: RawUnexpectedNodesSyntax? = nil,
     elements: RawEnumCaseElementListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .enumCaseDecl, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndCaseKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndCaseKeyword?.raw
       layout[5] = caseKeyword.raw
-      layout[6] = garbageBetweenCaseKeywordAndElements?.raw
+      layout[6] = unexpectedBetweenCaseKeywordAndElements?.raw
       layout[7] = elements.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndCaseKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndCaseKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var caseKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCaseKeywordAndElements: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCaseKeywordAndElements: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elements: RawEnumCaseElementListSyntax {
     raw.children[7].map(RawEnumCaseElementListSyntax.init(raw:))!
@@ -7483,91 +7483,91 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndEnumKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndEnumKeyword: RawUnexpectedNodesSyntax? = nil,
     enumKeyword: RawTokenSyntax,
-    _ garbageBetweenEnumKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEnumKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndGenericParameters: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndGenericParameters: RawUnexpectedNodesSyntax? = nil,
     genericParameters: RawGenericParameterClauseSyntax?,
-    _ garbageBetweenGenericParametersAndInheritanceClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParametersAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
-    _ garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? = nil,
     members: RawMemberDeclBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .enumDecl, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndEnumKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndEnumKeyword?.raw
       layout[5] = enumKeyword.raw
-      layout[6] = garbageBetweenEnumKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenEnumKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndGenericParameters?.raw
+      layout[8] = unexpectedBetweenIdentifierAndGenericParameters?.raw
       layout[9] = genericParameters?.raw
-      layout[10] = garbageBetweenGenericParametersAndInheritanceClause?.raw
+      layout[10] = unexpectedBetweenGenericParametersAndInheritanceClause?.raw
       layout[11] = inheritanceClause?.raw
-      layout[12] = garbageBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = garbageBetweenGenericWhereClauseAndMembers?.raw
+      layout[14] = unexpectedBetweenGenericWhereClauseAndMembers?.raw
       layout[15] = members.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndEnumKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndEnumKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var enumKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenEnumKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenEnumKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndGenericParameters: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndGenericParameters: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameters: RawGenericParameterClauseSyntax? {
     raw.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericParametersAndInheritanceClause: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParametersAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritanceClause: RawTypeInheritanceClauseSyntax? {
     raw.children[11].map(RawTypeInheritanceClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInheritanceClauseAndGenericWhereClause: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
     raw.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenGenericWhereClauseAndMembers: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericWhereClauseAndMembers: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var members: RawMemberDeclBlockSyntax {
     raw.children[15].map(RawMemberDeclBlockSyntax.init(raw:))!
@@ -7592,61 +7592,61 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndOperatorKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndOperatorKeyword: RawUnexpectedNodesSyntax? = nil,
     operatorKeyword: RawTokenSyntax,
-    _ garbageBetweenOperatorKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOperatorKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax? = nil,
     operatorPrecedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .operatorDecl, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndOperatorKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndOperatorKeyword?.raw
       layout[5] = operatorKeyword.raw
-      layout[6] = garbageBetweenOperatorKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenOperatorKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw
+      layout[8] = unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw
       layout[9] = operatorPrecedenceAndTypes?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndOperatorKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndOperatorKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var operatorKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenOperatorKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOperatorKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var operatorPrecedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax? {
     raw.children[9].map(RawOperatorPrecedenceAndTypesSyntax.init(raw:))
@@ -7698,31 +7698,31 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax? = nil,
     precedenceGroupAndDesignatedTypes: RawIdentifierListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .operatorPrecedenceAndTypes, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeColon?.raw
+      layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
-      layout[2] = garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw
+      layout[2] = unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw
       layout[3] = precedenceGroupAndDesignatedTypes.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeColon: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeColon: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var precedenceGroupAndDesignatedTypes: RawIdentifierListSyntax {
     raw.children[3].map(RawIdentifierListSyntax.init(raw:))!
@@ -7747,81 +7747,81 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
     modifiers: RawModifierListSyntax?,
-    _ garbageBetweenModifiersAndPrecedencegroupKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: RawUnexpectedNodesSyntax? = nil,
     precedencegroupKeyword: RawTokenSyntax,
-    _ garbageBetweenPrecedencegroupKeywordAndIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
-    _ garbageBetweenIdentifierAndLeftBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIdentifierAndLeftBrace: RawUnexpectedNodesSyntax? = nil,
     leftBrace: RawTokenSyntax,
-    _ garbageBetweenLeftBraceAndGroupAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndGroupAttributes: RawUnexpectedNodesSyntax? = nil,
     groupAttributes: RawPrecedenceGroupAttributeListSyntax,
-    _ garbageBetweenGroupAttributesAndRightBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGroupAttributesAndRightBrace: RawUnexpectedNodesSyntax? = nil,
     rightBrace: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupDecl, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndModifiers?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = garbageBetweenModifiersAndPrecedencegroupKeyword?.raw
+      layout[4] = unexpectedBetweenModifiersAndPrecedencegroupKeyword?.raw
       layout[5] = precedencegroupKeyword.raw
-      layout[6] = garbageBetweenPrecedencegroupKeywordAndIdentifier?.raw
+      layout[6] = unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = garbageBetweenIdentifierAndLeftBrace?.raw
+      layout[8] = unexpectedBetweenIdentifierAndLeftBrace?.raw
       layout[9] = leftBrace.raw
-      layout[10] = garbageBetweenLeftBraceAndGroupAttributes?.raw
+      layout[10] = unexpectedBetweenLeftBraceAndGroupAttributes?.raw
       layout[11] = groupAttributes.raw
-      layout[12] = garbageBetweenGroupAttributesAndRightBrace?.raw
+      layout[12] = unexpectedBetweenGroupAttributesAndRightBrace?.raw
       layout[13] = rightBrace.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndModifiers: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var modifiers: RawModifierListSyntax? {
     raw.children[3].map(RawModifierListSyntax.init(raw:))
   }
-  public var garbageBetweenModifiersAndPrecedencegroupKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenModifiersAndPrecedencegroupKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var precedencegroupKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPrecedencegroupKeywordAndIdentifier: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPrecedencegroupKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIdentifierAndLeftBrace: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIdentifierAndLeftBrace: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftBrace: RawTokenSyntax {
     raw.children[9].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftBraceAndGroupAttributes: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftBraceAndGroupAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var groupAttributes: RawPrecedenceGroupAttributeListSyntax {
     raw.children[11].map(RawPrecedenceGroupAttributeListSyntax.init(raw:))!
   }
-  public var garbageBetweenGroupAttributesAndRightBrace: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGroupAttributesAndRightBrace: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightBrace: RawTokenSyntax {
     raw.children[13].map(RawTokenSyntax.init(raw:))!
@@ -7873,41 +7873,41 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeHigherThanOrLowerThan: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeHigherThanOrLowerThan: RawUnexpectedNodesSyntax? = nil,
     higherThanOrLowerThan: RawTokenSyntax,
-    _ garbageBetweenHigherThanOrLowerThanAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenHigherThanOrLowerThanAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndOtherNames: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndOtherNames: RawUnexpectedNodesSyntax? = nil,
     otherNames: RawPrecedenceGroupNameListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupRelation, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeHigherThanOrLowerThan?.raw
+      layout[0] = unexpectedBeforeHigherThanOrLowerThan?.raw
       layout[1] = higherThanOrLowerThan.raw
-      layout[2] = garbageBetweenHigherThanOrLowerThanAndColon?.raw
+      layout[2] = unexpectedBetweenHigherThanOrLowerThanAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndOtherNames?.raw
+      layout[4] = unexpectedBetweenColonAndOtherNames?.raw
       layout[5] = otherNames.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeHigherThanOrLowerThan: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeHigherThanOrLowerThan: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var higherThanOrLowerThan: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenHigherThanOrLowerThanAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenHigherThanOrLowerThanAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndOtherNames: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndOtherNames: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var otherNames: RawPrecedenceGroupNameListSyntax {
     raw.children[5].map(RawPrecedenceGroupNameListSyntax.init(raw:))!
@@ -7959,31 +7959,31 @@ public struct RawPrecedenceGroupNameElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupNameElement, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenNameAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -8008,41 +8008,41 @@ public struct RawPrecedenceGroupAssignmentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAssignmentKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAssignmentKeyword: RawUnexpectedNodesSyntax? = nil,
     assignmentKeyword: RawTokenSyntax,
-    _ garbageBetweenAssignmentKeywordAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssignmentKeywordAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndFlag: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndFlag: RawUnexpectedNodesSyntax? = nil,
     flag: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupAssignment, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAssignmentKeyword?.raw
+      layout[0] = unexpectedBeforeAssignmentKeyword?.raw
       layout[1] = assignmentKeyword.raw
-      layout[2] = garbageBetweenAssignmentKeywordAndColon?.raw
+      layout[2] = unexpectedBetweenAssignmentKeywordAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndFlag?.raw
+      layout[4] = unexpectedBetweenColonAndFlag?.raw
       layout[5] = flag.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAssignmentKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAssignmentKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var assignmentKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAssignmentKeywordAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAssignmentKeywordAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndFlag: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndFlag: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var flag: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -8067,41 +8067,41 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAssociativityKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAssociativityKeyword: RawUnexpectedNodesSyntax? = nil,
     associativityKeyword: RawTokenSyntax,
-    _ garbageBetweenAssociativityKeywordAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAssociativityKeywordAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndValue: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? = nil,
     value: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupAssociativity, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAssociativityKeyword?.raw
+      layout[0] = unexpectedBeforeAssociativityKeyword?.raw
       layout[1] = associativityKeyword.raw
-      layout[2] = garbageBetweenAssociativityKeywordAndColon?.raw
+      layout[2] = unexpectedBetweenAssociativityKeywordAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndValue?.raw
+      layout[4] = unexpectedBetweenColonAndValue?.raw
       layout[5] = value.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAssociativityKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAssociativityKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var associativityKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAssociativityKeywordAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAssociativityKeywordAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndValue: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var value: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -8180,61 +8180,61 @@ public struct RawCustomAttributeSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAtSignToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax? = nil,
     atSignToken: RawTokenSyntax,
-    _ garbageBetweenAtSignTokenAndAttributeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax? = nil,
     attributeName: RawTypeSyntax,
-    _ garbageBetweenAttributeNameAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax?,
-    _ garbageBetweenLeftParenAndArgumentList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? = nil,
     argumentList: RawTupleExprElementListSyntax?,
-    _ garbageBetweenArgumentListAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .customAttribute, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAtSignToken?.raw
+      layout[0] = unexpectedBeforeAtSignToken?.raw
       layout[1] = atSignToken.raw
-      layout[2] = garbageBetweenAtSignTokenAndAttributeName?.raw
+      layout[2] = unexpectedBetweenAtSignTokenAndAttributeName?.raw
       layout[3] = attributeName.raw
-      layout[4] = garbageBetweenAttributeNameAndLeftParen?.raw
+      layout[4] = unexpectedBetweenAttributeNameAndLeftParen?.raw
       layout[5] = leftParen?.raw
-      layout[6] = garbageBetweenLeftParenAndArgumentList?.raw
+      layout[6] = unexpectedBetweenLeftParenAndArgumentList?.raw
       layout[7] = argumentList?.raw
-      layout[8] = garbageBetweenArgumentListAndRightParen?.raw
+      layout[8] = unexpectedBetweenArgumentListAndRightParen?.raw
       layout[9] = rightParen?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAtSignToken: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var atSignToken: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAtSignTokenAndAttributeName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributeName: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenAttributeNameAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenLeftParenAndArgumentList: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndArgumentList: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var argumentList: RawTupleExprElementListSyntax? {
     raw.children[7].map(RawTupleExprElementListSyntax.init(raw:))
   }
-  public var garbageBetweenArgumentListAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentListAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
@@ -8259,71 +8259,71 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAtSignToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax? = nil,
     atSignToken: RawTokenSyntax,
-    _ garbageBetweenAtSignTokenAndAttributeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax? = nil,
     attributeName: RawTokenSyntax,
-    _ garbageBetweenAttributeNameAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax?,
-    _ garbageBetweenLeftParenAndArgument: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgument: RawUnexpectedNodesSyntax? = nil,
     argument: RawSyntax?,
-    _ garbageBetweenArgumentAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax?,
-    _ garbageBetweenRightParenAndTokenList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTokenList: RawUnexpectedNodesSyntax? = nil,
     tokenList: RawTokenListSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .attribute, uninitializedCount: 12, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAtSignToken?.raw
+      layout[0] = unexpectedBeforeAtSignToken?.raw
       layout[1] = atSignToken.raw
-      layout[2] = garbageBetweenAtSignTokenAndAttributeName?.raw
+      layout[2] = unexpectedBetweenAtSignTokenAndAttributeName?.raw
       layout[3] = attributeName.raw
-      layout[4] = garbageBetweenAttributeNameAndLeftParen?.raw
+      layout[4] = unexpectedBetweenAttributeNameAndLeftParen?.raw
       layout[5] = leftParen?.raw
-      layout[6] = garbageBetweenLeftParenAndArgument?.raw
+      layout[6] = unexpectedBetweenLeftParenAndArgument?.raw
       layout[7] = argument?.raw
-      layout[8] = garbageBetweenArgumentAndRightParen?.raw
+      layout[8] = unexpectedBetweenArgumentAndRightParen?.raw
       layout[9] = rightParen?.raw
-      layout[10] = garbageBetweenRightParenAndTokenList?.raw
+      layout[10] = unexpectedBetweenRightParenAndTokenList?.raw
       layout[11] = tokenList?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAtSignToken: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAtSignToken: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var atSignToken: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAtSignTokenAndAttributeName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAtSignTokenAndAttributeName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributeName: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAttributeNameAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributeNameAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenLeftParenAndArgument: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndArgument: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var argument: RawSyntax? {
     raw.children[7]
   }
-  public var garbageBetweenArgumentAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenRightParenAndTokenList: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenRightParenAndTokenList: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var tokenList: RawTokenListSyntax? {
     raw.children[11].map(RawTokenListSyntax.init(raw:))
@@ -8402,51 +8402,51 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax,
-    _ garbageBetweenLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndAvailabilityList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndAvailabilityList: RawUnexpectedNodesSyntax? = nil,
     availabilityList: RawAvailabilitySpecListSyntax,
-    _ garbageBetweenAvailabilityListAndSemicolon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilityListAndSemicolon: RawUnexpectedNodesSyntax? = nil,
     semicolon: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .availabilityEntry, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabel?.raw
+      layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
-      layout[2] = garbageBetweenLabelAndColon?.raw
+      layout[2] = unexpectedBetweenLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndAvailabilityList?.raw
+      layout[4] = unexpectedBetweenColonAndAvailabilityList?.raw
       layout[5] = availabilityList.raw
-      layout[6] = garbageBetweenAvailabilityListAndSemicolon?.raw
+      layout[6] = unexpectedBetweenAvailabilityListAndSemicolon?.raw
       layout[7] = semicolon.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndAvailabilityList: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndAvailabilityList: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var availabilityList: RawAvailabilitySpecListSyntax {
     raw.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
   }
-  public var garbageBetweenAvailabilityListAndSemicolon: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAvailabilityListAndSemicolon: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var semicolon: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -8471,51 +8471,51 @@ public struct RawLabeledSpecializeEntrySyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax,
-    _ garbageBetweenLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndValue: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? = nil,
     value: RawTokenSyntax,
-    _ garbageBetweenValueAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenValueAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .labeledSpecializeEntry, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabel?.raw
+      layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
-      layout[2] = garbageBetweenLabelAndColon?.raw
+      layout[2] = unexpectedBetweenLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndValue?.raw
+      layout[4] = unexpectedBetweenColonAndValue?.raw
       layout[5] = value.raw
-      layout[6] = garbageBetweenValueAndTrailingComma?.raw
+      layout[6] = unexpectedBetweenValueAndTrailingComma?.raw
       layout[7] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndValue: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var value: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenValueAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenValueAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
@@ -8540,51 +8540,51 @@ public struct RawTargetFunctionEntrySyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax,
-    _ garbageBetweenLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndDeclname: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndDeclname: RawUnexpectedNodesSyntax? = nil,
     declname: RawDeclNameSyntax,
-    _ garbageBetweenDeclnameAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclnameAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .targetFunctionEntry, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabel?.raw
+      layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
-      layout[2] = garbageBetweenLabelAndColon?.raw
+      layout[2] = unexpectedBetweenLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndDeclname?.raw
+      layout[4] = unexpectedBetweenColonAndDeclname?.raw
       layout[5] = declname.raw
-      layout[6] = garbageBetweenDeclnameAndTrailingComma?.raw
+      layout[6] = unexpectedBetweenDeclnameAndTrailingComma?.raw
       layout[7] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndDeclname: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndDeclname: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declname: RawDeclNameSyntax {
     raw.children[5].map(RawDeclNameSyntax.init(raw:))!
   }
-  public var garbageBetweenDeclnameAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDeclnameAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
@@ -8609,41 +8609,41 @@ public struct RawNamedAttributeStringArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeNameTok: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeNameTok: RawUnexpectedNodesSyntax? = nil,
     nameTok: RawTokenSyntax,
-    _ garbageBetweenNameTokAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameTokAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndStringOrDeclname: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndStringOrDeclname: RawUnexpectedNodesSyntax? = nil,
     stringOrDeclname: RawSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .namedAttributeStringArgument, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeNameTok?.raw
+      layout[0] = unexpectedBeforeNameTok?.raw
       layout[1] = nameTok.raw
-      layout[2] = garbageBetweenNameTokAndColon?.raw
+      layout[2] = unexpectedBetweenNameTokAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndStringOrDeclname?.raw
+      layout[4] = unexpectedBetweenColonAndStringOrDeclname?.raw
       layout[5] = stringOrDeclname.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeNameTok: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeNameTok: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var nameTok: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameTokAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameTokAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndStringOrDeclname: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndStringOrDeclname: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var stringOrDeclname: RawSyntax {
     raw.children[5]!
@@ -8668,31 +8668,31 @@ public struct RawDeclNameSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDeclBaseName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDeclBaseName: RawUnexpectedNodesSyntax? = nil,
     declBaseName: RawSyntax,
-    _ garbageBetweenDeclBaseNameAndDeclNameArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .declName, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDeclBaseName?.raw
+      layout[0] = unexpectedBeforeDeclBaseName?.raw
       layout[1] = declBaseName.raw
-      layout[2] = garbageBetweenDeclBaseNameAndDeclNameArguments?.raw
+      layout[2] = unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw
       layout[3] = declNameArguments?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDeclBaseName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDeclBaseName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declBaseName: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenDeclBaseNameAndDeclNameArguments: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     raw.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
@@ -8717,51 +8717,51 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeType: RawUnexpectedNodesSyntax? = nil,
     type: RawSimpleTypeIdentifierSyntax,
-    _ garbageBetweenTypeAndComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax,
-    _ garbageBetweenCommaAndDeclBaseName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax? = nil,
     declBaseName: RawSyntax,
-    _ garbageBetweenDeclBaseNameAndDeclNameArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .implementsAttributeArguments, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeType?.raw
+      layout[0] = unexpectedBeforeType?.raw
       layout[1] = type.raw
-      layout[2] = garbageBetweenTypeAndComma?.raw
+      layout[2] = unexpectedBetweenTypeAndComma?.raw
       layout[3] = comma.raw
-      layout[4] = garbageBetweenCommaAndDeclBaseName?.raw
+      layout[4] = unexpectedBetweenCommaAndDeclBaseName?.raw
       layout[5] = declBaseName.raw
-      layout[6] = garbageBetweenDeclBaseNameAndDeclNameArguments?.raw
+      layout[6] = unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw
       layout[7] = declNameArguments?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawSimpleTypeIdentifierSyntax {
     raw.children[1].map(RawSimpleTypeIdentifierSyntax.init(raw:))!
   }
-  public var garbageBetweenTypeAndComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var comma: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCommaAndDeclBaseName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declBaseName: RawSyntax {
     raw.children[5]!
   }
-  public var garbageBetweenDeclBaseNameAndDeclNameArguments: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declNameArguments: RawDeclNameArgumentsSyntax? {
     raw.children[7].map(RawDeclNameArgumentsSyntax.init(raw:))
@@ -8786,31 +8786,31 @@ public struct RawObjCSelectorPieceSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax?,
-    _ garbageBetweenNameAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .objCSelectorPiece, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name?.raw
-      layout[2] = garbageBetweenNameAndColon?.raw
+      layout[2] = unexpectedBetweenNameAndColon?.raw
       layout[3] = colon?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenNameAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -8862,61 +8862,61 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDiffKind: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDiffKind: RawUnexpectedNodesSyntax? = nil,
     diffKind: RawTokenSyntax?,
-    _ garbageBetweenDiffKindAndDiffKindComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffKindAndDiffKindComma: RawUnexpectedNodesSyntax? = nil,
     diffKindComma: RawTokenSyntax?,
-    _ garbageBetweenDiffKindCommaAndDiffParams: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffKindCommaAndDiffParams: RawUnexpectedNodesSyntax? = nil,
     diffParams: RawDifferentiabilityParamsClauseSyntax?,
-    _ garbageBetweenDiffParamsAndDiffParamsComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffParamsAndDiffParamsComma: RawUnexpectedNodesSyntax? = nil,
     diffParamsComma: RawTokenSyntax?,
-    _ garbageBetweenDiffParamsCommaAndWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffParamsCommaAndWhereClause: RawUnexpectedNodesSyntax? = nil,
     whereClause: RawGenericWhereClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .differentiableAttributeArguments, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDiffKind?.raw
+      layout[0] = unexpectedBeforeDiffKind?.raw
       layout[1] = diffKind?.raw
-      layout[2] = garbageBetweenDiffKindAndDiffKindComma?.raw
+      layout[2] = unexpectedBetweenDiffKindAndDiffKindComma?.raw
       layout[3] = diffKindComma?.raw
-      layout[4] = garbageBetweenDiffKindCommaAndDiffParams?.raw
+      layout[4] = unexpectedBetweenDiffKindCommaAndDiffParams?.raw
       layout[5] = diffParams?.raw
-      layout[6] = garbageBetweenDiffParamsAndDiffParamsComma?.raw
+      layout[6] = unexpectedBetweenDiffParamsAndDiffParamsComma?.raw
       layout[7] = diffParamsComma?.raw
-      layout[8] = garbageBetweenDiffParamsCommaAndWhereClause?.raw
+      layout[8] = unexpectedBetweenDiffParamsCommaAndWhereClause?.raw
       layout[9] = whereClause?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDiffKind: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDiffKind: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var diffKind: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenDiffKindAndDiffKindComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDiffKindAndDiffKindComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var diffKindComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenDiffKindCommaAndDiffParams: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDiffKindCommaAndDiffParams: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var diffParams: RawDifferentiabilityParamsClauseSyntax? {
     raw.children[5].map(RawDifferentiabilityParamsClauseSyntax.init(raw:))
   }
-  public var garbageBetweenDiffParamsAndDiffParamsComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDiffParamsAndDiffParamsComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var diffParamsComma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenDiffParamsCommaAndWhereClause: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDiffParamsCommaAndWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whereClause: RawGenericWhereClauseSyntax? {
     raw.children[9].map(RawGenericWhereClauseSyntax.init(raw:))
@@ -8941,41 +8941,41 @@ public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeWrtLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWrtLabel: RawUnexpectedNodesSyntax? = nil,
     wrtLabel: RawTokenSyntax,
-    _ garbageBetweenWrtLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWrtLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndParameters: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndParameters: RawUnexpectedNodesSyntax? = nil,
     parameters: RawSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .differentiabilityParamsClause, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWrtLabel?.raw
+      layout[0] = unexpectedBeforeWrtLabel?.raw
       layout[1] = wrtLabel.raw
-      layout[2] = garbageBetweenWrtLabelAndColon?.raw
+      layout[2] = unexpectedBetweenWrtLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndParameters?.raw
+      layout[4] = unexpectedBetweenColonAndParameters?.raw
       layout[5] = parameters.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWrtLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWrtLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var wrtLabel: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenWrtLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWrtLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndParameters: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndParameters: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var parameters: RawSyntax {
     raw.children[5]!
@@ -9000,41 +9000,41 @@ public struct RawDifferentiabilityParamsSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndDiffParams: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndDiffParams: RawUnexpectedNodesSyntax? = nil,
     diffParams: RawDifferentiabilityParamListSyntax,
-    _ garbageBetweenDiffParamsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDiffParamsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .differentiabilityParams, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndDiffParams?.raw
+      layout[2] = unexpectedBetweenLeftParenAndDiffParams?.raw
       layout[3] = diffParams.raw
-      layout[4] = garbageBetweenDiffParamsAndRightParen?.raw
+      layout[4] = unexpectedBetweenDiffParamsAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndDiffParams: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndDiffParams: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var diffParams: RawDifferentiabilityParamListSyntax {
     raw.children[3].map(RawDifferentiabilityParamListSyntax.init(raw:))!
   }
-  public var garbageBetweenDiffParamsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDiffParamsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -9086,31 +9086,31 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeParameter: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeParameter: RawUnexpectedNodesSyntax? = nil,
     parameter: RawSyntax,
-    _ garbageBetweenParameterAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .differentiabilityParam, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeParameter?.raw
+      layout[0] = unexpectedBeforeParameter?.raw
       layout[1] = parameter.raw
-      layout[2] = garbageBetweenParameterAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenParameterAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeParameter: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeParameter: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var parameter: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenParameterAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -9135,81 +9135,81 @@ public struct RawDerivativeRegistrationAttributeArgumentsSyntax: RawSyntaxNodePr
   }
 
   public init(
-    _ garbageBeforeOfLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeOfLabel: RawUnexpectedNodesSyntax? = nil,
     ofLabel: RawTokenSyntax,
-    _ garbageBetweenOfLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOfLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndOriginalDeclName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndOriginalDeclName: RawUnexpectedNodesSyntax? = nil,
     originalDeclName: RawQualifiedDeclNameSyntax,
-    _ garbageBetweenOriginalDeclNameAndPeriod: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenOriginalDeclNameAndPeriod: RawUnexpectedNodesSyntax? = nil,
     period: RawTokenSyntax?,
-    _ garbageBetweenPeriodAndAccessorKind: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPeriodAndAccessorKind: RawUnexpectedNodesSyntax? = nil,
     accessorKind: RawTokenSyntax?,
-    _ garbageBetweenAccessorKindAndComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAccessorKindAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax?,
-    _ garbageBetweenCommaAndDiffParams: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndDiffParams: RawUnexpectedNodesSyntax? = nil,
     diffParams: RawDifferentiabilityParamsClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .derivativeRegistrationAttributeArguments, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeOfLabel?.raw
+      layout[0] = unexpectedBeforeOfLabel?.raw
       layout[1] = ofLabel.raw
-      layout[2] = garbageBetweenOfLabelAndColon?.raw
+      layout[2] = unexpectedBetweenOfLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndOriginalDeclName?.raw
+      layout[4] = unexpectedBetweenColonAndOriginalDeclName?.raw
       layout[5] = originalDeclName.raw
-      layout[6] = garbageBetweenOriginalDeclNameAndPeriod?.raw
+      layout[6] = unexpectedBetweenOriginalDeclNameAndPeriod?.raw
       layout[7] = period?.raw
-      layout[8] = garbageBetweenPeriodAndAccessorKind?.raw
+      layout[8] = unexpectedBetweenPeriodAndAccessorKind?.raw
       layout[9] = accessorKind?.raw
-      layout[10] = garbageBetweenAccessorKindAndComma?.raw
+      layout[10] = unexpectedBetweenAccessorKindAndComma?.raw
       layout[11] = comma?.raw
-      layout[12] = garbageBetweenCommaAndDiffParams?.raw
+      layout[12] = unexpectedBetweenCommaAndDiffParams?.raw
       layout[13] = diffParams?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeOfLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeOfLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var ofLabel: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenOfLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOfLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndOriginalDeclName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndOriginalDeclName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var originalDeclName: RawQualifiedDeclNameSyntax {
     raw.children[5].map(RawQualifiedDeclNameSyntax.init(raw:))!
   }
-  public var garbageBetweenOriginalDeclNameAndPeriod: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenOriginalDeclNameAndPeriod: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var period: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenPeriodAndAccessorKind: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPeriodAndAccessorKind: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var accessorKind: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAccessorKindAndComma: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAccessorKindAndComma: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var comma: RawTokenSyntax? {
     raw.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenCommaAndDiffParams: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCommaAndDiffParams: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var diffParams: RawDifferentiabilityParamsClauseSyntax? {
     raw.children[13].map(RawDifferentiabilityParamsClauseSyntax.init(raw:))
@@ -9234,51 +9234,51 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBaseType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? = nil,
     baseType: RawTypeSyntax?,
-    _ garbageBetweenBaseTypeAndDot: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBaseTypeAndDot: RawUnexpectedNodesSyntax? = nil,
     dot: RawTokenSyntax?,
-    _ garbageBetweenDotAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawDeclNameArgumentsSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .qualifiedDeclName, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBaseType?.raw
+      layout[0] = unexpectedBeforeBaseType?.raw
       layout[1] = baseType?.raw
-      layout[2] = garbageBetweenBaseTypeAndDot?.raw
+      layout[2] = unexpectedBetweenBaseTypeAndDot?.raw
       layout[3] = dot?.raw
-      layout[4] = garbageBetweenDotAndName?.raw
+      layout[4] = unexpectedBetweenDotAndName?.raw
       layout[5] = name.raw
-      layout[6] = garbageBetweenNameAndArguments?.raw
+      layout[6] = unexpectedBetweenNameAndArguments?.raw
       layout[7] = arguments?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBaseType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var baseType: RawTypeSyntax? {
     raw.children[1].map(RawTypeSyntax.init(raw:))
   }
-  public var garbageBetweenBaseTypeAndDot: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBaseTypeAndDot: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var dot: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenDotAndName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDotAndName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndArguments: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arguments: RawDeclNameArgumentsSyntax? {
     raw.children[7].map(RawDeclNameArgumentsSyntax.init(raw:))
@@ -9303,31 +9303,31 @@ public struct RawFunctionDeclNameSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawSyntax,
-    _ garbageBetweenNameAndArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawDeclNameArgumentsSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .functionDeclName, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndArguments?.raw
+      layout[2] = unexpectedBetweenNameAndArguments?.raw
       layout[3] = arguments?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenNameAndArguments: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arguments: RawDeclNameArgumentsSyntax? {
     raw.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
@@ -9352,41 +9352,41 @@ public struct RawBackDeployAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBeforeLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBeforeLabel: RawUnexpectedNodesSyntax? = nil,
     beforeLabel: RawTokenSyntax,
-    _ garbageBetweenBeforeLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBeforeLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndVersionList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndVersionList: RawUnexpectedNodesSyntax? = nil,
     versionList: RawBackDeployVersionListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .backDeployAttributeSpecList, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBeforeLabel?.raw
+      layout[0] = unexpectedBeforeBeforeLabel?.raw
       layout[1] = beforeLabel.raw
-      layout[2] = garbageBetweenBeforeLabelAndColon?.raw
+      layout[2] = unexpectedBetweenBeforeLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndVersionList?.raw
+      layout[4] = unexpectedBetweenColonAndVersionList?.raw
       layout[5] = versionList.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBeforeLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBeforeLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var beforeLabel: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenBeforeLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBeforeLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndVersionList: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndVersionList: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var versionList: RawBackDeployVersionListSyntax {
     raw.children[5].map(RawBackDeployVersionListSyntax.init(raw:))!
@@ -9438,31 +9438,31 @@ public struct RawBackDeployVersionArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAvailabilityVersionRestriction: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAvailabilityVersionRestriction: RawUnexpectedNodesSyntax? = nil,
     availabilityVersionRestriction: RawAvailabilityVersionRestrictionSyntax,
-    _ garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .backDeployVersionArgument, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAvailabilityVersionRestriction?.raw
+      layout[0] = unexpectedBeforeAvailabilityVersionRestriction?.raw
       layout[1] = availabilityVersionRestriction.raw
-      layout[2] = garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAvailabilityVersionRestriction: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAvailabilityVersionRestriction: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var availabilityVersionRestriction: RawAvailabilityVersionRestrictionSyntax {
     raw.children[1].map(RawAvailabilityVersionRestrictionSyntax.init(raw:))!
   }
-  public var garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -9487,41 +9487,41 @@ public struct RawLabeledStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabelName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabelName: RawUnexpectedNodesSyntax? = nil,
     labelName: RawTokenSyntax,
-    _ garbageBetweenLabelNameAndLabelColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax? = nil,
     labelColon: RawTokenSyntax,
-    _ garbageBetweenLabelColonAndStatement: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelColonAndStatement: RawUnexpectedNodesSyntax? = nil,
     statement: RawStmtSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .labeledStmt, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabelName?.raw
+      layout[0] = unexpectedBeforeLabelName?.raw
       layout[1] = labelName.raw
-      layout[2] = garbageBetweenLabelNameAndLabelColon?.raw
+      layout[2] = unexpectedBetweenLabelNameAndLabelColon?.raw
       layout[3] = labelColon.raw
-      layout[4] = garbageBetweenLabelColonAndStatement?.raw
+      layout[4] = unexpectedBetweenLabelColonAndStatement?.raw
       layout[5] = statement.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabelName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabelName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var labelName: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLabelNameAndLabelColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var labelColon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLabelColonAndStatement: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelColonAndStatement: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var statement: RawStmtSyntax {
     raw.children[5].map(RawStmtSyntax.init(raw:))!
@@ -9546,31 +9546,31 @@ public struct RawContinueStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeContinueKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeContinueKeyword: RawUnexpectedNodesSyntax? = nil,
     continueKeyword: RawTokenSyntax,
-    _ garbageBetweenContinueKeywordAndLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenContinueKeywordAndLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .continueStmt, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeContinueKeyword?.raw
+      layout[0] = unexpectedBeforeContinueKeyword?.raw
       layout[1] = continueKeyword.raw
-      layout[2] = garbageBetweenContinueKeywordAndLabel?.raw
+      layout[2] = unexpectedBetweenContinueKeywordAndLabel?.raw
       layout[3] = label?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeContinueKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeContinueKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var continueKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenContinueKeywordAndLabel: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenContinueKeywordAndLabel: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -9595,41 +9595,41 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeWhileKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWhileKeyword: RawUnexpectedNodesSyntax? = nil,
     whileKeyword: RawTokenSyntax,
-    _ garbageBetweenWhileKeywordAndConditions: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhileKeywordAndConditions: RawUnexpectedNodesSyntax? = nil,
     conditions: RawConditionElementListSyntax,
-    _ garbageBetweenConditionsAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .whileStmt, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWhileKeyword?.raw
+      layout[0] = unexpectedBeforeWhileKeyword?.raw
       layout[1] = whileKeyword.raw
-      layout[2] = garbageBetweenWhileKeywordAndConditions?.raw
+      layout[2] = unexpectedBetweenWhileKeywordAndConditions?.raw
       layout[3] = conditions.raw
-      layout[4] = garbageBetweenConditionsAndBody?.raw
+      layout[4] = unexpectedBetweenConditionsAndBody?.raw
       layout[5] = body.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWhileKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWhileKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whileKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenWhileKeywordAndConditions: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWhileKeywordAndConditions: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var conditions: RawConditionElementListSyntax {
     raw.children[3].map(RawConditionElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenConditionsAndBody: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[5].map(RawCodeBlockSyntax.init(raw:))!
@@ -9654,31 +9654,31 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDeferKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDeferKeyword: RawUnexpectedNodesSyntax? = nil,
     deferKeyword: RawTokenSyntax,
-    _ garbageBetweenDeferKeywordAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDeferKeywordAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .deferStmt, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDeferKeyword?.raw
+      layout[0] = unexpectedBeforeDeferKeyword?.raw
       layout[1] = deferKeyword.raw
-      layout[2] = garbageBetweenDeferKeywordAndBody?.raw
+      layout[2] = unexpectedBetweenDeferKeywordAndBody?.raw
       layout[3] = body.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDeferKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDeferKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var deferKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenDeferKeywordAndBody: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDeferKeywordAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[3].map(RawCodeBlockSyntax.init(raw:))!
@@ -9703,21 +9703,21 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .expressionStmt, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeExpression?.raw
+      layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
@@ -9769,51 +9769,51 @@ public struct RawRepeatWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeRepeatKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeRepeatKeyword: RawUnexpectedNodesSyntax? = nil,
     repeatKeyword: RawTokenSyntax,
-    _ garbageBetweenRepeatKeywordAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRepeatKeywordAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
-    _ garbageBetweenBodyAndWhileKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBodyAndWhileKeyword: RawUnexpectedNodesSyntax? = nil,
     whileKeyword: RawTokenSyntax,
-    _ garbageBetweenWhileKeywordAndCondition: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhileKeywordAndCondition: RawUnexpectedNodesSyntax? = nil,
     condition: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .repeatWhileStmt, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeRepeatKeyword?.raw
+      layout[0] = unexpectedBeforeRepeatKeyword?.raw
       layout[1] = repeatKeyword.raw
-      layout[2] = garbageBetweenRepeatKeywordAndBody?.raw
+      layout[2] = unexpectedBetweenRepeatKeywordAndBody?.raw
       layout[3] = body.raw
-      layout[4] = garbageBetweenBodyAndWhileKeyword?.raw
+      layout[4] = unexpectedBetweenBodyAndWhileKeyword?.raw
       layout[5] = whileKeyword.raw
-      layout[6] = garbageBetweenWhileKeywordAndCondition?.raw
+      layout[6] = unexpectedBetweenWhileKeywordAndCondition?.raw
       layout[7] = condition.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeRepeatKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeRepeatKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var repeatKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenRepeatKeywordAndBody: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenRepeatKeywordAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[3].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public var garbageBetweenBodyAndWhileKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBodyAndWhileKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whileKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenWhileKeywordAndCondition: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWhileKeywordAndCondition: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var condition: RawExprSyntax {
     raw.children[7].map(RawExprSyntax.init(raw:))!
@@ -9838,51 +9838,51 @@ public struct RawGuardStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeGuardKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeGuardKeyword: RawUnexpectedNodesSyntax? = nil,
     guardKeyword: RawTokenSyntax,
-    _ garbageBetweenGuardKeywordAndConditions: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGuardKeywordAndConditions: RawUnexpectedNodesSyntax? = nil,
     conditions: RawConditionElementListSyntax,
-    _ garbageBetweenConditionsAndElseKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionsAndElseKeyword: RawUnexpectedNodesSyntax? = nil,
     elseKeyword: RawTokenSyntax,
-    _ garbageBetweenElseKeywordAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElseKeywordAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .guardStmt, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeGuardKeyword?.raw
+      layout[0] = unexpectedBeforeGuardKeyword?.raw
       layout[1] = guardKeyword.raw
-      layout[2] = garbageBetweenGuardKeywordAndConditions?.raw
+      layout[2] = unexpectedBetweenGuardKeywordAndConditions?.raw
       layout[3] = conditions.raw
-      layout[4] = garbageBetweenConditionsAndElseKeyword?.raw
+      layout[4] = unexpectedBetweenConditionsAndElseKeyword?.raw
       layout[5] = elseKeyword.raw
-      layout[6] = garbageBetweenElseKeywordAndBody?.raw
+      layout[6] = unexpectedBetweenElseKeywordAndBody?.raw
       layout[7] = body.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeGuardKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeGuardKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var guardKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenGuardKeywordAndConditions: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGuardKeywordAndConditions: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var conditions: RawConditionElementListSyntax {
     raw.children[3].map(RawConditionElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenConditionsAndElseKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenConditionsAndElseKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elseKeyword: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenElseKeywordAndBody: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElseKeywordAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[7].map(RawCodeBlockSyntax.init(raw:))!
@@ -9907,31 +9907,31 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeWhereKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax? = nil,
     whereKeyword: RawTokenSyntax,
-    _ garbageBetweenWhereKeywordAndGuardResult: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereKeywordAndGuardResult: RawUnexpectedNodesSyntax? = nil,
     guardResult: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .whereClause, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWhereKeyword?.raw
+      layout[0] = unexpectedBeforeWhereKeyword?.raw
       layout[1] = whereKeyword.raw
-      layout[2] = garbageBetweenWhereKeywordAndGuardResult?.raw
+      layout[2] = unexpectedBetweenWhereKeywordAndGuardResult?.raw
       layout[3] = guardResult.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWhereKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whereKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenWhereKeywordAndGuardResult: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWhereKeywordAndGuardResult: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var guardResult: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
@@ -9956,111 +9956,111 @@ public struct RawForInStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeForKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeForKeyword: RawUnexpectedNodesSyntax? = nil,
     forKeyword: RawTokenSyntax,
-    _ garbageBetweenForKeywordAndTryKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenForKeywordAndTryKeyword: RawUnexpectedNodesSyntax? = nil,
     tryKeyword: RawTokenSyntax?,
-    _ garbageBetweenTryKeywordAndAwaitKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTryKeywordAndAwaitKeyword: RawUnexpectedNodesSyntax? = nil,
     awaitKeyword: RawTokenSyntax?,
-    _ garbageBetweenAwaitKeywordAndCaseKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAwaitKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? = nil,
     caseKeyword: RawTokenSyntax?,
-    _ garbageBetweenCaseKeywordAndPattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
-    _ garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil,
     typeAnnotation: RawTypeAnnotationSyntax?,
-    _ garbageBetweenTypeAnnotationAndInKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAnnotationAndInKeyword: RawUnexpectedNodesSyntax? = nil,
     inKeyword: RawTokenSyntax,
-    _ garbageBetweenInKeywordAndSequenceExpr: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInKeywordAndSequenceExpr: RawUnexpectedNodesSyntax? = nil,
     sequenceExpr: RawExprSyntax,
-    _ garbageBetweenSequenceExprAndWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSequenceExprAndWhereClause: RawUnexpectedNodesSyntax? = nil,
     whereClause: RawWhereClauseSyntax?,
-    _ garbageBetweenWhereClauseAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereClauseAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .forInStmt, uninitializedCount: 20, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeForKeyword?.raw
+      layout[0] = unexpectedBeforeForKeyword?.raw
       layout[1] = forKeyword.raw
-      layout[2] = garbageBetweenForKeywordAndTryKeyword?.raw
+      layout[2] = unexpectedBetweenForKeywordAndTryKeyword?.raw
       layout[3] = tryKeyword?.raw
-      layout[4] = garbageBetweenTryKeywordAndAwaitKeyword?.raw
+      layout[4] = unexpectedBetweenTryKeywordAndAwaitKeyword?.raw
       layout[5] = awaitKeyword?.raw
-      layout[6] = garbageBetweenAwaitKeywordAndCaseKeyword?.raw
+      layout[6] = unexpectedBetweenAwaitKeywordAndCaseKeyword?.raw
       layout[7] = caseKeyword?.raw
-      layout[8] = garbageBetweenCaseKeywordAndPattern?.raw
+      layout[8] = unexpectedBetweenCaseKeywordAndPattern?.raw
       layout[9] = pattern.raw
-      layout[10] = garbageBetweenPatternAndTypeAnnotation?.raw
+      layout[10] = unexpectedBetweenPatternAndTypeAnnotation?.raw
       layout[11] = typeAnnotation?.raw
-      layout[12] = garbageBetweenTypeAnnotationAndInKeyword?.raw
+      layout[12] = unexpectedBetweenTypeAnnotationAndInKeyword?.raw
       layout[13] = inKeyword.raw
-      layout[14] = garbageBetweenInKeywordAndSequenceExpr?.raw
+      layout[14] = unexpectedBetweenInKeywordAndSequenceExpr?.raw
       layout[15] = sequenceExpr.raw
-      layout[16] = garbageBetweenSequenceExprAndWhereClause?.raw
+      layout[16] = unexpectedBetweenSequenceExprAndWhereClause?.raw
       layout[17] = whereClause?.raw
-      layout[18] = garbageBetweenWhereClauseAndBody?.raw
+      layout[18] = unexpectedBetweenWhereClauseAndBody?.raw
       layout[19] = body.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeForKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeForKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var forKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenForKeywordAndTryKeyword: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenForKeywordAndTryKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var tryKeyword: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenTryKeywordAndAwaitKeyword: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTryKeywordAndAwaitKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var awaitKeyword: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAwaitKeywordAndCaseKeyword: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAwaitKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var caseKeyword: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenCaseKeywordAndPattern: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[9].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     raw.children[11].map(RawTypeAnnotationSyntax.init(raw:))
   }
-  public var garbageBetweenTypeAnnotationAndInKeyword: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAnnotationAndInKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inKeyword: RawTokenSyntax {
     raw.children[13].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenInKeywordAndSequenceExpr: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInKeywordAndSequenceExpr: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var sequenceExpr: RawExprSyntax {
     raw.children[15].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenSequenceExprAndWhereClause: RawGarbageNodesSyntax? {
-    raw.children[16].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSequenceExprAndWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whereClause: RawWhereClauseSyntax? {
     raw.children[17].map(RawWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenWhereClauseAndBody: RawGarbageNodesSyntax? {
-    raw.children[18].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWhereClauseAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[19].map(RawCodeBlockSyntax.init(raw:))!
@@ -10085,61 +10085,61 @@ public struct RawSwitchStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeSwitchKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeSwitchKeyword: RawUnexpectedNodesSyntax? = nil,
     switchKeyword: RawTokenSyntax,
-    _ garbageBetweenSwitchKeywordAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSwitchKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
-    _ garbageBetweenExpressionAndLeftBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenExpressionAndLeftBrace: RawUnexpectedNodesSyntax? = nil,
     leftBrace: RawTokenSyntax,
-    _ garbageBetweenLeftBraceAndCases: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftBraceAndCases: RawUnexpectedNodesSyntax? = nil,
     cases: RawSwitchCaseListSyntax,
-    _ garbageBetweenCasesAndRightBrace: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCasesAndRightBrace: RawUnexpectedNodesSyntax? = nil,
     rightBrace: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .switchStmt, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeSwitchKeyword?.raw
+      layout[0] = unexpectedBeforeSwitchKeyword?.raw
       layout[1] = switchKeyword.raw
-      layout[2] = garbageBetweenSwitchKeywordAndExpression?.raw
+      layout[2] = unexpectedBetweenSwitchKeywordAndExpression?.raw
       layout[3] = expression.raw
-      layout[4] = garbageBetweenExpressionAndLeftBrace?.raw
+      layout[4] = unexpectedBetweenExpressionAndLeftBrace?.raw
       layout[5] = leftBrace.raw
-      layout[6] = garbageBetweenLeftBraceAndCases?.raw
+      layout[6] = unexpectedBetweenLeftBraceAndCases?.raw
       layout[7] = cases.raw
-      layout[8] = garbageBetweenCasesAndRightBrace?.raw
+      layout[8] = unexpectedBetweenCasesAndRightBrace?.raw
       layout[9] = rightBrace.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeSwitchKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeSwitchKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var switchKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenSwitchKeywordAndExpression: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSwitchKeywordAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenExpressionAndLeftBrace: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenExpressionAndLeftBrace: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftBrace: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftBraceAndCases: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftBraceAndCases: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var cases: RawSwitchCaseListSyntax {
     raw.children[7].map(RawSwitchCaseListSyntax.init(raw:))!
   }
-  public var garbageBetweenCasesAndRightBrace: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCasesAndRightBrace: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightBrace: RawTokenSyntax {
     raw.children[9].map(RawTokenSyntax.init(raw:))!
@@ -10191,41 +10191,41 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDoKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDoKeyword: RawUnexpectedNodesSyntax? = nil,
     doKeyword: RawTokenSyntax,
-    _ garbageBetweenDoKeywordAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDoKeywordAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
-    _ garbageBetweenBodyAndCatchClauses: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax? = nil,
     catchClauses: RawCatchClauseListSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .doStmt, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDoKeyword?.raw
+      layout[0] = unexpectedBeforeDoKeyword?.raw
       layout[1] = doKeyword.raw
-      layout[2] = garbageBetweenDoKeywordAndBody?.raw
+      layout[2] = unexpectedBetweenDoKeywordAndBody?.raw
       layout[3] = body.raw
-      layout[4] = garbageBetweenBodyAndCatchClauses?.raw
+      layout[4] = unexpectedBetweenBodyAndCatchClauses?.raw
       layout[5] = catchClauses?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDoKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDoKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var doKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenDoKeywordAndBody: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDoKeywordAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[3].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public var garbageBetweenBodyAndCatchClauses: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var catchClauses: RawCatchClauseListSyntax? {
     raw.children[5].map(RawCatchClauseListSyntax.init(raw:))
@@ -10250,31 +10250,31 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeReturnKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeReturnKeyword: RawUnexpectedNodesSyntax? = nil,
     returnKeyword: RawTokenSyntax,
-    _ garbageBetweenReturnKeywordAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenReturnKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .returnStmt, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeReturnKeyword?.raw
+      layout[0] = unexpectedBeforeReturnKeyword?.raw
       layout[1] = returnKeyword.raw
-      layout[2] = garbageBetweenReturnKeywordAndExpression?.raw
+      layout[2] = unexpectedBetweenReturnKeywordAndExpression?.raw
       layout[3] = expression?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeReturnKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeReturnKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var returnKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenReturnKeywordAndExpression: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenReturnKeywordAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax? {
     raw.children[3].map(RawExprSyntax.init(raw:))
@@ -10299,31 +10299,31 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeYieldKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? = nil,
     yieldKeyword: RawTokenSyntax,
-    _ garbageBetweenYieldKeywordAndYields: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax? = nil,
     yields: RawSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .yieldStmt, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeYieldKeyword?.raw
+      layout[0] = unexpectedBeforeYieldKeyword?.raw
       layout[1] = yieldKeyword.raw
-      layout[2] = garbageBetweenYieldKeywordAndYields?.raw
+      layout[2] = unexpectedBetweenYieldKeywordAndYields?.raw
       layout[3] = yields.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeYieldKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeYieldKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var yieldKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenYieldKeywordAndYields: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenYieldKeywordAndYields: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var yields: RawSyntax {
     raw.children[3]!
@@ -10348,51 +10348,51 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndElementList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? = nil,
     elementList: RawExprListSyntax,
-    _ garbageBetweenElementListAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElementListAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
-    _ garbageBetweenTrailingCommaAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTrailingCommaAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .yieldList, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndElementList?.raw
+      layout[2] = unexpectedBetweenLeftParenAndElementList?.raw
       layout[3] = elementList.raw
-      layout[4] = garbageBetweenElementListAndTrailingComma?.raw
+      layout[4] = unexpectedBetweenElementListAndTrailingComma?.raw
       layout[5] = trailingComma?.raw
-      layout[6] = garbageBetweenTrailingCommaAndRightParen?.raw
+      layout[6] = unexpectedBetweenTrailingCommaAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndElementList: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elementList: RawExprListSyntax {
     raw.children[3].map(RawExprListSyntax.init(raw:))!
   }
-  public var garbageBetweenElementListAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElementListAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenTrailingCommaAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTrailingCommaAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -10417,21 +10417,21 @@ public struct RawFallthroughStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeFallthroughKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeFallthroughKeyword: RawUnexpectedNodesSyntax? = nil,
     fallthroughKeyword: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .fallthroughStmt, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeFallthroughKeyword?.raw
+      layout[0] = unexpectedBeforeFallthroughKeyword?.raw
       layout[1] = fallthroughKeyword.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeFallthroughKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeFallthroughKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var fallthroughKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -10456,31 +10456,31 @@ public struct RawBreakStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBreakKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBreakKeyword: RawUnexpectedNodesSyntax? = nil,
     breakKeyword: RawTokenSyntax,
-    _ garbageBetweenBreakKeywordAndLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBreakKeywordAndLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .breakStmt, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBreakKeyword?.raw
+      layout[0] = unexpectedBeforeBreakKeyword?.raw
       layout[1] = breakKeyword.raw
-      layout[2] = garbageBetweenBreakKeywordAndLabel?.raw
+      layout[2] = unexpectedBetweenBreakKeywordAndLabel?.raw
       layout[3] = label?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBreakKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBreakKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var breakKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenBreakKeywordAndLabel: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBreakKeywordAndLabel: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -10559,31 +10559,31 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeCondition: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCondition: RawUnexpectedNodesSyntax? = nil,
     condition: RawSyntax,
-    _ garbageBetweenConditionAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .conditionElement, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeCondition?.raw
+      layout[0] = unexpectedBeforeCondition?.raw
       layout[1] = condition.raw
-      layout[2] = garbageBetweenConditionAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenConditionAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeCondition: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeCondition: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var condition: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenConditionAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenConditionAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -10608,51 +10608,51 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundAvailableKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundAvailableKeyword: RawUnexpectedNodesSyntax? = nil,
     poundAvailableKeyword: RawTokenSyntax,
-    _ garbageBetweenPoundAvailableKeywordAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundAvailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndAvailabilitySpec: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? = nil,
     availabilitySpec: RawAvailabilitySpecListSyntax,
-    _ garbageBetweenAvailabilitySpecAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .availabilityCondition, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundAvailableKeyword?.raw
+      layout[0] = unexpectedBeforePoundAvailableKeyword?.raw
       layout[1] = poundAvailableKeyword.raw
-      layout[2] = garbageBetweenPoundAvailableKeywordAndLeftParen?.raw
+      layout[2] = unexpectedBetweenPoundAvailableKeywordAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndAvailabilitySpec?.raw
+      layout[4] = unexpectedBetweenLeftParenAndAvailabilitySpec?.raw
       layout[5] = availabilitySpec.raw
-      layout[6] = garbageBetweenAvailabilitySpecAndRightParen?.raw
+      layout[6] = unexpectedBetweenAvailabilitySpecAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundAvailableKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundAvailableKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundAvailableKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundAvailableKeywordAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundAvailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndAvailabilitySpec: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var availabilitySpec: RawAvailabilitySpecListSyntax {
     raw.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
   }
-  public var garbageBetweenAvailabilitySpecAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -10677,51 +10677,51 @@ public struct RawMatchingPatternConditionSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeCaseKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax? = nil,
     caseKeyword: RawTokenSyntax,
-    _ garbageBetweenCaseKeywordAndPattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
-    _ garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil,
     typeAnnotation: RawTypeAnnotationSyntax?,
-    _ garbageBetweenTypeAnnotationAndInitializer: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? = nil,
     initializer: RawInitializerClauseSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .matchingPatternCondition, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeCaseKeyword?.raw
+      layout[0] = unexpectedBeforeCaseKeyword?.raw
       layout[1] = caseKeyword.raw
-      layout[2] = garbageBetweenCaseKeywordAndPattern?.raw
+      layout[2] = unexpectedBetweenCaseKeywordAndPattern?.raw
       layout[3] = pattern.raw
-      layout[4] = garbageBetweenPatternAndTypeAnnotation?.raw
+      layout[4] = unexpectedBetweenPatternAndTypeAnnotation?.raw
       layout[5] = typeAnnotation?.raw
-      layout[6] = garbageBetweenTypeAnnotationAndInitializer?.raw
+      layout[6] = unexpectedBetweenTypeAnnotationAndInitializer?.raw
       layout[7] = initializer.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeCaseKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var caseKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCaseKeywordAndPattern: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[3].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     raw.children[5].map(RawTypeAnnotationSyntax.init(raw:))
   }
-  public var garbageBetweenTypeAnnotationAndInitializer: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var initializer: RawInitializerClauseSyntax {
     raw.children[7].map(RawInitializerClauseSyntax.init(raw:))!
@@ -10746,51 +10746,51 @@ public struct RawOptionalBindingConditionSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLetOrVarKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? = nil,
     letOrVarKeyword: RawTokenSyntax,
-    _ garbageBetweenLetOrVarKeywordAndPattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLetOrVarKeywordAndPattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
-    _ garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil,
     typeAnnotation: RawTypeAnnotationSyntax?,
-    _ garbageBetweenTypeAnnotationAndInitializer: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? = nil,
     initializer: RawInitializerClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .optionalBindingCondition, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLetOrVarKeyword?.raw
+      layout[0] = unexpectedBeforeLetOrVarKeyword?.raw
       layout[1] = letOrVarKeyword.raw
-      layout[2] = garbageBetweenLetOrVarKeywordAndPattern?.raw
+      layout[2] = unexpectedBetweenLetOrVarKeywordAndPattern?.raw
       layout[3] = pattern.raw
-      layout[4] = garbageBetweenPatternAndTypeAnnotation?.raw
+      layout[4] = unexpectedBetweenPatternAndTypeAnnotation?.raw
       layout[5] = typeAnnotation?.raw
-      layout[6] = garbageBetweenTypeAnnotationAndInitializer?.raw
+      layout[6] = unexpectedBetweenTypeAnnotationAndInitializer?.raw
       layout[7] = initializer?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLetOrVarKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var letOrVarKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLetOrVarKeywordAndPattern: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLetOrVarKeywordAndPattern: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[3].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenPatternAndTypeAnnotation: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     raw.children[5].map(RawTypeAnnotationSyntax.init(raw:))
   }
-  public var garbageBetweenTypeAnnotationAndInitializer: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAnnotationAndInitializer: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var initializer: RawInitializerClauseSyntax? {
     raw.children[7].map(RawInitializerClauseSyntax.init(raw:))
@@ -10815,51 +10815,51 @@ public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundUnavailableKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundUnavailableKeyword: RawUnexpectedNodesSyntax? = nil,
     poundUnavailableKeyword: RawTokenSyntax,
-    _ garbageBetweenPoundUnavailableKeywordAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundUnavailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndAvailabilitySpec: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? = nil,
     availabilitySpec: RawAvailabilitySpecListSyntax,
-    _ garbageBetweenAvailabilitySpecAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .unavailabilityCondition, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundUnavailableKeyword?.raw
+      layout[0] = unexpectedBeforePoundUnavailableKeyword?.raw
       layout[1] = poundUnavailableKeyword.raw
-      layout[2] = garbageBetweenPoundUnavailableKeywordAndLeftParen?.raw
+      layout[2] = unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndAvailabilitySpec?.raw
+      layout[4] = unexpectedBetweenLeftParenAndAvailabilitySpec?.raw
       layout[5] = availabilitySpec.raw
-      layout[6] = garbageBetweenAvailabilitySpecAndRightParen?.raw
+      layout[6] = unexpectedBetweenAvailabilitySpecAndRightParen?.raw
       layout[7] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundUnavailableKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundUnavailableKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundUnavailableKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundUnavailableKeywordAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundUnavailableKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndAvailabilitySpec: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var availabilitySpec: RawAvailabilitySpecListSyntax {
     raw.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
   }
-  public var garbageBetweenAvailabilitySpecAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[7].map(RawTokenSyntax.init(raw:))!
@@ -10911,21 +10911,21 @@ public struct RawDeclarationStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDeclaration: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDeclaration: RawUnexpectedNodesSyntax? = nil,
     declaration: RawDeclSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .declarationStmt, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDeclaration?.raw
+      layout[0] = unexpectedBeforeDeclaration?.raw
       layout[1] = declaration.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDeclaration: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDeclaration: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var declaration: RawDeclSyntax {
     raw.children[1].map(RawDeclSyntax.init(raw:))!
@@ -10950,31 +10950,31 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeThrowKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeThrowKeyword: RawUnexpectedNodesSyntax? = nil,
     throwKeyword: RawTokenSyntax,
-    _ garbageBetweenThrowKeywordAndExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .throwStmt, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeThrowKeyword?.raw
+      layout[0] = unexpectedBeforeThrowKeyword?.raw
       layout[1] = throwKeyword.raw
-      layout[2] = garbageBetweenThrowKeywordAndExpression?.raw
+      layout[2] = unexpectedBetweenThrowKeywordAndExpression?.raw
       layout[3] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeThrowKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeThrowKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var throwKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenThrowKeywordAndExpression: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenThrowKeywordAndExpression: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[3].map(RawExprSyntax.init(raw:))!
@@ -10999,61 +10999,61 @@ public struct RawIfStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIfKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIfKeyword: RawUnexpectedNodesSyntax? = nil,
     ifKeyword: RawTokenSyntax,
-    _ garbageBetweenIfKeywordAndConditions: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIfKeywordAndConditions: RawUnexpectedNodesSyntax? = nil,
     conditions: RawConditionElementListSyntax,
-    _ garbageBetweenConditionsAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
-    _ garbageBetweenBodyAndElseKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBodyAndElseKeyword: RawUnexpectedNodesSyntax? = nil,
     elseKeyword: RawTokenSyntax?,
-    _ garbageBetweenElseKeywordAndElseBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElseKeywordAndElseBody: RawUnexpectedNodesSyntax? = nil,
     elseBody: RawSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .ifStmt, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIfKeyword?.raw
+      layout[0] = unexpectedBeforeIfKeyword?.raw
       layout[1] = ifKeyword.raw
-      layout[2] = garbageBetweenIfKeywordAndConditions?.raw
+      layout[2] = unexpectedBetweenIfKeywordAndConditions?.raw
       layout[3] = conditions.raw
-      layout[4] = garbageBetweenConditionsAndBody?.raw
+      layout[4] = unexpectedBetweenConditionsAndBody?.raw
       layout[5] = body.raw
-      layout[6] = garbageBetweenBodyAndElseKeyword?.raw
+      layout[6] = unexpectedBetweenBodyAndElseKeyword?.raw
       layout[7] = elseKeyword?.raw
-      layout[8] = garbageBetweenElseKeywordAndElseBody?.raw
+      layout[8] = unexpectedBetweenElseKeywordAndElseBody?.raw
       layout[9] = elseBody?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIfKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIfKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var ifKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIfKeywordAndConditions: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIfKeywordAndConditions: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var conditions: RawConditionElementListSyntax {
     raw.children[3].map(RawConditionElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenConditionsAndBody: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[5].map(RawCodeBlockSyntax.init(raw:))!
   }
-  public var garbageBetweenBodyAndElseKeyword: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBodyAndElseKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elseKeyword: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenElseKeywordAndElseBody: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElseKeywordAndElseBody: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elseBody: RawSyntax? {
     raw.children[9]
@@ -11078,21 +11078,21 @@ public struct RawElseIfContinuationSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIfStatement: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIfStatement: RawUnexpectedNodesSyntax? = nil,
     ifStatement: RawIfStmtSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .elseIfContinuation, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIfStatement?.raw
+      layout[0] = unexpectedBeforeIfStatement?.raw
       layout[1] = ifStatement.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIfStatement: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIfStatement: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var ifStatement: RawIfStmtSyntax {
     raw.children[1].map(RawIfStmtSyntax.init(raw:))!
@@ -11117,31 +11117,31 @@ public struct RawElseBlockSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeElseKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeElseKeyword: RawUnexpectedNodesSyntax? = nil,
     elseKeyword: RawTokenSyntax,
-    _ garbageBetweenElseKeywordAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElseKeywordAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .elseBlock, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeElseKeyword?.raw
+      layout[0] = unexpectedBeforeElseKeyword?.raw
       layout[1] = elseKeyword.raw
-      layout[2] = garbageBetweenElseKeywordAndBody?.raw
+      layout[2] = unexpectedBetweenElseKeywordAndBody?.raw
       layout[3] = body.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeElseKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeElseKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elseKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenElseKeywordAndBody: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElseKeywordAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[3].map(RawCodeBlockSyntax.init(raw:))!
@@ -11166,41 +11166,41 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeUnknownAttr: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeUnknownAttr: RawUnexpectedNodesSyntax? = nil,
     unknownAttr: RawAttributeSyntax?,
-    _ garbageBetweenUnknownAttrAndLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenUnknownAttrAndLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawSyntax,
-    _ garbageBetweenLabelAndStatements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndStatements: RawUnexpectedNodesSyntax? = nil,
     statements: RawCodeBlockItemListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .switchCase, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeUnknownAttr?.raw
+      layout[0] = unexpectedBeforeUnknownAttr?.raw
       layout[1] = unknownAttr?.raw
-      layout[2] = garbageBetweenUnknownAttrAndLabel?.raw
+      layout[2] = unexpectedBetweenUnknownAttrAndLabel?.raw
       layout[3] = label.raw
-      layout[4] = garbageBetweenLabelAndStatements?.raw
+      layout[4] = unexpectedBetweenLabelAndStatements?.raw
       layout[5] = statements.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeUnknownAttr: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeUnknownAttr: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var unknownAttr: RawAttributeSyntax? {
     raw.children[1].map(RawAttributeSyntax.init(raw:))
   }
-  public var garbageBetweenUnknownAttrAndLabel: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenUnknownAttrAndLabel: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawSyntax {
     raw.children[3]!
   }
-  public var garbageBetweenLabelAndStatements: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelAndStatements: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var statements: RawCodeBlockItemListSyntax {
     raw.children[5].map(RawCodeBlockItemListSyntax.init(raw:))!
@@ -11225,31 +11225,31 @@ public struct RawSwitchDefaultLabelSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeDefaultKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeDefaultKeyword: RawUnexpectedNodesSyntax? = nil,
     defaultKeyword: RawTokenSyntax,
-    _ garbageBetweenDefaultKeywordAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenDefaultKeywordAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .switchDefaultLabel, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeDefaultKeyword?.raw
+      layout[0] = unexpectedBeforeDefaultKeyword?.raw
       layout[1] = defaultKeyword.raw
-      layout[2] = garbageBetweenDefaultKeywordAndColon?.raw
+      layout[2] = unexpectedBetweenDefaultKeywordAndColon?.raw
       layout[3] = colon.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeDefaultKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeDefaultKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var defaultKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenDefaultKeywordAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenDefaultKeywordAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -11274,41 +11274,41 @@ public struct RawCaseItemSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
-    _ garbageBetweenPatternAndWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? = nil,
     whereClause: RawWhereClauseSyntax?,
-    _ garbageBetweenWhereClauseAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .caseItem, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePattern?.raw
+      layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern.raw
-      layout[2] = garbageBetweenPatternAndWhereClause?.raw
+      layout[2] = unexpectedBetweenPatternAndWhereClause?.raw
       layout[3] = whereClause?.raw
-      layout[4] = garbageBetweenWhereClauseAndTrailingComma?.raw
+      layout[4] = unexpectedBetweenWhereClauseAndTrailingComma?.raw
       layout[5] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePattern: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[1].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenPatternAndWhereClause: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whereClause: RawWhereClauseSyntax? {
     raw.children[3].map(RawWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenWhereClauseAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
@@ -11333,41 +11333,41 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax?,
-    _ garbageBetweenPatternAndWhereClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? = nil,
     whereClause: RawWhereClauseSyntax?,
-    _ garbageBetweenWhereClauseAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .catchItem, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePattern?.raw
+      layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern?.raw
-      layout[2] = garbageBetweenPatternAndWhereClause?.raw
+      layout[2] = unexpectedBetweenPatternAndWhereClause?.raw
       layout[3] = whereClause?.raw
-      layout[4] = garbageBetweenWhereClauseAndTrailingComma?.raw
+      layout[4] = unexpectedBetweenWhereClauseAndTrailingComma?.raw
       layout[5] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePattern: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax? {
     raw.children[1].map(RawPatternSyntax.init(raw:))
   }
-  public var garbageBetweenPatternAndWhereClause: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whereClause: RawWhereClauseSyntax? {
     raw.children[3].map(RawWhereClauseSyntax.init(raw:))
   }
-  public var garbageBetweenWhereClauseAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
@@ -11392,41 +11392,41 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeCaseKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax? = nil,
     caseKeyword: RawTokenSyntax,
-    _ garbageBetweenCaseKeywordAndCaseItems: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseKeywordAndCaseItems: RawUnexpectedNodesSyntax? = nil,
     caseItems: RawCaseItemListSyntax,
-    _ garbageBetweenCaseItemsAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseItemsAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .switchCaseLabel, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeCaseKeyword?.raw
+      layout[0] = unexpectedBeforeCaseKeyword?.raw
       layout[1] = caseKeyword.raw
-      layout[2] = garbageBetweenCaseKeywordAndCaseItems?.raw
+      layout[2] = unexpectedBetweenCaseKeywordAndCaseItems?.raw
       layout[3] = caseItems.raw
-      layout[4] = garbageBetweenCaseItemsAndColon?.raw
+      layout[4] = unexpectedBetweenCaseItemsAndColon?.raw
       layout[5] = colon.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeCaseKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeCaseKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var caseKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCaseKeywordAndCaseItems: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCaseKeywordAndCaseItems: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var caseItems: RawCaseItemListSyntax {
     raw.children[3].map(RawCaseItemListSyntax.init(raw:))!
   }
-  public var garbageBetweenCaseItemsAndColon: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCaseItemsAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -11451,41 +11451,41 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeCatchKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeCatchKeyword: RawUnexpectedNodesSyntax? = nil,
     catchKeyword: RawTokenSyntax,
-    _ garbageBetweenCatchKeywordAndCatchItems: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCatchKeywordAndCatchItems: RawUnexpectedNodesSyntax? = nil,
     catchItems: RawCatchItemListSyntax?,
-    _ garbageBetweenCatchItemsAndBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCatchItemsAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .catchClause, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeCatchKeyword?.raw
+      layout[0] = unexpectedBeforeCatchKeyword?.raw
       layout[1] = catchKeyword.raw
-      layout[2] = garbageBetweenCatchKeywordAndCatchItems?.raw
+      layout[2] = unexpectedBetweenCatchKeywordAndCatchItems?.raw
       layout[3] = catchItems?.raw
-      layout[4] = garbageBetweenCatchItemsAndBody?.raw
+      layout[4] = unexpectedBetweenCatchItemsAndBody?.raw
       layout[5] = body.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeCatchKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeCatchKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var catchKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCatchKeywordAndCatchItems: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCatchKeywordAndCatchItems: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var catchItems: RawCatchItemListSyntax? {
     raw.children[3].map(RawCatchItemListSyntax.init(raw:))
   }
-  public var garbageBetweenCatchItemsAndBody: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCatchItemsAndBody: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawCodeBlockSyntax {
     raw.children[5].map(RawCodeBlockSyntax.init(raw:))!
@@ -11510,71 +11510,71 @@ public struct RawPoundAssertStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePoundAssert: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePoundAssert: RawUnexpectedNodesSyntax? = nil,
     poundAssert: RawTokenSyntax,
-    _ garbageBetweenPoundAssertAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPoundAssertAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndCondition: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndCondition: RawUnexpectedNodesSyntax? = nil,
     condition: RawExprSyntax,
-    _ garbageBetweenConditionAndComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenConditionAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax?,
-    _ garbageBetweenCommaAndMessage: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndMessage: RawUnexpectedNodesSyntax? = nil,
     message: RawTokenSyntax?,
-    _ garbageBetweenMessageAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .poundAssertStmt, uninitializedCount: 12, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePoundAssert?.raw
+      layout[0] = unexpectedBeforePoundAssert?.raw
       layout[1] = poundAssert.raw
-      layout[2] = garbageBetweenPoundAssertAndLeftParen?.raw
+      layout[2] = unexpectedBetweenPoundAssertAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = garbageBetweenLeftParenAndCondition?.raw
+      layout[4] = unexpectedBetweenLeftParenAndCondition?.raw
       layout[5] = condition.raw
-      layout[6] = garbageBetweenConditionAndComma?.raw
+      layout[6] = unexpectedBetweenConditionAndComma?.raw
       layout[7] = comma?.raw
-      layout[8] = garbageBetweenCommaAndMessage?.raw
+      layout[8] = unexpectedBetweenCommaAndMessage?.raw
       layout[9] = message?.raw
-      layout[10] = garbageBetweenMessageAndRightParen?.raw
+      layout[10] = unexpectedBetweenMessageAndRightParen?.raw
       layout[11] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePoundAssert: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePoundAssert: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var poundAssert: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPoundAssertAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPoundAssertAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndCondition: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndCondition: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var condition: RawExprSyntax {
     raw.children[5].map(RawExprSyntax.init(raw:))!
   }
-  public var garbageBetweenConditionAndComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenConditionAndComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var comma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenCommaAndMessage: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCommaAndMessage: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var message: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenMessageAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenMessageAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[11].map(RawTokenSyntax.init(raw:))!
@@ -11599,31 +11599,31 @@ public struct RawGenericWhereClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeWhereKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax? = nil,
     whereKeyword: RawTokenSyntax,
-    _ garbageBetweenWhereKeywordAndRequirementList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWhereKeywordAndRequirementList: RawUnexpectedNodesSyntax? = nil,
     requirementList: RawGenericRequirementListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .genericWhereClause, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWhereKeyword?.raw
+      layout[0] = unexpectedBeforeWhereKeyword?.raw
       layout[1] = whereKeyword.raw
-      layout[2] = garbageBetweenWhereKeywordAndRequirementList?.raw
+      layout[2] = unexpectedBetweenWhereKeywordAndRequirementList?.raw
       layout[3] = requirementList.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWhereKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var whereKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenWhereKeywordAndRequirementList: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWhereKeywordAndRequirementList: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var requirementList: RawGenericRequirementListSyntax {
     raw.children[3].map(RawGenericRequirementListSyntax.init(raw:))!
@@ -11675,31 +11675,31 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBody: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBody: RawUnexpectedNodesSyntax? = nil,
     body: RawSyntax,
-    _ garbageBetweenBodyAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBodyAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .genericRequirement, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBody?.raw
+      layout[0] = unexpectedBeforeBody?.raw
       layout[1] = body.raw
-      layout[2] = garbageBetweenBodyAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenBodyAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBody: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBody: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var body: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenBodyAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBodyAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -11724,41 +11724,41 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftTypeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax? = nil,
     leftTypeIdentifier: RawTypeSyntax,
-    _ garbageBetweenLeftTypeIdentifierAndEqualityToken: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: RawUnexpectedNodesSyntax? = nil,
     equalityToken: RawTokenSyntax,
-    _ garbageBetweenEqualityTokenAndRightTypeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: RawUnexpectedNodesSyntax? = nil,
     rightTypeIdentifier: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .sameTypeRequirement, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftTypeIdentifier?.raw
+      layout[0] = unexpectedBeforeLeftTypeIdentifier?.raw
       layout[1] = leftTypeIdentifier.raw
-      layout[2] = garbageBetweenLeftTypeIdentifierAndEqualityToken?.raw
+      layout[2] = unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.raw
       layout[3] = equalityToken.raw
-      layout[4] = garbageBetweenEqualityTokenAndRightTypeIdentifier?.raw
+      layout[4] = unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.raw
       layout[5] = rightTypeIdentifier.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftTypeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftTypeIdentifier: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftTypeIdentifierAndEqualityToken: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var equalityToken: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenEqualityTokenAndRightTypeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightTypeIdentifier: RawTypeSyntax {
     raw.children[5].map(RawTypeSyntax.init(raw:))!
@@ -11783,91 +11783,91 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeTypeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeTypeIdentifier: RawUnexpectedNodesSyntax? = nil,
     typeIdentifier: RawTypeSyntax,
-    _ garbageBetweenTypeIdentifierAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeIdentifierAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndLayoutConstraint: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndLayoutConstraint: RawUnexpectedNodesSyntax? = nil,
     layoutConstraint: RawTokenSyntax,
-    _ garbageBetweenLayoutConstraintAndLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLayoutConstraintAndLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax?,
-    _ garbageBetweenLeftParenAndSize: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndSize: RawUnexpectedNodesSyntax? = nil,
     size: RawTokenSyntax?,
-    _ garbageBetweenSizeAndComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSizeAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax?,
-    _ garbageBetweenCommaAndAlignment: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCommaAndAlignment: RawUnexpectedNodesSyntax? = nil,
     alignment: RawTokenSyntax?,
-    _ garbageBetweenAlignmentAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAlignmentAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .layoutRequirement, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeTypeIdentifier?.raw
+      layout[0] = unexpectedBeforeTypeIdentifier?.raw
       layout[1] = typeIdentifier.raw
-      layout[2] = garbageBetweenTypeIdentifierAndColon?.raw
+      layout[2] = unexpectedBetweenTypeIdentifierAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndLayoutConstraint?.raw
+      layout[4] = unexpectedBetweenColonAndLayoutConstraint?.raw
       layout[5] = layoutConstraint.raw
-      layout[6] = garbageBetweenLayoutConstraintAndLeftParen?.raw
+      layout[6] = unexpectedBetweenLayoutConstraintAndLeftParen?.raw
       layout[7] = leftParen?.raw
-      layout[8] = garbageBetweenLeftParenAndSize?.raw
+      layout[8] = unexpectedBetweenLeftParenAndSize?.raw
       layout[9] = size?.raw
-      layout[10] = garbageBetweenSizeAndComma?.raw
+      layout[10] = unexpectedBetweenSizeAndComma?.raw
       layout[11] = comma?.raw
-      layout[12] = garbageBetweenCommaAndAlignment?.raw
+      layout[12] = unexpectedBetweenCommaAndAlignment?.raw
       layout[13] = alignment?.raw
-      layout[14] = garbageBetweenAlignmentAndRightParen?.raw
+      layout[14] = unexpectedBetweenAlignmentAndRightParen?.raw
       layout[15] = rightParen?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeTypeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeTypeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeIdentifier: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenTypeIdentifierAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeIdentifierAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndLayoutConstraint: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndLayoutConstraint: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var layoutConstraint: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLayoutConstraintAndLeftParen: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLayoutConstraintAndLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenLeftParenAndSize: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndSize: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var size: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenSizeAndComma: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSizeAndComma: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var comma: RawTokenSyntax? {
     raw.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenCommaAndAlignment: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCommaAndAlignment: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var alignment: RawTokenSyntax? {
     raw.children[13].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAlignmentAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAlignmentAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax? {
     raw.children[15].map(RawTokenSyntax.init(raw:))
@@ -11919,61 +11919,61 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax?,
-    _ garbageBetweenColonAndInheritedType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? = nil,
     inheritedType: RawTypeSyntax?,
-    _ garbageBetweenInheritedTypeAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .genericParameter, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeAttributes?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = garbageBetweenAttributesAndName?.raw
+      layout[2] = unexpectedBetweenAttributesAndName?.raw
       layout[3] = name.raw
-      layout[4] = garbageBetweenNameAndColon?.raw
+      layout[4] = unexpectedBetweenNameAndColon?.raw
       layout[5] = colon?.raw
-      layout[6] = garbageBetweenColonAndInheritedType?.raw
+      layout[6] = unexpectedBetweenColonAndInheritedType?.raw
       layout[7] = inheritedType?.raw
-      layout[8] = garbageBetweenInheritedTypeAndTrailingComma?.raw
+      layout[8] = unexpectedBetweenInheritedTypeAndTrailingComma?.raw
       layout[9] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeAttributes: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndColon: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenColonAndInheritedType: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inheritedType: RawTypeSyntax? {
     raw.children[7].map(RawTypeSyntax.init(raw:))
   }
-  public var garbageBetweenInheritedTypeAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInheritedTypeAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
@@ -12025,31 +12025,31 @@ public struct RawPrimaryAssociatedTypeSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .primaryAssociatedType, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenNameAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -12074,41 +12074,41 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftAngleBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? = nil,
     leftAngleBracket: RawTokenSyntax,
-    _ garbageBetweenLeftAngleBracketAndGenericParameterList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax? = nil,
     genericParameterList: RawGenericParameterListSyntax,
-    _ garbageBetweenGenericParameterListAndRightAngleBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterListAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
     rightAngleBracket: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .genericParameterClause, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftAngleBracket?.raw
+      layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
-      layout[2] = garbageBetweenLeftAngleBracketAndGenericParameterList?.raw
+      layout[2] = unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw
       layout[3] = genericParameterList.raw
-      layout[4] = garbageBetweenGenericParameterListAndRightAngleBracket?.raw
+      layout[4] = unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw
       layout[5] = rightAngleBracket.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftAngleBracket: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftAngleBracket: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftAngleBracketAndGenericParameterList: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericParameterList: RawGenericParameterListSyntax {
     raw.children[3].map(RawGenericParameterListSyntax.init(raw:))!
   }
-  public var garbageBetweenGenericParameterListAndRightAngleBracket: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenGenericParameterListAndRightAngleBracket: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightAngleBracket: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -12133,41 +12133,41 @@ public struct RawConformanceRequirementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftTypeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax? = nil,
     leftTypeIdentifier: RawTypeSyntax,
-    _ garbageBetweenLeftTypeIdentifierAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftTypeIdentifierAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndRightTypeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndRightTypeIdentifier: RawUnexpectedNodesSyntax? = nil,
     rightTypeIdentifier: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .conformanceRequirement, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftTypeIdentifier?.raw
+      layout[0] = unexpectedBeforeLeftTypeIdentifier?.raw
       layout[1] = leftTypeIdentifier.raw
-      layout[2] = garbageBetweenLeftTypeIdentifierAndColon?.raw
+      layout[2] = unexpectedBetweenLeftTypeIdentifierAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndRightTypeIdentifier?.raw
+      layout[4] = unexpectedBetweenColonAndRightTypeIdentifier?.raw
       layout[5] = rightTypeIdentifier.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftTypeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftTypeIdentifier: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftTypeIdentifierAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftTypeIdentifierAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndRightTypeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndRightTypeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightTypeIdentifier: RawTypeSyntax {
     raw.children[5].map(RawTypeSyntax.init(raw:))!
@@ -12192,41 +12192,41 @@ public struct RawPrimaryAssociatedTypeClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftAngleBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? = nil,
     leftAngleBracket: RawTokenSyntax,
-    _ garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: RawUnexpectedNodesSyntax? = nil,
     primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax,
-    _ garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
     rightAngleBracket: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .primaryAssociatedTypeClause, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftAngleBracket?.raw
+      layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
-      layout[2] = garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.raw
+      layout[2] = unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.raw
       layout[3] = primaryAssociatedTypeList.raw
-      layout[4] = garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw
+      layout[4] = unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw
       layout[5] = rightAngleBracket.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftAngleBracket: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftAngleBracket: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax {
     raw.children[3].map(RawPrimaryAssociatedTypeListSyntax.init(raw:))!
   }
-  public var garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightAngleBracket: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -12251,31 +12251,31 @@ public struct RawSimpleTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndGenericArgumentClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     genericArgumentClause: RawGenericArgumentClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .simpleTypeIdentifier, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeName?.raw
+      layout[0] = unexpectedBeforeName?.raw
       layout[1] = name.raw
-      layout[2] = garbageBetweenNameAndGenericArgumentClause?.raw
+      layout[2] = unexpectedBetweenNameAndGenericArgumentClause?.raw
       layout[3] = genericArgumentClause?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndGenericArgumentClause: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
     raw.children[3].map(RawGenericArgumentClauseSyntax.init(raw:))
@@ -12300,51 +12300,51 @@ public struct RawMemberTypeIdentifierSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBaseType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? = nil,
     baseType: RawTypeSyntax,
-    _ garbageBetweenBaseTypeAndPeriod: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax? = nil,
     period: RawTokenSyntax,
-    _ garbageBetweenPeriodAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
-    _ garbageBetweenNameAndGenericArgumentClause: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     genericArgumentClause: RawGenericArgumentClauseSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .memberTypeIdentifier, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBaseType?.raw
+      layout[0] = unexpectedBeforeBaseType?.raw
       layout[1] = baseType.raw
-      layout[2] = garbageBetweenBaseTypeAndPeriod?.raw
+      layout[2] = unexpectedBetweenBaseTypeAndPeriod?.raw
       layout[3] = period.raw
-      layout[4] = garbageBetweenPeriodAndName?.raw
+      layout[4] = unexpectedBetweenPeriodAndName?.raw
       layout[5] = name.raw
-      layout[6] = garbageBetweenNameAndGenericArgumentClause?.raw
+      layout[6] = unexpectedBetweenNameAndGenericArgumentClause?.raw
       layout[7] = genericArgumentClause?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBaseType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var baseType: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenBaseTypeAndPeriod: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var period: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPeriodAndName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenNameAndGenericArgumentClause: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
     raw.children[7].map(RawGenericArgumentClauseSyntax.init(raw:))
@@ -12369,21 +12369,21 @@ public struct RawClassRestrictionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeClassKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeClassKeyword: RawUnexpectedNodesSyntax? = nil,
     classKeyword: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .classRestrictionType, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeClassKeyword?.raw
+      layout[0] = unexpectedBeforeClassKeyword?.raw
       layout[1] = classKeyword.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeClassKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeClassKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var classKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -12408,41 +12408,41 @@ public struct RawArrayTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftSquareBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax? = nil,
     leftSquareBracket: RawTokenSyntax,
-    _ garbageBetweenLeftSquareBracketAndElementType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftSquareBracketAndElementType: RawUnexpectedNodesSyntax? = nil,
     elementType: RawTypeSyntax,
-    _ garbageBetweenElementTypeAndRightSquareBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElementTypeAndRightSquareBracket: RawUnexpectedNodesSyntax? = nil,
     rightSquareBracket: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .arrayType, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftSquareBracket?.raw
+      layout[0] = unexpectedBeforeLeftSquareBracket?.raw
       layout[1] = leftSquareBracket.raw
-      layout[2] = garbageBetweenLeftSquareBracketAndElementType?.raw
+      layout[2] = unexpectedBetweenLeftSquareBracketAndElementType?.raw
       layout[3] = elementType.raw
-      layout[4] = garbageBetweenElementTypeAndRightSquareBracket?.raw
+      layout[4] = unexpectedBetweenElementTypeAndRightSquareBracket?.raw
       layout[5] = rightSquareBracket.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftSquareBracket: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftSquareBracket: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftSquareBracketAndElementType: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftSquareBracketAndElementType: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elementType: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenElementTypeAndRightSquareBracket: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElementTypeAndRightSquareBracket: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightSquareBracket: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -12467,61 +12467,61 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftSquareBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax? = nil,
     leftSquareBracket: RawTokenSyntax,
-    _ garbageBetweenLeftSquareBracketAndKeyType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftSquareBracketAndKeyType: RawUnexpectedNodesSyntax? = nil,
     keyType: RawTypeSyntax,
-    _ garbageBetweenKeyTypeAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenKeyTypeAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndValueType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValueType: RawUnexpectedNodesSyntax? = nil,
     valueType: RawTypeSyntax,
-    _ garbageBetweenValueTypeAndRightSquareBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenValueTypeAndRightSquareBracket: RawUnexpectedNodesSyntax? = nil,
     rightSquareBracket: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .dictionaryType, uninitializedCount: 10, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftSquareBracket?.raw
+      layout[0] = unexpectedBeforeLeftSquareBracket?.raw
       layout[1] = leftSquareBracket.raw
-      layout[2] = garbageBetweenLeftSquareBracketAndKeyType?.raw
+      layout[2] = unexpectedBetweenLeftSquareBracketAndKeyType?.raw
       layout[3] = keyType.raw
-      layout[4] = garbageBetweenKeyTypeAndColon?.raw
+      layout[4] = unexpectedBetweenKeyTypeAndColon?.raw
       layout[5] = colon.raw
-      layout[6] = garbageBetweenColonAndValueType?.raw
+      layout[6] = unexpectedBetweenColonAndValueType?.raw
       layout[7] = valueType.raw
-      layout[8] = garbageBetweenValueTypeAndRightSquareBracket?.raw
+      layout[8] = unexpectedBetweenValueTypeAndRightSquareBracket?.raw
       layout[9] = rightSquareBracket.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftSquareBracket: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftSquareBracket: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftSquareBracket: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftSquareBracketAndKeyType: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftSquareBracketAndKeyType: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var keyType: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenKeyTypeAndColon: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenKeyTypeAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndValueType: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndValueType: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var valueType: RawTypeSyntax {
     raw.children[7].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenValueTypeAndRightSquareBracket: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenValueTypeAndRightSquareBracket: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightSquareBracket: RawTokenSyntax {
     raw.children[9].map(RawTokenSyntax.init(raw:))!
@@ -12546,41 +12546,41 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeBaseType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? = nil,
     baseType: RawTypeSyntax,
-    _ garbageBetweenBaseTypeAndPeriod: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax? = nil,
     period: RawTokenSyntax,
-    _ garbageBetweenPeriodAndTypeOrProtocol: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPeriodAndTypeOrProtocol: RawUnexpectedNodesSyntax? = nil,
     typeOrProtocol: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .metatypeType, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeBaseType?.raw
+      layout[0] = unexpectedBeforeBaseType?.raw
       layout[1] = baseType.raw
-      layout[2] = garbageBetweenBaseTypeAndPeriod?.raw
+      layout[2] = unexpectedBetweenBaseTypeAndPeriod?.raw
       layout[3] = period.raw
-      layout[4] = garbageBetweenPeriodAndTypeOrProtocol?.raw
+      layout[4] = unexpectedBetweenPeriodAndTypeOrProtocol?.raw
       layout[5] = typeOrProtocol.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeBaseType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeBaseType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var baseType: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenBaseTypeAndPeriod: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var period: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPeriodAndTypeOrProtocol: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPeriodAndTypeOrProtocol: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeOrProtocol: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -12605,31 +12605,31 @@ public struct RawOptionalTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeWrappedType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax? = nil,
     wrappedType: RawTypeSyntax,
-    _ garbageBetweenWrappedTypeAndQuestionMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWrappedTypeAndQuestionMark: RawUnexpectedNodesSyntax? = nil,
     questionMark: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .optionalType, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWrappedType?.raw
+      layout[0] = unexpectedBeforeWrappedType?.raw
       layout[1] = wrappedType.raw
-      layout[2] = garbageBetweenWrappedTypeAndQuestionMark?.raw
+      layout[2] = unexpectedBetweenWrappedTypeAndQuestionMark?.raw
       layout[3] = questionMark.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWrappedType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var wrappedType: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenWrappedTypeAndQuestionMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWrappedTypeAndQuestionMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var questionMark: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -12654,31 +12654,31 @@ public struct RawConstrainedSugarTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeSomeOrAnySpecifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeSomeOrAnySpecifier: RawUnexpectedNodesSyntax? = nil,
     someOrAnySpecifier: RawTokenSyntax,
-    _ garbageBetweenSomeOrAnySpecifierAndBaseType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSomeOrAnySpecifierAndBaseType: RawUnexpectedNodesSyntax? = nil,
     baseType: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .constrainedSugarType, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeSomeOrAnySpecifier?.raw
+      layout[0] = unexpectedBeforeSomeOrAnySpecifier?.raw
       layout[1] = someOrAnySpecifier.raw
-      layout[2] = garbageBetweenSomeOrAnySpecifierAndBaseType?.raw
+      layout[2] = unexpectedBetweenSomeOrAnySpecifierAndBaseType?.raw
       layout[3] = baseType.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeSomeOrAnySpecifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeSomeOrAnySpecifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var someOrAnySpecifier: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenSomeOrAnySpecifierAndBaseType: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSomeOrAnySpecifierAndBaseType: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var baseType: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
@@ -12703,31 +12703,31 @@ public struct RawImplicitlyUnwrappedOptionalTypeSyntax: RawTypeSyntaxNodeProtoco
   }
 
   public init(
-    _ garbageBeforeWrappedType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax? = nil,
     wrappedType: RawTypeSyntax,
-    _ garbageBetweenWrappedTypeAndExclamationMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWrappedTypeAndExclamationMark: RawUnexpectedNodesSyntax? = nil,
     exclamationMark: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .implicitlyUnwrappedOptionalType, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWrappedType?.raw
+      layout[0] = unexpectedBeforeWrappedType?.raw
       layout[1] = wrappedType.raw
-      layout[2] = garbageBetweenWrappedTypeAndExclamationMark?.raw
+      layout[2] = unexpectedBetweenWrappedTypeAndExclamationMark?.raw
       layout[3] = exclamationMark.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWrappedType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWrappedType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var wrappedType: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenWrappedTypeAndExclamationMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWrappedTypeAndExclamationMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var exclamationMark: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -12752,31 +12752,31 @@ public struct RawCompositionTypeElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax,
-    _ garbageBetweenTypeAndAmpersand: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndAmpersand: RawUnexpectedNodesSyntax? = nil,
     ampersand: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .compositionTypeElement, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeType?.raw
+      layout[0] = unexpectedBeforeType?.raw
       layout[1] = type.raw
-      layout[2] = garbageBetweenTypeAndAmpersand?.raw
+      layout[2] = unexpectedBetweenTypeAndAmpersand?.raw
       layout[3] = ampersand?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenTypeAndAmpersand: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAndAmpersand: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var ampersand: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -12828,21 +12828,21 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeElements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeElements: RawUnexpectedNodesSyntax? = nil,
     elements: RawCompositionTypeElementListSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .compositionType, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeElements?.raw
+      layout[0] = unexpectedBeforeElements?.raw
       layout[1] = elements.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeElements: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeElements: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elements: RawCompositionTypeElementListSyntax {
     raw.children[1].map(RawCompositionTypeElementListSyntax.init(raw:))!
@@ -12867,91 +12867,91 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeInOut: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeInOut: RawUnexpectedNodesSyntax? = nil,
     inOut: RawTokenSyntax?,
-    _ garbageBetweenInOutAndName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInOutAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax?,
-    _ garbageBetweenNameAndSecondName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenNameAndSecondName: RawUnexpectedNodesSyntax? = nil,
     secondName: RawTokenSyntax?,
-    _ garbageBetweenSecondNameAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax?,
-    _ garbageBetweenColonAndType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax,
-    _ garbageBetweenTypeAndEllipsis: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? = nil,
     ellipsis: RawTokenSyntax?,
-    _ garbageBetweenEllipsisAndInitializer: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEllipsisAndInitializer: RawUnexpectedNodesSyntax? = nil,
     initializer: RawInitializerClauseSyntax?,
-    _ garbageBetweenInitializerAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleTypeElement, uninitializedCount: 16, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeInOut?.raw
+      layout[0] = unexpectedBeforeInOut?.raw
       layout[1] = inOut?.raw
-      layout[2] = garbageBetweenInOutAndName?.raw
+      layout[2] = unexpectedBetweenInOutAndName?.raw
       layout[3] = name?.raw
-      layout[4] = garbageBetweenNameAndSecondName?.raw
+      layout[4] = unexpectedBetweenNameAndSecondName?.raw
       layout[5] = secondName?.raw
-      layout[6] = garbageBetweenSecondNameAndColon?.raw
+      layout[6] = unexpectedBetweenSecondNameAndColon?.raw
       layout[7] = colon?.raw
-      layout[8] = garbageBetweenColonAndType?.raw
+      layout[8] = unexpectedBetweenColonAndType?.raw
       layout[9] = type.raw
-      layout[10] = garbageBetweenTypeAndEllipsis?.raw
+      layout[10] = unexpectedBetweenTypeAndEllipsis?.raw
       layout[11] = ellipsis?.raw
-      layout[12] = garbageBetweenEllipsisAndInitializer?.raw
+      layout[12] = unexpectedBetweenEllipsisAndInitializer?.raw
       layout[13] = initializer?.raw
-      layout[14] = garbageBetweenInitializerAndTrailingComma?.raw
+      layout[14] = unexpectedBetweenInitializerAndTrailingComma?.raw
       layout[15] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeInOut: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeInOut: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var inOut: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenInOutAndName: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInOutAndName: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var name: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenNameAndSecondName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenNameAndSecondName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var secondName: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenSecondNameAndColon: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenColonAndType: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax {
     raw.children[9].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenTypeAndEllipsis: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var ellipsis: RawTokenSyntax? {
     raw.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenEllipsisAndInitializer: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenEllipsisAndInitializer: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var initializer: RawInitializerClauseSyntax? {
     raw.children[13].map(RawInitializerClauseSyntax.init(raw:))
   }
-  public var garbageBetweenInitializerAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[14].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[15].map(RawTokenSyntax.init(raw:))
@@ -13003,41 +13003,41 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndElements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? = nil,
     elements: RawTupleTypeElementListSyntax,
-    _ garbageBetweenElementsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleType, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndElements?.raw
+      layout[2] = unexpectedBetweenLeftParenAndElements?.raw
       layout[3] = elements.raw
-      layout[4] = garbageBetweenElementsAndRightParen?.raw
+      layout[4] = unexpectedBetweenElementsAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndElements: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elements: RawTupleTypeElementListSyntax {
     raw.children[3].map(RawTupleTypeElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenElementsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -13062,81 +13062,81 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawTupleTypeElementListSyntax,
-    _ garbageBetweenArgumentsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
-    _ garbageBetweenRightParenAndAsyncKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndAsyncKeyword: RawUnexpectedNodesSyntax? = nil,
     asyncKeyword: RawTokenSyntax?,
-    _ garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax? = nil,
     throwsOrRethrowsKeyword: RawTokenSyntax?,
-    _ garbageBetweenThrowsOrRethrowsKeywordAndArrow: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: RawUnexpectedNodesSyntax? = nil,
     arrow: RawTokenSyntax,
-    _ garbageBetweenArrowAndReturnType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax? = nil,
     returnType: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .functionType, uninitializedCount: 14, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndArguments?.raw
+      layout[2] = unexpectedBetweenLeftParenAndArguments?.raw
       layout[3] = arguments.raw
-      layout[4] = garbageBetweenArgumentsAndRightParen?.raw
+      layout[4] = unexpectedBetweenArgumentsAndRightParen?.raw
       layout[5] = rightParen.raw
-      layout[6] = garbageBetweenRightParenAndAsyncKeyword?.raw
+      layout[6] = unexpectedBetweenRightParenAndAsyncKeyword?.raw
       layout[7] = asyncKeyword?.raw
-      layout[8] = garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.raw
+      layout[8] = unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.raw
       layout[9] = throwsOrRethrowsKeyword?.raw
-      layout[10] = garbageBetweenThrowsOrRethrowsKeywordAndArrow?.raw
+      layout[10] = unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.raw
       layout[11] = arrow.raw
-      layout[12] = garbageBetweenArrowAndReturnType?.raw
+      layout[12] = unexpectedBetweenArrowAndReturnType?.raw
       layout[13] = returnType.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndArguments: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arguments: RawTupleTypeElementListSyntax {
     raw.children[3].map(RawTupleTypeElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenArgumentsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenRightParenAndAsyncKeyword: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenRightParenAndAsyncKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var asyncKeyword: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: RawGarbageNodesSyntax? {
-    raw.children[8].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var throwsOrRethrowsKeyword: RawTokenSyntax? {
     raw.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenThrowsOrRethrowsKeywordAndArrow: RawGarbageNodesSyntax? {
-    raw.children[10].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: RawUnexpectedNodesSyntax? {
+    raw.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arrow: RawTokenSyntax {
     raw.children[11].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenArrowAndReturnType: RawGarbageNodesSyntax? {
-    raw.children[12].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArrowAndReturnType: RawUnexpectedNodesSyntax? {
+    raw.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var returnType: RawTypeSyntax {
     raw.children[13].map(RawTypeSyntax.init(raw:))!
@@ -13161,41 +13161,41 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeSpecifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? = nil,
     specifier: RawTokenSyntax?,
-    _ garbageBetweenSpecifierAndAttributes: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSpecifierAndAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ garbageBetweenAttributesAndBaseType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndBaseType: RawUnexpectedNodesSyntax? = nil,
     baseType: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .attributedType, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeSpecifier?.raw
+      layout[0] = unexpectedBeforeSpecifier?.raw
       layout[1] = specifier?.raw
-      layout[2] = garbageBetweenSpecifierAndAttributes?.raw
+      layout[2] = unexpectedBetweenSpecifierAndAttributes?.raw
       layout[3] = attributes?.raw
-      layout[4] = garbageBetweenAttributesAndBaseType?.raw
+      layout[4] = unexpectedBetweenAttributesAndBaseType?.raw
       layout[5] = baseType.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeSpecifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var specifier: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenSpecifierAndAttributes: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSpecifierAndAttributes: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var attributes: RawAttributeListSyntax? {
     raw.children[3].map(RawAttributeListSyntax.init(raw:))
   }
-  public var garbageBetweenAttributesAndBaseType: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAttributesAndBaseType: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var baseType: RawTypeSyntax {
     raw.children[5].map(RawTypeSyntax.init(raw:))!
@@ -13247,31 +13247,31 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeArgumentType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeArgumentType: RawUnexpectedNodesSyntax? = nil,
     argumentType: RawTypeSyntax,
-    _ garbageBetweenArgumentTypeAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentTypeAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .genericArgument, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeArgumentType?.raw
+      layout[0] = unexpectedBeforeArgumentType?.raw
       layout[1] = argumentType.raw
-      layout[2] = garbageBetweenArgumentTypeAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenArgumentTypeAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeArgumentType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeArgumentType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var argumentType: RawTypeSyntax {
     raw.children[1].map(RawTypeSyntax.init(raw:))!
   }
-  public var garbageBetweenArgumentTypeAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentTypeAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -13296,41 +13296,41 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftAngleBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? = nil,
     leftAngleBracket: RawTokenSyntax,
-    _ garbageBetweenLeftAngleBracketAndArguments: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftAngleBracketAndArguments: RawUnexpectedNodesSyntax? = nil,
     arguments: RawGenericArgumentListSyntax,
-    _ garbageBetweenArgumentsAndRightAngleBracket: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenArgumentsAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
     rightAngleBracket: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .genericArgumentClause, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftAngleBracket?.raw
+      layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
-      layout[2] = garbageBetweenLeftAngleBracketAndArguments?.raw
+      layout[2] = unexpectedBetweenLeftAngleBracketAndArguments?.raw
       layout[3] = arguments.raw
-      layout[4] = garbageBetweenArgumentsAndRightAngleBracket?.raw
+      layout[4] = unexpectedBetweenArgumentsAndRightAngleBracket?.raw
       layout[5] = rightAngleBracket.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftAngleBracket: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftAngleBracket: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftAngleBracketAndArguments: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftAngleBracketAndArguments: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var arguments: RawGenericArgumentListSyntax {
     raw.children[3].map(RawGenericArgumentListSyntax.init(raw:))!
   }
-  public var garbageBetweenArgumentsAndRightAngleBracket: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenArgumentsAndRightAngleBracket: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightAngleBracket: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -13355,31 +13355,31 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeAnnotation, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeColon?.raw
+      layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
-      layout[2] = garbageBetweenColonAndType?.raw
+      layout[2] = unexpectedBetweenColonAndType?.raw
       layout[3] = type.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeColon: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeColon: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndType: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
@@ -13404,51 +13404,51 @@ public struct RawEnumCasePatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax?,
-    _ garbageBetweenTypeAndPeriod: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenTypeAndPeriod: RawUnexpectedNodesSyntax? = nil,
     period: RawTokenSyntax,
-    _ garbageBetweenPeriodAndCaseName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPeriodAndCaseName: RawUnexpectedNodesSyntax? = nil,
     caseName: RawTokenSyntax,
-    _ garbageBetweenCaseNameAndAssociatedTuple: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenCaseNameAndAssociatedTuple: RawUnexpectedNodesSyntax? = nil,
     associatedTuple: RawTuplePatternSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .enumCasePattern, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeType?.raw
+      layout[0] = unexpectedBeforeType?.raw
       layout[1] = type?.raw
-      layout[2] = garbageBetweenTypeAndPeriod?.raw
+      layout[2] = unexpectedBetweenTypeAndPeriod?.raw
       layout[3] = period.raw
-      layout[4] = garbageBetweenPeriodAndCaseName?.raw
+      layout[4] = unexpectedBetweenPeriodAndCaseName?.raw
       layout[5] = caseName.raw
-      layout[6] = garbageBetweenCaseNameAndAssociatedTuple?.raw
+      layout[6] = unexpectedBetweenCaseNameAndAssociatedTuple?.raw
       layout[7] = associatedTuple?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeType: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax? {
     raw.children[1].map(RawTypeSyntax.init(raw:))
   }
-  public var garbageBetweenTypeAndPeriod: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenTypeAndPeriod: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var period: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPeriodAndCaseName: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPeriodAndCaseName: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var caseName: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenCaseNameAndAssociatedTuple: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenCaseNameAndAssociatedTuple: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var associatedTuple: RawTuplePatternSyntax? {
     raw.children[7].map(RawTuplePatternSyntax.init(raw:))
@@ -13473,31 +13473,31 @@ public struct RawIsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIsKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIsKeyword: RawUnexpectedNodesSyntax? = nil,
     isKeyword: RawTokenSyntax,
-    _ garbageBetweenIsKeywordAndType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenIsKeywordAndType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .isTypePattern, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIsKeyword?.raw
+      layout[0] = unexpectedBeforeIsKeyword?.raw
       layout[1] = isKeyword.raw
-      layout[2] = garbageBetweenIsKeywordAndType?.raw
+      layout[2] = unexpectedBetweenIsKeywordAndType?.raw
       layout[3] = type.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIsKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIsKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var isKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenIsKeywordAndType: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenIsKeywordAndType: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax {
     raw.children[3].map(RawTypeSyntax.init(raw:))!
@@ -13522,31 +13522,31 @@ public struct RawOptionalPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeSubPattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeSubPattern: RawUnexpectedNodesSyntax? = nil,
     subPattern: RawPatternSyntax,
-    _ garbageBetweenSubPatternAndQuestionMark: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenSubPatternAndQuestionMark: RawUnexpectedNodesSyntax? = nil,
     questionMark: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .optionalPattern, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeSubPattern?.raw
+      layout[0] = unexpectedBeforeSubPattern?.raw
       layout[1] = subPattern.raw
-      layout[2] = garbageBetweenSubPatternAndQuestionMark?.raw
+      layout[2] = unexpectedBetweenSubPatternAndQuestionMark?.raw
       layout[3] = questionMark.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeSubPattern: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeSubPattern: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var subPattern: RawPatternSyntax {
     raw.children[1].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenSubPatternAndQuestionMark: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenSubPatternAndQuestionMark: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var questionMark: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
@@ -13571,21 +13571,21 @@ public struct RawIdentifierPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeIdentifier: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .identifierPattern, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeIdentifier?.raw
+      layout[0] = unexpectedBeforeIdentifier?.raw
       layout[1] = identifier.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeIdentifier: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var identifier: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
@@ -13610,41 +13610,41 @@ public struct RawAsTypePatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
-    _ garbageBetweenPatternAndAsKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndAsKeyword: RawUnexpectedNodesSyntax? = nil,
     asKeyword: RawTokenSyntax,
-    _ garbageBetweenAsKeywordAndType: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenAsKeywordAndType: RawUnexpectedNodesSyntax? = nil,
     type: RawTypeSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .asTypePattern, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePattern?.raw
+      layout[0] = unexpectedBeforePattern?.raw
       layout[1] = pattern.raw
-      layout[2] = garbageBetweenPatternAndAsKeyword?.raw
+      layout[2] = unexpectedBetweenPatternAndAsKeyword?.raw
       layout[3] = asKeyword.raw
-      layout[4] = garbageBetweenAsKeywordAndType?.raw
+      layout[4] = unexpectedBetweenAsKeywordAndType?.raw
       layout[5] = type.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePattern: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePattern: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[1].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenPatternAndAsKeyword: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndAsKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var asKeyword: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenAsKeywordAndType: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenAsKeywordAndType: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var type: RawTypeSyntax {
     raw.children[5].map(RawTypeSyntax.init(raw:))!
@@ -13669,41 +13669,41 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLeftParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
     leftParen: RawTokenSyntax,
-    _ garbageBetweenLeftParenAndElements: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? = nil,
     elements: RawTuplePatternElementListSyntax,
-    _ garbageBetweenElementsAndRightParen: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tuplePattern, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLeftParen?.raw
+      layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = garbageBetweenLeftParenAndElements?.raw
+      layout[2] = unexpectedBetweenLeftParenAndElements?.raw
       layout[3] = elements.raw
-      layout[4] = garbageBetweenElementsAndRightParen?.raw
+      layout[4] = unexpectedBetweenElementsAndRightParen?.raw
       layout[5] = rightParen.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLeftParen: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var leftParen: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLeftParenAndElements: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var elements: RawTuplePatternElementListSyntax {
     raw.children[3].map(RawTuplePatternElementListSyntax.init(raw:))!
   }
-  public var garbageBetweenElementsAndRightParen: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var rightParen: RawTokenSyntax {
     raw.children[5].map(RawTokenSyntax.init(raw:))!
@@ -13728,31 +13728,31 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeWildcard: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? = nil,
     wildcard: RawTokenSyntax,
-    _ garbageBetweenWildcardAndTypeAnnotation: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenWildcardAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil,
     typeAnnotation: RawTypeAnnotationSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .wildcardPattern, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeWildcard?.raw
+      layout[0] = unexpectedBeforeWildcard?.raw
       layout[1] = wildcard.raw
-      layout[2] = garbageBetweenWildcardAndTypeAnnotation?.raw
+      layout[2] = unexpectedBetweenWildcardAndTypeAnnotation?.raw
       layout[3] = typeAnnotation?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeWildcard: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var wildcard: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenWildcardAndTypeAnnotation: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenWildcardAndTypeAnnotation: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var typeAnnotation: RawTypeAnnotationSyntax? {
     raw.children[3].map(RawTypeAnnotationSyntax.init(raw:))
@@ -13777,51 +13777,51 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabelName: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabelName: RawUnexpectedNodesSyntax? = nil,
     labelName: RawTokenSyntax?,
-    _ garbageBetweenLabelNameAndLabelColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax? = nil,
     labelColon: RawTokenSyntax?,
-    _ garbageBetweenLabelColonAndPattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelColonAndPattern: RawUnexpectedNodesSyntax? = nil,
     pattern: RawPatternSyntax,
-    _ garbageBetweenPatternAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatternAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tuplePatternElement, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabelName?.raw
+      layout[0] = unexpectedBeforeLabelName?.raw
       layout[1] = labelName?.raw
-      layout[2] = garbageBetweenLabelNameAndLabelColon?.raw
+      layout[2] = unexpectedBetweenLabelNameAndLabelColon?.raw
       layout[3] = labelColon?.raw
-      layout[4] = garbageBetweenLabelColonAndPattern?.raw
+      layout[4] = unexpectedBetweenLabelColonAndPattern?.raw
       layout[5] = pattern.raw
-      layout[6] = garbageBetweenPatternAndTrailingComma?.raw
+      layout[6] = unexpectedBetweenPatternAndTrailingComma?.raw
       layout[7] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabelName: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabelName: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var labelName: RawTokenSyntax? {
     raw.children[1].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenLabelNameAndLabelColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelNameAndLabelColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var labelColon: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenLabelColonAndPattern: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelColonAndPattern: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var pattern: RawPatternSyntax {
     raw.children[5].map(RawPatternSyntax.init(raw:))!
   }
-  public var garbageBetweenPatternAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[6].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatternAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[7].map(RawTokenSyntax.init(raw:))
@@ -13846,21 +13846,21 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeExpression: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil,
     expression: RawExprSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .expressionPattern, uninitializedCount: 2, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeExpression?.raw
+      layout[0] = unexpectedBeforeExpression?.raw
       layout[1] = expression.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeExpression: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeExpression: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var expression: RawExprSyntax {
     raw.children[1].map(RawExprSyntax.init(raw:))!
@@ -13912,31 +13912,31 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLetOrVarKeyword: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? = nil,
     letOrVarKeyword: RawTokenSyntax,
-    _ garbageBetweenLetOrVarKeywordAndValuePattern: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLetOrVarKeywordAndValuePattern: RawUnexpectedNodesSyntax? = nil,
     valuePattern: RawPatternSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .valueBindingPattern, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLetOrVarKeyword?.raw
+      layout[0] = unexpectedBeforeLetOrVarKeyword?.raw
       layout[1] = letOrVarKeyword.raw
-      layout[2] = garbageBetweenLetOrVarKeywordAndValuePattern?.raw
+      layout[2] = unexpectedBetweenLetOrVarKeywordAndValuePattern?.raw
       layout[3] = valuePattern.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLetOrVarKeyword: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLetOrVarKeyword: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var letOrVarKeyword: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLetOrVarKeywordAndValuePattern: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLetOrVarKeywordAndValuePattern: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var valuePattern: RawPatternSyntax {
     raw.children[3].map(RawPatternSyntax.init(raw:))!
@@ -13988,31 +13988,31 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeEntry: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeEntry: RawUnexpectedNodesSyntax? = nil,
     entry: RawSyntax,
-    _ garbageBetweenEntryAndTrailingComma: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenEntryAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .availabilityArgument, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeEntry?.raw
+      layout[0] = unexpectedBeforeEntry?.raw
       layout[1] = entry.raw
-      layout[2] = garbageBetweenEntryAndTrailingComma?.raw
+      layout[2] = unexpectedBetweenEntryAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeEntry: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeEntry: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var entry: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenEntryAndTrailingComma: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenEntryAndTrailingComma: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var trailingComma: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
@@ -14037,41 +14037,41 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeLabel: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeLabel: RawUnexpectedNodesSyntax? = nil,
     label: RawTokenSyntax,
-    _ garbageBetweenLabelAndColon: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ garbageBetweenColonAndValue: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? = nil,
     value: RawSyntax,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .availabilityLabeledArgument, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeLabel?.raw
+      layout[0] = unexpectedBeforeLabel?.raw
       layout[1] = label.raw
-      layout[2] = garbageBetweenLabelAndColon?.raw
+      layout[2] = unexpectedBetweenLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = garbageBetweenColonAndValue?.raw
+      layout[4] = unexpectedBetweenColonAndValue?.raw
       layout[5] = value.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeLabel: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeLabel: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var label: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenLabelAndColon: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colon: RawTokenSyntax {
     raw.children[3].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenColonAndValue: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var value: RawSyntax {
     raw.children[5]!
@@ -14096,31 +14096,31 @@ public struct RawAvailabilityVersionRestrictionSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforePlatform: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforePlatform: RawUnexpectedNodesSyntax? = nil,
     platform: RawTokenSyntax,
-    _ garbageBetweenPlatformAndVersion: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPlatformAndVersion: RawUnexpectedNodesSyntax? = nil,
     version: RawVersionTupleSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .availabilityVersionRestriction, uninitializedCount: 4, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforePlatform?.raw
+      layout[0] = unexpectedBeforePlatform?.raw
       layout[1] = platform.raw
-      layout[2] = garbageBetweenPlatformAndVersion?.raw
+      layout[2] = unexpectedBetweenPlatformAndVersion?.raw
       layout[3] = version?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforePlatform: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforePlatform: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var platform: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var garbageBetweenPlatformAndVersion: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPlatformAndVersion: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var version: RawVersionTupleSyntax? {
     raw.children[3].map(RawVersionTupleSyntax.init(raw:))
@@ -14145,41 +14145,41 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(
-    _ garbageBeforeMajorMinor: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax? = nil,
     majorMinor: RawSyntax,
-    _ garbageBetweenMajorMinorAndPatchPeriod: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? = nil,
     patchPeriod: RawTokenSyntax?,
-    _ garbageBetweenPatchPeriodAndPatchVersion: RawGarbageNodesSyntax? = nil,
+    _ unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax? = nil,
     patchVersion: RawTokenSyntax?,
     arena: SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .versionTuple, uninitializedCount: 6, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = garbageBeforeMajorMinor?.raw
+      layout[0] = unexpectedBeforeMajorMinor?.raw
       layout[1] = majorMinor.raw
-      layout[2] = garbageBetweenMajorMinorAndPatchPeriod?.raw
+      layout[2] = unexpectedBetweenMajorMinorAndPatchPeriod?.raw
       layout[3] = patchPeriod?.raw
-      layout[4] = garbageBetweenPatchPeriodAndPatchVersion?.raw
+      layout[4] = unexpectedBetweenPatchPeriodAndPatchVersion?.raw
       layout[5] = patchVersion?.raw
     }
     self.init(raw: raw)
   }
 
-  public var garbageBeforeMajorMinor: RawGarbageNodesSyntax? {
-    raw.children[0].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBeforeMajorMinor: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var majorMinor: RawSyntax {
     raw.children[1]!
   }
-  public var garbageBetweenMajorMinorAndPatchPeriod: RawGarbageNodesSyntax? {
-    raw.children[2].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenMajorMinorAndPatchPeriod: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var patchPeriod: RawTokenSyntax? {
     raw.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var garbageBetweenPatchPeriodAndPatchVersion: RawGarbageNodesSyntax? {
-    raw.children[4].map(RawGarbageNodesSyntax.init(raw:))
+  public var unexpectedBetweenPatchPeriodAndPatchVersion: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var patchVersion: RawTokenSyntax? {
     raw.children[5].map(RawTokenSyntax.init(raw:))

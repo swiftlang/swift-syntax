@@ -181,16 +181,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `CodeBlockSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CodeBlockSyntax) {}
-  /// Visiting `GarbageNodesSyntax` specifically.
+  /// Visiting `UnexpectedNodesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: GarbageNodesSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `GarbageNodesSyntax` and its descendents.
+  /// The function called after visiting `UnexpectedNodesSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: GarbageNodesSyntax) {}
+  open func visitPost(_ node: UnexpectedNodesSyntax) {}
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2874,8 +2874,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGarbageNodesSyntax(_ data: SyntaxData) {
-      let node = GarbageNodesSyntax(data)
+  private func visitImplUnexpectedNodesSyntax(_ data: SyntaxData) {
+      let node = UnexpectedNodesSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -5627,8 +5627,8 @@ open class SyntaxVisitor {
       visitImplCodeBlockItemListSyntax(data)
     case .codeBlock:
       visitImplCodeBlockSyntax(data)
-    case .garbageNodes:
-      visitImplGarbageNodesSyntax(data)
+    case .unexpectedNodes:
+      visitImplUnexpectedNodesSyntax(data)
     case .inOutExpr:
       visitImplInOutExprSyntax(data)
     case .poundColumnExpr:

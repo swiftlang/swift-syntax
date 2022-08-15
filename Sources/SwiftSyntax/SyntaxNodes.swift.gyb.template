@@ -86,7 +86,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       param_type = child.type_name
 %       if child.is_optional:
 %         param_type = param_type + "?"
-%       if child.is_garbage_nodes():
+%       if child.is_unexpected_nodes():
     _ ${child.swift_name}: ${param_type} = nil${comma}
 %       else:
     ${child.swift_name}: ${param_type}${comma}
@@ -143,9 +143,9 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       # ===============
 %       # Adding children
 %       # ===============
-%       # We don't currently support adding elements to a specific garbage collection.
-%       # If needed, this could be added in the future, but for now withGarbage should be sufficient.
-%       if child_node and child_node.is_syntax_collection() and not child.is_garbage_nodes():
+%       # We don't currently support adding elements to a specific unexpected collection.
+%       # If needed, this could be added in the future, but for now withUnexpected should be sufficient.
+%       if child_node and child_node.is_syntax_collection() and not child.is_unexpected_nodes():
 %         child_elt = child.collection_element_name
 %         child_elt_type = child_node.collection_element_type
 %         if not child_elt:

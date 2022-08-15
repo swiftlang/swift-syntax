@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class EnumCaseElementTests: XCTestCase {
   func testEnumInit() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     let buildable = EnumDecl(
       identifier: "Greeting",
       inheritanceClause: TypeInheritanceClause {

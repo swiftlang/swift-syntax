@@ -72,10 +72,10 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
 %   if node.is_buildable() or node.is_missing():
   public init(
 %     for child in node.children:
-%       param_label = "_ " if child.is_garbage_nodes() else ""
+%       param_label = "_ " if child.is_unexpected_nodes() else ""
 %       optional_mark = "?" if child.is_optional else ""
 %       param_type = "Raw" + child.type_name + optional_mark
-%       param_default = " = nil" if child.is_garbage_nodes() else ""
+%       param_default = " = nil" if child.is_unexpected_nodes() else ""
     ${param_label}${child.swift_name}: ${param_type}${param_default},
 %     end
     arena: SyntaxArena

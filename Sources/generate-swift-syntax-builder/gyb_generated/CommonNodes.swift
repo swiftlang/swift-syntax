@@ -132,7 +132,7 @@ let COMMON_NODES: [Node] = [
                requiresLeadingNewline: true)
        ]),
 
-  Node(name: "GarbageNodes",
+  Node(name: "UnexpectedNodes",
        description: "A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.",
        kind: "SyntaxCollection",
        element: "Syntax"),

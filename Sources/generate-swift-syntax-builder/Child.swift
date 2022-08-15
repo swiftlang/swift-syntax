@@ -64,9 +64,9 @@ class Child {
     return tokenChoices.first
   }
 
-  /// Whether this child has syntax kind `GarbageNodes`.
-  var isGarbageNodes: Bool {
-    syntaxKind == "GarbageNodes"
+  /// Whether this child has syntax kind `UnexpectedNodes`.
+  var isUnexpectedNodes: Bool {
+    syntaxKind == "UnexpectedNodes"
   }
 
   /// If a classification is passed, it specifies the color identifiers in

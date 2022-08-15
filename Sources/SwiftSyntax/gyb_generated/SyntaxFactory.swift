@@ -97,11 +97,11 @@ public enum SyntaxFactory {
     return MissingSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MissingDeclSyntax")
-  public static func makeMissingDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?) -> MissingDeclSyntax {
+  public static func makeMissingDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?) -> MissingDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missingDecl,
@@ -154,13 +154,13 @@ public enum SyntaxFactory {
     return MissingPatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CodeBlockItemSyntax")
-  public static func makeCodeBlockItem(_ garbageBeforeItem: GarbageNodesSyntax? = nil, item: Syntax, _ garbageBetweenItemAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax?, _ garbageBetweenSemicolonAndErrorTokens: GarbageNodesSyntax? = nil, errorTokens: Syntax?) -> CodeBlockItemSyntax {
+  public static func makeCodeBlockItem(_ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil, item: Syntax, _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil, semicolon: TokenSyntax?, _ unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? = nil, errorTokens: Syntax?) -> CodeBlockItemSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeItem?.raw,
+      unexpectedBeforeItem?.raw,
       item.raw,
-      garbageBetweenItemAndSemicolon?.raw,
+      unexpectedBetweenItemAndSemicolon?.raw,
       semicolon?.raw,
-      garbageBetweenSemicolonAndErrorTokens?.raw,
+      unexpectedBetweenSemicolonAndErrorTokens?.raw,
       errorTokens?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItem,
@@ -199,13 +199,13 @@ public enum SyntaxFactory {
     return CodeBlockItemListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CodeBlockSyntax")
-  public static func makeCodeBlock(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> CodeBlockSyntax {
+  public static func makeCodeBlock(_ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax) -> CodeBlockSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftBrace?.raw,
+      unexpectedBeforeLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndStatements?.raw,
+      unexpectedBetweenLeftBraceAndStatements?.raw,
       statements.raw,
-      garbageBetweenStatementsAndRightBrace?.raw,
+      unexpectedBetweenStatementsAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlock,
@@ -227,28 +227,28 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CodeBlockSyntax(data)
   }
-  @available(*, deprecated, message: "Use initializer on GarbageNodesSyntax")
-  public static func makeGarbageNodes(
-    _ elements: [Syntax]) -> GarbageNodesSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.garbageNodes,
+  @available(*, deprecated, message: "Use initializer on UnexpectedNodesSyntax")
+  public static func makeUnexpectedNodes(
+    _ elements: [Syntax]) -> UnexpectedNodesSyntax {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unexpectedNodes,
       layout: elements.map { $0.raw }, presence: SourcePresence.present)
     let data = SyntaxData.forRoot(raw)
-    return GarbageNodesSyntax(data)
+    return UnexpectedNodesSyntax(data)
   }
 
-  @available(*, deprecated, message: "Use initializer on GarbageNodesSyntax")
-  public static func makeBlankGarbageNodes(presence: SourcePresence = .present) -> GarbageNodesSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .garbageNodes,
+  @available(*, deprecated, message: "Use initializer on UnexpectedNodesSyntax")
+  public static func makeBlankUnexpectedNodes(presence: SourcePresence = .present) -> UnexpectedNodesSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unexpectedNodes,
       layout: [
     ], length: .zero, presence: presence))
-    return GarbageNodesSyntax(data)
+    return UnexpectedNodesSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on InOutExprSyntax")
-  public static func makeInOutExpr(_ garbageBeforeAmpersand: GarbageNodesSyntax? = nil, ampersand: TokenSyntax, _ garbageBetweenAmpersandAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> InOutExprSyntax {
+  public static func makeInOutExpr(_ unexpectedBeforeAmpersand: UnexpectedNodesSyntax? = nil, ampersand: TokenSyntax, _ unexpectedBetweenAmpersandAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> InOutExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAmpersand?.raw,
+      unexpectedBeforeAmpersand?.raw,
       ampersand.raw,
-      garbageBetweenAmpersandAndExpression?.raw,
+      unexpectedBetweenAmpersandAndExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inOutExpr,
@@ -269,9 +269,9 @@ public enum SyntaxFactory {
     return InOutExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundColumnExprSyntax")
-  public static func makePoundColumnExpr(_ garbageBeforePoundColumn: GarbageNodesSyntax? = nil, poundColumn: TokenSyntax) -> PoundColumnExprSyntax {
+  public static func makePoundColumnExpr(_ unexpectedBeforePoundColumn: UnexpectedNodesSyntax? = nil, poundColumn: TokenSyntax) -> PoundColumnExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundColumn?.raw,
+      unexpectedBeforePoundColumn?.raw,
       poundColumn.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundColumnExpr,
@@ -354,13 +354,13 @@ public enum SyntaxFactory {
     return StringLiteralSegmentsSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TryExprSyntax")
-  public static func makeTryExpr(_ garbageBeforeTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax, _ garbageBetweenTryKeywordAndQuestionOrExclamationMark: GarbageNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ garbageBetweenQuestionOrExclamationMarkAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> TryExprSyntax {
+  public static func makeTryExpr(_ unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? = nil, tryKeyword: TokenSyntax, _ unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ unexpectedBetweenQuestionOrExclamationMarkAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> TryExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeTryKeyword?.raw,
+      unexpectedBeforeTryKeyword?.raw,
       tryKeyword.raw,
-      garbageBetweenTryKeywordAndQuestionOrExclamationMark?.raw,
+      unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.raw,
       questionOrExclamationMark?.raw,
-      garbageBetweenQuestionOrExclamationMarkAndExpression?.raw,
+      unexpectedBetweenQuestionOrExclamationMarkAndExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tryExpr,
@@ -383,11 +383,11 @@ public enum SyntaxFactory {
     return TryExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AwaitExprSyntax")
-  public static func makeAwaitExpr(_ garbageBeforeAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax, _ garbageBetweenAwaitKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> AwaitExprSyntax {
+  public static func makeAwaitExpr(_ unexpectedBeforeAwaitKeyword: UnexpectedNodesSyntax? = nil, awaitKeyword: TokenSyntax, _ unexpectedBetweenAwaitKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> AwaitExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAwaitKeyword?.raw,
+      unexpectedBeforeAwaitKeyword?.raw,
       awaitKeyword.raw,
-      garbageBetweenAwaitKeywordAndExpression?.raw,
+      unexpectedBetweenAwaitKeywordAndExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.awaitExpr,
@@ -408,11 +408,11 @@ public enum SyntaxFactory {
     return AwaitExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MoveExprSyntax")
-  public static func makeMoveExpr(_ garbageBeforeMoveKeyword: GarbageNodesSyntax? = nil, moveKeyword: TokenSyntax, _ garbageBetweenMoveKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> MoveExprSyntax {
+  public static func makeMoveExpr(_ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil, moveKeyword: TokenSyntax, _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> MoveExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeMoveKeyword?.raw,
+      unexpectedBeforeMoveKeyword?.raw,
       moveKeyword.raw,
-      garbageBetweenMoveKeywordAndExpression?.raw,
+      unexpectedBetweenMoveKeywordAndExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.moveExpr,
@@ -433,11 +433,11 @@ public enum SyntaxFactory {
     return MoveExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeclNameArgumentSyntax")
-  public static func makeDeclNameArgument(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> DeclNameArgumentSyntax {
+  public static func makeDeclNameArgument(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax) -> DeclNameArgumentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndColon?.raw,
       colon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgument,
@@ -474,13 +474,13 @@ public enum SyntaxFactory {
     return DeclNameArgumentListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeclNameArgumentsSyntax")
-  public static func makeDeclNameArguments(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentListSyntax, _ garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclNameArgumentsSyntax {
+  public static func makeDeclNameArguments(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil, arguments: DeclNameArgumentListSyntax, _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclNameArgumentsSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndArguments?.raw,
+      unexpectedBetweenLeftParenAndArguments?.raw,
       arguments.raw,
-      garbageBetweenArgumentsAndRightParen?.raw,
+      unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArguments,
@@ -503,11 +503,11 @@ public enum SyntaxFactory {
     return DeclNameArgumentsSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IdentifierExprSyntax")
-  public static func makeIdentifierExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> IdentifierExprSyntax {
+  public static func makeIdentifierExpr(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> IdentifierExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIdentifier?.raw,
+      unexpectedBeforeIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndDeclNameArguments?.raw,
+      unexpectedBetweenIdentifierAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierExpr,
@@ -528,9 +528,9 @@ public enum SyntaxFactory {
     return IdentifierExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SuperRefExprSyntax")
-  public static func makeSuperRefExpr(_ garbageBeforeSuperKeyword: GarbageNodesSyntax? = nil, superKeyword: TokenSyntax) -> SuperRefExprSyntax {
+  public static func makeSuperRefExpr(_ unexpectedBeforeSuperKeyword: UnexpectedNodesSyntax? = nil, superKeyword: TokenSyntax) -> SuperRefExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeSuperKeyword?.raw,
+      unexpectedBeforeSuperKeyword?.raw,
       superKeyword.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.superRefExpr,
@@ -549,9 +549,9 @@ public enum SyntaxFactory {
     return SuperRefExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on NilLiteralExprSyntax")
-  public static func makeNilLiteralExpr(_ garbageBeforeNilKeyword: GarbageNodesSyntax? = nil, nilKeyword: TokenSyntax) -> NilLiteralExprSyntax {
+  public static func makeNilLiteralExpr(_ unexpectedBeforeNilKeyword: UnexpectedNodesSyntax? = nil, nilKeyword: TokenSyntax) -> NilLiteralExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeNilKeyword?.raw,
+      unexpectedBeforeNilKeyword?.raw,
       nilKeyword.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.nilLiteralExpr,
@@ -570,9 +570,9 @@ public enum SyntaxFactory {
     return NilLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DiscardAssignmentExprSyntax")
-  public static func makeDiscardAssignmentExpr(_ garbageBeforeWildcard: GarbageNodesSyntax? = nil, wildcard: TokenSyntax) -> DiscardAssignmentExprSyntax {
+  public static func makeDiscardAssignmentExpr(_ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil, wildcard: TokenSyntax) -> DiscardAssignmentExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWildcard?.raw,
+      unexpectedBeforeWildcard?.raw,
       wildcard.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.discardAssignmentExpr,
@@ -591,9 +591,9 @@ public enum SyntaxFactory {
     return DiscardAssignmentExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AssignmentExprSyntax")
-  public static func makeAssignmentExpr(_ garbageBeforeAssignToken: GarbageNodesSyntax? = nil, assignToken: TokenSyntax) -> AssignmentExprSyntax {
+  public static func makeAssignmentExpr(_ unexpectedBeforeAssignToken: UnexpectedNodesSyntax? = nil, assignToken: TokenSyntax) -> AssignmentExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAssignToken?.raw,
+      unexpectedBeforeAssignToken?.raw,
       assignToken.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.assignmentExpr,
@@ -612,9 +612,9 @@ public enum SyntaxFactory {
     return AssignmentExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SequenceExprSyntax")
-  public static func makeSequenceExpr(_ garbageBeforeElements: GarbageNodesSyntax? = nil, elements: ExprListSyntax) -> SequenceExprSyntax {
+  public static func makeSequenceExpr(_ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil, elements: ExprListSyntax) -> SequenceExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeElements?.raw,
+      unexpectedBeforeElements?.raw,
       elements.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sequenceExpr,
@@ -649,9 +649,9 @@ public enum SyntaxFactory {
     return ExprListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundLineExprSyntax")
-  public static func makePoundLineExpr(_ garbageBeforePoundLine: GarbageNodesSyntax? = nil, poundLine: TokenSyntax) -> PoundLineExprSyntax {
+  public static func makePoundLineExpr(_ unexpectedBeforePoundLine: UnexpectedNodesSyntax? = nil, poundLine: TokenSyntax) -> PoundLineExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundLine?.raw,
+      unexpectedBeforePoundLine?.raw,
       poundLine.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundLineExpr,
@@ -670,9 +670,9 @@ public enum SyntaxFactory {
     return PoundLineExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundFileExprSyntax")
-  public static func makePoundFileExpr(_ garbageBeforePoundFile: GarbageNodesSyntax? = nil, poundFile: TokenSyntax) -> PoundFileExprSyntax {
+  public static func makePoundFileExpr(_ unexpectedBeforePoundFile: UnexpectedNodesSyntax? = nil, poundFile: TokenSyntax) -> PoundFileExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundFile?.raw,
+      unexpectedBeforePoundFile?.raw,
       poundFile.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFileExpr,
@@ -691,9 +691,9 @@ public enum SyntaxFactory {
     return PoundFileExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundFileIDExprSyntax")
-  public static func makePoundFileIDExpr(_ garbageBeforePoundFileID: GarbageNodesSyntax? = nil, poundFileID: TokenSyntax) -> PoundFileIDExprSyntax {
+  public static func makePoundFileIDExpr(_ unexpectedBeforePoundFileID: UnexpectedNodesSyntax? = nil, poundFileID: TokenSyntax) -> PoundFileIDExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundFileID?.raw,
+      unexpectedBeforePoundFileID?.raw,
       poundFileID.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFileIDExpr,
@@ -712,9 +712,9 @@ public enum SyntaxFactory {
     return PoundFileIDExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundFilePathExprSyntax")
-  public static func makePoundFilePathExpr(_ garbageBeforePoundFilePath: GarbageNodesSyntax? = nil, poundFilePath: TokenSyntax) -> PoundFilePathExprSyntax {
+  public static func makePoundFilePathExpr(_ unexpectedBeforePoundFilePath: UnexpectedNodesSyntax? = nil, poundFilePath: TokenSyntax) -> PoundFilePathExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundFilePath?.raw,
+      unexpectedBeforePoundFilePath?.raw,
       poundFilePath.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFilePathExpr,
@@ -733,9 +733,9 @@ public enum SyntaxFactory {
     return PoundFilePathExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundFunctionExprSyntax")
-  public static func makePoundFunctionExpr(_ garbageBeforePoundFunction: GarbageNodesSyntax? = nil, poundFunction: TokenSyntax) -> PoundFunctionExprSyntax {
+  public static func makePoundFunctionExpr(_ unexpectedBeforePoundFunction: UnexpectedNodesSyntax? = nil, poundFunction: TokenSyntax) -> PoundFunctionExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundFunction?.raw,
+      unexpectedBeforePoundFunction?.raw,
       poundFunction.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFunctionExpr,
@@ -754,9 +754,9 @@ public enum SyntaxFactory {
     return PoundFunctionExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundDsohandleExprSyntax")
-  public static func makePoundDsohandleExpr(_ garbageBeforePoundDsohandle: GarbageNodesSyntax? = nil, poundDsohandle: TokenSyntax) -> PoundDsohandleExprSyntax {
+  public static func makePoundDsohandleExpr(_ unexpectedBeforePoundDsohandle: UnexpectedNodesSyntax? = nil, poundDsohandle: TokenSyntax) -> PoundDsohandleExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundDsohandle?.raw,
+      unexpectedBeforePoundDsohandle?.raw,
       poundDsohandle.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundDsohandleExpr,
@@ -775,11 +775,11 @@ public enum SyntaxFactory {
     return PoundDsohandleExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SymbolicReferenceExprSyntax")
-  public static func makeSymbolicReferenceExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SymbolicReferenceExprSyntax {
+  public static func makeSymbolicReferenceExpr(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SymbolicReferenceExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIdentifier?.raw,
+      unexpectedBeforeIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndGenericArgumentClause?.raw,
+      unexpectedBetweenIdentifierAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.symbolicReferenceExpr,
@@ -800,11 +800,11 @@ public enum SyntaxFactory {
     return SymbolicReferenceExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrefixOperatorExprSyntax")
-  public static func makePrefixOperatorExpr(_ garbageBeforeOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax?, _ garbageBetweenOperatorTokenAndPostfixExpression: GarbageNodesSyntax? = nil, postfixExpression: ExprSyntax) -> PrefixOperatorExprSyntax {
+  public static func makePrefixOperatorExpr(_ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil, operatorToken: TokenSyntax?, _ unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodesSyntax? = nil, postfixExpression: ExprSyntax) -> PrefixOperatorExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeOperatorToken?.raw,
+      unexpectedBeforeOperatorToken?.raw,
       operatorToken?.raw,
-      garbageBetweenOperatorTokenAndPostfixExpression?.raw,
+      unexpectedBetweenOperatorTokenAndPostfixExpression?.raw,
       postfixExpression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.prefixOperatorExpr,
@@ -825,9 +825,9 @@ public enum SyntaxFactory {
     return PrefixOperatorExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on BinaryOperatorExprSyntax")
-  public static func makeBinaryOperatorExpr(_ garbageBeforeOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax) -> BinaryOperatorExprSyntax {
+  public static func makeBinaryOperatorExpr(_ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil, operatorToken: TokenSyntax) -> BinaryOperatorExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeOperatorToken?.raw,
+      unexpectedBeforeOperatorToken?.raw,
       operatorToken.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.binaryOperatorExpr,
@@ -846,13 +846,13 @@ public enum SyntaxFactory {
     return BinaryOperatorExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ArrowExprSyntax")
-  public static func makeArrowExpr(_ garbageBeforeAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsToken: GarbageNodesSyntax? = nil, throwsToken: TokenSyntax?, _ garbageBetweenThrowsTokenAndArrowToken: GarbageNodesSyntax? = nil, arrowToken: TokenSyntax) -> ArrowExprSyntax {
+  public static func makeArrowExpr(_ unexpectedBeforeAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsToken: UnexpectedNodesSyntax? = nil, throwsToken: TokenSyntax?, _ unexpectedBetweenThrowsTokenAndArrowToken: UnexpectedNodesSyntax? = nil, arrowToken: TokenSyntax) -> ArrowExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAsyncKeyword?.raw,
+      unexpectedBeforeAsyncKeyword?.raw,
       asyncKeyword?.raw,
-      garbageBetweenAsyncKeywordAndThrowsToken?.raw,
+      unexpectedBetweenAsyncKeywordAndThrowsToken?.raw,
       throwsToken?.raw,
-      garbageBetweenThrowsTokenAndArrowToken?.raw,
+      unexpectedBetweenThrowsTokenAndArrowToken?.raw,
       arrowToken.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrowExpr,
@@ -875,13 +875,13 @@ public enum SyntaxFactory {
     return ArrowExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on InfixOperatorExprSyntax")
-  public static func makeInfixOperatorExpr(_ garbageBeforeLeftOperand: GarbageNodesSyntax? = nil, leftOperand: ExprSyntax, _ garbageBetweenLeftOperandAndOperatorOperand: GarbageNodesSyntax? = nil, operatorOperand: ExprSyntax, _ garbageBetweenOperatorOperandAndRightOperand: GarbageNodesSyntax? = nil, rightOperand: ExprSyntax) -> InfixOperatorExprSyntax {
+  public static func makeInfixOperatorExpr(_ unexpectedBeforeLeftOperand: UnexpectedNodesSyntax? = nil, leftOperand: ExprSyntax, _ unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodesSyntax? = nil, operatorOperand: ExprSyntax, _ unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? = nil, rightOperand: ExprSyntax) -> InfixOperatorExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftOperand?.raw,
+      unexpectedBeforeLeftOperand?.raw,
       leftOperand.raw,
-      garbageBetweenLeftOperandAndOperatorOperand?.raw,
+      unexpectedBetweenLeftOperandAndOperatorOperand?.raw,
       operatorOperand.raw,
-      garbageBetweenOperatorOperandAndRightOperand?.raw,
+      unexpectedBetweenOperatorOperandAndRightOperand?.raw,
       rightOperand.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.infixOperatorExpr,
@@ -904,9 +904,9 @@ public enum SyntaxFactory {
     return InfixOperatorExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FloatLiteralExprSyntax")
-  public static func makeFloatLiteralExpr(_ garbageBeforeFloatingDigits: GarbageNodesSyntax? = nil, floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
+  public static func makeFloatLiteralExpr(_ unexpectedBeforeFloatingDigits: UnexpectedNodesSyntax? = nil, floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeFloatingDigits?.raw,
+      unexpectedBeforeFloatingDigits?.raw,
       floatingDigits.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.floatLiteralExpr,
@@ -925,13 +925,13 @@ public enum SyntaxFactory {
     return FloatLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TupleExprSyntax")
-  public static func makeTupleExpr(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? = nil, elementList: TupleExprElementListSyntax, _ garbageBetweenElementListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleExprSyntax {
+  public static func makeTupleExpr(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, elementList: TupleExprElementListSyntax, _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndElementList?.raw,
+      unexpectedBetweenLeftParenAndElementList?.raw,
       elementList.raw,
-      garbageBetweenElementListAndRightParen?.raw,
+      unexpectedBetweenElementListAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExpr,
@@ -954,13 +954,13 @@ public enum SyntaxFactory {
     return TupleExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ArrayExprSyntax")
-  public static func makeArrayExpr(_ garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, _ garbageBetweenLeftSquareAndElements: GarbageNodesSyntax? = nil, elements: ArrayElementListSyntax, _ garbageBetweenElementsAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> ArrayExprSyntax {
+  public static func makeArrayExpr(_ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax, _ unexpectedBetweenLeftSquareAndElements: UnexpectedNodesSyntax? = nil, elements: ArrayElementListSyntax, _ unexpectedBetweenElementsAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax) -> ArrayExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftSquare?.raw,
+      unexpectedBeforeLeftSquare?.raw,
       leftSquare.raw,
-      garbageBetweenLeftSquareAndElements?.raw,
+      unexpectedBetweenLeftSquareAndElements?.raw,
       elements.raw,
-      garbageBetweenElementsAndRightSquare?.raw,
+      unexpectedBetweenElementsAndRightSquare?.raw,
       rightSquare.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayExpr,
@@ -983,13 +983,13 @@ public enum SyntaxFactory {
     return ArrayExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DictionaryExprSyntax")
-  public static func makeDictionaryExpr(_ garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, _ garbageBetweenLeftSquareAndContent: GarbageNodesSyntax? = nil, content: Syntax, _ garbageBetweenContentAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> DictionaryExprSyntax {
+  public static func makeDictionaryExpr(_ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax, _ unexpectedBetweenLeftSquareAndContent: UnexpectedNodesSyntax? = nil, content: Syntax, _ unexpectedBetweenContentAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax) -> DictionaryExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftSquare?.raw,
+      unexpectedBeforeLeftSquare?.raw,
       leftSquare.raw,
-      garbageBetweenLeftSquareAndContent?.raw,
+      unexpectedBetweenLeftSquareAndContent?.raw,
       content.raw,
-      garbageBetweenContentAndRightSquare?.raw,
+      unexpectedBetweenContentAndRightSquare?.raw,
       rightSquare.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryExpr,
@@ -1012,15 +1012,15 @@ public enum SyntaxFactory {
     return DictionaryExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TupleExprElementSyntax")
-  public static func makeTupleExprElement(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleExprElementSyntax {
+  public static func makeTupleExprElement(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax?, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleExprElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label?.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndExpression?.raw,
+      unexpectedBetweenColonAndExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndTrailingComma?.raw,
+      unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElement,
@@ -1045,11 +1045,11 @@ public enum SyntaxFactory {
     return TupleExprElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ArrayElementSyntax")
-  public static func makeArrayElement(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ArrayElementSyntax {
+  public static func makeArrayElement(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ArrayElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndTrailingComma?.raw,
+      unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElement,
@@ -1070,15 +1070,15 @@ public enum SyntaxFactory {
     return ArrayElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DictionaryElementSyntax")
-  public static func makeDictionaryElement(_ garbageBeforeKeyExpression: GarbageNodesSyntax? = nil, keyExpression: ExprSyntax, _ garbageBetweenKeyExpressionAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValueExpression: GarbageNodesSyntax? = nil, valueExpression: ExprSyntax, _ garbageBetweenValueExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DictionaryElementSyntax {
+  public static func makeDictionaryElement(_ unexpectedBeforeKeyExpression: UnexpectedNodesSyntax? = nil, keyExpression: ExprSyntax, _ unexpectedBetweenKeyExpressionAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValueExpression: UnexpectedNodesSyntax? = nil, valueExpression: ExprSyntax, _ unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DictionaryElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeKeyExpression?.raw,
+      unexpectedBeforeKeyExpression?.raw,
       keyExpression.raw,
-      garbageBetweenKeyExpressionAndColon?.raw,
+      unexpectedBetweenKeyExpressionAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValueExpression?.raw,
+      unexpectedBetweenColonAndValueExpression?.raw,
       valueExpression.raw,
-      garbageBetweenValueExpressionAndTrailingComma?.raw,
+      unexpectedBetweenValueExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElement,
@@ -1103,9 +1103,9 @@ public enum SyntaxFactory {
     return DictionaryElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IntegerLiteralExprSyntax")
-  public static func makeIntegerLiteralExpr(_ garbageBeforeDigits: GarbageNodesSyntax? = nil, digits: TokenSyntax) -> IntegerLiteralExprSyntax {
+  public static func makeIntegerLiteralExpr(_ unexpectedBeforeDigits: UnexpectedNodesSyntax? = nil, digits: TokenSyntax) -> IntegerLiteralExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDigits?.raw,
+      unexpectedBeforeDigits?.raw,
       digits.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.integerLiteralExpr,
@@ -1124,9 +1124,9 @@ public enum SyntaxFactory {
     return IntegerLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on BooleanLiteralExprSyntax")
-  public static func makeBooleanLiteralExpr(_ garbageBeforeBooleanLiteral: GarbageNodesSyntax? = nil, booleanLiteral: TokenSyntax) -> BooleanLiteralExprSyntax {
+  public static func makeBooleanLiteralExpr(_ unexpectedBeforeBooleanLiteral: UnexpectedNodesSyntax? = nil, booleanLiteral: TokenSyntax) -> BooleanLiteralExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBooleanLiteral?.raw,
+      unexpectedBeforeBooleanLiteral?.raw,
       booleanLiteral.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.booleanLiteralExpr,
@@ -1145,17 +1145,17 @@ public enum SyntaxFactory {
     return BooleanLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TernaryExprSyntax")
-  public static func makeTernaryExpr(_ garbageBeforeConditionExpression: GarbageNodesSyntax? = nil, conditionExpression: ExprSyntax, _ garbageBetweenConditionExpressionAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax, _ garbageBetweenQuestionMarkAndFirstChoice: GarbageNodesSyntax? = nil, firstChoice: ExprSyntax, _ garbageBetweenFirstChoiceAndColonMark: GarbageNodesSyntax? = nil, colonMark: TokenSyntax, _ garbageBetweenColonMarkAndSecondChoice: GarbageNodesSyntax? = nil, secondChoice: ExprSyntax) -> TernaryExprSyntax {
+  public static func makeTernaryExpr(_ unexpectedBeforeConditionExpression: UnexpectedNodesSyntax? = nil, conditionExpression: ExprSyntax, _ unexpectedBetweenConditionExpressionAndQuestionMark: UnexpectedNodesSyntax? = nil, questionMark: TokenSyntax, _ unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? = nil, firstChoice: ExprSyntax, _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil, colonMark: TokenSyntax, _ unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodesSyntax? = nil, secondChoice: ExprSyntax) -> TernaryExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeConditionExpression?.raw,
+      unexpectedBeforeConditionExpression?.raw,
       conditionExpression.raw,
-      garbageBetweenConditionExpressionAndQuestionMark?.raw,
+      unexpectedBetweenConditionExpressionAndQuestionMark?.raw,
       questionMark.raw,
-      garbageBetweenQuestionMarkAndFirstChoice?.raw,
+      unexpectedBetweenQuestionMarkAndFirstChoice?.raw,
       firstChoice.raw,
-      garbageBetweenFirstChoiceAndColonMark?.raw,
+      unexpectedBetweenFirstChoiceAndColonMark?.raw,
       colonMark.raw,
-      garbageBetweenColonMarkAndSecondChoice?.raw,
+      unexpectedBetweenColonMarkAndSecondChoice?.raw,
       secondChoice.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ternaryExpr,
@@ -1182,15 +1182,15 @@ public enum SyntaxFactory {
     return TernaryExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MemberAccessExprSyntax")
-  public static func makeMemberAccessExpr(_ garbageBeforeBase: GarbageNodesSyntax? = nil, base: ExprSyntax?, _ garbageBetweenBaseAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax, _ garbageBetweenDotAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> MemberAccessExprSyntax {
+  public static func makeMemberAccessExpr(_ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil, base: ExprSyntax?, _ unexpectedBetweenBaseAndDot: UnexpectedNodesSyntax? = nil, dot: TokenSyntax, _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> MemberAccessExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBase?.raw,
+      unexpectedBeforeBase?.raw,
       base?.raw,
-      garbageBetweenBaseAndDot?.raw,
+      unexpectedBetweenBaseAndDot?.raw,
       dot.raw,
-      garbageBetweenDotAndName?.raw,
+      unexpectedBetweenDotAndName?.raw,
       name.raw,
-      garbageBetweenNameAndDeclNameArguments?.raw,
+      unexpectedBetweenNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberAccessExpr,
@@ -1215,11 +1215,11 @@ public enum SyntaxFactory {
     return MemberAccessExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IsExprSyntax")
-  public static func makeIsExpr(_ garbageBeforeIsTok: GarbageNodesSyntax? = nil, isTok: TokenSyntax, _ garbageBetweenIsTokAndTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax) -> IsExprSyntax {
+  public static func makeIsExpr(_ unexpectedBeforeIsTok: UnexpectedNodesSyntax? = nil, isTok: TokenSyntax, _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil, typeName: TypeSyntax) -> IsExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIsTok?.raw,
+      unexpectedBeforeIsTok?.raw,
       isTok.raw,
-      garbageBetweenIsTokAndTypeName?.raw,
+      unexpectedBetweenIsTokAndTypeName?.raw,
       typeName.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.isExpr,
@@ -1240,13 +1240,13 @@ public enum SyntaxFactory {
     return IsExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AsExprSyntax")
-  public static func makeAsExpr(_ garbageBeforeAsTok: GarbageNodesSyntax? = nil, asTok: TokenSyntax, _ garbageBetweenAsTokAndQuestionOrExclamationMark: GarbageNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ garbageBetweenQuestionOrExclamationMarkAndTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax) -> AsExprSyntax {
+  public static func makeAsExpr(_ unexpectedBeforeAsTok: UnexpectedNodesSyntax? = nil, asTok: TokenSyntax, _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? = nil, typeName: TypeSyntax) -> AsExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAsTok?.raw,
+      unexpectedBeforeAsTok?.raw,
       asTok.raw,
-      garbageBetweenAsTokAndQuestionOrExclamationMark?.raw,
+      unexpectedBetweenAsTokAndQuestionOrExclamationMark?.raw,
       questionOrExclamationMark?.raw,
-      garbageBetweenQuestionOrExclamationMarkAndTypeName?.raw,
+      unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.raw,
       typeName.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.asExpr,
@@ -1269,9 +1269,9 @@ public enum SyntaxFactory {
     return AsExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TypeExprSyntax")
-  public static func makeTypeExpr(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> TypeExprSyntax {
+  public static func makeTypeExpr(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: TypeSyntax) -> TypeExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeType?.raw,
+      unexpectedBeforeType?.raw,
       type.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeExpr,
@@ -1290,17 +1290,17 @@ public enum SyntaxFactory {
     return TypeExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ClosureCaptureItemSyntax")
-  public static func makeClosureCaptureItem(_ garbageBeforeSpecifier: GarbageNodesSyntax? = nil, specifier: TokenListSyntax?, _ garbageBetweenSpecifierAndName: GarbageNodesSyntax? = nil, name: TokenSyntax?, _ garbageBetweenNameAndAssignToken: GarbageNodesSyntax? = nil, assignToken: TokenSyntax?, _ garbageBetweenAssignTokenAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureCaptureItemSyntax {
+  public static func makeClosureCaptureItem(_ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil, specifier: TokenListSyntax?, _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax?, _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil, assignToken: TokenSyntax?, _ unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureCaptureItemSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeSpecifier?.raw,
+      unexpectedBeforeSpecifier?.raw,
       specifier?.raw,
-      garbageBetweenSpecifierAndName?.raw,
+      unexpectedBetweenSpecifierAndName?.raw,
       name?.raw,
-      garbageBetweenNameAndAssignToken?.raw,
+      unexpectedBetweenNameAndAssignToken?.raw,
       assignToken?.raw,
-      garbageBetweenAssignTokenAndExpression?.raw,
+      unexpectedBetweenAssignTokenAndExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndTrailingComma?.raw,
+      unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItem,
@@ -1343,13 +1343,13 @@ public enum SyntaxFactory {
     return ClosureCaptureItemListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ClosureCaptureSignatureSyntax")
-  public static func makeClosureCaptureSignature(_ garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, _ garbageBetweenLeftSquareAndItems: GarbageNodesSyntax? = nil, items: ClosureCaptureItemListSyntax?, _ garbageBetweenItemsAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> ClosureCaptureSignatureSyntax {
+  public static func makeClosureCaptureSignature(_ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, leftSquare: TokenSyntax, _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil, items: ClosureCaptureItemListSyntax?, _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil, rightSquare: TokenSyntax) -> ClosureCaptureSignatureSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftSquare?.raw,
+      unexpectedBeforeLeftSquare?.raw,
       leftSquare.raw,
-      garbageBetweenLeftSquareAndItems?.raw,
+      unexpectedBetweenLeftSquareAndItems?.raw,
       items?.raw,
-      garbageBetweenItemsAndRightSquare?.raw,
+      unexpectedBetweenItemsAndRightSquare?.raw,
       rightSquare.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureSignature,
@@ -1372,11 +1372,11 @@ public enum SyntaxFactory {
     return ClosureCaptureSignatureSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ClosureParamSyntax")
-  public static func makeClosureParam(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureParamSyntax {
+  public static func makeClosureParam(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureParamSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingComma?.raw,
+      unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParam,
@@ -1413,21 +1413,21 @@ public enum SyntaxFactory {
     return ClosureParamListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ClosureSignatureSyntax")
-  public static func makeClosureSignature(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndCapture: GarbageNodesSyntax? = nil, capture: ClosureCaptureSignatureSyntax?, _ garbageBetweenCaptureAndInput: GarbageNodesSyntax? = nil, input: Syntax?, _ garbageBetweenInputAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsTok: GarbageNodesSyntax? = nil, throwsTok: TokenSyntax?, _ garbageBetweenThrowsTokAndOutput: GarbageNodesSyntax? = nil, output: ReturnClauseSyntax?, _ garbageBetweenOutputAndInTok: GarbageNodesSyntax? = nil, inTok: TokenSyntax) -> ClosureSignatureSyntax {
+  public static func makeClosureSignature(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil, capture: ClosureCaptureSignatureSyntax?, _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil, input: Syntax?, _ unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodesSyntax? = nil, throwsTok: TokenSyntax?, _ unexpectedBetweenThrowsTokAndOutput: UnexpectedNodesSyntax? = nil, output: ReturnClauseSyntax?, _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil, inTok: TokenSyntax) -> ClosureSignatureSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndCapture?.raw,
+      unexpectedBetweenAttributesAndCapture?.raw,
       capture?.raw,
-      garbageBetweenCaptureAndInput?.raw,
+      unexpectedBetweenCaptureAndInput?.raw,
       input?.raw,
-      garbageBetweenInputAndAsyncKeyword?.raw,
+      unexpectedBetweenInputAndAsyncKeyword?.raw,
       asyncKeyword?.raw,
-      garbageBetweenAsyncKeywordAndThrowsTok?.raw,
+      unexpectedBetweenAsyncKeywordAndThrowsTok?.raw,
       throwsTok?.raw,
-      garbageBetweenThrowsTokAndOutput?.raw,
+      unexpectedBetweenThrowsTokAndOutput?.raw,
       output?.raw,
-      garbageBetweenOutputAndInTok?.raw,
+      unexpectedBetweenOutputAndInTok?.raw,
       inTok.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureSignature,
@@ -1458,15 +1458,15 @@ public enum SyntaxFactory {
     return ClosureSignatureSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ClosureExprSyntax")
-  public static func makeClosureExpr(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndSignature: GarbageNodesSyntax? = nil, signature: ClosureSignatureSyntax?, _ garbageBetweenSignatureAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> ClosureExprSyntax {
+  public static func makeClosureExpr(_ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndSignature: UnexpectedNodesSyntax? = nil, signature: ClosureSignatureSyntax?, _ unexpectedBetweenSignatureAndStatements: UnexpectedNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax) -> ClosureExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftBrace?.raw,
+      unexpectedBeforeLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndSignature?.raw,
+      unexpectedBetweenLeftBraceAndSignature?.raw,
       signature?.raw,
-      garbageBetweenSignatureAndStatements?.raw,
+      unexpectedBetweenSignatureAndStatements?.raw,
       statements.raw,
-      garbageBetweenStatementsAndRightBrace?.raw,
+      unexpectedBetweenStatementsAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureExpr,
@@ -1491,9 +1491,9 @@ public enum SyntaxFactory {
     return ClosureExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on UnresolvedPatternExprSyntax")
-  public static func makeUnresolvedPatternExpr(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax) -> UnresolvedPatternExprSyntax {
+  public static func makeUnresolvedPatternExpr(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax) -> UnresolvedPatternExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unresolvedPatternExpr,
@@ -1512,13 +1512,13 @@ public enum SyntaxFactory {
     return UnresolvedPatternExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MultipleTrailingClosureElementSyntax")
-  public static func makeMultipleTrailingClosureElement(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndClosure: GarbageNodesSyntax? = nil, closure: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
+  public static func makeMultipleTrailingClosureElement(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndClosure: UnexpectedNodesSyntax? = nil, closure: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndClosure?.raw,
+      unexpectedBetweenColonAndClosure?.raw,
       closure.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElement,
@@ -1557,19 +1557,19 @@ public enum SyntaxFactory {
     return MultipleTrailingClosureElementListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionCallExprSyntax")
-  public static func makeFunctionCallExpr(_ garbageBeforeCalledExpression: GarbageNodesSyntax? = nil, calledExpression: ExprSyntax, _ garbageBetweenCalledExpressionAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?, _ garbageBetweenRightParenAndTrailingClosure: GarbageNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> FunctionCallExprSyntax {
+  public static func makeFunctionCallExpr(_ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, calledExpression: ExprSyntax, _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> FunctionCallExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeCalledExpression?.raw,
+      unexpectedBeforeCalledExpression?.raw,
       calledExpression.raw,
-      garbageBetweenCalledExpressionAndLeftParen?.raw,
+      unexpectedBetweenCalledExpressionAndLeftParen?.raw,
       leftParen?.raw,
-      garbageBetweenLeftParenAndArgumentList?.raw,
+      unexpectedBetweenLeftParenAndArgumentList?.raw,
       argumentList.raw,
-      garbageBetweenArgumentListAndRightParen?.raw,
+      unexpectedBetweenArgumentListAndRightParen?.raw,
       rightParen?.raw,
-      garbageBetweenRightParenAndTrailingClosure?.raw,
+      unexpectedBetweenRightParenAndTrailingClosure?.raw,
       trailingClosure?.raw,
-      garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
       additionalTrailingClosures?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionCallExpr,
@@ -1598,19 +1598,19 @@ public enum SyntaxFactory {
     return FunctionCallExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SubscriptExprSyntax")
-  public static func makeSubscriptExpr(_ garbageBeforeCalledExpression: GarbageNodesSyntax? = nil, calledExpression: ExprSyntax, _ garbageBetweenCalledExpressionAndLeftBracket: GarbageNodesSyntax? = nil, leftBracket: TokenSyntax, _ garbageBetweenLeftBracketAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ garbageBetweenArgumentListAndRightBracket: GarbageNodesSyntax? = nil, rightBracket: TokenSyntax, _ garbageBetweenRightBracketAndTrailingClosure: GarbageNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> SubscriptExprSyntax {
+  public static func makeSubscriptExpr(_ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, calledExpression: ExprSyntax, _ unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil, leftBracket: TokenSyntax, _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, rightBracket: TokenSyntax, _ unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> SubscriptExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeCalledExpression?.raw,
+      unexpectedBeforeCalledExpression?.raw,
       calledExpression.raw,
-      garbageBetweenCalledExpressionAndLeftBracket?.raw,
+      unexpectedBetweenCalledExpressionAndLeftBracket?.raw,
       leftBracket.raw,
-      garbageBetweenLeftBracketAndArgumentList?.raw,
+      unexpectedBetweenLeftBracketAndArgumentList?.raw,
       argumentList.raw,
-      garbageBetweenArgumentListAndRightBracket?.raw,
+      unexpectedBetweenArgumentListAndRightBracket?.raw,
       rightBracket.raw,
-      garbageBetweenRightBracketAndTrailingClosure?.raw,
+      unexpectedBetweenRightBracketAndTrailingClosure?.raw,
       trailingClosure?.raw,
-      garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
       additionalTrailingClosures?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.subscriptExpr,
@@ -1639,11 +1639,11 @@ public enum SyntaxFactory {
     return SubscriptExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OptionalChainingExprSyntax")
-  public static func makeOptionalChainingExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalChainingExprSyntax {
+  public static func makeOptionalChainingExpr(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndQuestionMark: UnexpectedNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalChainingExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndQuestionMark?.raw,
+      unexpectedBetweenExpressionAndQuestionMark?.raw,
       questionMark.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalChainingExpr,
@@ -1664,11 +1664,11 @@ public enum SyntaxFactory {
     return OptionalChainingExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ForcedValueExprSyntax")
-  public static func makeForcedValueExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndExclamationMark: GarbageNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ForcedValueExprSyntax {
+  public static func makeForcedValueExpr(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndExclamationMark: UnexpectedNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ForcedValueExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndExclamationMark?.raw,
+      unexpectedBetweenExpressionAndExclamationMark?.raw,
       exclamationMark.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.forcedValueExpr,
@@ -1689,11 +1689,11 @@ public enum SyntaxFactory {
     return ForcedValueExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PostfixUnaryExprSyntax")
-  public static func makePostfixUnaryExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax) -> PostfixUnaryExprSyntax {
+  public static func makePostfixUnaryExpr(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodesSyntax? = nil, operatorToken: TokenSyntax) -> PostfixUnaryExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndOperatorToken?.raw,
+      unexpectedBetweenExpressionAndOperatorToken?.raw,
       operatorToken.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixUnaryExpr,
@@ -1714,11 +1714,11 @@ public enum SyntaxFactory {
     return PostfixUnaryExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SpecializeExprSyntax")
-  public static func makeSpecializeExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax) -> SpecializeExprSyntax {
+  public static func makeSpecializeExpr(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndGenericArgumentClause: UnexpectedNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax) -> SpecializeExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndGenericArgumentClause?.raw,
+      unexpectedBetweenExpressionAndGenericArgumentClause?.raw,
       genericArgumentClause.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.specializeExpr,
@@ -1739,9 +1739,9 @@ public enum SyntaxFactory {
     return SpecializeExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on StringSegmentSyntax")
-  public static func makeStringSegment(_ garbageBeforeContent: GarbageNodesSyntax? = nil, content: TokenSyntax) -> StringSegmentSyntax {
+  public static func makeStringSegment(_ unexpectedBeforeContent: UnexpectedNodesSyntax? = nil, content: TokenSyntax) -> StringSegmentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeContent?.raw,
+      unexpectedBeforeContent?.raw,
       content.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringSegment,
@@ -1760,17 +1760,17 @@ public enum SyntaxFactory {
     return StringSegmentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ExpressionSegmentSyntax")
-  public static func makeExpressionSegment(_ garbageBeforeBackslash: GarbageNodesSyntax? = nil, backslash: TokenSyntax, _ garbageBetweenBackslashAndDelimiter: GarbageNodesSyntax? = nil, delimiter: TokenSyntax?, _ garbageBetweenDelimiterAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndExpressions: GarbageNodesSyntax? = nil, expressions: TupleExprElementListSyntax, _ garbageBetweenExpressionsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ExpressionSegmentSyntax {
+  public static func makeExpressionSegment(_ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, backslash: TokenSyntax, _ unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? = nil, delimiter: TokenSyntax?, _ unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil, expressions: TupleExprElementListSyntax, _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> ExpressionSegmentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBackslash?.raw,
+      unexpectedBeforeBackslash?.raw,
       backslash.raw,
-      garbageBetweenBackslashAndDelimiter?.raw,
+      unexpectedBetweenBackslashAndDelimiter?.raw,
       delimiter?.raw,
-      garbageBetweenDelimiterAndLeftParen?.raw,
+      unexpectedBetweenDelimiterAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndExpressions?.raw,
+      unexpectedBetweenLeftParenAndExpressions?.raw,
       expressions.raw,
-      garbageBetweenExpressionsAndRightParen?.raw,
+      unexpectedBetweenExpressionsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionSegment,
@@ -1797,17 +1797,17 @@ public enum SyntaxFactory {
     return ExpressionSegmentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on StringLiteralExprSyntax")
-  public static func makeStringLiteralExpr(_ garbageBeforeOpenDelimiter: GarbageNodesSyntax? = nil, openDelimiter: TokenSyntax?, _ garbageBetweenOpenDelimiterAndOpenQuote: GarbageNodesSyntax? = nil, openQuote: TokenSyntax, _ garbageBetweenOpenQuoteAndSegments: GarbageNodesSyntax? = nil, segments: StringLiteralSegmentsSyntax, _ garbageBetweenSegmentsAndCloseQuote: GarbageNodesSyntax? = nil, closeQuote: TokenSyntax, _ garbageBetweenCloseQuoteAndCloseDelimiter: GarbageNodesSyntax? = nil, closeDelimiter: TokenSyntax?) -> StringLiteralExprSyntax {
+  public static func makeStringLiteralExpr(_ unexpectedBeforeOpenDelimiter: UnexpectedNodesSyntax? = nil, openDelimiter: TokenSyntax?, _ unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodesSyntax? = nil, openQuote: TokenSyntax, _ unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodesSyntax? = nil, segments: StringLiteralSegmentsSyntax, _ unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodesSyntax? = nil, closeQuote: TokenSyntax, _ unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodesSyntax? = nil, closeDelimiter: TokenSyntax?) -> StringLiteralExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeOpenDelimiter?.raw,
+      unexpectedBeforeOpenDelimiter?.raw,
       openDelimiter?.raw,
-      garbageBetweenOpenDelimiterAndOpenQuote?.raw,
+      unexpectedBetweenOpenDelimiterAndOpenQuote?.raw,
       openQuote.raw,
-      garbageBetweenOpenQuoteAndSegments?.raw,
+      unexpectedBetweenOpenQuoteAndSegments?.raw,
       segments.raw,
-      garbageBetweenSegmentsAndCloseQuote?.raw,
+      unexpectedBetweenSegmentsAndCloseQuote?.raw,
       closeQuote.raw,
-      garbageBetweenCloseQuoteAndCloseDelimiter?.raw,
+      unexpectedBetweenCloseQuoteAndCloseDelimiter?.raw,
       closeDelimiter?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringLiteralExpr,
@@ -1834,9 +1834,9 @@ public enum SyntaxFactory {
     return StringLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on RegexLiteralExprSyntax")
-  public static func makeRegexLiteralExpr(_ garbageBeforeRegex: GarbageNodesSyntax? = nil, regex: TokenSyntax) -> RegexLiteralExprSyntax {
+  public static func makeRegexLiteralExpr(_ unexpectedBeforeRegex: UnexpectedNodesSyntax? = nil, regex: TokenSyntax) -> RegexLiteralExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeRegex?.raw,
+      unexpectedBeforeRegex?.raw,
       regex.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.regexLiteralExpr,
@@ -1855,13 +1855,13 @@ public enum SyntaxFactory {
     return RegexLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on KeyPathExprSyntax")
-  public static func makeKeyPathExpr(_ garbageBeforeBackslash: GarbageNodesSyntax? = nil, backslash: TokenSyntax, _ garbageBetweenBackslashAndRootExpr: GarbageNodesSyntax? = nil, rootExpr: ExprSyntax?, _ garbageBetweenRootExprAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> KeyPathExprSyntax {
+  public static func makeKeyPathExpr(_ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, backslash: TokenSyntax, _ unexpectedBetweenBackslashAndRootExpr: UnexpectedNodesSyntax? = nil, rootExpr: ExprSyntax?, _ unexpectedBetweenRootExprAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> KeyPathExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBackslash?.raw,
+      unexpectedBeforeBackslash?.raw,
       backslash.raw,
-      garbageBetweenBackslashAndRootExpr?.raw,
+      unexpectedBetweenBackslashAndRootExpr?.raw,
       rootExpr?.raw,
-      garbageBetweenRootExprAndExpression?.raw,
+      unexpectedBetweenRootExprAndExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.keyPathExpr,
@@ -1884,9 +1884,9 @@ public enum SyntaxFactory {
     return KeyPathExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on KeyPathBaseExprSyntax")
-  public static func makeKeyPathBaseExpr(_ garbageBeforePeriod: GarbageNodesSyntax? = nil, period: TokenSyntax) -> KeyPathBaseExprSyntax {
+  public static func makeKeyPathBaseExpr(_ unexpectedBeforePeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax) -> KeyPathBaseExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePeriod?.raw,
+      unexpectedBeforePeriod?.raw,
       period.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.keyPathBaseExpr,
@@ -1905,11 +1905,11 @@ public enum SyntaxFactory {
     return KeyPathBaseExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ObjcNamePieceSyntax")
-  public static func makeObjcNamePiece(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax?) -> ObjcNamePieceSyntax {
+  public static func makeObjcNamePiece(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndDot: UnexpectedNodesSyntax? = nil, dot: TokenSyntax?) -> ObjcNamePieceSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndDot?.raw,
+      unexpectedBetweenNameAndDot?.raw,
       dot?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcNamePiece,
@@ -1946,15 +1946,15 @@ public enum SyntaxFactory {
     return ObjcNameSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ObjcKeyPathExprSyntax")
-  public static func makeObjcKeyPathExpr(_ garbageBeforeKeyPath: GarbageNodesSyntax? = nil, keyPath: TokenSyntax, _ garbageBetweenKeyPathAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndName: GarbageNodesSyntax? = nil, name: ObjcNameSyntax, _ garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcKeyPathExprSyntax {
+  public static func makeObjcKeyPathExpr(_ unexpectedBeforeKeyPath: UnexpectedNodesSyntax? = nil, keyPath: TokenSyntax, _ unexpectedBetweenKeyPathAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndName: UnexpectedNodesSyntax? = nil, name: ObjcNameSyntax, _ unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcKeyPathExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeKeyPath?.raw,
+      unexpectedBeforeKeyPath?.raw,
       keyPath.raw,
-      garbageBetweenKeyPathAndLeftParen?.raw,
+      unexpectedBetweenKeyPathAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndName?.raw,
+      unexpectedBetweenLeftParenAndName?.raw,
       name.raw,
-      garbageBetweenNameAndRightParen?.raw,
+      unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcKeyPathExpr,
@@ -1979,19 +1979,19 @@ public enum SyntaxFactory {
     return ObjcKeyPathExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ObjcSelectorExprSyntax")
-  public static func makeObjcSelectorExpr(_ garbageBeforePoundSelector: GarbageNodesSyntax? = nil, poundSelector: TokenSyntax, _ garbageBetweenPoundSelectorAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndKind: GarbageNodesSyntax? = nil, kind: TokenSyntax?, _ garbageBetweenKindAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndName: GarbageNodesSyntax? = nil, name: ExprSyntax, _ garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcSelectorExprSyntax {
+  public static func makeObjcSelectorExpr(_ unexpectedBeforePoundSelector: UnexpectedNodesSyntax? = nil, poundSelector: TokenSyntax, _ unexpectedBetweenPoundSelectorAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndKind: UnexpectedNodesSyntax? = nil, kind: TokenSyntax?, _ unexpectedBetweenKindAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndName: UnexpectedNodesSyntax? = nil, name: ExprSyntax, _ unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcSelectorExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundSelector?.raw,
+      unexpectedBeforePoundSelector?.raw,
       poundSelector.raw,
-      garbageBetweenPoundSelectorAndLeftParen?.raw,
+      unexpectedBetweenPoundSelectorAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndKind?.raw,
+      unexpectedBetweenLeftParenAndKind?.raw,
       kind?.raw,
-      garbageBetweenKindAndColon?.raw,
+      unexpectedBetweenKindAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndName?.raw,
+      unexpectedBetweenColonAndName?.raw,
       name.raw,
-      garbageBetweenNameAndRightParen?.raw,
+      unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcSelectorExpr,
@@ -2020,11 +2020,11 @@ public enum SyntaxFactory {
     return ObjcSelectorExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PostfixIfConfigExprSyntax")
-  public static func makePostfixIfConfigExpr(_ garbageBeforeBase: GarbageNodesSyntax? = nil, base: ExprSyntax?, _ garbageBetweenBaseAndConfig: GarbageNodesSyntax? = nil, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
+  public static func makePostfixIfConfigExpr(_ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil, base: ExprSyntax?, _ unexpectedBetweenBaseAndConfig: UnexpectedNodesSyntax? = nil, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBase?.raw,
+      unexpectedBeforeBase?.raw,
       base?.raw,
-      garbageBetweenBaseAndConfig?.raw,
+      unexpectedBetweenBaseAndConfig?.raw,
       config.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixIfConfigExpr,
@@ -2045,9 +2045,9 @@ public enum SyntaxFactory {
     return PostfixIfConfigExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on EditorPlaceholderExprSyntax")
-  public static func makeEditorPlaceholderExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax) -> EditorPlaceholderExprSyntax {
+  public static func makeEditorPlaceholderExpr(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax) -> EditorPlaceholderExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIdentifier?.raw,
+      unexpectedBeforeIdentifier?.raw,
       identifier.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.editorPlaceholderExpr,
@@ -2066,15 +2066,15 @@ public enum SyntaxFactory {
     return EditorPlaceholderExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ObjectLiteralExprSyntax")
-  public static func makeObjectLiteralExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: TupleExprElementListSyntax, _ garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjectLiteralExprSyntax {
+  public static func makeObjectLiteralExpr(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil, arguments: TupleExprElementListSyntax, _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjectLiteralExprSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIdentifier?.raw,
+      unexpectedBeforeIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndLeftParen?.raw,
+      unexpectedBetweenIdentifierAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndArguments?.raw,
+      unexpectedBetweenLeftParenAndArguments?.raw,
       arguments.raw,
-      garbageBetweenArgumentsAndRightParen?.raw,
+      unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objectLiteralExpr,
@@ -2099,11 +2099,11 @@ public enum SyntaxFactory {
     return ObjectLiteralExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TypeInitializerClauseSyntax")
-  public static func makeTypeInitializerClause(_ garbageBeforeEqual: GarbageNodesSyntax? = nil, equal: TokenSyntax, _ garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil, value: TypeSyntax) -> TypeInitializerClauseSyntax {
+  public static func makeTypeInitializerClause(_ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil, equal: TokenSyntax, _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil, value: TypeSyntax) -> TypeInitializerClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeEqual?.raw,
+      unexpectedBeforeEqual?.raw,
       equal.raw,
-      garbageBetweenEqualAndValue?.raw,
+      unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInitializerClause,
@@ -2124,21 +2124,21 @@ public enum SyntaxFactory {
     return TypeInitializerClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TypealiasDeclSyntax")
-  public static func makeTypealiasDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndTypealiasKeyword: GarbageNodesSyntax? = nil, typealiasKeyword: TokenSyntax, _ garbageBetweenTypealiasKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInitializer: GarbageNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax, _ garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
+  public static func makeTypealiasDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil, typealiasKeyword: TokenSyntax, _ unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax, _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndTypealiasKeyword?.raw,
+      unexpectedBetweenModifiersAndTypealiasKeyword?.raw,
       typealiasKeyword.raw,
-      garbageBetweenTypealiasKeywordAndIdentifier?.raw,
+      unexpectedBetweenTypealiasKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndGenericParameterClause?.raw,
+      unexpectedBetweenIdentifierAndGenericParameterClause?.raw,
       genericParameterClause?.raw,
-      garbageBetweenGenericParameterClauseAndInitializer?.raw,
+      unexpectedBetweenGenericParameterClauseAndInitializer?.raw,
       initializer.raw,
-      garbageBetweenInitializerAndGenericWhereClause?.raw,
+      unexpectedBetweenInitializerAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typealiasDecl,
@@ -2169,21 +2169,21 @@ public enum SyntaxFactory {
     return TypealiasDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AssociatedtypeDeclSyntax")
-  public static func makeAssociatedtypeDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndAssociatedtypeKeyword: GarbageNodesSyntax? = nil, associatedtypeKeyword: TokenSyntax, _ garbageBetweenAssociatedtypeKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndInitializer: GarbageNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax?, _ garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
+  public static func makeAssociatedtypeDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? = nil, associatedtypeKeyword: TokenSyntax, _ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax?, _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndAssociatedtypeKeyword?.raw,
+      unexpectedBetweenModifiersAndAssociatedtypeKeyword?.raw,
       associatedtypeKeyword.raw,
-      garbageBetweenAssociatedtypeKeywordAndIdentifier?.raw,
+      unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndInheritanceClause?.raw,
+      unexpectedBetweenIdentifierAndInheritanceClause?.raw,
       inheritanceClause?.raw,
-      garbageBetweenInheritanceClauseAndInitializer?.raw,
+      unexpectedBetweenInheritanceClauseAndInitializer?.raw,
       initializer?.raw,
-      garbageBetweenInitializerAndGenericWhereClause?.raw,
+      unexpectedBetweenInitializerAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.associatedtypeDecl,
@@ -2230,13 +2230,13 @@ public enum SyntaxFactory {
     return FunctionParameterListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ParameterClauseSyntax")
-  public static func makeParameterClause(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndParameterList: GarbageNodesSyntax? = nil, parameterList: FunctionParameterListSyntax, _ garbageBetweenParameterListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ParameterClauseSyntax {
+  public static func makeParameterClause(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil, parameterList: FunctionParameterListSyntax, _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> ParameterClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndParameterList?.raw,
+      unexpectedBetweenLeftParenAndParameterList?.raw,
       parameterList.raw,
-      garbageBetweenParameterListAndRightParen?.raw,
+      unexpectedBetweenParameterListAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.parameterClause,
@@ -2259,11 +2259,11 @@ public enum SyntaxFactory {
     return ParameterClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ReturnClauseSyntax")
-  public static func makeReturnClause(_ garbageBeforeArrow: GarbageNodesSyntax? = nil, arrow: TokenSyntax, _ garbageBetweenArrowAndReturnType: GarbageNodesSyntax? = nil, returnType: TypeSyntax) -> ReturnClauseSyntax {
+  public static func makeReturnClause(_ unexpectedBeforeArrow: UnexpectedNodesSyntax? = nil, arrow: TokenSyntax, _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil, returnType: TypeSyntax) -> ReturnClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeArrow?.raw,
+      unexpectedBeforeArrow?.raw,
       arrow.raw,
-      garbageBetweenArrowAndReturnType?.raw,
+      unexpectedBetweenArrowAndReturnType?.raw,
       returnType.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.returnClause,
@@ -2284,15 +2284,15 @@ public enum SyntaxFactory {
     return ReturnClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionSignatureSyntax")
-  public static func makeFunctionSignature(_ garbageBeforeInput: GarbageNodesSyntax? = nil, input: ParameterClauseSyntax, _ garbageBetweenInputAndAsyncOrReasyncKeyword: GarbageNodesSyntax? = nil, asyncOrReasyncKeyword: TokenSyntax?, _ garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ garbageBetweenThrowsOrRethrowsKeywordAndOutput: GarbageNodesSyntax? = nil, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
+  public static func makeFunctionSignature(_ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil, input: ParameterClauseSyntax, _ unexpectedBetweenInputAndAsyncOrReasyncKeyword: UnexpectedNodesSyntax? = nil, asyncOrReasyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: UnexpectedNodesSyntax? = nil, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeInput?.raw,
+      unexpectedBeforeInput?.raw,
       input.raw,
-      garbageBetweenInputAndAsyncOrReasyncKeyword?.raw,
+      unexpectedBetweenInputAndAsyncOrReasyncKeyword?.raw,
       asyncOrReasyncKeyword?.raw,
-      garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.raw,
+      unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.raw,
       throwsOrRethrowsKeyword?.raw,
-      garbageBetweenThrowsOrRethrowsKeywordAndOutput?.raw,
+      unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.raw,
       output?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionSignature,
@@ -2317,13 +2317,13 @@ public enum SyntaxFactory {
     return FunctionSignatureSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IfConfigClauseSyntax")
-  public static func makeIfConfigClause(_ garbageBeforePoundKeyword: GarbageNodesSyntax? = nil, poundKeyword: TokenSyntax, _ garbageBetweenPoundKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax?, _ garbageBetweenConditionAndElements: GarbageNodesSyntax? = nil, elements: Syntax) -> IfConfigClauseSyntax {
+  public static func makeIfConfigClause(_ unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? = nil, poundKeyword: TokenSyntax, _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax?, _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil, elements: Syntax) -> IfConfigClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundKeyword?.raw,
+      unexpectedBeforePoundKeyword?.raw,
       poundKeyword.raw,
-      garbageBetweenPoundKeywordAndCondition?.raw,
+      unexpectedBetweenPoundKeywordAndCondition?.raw,
       condition?.raw,
-      garbageBetweenConditionAndElements?.raw,
+      unexpectedBetweenConditionAndElements?.raw,
       elements.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClause,
@@ -2362,11 +2362,11 @@ public enum SyntaxFactory {
     return IfConfigClauseListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IfConfigDeclSyntax")
-  public static func makeIfConfigDecl(_ garbageBeforeClauses: GarbageNodesSyntax? = nil, clauses: IfConfigClauseListSyntax, _ garbageBetweenClausesAndPoundEndif: GarbageNodesSyntax? = nil, poundEndif: TokenSyntax) -> IfConfigDeclSyntax {
+  public static func makeIfConfigDecl(_ unexpectedBeforeClauses: UnexpectedNodesSyntax? = nil, clauses: IfConfigClauseListSyntax, _ unexpectedBetweenClausesAndPoundEndif: UnexpectedNodesSyntax? = nil, poundEndif: TokenSyntax) -> IfConfigDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeClauses?.raw,
+      unexpectedBeforeClauses?.raw,
       clauses.raw,
-      garbageBetweenClausesAndPoundEndif?.raw,
+      unexpectedBetweenClausesAndPoundEndif?.raw,
       poundEndif.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigDecl,
@@ -2387,15 +2387,15 @@ public enum SyntaxFactory {
     return IfConfigDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundErrorDeclSyntax")
-  public static func makePoundErrorDecl(_ garbageBeforePoundError: GarbageNodesSyntax? = nil, poundError: TokenSyntax, _ garbageBetweenPoundErrorAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? = nil, message: StringLiteralExprSyntax, _ garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundErrorDeclSyntax {
+  public static func makePoundErrorDecl(_ unexpectedBeforePoundError: UnexpectedNodesSyntax? = nil, poundError: TokenSyntax, _ unexpectedBetweenPoundErrorAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil, message: StringLiteralExprSyntax, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundErrorDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundError?.raw,
+      unexpectedBeforePoundError?.raw,
       poundError.raw,
-      garbageBetweenPoundErrorAndLeftParen?.raw,
+      unexpectedBetweenPoundErrorAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndMessage?.raw,
+      unexpectedBetweenLeftParenAndMessage?.raw,
       message.raw,
-      garbageBetweenMessageAndRightParen?.raw,
+      unexpectedBetweenMessageAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundErrorDecl,
@@ -2420,15 +2420,15 @@ public enum SyntaxFactory {
     return PoundErrorDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundWarningDeclSyntax")
-  public static func makePoundWarningDecl(_ garbageBeforePoundWarning: GarbageNodesSyntax? = nil, poundWarning: TokenSyntax, _ garbageBetweenPoundWarningAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? = nil, message: StringLiteralExprSyntax, _ garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundWarningDeclSyntax {
+  public static func makePoundWarningDecl(_ unexpectedBeforePoundWarning: UnexpectedNodesSyntax? = nil, poundWarning: TokenSyntax, _ unexpectedBetweenPoundWarningAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? = nil, message: StringLiteralExprSyntax, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundWarningDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundWarning?.raw,
+      unexpectedBeforePoundWarning?.raw,
       poundWarning.raw,
-      garbageBetweenPoundWarningAndLeftParen?.raw,
+      unexpectedBetweenPoundWarningAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndMessage?.raw,
+      unexpectedBetweenLeftParenAndMessage?.raw,
       message.raw,
-      garbageBetweenMessageAndRightParen?.raw,
+      unexpectedBetweenMessageAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundWarningDecl,
@@ -2453,15 +2453,15 @@ public enum SyntaxFactory {
     return PoundWarningDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundSourceLocationSyntax")
-  public static func makePoundSourceLocation(_ garbageBeforePoundSourceLocation: GarbageNodesSyntax? = nil, poundSourceLocation: TokenSyntax, _ garbageBetweenPoundSourceLocationAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArgs: GarbageNodesSyntax? = nil, args: PoundSourceLocationArgsSyntax?, _ garbageBetweenArgsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundSourceLocationSyntax {
+  public static func makePoundSourceLocation(_ unexpectedBeforePoundSourceLocation: UnexpectedNodesSyntax? = nil, poundSourceLocation: TokenSyntax, _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil, args: PoundSourceLocationArgsSyntax?, _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundSourceLocationSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundSourceLocation?.raw,
+      unexpectedBeforePoundSourceLocation?.raw,
       poundSourceLocation.raw,
-      garbageBetweenPoundSourceLocationAndLeftParen?.raw,
+      unexpectedBetweenPoundSourceLocationAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndArgs?.raw,
+      unexpectedBetweenLeftParenAndArgs?.raw,
       args?.raw,
-      garbageBetweenArgsAndRightParen?.raw,
+      unexpectedBetweenArgsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundSourceLocation,
@@ -2486,21 +2486,21 @@ public enum SyntaxFactory {
     return PoundSourceLocationSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundSourceLocationArgsSyntax")
-  public static func makePoundSourceLocationArgs(_ garbageBeforeFileArgLabel: GarbageNodesSyntax? = nil, fileArgLabel: TokenSyntax, _ garbageBetweenFileArgLabelAndFileArgColon: GarbageNodesSyntax? = nil, fileArgColon: TokenSyntax, _ garbageBetweenFileArgColonAndFileName: GarbageNodesSyntax? = nil, fileName: TokenSyntax, _ garbageBetweenFileNameAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax, _ garbageBetweenCommaAndLineArgLabel: GarbageNodesSyntax? = nil, lineArgLabel: TokenSyntax, _ garbageBetweenLineArgLabelAndLineArgColon: GarbageNodesSyntax? = nil, lineArgColon: TokenSyntax, _ garbageBetweenLineArgColonAndLineNumber: GarbageNodesSyntax? = nil, lineNumber: TokenSyntax) -> PoundSourceLocationArgsSyntax {
+  public static func makePoundSourceLocationArgs(_ unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? = nil, fileArgLabel: TokenSyntax, _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil, fileArgColon: TokenSyntax, _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil, fileName: TokenSyntax, _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil, lineArgLabel: TokenSyntax, _ unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodesSyntax? = nil, lineArgColon: TokenSyntax, _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil, lineNumber: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeFileArgLabel?.raw,
+      unexpectedBeforeFileArgLabel?.raw,
       fileArgLabel.raw,
-      garbageBetweenFileArgLabelAndFileArgColon?.raw,
+      unexpectedBetweenFileArgLabelAndFileArgColon?.raw,
       fileArgColon.raw,
-      garbageBetweenFileArgColonAndFileName?.raw,
+      unexpectedBetweenFileArgColonAndFileName?.raw,
       fileName.raw,
-      garbageBetweenFileNameAndComma?.raw,
+      unexpectedBetweenFileNameAndComma?.raw,
       comma.raw,
-      garbageBetweenCommaAndLineArgLabel?.raw,
+      unexpectedBetweenCommaAndLineArgLabel?.raw,
       lineArgLabel.raw,
-      garbageBetweenLineArgLabelAndLineArgColon?.raw,
+      unexpectedBetweenLineArgLabelAndLineArgColon?.raw,
       lineArgColon.raw,
-      garbageBetweenLineArgColonAndLineNumber?.raw,
+      unexpectedBetweenLineArgColonAndLineNumber?.raw,
       lineNumber.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundSourceLocationArgs,
@@ -2531,13 +2531,13 @@ public enum SyntaxFactory {
     return PoundSourceLocationArgsSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeclModifierDetailSyntax")
-  public static func makeDeclModifierDetail(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndDetail: GarbageNodesSyntax? = nil, detail: TokenSyntax, _ garbageBetweenDetailAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclModifierDetailSyntax {
+  public static func makeDeclModifierDetail(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil, detail: TokenSyntax, _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclModifierDetailSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndDetail?.raw,
+      unexpectedBetweenLeftParenAndDetail?.raw,
       detail.raw,
-      garbageBetweenDetailAndRightParen?.raw,
+      unexpectedBetweenDetailAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifierDetail,
@@ -2560,11 +2560,11 @@ public enum SyntaxFactory {
     return DeclModifierDetailSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeclModifierSyntax")
-  public static func makeDeclModifier(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndDetail: GarbageNodesSyntax? = nil, detail: DeclModifierDetailSyntax?) -> DeclModifierSyntax {
+  public static func makeDeclModifier(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndDetail: UnexpectedNodesSyntax? = nil, detail: DeclModifierDetailSyntax?) -> DeclModifierSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndDetail?.raw,
+      unexpectedBetweenNameAndDetail?.raw,
       detail?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifier,
@@ -2585,11 +2585,11 @@ public enum SyntaxFactory {
     return DeclModifierSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on InheritedTypeSyntax")
-  public static func makeInheritedType(_ garbageBeforeTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax, _ garbageBetweenTypeNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> InheritedTypeSyntax {
+  public static func makeInheritedType(_ unexpectedBeforeTypeName: UnexpectedNodesSyntax? = nil, typeName: TypeSyntax, _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> InheritedTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeTypeName?.raw,
+      unexpectedBeforeTypeName?.raw,
       typeName.raw,
-      garbageBetweenTypeNameAndTrailingComma?.raw,
+      unexpectedBetweenTypeNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedType,
@@ -2626,11 +2626,11 @@ public enum SyntaxFactory {
     return InheritedTypeListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TypeInheritanceClauseSyntax")
-  public static func makeTypeInheritanceClause(_ garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndInheritedTypeCollection: GarbageNodesSyntax? = nil, inheritedTypeCollection: InheritedTypeListSyntax) -> TypeInheritanceClauseSyntax {
+  public static func makeTypeInheritanceClause(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil, inheritedTypeCollection: InheritedTypeListSyntax) -> TypeInheritanceClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeColon?.raw,
+      unexpectedBeforeColon?.raw,
       colon.raw,
-      garbageBetweenColonAndInheritedTypeCollection?.raw,
+      unexpectedBetweenColonAndInheritedTypeCollection?.raw,
       inheritedTypeCollection.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInheritanceClause,
@@ -2651,23 +2651,23 @@ public enum SyntaxFactory {
     return TypeInheritanceClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ClassDeclSyntax")
-  public static func makeClassDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndClassKeyword: GarbageNodesSyntax? = nil, classKeyword: TokenSyntax, _ garbageBetweenClassKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
+  public static func makeClassDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil, classKeyword: TokenSyntax, _ unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndClassKeyword?.raw,
+      unexpectedBetweenModifiersAndClassKeyword?.raw,
       classKeyword.raw,
-      garbageBetweenClassKeywordAndIdentifier?.raw,
+      unexpectedBetweenClassKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndGenericParameterClause?.raw,
+      unexpectedBetweenIdentifierAndGenericParameterClause?.raw,
       genericParameterClause?.raw,
-      garbageBetweenGenericParameterClauseAndInheritanceClause?.raw,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw,
       inheritanceClause?.raw,
-      garbageBetweenInheritanceClauseAndGenericWhereClause?.raw,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndMembers?.raw,
+      unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.classDecl,
@@ -2700,23 +2700,23 @@ public enum SyntaxFactory {
     return ClassDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ActorDeclSyntax")
-  public static func makeActorDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndActorKeyword: GarbageNodesSyntax? = nil, actorKeyword: TokenSyntax, _ garbageBetweenActorKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ActorDeclSyntax {
+  public static func makeActorDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil, actorKeyword: TokenSyntax, _ unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ActorDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndActorKeyword?.raw,
+      unexpectedBetweenModifiersAndActorKeyword?.raw,
       actorKeyword.raw,
-      garbageBetweenActorKeywordAndIdentifier?.raw,
+      unexpectedBetweenActorKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndGenericParameterClause?.raw,
+      unexpectedBetweenIdentifierAndGenericParameterClause?.raw,
       genericParameterClause?.raw,
-      garbageBetweenGenericParameterClauseAndInheritanceClause?.raw,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw,
       inheritanceClause?.raw,
-      garbageBetweenInheritanceClauseAndGenericWhereClause?.raw,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndMembers?.raw,
+      unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.actorDecl,
@@ -2749,23 +2749,23 @@ public enum SyntaxFactory {
     return ActorDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on StructDeclSyntax")
-  public static func makeStructDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndStructKeyword: GarbageNodesSyntax? = nil, structKeyword: TokenSyntax, _ garbageBetweenStructKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> StructDeclSyntax {
+  public static func makeStructDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil, structKeyword: TokenSyntax, _ unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> StructDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndStructKeyword?.raw,
+      unexpectedBetweenModifiersAndStructKeyword?.raw,
       structKeyword.raw,
-      garbageBetweenStructKeywordAndIdentifier?.raw,
+      unexpectedBetweenStructKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndGenericParameterClause?.raw,
+      unexpectedBetweenIdentifierAndGenericParameterClause?.raw,
       genericParameterClause?.raw,
-      garbageBetweenGenericParameterClauseAndInheritanceClause?.raw,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw,
       inheritanceClause?.raw,
-      garbageBetweenInheritanceClauseAndGenericWhereClause?.raw,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndMembers?.raw,
+      unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.structDecl,
@@ -2798,23 +2798,23 @@ public enum SyntaxFactory {
     return StructDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ProtocolDeclSyntax")
-  public static func makeProtocolDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndProtocolKeyword: GarbageNodesSyntax? = nil, protocolKeyword: TokenSyntax, _ garbageBetweenProtocolKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: GarbageNodesSyntax? = nil, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?, _ garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ProtocolDeclSyntax {
+  public static func makeProtocolDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil, protocolKeyword: TokenSyntax, _ unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?, _ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ProtocolDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndProtocolKeyword?.raw,
+      unexpectedBetweenModifiersAndProtocolKeyword?.raw,
       protocolKeyword.raw,
-      garbageBetweenProtocolKeywordAndIdentifier?.raw,
+      unexpectedBetweenProtocolKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndPrimaryAssociatedTypeClause?.raw,
+      unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.raw,
       primaryAssociatedTypeClause?.raw,
-      garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.raw,
+      unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.raw,
       inheritanceClause?.raw,
-      garbageBetweenInheritanceClauseAndGenericWhereClause?.raw,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndMembers?.raw,
+      unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.protocolDecl,
@@ -2847,21 +2847,21 @@ public enum SyntaxFactory {
     return ProtocolDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ExtensionDeclSyntax")
-  public static func makeExtensionDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndExtensionKeyword: GarbageNodesSyntax? = nil, extensionKeyword: TokenSyntax, _ garbageBetweenExtensionKeywordAndExtendedType: GarbageNodesSyntax? = nil, extendedType: TypeSyntax, _ garbageBetweenExtendedTypeAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ExtensionDeclSyntax {
+  public static func makeExtensionDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil, extensionKeyword: TokenSyntax, _ unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil, extendedType: TypeSyntax, _ unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ExtensionDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndExtensionKeyword?.raw,
+      unexpectedBetweenModifiersAndExtensionKeyword?.raw,
       extensionKeyword.raw,
-      garbageBetweenExtensionKeywordAndExtendedType?.raw,
+      unexpectedBetweenExtensionKeywordAndExtendedType?.raw,
       extendedType.raw,
-      garbageBetweenExtendedTypeAndInheritanceClause?.raw,
+      unexpectedBetweenExtendedTypeAndInheritanceClause?.raw,
       inheritanceClause?.raw,
-      garbageBetweenInheritanceClauseAndGenericWhereClause?.raw,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndMembers?.raw,
+      unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.extensionDecl,
@@ -2892,13 +2892,13 @@ public enum SyntaxFactory {
     return ExtensionDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MemberDeclBlockSyntax")
-  public static func makeMemberDeclBlock(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclListSyntax, _ garbageBetweenMembersAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> MemberDeclBlockSyntax {
+  public static func makeMemberDeclBlock(_ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? = nil, members: MemberDeclListSyntax, _ unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax) -> MemberDeclBlockSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftBrace?.raw,
+      unexpectedBeforeLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndMembers?.raw,
+      unexpectedBetweenLeftBraceAndMembers?.raw,
       members.raw,
-      garbageBetweenMembersAndRightBrace?.raw,
+      unexpectedBetweenMembersAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclBlock,
@@ -2937,11 +2937,11 @@ public enum SyntaxFactory {
     return MemberDeclListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MemberDeclListItemSyntax")
-  public static func makeMemberDeclListItem(_ garbageBeforeDecl: GarbageNodesSyntax? = nil, decl: DeclSyntax, _ garbageBetweenDeclAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax?) -> MemberDeclListItemSyntax {
+  public static func makeMemberDeclListItem(_ unexpectedBeforeDecl: UnexpectedNodesSyntax? = nil, decl: DeclSyntax, _ unexpectedBetweenDeclAndSemicolon: UnexpectedNodesSyntax? = nil, semicolon: TokenSyntax?) -> MemberDeclListItemSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDecl?.raw,
+      unexpectedBeforeDecl?.raw,
       decl.raw,
-      garbageBetweenDeclAndSemicolon?.raw,
+      unexpectedBetweenDeclAndSemicolon?.raw,
       semicolon?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclListItem,
@@ -2962,11 +2962,11 @@ public enum SyntaxFactory {
     return MemberDeclListItemSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SourceFileSyntax")
-  public static func makeSourceFile(_ garbageBeforeStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ garbageBetweenStatementsAndEOFToken: GarbageNodesSyntax? = nil, eofToken: TokenSyntax) -> SourceFileSyntax {
+  public static func makeSourceFile(_ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil, eofToken: TokenSyntax) -> SourceFileSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeStatements?.raw,
+      unexpectedBeforeStatements?.raw,
       statements.raw,
-      garbageBetweenStatementsAndEOFToken?.raw,
+      unexpectedBetweenStatementsAndEOFToken?.raw,
       eofToken.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sourceFile,
@@ -2987,11 +2987,11 @@ public enum SyntaxFactory {
     return SourceFileSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on InitializerClauseSyntax")
-  public static func makeInitializerClause(_ garbageBeforeEqual: GarbageNodesSyntax? = nil, equal: TokenSyntax, _ garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil, value: ExprSyntax) -> InitializerClauseSyntax {
+  public static func makeInitializerClause(_ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil, equal: TokenSyntax, _ unexpectedBetweenEqualAndValue: UnexpectedNodesSyntax? = nil, value: ExprSyntax) -> InitializerClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeEqual?.raw,
+      unexpectedBeforeEqual?.raw,
       equal.raw,
-      garbageBetweenEqualAndValue?.raw,
+      unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.initializerClause,
@@ -3012,23 +3012,23 @@ public enum SyntaxFactory {
     return InitializerClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionParameterSyntax")
-  public static func makeFunctionParameter(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndFirstName: GarbageNodesSyntax? = nil, firstName: TokenSyntax?, _ garbageBetweenFirstNameAndSecondName: GarbageNodesSyntax? = nil, secondName: TokenSyntax?, _ garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax?, _ garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil, ellipsis: TokenSyntax?, _ garbageBetweenEllipsisAndDefaultArgument: GarbageNodesSyntax? = nil, defaultArgument: InitializerClauseSyntax?, _ garbageBetweenDefaultArgumentAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> FunctionParameterSyntax {
+  public static func makeFunctionParameter(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndFirstName: UnexpectedNodesSyntax? = nil, firstName: TokenSyntax?, _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, secondName: TokenSyntax?, _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax?, _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax?, _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil, defaultArgument: InitializerClauseSyntax?, _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> FunctionParameterSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndFirstName?.raw,
+      unexpectedBetweenAttributesAndFirstName?.raw,
       firstName?.raw,
-      garbageBetweenFirstNameAndSecondName?.raw,
+      unexpectedBetweenFirstNameAndSecondName?.raw,
       secondName?.raw,
-      garbageBetweenSecondNameAndColon?.raw,
+      unexpectedBetweenSecondNameAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndType?.raw,
+      unexpectedBetweenColonAndType?.raw,
       type?.raw,
-      garbageBetweenTypeAndEllipsis?.raw,
+      unexpectedBetweenTypeAndEllipsis?.raw,
       ellipsis?.raw,
-      garbageBetweenEllipsisAndDefaultArgument?.raw,
+      unexpectedBetweenEllipsisAndDefaultArgument?.raw,
       defaultArgument?.raw,
-      garbageBetweenDefaultArgumentAndTrailingComma?.raw,
+      unexpectedBetweenDefaultArgumentAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameter,
@@ -3077,23 +3077,23 @@ public enum SyntaxFactory {
     return ModifierListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionDeclSyntax")
-  public static func makeFunctionDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndFuncKeyword: GarbageNodesSyntax? = nil, funcKeyword: TokenSyntax, _ garbageBetweenFuncKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? = nil, signature: FunctionSignatureSyntax, _ garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> FunctionDeclSyntax {
+  public static func makeFunctionDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil, funcKeyword: TokenSyntax, _ unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: FunctionSignatureSyntax, _ unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax?) -> FunctionDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndFuncKeyword?.raw,
+      unexpectedBetweenModifiersAndFuncKeyword?.raw,
       funcKeyword.raw,
-      garbageBetweenFuncKeywordAndIdentifier?.raw,
+      unexpectedBetweenFuncKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndGenericParameterClause?.raw,
+      unexpectedBetweenIdentifierAndGenericParameterClause?.raw,
       genericParameterClause?.raw,
-      garbageBetweenGenericParameterClauseAndSignature?.raw,
+      unexpectedBetweenGenericParameterClauseAndSignature?.raw,
       signature.raw,
-      garbageBetweenSignatureAndGenericWhereClause?.raw,
+      unexpectedBetweenSignatureAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndBody?.raw,
+      unexpectedBetweenGenericWhereClauseAndBody?.raw,
       body?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDecl,
@@ -3126,23 +3126,23 @@ public enum SyntaxFactory {
     return FunctionDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on InitializerDeclSyntax")
-  public static func makeInitializerDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndInitKeyword: GarbageNodesSyntax? = nil, initKeyword: TokenSyntax, _ garbageBetweenInitKeywordAndOptionalMark: GarbageNodesSyntax? = nil, optionalMark: TokenSyntax?, _ garbageBetweenOptionalMarkAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? = nil, signature: FunctionSignatureSyntax, _ garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> InitializerDeclSyntax {
+  public static func makeInitializerDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil, initKeyword: TokenSyntax, _ unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodesSyntax? = nil, optionalMark: TokenSyntax?, _ unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil, signature: FunctionSignatureSyntax, _ unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax?) -> InitializerDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndInitKeyword?.raw,
+      unexpectedBetweenModifiersAndInitKeyword?.raw,
       initKeyword.raw,
-      garbageBetweenInitKeywordAndOptionalMark?.raw,
+      unexpectedBetweenInitKeywordAndOptionalMark?.raw,
       optionalMark?.raw,
-      garbageBetweenOptionalMarkAndGenericParameterClause?.raw,
+      unexpectedBetweenOptionalMarkAndGenericParameterClause?.raw,
       genericParameterClause?.raw,
-      garbageBetweenGenericParameterClauseAndSignature?.raw,
+      unexpectedBetweenGenericParameterClauseAndSignature?.raw,
       signature.raw,
-      garbageBetweenSignatureAndGenericWhereClause?.raw,
+      unexpectedBetweenSignatureAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndBody?.raw,
+      unexpectedBetweenGenericWhereClauseAndBody?.raw,
       body?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.initializerDecl,
@@ -3175,15 +3175,15 @@ public enum SyntaxFactory {
     return InitializerDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeinitializerDeclSyntax")
-  public static func makeDeinitializerDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndDeinitKeyword: GarbageNodesSyntax? = nil, deinitKeyword: TokenSyntax, _ garbageBetweenDeinitKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
+  public static func makeDeinitializerDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil, deinitKeyword: TokenSyntax, _ unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndDeinitKeyword?.raw,
+      unexpectedBetweenModifiersAndDeinitKeyword?.raw,
       deinitKeyword.raw,
-      garbageBetweenDeinitKeywordAndBody?.raw,
+      unexpectedBetweenDeinitKeywordAndBody?.raw,
       body?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.deinitializerDecl,
@@ -3208,23 +3208,23 @@ public enum SyntaxFactory {
     return DeinitializerDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SubscriptDeclSyntax")
-  public static func makeSubscriptDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndSubscriptKeyword: GarbageNodesSyntax? = nil, subscriptKeyword: TokenSyntax, _ garbageBetweenSubscriptKeywordAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndIndices: GarbageNodesSyntax? = nil, indices: ParameterClauseSyntax, _ garbageBetweenIndicesAndResult: GarbageNodesSyntax? = nil, result: ReturnClauseSyntax, _ garbageBetweenResultAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndAccessor: GarbageNodesSyntax? = nil, accessor: Syntax?) -> SubscriptDeclSyntax {
+  public static func makeSubscriptDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? = nil, subscriptKeyword: TokenSyntax, _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? = nil, indices: ParameterClauseSyntax, _ unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? = nil, result: ReturnClauseSyntax, _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil, accessor: Syntax?) -> SubscriptDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndSubscriptKeyword?.raw,
+      unexpectedBetweenModifiersAndSubscriptKeyword?.raw,
       subscriptKeyword.raw,
-      garbageBetweenSubscriptKeywordAndGenericParameterClause?.raw,
+      unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.raw,
       genericParameterClause?.raw,
-      garbageBetweenGenericParameterClauseAndIndices?.raw,
+      unexpectedBetweenGenericParameterClauseAndIndices?.raw,
       indices.raw,
-      garbageBetweenIndicesAndResult?.raw,
+      unexpectedBetweenIndicesAndResult?.raw,
       result.raw,
-      garbageBetweenResultAndGenericWhereClause?.raw,
+      unexpectedBetweenResultAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndAccessor?.raw,
+      unexpectedBetweenGenericWhereClauseAndAccessor?.raw,
       accessor?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.subscriptDecl,
@@ -3257,11 +3257,11 @@ public enum SyntaxFactory {
     return SubscriptDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AccessLevelModifierSyntax")
-  public static func makeAccessLevelModifier(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndModifier: GarbageNodesSyntax? = nil, modifier: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
+  public static func makeAccessLevelModifier(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndModifier: UnexpectedNodesSyntax? = nil, modifier: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndModifier?.raw,
+      unexpectedBetweenNameAndModifier?.raw,
       modifier?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessLevelModifier,
@@ -3282,11 +3282,11 @@ public enum SyntaxFactory {
     return AccessLevelModifierSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AccessPathComponentSyntax")
-  public static func makeAccessPathComponent(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingDot: GarbageNodesSyntax? = nil, trailingDot: TokenSyntax?) -> AccessPathComponentSyntax {
+  public static func makeAccessPathComponent(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil, trailingDot: TokenSyntax?) -> AccessPathComponentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingDot?.raw,
+      unexpectedBetweenNameAndTrailingDot?.raw,
       trailingDot?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPathComponent,
@@ -3323,17 +3323,17 @@ public enum SyntaxFactory {
     return AccessPathSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ImportDeclSyntax")
-  public static func makeImportDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndImportTok: GarbageNodesSyntax? = nil, importTok: TokenSyntax, _ garbageBetweenImportTokAndImportKind: GarbageNodesSyntax? = nil, importKind: TokenSyntax?, _ garbageBetweenImportKindAndPath: GarbageNodesSyntax? = nil, path: AccessPathSyntax) -> ImportDeclSyntax {
+  public static func makeImportDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? = nil, importTok: TokenSyntax, _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil, importKind: TokenSyntax?, _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil, path: AccessPathSyntax) -> ImportDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndImportTok?.raw,
+      unexpectedBetweenModifiersAndImportTok?.raw,
       importTok.raw,
-      garbageBetweenImportTokAndImportKind?.raw,
+      unexpectedBetweenImportTokAndImportKind?.raw,
       importKind?.raw,
-      garbageBetweenImportKindAndPath?.raw,
+      unexpectedBetweenImportKindAndPath?.raw,
       path.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.importDecl,
@@ -3360,13 +3360,13 @@ public enum SyntaxFactory {
     return ImportDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AccessorParameterSyntax")
-  public static func makeAccessorParameter(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> AccessorParameterSyntax {
+  public static func makeAccessorParameter(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> AccessorParameterSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndName?.raw,
+      unexpectedBetweenLeftParenAndName?.raw,
       name.raw,
-      garbageBetweenNameAndRightParen?.raw,
+      unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorParameter,
@@ -3389,21 +3389,21 @@ public enum SyntaxFactory {
     return AccessorParameterSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AccessorDeclSyntax")
-  public static func makeAccessorDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifier: GarbageNodesSyntax? = nil, modifier: DeclModifierSyntax?, _ garbageBetweenModifierAndAccessorKind: GarbageNodesSyntax? = nil, accessorKind: TokenSyntax, _ garbageBetweenAccessorKindAndParameter: GarbageNodesSyntax? = nil, parameter: AccessorParameterSyntax?, _ garbageBetweenParameterAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsKeyword: GarbageNodesSyntax? = nil, throwsKeyword: TokenSyntax?, _ garbageBetweenThrowsKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> AccessorDeclSyntax {
+  public static func makeAccessorDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil, modifier: DeclModifierSyntax?, _ unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil, accessorKind: TokenSyntax, _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, parameter: AccessorParameterSyntax?, _ unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodesSyntax? = nil, throwsKeyword: TokenSyntax?, _ unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax?) -> AccessorDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifier?.raw,
+      unexpectedBetweenAttributesAndModifier?.raw,
       modifier?.raw,
-      garbageBetweenModifierAndAccessorKind?.raw,
+      unexpectedBetweenModifierAndAccessorKind?.raw,
       accessorKind.raw,
-      garbageBetweenAccessorKindAndParameter?.raw,
+      unexpectedBetweenAccessorKindAndParameter?.raw,
       parameter?.raw,
-      garbageBetweenParameterAndAsyncKeyword?.raw,
+      unexpectedBetweenParameterAndAsyncKeyword?.raw,
       asyncKeyword?.raw,
-      garbageBetweenAsyncKeywordAndThrowsKeyword?.raw,
+      unexpectedBetweenAsyncKeywordAndThrowsKeyword?.raw,
       throwsKeyword?.raw,
-      garbageBetweenThrowsKeywordAndBody?.raw,
+      unexpectedBetweenThrowsKeywordAndBody?.raw,
       body?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorDecl,
@@ -3450,13 +3450,13 @@ public enum SyntaxFactory {
     return AccessorListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AccessorBlockSyntax")
-  public static func makeAccessorBlock(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndAccessors: GarbageNodesSyntax? = nil, accessors: AccessorListSyntax, _ garbageBetweenAccessorsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> AccessorBlockSyntax {
+  public static func makeAccessorBlock(_ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodesSyntax? = nil, accessors: AccessorListSyntax, _ unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax) -> AccessorBlockSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftBrace?.raw,
+      unexpectedBeforeLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndAccessors?.raw,
+      unexpectedBetweenLeftBraceAndAccessors?.raw,
       accessors.raw,
-      garbageBetweenAccessorsAndRightBrace?.raw,
+      unexpectedBetweenAccessorsAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorBlock,
@@ -3479,17 +3479,17 @@ public enum SyntaxFactory {
     return AccessorBlockSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PatternBindingSyntax")
-  public static func makePatternBinding(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?, _ garbageBetweenInitializerAndAccessor: GarbageNodesSyntax? = nil, accessor: Syntax?, _ garbageBetweenAccessorAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PatternBindingSyntax {
+  public static func makePatternBinding(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil, initializer: InitializerClauseSyntax?, _ unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? = nil, accessor: Syntax?, _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PatternBindingSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTypeAnnotation?.raw,
+      unexpectedBetweenPatternAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
-      garbageBetweenTypeAnnotationAndInitializer?.raw,
+      unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer?.raw,
-      garbageBetweenInitializerAndAccessor?.raw,
+      unexpectedBetweenInitializerAndAccessor?.raw,
       accessor?.raw,
-      garbageBetweenAccessorAndTrailingComma?.raw,
+      unexpectedBetweenAccessorAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBinding,
@@ -3532,15 +3532,15 @@ public enum SyntaxFactory {
     return PatternBindingListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on VariableDeclSyntax")
-  public static func makeVariableDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ garbageBetweenLetOrVarKeywordAndBindings: GarbageNodesSyntax? = nil, bindings: PatternBindingListSyntax) -> VariableDeclSyntax {
+  public static func makeVariableDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? = nil, bindings: PatternBindingListSyntax) -> VariableDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndLetOrVarKeyword?.raw,
+      unexpectedBetweenModifiersAndLetOrVarKeyword?.raw,
       letOrVarKeyword.raw,
-      garbageBetweenLetOrVarKeywordAndBindings?.raw,
+      unexpectedBetweenLetOrVarKeywordAndBindings?.raw,
       bindings.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.variableDecl,
@@ -3565,15 +3565,15 @@ public enum SyntaxFactory {
     return VariableDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on EnumCaseElementSyntax")
-  public static func makeEnumCaseElement(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndAssociatedValue: GarbageNodesSyntax? = nil, associatedValue: ParameterClauseSyntax?, _ garbageBetweenAssociatedValueAndRawValue: GarbageNodesSyntax? = nil, rawValue: InitializerClauseSyntax?, _ garbageBetweenRawValueAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> EnumCaseElementSyntax {
+  public static func makeEnumCaseElement(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? = nil, associatedValue: ParameterClauseSyntax?, _ unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? = nil, rawValue: InitializerClauseSyntax?, _ unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> EnumCaseElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIdentifier?.raw,
+      unexpectedBeforeIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndAssociatedValue?.raw,
+      unexpectedBetweenIdentifierAndAssociatedValue?.raw,
       associatedValue?.raw,
-      garbageBetweenAssociatedValueAndRawValue?.raw,
+      unexpectedBetweenAssociatedValueAndRawValue?.raw,
       rawValue?.raw,
-      garbageBetweenRawValueAndTrailingComma?.raw,
+      unexpectedBetweenRawValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElement,
@@ -3614,15 +3614,15 @@ public enum SyntaxFactory {
     return EnumCaseElementListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on EnumCaseDeclSyntax")
-  public static func makeEnumCaseDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, _ garbageBetweenCaseKeywordAndElements: GarbageNodesSyntax? = nil, elements: EnumCaseElementListSyntax) -> EnumCaseDeclSyntax {
+  public static func makeEnumCaseDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax, _ unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? = nil, elements: EnumCaseElementListSyntax) -> EnumCaseDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndCaseKeyword?.raw,
+      unexpectedBetweenModifiersAndCaseKeyword?.raw,
       caseKeyword.raw,
-      garbageBetweenCaseKeywordAndElements?.raw,
+      unexpectedBetweenCaseKeywordAndElements?.raw,
       elements.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseDecl,
@@ -3647,23 +3647,23 @@ public enum SyntaxFactory {
     return EnumCaseDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on EnumDeclSyntax")
-  public static func makeEnumDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndEnumKeyword: GarbageNodesSyntax? = nil, enumKeyword: TokenSyntax, _ garbageBetweenEnumKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameters: GarbageNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax?, _ garbageBetweenGenericParametersAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> EnumDeclSyntax {
+  public static func makeEnumDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil, enumKeyword: TokenSyntax, _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax?, _ unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> EnumDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndEnumKeyword?.raw,
+      unexpectedBetweenModifiersAndEnumKeyword?.raw,
       enumKeyword.raw,
-      garbageBetweenEnumKeywordAndIdentifier?.raw,
+      unexpectedBetweenEnumKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndGenericParameters?.raw,
+      unexpectedBetweenIdentifierAndGenericParameters?.raw,
       genericParameters?.raw,
-      garbageBetweenGenericParametersAndInheritanceClause?.raw,
+      unexpectedBetweenGenericParametersAndInheritanceClause?.raw,
       inheritanceClause?.raw,
-      garbageBetweenInheritanceClauseAndGenericWhereClause?.raw,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
       genericWhereClause?.raw,
-      garbageBetweenGenericWhereClauseAndMembers?.raw,
+      unexpectedBetweenGenericWhereClauseAndMembers?.raw,
       members.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumDecl,
@@ -3696,17 +3696,17 @@ public enum SyntaxFactory {
     return EnumDeclSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OperatorDeclSyntax")
-  public static func makeOperatorDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndOperatorKeyword: GarbageNodesSyntax? = nil, operatorKeyword: TokenSyntax, _ garbageBetweenOperatorKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: GarbageNodesSyntax? = nil, operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
+  public static func makeOperatorDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodesSyntax? = nil, operatorKeyword: TokenSyntax, _ unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil, operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndOperatorKeyword?.raw,
+      unexpectedBetweenModifiersAndOperatorKeyword?.raw,
       operatorKeyword.raw,
-      garbageBetweenOperatorKeywordAndIdentifier?.raw,
+      unexpectedBetweenOperatorKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw,
+      unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw,
       operatorPrecedenceAndTypes?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.operatorDecl,
@@ -3749,11 +3749,11 @@ public enum SyntaxFactory {
     return IdentifierListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OperatorPrecedenceAndTypesSyntax")
-  public static func makeOperatorPrecedenceAndTypes(_ garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: GarbageNodesSyntax? = nil, precedenceGroupAndDesignatedTypes: IdentifierListSyntax) -> OperatorPrecedenceAndTypesSyntax {
+  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, precedenceGroupAndDesignatedTypes: IdentifierListSyntax) -> OperatorPrecedenceAndTypesSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeColon?.raw,
+      unexpectedBeforeColon?.raw,
       colon.raw,
-      garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
+      unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
       precedenceGroupAndDesignatedTypes.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.operatorPrecedenceAndTypes,
@@ -3774,21 +3774,21 @@ public enum SyntaxFactory {
     return OperatorPrecedenceAndTypesSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrecedenceGroupDeclSyntax")
-  public static func makePrecedenceGroupDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndPrecedencegroupKeyword: GarbageNodesSyntax? = nil, precedencegroupKeyword: TokenSyntax, _ garbageBetweenPrecedencegroupKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndGroupAttributes: GarbageNodesSyntax? = nil, groupAttributes: PrecedenceGroupAttributeListSyntax, _ garbageBetweenGroupAttributesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> PrecedenceGroupDeclSyntax {
+  public static func makePrecedenceGroupDecl(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? = nil, precedencegroupKeyword: TokenSyntax, _ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax, _ unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodesSyntax? = nil, groupAttributes: PrecedenceGroupAttributeListSyntax, _ unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax) -> PrecedenceGroupDeclSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndModifiers?.raw,
+      unexpectedBetweenAttributesAndModifiers?.raw,
       modifiers?.raw,
-      garbageBetweenModifiersAndPrecedencegroupKeyword?.raw,
+      unexpectedBetweenModifiersAndPrecedencegroupKeyword?.raw,
       precedencegroupKeyword.raw,
-      garbageBetweenPrecedencegroupKeywordAndIdentifier?.raw,
+      unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.raw,
       identifier.raw,
-      garbageBetweenIdentifierAndLeftBrace?.raw,
+      unexpectedBetweenIdentifierAndLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndGroupAttributes?.raw,
+      unexpectedBetweenLeftBraceAndGroupAttributes?.raw,
       groupAttributes.raw,
-      garbageBetweenGroupAttributesAndRightBrace?.raw,
+      unexpectedBetweenGroupAttributesAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupDecl,
@@ -3835,13 +3835,13 @@ public enum SyntaxFactory {
     return PrecedenceGroupAttributeListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrecedenceGroupRelationSyntax")
-  public static func makePrecedenceGroupRelation(_ garbageBeforeHigherThanOrLowerThan: GarbageNodesSyntax? = nil, higherThanOrLowerThan: TokenSyntax, _ garbageBetweenHigherThanOrLowerThanAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndOtherNames: GarbageNodesSyntax? = nil, otherNames: PrecedenceGroupNameListSyntax) -> PrecedenceGroupRelationSyntax {
+  public static func makePrecedenceGroupRelation(_ unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? = nil, higherThanOrLowerThan: TokenSyntax, _ unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil, otherNames: PrecedenceGroupNameListSyntax) -> PrecedenceGroupRelationSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeHigherThanOrLowerThan?.raw,
+      unexpectedBeforeHigherThanOrLowerThan?.raw,
       higherThanOrLowerThan.raw,
-      garbageBetweenHigherThanOrLowerThanAndColon?.raw,
+      unexpectedBetweenHigherThanOrLowerThanAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndOtherNames?.raw,
+      unexpectedBetweenColonAndOtherNames?.raw,
       otherNames.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupRelation,
@@ -3880,11 +3880,11 @@ public enum SyntaxFactory {
     return PrecedenceGroupNameListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrecedenceGroupNameElementSyntax")
-  public static func makePrecedenceGroupNameElement(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrecedenceGroupNameElementSyntax {
+  public static func makePrecedenceGroupNameElement(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrecedenceGroupNameElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingComma?.raw,
+      unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameElement,
@@ -3905,13 +3905,13 @@ public enum SyntaxFactory {
     return PrecedenceGroupNameElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrecedenceGroupAssignmentSyntax")
-  public static func makePrecedenceGroupAssignment(_ garbageBeforeAssignmentKeyword: GarbageNodesSyntax? = nil, assignmentKeyword: TokenSyntax, _ garbageBetweenAssignmentKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndFlag: GarbageNodesSyntax? = nil, flag: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
+  public static func makePrecedenceGroupAssignment(_ unexpectedBeforeAssignmentKeyword: UnexpectedNodesSyntax? = nil, assignmentKeyword: TokenSyntax, _ unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndFlag: UnexpectedNodesSyntax? = nil, flag: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAssignmentKeyword?.raw,
+      unexpectedBeforeAssignmentKeyword?.raw,
       assignmentKeyword.raw,
-      garbageBetweenAssignmentKeywordAndColon?.raw,
+      unexpectedBetweenAssignmentKeywordAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndFlag?.raw,
+      unexpectedBetweenColonAndFlag?.raw,
       flag.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssignment,
@@ -3934,13 +3934,13 @@ public enum SyntaxFactory {
     return PrecedenceGroupAssignmentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrecedenceGroupAssociativitySyntax")
-  public static func makePrecedenceGroupAssociativity(_ garbageBeforeAssociativityKeyword: GarbageNodesSyntax? = nil, associativityKeyword: TokenSyntax, _ garbageBetweenAssociativityKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
+  public static func makePrecedenceGroupAssociativity(_ unexpectedBeforeAssociativityKeyword: UnexpectedNodesSyntax? = nil, associativityKeyword: TokenSyntax, _ unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, value: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAssociativityKeyword?.raw,
+      unexpectedBeforeAssociativityKeyword?.raw,
       associativityKeyword.raw,
-      garbageBetweenAssociativityKeywordAndColon?.raw,
+      unexpectedBetweenAssociativityKeywordAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValue?.raw,
+      unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssociativity,
@@ -3995,17 +3995,17 @@ public enum SyntaxFactory {
     return NonEmptyTokenListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CustomAttributeSyntax")
-  public static func makeCustomAttribute(_ garbageBeforeAtSignToken: GarbageNodesSyntax? = nil, atSignToken: TokenSyntax, _ garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil, attributeName: TypeSyntax, _ garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax?, _ garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?) -> CustomAttributeSyntax {
+  public static func makeCustomAttribute(_ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, atSignToken: TokenSyntax, _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, attributeName: TypeSyntax, _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, argumentList: TupleExprElementListSyntax?, _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?) -> CustomAttributeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAtSignToken?.raw,
+      unexpectedBeforeAtSignToken?.raw,
       atSignToken.raw,
-      garbageBetweenAtSignTokenAndAttributeName?.raw,
+      unexpectedBetweenAtSignTokenAndAttributeName?.raw,
       attributeName.raw,
-      garbageBetweenAttributeNameAndLeftParen?.raw,
+      unexpectedBetweenAttributeNameAndLeftParen?.raw,
       leftParen?.raw,
-      garbageBetweenLeftParenAndArgumentList?.raw,
+      unexpectedBetweenLeftParenAndArgumentList?.raw,
       argumentList?.raw,
-      garbageBetweenArgumentListAndRightParen?.raw,
+      unexpectedBetweenArgumentListAndRightParen?.raw,
       rightParen?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.customAttribute,
@@ -4032,19 +4032,19 @@ public enum SyntaxFactory {
     return CustomAttributeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AttributeSyntax")
-  public static func makeAttribute(_ garbageBeforeAtSignToken: GarbageNodesSyntax? = nil, atSignToken: TokenSyntax, _ garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil, attributeName: TokenSyntax, _ garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndArgument: GarbageNodesSyntax? = nil, argument: Syntax?, _ garbageBetweenArgumentAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?, _ garbageBetweenRightParenAndTokenList: GarbageNodesSyntax? = nil, tokenList: TokenListSyntax?) -> AttributeSyntax {
+  public static func makeAttribute(_ unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? = nil, atSignToken: TokenSyntax, _ unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodesSyntax? = nil, attributeName: TokenSyntax, _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil, argument: Syntax?, _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?, _ unexpectedBetweenRightParenAndTokenList: UnexpectedNodesSyntax? = nil, tokenList: TokenListSyntax?) -> AttributeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAtSignToken?.raw,
+      unexpectedBeforeAtSignToken?.raw,
       atSignToken.raw,
-      garbageBetweenAtSignTokenAndAttributeName?.raw,
+      unexpectedBetweenAtSignTokenAndAttributeName?.raw,
       attributeName.raw,
-      garbageBetweenAttributeNameAndLeftParen?.raw,
+      unexpectedBetweenAttributeNameAndLeftParen?.raw,
       leftParen?.raw,
-      garbageBetweenLeftParenAndArgument?.raw,
+      unexpectedBetweenLeftParenAndArgument?.raw,
       argument?.raw,
-      garbageBetweenArgumentAndRightParen?.raw,
+      unexpectedBetweenArgumentAndRightParen?.raw,
       rightParen?.raw,
-      garbageBetweenRightParenAndTokenList?.raw,
+      unexpectedBetweenRightParenAndTokenList?.raw,
       tokenList?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attribute,
@@ -4105,15 +4105,15 @@ public enum SyntaxFactory {
     return SpecializeAttributeSpecListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AvailabilityEntrySyntax")
-  public static func makeAvailabilityEntry(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndAvailabilityList: GarbageNodesSyntax? = nil, availabilityList: AvailabilitySpecListSyntax, _ garbageBetweenAvailabilityListAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax) -> AvailabilityEntrySyntax {
+  public static func makeAvailabilityEntry(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil, availabilityList: AvailabilitySpecListSyntax, _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil, semicolon: TokenSyntax) -> AvailabilityEntrySyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndAvailabilityList?.raw,
+      unexpectedBetweenColonAndAvailabilityList?.raw,
       availabilityList.raw,
-      garbageBetweenAvailabilityListAndSemicolon?.raw,
+      unexpectedBetweenAvailabilityListAndSemicolon?.raw,
       semicolon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityEntry,
@@ -4138,15 +4138,15 @@ public enum SyntaxFactory {
     return AvailabilityEntrySyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on LabeledSpecializeEntrySyntax")
-  public static func makeLabeledSpecializeEntry(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: TokenSyntax, _ garbageBetweenValueAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
+  public static func makeLabeledSpecializeEntry(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, value: TokenSyntax, _ unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValue?.raw,
+      unexpectedBetweenColonAndValue?.raw,
       value.raw,
-      garbageBetweenValueAndTrailingComma?.raw,
+      unexpectedBetweenValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.labeledSpecializeEntry,
@@ -4171,15 +4171,15 @@ public enum SyntaxFactory {
     return LabeledSpecializeEntrySyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TargetFunctionEntrySyntax")
-  public static func makeTargetFunctionEntry(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndDeclname: GarbageNodesSyntax? = nil, declname: DeclNameSyntax, _ garbageBetweenDeclnameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
+  public static func makeTargetFunctionEntry(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil, declname: DeclNameSyntax, _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndDeclname?.raw,
+      unexpectedBetweenColonAndDeclname?.raw,
       declname.raw,
-      garbageBetweenDeclnameAndTrailingComma?.raw,
+      unexpectedBetweenDeclnameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.targetFunctionEntry,
@@ -4204,13 +4204,13 @@ public enum SyntaxFactory {
     return TargetFunctionEntrySyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on NamedAttributeStringArgumentSyntax")
-  public static func makeNamedAttributeStringArgument(_ garbageBeforeNameTok: GarbageNodesSyntax? = nil, nameTok: TokenSyntax, _ garbageBetweenNameTokAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndStringOrDeclname: GarbageNodesSyntax? = nil, stringOrDeclname: Syntax) -> NamedAttributeStringArgumentSyntax {
+  public static func makeNamedAttributeStringArgument(_ unexpectedBeforeNameTok: UnexpectedNodesSyntax? = nil, nameTok: TokenSyntax, _ unexpectedBetweenNameTokAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodesSyntax? = nil, stringOrDeclname: Syntax) -> NamedAttributeStringArgumentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeNameTok?.raw,
+      unexpectedBeforeNameTok?.raw,
       nameTok.raw,
-      garbageBetweenNameTokAndColon?.raw,
+      unexpectedBetweenNameTokAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndStringOrDeclname?.raw,
+      unexpectedBetweenColonAndStringOrDeclname?.raw,
       stringOrDeclname.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.namedAttributeStringArgument,
@@ -4233,11 +4233,11 @@ public enum SyntaxFactory {
     return NamedAttributeStringArgumentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeclNameSyntax")
-  public static func makeDeclName(_ garbageBeforeDeclBaseName: GarbageNodesSyntax? = nil, declBaseName: Syntax, _ garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> DeclNameSyntax {
+  public static func makeDeclName(_ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: Syntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> DeclNameSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDeclBaseName?.raw,
+      unexpectedBeforeDeclBaseName?.raw,
       declBaseName.raw,
-      garbageBetweenDeclBaseNameAndDeclNameArguments?.raw,
+      unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declName,
@@ -4258,15 +4258,15 @@ public enum SyntaxFactory {
     return DeclNameSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ImplementsAttributeArgumentsSyntax")
-  public static func makeImplementsAttributeArguments(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: SimpleTypeIdentifierSyntax, _ garbageBetweenTypeAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax, _ garbageBetweenCommaAndDeclBaseName: GarbageNodesSyntax? = nil, declBaseName: Syntax, _ garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  public static func makeImplementsAttributeArguments(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: SimpleTypeIdentifierSyntax, _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: Syntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeType?.raw,
+      unexpectedBeforeType?.raw,
       type.raw,
-      garbageBetweenTypeAndComma?.raw,
+      unexpectedBetweenTypeAndComma?.raw,
       comma.raw,
-      garbageBetweenCommaAndDeclBaseName?.raw,
+      unexpectedBetweenCommaAndDeclBaseName?.raw,
       declBaseName.raw,
-      garbageBetweenDeclBaseNameAndDeclNameArguments?.raw,
+      unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implementsAttributeArguments,
@@ -4291,11 +4291,11 @@ public enum SyntaxFactory {
     return ImplementsAttributeArgumentsSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ObjCSelectorPieceSyntax")
-  public static func makeObjCSelectorPiece(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax?, _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?) -> ObjCSelectorPieceSyntax {
+  public static func makeObjCSelectorPiece(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax?, _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?) -> ObjCSelectorPieceSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name?.raw,
-      garbageBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndColon?.raw,
       colon?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelectorPiece,
@@ -4332,17 +4332,17 @@ public enum SyntaxFactory {
     return ObjCSelectorSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DifferentiableAttributeArgumentsSyntax")
-  public static func makeDifferentiableAttributeArguments(_ garbageBeforeDiffKind: GarbageNodesSyntax? = nil, diffKind: TokenSyntax?, _ garbageBetweenDiffKindAndDiffKindComma: GarbageNodesSyntax? = nil, diffKindComma: TokenSyntax?, _ garbageBetweenDiffKindCommaAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?, _ garbageBetweenDiffParamsAndDiffParamsComma: GarbageNodesSyntax? = nil, diffParamsComma: TokenSyntax?, _ garbageBetweenDiffParamsCommaAndWhereClause: GarbageNodesSyntax? = nil, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  public static func makeDifferentiableAttributeArguments(_ unexpectedBeforeDiffKind: UnexpectedNodesSyntax? = nil, diffKind: TokenSyntax?, _ unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodesSyntax? = nil, diffKindComma: TokenSyntax?, _ unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?, _ unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodesSyntax? = nil, diffParamsComma: TokenSyntax?, _ unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDiffKind?.raw,
+      unexpectedBeforeDiffKind?.raw,
       diffKind?.raw,
-      garbageBetweenDiffKindAndDiffKindComma?.raw,
+      unexpectedBetweenDiffKindAndDiffKindComma?.raw,
       diffKindComma?.raw,
-      garbageBetweenDiffKindCommaAndDiffParams?.raw,
+      unexpectedBetweenDiffKindCommaAndDiffParams?.raw,
       diffParams?.raw,
-      garbageBetweenDiffParamsAndDiffParamsComma?.raw,
+      unexpectedBetweenDiffParamsAndDiffParamsComma?.raw,
       diffParamsComma?.raw,
-      garbageBetweenDiffParamsCommaAndWhereClause?.raw,
+      unexpectedBetweenDiffParamsCommaAndWhereClause?.raw,
       whereClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiableAttributeArguments,
@@ -4369,13 +4369,13 @@ public enum SyntaxFactory {
     return DifferentiableAttributeArgumentsSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DifferentiabilityParamsClauseSyntax")
-  public static func makeDifferentiabilityParamsClause(_ garbageBeforeWrtLabel: GarbageNodesSyntax? = nil, wrtLabel: TokenSyntax, _ garbageBetweenWrtLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndParameters: GarbageNodesSyntax? = nil, parameters: Syntax) -> DifferentiabilityParamsClauseSyntax {
+  public static func makeDifferentiabilityParamsClause(_ unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? = nil, wrtLabel: TokenSyntax, _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil, parameters: Syntax) -> DifferentiabilityParamsClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWrtLabel?.raw,
+      unexpectedBeforeWrtLabel?.raw,
       wrtLabel.raw,
-      garbageBetweenWrtLabelAndColon?.raw,
+      unexpectedBetweenWrtLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndParameters?.raw,
+      unexpectedBetweenColonAndParameters?.raw,
       parameters.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamsClause,
@@ -4398,13 +4398,13 @@ public enum SyntaxFactory {
     return DifferentiabilityParamsClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DifferentiabilityParamsSyntax")
-  public static func makeDifferentiabilityParams(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamListSyntax, _ garbageBetweenDiffParamsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DifferentiabilityParamsSyntax {
+  public static func makeDifferentiabilityParams(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodesSyntax? = nil, diffParams: DifferentiabilityParamListSyntax, _ unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> DifferentiabilityParamsSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndDiffParams?.raw,
+      unexpectedBetweenLeftParenAndDiffParams?.raw,
       diffParams.raw,
-      garbageBetweenDiffParamsAndRightParen?.raw,
+      unexpectedBetweenDiffParamsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParams,
@@ -4443,11 +4443,11 @@ public enum SyntaxFactory {
     return DifferentiabilityParamListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DifferentiabilityParamSyntax")
-  public static func makeDifferentiabilityParam(_ garbageBeforeParameter: GarbageNodesSyntax? = nil, parameter: Syntax, _ garbageBetweenParameterAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DifferentiabilityParamSyntax {
+  public static func makeDifferentiabilityParam(_ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil, parameter: Syntax, _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DifferentiabilityParamSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeParameter?.raw,
+      unexpectedBeforeParameter?.raw,
       parameter.raw,
-      garbageBetweenParameterAndTrailingComma?.raw,
+      unexpectedBetweenParameterAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParam,
@@ -4468,21 +4468,21 @@ public enum SyntaxFactory {
     return DifferentiabilityParamSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DerivativeRegistrationAttributeArgumentsSyntax")
-  public static func makeDerivativeRegistrationAttributeArguments(_ garbageBeforeOfLabel: GarbageNodesSyntax? = nil, ofLabel: TokenSyntax, _ garbageBetweenOfLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndOriginalDeclName: GarbageNodesSyntax? = nil, originalDeclName: QualifiedDeclNameSyntax, _ garbageBetweenOriginalDeclNameAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax?, _ garbageBetweenPeriodAndAccessorKind: GarbageNodesSyntax? = nil, accessorKind: TokenSyntax?, _ garbageBetweenAccessorKindAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, _ garbageBetweenCommaAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  public static func makeDerivativeRegistrationAttributeArguments(_ unexpectedBeforeOfLabel: UnexpectedNodesSyntax? = nil, ofLabel: TokenSyntax, _ unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? = nil, originalDeclName: QualifiedDeclNameSyntax, _ unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax?, _ unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? = nil, accessorKind: TokenSyntax?, _ unexpectedBetweenAccessorKindAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeOfLabel?.raw,
+      unexpectedBeforeOfLabel?.raw,
       ofLabel.raw,
-      garbageBetweenOfLabelAndColon?.raw,
+      unexpectedBetweenOfLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndOriginalDeclName?.raw,
+      unexpectedBetweenColonAndOriginalDeclName?.raw,
       originalDeclName.raw,
-      garbageBetweenOriginalDeclNameAndPeriod?.raw,
+      unexpectedBetweenOriginalDeclNameAndPeriod?.raw,
       period?.raw,
-      garbageBetweenPeriodAndAccessorKind?.raw,
+      unexpectedBetweenPeriodAndAccessorKind?.raw,
       accessorKind?.raw,
-      garbageBetweenAccessorKindAndComma?.raw,
+      unexpectedBetweenAccessorKindAndComma?.raw,
       comma?.raw,
-      garbageBetweenCommaAndDiffParams?.raw,
+      unexpectedBetweenCommaAndDiffParams?.raw,
       diffParams?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
@@ -4513,15 +4513,15 @@ public enum SyntaxFactory {
     return DerivativeRegistrationAttributeArgumentsSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on QualifiedDeclNameSyntax")
-  public static func makeQualifiedDeclName(_ garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax?, _ garbageBetweenBaseTypeAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax?, _ garbageBetweenDotAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> QualifiedDeclNameSyntax {
+  public static func makeQualifiedDeclName(_ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil, baseType: TypeSyntax?, _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil, dot: TokenSyntax?, _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> QualifiedDeclNameSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBaseType?.raw,
+      unexpectedBeforeBaseType?.raw,
       baseType?.raw,
-      garbageBetweenBaseTypeAndDot?.raw,
+      unexpectedBetweenBaseTypeAndDot?.raw,
       dot?.raw,
-      garbageBetweenDotAndName?.raw,
+      unexpectedBetweenDotAndName?.raw,
       name.raw,
-      garbageBetweenNameAndArguments?.raw,
+      unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.qualifiedDeclName,
@@ -4546,11 +4546,11 @@ public enum SyntaxFactory {
     return QualifiedDeclNameSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionDeclNameSyntax")
-  public static func makeFunctionDeclName(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: Syntax, _ garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
+  public static func makeFunctionDeclName(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: Syntax, _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndArguments?.raw,
+      unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDeclName,
@@ -4571,13 +4571,13 @@ public enum SyntaxFactory {
     return FunctionDeclNameSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on BackDeployAttributeSpecListSyntax")
-  public static func makeBackDeployAttributeSpecList(_ garbageBeforeBeforeLabel: GarbageNodesSyntax? = nil, beforeLabel: TokenSyntax, _ garbageBetweenBeforeLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndVersionList: GarbageNodesSyntax? = nil, versionList: BackDeployVersionListSyntax) -> BackDeployAttributeSpecListSyntax {
+  public static func makeBackDeployAttributeSpecList(_ unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? = nil, beforeLabel: TokenSyntax, _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil, versionList: BackDeployVersionListSyntax) -> BackDeployAttributeSpecListSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBeforeLabel?.raw,
+      unexpectedBeforeBeforeLabel?.raw,
       beforeLabel.raw,
-      garbageBetweenBeforeLabelAndColon?.raw,
+      unexpectedBetweenBeforeLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndVersionList?.raw,
+      unexpectedBetweenColonAndVersionList?.raw,
       versionList.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployAttributeSpecList,
@@ -4616,11 +4616,11 @@ public enum SyntaxFactory {
     return BackDeployVersionListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on BackDeployVersionArgumentSyntax")
-  public static func makeBackDeployVersionArgument(_ garbageBeforeAvailabilityVersionRestriction: GarbageNodesSyntax? = nil, availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, _ garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> BackDeployVersionArgumentSyntax {
+  public static func makeBackDeployVersionArgument(_ unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? = nil, availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> BackDeployVersionArgumentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAvailabilityVersionRestriction?.raw,
+      unexpectedBeforeAvailabilityVersionRestriction?.raw,
       availabilityVersionRestriction.raw,
-      garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw,
+      unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionArgument,
@@ -4641,13 +4641,13 @@ public enum SyntaxFactory {
     return BackDeployVersionArgumentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on LabeledStmtSyntax")
-  public static func makeLabeledStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax, _ garbageBetweenLabelColonAndStatement: GarbageNodesSyntax? = nil, statement: StmtSyntax) -> LabeledStmtSyntax {
+  public static func makeLabeledStmt(_ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, labelName: TokenSyntax, _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, labelColon: TokenSyntax, _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, statement: StmtSyntax) -> LabeledStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
+      unexpectedBeforeLabelName?.raw,
       labelName.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
+      unexpectedBetweenLabelNameAndLabelColon?.raw,
       labelColon.raw,
-      garbageBetweenLabelColonAndStatement?.raw,
+      unexpectedBetweenLabelColonAndStatement?.raw,
       statement.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.labeledStmt,
@@ -4670,11 +4670,11 @@ public enum SyntaxFactory {
     return LabeledStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ContinueStmtSyntax")
-  public static func makeContinueStmt(_ garbageBeforeContinueKeyword: GarbageNodesSyntax? = nil, continueKeyword: TokenSyntax, _ garbageBetweenContinueKeywordAndLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?) -> ContinueStmtSyntax {
+  public static func makeContinueStmt(_ unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? = nil, continueKeyword: TokenSyntax, _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax?) -> ContinueStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeContinueKeyword?.raw,
+      unexpectedBeforeContinueKeyword?.raw,
       continueKeyword.raw,
-      garbageBetweenContinueKeywordAndLabel?.raw,
+      unexpectedBetweenContinueKeywordAndLabel?.raw,
       label?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.continueStmt,
@@ -4695,13 +4695,13 @@ public enum SyntaxFactory {
     return ContinueStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on WhileStmtSyntax")
-  public static func makeWhileStmt(_ garbageBeforeWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> WhileStmtSyntax {
+  public static func makeWhileStmt(_ unexpectedBeforeWhileKeyword: UnexpectedNodesSyntax? = nil, whileKeyword: TokenSyntax, _ unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax) -> WhileStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWhileKeyword?.raw,
+      unexpectedBeforeWhileKeyword?.raw,
       whileKeyword.raw,
-      garbageBetweenWhileKeywordAndConditions?.raw,
+      unexpectedBetweenWhileKeywordAndConditions?.raw,
       conditions.raw,
-      garbageBetweenConditionsAndBody?.raw,
+      unexpectedBetweenConditionsAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.whileStmt,
@@ -4724,11 +4724,11 @@ public enum SyntaxFactory {
     return WhileStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeferStmtSyntax")
-  public static func makeDeferStmt(_ garbageBeforeDeferKeyword: GarbageNodesSyntax? = nil, deferKeyword: TokenSyntax, _ garbageBetweenDeferKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> DeferStmtSyntax {
+  public static func makeDeferStmt(_ unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? = nil, deferKeyword: TokenSyntax, _ unexpectedBetweenDeferKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax) -> DeferStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDeferKeyword?.raw,
+      unexpectedBeforeDeferKeyword?.raw,
       deferKeyword.raw,
-      garbageBetweenDeferKeywordAndBody?.raw,
+      unexpectedBetweenDeferKeywordAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.deferStmt,
@@ -4749,9 +4749,9 @@ public enum SyntaxFactory {
     return DeferStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ExpressionStmtSyntax")
-  public static func makeExpressionStmt(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionStmtSyntax {
+  public static func makeExpressionStmt(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionStmt,
@@ -4786,15 +4786,15 @@ public enum SyntaxFactory {
     return SwitchCaseListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on RepeatWhileStmtSyntax")
-  public static func makeRepeatWhileStmt(_ garbageBeforeRepeatKeyword: GarbageNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ garbageBetweenRepeatKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax) -> RepeatWhileStmtSyntax {
+  public static func makeRepeatWhileStmt(_ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax, _ unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodesSyntax? = nil, whileKeyword: TokenSyntax, _ unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax) -> RepeatWhileStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeRepeatKeyword?.raw,
+      unexpectedBeforeRepeatKeyword?.raw,
       repeatKeyword.raw,
-      garbageBetweenRepeatKeywordAndBody?.raw,
+      unexpectedBetweenRepeatKeywordAndBody?.raw,
       body.raw,
-      garbageBetweenBodyAndWhileKeyword?.raw,
+      unexpectedBetweenBodyAndWhileKeyword?.raw,
       whileKeyword.raw,
-      garbageBetweenWhileKeywordAndCondition?.raw,
+      unexpectedBetweenWhileKeywordAndCondition?.raw,
       condition.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.repeatWhileStmt,
@@ -4819,15 +4819,15 @@ public enum SyntaxFactory {
     return RepeatWhileStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GuardStmtSyntax")
-  public static func makeGuardStmt(_ garbageBeforeGuardKeyword: GarbageNodesSyntax? = nil, guardKeyword: TokenSyntax, _ garbageBetweenGuardKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax, _ garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> GuardStmtSyntax {
+  public static func makeGuardStmt(_ unexpectedBeforeGuardKeyword: UnexpectedNodesSyntax? = nil, guardKeyword: TokenSyntax, _ unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax, _ unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax) -> GuardStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeGuardKeyword?.raw,
+      unexpectedBeforeGuardKeyword?.raw,
       guardKeyword.raw,
-      garbageBetweenGuardKeywordAndConditions?.raw,
+      unexpectedBetweenGuardKeywordAndConditions?.raw,
       conditions.raw,
-      garbageBetweenConditionsAndElseKeyword?.raw,
+      unexpectedBetweenConditionsAndElseKeyword?.raw,
       elseKeyword.raw,
-      garbageBetweenElseKeywordAndBody?.raw,
+      unexpectedBetweenElseKeywordAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.guardStmt,
@@ -4852,11 +4852,11 @@ public enum SyntaxFactory {
     return GuardStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on WhereClauseSyntax")
-  public static func makeWhereClause(_ garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil, whereKeyword: TokenSyntax, _ garbageBetweenWhereKeywordAndGuardResult: GarbageNodesSyntax? = nil, guardResult: ExprSyntax) -> WhereClauseSyntax {
+  public static func makeWhereClause(_ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil, whereKeyword: TokenSyntax, _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil, guardResult: ExprSyntax) -> WhereClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWhereKeyword?.raw,
+      unexpectedBeforeWhereKeyword?.raw,
       whereKeyword.raw,
-      garbageBetweenWhereKeywordAndGuardResult?.raw,
+      unexpectedBetweenWhereKeywordAndGuardResult?.raw,
       guardResult.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.whereClause,
@@ -4877,27 +4877,27 @@ public enum SyntaxFactory {
     return WhereClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ForInStmtSyntax")
-  public static func makeForInStmt(_ garbageBeforeForKeyword: GarbageNodesSyntax? = nil, forKeyword: TokenSyntax, _ garbageBetweenForKeywordAndTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax?, _ garbageBetweenTryKeywordAndAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax?, _ garbageBetweenAwaitKeywordAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax?, _ garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInKeyword: GarbageNodesSyntax? = nil, inKeyword: TokenSyntax, _ garbageBetweenInKeywordAndSequenceExpr: GarbageNodesSyntax? = nil, sequenceExpr: ExprSyntax, _ garbageBetweenSequenceExprAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ForInStmtSyntax {
+  public static func makeForInStmt(_ unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil, forKeyword: TokenSyntax, _ unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil, tryKeyword: TokenSyntax?, _ unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil, awaitKeyword: TokenSyntax?, _ unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax?, _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil, inKeyword: TokenSyntax, _ unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil, sequenceExpr: ExprSyntax, _ unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax) -> ForInStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeForKeyword?.raw,
+      unexpectedBeforeForKeyword?.raw,
       forKeyword.raw,
-      garbageBetweenForKeywordAndTryKeyword?.raw,
+      unexpectedBetweenForKeywordAndTryKeyword?.raw,
       tryKeyword?.raw,
-      garbageBetweenTryKeywordAndAwaitKeyword?.raw,
+      unexpectedBetweenTryKeywordAndAwaitKeyword?.raw,
       awaitKeyword?.raw,
-      garbageBetweenAwaitKeywordAndCaseKeyword?.raw,
+      unexpectedBetweenAwaitKeywordAndCaseKeyword?.raw,
       caseKeyword?.raw,
-      garbageBetweenCaseKeywordAndPattern?.raw,
+      unexpectedBetweenCaseKeywordAndPattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTypeAnnotation?.raw,
+      unexpectedBetweenPatternAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
-      garbageBetweenTypeAnnotationAndInKeyword?.raw,
+      unexpectedBetweenTypeAnnotationAndInKeyword?.raw,
       inKeyword.raw,
-      garbageBetweenInKeywordAndSequenceExpr?.raw,
+      unexpectedBetweenInKeywordAndSequenceExpr?.raw,
       sequenceExpr.raw,
-      garbageBetweenSequenceExprAndWhereClause?.raw,
+      unexpectedBetweenSequenceExprAndWhereClause?.raw,
       whereClause?.raw,
-      garbageBetweenWhereClauseAndBody?.raw,
+      unexpectedBetweenWhereClauseAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.forInStmt,
@@ -4934,17 +4934,17 @@ public enum SyntaxFactory {
     return ForInStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SwitchStmtSyntax")
-  public static func makeSwitchStmt(_ garbageBeforeSwitchKeyword: GarbageNodesSyntax? = nil, switchKeyword: TokenSyntax, _ garbageBetweenSwitchKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndCases: GarbageNodesSyntax? = nil, cases: SwitchCaseListSyntax, _ garbageBetweenCasesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> SwitchStmtSyntax {
+  public static func makeSwitchStmt(_ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil, switchKeyword: TokenSyntax, _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil, leftBrace: TokenSyntax, _ unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil, cases: SwitchCaseListSyntax, _ unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil, rightBrace: TokenSyntax) -> SwitchStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeSwitchKeyword?.raw,
+      unexpectedBeforeSwitchKeyword?.raw,
       switchKeyword.raw,
-      garbageBetweenSwitchKeywordAndExpression?.raw,
+      unexpectedBetweenSwitchKeywordAndExpression?.raw,
       expression.raw,
-      garbageBetweenExpressionAndLeftBrace?.raw,
+      unexpectedBetweenExpressionAndLeftBrace?.raw,
       leftBrace.raw,
-      garbageBetweenLeftBraceAndCases?.raw,
+      unexpectedBetweenLeftBraceAndCases?.raw,
       cases.raw,
-      garbageBetweenCasesAndRightBrace?.raw,
+      unexpectedBetweenCasesAndRightBrace?.raw,
       rightBrace.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchStmt,
@@ -4987,13 +4987,13 @@ public enum SyntaxFactory {
     return CatchClauseListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DoStmtSyntax")
-  public static func makeDoStmt(_ garbageBeforeDoKeyword: GarbageNodesSyntax? = nil, doKeyword: TokenSyntax, _ garbageBetweenDoKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndCatchClauses: GarbageNodesSyntax? = nil, catchClauses: CatchClauseListSyntax?) -> DoStmtSyntax {
+  public static func makeDoStmt(_ unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil, doKeyword: TokenSyntax, _ unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax, _ unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil, catchClauses: CatchClauseListSyntax?) -> DoStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDoKeyword?.raw,
+      unexpectedBeforeDoKeyword?.raw,
       doKeyword.raw,
-      garbageBetweenDoKeywordAndBody?.raw,
+      unexpectedBetweenDoKeywordAndBody?.raw,
       body.raw,
-      garbageBetweenBodyAndCatchClauses?.raw,
+      unexpectedBetweenBodyAndCatchClauses?.raw,
       catchClauses?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.doStmt,
@@ -5016,11 +5016,11 @@ public enum SyntaxFactory {
     return DoStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ReturnStmtSyntax")
-  public static func makeReturnStmt(_ garbageBeforeReturnKeyword: GarbageNodesSyntax? = nil, returnKeyword: TokenSyntax, _ garbageBetweenReturnKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax?) -> ReturnStmtSyntax {
+  public static func makeReturnStmt(_ unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? = nil, returnKeyword: TokenSyntax, _ unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax?) -> ReturnStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeReturnKeyword?.raw,
+      unexpectedBeforeReturnKeyword?.raw,
       returnKeyword.raw,
-      garbageBetweenReturnKeywordAndExpression?.raw,
+      unexpectedBetweenReturnKeywordAndExpression?.raw,
       expression?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.returnStmt,
@@ -5041,11 +5041,11 @@ public enum SyntaxFactory {
     return ReturnStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on YieldStmtSyntax")
-  public static func makeYieldStmt(_ garbageBeforeYieldKeyword: GarbageNodesSyntax? = nil, yieldKeyword: TokenSyntax, _ garbageBetweenYieldKeywordAndYields: GarbageNodesSyntax? = nil, yields: Syntax) -> YieldStmtSyntax {
+  public static func makeYieldStmt(_ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil, yieldKeyword: TokenSyntax, _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil, yields: Syntax) -> YieldStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeYieldKeyword?.raw,
+      unexpectedBeforeYieldKeyword?.raw,
       yieldKeyword.raw,
-      garbageBetweenYieldKeywordAndYields?.raw,
+      unexpectedBetweenYieldKeywordAndYields?.raw,
       yields.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.yieldStmt,
@@ -5066,15 +5066,15 @@ public enum SyntaxFactory {
     return YieldStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on YieldListSyntax")
-  public static func makeYieldList(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? = nil, elementList: ExprListSyntax, _ garbageBetweenElementListAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?, _ garbageBetweenTrailingCommaAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> YieldListSyntax {
+  public static func makeYieldList(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, elementList: ExprListSyntax, _ unexpectedBetweenElementListAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?, _ unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> YieldListSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndElementList?.raw,
+      unexpectedBetweenLeftParenAndElementList?.raw,
       elementList.raw,
-      garbageBetweenElementListAndTrailingComma?.raw,
+      unexpectedBetweenElementListAndTrailingComma?.raw,
       trailingComma?.raw,
-      garbageBetweenTrailingCommaAndRightParen?.raw,
+      unexpectedBetweenTrailingCommaAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.yieldList,
@@ -5099,9 +5099,9 @@ public enum SyntaxFactory {
     return YieldListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FallthroughStmtSyntax")
-  public static func makeFallthroughStmt(_ garbageBeforeFallthroughKeyword: GarbageNodesSyntax? = nil, fallthroughKeyword: TokenSyntax) -> FallthroughStmtSyntax {
+  public static func makeFallthroughStmt(_ unexpectedBeforeFallthroughKeyword: UnexpectedNodesSyntax? = nil, fallthroughKeyword: TokenSyntax) -> FallthroughStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeFallthroughKeyword?.raw,
+      unexpectedBeforeFallthroughKeyword?.raw,
       fallthroughKeyword.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.fallthroughStmt,
@@ -5120,11 +5120,11 @@ public enum SyntaxFactory {
     return FallthroughStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on BreakStmtSyntax")
-  public static func makeBreakStmt(_ garbageBeforeBreakKeyword: GarbageNodesSyntax? = nil, breakKeyword: TokenSyntax, _ garbageBetweenBreakKeywordAndLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?) -> BreakStmtSyntax {
+  public static func makeBreakStmt(_ unexpectedBeforeBreakKeyword: UnexpectedNodesSyntax? = nil, breakKeyword: TokenSyntax, _ unexpectedBetweenBreakKeywordAndLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax?) -> BreakStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBreakKeyword?.raw,
+      unexpectedBeforeBreakKeyword?.raw,
       breakKeyword.raw,
-      garbageBetweenBreakKeywordAndLabel?.raw,
+      unexpectedBetweenBreakKeywordAndLabel?.raw,
       label?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.breakStmt,
@@ -5177,11 +5177,11 @@ public enum SyntaxFactory {
     return CatchItemListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ConditionElementSyntax")
-  public static func makeConditionElement(_ garbageBeforeCondition: GarbageNodesSyntax? = nil, condition: Syntax, _ garbageBetweenConditionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ConditionElementSyntax {
+  public static func makeConditionElement(_ unexpectedBeforeCondition: UnexpectedNodesSyntax? = nil, condition: Syntax, _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ConditionElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeCondition?.raw,
+      unexpectedBeforeCondition?.raw,
       condition.raw,
-      garbageBetweenConditionAndTrailingComma?.raw,
+      unexpectedBetweenConditionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElement,
@@ -5202,15 +5202,15 @@ public enum SyntaxFactory {
     return ConditionElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AvailabilityConditionSyntax")
-  public static func makeAvailabilityCondition(_ garbageBeforePoundAvailableKeyword: GarbageNodesSyntax? = nil, poundAvailableKeyword: TokenSyntax, _ garbageBetweenPoundAvailableKeywordAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> AvailabilityConditionSyntax {
+  public static func makeAvailabilityCondition(_ unexpectedBeforePoundAvailableKeyword: UnexpectedNodesSyntax? = nil, poundAvailableKeyword: TokenSyntax, _ unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> AvailabilityConditionSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundAvailableKeyword?.raw,
+      unexpectedBeforePoundAvailableKeyword?.raw,
       poundAvailableKeyword.raw,
-      garbageBetweenPoundAvailableKeywordAndLeftParen?.raw,
+      unexpectedBetweenPoundAvailableKeywordAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndAvailabilitySpec?.raw,
+      unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
       availabilitySpec.raw,
-      garbageBetweenAvailabilitySpecAndRightParen?.raw,
+      unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityCondition,
@@ -5235,15 +5235,15 @@ public enum SyntaxFactory {
     return AvailabilityConditionSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MatchingPatternConditionSyntax")
-  public static func makeMatchingPatternCondition(_ garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, _ garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax) -> MatchingPatternConditionSyntax {
+  public static func makeMatchingPatternCondition(_ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax, _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil, initializer: InitializerClauseSyntax) -> MatchingPatternConditionSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeCaseKeyword?.raw,
+      unexpectedBeforeCaseKeyword?.raw,
       caseKeyword.raw,
-      garbageBetweenCaseKeywordAndPattern?.raw,
+      unexpectedBetweenCaseKeywordAndPattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTypeAnnotation?.raw,
+      unexpectedBetweenPatternAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
-      garbageBetweenTypeAnnotationAndInitializer?.raw,
+      unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.matchingPatternCondition,
@@ -5268,15 +5268,15 @@ public enum SyntaxFactory {
     return MatchingPatternConditionSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OptionalBindingConditionSyntax")
-  public static func makeOptionalBindingCondition(_ garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ garbageBetweenLetOrVarKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?) -> OptionalBindingConditionSyntax {
+  public static func makeOptionalBindingCondition(_ unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil, initializer: InitializerClauseSyntax?) -> OptionalBindingConditionSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLetOrVarKeyword?.raw,
+      unexpectedBeforeLetOrVarKeyword?.raw,
       letOrVarKeyword.raw,
-      garbageBetweenLetOrVarKeywordAndPattern?.raw,
+      unexpectedBetweenLetOrVarKeywordAndPattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTypeAnnotation?.raw,
+      unexpectedBetweenPatternAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
-      garbageBetweenTypeAnnotationAndInitializer?.raw,
+      unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalBindingCondition,
@@ -5301,15 +5301,15 @@ public enum SyntaxFactory {
     return OptionalBindingConditionSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on UnavailabilityConditionSyntax")
-  public static func makeUnavailabilityCondition(_ garbageBeforePoundUnavailableKeyword: GarbageNodesSyntax? = nil, poundUnavailableKeyword: TokenSyntax, _ garbageBetweenPoundUnavailableKeywordAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> UnavailabilityConditionSyntax {
+  public static func makeUnavailabilityCondition(_ unexpectedBeforePoundUnavailableKeyword: UnexpectedNodesSyntax? = nil, poundUnavailableKeyword: TokenSyntax, _ unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> UnavailabilityConditionSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundUnavailableKeyword?.raw,
+      unexpectedBeforePoundUnavailableKeyword?.raw,
       poundUnavailableKeyword.raw,
-      garbageBetweenPoundUnavailableKeywordAndLeftParen?.raw,
+      unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndAvailabilitySpec?.raw,
+      unexpectedBetweenLeftParenAndAvailabilitySpec?.raw,
       availabilitySpec.raw,
-      garbageBetweenAvailabilitySpecAndRightParen?.raw,
+      unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unavailabilityCondition,
@@ -5350,9 +5350,9 @@ public enum SyntaxFactory {
     return ConditionElementListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DeclarationStmtSyntax")
-  public static func makeDeclarationStmt(_ garbageBeforeDeclaration: GarbageNodesSyntax? = nil, declaration: DeclSyntax) -> DeclarationStmtSyntax {
+  public static func makeDeclarationStmt(_ unexpectedBeforeDeclaration: UnexpectedNodesSyntax? = nil, declaration: DeclSyntax) -> DeclarationStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDeclaration?.raw,
+      unexpectedBeforeDeclaration?.raw,
       declaration.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declarationStmt,
@@ -5371,11 +5371,11 @@ public enum SyntaxFactory {
     return DeclarationStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ThrowStmtSyntax")
-  public static func makeThrowStmt(_ garbageBeforeThrowKeyword: GarbageNodesSyntax? = nil, throwKeyword: TokenSyntax, _ garbageBetweenThrowKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ThrowStmtSyntax {
+  public static func makeThrowStmt(_ unexpectedBeforeThrowKeyword: UnexpectedNodesSyntax? = nil, throwKeyword: TokenSyntax, _ unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> ThrowStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeThrowKeyword?.raw,
+      unexpectedBeforeThrowKeyword?.raw,
       throwKeyword.raw,
-      garbageBetweenThrowKeywordAndExpression?.raw,
+      unexpectedBetweenThrowKeywordAndExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.throwStmt,
@@ -5396,17 +5396,17 @@ public enum SyntaxFactory {
     return ThrowStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IfStmtSyntax")
-  public static func makeIfStmt(_ garbageBeforeIfKeyword: GarbageNodesSyntax? = nil, ifKeyword: TokenSyntax, _ garbageBetweenIfKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax?, _ garbageBetweenElseKeywordAndElseBody: GarbageNodesSyntax? = nil, elseBody: Syntax?) -> IfStmtSyntax {
+  public static func makeIfStmt(_ unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil, ifKeyword: TokenSyntax, _ unexpectedBetweenIfKeywordAndConditions: UnexpectedNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ unexpectedBetweenConditionsAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax, _ unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax?, _ unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil, elseBody: Syntax?) -> IfStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIfKeyword?.raw,
+      unexpectedBeforeIfKeyword?.raw,
       ifKeyword.raw,
-      garbageBetweenIfKeywordAndConditions?.raw,
+      unexpectedBetweenIfKeywordAndConditions?.raw,
       conditions.raw,
-      garbageBetweenConditionsAndBody?.raw,
+      unexpectedBetweenConditionsAndBody?.raw,
       body.raw,
-      garbageBetweenBodyAndElseKeyword?.raw,
+      unexpectedBetweenBodyAndElseKeyword?.raw,
       elseKeyword?.raw,
-      garbageBetweenElseKeywordAndElseBody?.raw,
+      unexpectedBetweenElseKeywordAndElseBody?.raw,
       elseBody?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifStmt,
@@ -5433,9 +5433,9 @@ public enum SyntaxFactory {
     return IfStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ElseIfContinuationSyntax")
-  public static func makeElseIfContinuation(_ garbageBeforeIfStatement: GarbageNodesSyntax? = nil, ifStatement: IfStmtSyntax) -> ElseIfContinuationSyntax {
+  public static func makeElseIfContinuation(_ unexpectedBeforeIfStatement: UnexpectedNodesSyntax? = nil, ifStatement: IfStmtSyntax) -> ElseIfContinuationSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIfStatement?.raw,
+      unexpectedBeforeIfStatement?.raw,
       ifStatement.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseIfContinuation,
@@ -5454,11 +5454,11 @@ public enum SyntaxFactory {
     return ElseIfContinuationSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ElseBlockSyntax")
-  public static func makeElseBlock(_ garbageBeforeElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax, _ garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ElseBlockSyntax {
+  public static func makeElseBlock(_ unexpectedBeforeElseKeyword: UnexpectedNodesSyntax? = nil, elseKeyword: TokenSyntax, _ unexpectedBetweenElseKeywordAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax) -> ElseBlockSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeElseKeyword?.raw,
+      unexpectedBeforeElseKeyword?.raw,
       elseKeyword.raw,
-      garbageBetweenElseKeywordAndBody?.raw,
+      unexpectedBetweenElseKeywordAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseBlock,
@@ -5479,13 +5479,13 @@ public enum SyntaxFactory {
     return ElseBlockSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SwitchCaseSyntax")
-  public static func makeSwitchCase(_ garbageBeforeUnknownAttr: GarbageNodesSyntax? = nil, unknownAttr: AttributeSyntax?, _ garbageBetweenUnknownAttrAndLabel: GarbageNodesSyntax? = nil, label: Syntax, _ garbageBetweenLabelAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax) -> SwitchCaseSyntax {
+  public static func makeSwitchCase(_ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, unknownAttr: AttributeSyntax?, _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, label: Syntax, _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, statements: CodeBlockItemListSyntax) -> SwitchCaseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeUnknownAttr?.raw,
+      unexpectedBeforeUnknownAttr?.raw,
       unknownAttr?.raw,
-      garbageBetweenUnknownAttrAndLabel?.raw,
+      unexpectedBetweenUnknownAttrAndLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndStatements?.raw,
+      unexpectedBetweenLabelAndStatements?.raw,
       statements.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCase,
@@ -5508,11 +5508,11 @@ public enum SyntaxFactory {
     return SwitchCaseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SwitchDefaultLabelSyntax")
-  public static func makeSwitchDefaultLabel(_ garbageBeforeDefaultKeyword: GarbageNodesSyntax? = nil, defaultKeyword: TokenSyntax, _ garbageBetweenDefaultKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> SwitchDefaultLabelSyntax {
+  public static func makeSwitchDefaultLabel(_ unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? = nil, defaultKeyword: TokenSyntax, _ unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax) -> SwitchDefaultLabelSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeDefaultKeyword?.raw,
+      unexpectedBeforeDefaultKeyword?.raw,
       defaultKeyword.raw,
-      garbageBetweenDefaultKeywordAndColon?.raw,
+      unexpectedBetweenDefaultKeywordAndColon?.raw,
       colon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchDefaultLabel,
@@ -5533,13 +5533,13 @@ public enum SyntaxFactory {
     return SwitchDefaultLabelSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CaseItemSyntax")
-  public static func makeCaseItem(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CaseItemSyntax {
+  public static func makeCaseItem(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CaseItemSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndWhereClause?.raw,
+      unexpectedBetweenPatternAndWhereClause?.raw,
       whereClause?.raw,
-      garbageBetweenWhereClauseAndTrailingComma?.raw,
+      unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItem,
@@ -5562,13 +5562,13 @@ public enum SyntaxFactory {
     return CaseItemSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CatchItemSyntax")
-  public static func makeCatchItem(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax?, _ garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CatchItemSyntax {
+  public static func makeCatchItem(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax?, _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CatchItemSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern?.raw,
-      garbageBetweenPatternAndWhereClause?.raw,
+      unexpectedBetweenPatternAndWhereClause?.raw,
       whereClause?.raw,
-      garbageBetweenWhereClauseAndTrailingComma?.raw,
+      unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItem,
@@ -5591,13 +5591,13 @@ public enum SyntaxFactory {
     return CatchItemSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SwitchCaseLabelSyntax")
-  public static func makeSwitchCaseLabel(_ garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, _ garbageBetweenCaseKeywordAndCaseItems: GarbageNodesSyntax? = nil, caseItems: CaseItemListSyntax, _ garbageBetweenCaseItemsAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> SwitchCaseLabelSyntax {
+  public static func makeSwitchCaseLabel(_ unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? = nil, caseKeyword: TokenSyntax, _ unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodesSyntax? = nil, caseItems: CaseItemListSyntax, _ unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax) -> SwitchCaseLabelSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeCaseKeyword?.raw,
+      unexpectedBeforeCaseKeyword?.raw,
       caseKeyword.raw,
-      garbageBetweenCaseKeywordAndCaseItems?.raw,
+      unexpectedBetweenCaseKeywordAndCaseItems?.raw,
       caseItems.raw,
-      garbageBetweenCaseItemsAndColon?.raw,
+      unexpectedBetweenCaseItemsAndColon?.raw,
       colon.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseLabel,
@@ -5620,13 +5620,13 @@ public enum SyntaxFactory {
     return SwitchCaseLabelSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CatchClauseSyntax")
-  public static func makeCatchClause(_ garbageBeforeCatchKeyword: GarbageNodesSyntax? = nil, catchKeyword: TokenSyntax, _ garbageBetweenCatchKeywordAndCatchItems: GarbageNodesSyntax? = nil, catchItems: CatchItemListSyntax?, _ garbageBetweenCatchItemsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> CatchClauseSyntax {
+  public static func makeCatchClause(_ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil, catchKeyword: TokenSyntax, _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil, catchItems: CatchItemListSyntax?, _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil, body: CodeBlockSyntax) -> CatchClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeCatchKeyword?.raw,
+      unexpectedBeforeCatchKeyword?.raw,
       catchKeyword.raw,
-      garbageBetweenCatchKeywordAndCatchItems?.raw,
+      unexpectedBetweenCatchKeywordAndCatchItems?.raw,
       catchItems?.raw,
-      garbageBetweenCatchItemsAndBody?.raw,
+      unexpectedBetweenCatchItemsAndBody?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClause,
@@ -5649,19 +5649,19 @@ public enum SyntaxFactory {
     return CatchClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PoundAssertStmtSyntax")
-  public static func makePoundAssertStmt(_ garbageBeforePoundAssert: GarbageNodesSyntax? = nil, poundAssert: TokenSyntax, _ garbageBetweenPoundAssertAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax, _ garbageBetweenConditionAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, _ garbageBetweenCommaAndMessage: GarbageNodesSyntax? = nil, message: TokenSyntax?, _ garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundAssertStmtSyntax {
+  public static func makePoundAssertStmt(_ unexpectedBeforePoundAssert: UnexpectedNodesSyntax? = nil, poundAssert: TokenSyntax, _ unexpectedBetweenPoundAssertAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndCondition: UnexpectedNodesSyntax? = nil, condition: ExprSyntax, _ unexpectedBetweenConditionAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndMessage: UnexpectedNodesSyntax? = nil, message: TokenSyntax?, _ unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundAssertStmtSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePoundAssert?.raw,
+      unexpectedBeforePoundAssert?.raw,
       poundAssert.raw,
-      garbageBetweenPoundAssertAndLeftParen?.raw,
+      unexpectedBetweenPoundAssertAndLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndCondition?.raw,
+      unexpectedBetweenLeftParenAndCondition?.raw,
       condition.raw,
-      garbageBetweenConditionAndComma?.raw,
+      unexpectedBetweenConditionAndComma?.raw,
       comma?.raw,
-      garbageBetweenCommaAndMessage?.raw,
+      unexpectedBetweenCommaAndMessage?.raw,
       message?.raw,
-      garbageBetweenMessageAndRightParen?.raw,
+      unexpectedBetweenMessageAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundAssertStmt,
@@ -5690,11 +5690,11 @@ public enum SyntaxFactory {
     return PoundAssertStmtSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericWhereClauseSyntax")
-  public static func makeGenericWhereClause(_ garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil, whereKeyword: TokenSyntax, _ garbageBetweenWhereKeywordAndRequirementList: GarbageNodesSyntax? = nil, requirementList: GenericRequirementListSyntax) -> GenericWhereClauseSyntax {
+  public static func makeGenericWhereClause(_ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil, whereKeyword: TokenSyntax, _ unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil, requirementList: GenericRequirementListSyntax) -> GenericWhereClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWhereKeyword?.raw,
+      unexpectedBeforeWhereKeyword?.raw,
       whereKeyword.raw,
-      garbageBetweenWhereKeywordAndRequirementList?.raw,
+      unexpectedBetweenWhereKeywordAndRequirementList?.raw,
       requirementList.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericWhereClause,
@@ -5731,11 +5731,11 @@ public enum SyntaxFactory {
     return GenericRequirementListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericRequirementSyntax")
-  public static func makeGenericRequirement(_ garbageBeforeBody: GarbageNodesSyntax? = nil, body: Syntax, _ garbageBetweenBodyAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericRequirementSyntax {
+  public static func makeGenericRequirement(_ unexpectedBeforeBody: UnexpectedNodesSyntax? = nil, body: Syntax, _ unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericRequirementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBody?.raw,
+      unexpectedBeforeBody?.raw,
       body.raw,
-      garbageBetweenBodyAndTrailingComma?.raw,
+      unexpectedBetweenBodyAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirement,
@@ -5756,13 +5756,13 @@ public enum SyntaxFactory {
     return GenericRequirementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SameTypeRequirementSyntax")
-  public static func makeSameTypeRequirement(_ garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, _ garbageBetweenLeftTypeIdentifierAndEqualityToken: GarbageNodesSyntax? = nil, equalityToken: TokenSyntax, _ garbageBetweenEqualityTokenAndRightTypeIdentifier: GarbageNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> SameTypeRequirementSyntax {
+  public static func makeSameTypeRequirement(_ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil, equalityToken: TokenSyntax, _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> SameTypeRequirementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftTypeIdentifier?.raw,
+      unexpectedBeforeLeftTypeIdentifier?.raw,
       leftTypeIdentifier.raw,
-      garbageBetweenLeftTypeIdentifierAndEqualityToken?.raw,
+      unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.raw,
       equalityToken.raw,
-      garbageBetweenEqualityTokenAndRightTypeIdentifier?.raw,
+      unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sameTypeRequirement,
@@ -5785,23 +5785,23 @@ public enum SyntaxFactory {
     return SameTypeRequirementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on LayoutRequirementSyntax")
-  public static func makeLayoutRequirement(_ garbageBeforeTypeIdentifier: GarbageNodesSyntax? = nil, typeIdentifier: TypeSyntax, _ garbageBetweenTypeIdentifierAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndLayoutConstraint: GarbageNodesSyntax? = nil, layoutConstraint: TokenSyntax, _ garbageBetweenLayoutConstraintAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndSize: GarbageNodesSyntax? = nil, size: TokenSyntax?, _ garbageBetweenSizeAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, _ garbageBetweenCommaAndAlignment: GarbageNodesSyntax? = nil, alignment: TokenSyntax?, _ garbageBetweenAlignmentAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?) -> LayoutRequirementSyntax {
+  public static func makeLayoutRequirement(_ unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? = nil, typeIdentifier: TypeSyntax, _ unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodesSyntax? = nil, layoutConstraint: TokenSyntax, _ unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax?, _ unexpectedBetweenLeftParenAndSize: UnexpectedNodesSyntax? = nil, size: TokenSyntax?, _ unexpectedBetweenSizeAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndAlignment: UnexpectedNodesSyntax? = nil, alignment: TokenSyntax?, _ unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax?) -> LayoutRequirementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeTypeIdentifier?.raw,
+      unexpectedBeforeTypeIdentifier?.raw,
       typeIdentifier.raw,
-      garbageBetweenTypeIdentifierAndColon?.raw,
+      unexpectedBetweenTypeIdentifierAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndLayoutConstraint?.raw,
+      unexpectedBetweenColonAndLayoutConstraint?.raw,
       layoutConstraint.raw,
-      garbageBetweenLayoutConstraintAndLeftParen?.raw,
+      unexpectedBetweenLayoutConstraintAndLeftParen?.raw,
       leftParen?.raw,
-      garbageBetweenLeftParenAndSize?.raw,
+      unexpectedBetweenLeftParenAndSize?.raw,
       size?.raw,
-      garbageBetweenSizeAndComma?.raw,
+      unexpectedBetweenSizeAndComma?.raw,
       comma?.raw,
-      garbageBetweenCommaAndAlignment?.raw,
+      unexpectedBetweenCommaAndAlignment?.raw,
       alignment?.raw,
-      garbageBetweenAlignmentAndRightParen?.raw,
+      unexpectedBetweenAlignmentAndRightParen?.raw,
       rightParen?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.layoutRequirement,
@@ -5850,17 +5850,17 @@ public enum SyntaxFactory {
     return GenericParameterListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericParameterSyntax")
-  public static func makeGenericParameter(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndInheritedType: GarbageNodesSyntax? = nil, inheritedType: TypeSyntax?, _ garbageBetweenInheritedTypeAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericParameterSyntax {
+  public static func makeGenericParameter(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil, inheritedType: TypeSyntax?, _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericParameterSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeAttributes?.raw,
+      unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndName?.raw,
+      unexpectedBetweenAttributesAndName?.raw,
       name.raw,
-      garbageBetweenNameAndColon?.raw,
+      unexpectedBetweenNameAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndInheritedType?.raw,
+      unexpectedBetweenColonAndInheritedType?.raw,
       inheritedType?.raw,
-      garbageBetweenInheritedTypeAndTrailingComma?.raw,
+      unexpectedBetweenInheritedTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameter,
@@ -5903,11 +5903,11 @@ public enum SyntaxFactory {
     return PrimaryAssociatedTypeListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrimaryAssociatedTypeSyntax")
-  public static func makePrimaryAssociatedType(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+  public static func makePrimaryAssociatedType(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndTrailingComma?.raw,
+      unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
@@ -5928,13 +5928,13 @@ public enum SyntaxFactory {
     return PrimaryAssociatedTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericParameterClauseSyntax")
-  public static func makeGenericParameterClause(_ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ garbageBetweenLeftAngleBracketAndGenericParameterList: GarbageNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, _ garbageBetweenGenericParameterListAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
+  public static func makeGenericParameterClause(_ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, _ unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftAngleBracket?.raw,
+      unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
-      garbageBetweenLeftAngleBracketAndGenericParameterList?.raw,
+      unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw,
       genericParameterList.raw,
-      garbageBetweenGenericParameterListAndRightAngleBracket?.raw,
+      unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterClause,
@@ -5957,13 +5957,13 @@ public enum SyntaxFactory {
     return GenericParameterClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ConformanceRequirementSyntax")
-  public static func makeConformanceRequirement(_ garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, _ garbageBetweenLeftTypeIdentifierAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndRightTypeIdentifier: GarbageNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> ConformanceRequirementSyntax {
+  public static func makeConformanceRequirement(_ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, _ unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> ConformanceRequirementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftTypeIdentifier?.raw,
+      unexpectedBeforeLeftTypeIdentifier?.raw,
       leftTypeIdentifier.raw,
-      garbageBetweenLeftTypeIdentifierAndColon?.raw,
+      unexpectedBetweenLeftTypeIdentifierAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndRightTypeIdentifier?.raw,
+      unexpectedBetweenColonAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conformanceRequirement,
@@ -5986,13 +5986,13 @@ public enum SyntaxFactory {
     return ConformanceRequirementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on PrimaryAssociatedTypeClauseSyntax")
-  public static func makePrimaryAssociatedTypeClause(_ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: GarbageNodesSyntax? = nil, primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, _ garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+  public static func makePrimaryAssociatedTypeClause(_ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodesSyntax? = nil, primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, _ unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftAngleBracket?.raw,
+      unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
-      garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.raw,
+      unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.raw,
       primaryAssociatedTypeList.raw,
-      garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw,
+      unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeClause,
@@ -6015,11 +6015,11 @@ public enum SyntaxFactory {
     return PrimaryAssociatedTypeClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on SimpleTypeIdentifierSyntax")
-  public static func makeSimpleTypeIdentifier(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
+  public static func makeSimpleTypeIdentifier(_ unexpectedBeforeName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeName?.raw,
+      unexpectedBeforeName?.raw,
       name.raw,
-      garbageBetweenNameAndGenericArgumentClause?.raw,
+      unexpectedBetweenNameAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.simpleTypeIdentifier,
@@ -6040,15 +6040,15 @@ public enum SyntaxFactory {
     return SimpleTypeIdentifierSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MemberTypeIdentifierSyntax")
-  public static func makeMemberTypeIdentifier(_ garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax, _ garbageBetweenBaseTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, _ garbageBetweenPeriodAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> MemberTypeIdentifierSyntax {
+  public static func makeMemberTypeIdentifier(_ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil, baseType: TypeSyntax, _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax, _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax, _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> MemberTypeIdentifierSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBaseType?.raw,
+      unexpectedBeforeBaseType?.raw,
       baseType.raw,
-      garbageBetweenBaseTypeAndPeriod?.raw,
+      unexpectedBetweenBaseTypeAndPeriod?.raw,
       period.raw,
-      garbageBetweenPeriodAndName?.raw,
+      unexpectedBetweenPeriodAndName?.raw,
       name.raw,
-      garbageBetweenNameAndGenericArgumentClause?.raw,
+      unexpectedBetweenNameAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberTypeIdentifier,
@@ -6073,9 +6073,9 @@ public enum SyntaxFactory {
     return MemberTypeIdentifierSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ClassRestrictionTypeSyntax")
-  public static func makeClassRestrictionType(_ garbageBeforeClassKeyword: GarbageNodesSyntax? = nil, classKeyword: TokenSyntax) -> ClassRestrictionTypeSyntax {
+  public static func makeClassRestrictionType(_ unexpectedBeforeClassKeyword: UnexpectedNodesSyntax? = nil, classKeyword: TokenSyntax) -> ClassRestrictionTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeClassKeyword?.raw,
+      unexpectedBeforeClassKeyword?.raw,
       classKeyword.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.classRestrictionType,
@@ -6094,13 +6094,13 @@ public enum SyntaxFactory {
     return ClassRestrictionTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ArrayTypeSyntax")
-  public static func makeArrayType(_ garbageBeforeLeftSquareBracket: GarbageNodesSyntax? = nil, leftSquareBracket: TokenSyntax, _ garbageBetweenLeftSquareBracketAndElementType: GarbageNodesSyntax? = nil, elementType: TypeSyntax, _ garbageBetweenElementTypeAndRightSquareBracket: GarbageNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> ArrayTypeSyntax {
+  public static func makeArrayType(_ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil, leftSquareBracket: TokenSyntax, _ unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? = nil, elementType: TypeSyntax, _ unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> ArrayTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftSquareBracket?.raw,
+      unexpectedBeforeLeftSquareBracket?.raw,
       leftSquareBracket.raw,
-      garbageBetweenLeftSquareBracketAndElementType?.raw,
+      unexpectedBetweenLeftSquareBracketAndElementType?.raw,
       elementType.raw,
-      garbageBetweenElementTypeAndRightSquareBracket?.raw,
+      unexpectedBetweenElementTypeAndRightSquareBracket?.raw,
       rightSquareBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayType,
@@ -6123,17 +6123,17 @@ public enum SyntaxFactory {
     return ArrayTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on DictionaryTypeSyntax")
-  public static func makeDictionaryType(_ garbageBeforeLeftSquareBracket: GarbageNodesSyntax? = nil, leftSquareBracket: TokenSyntax, _ garbageBetweenLeftSquareBracketAndKeyType: GarbageNodesSyntax? = nil, keyType: TypeSyntax, _ garbageBetweenKeyTypeAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValueType: GarbageNodesSyntax? = nil, valueType: TypeSyntax, _ garbageBetweenValueTypeAndRightSquareBracket: GarbageNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> DictionaryTypeSyntax {
+  public static func makeDictionaryType(_ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil, leftSquareBracket: TokenSyntax, _ unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodesSyntax? = nil, keyType: TypeSyntax, _ unexpectedBetweenKeyTypeAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValueType: UnexpectedNodesSyntax? = nil, valueType: TypeSyntax, _ unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> DictionaryTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftSquareBracket?.raw,
+      unexpectedBeforeLeftSquareBracket?.raw,
       leftSquareBracket.raw,
-      garbageBetweenLeftSquareBracketAndKeyType?.raw,
+      unexpectedBetweenLeftSquareBracketAndKeyType?.raw,
       keyType.raw,
-      garbageBetweenKeyTypeAndColon?.raw,
+      unexpectedBetweenKeyTypeAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValueType?.raw,
+      unexpectedBetweenColonAndValueType?.raw,
       valueType.raw,
-      garbageBetweenValueTypeAndRightSquareBracket?.raw,
+      unexpectedBetweenValueTypeAndRightSquareBracket?.raw,
       rightSquareBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryType,
@@ -6160,13 +6160,13 @@ public enum SyntaxFactory {
     return DictionaryTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on MetatypeTypeSyntax")
-  public static func makeMetatypeType(_ garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax, _ garbageBetweenBaseTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, _ garbageBetweenPeriodAndTypeOrProtocol: GarbageNodesSyntax? = nil, typeOrProtocol: TokenSyntax) -> MetatypeTypeSyntax {
+  public static func makeMetatypeType(_ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil, baseType: TypeSyntax, _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax, _ unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodesSyntax? = nil, typeOrProtocol: TokenSyntax) -> MetatypeTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeBaseType?.raw,
+      unexpectedBeforeBaseType?.raw,
       baseType.raw,
-      garbageBetweenBaseTypeAndPeriod?.raw,
+      unexpectedBetweenBaseTypeAndPeriod?.raw,
       period.raw,
-      garbageBetweenPeriodAndTypeOrProtocol?.raw,
+      unexpectedBetweenPeriodAndTypeOrProtocol?.raw,
       typeOrProtocol.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.metatypeType,
@@ -6189,11 +6189,11 @@ public enum SyntaxFactory {
     return MetatypeTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OptionalTypeSyntax")
-  public static func makeOptionalType(_ garbageBeforeWrappedType: GarbageNodesSyntax? = nil, wrappedType: TypeSyntax, _ garbageBetweenWrappedTypeAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalTypeSyntax {
+  public static func makeOptionalType(_ unexpectedBeforeWrappedType: UnexpectedNodesSyntax? = nil, wrappedType: TypeSyntax, _ unexpectedBetweenWrappedTypeAndQuestionMark: UnexpectedNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWrappedType?.raw,
+      unexpectedBeforeWrappedType?.raw,
       wrappedType.raw,
-      garbageBetweenWrappedTypeAndQuestionMark?.raw,
+      unexpectedBetweenWrappedTypeAndQuestionMark?.raw,
       questionMark.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalType,
@@ -6214,11 +6214,11 @@ public enum SyntaxFactory {
     return OptionalTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ConstrainedSugarTypeSyntax")
-  public static func makeConstrainedSugarType(_ garbageBeforeSomeOrAnySpecifier: GarbageNodesSyntax? = nil, someOrAnySpecifier: TokenSyntax, _ garbageBetweenSomeOrAnySpecifierAndBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax) -> ConstrainedSugarTypeSyntax {
+  public static func makeConstrainedSugarType(_ unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? = nil, someOrAnySpecifier: TokenSyntax, _ unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? = nil, baseType: TypeSyntax) -> ConstrainedSugarTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeSomeOrAnySpecifier?.raw,
+      unexpectedBeforeSomeOrAnySpecifier?.raw,
       someOrAnySpecifier.raw,
-      garbageBetweenSomeOrAnySpecifierAndBaseType?.raw,
+      unexpectedBetweenSomeOrAnySpecifierAndBaseType?.raw,
       baseType.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.constrainedSugarType,
@@ -6239,11 +6239,11 @@ public enum SyntaxFactory {
     return ConstrainedSugarTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ImplicitlyUnwrappedOptionalTypeSyntax")
-  public static func makeImplicitlyUnwrappedOptionalType(_ garbageBeforeWrappedType: GarbageNodesSyntax? = nil, wrappedType: TypeSyntax, _ garbageBetweenWrappedTypeAndExclamationMark: GarbageNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+  public static func makeImplicitlyUnwrappedOptionalType(_ unexpectedBeforeWrappedType: UnexpectedNodesSyntax? = nil, wrappedType: TypeSyntax, _ unexpectedBetweenWrappedTypeAndExclamationMark: UnexpectedNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWrappedType?.raw,
+      unexpectedBeforeWrappedType?.raw,
       wrappedType.raw,
-      garbageBetweenWrappedTypeAndExclamationMark?.raw,
+      unexpectedBetweenWrappedTypeAndExclamationMark?.raw,
       exclamationMark.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implicitlyUnwrappedOptionalType,
@@ -6264,11 +6264,11 @@ public enum SyntaxFactory {
     return ImplicitlyUnwrappedOptionalTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CompositionTypeElementSyntax")
-  public static func makeCompositionTypeElement(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax, _ garbageBetweenTypeAndAmpersand: GarbageNodesSyntax? = nil, ampersand: TokenSyntax?) -> CompositionTypeElementSyntax {
+  public static func makeCompositionTypeElement(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: TypeSyntax, _ unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? = nil, ampersand: TokenSyntax?) -> CompositionTypeElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeType?.raw,
+      unexpectedBeforeType?.raw,
       type.raw,
-      garbageBetweenTypeAndAmpersand?.raw,
+      unexpectedBetweenTypeAndAmpersand?.raw,
       ampersand?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElement,
@@ -6305,9 +6305,9 @@ public enum SyntaxFactory {
     return CompositionTypeElementListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on CompositionTypeSyntax")
-  public static func makeCompositionType(_ garbageBeforeElements: GarbageNodesSyntax? = nil, elements: CompositionTypeElementListSyntax) -> CompositionTypeSyntax {
+  public static func makeCompositionType(_ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil, elements: CompositionTypeElementListSyntax) -> CompositionTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeElements?.raw,
+      unexpectedBeforeElements?.raw,
       elements.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionType,
@@ -6326,23 +6326,23 @@ public enum SyntaxFactory {
     return CompositionTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TupleTypeElementSyntax")
-  public static func makeTupleTypeElement(_ garbageBeforeInOut: GarbageNodesSyntax? = nil, inOut: TokenSyntax?, _ garbageBetweenInOutAndName: GarbageNodesSyntax? = nil, name: TokenSyntax?, _ garbageBetweenNameAndSecondName: GarbageNodesSyntax? = nil, secondName: TokenSyntax?, _ garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax, _ garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil, ellipsis: TokenSyntax?, _ garbageBetweenEllipsisAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?, _ garbageBetweenInitializerAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleTypeElementSyntax {
+  public static func makeTupleTypeElement(_ unexpectedBeforeInOut: UnexpectedNodesSyntax? = nil, inOut: TokenSyntax?, _ unexpectedBetweenInOutAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax?, _ unexpectedBetweenNameAndSecondName: UnexpectedNodesSyntax? = nil, secondName: TokenSyntax?, _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax, _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax?, _ unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? = nil, initializer: InitializerClauseSyntax?, _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleTypeElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeInOut?.raw,
+      unexpectedBeforeInOut?.raw,
       inOut?.raw,
-      garbageBetweenInOutAndName?.raw,
+      unexpectedBetweenInOutAndName?.raw,
       name?.raw,
-      garbageBetweenNameAndSecondName?.raw,
+      unexpectedBetweenNameAndSecondName?.raw,
       secondName?.raw,
-      garbageBetweenSecondNameAndColon?.raw,
+      unexpectedBetweenSecondNameAndColon?.raw,
       colon?.raw,
-      garbageBetweenColonAndType?.raw,
+      unexpectedBetweenColonAndType?.raw,
       type.raw,
-      garbageBetweenTypeAndEllipsis?.raw,
+      unexpectedBetweenTypeAndEllipsis?.raw,
       ellipsis?.raw,
-      garbageBetweenEllipsisAndInitializer?.raw,
+      unexpectedBetweenEllipsisAndInitializer?.raw,
       initializer?.raw,
-      garbageBetweenInitializerAndTrailingComma?.raw,
+      unexpectedBetweenInitializerAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElement,
@@ -6391,13 +6391,13 @@ public enum SyntaxFactory {
     return TupleTypeElementListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TupleTypeSyntax")
-  public static func makeTupleType(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElements: GarbageNodesSyntax? = nil, elements: TupleTypeElementListSyntax, _ garbageBetweenElementsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleTypeSyntax {
+  public static func makeTupleType(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil, elements: TupleTypeElementListSyntax, _ unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndElements?.raw,
+      unexpectedBetweenLeftParenAndElements?.raw,
       elements.raw,
-      garbageBetweenElementsAndRightParen?.raw,
+      unexpectedBetweenElementsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleType,
@@ -6420,21 +6420,21 @@ public enum SyntaxFactory {
     return TupleTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionTypeSyntax")
-  public static func makeFunctionType(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: TupleTypeElementListSyntax, _ garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax, _ garbageBetweenRightParenAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ garbageBetweenThrowsOrRethrowsKeywordAndArrow: GarbageNodesSyntax? = nil, arrow: TokenSyntax, _ garbageBetweenArrowAndReturnType: GarbageNodesSyntax? = nil, returnType: TypeSyntax) -> FunctionTypeSyntax {
+  public static func makeFunctionType(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil, arguments: TupleTypeElementListSyntax, _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax, _ unexpectedBetweenRightParenAndAsyncKeyword: UnexpectedNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: UnexpectedNodesSyntax? = nil, arrow: TokenSyntax, _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil, returnType: TypeSyntax) -> FunctionTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndArguments?.raw,
+      unexpectedBetweenLeftParenAndArguments?.raw,
       arguments.raw,
-      garbageBetweenArgumentsAndRightParen?.raw,
+      unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
-      garbageBetweenRightParenAndAsyncKeyword?.raw,
+      unexpectedBetweenRightParenAndAsyncKeyword?.raw,
       asyncKeyword?.raw,
-      garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.raw,
+      unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.raw,
       throwsOrRethrowsKeyword?.raw,
-      garbageBetweenThrowsOrRethrowsKeywordAndArrow?.raw,
+      unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.raw,
       arrow.raw,
-      garbageBetweenArrowAndReturnType?.raw,
+      unexpectedBetweenArrowAndReturnType?.raw,
       returnType.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionType,
@@ -6465,13 +6465,13 @@ public enum SyntaxFactory {
     return FunctionTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AttributedTypeSyntax")
-  public static func makeAttributedType(_ garbageBeforeSpecifier: GarbageNodesSyntax? = nil, specifier: TokenSyntax?, _ garbageBetweenSpecifierAndAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax) -> AttributedTypeSyntax {
+  public static func makeAttributedType(_ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil, specifier: TokenSyntax?, _ unexpectedBetweenSpecifierAndAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? = nil, baseType: TypeSyntax) -> AttributedTypeSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeSpecifier?.raw,
+      unexpectedBeforeSpecifier?.raw,
       specifier?.raw,
-      garbageBetweenSpecifierAndAttributes?.raw,
+      unexpectedBetweenSpecifierAndAttributes?.raw,
       attributes?.raw,
-      garbageBetweenAttributesAndBaseType?.raw,
+      unexpectedBetweenAttributesAndBaseType?.raw,
       baseType.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attributedType,
@@ -6510,11 +6510,11 @@ public enum SyntaxFactory {
     return GenericArgumentListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericArgumentSyntax")
-  public static func makeGenericArgument(_ garbageBeforeArgumentType: GarbageNodesSyntax? = nil, argumentType: TypeSyntax, _ garbageBetweenArgumentTypeAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericArgumentSyntax {
+  public static func makeGenericArgument(_ unexpectedBeforeArgumentType: UnexpectedNodesSyntax? = nil, argumentType: TypeSyntax, _ unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericArgumentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeArgumentType?.raw,
+      unexpectedBeforeArgumentType?.raw,
       argumentType.raw,
-      garbageBetweenArgumentTypeAndTrailingComma?.raw,
+      unexpectedBetweenArgumentTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgument,
@@ -6535,13 +6535,13 @@ public enum SyntaxFactory {
     return GenericArgumentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericArgumentClauseSyntax")
-  public static func makeGenericArgumentClause(_ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ garbageBetweenLeftAngleBracketAndArguments: GarbageNodesSyntax? = nil, arguments: GenericArgumentListSyntax, _ garbageBetweenArgumentsAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericArgumentClauseSyntax {
+  public static func makeGenericArgumentClause(_ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil, arguments: GenericArgumentListSyntax, _ unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericArgumentClauseSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftAngleBracket?.raw,
+      unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
-      garbageBetweenLeftAngleBracketAndArguments?.raw,
+      unexpectedBetweenLeftAngleBracketAndArguments?.raw,
       arguments.raw,
-      garbageBetweenArgumentsAndRightAngleBracket?.raw,
+      unexpectedBetweenArgumentsAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentClause,
@@ -6564,11 +6564,11 @@ public enum SyntaxFactory {
     return GenericArgumentClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TypeAnnotationSyntax")
-  public static func makeTypeAnnotation(_ garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> TypeAnnotationSyntax {
+  public static func makeTypeAnnotation(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax) -> TypeAnnotationSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeColon?.raw,
+      unexpectedBeforeColon?.raw,
       colon.raw,
-      garbageBetweenColonAndType?.raw,
+      unexpectedBetweenColonAndType?.raw,
       type.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeAnnotation,
@@ -6589,15 +6589,15 @@ public enum SyntaxFactory {
     return TypeAnnotationSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on EnumCasePatternSyntax")
-  public static func makeEnumCasePattern(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax?, _ garbageBetweenTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, _ garbageBetweenPeriodAndCaseName: GarbageNodesSyntax? = nil, caseName: TokenSyntax, _ garbageBetweenCaseNameAndAssociatedTuple: GarbageNodesSyntax? = nil, associatedTuple: TuplePatternSyntax?) -> EnumCasePatternSyntax {
+  public static func makeEnumCasePattern(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: TypeSyntax?, _ unexpectedBetweenTypeAndPeriod: UnexpectedNodesSyntax? = nil, period: TokenSyntax, _ unexpectedBetweenPeriodAndCaseName: UnexpectedNodesSyntax? = nil, caseName: TokenSyntax, _ unexpectedBetweenCaseNameAndAssociatedTuple: UnexpectedNodesSyntax? = nil, associatedTuple: TuplePatternSyntax?) -> EnumCasePatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeType?.raw,
+      unexpectedBeforeType?.raw,
       type?.raw,
-      garbageBetweenTypeAndPeriod?.raw,
+      unexpectedBetweenTypeAndPeriod?.raw,
       period.raw,
-      garbageBetweenPeriodAndCaseName?.raw,
+      unexpectedBetweenPeriodAndCaseName?.raw,
       caseName.raw,
-      garbageBetweenCaseNameAndAssociatedTuple?.raw,
+      unexpectedBetweenCaseNameAndAssociatedTuple?.raw,
       associatedTuple?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCasePattern,
@@ -6622,11 +6622,11 @@ public enum SyntaxFactory {
     return EnumCasePatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IsTypePatternSyntax")
-  public static func makeIsTypePattern(_ garbageBeforeIsKeyword: GarbageNodesSyntax? = nil, isKeyword: TokenSyntax, _ garbageBetweenIsKeywordAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> IsTypePatternSyntax {
+  public static func makeIsTypePattern(_ unexpectedBeforeIsKeyword: UnexpectedNodesSyntax? = nil, isKeyword: TokenSyntax, _ unexpectedBetweenIsKeywordAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax) -> IsTypePatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIsKeyword?.raw,
+      unexpectedBeforeIsKeyword?.raw,
       isKeyword.raw,
-      garbageBetweenIsKeywordAndType?.raw,
+      unexpectedBetweenIsKeywordAndType?.raw,
       type.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.isTypePattern,
@@ -6647,11 +6647,11 @@ public enum SyntaxFactory {
     return IsTypePatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OptionalPatternSyntax")
-  public static func makeOptionalPattern(_ garbageBeforeSubPattern: GarbageNodesSyntax? = nil, subPattern: PatternSyntax, _ garbageBetweenSubPatternAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalPatternSyntax {
+  public static func makeOptionalPattern(_ unexpectedBeforeSubPattern: UnexpectedNodesSyntax? = nil, subPattern: PatternSyntax, _ unexpectedBetweenSubPatternAndQuestionMark: UnexpectedNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalPatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeSubPattern?.raw,
+      unexpectedBeforeSubPattern?.raw,
       subPattern.raw,
-      garbageBetweenSubPatternAndQuestionMark?.raw,
+      unexpectedBetweenSubPatternAndQuestionMark?.raw,
       questionMark.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalPattern,
@@ -6672,9 +6672,9 @@ public enum SyntaxFactory {
     return OptionalPatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on IdentifierPatternSyntax")
-  public static func makeIdentifierPattern(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax) -> IdentifierPatternSyntax {
+  public static func makeIdentifierPattern(_ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil, identifier: TokenSyntax) -> IdentifierPatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeIdentifier?.raw,
+      unexpectedBeforeIdentifier?.raw,
       identifier.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierPattern,
@@ -6693,13 +6693,13 @@ public enum SyntaxFactory {
     return IdentifierPatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AsTypePatternSyntax")
-  public static func makeAsTypePattern(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndAsKeyword: GarbageNodesSyntax? = nil, asKeyword: TokenSyntax, _ garbageBetweenAsKeywordAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> AsTypePatternSyntax {
+  public static func makeAsTypePattern(_ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndAsKeyword: UnexpectedNodesSyntax? = nil, asKeyword: TokenSyntax, _ unexpectedBetweenAsKeywordAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax) -> AsTypePatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePattern?.raw,
+      unexpectedBeforePattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndAsKeyword?.raw,
+      unexpectedBetweenPatternAndAsKeyword?.raw,
       asKeyword.raw,
-      garbageBetweenAsKeywordAndType?.raw,
+      unexpectedBetweenAsKeywordAndType?.raw,
       type.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.asTypePattern,
@@ -6722,13 +6722,13 @@ public enum SyntaxFactory {
     return AsTypePatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TuplePatternSyntax")
-  public static func makeTuplePattern(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElements: GarbageNodesSyntax? = nil, elements: TuplePatternElementListSyntax, _ garbageBetweenElementsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TuplePatternSyntax {
+  public static func makeTuplePattern(_ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil, elements: TuplePatternElementListSyntax, _ unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> TuplePatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLeftParen?.raw,
+      unexpectedBeforeLeftParen?.raw,
       leftParen.raw,
-      garbageBetweenLeftParenAndElements?.raw,
+      unexpectedBetweenLeftParenAndElements?.raw,
       elements.raw,
-      garbageBetweenElementsAndRightParen?.raw,
+      unexpectedBetweenElementsAndRightParen?.raw,
       rightParen.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePattern,
@@ -6751,11 +6751,11 @@ public enum SyntaxFactory {
     return TuplePatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on WildcardPatternSyntax")
-  public static func makeWildcardPattern(_ garbageBeforeWildcard: GarbageNodesSyntax? = nil, wildcard: TokenSyntax, _ garbageBetweenWildcardAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?) -> WildcardPatternSyntax {
+  public static func makeWildcardPattern(_ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil, wildcard: TokenSyntax, _ unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?) -> WildcardPatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeWildcard?.raw,
+      unexpectedBeforeWildcard?.raw,
       wildcard.raw,
-      garbageBetweenWildcardAndTypeAnnotation?.raw,
+      unexpectedBetweenWildcardAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.wildcardPattern,
@@ -6776,15 +6776,15 @@ public enum SyntaxFactory {
     return WildcardPatternSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TuplePatternElementSyntax")
-  public static func makeTuplePatternElement(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TuplePatternElementSyntax {
+  public static func makeTuplePatternElement(_ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, labelName: TokenSyntax?, _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, labelColon: TokenSyntax?, _ unexpectedBetweenLabelColonAndPattern: UnexpectedNodesSyntax? = nil, pattern: PatternSyntax, _ unexpectedBetweenPatternAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TuplePatternElementSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabelName?.raw,
+      unexpectedBeforeLabelName?.raw,
       labelName?.raw,
-      garbageBetweenLabelNameAndLabelColon?.raw,
+      unexpectedBetweenLabelNameAndLabelColon?.raw,
       labelColon?.raw,
-      garbageBetweenLabelColonAndPattern?.raw,
+      unexpectedBetweenLabelColonAndPattern?.raw,
       pattern.raw,
-      garbageBetweenPatternAndTrailingComma?.raw,
+      unexpectedBetweenPatternAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElement,
@@ -6809,9 +6809,9 @@ public enum SyntaxFactory {
     return TuplePatternElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ExpressionPatternSyntax")
-  public static func makeExpressionPattern(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionPatternSyntax {
+  public static func makeExpressionPattern(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionPatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeExpression?.raw,
+      unexpectedBeforeExpression?.raw,
       expression.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionPattern,
@@ -6846,11 +6846,11 @@ public enum SyntaxFactory {
     return TuplePatternElementListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ValueBindingPatternSyntax")
-  public static func makeValueBindingPattern(_ garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ garbageBetweenLetOrVarKeywordAndValuePattern: GarbageNodesSyntax? = nil, valuePattern: PatternSyntax) -> ValueBindingPatternSyntax {
+  public static func makeValueBindingPattern(_ unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodesSyntax? = nil, valuePattern: PatternSyntax) -> ValueBindingPatternSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLetOrVarKeyword?.raw,
+      unexpectedBeforeLetOrVarKeyword?.raw,
       letOrVarKeyword.raw,
-      garbageBetweenLetOrVarKeywordAndValuePattern?.raw,
+      unexpectedBetweenLetOrVarKeywordAndValuePattern?.raw,
       valuePattern.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.valueBindingPattern,
@@ -6887,11 +6887,11 @@ public enum SyntaxFactory {
     return AvailabilitySpecListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AvailabilityArgumentSyntax")
-  public static func makeAvailabilityArgument(_ garbageBeforeEntry: GarbageNodesSyntax? = nil, entry: Syntax, _ garbageBetweenEntryAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> AvailabilityArgumentSyntax {
+  public static func makeAvailabilityArgument(_ unexpectedBeforeEntry: UnexpectedNodesSyntax? = nil, entry: Syntax, _ unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> AvailabilityArgumentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeEntry?.raw,
+      unexpectedBeforeEntry?.raw,
       entry.raw,
-      garbageBetweenEntryAndTrailingComma?.raw,
+      unexpectedBetweenEntryAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityArgument,
@@ -6912,13 +6912,13 @@ public enum SyntaxFactory {
     return AvailabilityArgumentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AvailabilityLabeledArgumentSyntax")
-  public static func makeAvailabilityLabeledArgument(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: Syntax) -> AvailabilityLabeledArgumentSyntax {
+  public static func makeAvailabilityLabeledArgument(_ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil, label: TokenSyntax, _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil, value: Syntax) -> AvailabilityLabeledArgumentSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeLabel?.raw,
+      unexpectedBeforeLabel?.raw,
       label.raw,
-      garbageBetweenLabelAndColon?.raw,
+      unexpectedBetweenLabelAndColon?.raw,
       colon.raw,
-      garbageBetweenColonAndValue?.raw,
+      unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityLabeledArgument,
@@ -6941,11 +6941,11 @@ public enum SyntaxFactory {
     return AvailabilityLabeledArgumentSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on AvailabilityVersionRestrictionSyntax")
-  public static func makeAvailabilityVersionRestriction(_ garbageBeforePlatform: GarbageNodesSyntax? = nil, platform: TokenSyntax, _ garbageBetweenPlatformAndVersion: GarbageNodesSyntax? = nil, version: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
+  public static func makeAvailabilityVersionRestriction(_ unexpectedBeforePlatform: UnexpectedNodesSyntax? = nil, platform: TokenSyntax, _ unexpectedBetweenPlatformAndVersion: UnexpectedNodesSyntax? = nil, version: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforePlatform?.raw,
+      unexpectedBeforePlatform?.raw,
       platform.raw,
-      garbageBetweenPlatformAndVersion?.raw,
+      unexpectedBetweenPlatformAndVersion?.raw,
       version?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityVersionRestriction,
@@ -6966,13 +6966,13 @@ public enum SyntaxFactory {
     return AvailabilityVersionRestrictionSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on VersionTupleSyntax")
-  public static func makeVersionTuple(_ garbageBeforeMajorMinor: GarbageNodesSyntax? = nil, majorMinor: Syntax, _ garbageBetweenMajorMinorAndPatchPeriod: GarbageNodesSyntax? = nil, patchPeriod: TokenSyntax?, _ garbageBetweenPatchPeriodAndPatchVersion: GarbageNodesSyntax? = nil, patchVersion: TokenSyntax?) -> VersionTupleSyntax {
+  public static func makeVersionTuple(_ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil, majorMinor: Syntax, _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil, patchPeriod: TokenSyntax?, _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil, patchVersion: TokenSyntax?) -> VersionTupleSyntax {
     let layout: [RawSyntax?] = [
-      garbageBeforeMajorMinor?.raw,
+      unexpectedBeforeMajorMinor?.raw,
       majorMinor.raw,
-      garbageBetweenMajorMinorAndPatchPeriod?.raw,
+      unexpectedBetweenMajorMinorAndPatchPeriod?.raw,
       patchPeriod?.raw,
-      garbageBetweenPatchPeriodAndPatchVersion?.raw,
+      unexpectedBetweenPatchPeriodAndPatchVersion?.raw,
       patchVersion?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.versionTuple,

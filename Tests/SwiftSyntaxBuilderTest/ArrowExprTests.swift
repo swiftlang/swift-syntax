@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class ArrowExprTests: XCTestCase {
   func testArrowExpr() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (ExpressibleAsArrowExpr, String)] = [
       #line: (ArrowExpr(), "␣ -> "),

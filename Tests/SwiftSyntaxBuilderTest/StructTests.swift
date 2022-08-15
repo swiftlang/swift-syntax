@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class StructTests: XCTestCase {
   func testEmptyStruct() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     let buildable = StructDecl(identifier: "TestStruct") {}
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
@@ -18,7 +18,7 @@ final class StructTests: XCTestCase {
   }
 
   func testNestedStruct() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     let nestedStruct = StructDecl(
       leadingTrivia: [
         .docLineComment("/// A nested struct"),

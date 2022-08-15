@@ -58,8 +58,8 @@ public enum SyntaxFactory {
 %       if child.is_optional:
 %          param_type = param_type + "?"
 %       end
-%       if child.is_garbage_nodes():
-%         # It would be nice if we could label all of these arguments 'garbage'.
+%       if child.is_unexpected_nodes():
+%         # It would be nice if we could label all of these arguments 'unexpected'.
 %         # But if we do this, we hit https://github.com/apple/swift/issues/60274.
 %         child_params.append("_ %s: %s = nil" % (child.swift_name, param_type))
 %       else:

@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class FloatLiteralTests: XCTestCase {
   func testFloatLiteral() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (FloatLiteralExpr, String)] = [
       #line: (FloatLiteralExpr(floatingDigits: .floatingLiteral(String(123.321))), "␣123.321"),

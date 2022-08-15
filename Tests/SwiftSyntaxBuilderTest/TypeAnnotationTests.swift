@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class TypeAnnotationTests: XCTestCase {
   func testStringLiteral() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (ExpressibleAsTypeAnnotation, String)] = [
       #line: (TypeAnnotation(type: "Test"), "␣: Test"),

@@ -453,7 +453,7 @@ fileprivate extension TriviaPiece {
       lineLength += SourceLength(utf8Length: text.utf8.count)
     case let .blockComment(text),
          let .docBlockComment(text),
-         let .garbageText(text):
+         let .unexpectedText(text):
       lineLength = text.forEachLineLength(prefix: lineLength, body: body)
     }
     return lineLength

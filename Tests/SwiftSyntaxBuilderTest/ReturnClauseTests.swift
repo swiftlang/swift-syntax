@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class ReturnClauseTests: XCTestCase {
   func testReturnClause() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (ExpressibleAsReturnClause, String)] = [
       #line: (ReturnClause(returnType: "Int"), "␣ -> Int"),

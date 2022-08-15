@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class TypeInitializerClauseTests: XCTestCase {
   func testTypeInitializerClause() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (ExpressibleAsTypeInitializerClause, String)] = [
       #line: ("String", "␣ = String"),
       #line: (ArrayType(elementType: "String"), "␣ = [String]")

@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class BooleanLiteralTests: XCTestCase {
   func testBooleanLiteral() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (BooleanLiteralExpr, String)] = [
       #line: (BooleanLiteralExpr(booleanLiteral: .true), "␣true"),

@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class StringLiteralTests: XCTestCase {
   func testStringLiteral() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (String, String)] = [
       #line: ("", #"␣"""#),
       #line: ("asdf", #"␣"asdf""#)
@@ -27,7 +27,7 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testStringLiteralConvenienceInitializers() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (ExpressibleAsStringLiteralExpr, String)] = [
       #line: (StringLiteralExpr(""), #"␣"""#),
       #line: (StringLiteralExpr("asdf"), #"␣"asdf""#),

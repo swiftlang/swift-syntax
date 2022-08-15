@@ -43,8 +43,8 @@ public enum TriviaPiece {
     case docLineComment(String)
     /// A documentation block comment, starting with '/**' and ending with '*/'.
     case docBlockComment(String)
-    /// Any skipped garbage text.
-    case garbageText(String)
+    /// Any skipped unexpected text.
+    case unexpectedText(String)
     /// A script command, starting with '#!'.
     case shebang(String)
 }
@@ -81,7 +81,7 @@ extension TriviaPiece: TextOutputStreamable {
       target.write(text)
     case let .docBlockComment(text):
       target.write(text)
-    case let .garbageText(text):
+    case let .unexpectedText(text):
       target.write(text)
     case let .shebang(text):
       target.write(text)
@@ -115,8 +115,8 @@ extension TriviaPiece: CustomDebugStringConvertible {
       return "docLineComment(\(name))"
     case .docBlockComment(let name):
       return "docBlockComment(\(name))"
-    case .garbageText(let name):
-      return "garbageText(\(name))"
+    case .unexpectedText(let name):
+      return "unexpectedText(\(name))"
     case .shebang(let name):
       return "shebang(\(name))"
     }
@@ -263,9 +263,9 @@ public struct Trivia {
     return [.docBlockComment(text)]
   }
 
-  /// Returns a piece of trivia for GarbageText.
-  public static func garbageText(_ text: String) -> Trivia {
-    return [.garbageText(text)]
+  /// Returns a piece of trivia for UnexpectedText.
+  public static func unexpectedText(_ text: String) -> Trivia {
+    return [.unexpectedText(text)]
   }
 
   /// Returns a piece of trivia for Shebang.
@@ -363,7 +363,7 @@ extension TriviaPiece {
       return SourceLength(of: text)
     case let .docBlockComment(text):
       return SourceLength(of: text)
-    case let .garbageText(text):
+    case let .unexpectedText(text):
       return SourceLength(of: text)
     case let .shebang(text):
       return SourceLength(of: text)
@@ -388,7 +388,7 @@ public enum RawTriviaPiece {
   case blockComment(SyntaxText)
   case docLineComment(SyntaxText)
   case docBlockComment(SyntaxText)
-  case garbageText(SyntaxText)
+  case unexpectedText(SyntaxText)
   case shebang(SyntaxText)
 
   static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {
@@ -404,7 +404,7 @@ public enum RawTriviaPiece {
     case let .blockComment(text): return .blockComment(arena.intern(text))
     case let .docLineComment(text): return .docLineComment(arena.intern(text))
     case let .docBlockComment(text): return .docBlockComment(arena.intern(text))
-    case let .garbageText(text): return .garbageText(arena.intern(text))
+    case let .unexpectedText(text): return .unexpectedText(arena.intern(text))
     case let .shebang(text): return .shebang(arena.intern(text))
     }
   }
@@ -430,7 +430,7 @@ extension TriviaPiece {
     case let .blockComment(text): self = .blockComment(String(syntaxText: text))
     case let .docLineComment(text): self = .docLineComment(String(syntaxText: text))
     case let .docBlockComment(text): self = .docBlockComment(String(syntaxText: text))
-    case let .garbageText(text): self = .garbageText(String(syntaxText: text))
+    case let .unexpectedText(text): self = .unexpectedText(String(syntaxText: text))
     case let .shebang(text): self = .shebang(String(syntaxText: text))
     }
   }
@@ -461,7 +461,7 @@ extension RawTriviaPiece {
       return text.count
     case let .docBlockComment(text):
       return text.count
-    case let .garbageText(text):
+    case let .unexpectedText(text):
       return text.count
     case let .shebang(text):
       return text.count
@@ -481,7 +481,7 @@ extension RawTriviaPiece {
     case .blockComment(let text): return text
     case .docLineComment(let text): return text
     case .docBlockComment(let text): return text
-    case .garbageText(let text): return text
+    case .unexpectedText(let text): return text
     case .shebang(let text): return text
     }
   }
@@ -513,7 +513,7 @@ extension RawTriviaPiece {
     case 11:
       return .docBlockComment(text)
     case 12:
-      return .garbageText(text)
+      return .unexpectedText(text)
     case 13:
       return .shebang(text)
     default:

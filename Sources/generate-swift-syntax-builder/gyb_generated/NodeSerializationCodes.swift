@@ -276,7 +276,7 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "MissingStmt": 263,
   "MissingType": 264,
   "MissingPattern": 265,
-  "GarbageNodes": 266,
+  "UnexpectedNodes": 266,
   "LabeledStmt": 267,
   "InfixOperatorExpr": 268,
   "MoveExpr": 269,

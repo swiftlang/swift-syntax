@@ -118,13 +118,14 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   var syntaxNodeType: SyntaxProtocol.Type { get }
 }
 
-internal extension SyntaxProtocol {
+extension SyntaxProtocol {
   var data: SyntaxData {
     return _syntaxNode.data
   }
 
   /// Access the raw syntax assuming the node is a Syntax.
-  var raw: RawSyntax {
+  @_spi(RawSyntax)
+  public var raw: RawSyntax {
     return _syntaxNode.data.raw
   }
 }

@@ -86,6 +86,10 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     return raw.rawTokenText
   }
 
+  public var byteLength: Int {
+    return raw.byteLength
+  }
+
   public var presence: SourcePresence {
     raw.presence
   }
@@ -94,7 +98,30 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     presence == .missing
   }
 
-  /// Creates a `TokenSyntax`. `text` and trivia must be managed by the same
+  public var leadingTriviaPieces: [RawTriviaPiece] {
+    raw.tokenLeadingRawTriviaPieces
+  }
+
+  public var trailingTriviaPieces: [RawTriviaPiece] {
+    raw.tokenTrailingRawTriviaPieces
+  }
+
+  /// Creates a `RawTokenSyntax`. `wholeText` must be managed by the same
+  /// `arena`. `textRange` is a range of the token text in `wholeText`.
+  public init(
+    kind: RawTokenKind,
+    wholeText: SyntaxText,
+    textRange: Range<SyntaxText.Index>,
+    arena: SyntaxArena
+  ) {
+    assert(arena.contains(text: wholeText),
+           "token text must be managed by the arena")
+    let raw = RawSyntax.parsedToken(
+      kind: kind, wholeText: wholeText, textRange: textRange, arena: arena)
+    self = RawTokenSyntax(raw: raw)
+  }
+
+  /// Creates a `RawTokenSyntax`. `text` and trivia must be managed by the same
   /// `arena`.
   public init(
     kind: RawTokenKind,

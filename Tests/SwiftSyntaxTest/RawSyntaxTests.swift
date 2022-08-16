@@ -80,5 +80,34 @@ final class RawSyntaxTests: XCTestCase {
     }
   }
 
+  func testParsedToken() throws {
+    // Dummy trivia parsing function.
+    func dummyParseToken(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+      // Emit a single `unexpectedText` trivia of the whole trivia text.
+      return [.unexpectedText(source)]
+    }
 
+    withExtendedLifetime(SyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+      let ident = RawTokenSyntax(
+        kind: .identifier, wholeText: arena.intern("\nfoo "), textRange: 1..<4,
+        arena: arena)
+
+      XCTAssertEqual(ident.tokenKind, .identifier)
+      XCTAssertEqual(ident.tokenText, "foo")
+      XCTAssertEqual(ident.presence, .present)
+      XCTAssertEqual(ident.leadingTriviaPieces, [.unexpectedText("\n")])
+      XCTAssertEqual(ident.trailingTriviaPieces, [.unexpectedText(" ")])
+      XCTAssertEqual(ident.description, "\nfoo ")
+
+      let identSyntax = Syntax(raw: ident.raw).as(TokenSyntax.self)!
+      let barIdentSyntax = identSyntax.withKind(.contextualKeyword("open"))
+      let barIdent = barIdentSyntax.raw.as(RawTokenSyntax.self)!
+
+      XCTAssertEqual(barIdent.tokenKind, .contextualKeyword)
+      XCTAssertEqual(barIdent.tokenText, "open")
+      XCTAssertEqual(barIdent.leadingTriviaPieces, [.unexpectedText("\n")])
+      XCTAssertEqual(barIdent.trailingTriviaPieces, [.unexpectedText(" ")])
+      XCTAssertEqual(barIdent.description, "\nopen ")
+    }
+  }
 }

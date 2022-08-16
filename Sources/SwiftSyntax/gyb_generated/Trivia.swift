@@ -12,6 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+public enum TriviaPosition {
+  case leading
+  case trailing
+}
+
 /// A contiguous stretch of a single kind of trivia. The constituent part of
 /// a `Trivia` collection.
 ///
@@ -108,17 +113,17 @@ extension TriviaPiece: CustomDebugStringConvertible {
     case .carriageReturnLineFeeds(let data):
       return "carriageReturnLineFeeds(\(data))"
     case .lineComment(let name):
-      return "lineComment(\(name))"
+      return "lineComment(\(name.debugDescription))"
     case .blockComment(let name):
-      return "blockComment(\(name))"
+      return "blockComment(\(name.debugDescription))"
     case .docLineComment(let name):
-      return "docLineComment(\(name))"
+      return "docLineComment(\(name.debugDescription))"
     case .docBlockComment(let name):
-      return "docBlockComment(\(name))"
+      return "docBlockComment(\(name.debugDescription))"
     case .unexpectedText(let name):
-      return "unexpectedText(\(name))"
+      return "unexpectedText(\(name.debugDescription))"
     case .shebang(let name):
-      return "shebang(\(name))"
+      return "shebang(\(name.debugDescription))"
     }
   }
 }
@@ -413,6 +418,11 @@ public enum RawTriviaPiece: Equatable {
 extension RawTriviaPiece: TextOutputStreamable {
   public func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)
+  }
+}
+extension RawTriviaPiece: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    TriviaPiece(raw: self).debugDescription
   }
 }
 

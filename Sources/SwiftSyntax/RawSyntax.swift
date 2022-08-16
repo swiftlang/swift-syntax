@@ -16,8 +16,26 @@ typealias RawTriviaPieceBuffer = UnsafeBufferPointer<RawTriviaPiece>
 /// Node data for RawSyntax tree. Tagged union plus common data.
 internal struct RawSyntaxData {
   internal enum Payload {
+    case parsedToken(ParsedToken)
     case materializedToken(MaterializedToken)
     case layout(Layout)
+  }
+
+  /// Token with lazy trivia parsing.
+  ///
+  /// The RawSyntax's `arena` must have a valid trivia parsing function to
+  /// lazily materialize the leading/trailing trivia pieces.
+  struct ParsedToken {
+    var tokenKind: RawTokenKind
+
+    /// Whole text of this token including leading/trailing trivia.
+    var wholeText: SyntaxText
+
+    /// Range of the actual token’s text.
+    ///
+    /// Text in `wholeText` before `textRange.lowerBound` is leading trivia and
+    /// after `textRange.upperBound` is trailing trivia.
+    var textRange: Range<SyntaxText.Index>
   }
 
   /// Token typically created with `TokenSyntax.<someToken>`.
@@ -40,6 +58,18 @@ internal struct RawSyntaxData {
 
   fileprivate var payload: Payload
   fileprivate var arenaReference: SyntaxArenaRef
+}
+
+extension RawSyntaxData.ParsedToken {
+  var tokenText: SyntaxText {
+    SyntaxText(rebasing: wholeText[textRange])
+  }
+  var leadingTriviaText: SyntaxText {
+    SyntaxText(rebasing: wholeText[..<textRange.lowerBound])
+  }
+  var trailingTriviaText: SyntaxText {
+    SyntaxText(rebasing: wholeText[textRange.upperBound...])
+  }
 }
 
 extension RawSyntaxData.MaterializedToken {
@@ -94,6 +124,8 @@ extension RawSyntax {
     switch rawData.payload {
     case .materializedToken(let dat):
       return dat.tokenKind
+    case .parsedToken(let dat):
+      return dat.tokenKind
     case .layout(_):
       preconditionFailure("'tokenKind' is not available for non-token node")
     }
@@ -102,6 +134,8 @@ extension RawSyntax {
   /// Token text of this node assuming this node is a token.
   var rawTokenText: SyntaxText {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      return dat.tokenText
     case .materializedToken(let dat):
       return dat.tokenText
     case .layout(_):
@@ -112,6 +146,8 @@ extension RawSyntax {
   /// The UTF-8 byte length of the leading trivia, assuming this node is a token.
   var tokenLeadingTriviaByteLength: Int {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      return dat.leadingTriviaText.count
     case .materializedToken(let dat):
       return dat.leadingTrivia.reduce(0) { $0 + $1.byteLength }
     case .layout(_):
@@ -122,6 +158,8 @@ extension RawSyntax {
   /// The UTF-8 byte length of the trailing trivia, assuming this node is a token.
   var tokenTrailingTriviaByteLength: Int {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      return dat.trailingTriviaText.count
     case .materializedToken(let dat):
       return dat.trailingTrivia.reduce(0) { $0 + $1.byteLength }
     case .layout(_):
@@ -129,19 +167,23 @@ extension RawSyntax {
     }
   }
 
-  var tokenLeadingRawTriviaPieces: RawTriviaPieceBuffer {
+  var tokenLeadingRawTriviaPieces: [RawTriviaPiece] {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      return self.arena.parseTrivia(source: dat.leadingTriviaText, position: .leading)
     case .materializedToken(let dat):
-      return dat.leadingTrivia
+      return Array(dat.leadingTrivia)
     case .layout(_):
       preconditionFailure("'tokenLeadingRawTriviaPieces' is called on non-token raw syntax")
     }
   }
 
-  var tokenTrailingRawTriviaPieces: RawTriviaPieceBuffer {
+  var tokenTrailingRawTriviaPieces: [RawTriviaPiece] {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      return self.arena.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
     case .materializedToken(let dat):
-      return dat.trailingTrivia
+      return Array(dat.trailingTrivia)
     case .layout(_):
       preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
     }
@@ -152,6 +194,7 @@ extension RawSyntax {
   /// The syntax kind of this raw syntax.
   var kind: SyntaxKind {
     switch rawData.payload {
+    case .parsedToken(_): return .token
     case .materializedToken(_): return .token
     case .layout(let dat): return dat.kind
     }
@@ -175,8 +218,11 @@ extension RawSyntax {
   /// Child nodes.
   var children: RawSyntaxBuffer {
     switch rawData.payload {
-    case .materializedToken(_): return .init(start: nil, count: 0)
-    case .layout(let dat): return dat.layout
+    case .parsedToken(_),
+         .materializedToken(_):
+      return .init(start: nil, count: 0)
+    case .layout(let dat):
+      return dat.layout
     }
   }
 
@@ -197,8 +243,11 @@ extension RawSyntax {
   /// Total number of nodes in this sub-tree, including `self` node.
   var totalNodes: Int {
     switch rawData.payload {
-    case .materializedToken(_): return 1
-    case .layout(let dat): return dat.descendantCount + 1
+    case .parsedToken(_),
+         .materializedToken(_):
+      return 1
+    case .layout(let dat):
+      return dat.descendantCount + 1
     }
   }
 
@@ -226,6 +275,7 @@ extension RawSyntax {
   /// Sum of text byte lengths of all descendant token nodes.
   var byteLength: Int {
     switch rawData.payload {
+    case .parsedToken(let dat): return dat.wholeText.count
     case .materializedToken(let dat): return Int(dat.byteLength)
     case .layout(let dat): return dat.byteLength
     }
@@ -237,6 +287,8 @@ extension RawSyntax {
 
   func formTokenKind() -> TokenKind? {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
     case .materializedToken(let dat):
       return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
     case .layout(_):
@@ -255,13 +307,13 @@ extension RawSyntax {
   }
 
   /// Returns the leading `Trivia`, assuming this node is a token.
-  func formTokenLeadingTrivia() -> Trivia? {
+  func formTokenLeadingTrivia() -> Trivia {
     return Trivia(pieces: tokenLeadingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
   /// Returns the trailing `Trivia`, assuming this node is a token.
   /// - Returns: nil if called on a layout node.
-  func formTokenTrailingTrivia() -> Trivia? {
+  func formTokenTrailingTrivia() -> Trivia {
     return Trivia(pieces: tokenTrailingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
@@ -280,7 +332,14 @@ extension RawSyntax {
   /// Assuming this node is a token, returns a `RawSyntax` node with the same
   /// source text but with the token kind changed to `newValue`.
   func withTokenKind(_ newValue: TokenKind) -> RawSyntax {
-    switch payload {
+    switch rawData.payload {
+    case .parsedToken(_):
+      // The wholeText can't be continuous anymore. Make a materialized token.
+      return .makeMaterializedToken(
+        kind: newValue,
+        leadingTrivia: formTokenLeadingTrivia(),
+        trailingTrivia: formTokenTrailingTrivia(),
+        arena: arena)
     case .materializedToken(var payload):
       let decomposed = newValue.decomposeToRaw()
       let rawKind = decomposed.rawKind
@@ -304,7 +363,7 @@ extension RawSyntax {
       return .makeMaterializedToken(
         kind: formTokenKind()!,
         leadingTrivia: leadingTrivia,
-        trailingTrivia: formTokenTrailingTrivia()!,
+        trailingTrivia: formTokenTrailingTrivia(),
         arena: arena)
     }
 
@@ -324,7 +383,7 @@ extension RawSyntax {
     if isToken {
       return .makeMaterializedToken(
         kind: formTokenKind()!,
-        leadingTrivia: formTokenLeadingTrivia()!,
+        leadingTrivia: formTokenLeadingTrivia(),
         trailingTrivia: trailingTrivia,
         arena: arena)
     }
@@ -517,6 +576,9 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   /// - Parameter stream: The stream on which to output this node.
   public func write<Target: TextOutputStream>(to target: inout Target) {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      String(syntaxText: dat.wholeText).write(to: &target)
+      break
     case .materializedToken(let dat):
       for p in dat.leadingTrivia { p.write(to: &target) }
       String(syntaxText: dat.tokenText).write(to: &target)
@@ -594,6 +656,8 @@ extension RawSyntax {
   /// is a token node.
   var tokenTextByteLength: Int {
     switch rawData.payload {
+    case .parsedToken(let dat):
+      return dat.tokenText.count
     case .materializedToken(let dat):
       return dat.tokenText.count
     case .layout(_):
@@ -640,6 +704,24 @@ private func makeRawTriviaPieces(leadingTrivia: Trivia, trailingTrivia: Trivia, 
 }
 
 extension RawSyntax {
+  /// "Designated" factory method to create a parsed token node.
+  ///
+  /// - Parameters:
+  ///   - kind: Token kind.
+  ///   - wholeText: Whole text of this token including trailing/leading trivia.
+  ///   - textRange: Range of the token text in `wholeText`.
+  ///   - arena: SyntaxArea to the result node data resides.
+  internal static func parsedToken(
+    kind: RawTokenKind,
+    wholeText: SyntaxText,
+    textRange: Range<SyntaxText.Index>,
+    arena: SyntaxArena
+  ) -> RawSyntax {
+    let payload = RawSyntaxData.ParsedToken(
+      tokenKind: kind, wholeText: wholeText, textRange: textRange)
+    return RawSyntax(arena: arena, payload: .parsedToken(payload))
+  }
+
   /// "Designated" factory method to create a materialized token node.
   ///
   /// This should not be called directly.
@@ -864,6 +946,11 @@ extension RawSyntax: CustomDebugStringConvertible {
   private func debugWrite<Target: TextOutputStream>(to target: inout Target, indent: Int, withChildren: Bool = false) {
     let childIndent = indent + 2
     switch rawData.payload {
+    case .parsedToken(let dat):
+      target.write(".parsedToken(")
+      target.write(String(describing: dat.tokenKind))
+      target.write(" wholeText=\(dat.tokenText.debugDescription)")
+      target.write(" textRange=\(dat.textRange.description)")
     case .materializedToken(let dat):
       target.write(".materializedToken(")
       target.write(String(describing: dat.tokenKind))

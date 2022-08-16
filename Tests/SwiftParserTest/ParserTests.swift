@@ -18,6 +18,20 @@ public class ParserTests: XCTestCase {
         let fileContents = try String(contentsOf: fileURL)
         let parsed = try Parser.parse(source: fileContents)
         AssertStringsEqualWithDiff("\(parsed)", fileContents)
+        let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: parsed)
+        if !diagnostics.isEmpty {
+          var locationAndDiagnostics: [String] = []
+          let locationConverter = SourceLocationConverter(file: fileURL.lastPathComponent, tree: parsed)
+          for diag in diagnostics {
+            let location = diag.location(converter: locationConverter)
+            let message = diag.message
+            locationAndDiagnostics.append("\(location): \(message)")
+          }
+          XCTFail("""
+          Received the following diagnostics while parsing \(fileURL)
+          \(locationAndDiagnostics.joined(separator: "\n"))
+          """)
+        }
       }())
     }
   }

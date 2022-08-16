@@ -59,6 +59,9 @@ public struct SyntaxText {
   }
 
   /// Base address of the memory range this string refers to.
+  ///
+  /// If the `baseAddress` is `nil`, the text is empty. However, text can be
+  /// `isEmpty` even with a non-`nil` base address.
   public var baseAddress: UnsafePointer<UInt8>? {
     buffer.baseAddress
   }
@@ -148,10 +151,19 @@ extension SyntaxText: Hashable {
     if lhs.buffer.count != rhs.buffer.count {
       return false
     }
-    if lhs.isEmpty || lhs.buffer.baseAddress == rhs.buffer.baseAddress {
+    guard let lBase = lhs.baseAddress, let rBase = rhs.baseAddress else {
+      // If either `baseAddress` is `nil`, both are empty so returns `true`.
       return true
     }
-    return compareMemory(lhs.baseAddress!, rhs.baseAddress!, lhs.count)
+    // We don't do `lhs.baseAddress == rhs.baseAddress` shortcut, because in
+    // SwiftSyntax use cases, comparing the same SyntaxText instances is
+    // extremely rare, and checking it causes extra branch.
+    // The most common usage is comparing parsed text with a static text e.g.
+    // `token.text == "func"`. In such cases `compareMemory`(`memcmp`) is
+    // optimzed to a `cmp` or similar opcode if either operand is a short static
+    // text. So the same-baseAddress shortcut doesn't give us a huge performance
+    // boost even if they actually refer the same memory.
+    return compareMemory(lBase, rBase, lhs.count)
   }
 
   public func hash(into hasher: inout Hasher) {
@@ -209,7 +221,7 @@ extension String {
 private func compareMemory(
   _ s1: UnsafePointer<UInt8>, _ s2: UnsafePointer<UInt8>, _ count: Int
 ) -> Bool {
-  assert(count > 0)
+  assert(count >= 0)
 #if canImport(Darwin)
   return Darwin.memcmp(s1, s2, count) == 0
 #elseif canImport(Glibc)

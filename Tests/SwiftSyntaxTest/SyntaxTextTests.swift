@@ -45,6 +45,40 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertEqual(SyntaxText(rebasing: text[2..<2]), SyntaxText(rebasing: text[3..<3]))
   }
 
+  func testEmptyCompare() throws {
+    let text: SyntaxText = "0123456789"
+
+    let emptyDefault = SyntaxText()
+    let emptyStatic: SyntaxText = ""
+    let emptySlice1 = SyntaxText(rebasing: text[1..<1])
+    let emptySlice2 =  SyntaxText(rebasing: text[6..<6])
+
+    XCTAssertTrue(emptyDefault.baseAddress == nil && emptyDefault.isEmpty)
+    XCTAssertTrue(emptyStatic.baseAddress != nil && emptyStatic.isEmpty)
+    XCTAssertTrue(emptySlice1.baseAddress != nil && emptySlice1.isEmpty)
+    XCTAssertTrue(emptySlice2.baseAddress != nil && emptySlice2.isEmpty)
+
+    XCTAssertTrue(emptyDefault == emptyDefault)
+    XCTAssertTrue(emptyDefault == emptyStatic)
+    XCTAssertTrue(emptyDefault == emptySlice1)
+    XCTAssertTrue(emptyDefault == emptySlice2)
+
+    XCTAssertTrue(emptyStatic == emptyDefault)
+    XCTAssertTrue(emptyStatic == emptyStatic)
+    XCTAssertTrue(emptyStatic == emptySlice1)
+    XCTAssertTrue(emptyStatic == emptySlice2)
+
+    XCTAssertTrue(emptySlice1 == emptyDefault)
+    XCTAssertTrue(emptySlice1 == emptyStatic)
+    XCTAssertTrue(emptySlice1 == emptySlice1)
+    XCTAssertTrue(emptySlice1 == emptySlice2)
+
+    XCTAssertTrue(emptySlice2 == emptyDefault)
+    XCTAssertTrue(emptySlice2 == emptyStatic)
+    XCTAssertTrue(emptySlice2 == emptySlice1)
+    XCTAssertTrue(emptySlice2 == emptySlice2)
+  }
+
   func testFirstRange() throws {
     let text: SyntaxText = "0123456789012345"
 

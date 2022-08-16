@@ -39,7 +39,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
     self.item = item.createSyntaxBuildable()
     self.unexpectedBetweenItemAndSemicolon = unexpectedBetweenItemAndSemicolon?.createUnexpectedNodes()
     self.semicolon = semicolon
-    assert(semicolon == nil || semicolon!.text == #";"# || semicolon!.text == #";"#)
+    assert(semicolon == nil || semicolon!.text == #";"#)
     self.unexpectedBetweenSemicolonAndErrorTokens = unexpectedBetweenSemicolonAndErrorTokens?.createUnexpectedNodes()
     self.errorTokens = errorTokens?.createSyntaxBuildable()
   }
@@ -91,12 +91,12 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
-    assert(leftBrace.text == #"{"# || leftBrace.text == #"{"#)
+    assert(leftBrace.text == #"{"#)
     self.unexpectedBetweenLeftBraceAndStatements = unexpectedBetweenLeftBraceAndStatements?.createUnexpectedNodes()
     self.statements = statements.createCodeBlockItemList()
     self.unexpectedBetweenStatementsAndRightBrace = unexpectedBetweenStatementsAndRightBrace?.createUnexpectedNodes()
     self.rightBrace = rightBrace
-    assert(rightBrace.text == #"}"# || rightBrace.text == #"}"#)
+    assert(rightBrace.text == #"}"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -150,7 +150,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAmpersand = unexpectedBeforeAmpersand?.createUnexpectedNodes()
     self.ampersand = ampersand
-    assert(ampersand.text == #"&"# || ampersand.text == #"&"#)
+    assert(ampersand.text == #"&"#)
     self.unexpectedBetweenAmpersandAndExpression = unexpectedBetweenAmpersandAndExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
   }
@@ -201,7 +201,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundColumn = unexpectedBeforePoundColumn?.createUnexpectedNodes()
     self.poundColumn = poundColumn
-    assert(poundColumn.text == #"#column"# || poundColumn.text == #"#column"#)
+    assert(poundColumn.text == #"#column"#)
   }
   /// Builds a `PoundColumnExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -258,7 +258,7 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeTryKeyword = unexpectedBeforeTryKeyword?.createUnexpectedNodes()
     self.tryKeyword = tryKeyword
-    assert(tryKeyword.text == #"try"# || tryKeyword.text == #"try"#)
+    assert(tryKeyword.text == #"try"#)
     self.unexpectedBetweenTryKeywordAndQuestionOrExclamationMark = unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.createUnexpectedNodes()
     self.questionOrExclamationMark = questionOrExclamationMark
     assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == #"?"# || questionOrExclamationMark!.text == #"!"#)
@@ -440,7 +440,7 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
     self.name = name
     self.unexpectedBetweenNameAndColon = unexpectedBetweenNameAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
   }
   /// Builds a `DeclNameArgumentSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -490,12 +490,12 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndArguments = unexpectedBetweenLeftParenAndArguments?.createUnexpectedNodes()
     self.arguments = arguments.createDeclNameArgumentList()
     self.unexpectedBetweenArgumentsAndRightParen = unexpectedBetweenArgumentsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `DeclNameArgumentsSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -591,7 +591,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSuperKeyword = unexpectedBeforeSuperKeyword?.createUnexpectedNodes()
     self.superKeyword = superKeyword
-    assert(superKeyword.text == #"super"# || superKeyword.text == #"super"#)
+    assert(superKeyword.text == #"super"#)
   }
   /// Builds a `SuperRefExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -640,7 +640,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeNilKeyword = unexpectedBeforeNilKeyword?.createUnexpectedNodes()
     self.nilKeyword = nilKeyword
-    assert(nilKeyword.text == #"nil"# || nilKeyword.text == #"nil"#)
+    assert(nilKeyword.text == #"nil"#)
   }
   /// Builds a `NilLiteralExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -689,7 +689,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWildcard = unexpectedBeforeWildcard?.createUnexpectedNodes()
     self.wildcard = wildcard
-    assert(wildcard.text == #"_"# || wildcard.text == #"_"#)
+    assert(wildcard.text == #"_"#)
   }
   /// Builds a `DiscardAssignmentExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -738,7 +738,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAssignToken = unexpectedBeforeAssignToken?.createUnexpectedNodes()
     self.assignToken = assignToken
-    assert(assignToken.text == #"="# || assignToken.text == #"="#)
+    assert(assignToken.text == #"="#)
   }
   /// Builds a `AssignmentExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -843,7 +843,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundLine = unexpectedBeforePoundLine?.createUnexpectedNodes()
     self.poundLine = poundLine
-    assert(poundLine.text == #"#line"# || poundLine.text == #"#line"#)
+    assert(poundLine.text == #"#line"#)
   }
   /// Builds a `PoundLineExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -892,7 +892,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFile = unexpectedBeforePoundFile?.createUnexpectedNodes()
     self.poundFile = poundFile
-    assert(poundFile.text == #"#file"# || poundFile.text == #"#file"#)
+    assert(poundFile.text == #"#file"#)
   }
   /// Builds a `PoundFileExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -941,7 +941,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFileID = unexpectedBeforePoundFileID?.createUnexpectedNodes()
     self.poundFileID = poundFileID
-    assert(poundFileID.text == #"#fileID"# || poundFileID.text == #"#fileID"#)
+    assert(poundFileID.text == #"#fileID"#)
   }
   /// Builds a `PoundFileIDExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -990,7 +990,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFilePath = unexpectedBeforePoundFilePath?.createUnexpectedNodes()
     self.poundFilePath = poundFilePath
-    assert(poundFilePath.text == #"#filePath"# || poundFilePath.text == #"#filePath"#)
+    assert(poundFilePath.text == #"#filePath"#)
   }
   /// Builds a `PoundFilePathExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -1039,7 +1039,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFunction = unexpectedBeforePoundFunction?.createUnexpectedNodes()
     self.poundFunction = poundFunction
-    assert(poundFunction.text == #"#function"# || poundFunction.text == #"#function"#)
+    assert(poundFunction.text == #"#function"#)
   }
   /// Builds a `PoundFunctionExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -1088,7 +1088,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundDsohandle = unexpectedBeforePoundDsohandle?.createUnexpectedNodes()
     self.poundDsohandle = poundDsohandle
-    assert(poundDsohandle.text == #"#dsohandle"# || poundDsohandle.text == #"#dsohandle"#)
+    assert(poundDsohandle.text == #"#dsohandle"#)
   }
   /// Builds a `PoundDsohandleExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -1318,10 +1318,10 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
     assert(asyncKeyword == nil || asyncKeyword!.text == #"async"#)
     self.unexpectedBetweenAsyncKeywordAndThrowsToken = unexpectedBetweenAsyncKeywordAndThrowsToken?.createUnexpectedNodes()
     self.throwsToken = throwsToken
-    assert(throwsToken == nil || throwsToken!.text == #"throws"# || throwsToken!.text == #"throws"#)
+    assert(throwsToken == nil || throwsToken!.text == #"throws"#)
     self.unexpectedBetweenThrowsTokenAndArrowToken = unexpectedBetweenThrowsTokenAndArrowToken?.createUnexpectedNodes()
     self.arrowToken = arrowToken
-    assert(arrowToken.text == #"->"# || arrowToken.text == #"->"#)
+    assert(arrowToken.text == #"->"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -1500,12 +1500,12 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndElementList = unexpectedBetweenLeftParenAndElementList?.createUnexpectedNodes()
     self.elementList = elementList.createTupleExprElementList()
     self.unexpectedBetweenElementListAndRightParen = unexpectedBetweenElementListAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -1570,12 +1570,12 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquare = unexpectedBeforeLeftSquare?.createUnexpectedNodes()
     self.leftSquare = leftSquare
-    assert(leftSquare.text == #"["# || leftSquare.text == #"["#)
+    assert(leftSquare.text == #"["#)
     self.unexpectedBetweenLeftSquareAndElements = unexpectedBetweenLeftSquareAndElements?.createUnexpectedNodes()
     self.elements = elements.createArrayElementList()
     self.unexpectedBetweenElementsAndRightSquare = unexpectedBetweenElementsAndRightSquare?.createUnexpectedNodes()
     self.rightSquare = rightSquare
-    assert(rightSquare.text == #"]"# || rightSquare.text == #"]"#)
+    assert(rightSquare.text == #"]"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -1640,12 +1640,12 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquare = unexpectedBeforeLeftSquare?.createUnexpectedNodes()
     self.leftSquare = leftSquare
-    assert(leftSquare.text == #"["# || leftSquare.text == #"["#)
+    assert(leftSquare.text == #"["#)
     self.unexpectedBetweenLeftSquareAndContent = unexpectedBetweenLeftSquareAndContent?.createUnexpectedNodes()
     self.content = content.createSyntaxBuildable()
     self.unexpectedBetweenContentAndRightSquare = unexpectedBetweenContentAndRightSquare?.createUnexpectedNodes()
     self.rightSquare = rightSquare
-    assert(rightSquare.text == #"]"# || rightSquare.text == #"]"#)
+    assert(rightSquare.text == #"]"#)
   }
   /// Builds a `DictionaryExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -1708,12 +1708,12 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
     self.label = label
     self.unexpectedBetweenLabelAndColon = unexpectedBetweenLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon == nil || colon!.text == #":"# || colon!.text == #":"#)
+    assert(colon == nil || colon!.text == #":"#)
     self.unexpectedBetweenColonAndExpression = unexpectedBetweenColonAndExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
     self.unexpectedBetweenExpressionAndTrailingComma = unexpectedBetweenExpressionAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `TupleExprElementSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -1765,7 +1765,7 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
     self.expression = expression.createExprBuildable()
     self.unexpectedBetweenExpressionAndTrailingComma = unexpectedBetweenExpressionAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `ArrayElementSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -1825,12 +1825,12 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
     self.keyExpression = keyExpression.createExprBuildable()
     self.unexpectedBetweenKeyExpressionAndColon = unexpectedBetweenKeyExpressionAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndValueExpression = unexpectedBetweenColonAndValueExpression?.createUnexpectedNodes()
     self.valueExpression = valueExpression.createExprBuildable()
     self.unexpectedBetweenValueExpressionAndTrailingComma = unexpectedBetweenValueExpressionAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `DictionaryElementSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -1997,12 +1997,12 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
     self.conditionExpression = conditionExpression.createExprBuildable()
     self.unexpectedBetweenConditionExpressionAndQuestionMark = unexpectedBetweenConditionExpressionAndQuestionMark?.createUnexpectedNodes()
     self.questionMark = questionMark
-    assert(questionMark.text == #"?"# || questionMark.text == #"?"#)
+    assert(questionMark.text == #"?"#)
     self.unexpectedBetweenQuestionMarkAndFirstChoice = unexpectedBetweenQuestionMarkAndFirstChoice?.createUnexpectedNodes()
     self.firstChoice = firstChoice.createExprBuildable()
     self.unexpectedBetweenFirstChoiceAndColonMark = unexpectedBetweenFirstChoiceAndColonMark?.createUnexpectedNodes()
     self.colonMark = colonMark
-    assert(colonMark.text == #":"# || colonMark.text == #":"#)
+    assert(colonMark.text == #":"#)
     self.unexpectedBetweenColonMarkAndSecondChoice = unexpectedBetweenColonMarkAndSecondChoice?.createUnexpectedNodes()
     self.secondChoice = secondChoice.createExprBuildable()
   }
@@ -2124,7 +2124,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIsTok = unexpectedBeforeIsTok?.createUnexpectedNodes()
     self.isTok = isTok
-    assert(isTok.text == #"is"# || isTok.text == #"is"#)
+    assert(isTok.text == #"is"#)
     self.unexpectedBetweenIsTokAndTypeName = unexpectedBetweenIsTokAndTypeName?.createUnexpectedNodes()
     self.typeName = typeName.createTypeBuildable()
   }
@@ -2183,7 +2183,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAsTok = unexpectedBeforeAsTok?.createUnexpectedNodes()
     self.asTok = asTok
-    assert(asTok.text == #"as"# || asTok.text == #"as"#)
+    assert(asTok.text == #"as"#)
     self.unexpectedBetweenAsTokAndQuestionOrExclamationMark = unexpectedBetweenAsTokAndQuestionOrExclamationMark?.createUnexpectedNodes()
     self.questionOrExclamationMark = questionOrExclamationMark
     assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == #"?"# || questionOrExclamationMark!.text == #"!"#)
@@ -2305,12 +2305,12 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
     self.name = name
     self.unexpectedBetweenNameAndAssignToken = unexpectedBetweenNameAndAssignToken?.createUnexpectedNodes()
     self.assignToken = assignToken
-    assert(assignToken == nil || assignToken!.text == #"="# || assignToken!.text == #"="#)
+    assert(assignToken == nil || assignToken!.text == #"="#)
     self.unexpectedBetweenAssignTokenAndExpression = unexpectedBetweenAssignTokenAndExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
     self.unexpectedBetweenExpressionAndTrailingComma = unexpectedBetweenExpressionAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -2372,12 +2372,12 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquare = unexpectedBeforeLeftSquare?.createUnexpectedNodes()
     self.leftSquare = leftSquare
-    assert(leftSquare.text == #"["# || leftSquare.text == #"["#)
+    assert(leftSquare.text == #"["#)
     self.unexpectedBetweenLeftSquareAndItems = unexpectedBetweenLeftSquareAndItems?.createUnexpectedNodes()
     self.items = items?.createClosureCaptureItemList()
     self.unexpectedBetweenItemsAndRightSquare = unexpectedBetweenItemsAndRightSquare?.createUnexpectedNodes()
     self.rightSquare = rightSquare
-    assert(rightSquare.text == #"]"# || rightSquare.text == #"]"#)
+    assert(rightSquare.text == #"]"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -2433,7 +2433,7 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
     self.name = name
     self.unexpectedBetweenNameAndTrailingComma = unexpectedBetweenNameAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `ClosureParamSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -2512,12 +2512,12 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
     assert(asyncKeyword == nil || asyncKeyword!.text == #"async"#)
     self.unexpectedBetweenAsyncKeywordAndThrowsTok = unexpectedBetweenAsyncKeywordAndThrowsTok?.createUnexpectedNodes()
     self.throwsTok = throwsTok
-    assert(throwsTok == nil || throwsTok!.text == #"throws"# || throwsTok!.text == #"throws"#)
+    assert(throwsTok == nil || throwsTok!.text == #"throws"#)
     self.unexpectedBetweenThrowsTokAndOutput = unexpectedBetweenThrowsTokAndOutput?.createUnexpectedNodes()
     self.output = output?.createReturnClause()
     self.unexpectedBetweenOutputAndInTok = unexpectedBetweenOutputAndInTok?.createUnexpectedNodes()
     self.inTok = inTok
-    assert(inTok.text == #"in"# || inTok.text == #"in"#)
+    assert(inTok.text == #"in"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -2579,14 +2579,14 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
-    assert(leftBrace.text == #"{"# || leftBrace.text == #"{"#)
+    assert(leftBrace.text == #"{"#)
     self.unexpectedBetweenLeftBraceAndSignature = unexpectedBetweenLeftBraceAndSignature?.createUnexpectedNodes()
     self.signature = signature?.createClosureSignature()
     self.unexpectedBetweenSignatureAndStatements = unexpectedBetweenSignatureAndStatements?.createUnexpectedNodes()
     self.statements = statements.createCodeBlockItemList()
     self.unexpectedBetweenStatementsAndRightBrace = unexpectedBetweenStatementsAndRightBrace?.createUnexpectedNodes()
     self.rightBrace = rightBrace
-    assert(rightBrace.text == #"}"# || rightBrace.text == #"}"#)
+    assert(rightBrace.text == #"}"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -2701,7 +2701,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
     self.label = label
     self.unexpectedBetweenLabelAndColon = unexpectedBetweenLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndClosure = unexpectedBetweenColonAndClosure?.createUnexpectedNodes()
     self.closure = closure.createClosureExpr()
   }
@@ -2767,12 +2767,12 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
     self.calledExpression = calledExpression.createExprBuildable()
     self.unexpectedBetweenCalledExpressionAndLeftParen = unexpectedBetweenCalledExpressionAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen == nil || leftParen!.text == #"("# || leftParen!.text == #"("#)
+    assert(leftParen == nil || leftParen!.text == #"("#)
     self.unexpectedBetweenLeftParenAndArgumentList = unexpectedBetweenLeftParenAndArgumentList?.createUnexpectedNodes()
     self.argumentList = argumentList.createTupleExprElementList()
     self.unexpectedBetweenArgumentListAndRightParen = unexpectedBetweenArgumentListAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen == nil || rightParen!.text == #")"# || rightParen!.text == #")"#)
+    assert(rightParen == nil || rightParen!.text == #")"#)
     self.unexpectedBetweenRightParenAndTrailingClosure = unexpectedBetweenRightParenAndTrailingClosure?.createUnexpectedNodes()
     self.trailingClosure = trailingClosure?.createClosureExpr()
     self.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.createUnexpectedNodes()
@@ -2855,12 +2855,12 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
     self.calledExpression = calledExpression.createExprBuildable()
     self.unexpectedBetweenCalledExpressionAndLeftBracket = unexpectedBetweenCalledExpressionAndLeftBracket?.createUnexpectedNodes()
     self.leftBracket = leftBracket
-    assert(leftBracket.text == #"["# || leftBracket.text == #"["#)
+    assert(leftBracket.text == #"["#)
     self.unexpectedBetweenLeftBracketAndArgumentList = unexpectedBetweenLeftBracketAndArgumentList?.createUnexpectedNodes()
     self.argumentList = argumentList.createTupleExprElementList()
     self.unexpectedBetweenArgumentListAndRightBracket = unexpectedBetweenArgumentListAndRightBracket?.createUnexpectedNodes()
     self.rightBracket = rightBracket
-    assert(rightBracket.text == #"]"# || rightBracket.text == #"]"#)
+    assert(rightBracket.text == #"]"#)
     self.unexpectedBetweenRightBracketAndTrailingClosure = unexpectedBetweenRightBracketAndTrailingClosure?.createUnexpectedNodes()
     self.trailingClosure = trailingClosure?.createClosureExpr()
     self.unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.createUnexpectedNodes()
@@ -2927,7 +2927,7 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
     self.expression = expression.createExprBuildable()
     self.unexpectedBetweenExpressionAndQuestionMark = unexpectedBetweenExpressionAndQuestionMark?.createUnexpectedNodes()
     self.questionMark = questionMark
-    assert(questionMark.text == #"?"# || questionMark.text == #"?"#)
+    assert(questionMark.text == #"?"#)
   }
   /// Builds a `OptionalChainingExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -2982,7 +2982,7 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
     self.expression = expression.createExprBuildable()
     self.unexpectedBetweenExpressionAndExclamationMark = unexpectedBetweenExpressionAndExclamationMark?.createUnexpectedNodes()
     self.exclamationMark = exclamationMark
-    assert(exclamationMark.text == #"!"# || exclamationMark.text == #"!"#)
+    assert(exclamationMark.text == #"!"#)
   }
   /// Builds a `ForcedValueExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -3208,17 +3208,17 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBackslash = unexpectedBeforeBackslash?.createUnexpectedNodes()
     self.backslash = backslash
-    assert(backslash.text == #"\"# || backslash.text == #"\"#)
+    assert(backslash.text == #"\"#)
     self.unexpectedBetweenBackslashAndDelimiter = unexpectedBetweenBackslashAndDelimiter?.createUnexpectedNodes()
     self.delimiter = delimiter
     self.unexpectedBetweenDelimiterAndLeftParen = unexpectedBetweenDelimiterAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndExpressions = unexpectedBetweenLeftParenAndExpressions?.createUnexpectedNodes()
     self.expressions = expressions.createTupleExprElementList()
     self.unexpectedBetweenExpressionsAndRightParen = unexpectedBetweenExpressionsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -3416,7 +3416,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBackslash = unexpectedBeforeBackslash?.createUnexpectedNodes()
     self.backslash = backslash
-    assert(backslash.text == #"\"# || backslash.text == #"\"#)
+    assert(backslash.text == #"\"#)
     self.unexpectedBetweenBackslashAndRootExpr = unexpectedBetweenBackslashAndRootExpr?.createUnexpectedNodes()
     self.rootExpr = rootExpr?.createExprBuildable()
     self.unexpectedBetweenRootExprAndExpression = unexpectedBetweenRootExprAndExpression?.createUnexpectedNodes()
@@ -3469,7 +3469,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePeriod = unexpectedBeforePeriod?.createUnexpectedNodes()
     self.period = period
-    assert(period.text == #"."# || period.text == #"."#)
+    assert(period.text == #"."#)
   }
   /// Builds a `KeyPathBaseExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -3524,7 +3524,7 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
     self.name = name
     self.unexpectedBetweenNameAndDot = unexpectedBetweenNameAndDot?.createUnexpectedNodes()
     self.dot = dot
-    assert(dot == nil || dot!.text == #"."# || dot!.text == #"."#)
+    assert(dot == nil || dot!.text == #"."#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -3584,15 +3584,15 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeKeyPath = unexpectedBeforeKeyPath?.createUnexpectedNodes()
     self.keyPath = keyPath
-    assert(keyPath.text == #"#keyPath"# || keyPath.text == #"#keyPath"#)
+    assert(keyPath.text == #"#keyPath"#)
     self.unexpectedBetweenKeyPathAndLeftParen = unexpectedBetweenKeyPathAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndName = unexpectedBetweenLeftParenAndName?.createUnexpectedNodes()
     self.name = name.createObjcName()
     self.unexpectedBetweenNameAndRightParen = unexpectedBetweenNameAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `ObjcKeyPathExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -3661,21 +3661,21 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundSelector = unexpectedBeforePoundSelector?.createUnexpectedNodes()
     self.poundSelector = poundSelector
-    assert(poundSelector.text == #"#selector"# || poundSelector.text == #"#selector"#)
+    assert(poundSelector.text == #"#selector"#)
     self.unexpectedBetweenPoundSelectorAndLeftParen = unexpectedBetweenPoundSelectorAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndKind = unexpectedBetweenLeftParenAndKind?.createUnexpectedNodes()
     self.kind = kind
     assert(kind == nil || kind!.text == #"getter"# || kind!.text == #"setter"#)
     self.unexpectedBetweenKindAndColon = unexpectedBetweenKindAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon == nil || colon!.text == #":"# || colon!.text == #":"#)
+    assert(colon == nil || colon!.text == #":"#)
     self.unexpectedBetweenColonAndName = unexpectedBetweenColonAndName?.createUnexpectedNodes()
     self.name = name.createExprBuildable()
     self.unexpectedBetweenNameAndRightParen = unexpectedBetweenNameAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -3855,12 +3855,12 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
     assert(identifier.text == #"#colorLiteral"# || identifier.text == #"#fileLiteral"# || identifier.text == #"#imageLiteral"#)
     self.unexpectedBetweenIdentifierAndLeftParen = unexpectedBetweenIdentifierAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndArguments = unexpectedBetweenLeftParenAndArguments?.createUnexpectedNodes()
     self.arguments = arguments.createTupleExprElementList()
     self.unexpectedBetweenArgumentsAndRightParen = unexpectedBetweenArgumentsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -3921,7 +3921,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeEqual = unexpectedBeforeEqual?.createUnexpectedNodes()
     self.equal = equal
-    assert(equal.text == #"="# || equal.text == #"="#)
+    assert(equal.text == #"="#)
     self.unexpectedBetweenEqualAndValue = unexpectedBetweenEqualAndValue?.createUnexpectedNodes()
     self.value = value.createTypeBuildable()
   }
@@ -3993,7 +3993,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndTypealiasKeyword = unexpectedBetweenModifiersAndTypealiasKeyword?.createUnexpectedNodes()
     self.typealiasKeyword = typealiasKeyword
-    assert(typealiasKeyword.text == #"typealias"# || typealiasKeyword.text == #"typealias"#)
+    assert(typealiasKeyword.text == #"typealias"#)
     self.unexpectedBetweenTypealiasKeywordAndIdentifier = unexpectedBetweenTypealiasKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndGenericParameterClause = unexpectedBetweenIdentifierAndGenericParameterClause?.createUnexpectedNodes()
@@ -4084,7 +4084,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndAssociatedtypeKeyword = unexpectedBetweenModifiersAndAssociatedtypeKeyword?.createUnexpectedNodes()
     self.associatedtypeKeyword = associatedtypeKeyword
-    assert(associatedtypeKeyword.text == #"associatedtype"# || associatedtypeKeyword.text == #"associatedtype"#)
+    assert(associatedtypeKeyword.text == #"associatedtype"#)
     self.unexpectedBetweenAssociatedtypeKeywordAndIdentifier = unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndInheritanceClause = unexpectedBetweenIdentifierAndInheritanceClause?.createUnexpectedNodes()
@@ -4155,12 +4155,12 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndParameterList = unexpectedBetweenLeftParenAndParameterList?.createUnexpectedNodes()
     self.parameterList = parameterList.createFunctionParameterList()
     self.unexpectedBetweenParameterListAndRightParen = unexpectedBetweenParameterListAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -4214,7 +4214,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeArrow = unexpectedBeforeArrow?.createUnexpectedNodes()
     self.arrow = arrow
-    assert(arrow.text == #"->"# || arrow.text == #"->"#)
+    assert(arrow.text == #"->"#)
     self.unexpectedBetweenArrowAndReturnType = unexpectedBetweenArrowAndReturnType?.createUnexpectedNodes()
     self.returnType = returnType.createTypeBuildable()
   }
@@ -4387,7 +4387,7 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
     self.clauses = clauses.createIfConfigClauseList()
     self.unexpectedBetweenClausesAndPoundEndif = unexpectedBetweenClausesAndPoundEndif?.createUnexpectedNodes()
     self.poundEndif = poundEndif
-    assert(poundEndif.text == #"#endif"# || poundEndif.text == #"#endif"#)
+    assert(poundEndif.text == #"#endif"#)
   }
   /// Builds a `IfConfigDeclSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -4448,15 +4448,15 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundError = unexpectedBeforePoundError?.createUnexpectedNodes()
     self.poundError = poundError
-    assert(poundError.text == #"#error"# || poundError.text == #"#error"#)
+    assert(poundError.text == #"#error"#)
     self.unexpectedBetweenPoundErrorAndLeftParen = unexpectedBetweenPoundErrorAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndMessage = unexpectedBetweenLeftParenAndMessage?.createUnexpectedNodes()
     self.message = message.createStringLiteralExpr()
     self.unexpectedBetweenMessageAndRightParen = unexpectedBetweenMessageAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `PoundErrorDeclSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -4517,15 +4517,15 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundWarning = unexpectedBeforePoundWarning?.createUnexpectedNodes()
     self.poundWarning = poundWarning
-    assert(poundWarning.text == #"#warning"# || poundWarning.text == #"#warning"#)
+    assert(poundWarning.text == #"#warning"#)
     self.unexpectedBetweenPoundWarningAndLeftParen = unexpectedBetweenPoundWarningAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndMessage = unexpectedBetweenLeftParenAndMessage?.createUnexpectedNodes()
     self.message = message.createStringLiteralExpr()
     self.unexpectedBetweenMessageAndRightParen = unexpectedBetweenMessageAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `PoundWarningDeclSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -4586,15 +4586,15 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundSourceLocation = unexpectedBeforePoundSourceLocation?.createUnexpectedNodes()
     self.poundSourceLocation = poundSourceLocation
-    assert(poundSourceLocation.text == #"#sourceLocation"# || poundSourceLocation.text == #"#sourceLocation"#)
+    assert(poundSourceLocation.text == #"#sourceLocation"#)
     self.unexpectedBetweenPoundSourceLocationAndLeftParen = unexpectedBetweenPoundSourceLocationAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndArgs = unexpectedBetweenLeftParenAndArgs?.createUnexpectedNodes()
     self.args = args?.createPoundSourceLocationArgs()
     self.unexpectedBetweenArgsAndRightParen = unexpectedBetweenArgsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `PoundSourceLocationSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -4670,18 +4670,18 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
     assert(fileArgLabel.text == #"file"#)
     self.unexpectedBetweenFileArgLabelAndFileArgColon = unexpectedBetweenFileArgLabelAndFileArgColon?.createUnexpectedNodes()
     self.fileArgColon = fileArgColon
-    assert(fileArgColon.text == #":"# || fileArgColon.text == #":"#)
+    assert(fileArgColon.text == #":"#)
     self.unexpectedBetweenFileArgColonAndFileName = unexpectedBetweenFileArgColonAndFileName?.createUnexpectedNodes()
     self.fileName = fileName
     self.unexpectedBetweenFileNameAndComma = unexpectedBetweenFileNameAndComma?.createUnexpectedNodes()
     self.comma = comma
-    assert(comma.text == #","# || comma.text == #","#)
+    assert(comma.text == #","#)
     self.unexpectedBetweenCommaAndLineArgLabel = unexpectedBetweenCommaAndLineArgLabel?.createUnexpectedNodes()
     self.lineArgLabel = lineArgLabel
     assert(lineArgLabel.text == #"line"#)
     self.unexpectedBetweenLineArgLabelAndLineArgColon = unexpectedBetweenLineArgLabelAndLineArgColon?.createUnexpectedNodes()
     self.lineArgColon = lineArgColon
-    assert(lineArgColon.text == #":"# || lineArgColon.text == #":"#)
+    assert(lineArgColon.text == #":"#)
     self.unexpectedBetweenLineArgColonAndLineNumber = unexpectedBetweenLineArgColonAndLineNumber?.createUnexpectedNodes()
     self.lineNumber = lineNumber
   }
@@ -4739,12 +4739,12 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndDetail = unexpectedBetweenLeftParenAndDetail?.createUnexpectedNodes()
     self.detail = detail
     self.unexpectedBetweenDetailAndRightParen = unexpectedBetweenDetailAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -4846,7 +4846,7 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
     self.typeName = typeName.createTypeBuildable()
     self.unexpectedBetweenTypeNameAndTrailingComma = unexpectedBetweenTypeNameAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `InheritedTypeSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -4896,7 +4896,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndInheritedTypeCollection = unexpectedBetweenColonAndInheritedTypeCollection?.createUnexpectedNodes()
     self.inheritedTypeCollection = inheritedTypeCollection.createInheritedTypeList()
   }
@@ -4980,7 +4980,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndClassKeyword = unexpectedBetweenModifiersAndClassKeyword?.createUnexpectedNodes()
     self.classKeyword = classKeyword
-    assert(classKeyword.text == #"class"# || classKeyword.text == #"class"#)
+    assert(classKeyword.text == #"class"#)
     self.unexpectedBetweenClassKeywordAndIdentifier = unexpectedBetweenClassKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndGenericParameterClause = unexpectedBetweenIdentifierAndGenericParameterClause?.createUnexpectedNodes()
@@ -5178,7 +5178,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndStructKeyword = unexpectedBetweenModifiersAndStructKeyword?.createUnexpectedNodes()
     self.structKeyword = structKeyword
-    assert(structKeyword.text == #"struct"# || structKeyword.text == #"struct"#)
+    assert(structKeyword.text == #"struct"#)
     self.unexpectedBetweenStructKeywordAndIdentifier = unexpectedBetweenStructKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndGenericParameterClause = unexpectedBetweenIdentifierAndGenericParameterClause?.createUnexpectedNodes()
@@ -5277,7 +5277,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndProtocolKeyword = unexpectedBetweenModifiersAndProtocolKeyword?.createUnexpectedNodes()
     self.protocolKeyword = protocolKeyword
-    assert(protocolKeyword.text == #"protocol"# || protocolKeyword.text == #"protocol"#)
+    assert(protocolKeyword.text == #"protocol"#)
     self.unexpectedBetweenProtocolKeywordAndIdentifier = unexpectedBetweenProtocolKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause = unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.createUnexpectedNodes()
@@ -5372,7 +5372,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndExtensionKeyword = unexpectedBetweenModifiersAndExtensionKeyword?.createUnexpectedNodes()
     self.extensionKeyword = extensionKeyword
-    assert(extensionKeyword.text == #"extension"# || extensionKeyword.text == #"extension"#)
+    assert(extensionKeyword.text == #"extension"#)
     self.unexpectedBetweenExtensionKeywordAndExtendedType = unexpectedBetweenExtensionKeywordAndExtendedType?.createUnexpectedNodes()
     self.extendedType = extendedType.createTypeBuildable()
     self.unexpectedBetweenExtendedTypeAndInheritanceClause = unexpectedBetweenExtendedTypeAndInheritanceClause?.createUnexpectedNodes()
@@ -5445,12 +5445,12 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
-    assert(leftBrace.text == #"{"# || leftBrace.text == #"{"#)
+    assert(leftBrace.text == #"{"#)
     self.unexpectedBetweenLeftBraceAndMembers = unexpectedBetweenLeftBraceAndMembers?.createUnexpectedNodes()
     self.members = members.createMemberDeclList()
     self.unexpectedBetweenMembersAndRightBrace = unexpectedBetweenMembersAndRightBrace?.createUnexpectedNodes()
     self.rightBrace = rightBrace
-    assert(rightBrace.text == #"}"# || rightBrace.text == #"}"#)
+    assert(rightBrace.text == #"}"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -5507,7 +5507,7 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
     self.decl = decl.createDeclBuildable()
     self.unexpectedBetweenDeclAndSemicolon = unexpectedBetweenDeclAndSemicolon?.createUnexpectedNodes()
     self.semicolon = semicolon
-    assert(semicolon == nil || semicolon!.text == #";"# || semicolon!.text == #";"#)
+    assert(semicolon == nil || semicolon!.text == #";"#)
   }
   /// Builds a `MemberDeclListItemSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -5608,7 +5608,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeEqual = unexpectedBeforeEqual?.createUnexpectedNodes()
     self.equal = equal
-    assert(equal.text == #"="# || equal.text == #"="#)
+    assert(equal.text == #"="#)
     self.unexpectedBetweenEqualAndValue = unexpectedBetweenEqualAndValue?.createUnexpectedNodes()
     self.value = value.createExprBuildable()
   }
@@ -5686,17 +5686,17 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
     self.secondName = secondName
     self.unexpectedBetweenSecondNameAndColon = unexpectedBetweenSecondNameAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon == nil || colon!.text == #":"# || colon!.text == #":"#)
+    assert(colon == nil || colon!.text == #":"#)
     self.unexpectedBetweenColonAndType = unexpectedBetweenColonAndType?.createUnexpectedNodes()
     self.type = type?.createTypeBuildable()
     self.unexpectedBetweenTypeAndEllipsis = unexpectedBetweenTypeAndEllipsis?.createUnexpectedNodes()
     self.ellipsis = ellipsis
-    assert(ellipsis == nil || ellipsis!.text == #"..."# || ellipsis!.text == #"..."#)
+    assert(ellipsis == nil || ellipsis!.text == #"..."#)
     self.unexpectedBetweenEllipsisAndDefaultArgument = unexpectedBetweenEllipsisAndDefaultArgument?.createUnexpectedNodes()
     self.defaultArgument = defaultArgument?.createInitializerClause()
     self.unexpectedBetweenDefaultArgumentAndTrailingComma = unexpectedBetweenDefaultArgumentAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `FunctionParameterSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -5774,7 +5774,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndFuncKeyword = unexpectedBetweenModifiersAndFuncKeyword?.createUnexpectedNodes()
     self.funcKeyword = funcKeyword
-    assert(funcKeyword.text == #"func"# || funcKeyword.text == #"func"#)
+    assert(funcKeyword.text == #"func"#)
     self.unexpectedBetweenFuncKeywordAndIdentifier = unexpectedBetweenFuncKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndGenericParameterClause = unexpectedBetweenIdentifierAndGenericParameterClause?.createUnexpectedNodes()
@@ -5873,7 +5873,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndInitKeyword = unexpectedBetweenModifiersAndInitKeyword?.createUnexpectedNodes()
     self.initKeyword = initKeyword
-    assert(initKeyword.text == #"init"# || initKeyword.text == #"init"#)
+    assert(initKeyword.text == #"init"#)
     self.unexpectedBetweenInitKeywordAndOptionalMark = unexpectedBetweenInitKeywordAndOptionalMark?.createUnexpectedNodes()
     self.optionalMark = optionalMark
     assert(optionalMark == nil || optionalMark!.text == #"?"# || optionalMark!.text == #"?"# || optionalMark!.text == #"!"#)
@@ -5957,7 +5957,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndDeinitKeyword = unexpectedBetweenModifiersAndDeinitKeyword?.createUnexpectedNodes()
     self.deinitKeyword = deinitKeyword
-    assert(deinitKeyword.text == #"deinit"# || deinitKeyword.text == #"deinit"#)
+    assert(deinitKeyword.text == #"deinit"#)
     self.unexpectedBetweenDeinitKeywordAndBody = unexpectedBetweenDeinitKeywordAndBody?.createUnexpectedNodes()
     self.body = body?.createCodeBlock()
   }
@@ -6048,7 +6048,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndSubscriptKeyword = unexpectedBetweenModifiersAndSubscriptKeyword?.createUnexpectedNodes()
     self.subscriptKeyword = subscriptKeyword
-    assert(subscriptKeyword.text == #"subscript"# || subscriptKeyword.text == #"subscript"#)
+    assert(subscriptKeyword.text == #"subscript"#)
     self.unexpectedBetweenSubscriptKeywordAndGenericParameterClause = unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.createUnexpectedNodes()
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
     self.unexpectedBetweenGenericParameterClauseAndIndices = unexpectedBetweenGenericParameterClauseAndIndices?.createUnexpectedNodes()
@@ -6166,7 +6166,7 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
     self.name = name
     self.unexpectedBetweenNameAndTrailingDot = unexpectedBetweenNameAndTrailingDot?.createUnexpectedNodes()
     self.trailingDot = trailingDot
-    assert(trailingDot == nil || trailingDot!.text == #"."# || trailingDot!.text == #"."#)
+    assert(trailingDot == nil || trailingDot!.text == #"."#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -6234,7 +6234,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndImportTok = unexpectedBetweenModifiersAndImportTok?.createUnexpectedNodes()
     self.importTok = importTok
-    assert(importTok.text == #"import"# || importTok.text == #"import"#)
+    assert(importTok.text == #"import"#)
     self.unexpectedBetweenImportTokAndImportKind = unexpectedBetweenImportTokAndImportKind?.createUnexpectedNodes()
     self.importKind = importKind
     assert(importKind == nil || importKind!.text == #"typealias"# || importKind!.text == #"struct"# || importKind!.text == #"class"# || importKind!.text == #"enum"# || importKind!.text == #"protocol"# || importKind!.text == #"var"# || importKind!.text == #"let"# || importKind!.text == #"func"#)
@@ -6296,12 +6296,12 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndName = unexpectedBetweenLeftParenAndName?.createUnexpectedNodes()
     self.name = name
     self.unexpectedBetweenNameAndRightParen = unexpectedBetweenNameAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -6454,12 +6454,12 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
-    assert(leftBrace.text == #"{"# || leftBrace.text == #"{"#)
+    assert(leftBrace.text == #"{"#)
     self.unexpectedBetweenLeftBraceAndAccessors = unexpectedBetweenLeftBraceAndAccessors?.createUnexpectedNodes()
     self.accessors = accessors.createAccessorList()
     self.unexpectedBetweenAccessorsAndRightBrace = unexpectedBetweenAccessorsAndRightBrace?.createUnexpectedNodes()
     self.rightBrace = rightBrace
-    assert(rightBrace.text == #"}"# || rightBrace.text == #"}"#)
+    assert(rightBrace.text == #"}"#)
   }
   /// Builds a `AccessorBlockSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -6525,7 +6525,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
     self.accessor = accessor?.createSyntaxBuildable()
     self.unexpectedBetweenAccessorAndTrailingComma = unexpectedBetweenAccessorAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `PatternBindingSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -6665,7 +6665,7 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
     self.rawValue = rawValue?.createInitializerClause()
     self.unexpectedBetweenRawValueAndTrailingComma = unexpectedBetweenRawValueAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -6734,7 +6734,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndCaseKeyword = unexpectedBetweenModifiersAndCaseKeyword?.createUnexpectedNodes()
     self.caseKeyword = caseKeyword
-    assert(caseKeyword.text == #"case"# || caseKeyword.text == #"case"#)
+    assert(caseKeyword.text == #"case"#)
     self.unexpectedBetweenCaseKeywordAndElements = unexpectedBetweenCaseKeywordAndElements?.createUnexpectedNodes()
     self.elements = elements.createEnumCaseElementList()
   }
@@ -6826,7 +6826,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndEnumKeyword = unexpectedBetweenModifiersAndEnumKeyword?.createUnexpectedNodes()
     self.enumKeyword = enumKeyword
-    assert(enumKeyword.text == #"enum"# || enumKeyword.text == #"enum"#)
+    assert(enumKeyword.text == #"enum"#)
     self.unexpectedBetweenEnumKeywordAndIdentifier = unexpectedBetweenEnumKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndGenericParameters = unexpectedBetweenIdentifierAndGenericParameters?.createUnexpectedNodes()
@@ -6914,7 +6914,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndOperatorKeyword = unexpectedBetweenModifiersAndOperatorKeyword?.createUnexpectedNodes()
     self.operatorKeyword = operatorKeyword
-    assert(operatorKeyword.text == #"operator"# || operatorKeyword.text == #"operator"#)
+    assert(operatorKeyword.text == #"operator"#)
     self.unexpectedBetweenOperatorKeywordAndIdentifier = unexpectedBetweenOperatorKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes = unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.createUnexpectedNodes()
@@ -6972,7 +6972,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes = unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.createUnexpectedNodes()
     self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
   }
@@ -7045,17 +7045,17 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
     self.modifiers = modifiers?.createModifierList()
     self.unexpectedBetweenModifiersAndPrecedencegroupKeyword = unexpectedBetweenModifiersAndPrecedencegroupKeyword?.createUnexpectedNodes()
     self.precedencegroupKeyword = precedencegroupKeyword
-    assert(precedencegroupKeyword.text == #"precedencegroup"# || precedencegroupKeyword.text == #"precedencegroup"#)
+    assert(precedencegroupKeyword.text == #"precedencegroup"#)
     self.unexpectedBetweenPrecedencegroupKeywordAndIdentifier = unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
     self.unexpectedBetweenIdentifierAndLeftBrace = unexpectedBetweenIdentifierAndLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
-    assert(leftBrace.text == #"{"# || leftBrace.text == #"{"#)
+    assert(leftBrace.text == #"{"#)
     self.unexpectedBetweenLeftBraceAndGroupAttributes = unexpectedBetweenLeftBraceAndGroupAttributes?.createUnexpectedNodes()
     self.groupAttributes = groupAttributes.createPrecedenceGroupAttributeList()
     self.unexpectedBetweenGroupAttributesAndRightBrace = unexpectedBetweenGroupAttributesAndRightBrace?.createUnexpectedNodes()
     self.rightBrace = rightBrace
-    assert(rightBrace.text == #"}"# || rightBrace.text == #"}"#)
+    assert(rightBrace.text == #"}"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -7122,7 +7122,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
     assert(higherThanOrLowerThan.text == #"higherThan"# || higherThanOrLowerThan.text == #"lowerThan"#)
     self.unexpectedBetweenHigherThanOrLowerThanAndColon = unexpectedBetweenHigherThanOrLowerThanAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndOtherNames = unexpectedBetweenColonAndOtherNames?.createUnexpectedNodes()
     self.otherNames = otherNames.createPrecedenceGroupNameList()
   }
@@ -7178,7 +7178,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
     self.name = name
     self.unexpectedBetweenNameAndTrailingComma = unexpectedBetweenNameAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -7238,7 +7238,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
     assert(assignmentKeyword.text == #"assignment"#)
     self.unexpectedBetweenAssignmentKeywordAndColon = unexpectedBetweenAssignmentKeywordAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndFlag = unexpectedBetweenColonAndFlag?.createUnexpectedNodes()
     self.flag = flag
     assert(flag.text == #"true"# || flag.text == #"false"#)
@@ -7301,7 +7301,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
     assert(associativityKeyword.text == #"associativity"#)
     self.unexpectedBetweenAssociativityKeywordAndColon = unexpectedBetweenAssociativityKeywordAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndValue = unexpectedBetweenColonAndValue?.createUnexpectedNodes()
     self.value = value
     assert(value.text == #"left"# || value.text == #"right"# || value.text == #"none"#)
@@ -7369,17 +7369,17 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAtSignToken = unexpectedBeforeAtSignToken?.createUnexpectedNodes()
     self.atSignToken = atSignToken
-    assert(atSignToken.text == #"@"# || atSignToken.text == #"@"#)
+    assert(atSignToken.text == #"@"#)
     self.unexpectedBetweenAtSignTokenAndAttributeName = unexpectedBetweenAtSignTokenAndAttributeName?.createUnexpectedNodes()
     self.attributeName = attributeName.createTypeBuildable()
     self.unexpectedBetweenAttributeNameAndLeftParen = unexpectedBetweenAttributeNameAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen == nil || leftParen!.text == #"("# || leftParen!.text == #"("#)
+    assert(leftParen == nil || leftParen!.text == #"("#)
     self.unexpectedBetweenLeftParenAndArgumentList = unexpectedBetweenLeftParenAndArgumentList?.createUnexpectedNodes()
     self.argumentList = argumentList?.createTupleExprElementList()
     self.unexpectedBetweenArgumentListAndRightParen = unexpectedBetweenArgumentListAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen == nil || rightParen!.text == #")"# || rightParen!.text == #")"#)
+    assert(rightParen == nil || rightParen!.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -7450,17 +7450,17 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAtSignToken = unexpectedBeforeAtSignToken?.createUnexpectedNodes()
     self.atSignToken = atSignToken
-    assert(atSignToken.text == #"@"# || atSignToken.text == #"@"#)
+    assert(atSignToken.text == #"@"#)
     self.unexpectedBetweenAtSignTokenAndAttributeName = unexpectedBetweenAtSignTokenAndAttributeName?.createUnexpectedNodes()
     self.attributeName = attributeName
     self.unexpectedBetweenAttributeNameAndLeftParen = unexpectedBetweenAttributeNameAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen == nil || leftParen!.text == #"("# || leftParen!.text == #"("#)
+    assert(leftParen == nil || leftParen!.text == #"("#)
     self.unexpectedBetweenLeftParenAndArgument = unexpectedBetweenLeftParenAndArgument?.createUnexpectedNodes()
     self.argument = argument?.createSyntaxBuildable()
     self.unexpectedBetweenArgumentAndRightParen = unexpectedBetweenArgumentAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen == nil || rightParen!.text == #")"# || rightParen!.text == #")"#)
+    assert(rightParen == nil || rightParen!.text == #")"#)
     self.unexpectedBetweenRightParenAndTokenList = unexpectedBetweenRightParenAndTokenList?.createUnexpectedNodes()
     self.tokenList = tokenList?.createTokenList()
   }
@@ -7519,12 +7519,12 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
     self.label = label
     self.unexpectedBetweenLabelAndColon = unexpectedBetweenLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndAvailabilityList = unexpectedBetweenColonAndAvailabilityList?.createUnexpectedNodes()
     self.availabilityList = availabilityList.createAvailabilitySpecList()
     self.unexpectedBetweenAvailabilityListAndSemicolon = unexpectedBetweenAvailabilityListAndSemicolon?.createUnexpectedNodes()
     self.semicolon = semicolon
-    assert(semicolon.text == #";"# || semicolon.text == #";"#)
+    assert(semicolon.text == #";"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -7587,12 +7587,12 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
     self.label = label
     self.unexpectedBetweenLabelAndColon = unexpectedBetweenLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndValue = unexpectedBetweenColonAndValue?.createUnexpectedNodes()
     self.value = value
     self.unexpectedBetweenValueAndTrailingComma = unexpectedBetweenValueAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -7659,12 +7659,12 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
     self.label = label
     self.unexpectedBetweenLabelAndColon = unexpectedBetweenLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndDeclname = unexpectedBetweenColonAndDeclname?.createUnexpectedNodes()
     self.declname = declname.createDeclName()
     self.unexpectedBetweenDeclnameAndTrailingComma = unexpectedBetweenDeclnameAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -7727,7 +7727,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
     self.nameTok = nameTok
     self.unexpectedBetweenNameTokAndColon = unexpectedBetweenNameTokAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndStringOrDeclname = unexpectedBetweenColonAndStringOrDeclname?.createUnexpectedNodes()
     self.stringOrDeclname = stringOrDeclname.createSyntaxBuildable()
   }
@@ -7833,7 +7833,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
     self.type = type.createSimpleTypeIdentifier()
     self.unexpectedBetweenTypeAndComma = unexpectedBetweenTypeAndComma?.createUnexpectedNodes()
     self.comma = comma
-    assert(comma.text == #","# || comma.text == #","#)
+    assert(comma.text == #","#)
     self.unexpectedBetweenCommaAndDeclBaseName = unexpectedBetweenCommaAndDeclBaseName?.createUnexpectedNodes()
     self.declBaseName = declBaseName.createSyntaxBuildable()
     self.unexpectedBetweenDeclBaseNameAndDeclNameArguments = unexpectedBetweenDeclBaseNameAndDeclNameArguments?.createUnexpectedNodes()
@@ -7886,7 +7886,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
     self.name = name
     self.unexpectedBetweenNameAndColon = unexpectedBetweenNameAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon == nil || colon!.text == #":"# || colon!.text == #":"#)
+    assert(colon == nil || colon!.text == #":"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -7956,12 +7956,12 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
     assert(diffKind == nil || diffKind!.text == #"forward"# || diffKind!.text == #"reverse"# || diffKind!.text == #"linear"#)
     self.unexpectedBetweenDiffKindAndDiffKindComma = unexpectedBetweenDiffKindAndDiffKindComma?.createUnexpectedNodes()
     self.diffKindComma = diffKindComma
-    assert(diffKindComma == nil || diffKindComma!.text == #","# || diffKindComma!.text == #","#)
+    assert(diffKindComma == nil || diffKindComma!.text == #","#)
     self.unexpectedBetweenDiffKindCommaAndDiffParams = unexpectedBetweenDiffKindCommaAndDiffParams?.createUnexpectedNodes()
     self.diffParams = diffParams?.createDifferentiabilityParamsClause()
     self.unexpectedBetweenDiffParamsAndDiffParamsComma = unexpectedBetweenDiffParamsAndDiffParamsComma?.createUnexpectedNodes()
     self.diffParamsComma = diffParamsComma
-    assert(diffParamsComma == nil || diffParamsComma!.text == #","# || diffParamsComma!.text == #","#)
+    assert(diffParamsComma == nil || diffParamsComma!.text == #","#)
     self.unexpectedBetweenDiffParamsCommaAndWhereClause = unexpectedBetweenDiffParamsCommaAndWhereClause?.createUnexpectedNodes()
     self.whereClause = whereClause?.createGenericWhereClause()
   }
@@ -8025,7 +8025,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
     assert(wrtLabel.text == #"wrt"#)
     self.unexpectedBetweenWrtLabelAndColon = unexpectedBetweenWrtLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndParameters = unexpectedBetweenColonAndParameters?.createUnexpectedNodes()
     self.parameters = parameters.createSyntaxBuildable()
   }
@@ -8084,12 +8084,12 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndDiffParams = unexpectedBetweenLeftParenAndDiffParams?.createUnexpectedNodes()
     self.diffParams = diffParams.createDifferentiabilityParamList()
     self.unexpectedBetweenDiffParamsAndRightParen = unexpectedBetweenDiffParamsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `DifferentiabilityParamsSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -8138,7 +8138,7 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
     self.parameter = parameter.createSyntaxBuildable()
     self.unexpectedBetweenParameterAndTrailingComma = unexpectedBetweenParameterAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `DifferentiabilityParamSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -8212,18 +8212,18 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
     assert(ofLabel.text == #"of"#)
     self.unexpectedBetweenOfLabelAndColon = unexpectedBetweenOfLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndOriginalDeclName = unexpectedBetweenColonAndOriginalDeclName?.createUnexpectedNodes()
     self.originalDeclName = originalDeclName.createQualifiedDeclName()
     self.unexpectedBetweenOriginalDeclNameAndPeriod = unexpectedBetweenOriginalDeclNameAndPeriod?.createUnexpectedNodes()
     self.period = period
-    assert(period == nil || period!.text == #"."# || period!.text == #"."#)
+    assert(period == nil || period!.text == #"."#)
     self.unexpectedBetweenPeriodAndAccessorKind = unexpectedBetweenPeriodAndAccessorKind?.createUnexpectedNodes()
     self.accessorKind = accessorKind
     assert(accessorKind == nil || accessorKind!.text == #"get"# || accessorKind!.text == #"set"#)
     self.unexpectedBetweenAccessorKindAndComma = unexpectedBetweenAccessorKindAndComma?.createUnexpectedNodes()
     self.comma = comma
-    assert(comma == nil || comma!.text == #","# || comma!.text == #","#)
+    assert(comma == nil || comma!.text == #","#)
     self.unexpectedBetweenCommaAndDiffParams = unexpectedBetweenCommaAndDiffParams?.createUnexpectedNodes()
     self.diffParams = diffParams?.createDifferentiabilityParamsClause()
   }
@@ -8396,7 +8396,7 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
     assert(beforeLabel.text == #"before"#)
     self.unexpectedBetweenBeforeLabelAndColon = unexpectedBetweenBeforeLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndVersionList = unexpectedBetweenColonAndVersionList?.createUnexpectedNodes()
     self.versionList = versionList.createBackDeployVersionList()
   }
@@ -8453,7 +8453,7 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
     self.availabilityVersionRestriction = availabilityVersionRestriction.createAvailabilityVersionRestriction()
     self.unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma = unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `BackDeployVersionArgumentSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -8505,7 +8505,7 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
     self.labelName = labelName
     self.unexpectedBetweenLabelNameAndLabelColon = unexpectedBetweenLabelNameAndLabelColon?.createUnexpectedNodes()
     self.labelColon = labelColon
-    assert(labelColon.text == #":"# || labelColon.text == #":"#)
+    assert(labelColon.text == #":"#)
     self.unexpectedBetweenLabelColonAndStatement = unexpectedBetweenLabelColonAndStatement?.createUnexpectedNodes()
     self.statement = statement.createStmtBuildable()
   }
@@ -8566,7 +8566,7 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeContinueKeyword = unexpectedBeforeContinueKeyword?.createUnexpectedNodes()
     self.continueKeyword = continueKeyword
-    assert(continueKeyword.text == #"continue"# || continueKeyword.text == #"continue"#)
+    assert(continueKeyword.text == #"continue"#)
     self.unexpectedBetweenContinueKeywordAndLabel = unexpectedBetweenContinueKeywordAndLabel?.createUnexpectedNodes()
     self.label = label
   }
@@ -8633,7 +8633,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWhileKeyword = unexpectedBeforeWhileKeyword?.createUnexpectedNodes()
     self.whileKeyword = whileKeyword
-    assert(whileKeyword.text == #"while"# || whileKeyword.text == #"while"#)
+    assert(whileKeyword.text == #"while"#)
     self.unexpectedBetweenWhileKeywordAndConditions = unexpectedBetweenWhileKeywordAndConditions?.createUnexpectedNodes()
     self.conditions = conditions.createConditionElementList()
     self.unexpectedBetweenConditionsAndBody = unexpectedBetweenConditionsAndBody?.createUnexpectedNodes()
@@ -8698,7 +8698,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDeferKeyword = unexpectedBeforeDeferKeyword?.createUnexpectedNodes()
     self.deferKeyword = deferKeyword
-    assert(deferKeyword.text == #"defer"# || deferKeyword.text == #"defer"#)
+    assert(deferKeyword.text == #"defer"#)
     self.unexpectedBetweenDeferKeywordAndBody = unexpectedBetweenDeferKeywordAndBody?.createUnexpectedNodes()
     self.body = body.createCodeBlock()
   }
@@ -8817,12 +8817,12 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeRepeatKeyword = unexpectedBeforeRepeatKeyword?.createUnexpectedNodes()
     self.repeatKeyword = repeatKeyword
-    assert(repeatKeyword.text == #"repeat"# || repeatKeyword.text == #"repeat"#)
+    assert(repeatKeyword.text == #"repeat"#)
     self.unexpectedBetweenRepeatKeywordAndBody = unexpectedBetweenRepeatKeywordAndBody?.createUnexpectedNodes()
     self.body = body.createCodeBlock()
     self.unexpectedBetweenBodyAndWhileKeyword = unexpectedBetweenBodyAndWhileKeyword?.createUnexpectedNodes()
     self.whileKeyword = whileKeyword
-    assert(whileKeyword.text == #"while"# || whileKeyword.text == #"while"#)
+    assert(whileKeyword.text == #"while"#)
     self.unexpectedBetweenWhileKeywordAndCondition = unexpectedBetweenWhileKeywordAndCondition?.createUnexpectedNodes()
     self.condition = condition.createExprBuildable()
   }
@@ -8893,12 +8893,12 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeGuardKeyword = unexpectedBeforeGuardKeyword?.createUnexpectedNodes()
     self.guardKeyword = guardKeyword
-    assert(guardKeyword.text == #"guard"# || guardKeyword.text == #"guard"#)
+    assert(guardKeyword.text == #"guard"#)
     self.unexpectedBetweenGuardKeywordAndConditions = unexpectedBetweenGuardKeywordAndConditions?.createUnexpectedNodes()
     self.conditions = conditions.createConditionElementList()
     self.unexpectedBetweenConditionsAndElseKeyword = unexpectedBetweenConditionsAndElseKeyword?.createUnexpectedNodes()
     self.elseKeyword = elseKeyword
-    assert(elseKeyword.text == #"else"# || elseKeyword.text == #"else"#)
+    assert(elseKeyword.text == #"else"#)
     self.unexpectedBetweenElseKeywordAndBody = unexpectedBetweenElseKeywordAndBody?.createUnexpectedNodes()
     self.body = body.createCodeBlock()
   }
@@ -8961,7 +8961,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWhereKeyword = unexpectedBeforeWhereKeyword?.createUnexpectedNodes()
     self.whereKeyword = whereKeyword
-    assert(whereKeyword.text == #"where"# || whereKeyword.text == #"where"#)
+    assert(whereKeyword.text == #"where"#)
     self.unexpectedBetweenWhereKeywordAndGuardResult = unexpectedBetweenWhereKeywordAndGuardResult?.createUnexpectedNodes()
     self.guardResult = guardResult.createExprBuildable()
   }
@@ -9041,23 +9041,23 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeForKeyword = unexpectedBeforeForKeyword?.createUnexpectedNodes()
     self.forKeyword = forKeyword
-    assert(forKeyword.text == #"for"# || forKeyword.text == #"for"#)
+    assert(forKeyword.text == #"for"#)
     self.unexpectedBetweenForKeywordAndTryKeyword = unexpectedBetweenForKeywordAndTryKeyword?.createUnexpectedNodes()
     self.tryKeyword = tryKeyword
-    assert(tryKeyword == nil || tryKeyword!.text == #"try"# || tryKeyword!.text == #"try"#)
+    assert(tryKeyword == nil || tryKeyword!.text == #"try"#)
     self.unexpectedBetweenTryKeywordAndAwaitKeyword = unexpectedBetweenTryKeywordAndAwaitKeyword?.createUnexpectedNodes()
     self.awaitKeyword = awaitKeyword
     assert(awaitKeyword == nil || awaitKeyword!.text == #"await"#)
     self.unexpectedBetweenAwaitKeywordAndCaseKeyword = unexpectedBetweenAwaitKeywordAndCaseKeyword?.createUnexpectedNodes()
     self.caseKeyword = caseKeyword
-    assert(caseKeyword == nil || caseKeyword!.text == #"case"# || caseKeyword!.text == #"case"#)
+    assert(caseKeyword == nil || caseKeyword!.text == #"case"#)
     self.unexpectedBetweenCaseKeywordAndPattern = unexpectedBetweenCaseKeywordAndPattern?.createUnexpectedNodes()
     self.pattern = pattern.createPatternBuildable()
     self.unexpectedBetweenPatternAndTypeAnnotation = unexpectedBetweenPatternAndTypeAnnotation?.createUnexpectedNodes()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
     self.unexpectedBetweenTypeAnnotationAndInKeyword = unexpectedBetweenTypeAnnotationAndInKeyword?.createUnexpectedNodes()
     self.inKeyword = inKeyword
-    assert(inKeyword.text == #"in"# || inKeyword.text == #"in"#)
+    assert(inKeyword.text == #"in"#)
     self.unexpectedBetweenInKeywordAndSequenceExpr = unexpectedBetweenInKeywordAndSequenceExpr?.createUnexpectedNodes()
     self.sequenceExpr = sequenceExpr.createExprBuildable()
     self.unexpectedBetweenSequenceExprAndWhereClause = unexpectedBetweenSequenceExprAndWhereClause?.createUnexpectedNodes()
@@ -9138,17 +9138,17 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSwitchKeyword = unexpectedBeforeSwitchKeyword?.createUnexpectedNodes()
     self.switchKeyword = switchKeyword
-    assert(switchKeyword.text == #"switch"# || switchKeyword.text == #"switch"#)
+    assert(switchKeyword.text == #"switch"#)
     self.unexpectedBetweenSwitchKeywordAndExpression = unexpectedBetweenSwitchKeywordAndExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
     self.unexpectedBetweenExpressionAndLeftBrace = unexpectedBetweenExpressionAndLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
-    assert(leftBrace.text == #"{"# || leftBrace.text == #"{"#)
+    assert(leftBrace.text == #"{"#)
     self.unexpectedBetweenLeftBraceAndCases = unexpectedBetweenLeftBraceAndCases?.createUnexpectedNodes()
     self.cases = cases.createSwitchCaseList()
     self.unexpectedBetweenCasesAndRightBrace = unexpectedBetweenCasesAndRightBrace?.createUnexpectedNodes()
     self.rightBrace = rightBrace
-    assert(rightBrace.text == #"}"# || rightBrace.text == #"}"#)
+    assert(rightBrace.text == #"}"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -9213,7 +9213,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDoKeyword = unexpectedBeforeDoKeyword?.createUnexpectedNodes()
     self.doKeyword = doKeyword
-    assert(doKeyword.text == #"do"# || doKeyword.text == #"do"#)
+    assert(doKeyword.text == #"do"#)
     self.unexpectedBetweenDoKeywordAndBody = unexpectedBetweenDoKeywordAndBody?.createUnexpectedNodes()
     self.body = body.createCodeBlock()
     self.unexpectedBetweenBodyAndCatchClauses = unexpectedBetweenBodyAndCatchClauses?.createUnexpectedNodes()
@@ -9278,7 +9278,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeReturnKeyword = unexpectedBeforeReturnKeyword?.createUnexpectedNodes()
     self.returnKeyword = returnKeyword
-    assert(returnKeyword.text == #"return"# || returnKeyword.text == #"return"#)
+    assert(returnKeyword.text == #"return"#)
     self.unexpectedBetweenReturnKeywordAndExpression = unexpectedBetweenReturnKeywordAndExpression?.createUnexpectedNodes()
     self.expression = expression?.createExprBuildable()
   }
@@ -9333,7 +9333,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeYieldKeyword = unexpectedBeforeYieldKeyword?.createUnexpectedNodes()
     self.yieldKeyword = yieldKeyword
-    assert(yieldKeyword.text == #"yield"# || yieldKeyword.text == #"yield"#)
+    assert(yieldKeyword.text == #"yield"#)
     self.unexpectedBetweenYieldKeywordAndYields = unexpectedBetweenYieldKeywordAndYields?.createUnexpectedNodes()
     self.yields = yields.createSyntaxBuildable()
   }
@@ -9396,15 +9396,15 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndElementList = unexpectedBetweenLeftParenAndElementList?.createUnexpectedNodes()
     self.elementList = elementList.createExprList()
     self.unexpectedBetweenElementListAndTrailingComma = unexpectedBetweenElementListAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
     self.unexpectedBetweenTrailingCommaAndRightParen = unexpectedBetweenTrailingCommaAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -9454,7 +9454,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeFallthroughKeyword = unexpectedBeforeFallthroughKeyword?.createUnexpectedNodes()
     self.fallthroughKeyword = fallthroughKeyword
-    assert(fallthroughKeyword.text == #"fallthrough"# || fallthroughKeyword.text == #"fallthrough"#)
+    assert(fallthroughKeyword.text == #"fallthrough"#)
   }
   /// Builds a `FallthroughStmtSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -9507,7 +9507,7 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBreakKeyword = unexpectedBeforeBreakKeyword?.createUnexpectedNodes()
     self.breakKeyword = breakKeyword
-    assert(breakKeyword.text == #"break"# || breakKeyword.text == #"break"#)
+    assert(breakKeyword.text == #"break"#)
     self.unexpectedBetweenBreakKeywordAndLabel = unexpectedBetweenBreakKeywordAndLabel?.createUnexpectedNodes()
     self.label = label
   }
@@ -9572,7 +9572,7 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
     self.condition = condition.createSyntaxBuildable()
     self.unexpectedBetweenConditionAndTrailingComma = unexpectedBetweenConditionAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `ConditionElementSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -9630,15 +9630,15 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundAvailableKeyword = unexpectedBeforePoundAvailableKeyword?.createUnexpectedNodes()
     self.poundAvailableKeyword = poundAvailableKeyword
-    assert(poundAvailableKeyword.text == #"#available"# || poundAvailableKeyword.text == #"#available"#)
+    assert(poundAvailableKeyword.text == #"#available"#)
     self.unexpectedBetweenPoundAvailableKeywordAndLeftParen = unexpectedBetweenPoundAvailableKeywordAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndAvailabilitySpec = unexpectedBetweenLeftParenAndAvailabilitySpec?.createUnexpectedNodes()
     self.availabilitySpec = availabilitySpec.createAvailabilitySpecList()
     self.unexpectedBetweenAvailabilitySpecAndRightParen = unexpectedBetweenAvailabilitySpecAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `AvailabilityConditionSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -9692,7 +9692,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCaseKeyword = unexpectedBeforeCaseKeyword?.createUnexpectedNodes()
     self.caseKeyword = caseKeyword
-    assert(caseKeyword.text == #"case"# || caseKeyword.text == #"case"#)
+    assert(caseKeyword.text == #"case"#)
     self.unexpectedBetweenCaseKeywordAndPattern = unexpectedBetweenCaseKeywordAndPattern?.createUnexpectedNodes()
     self.pattern = pattern.createPatternBuildable()
     self.unexpectedBetweenPatternAndTypeAnnotation = unexpectedBetweenPatternAndTypeAnnotation?.createUnexpectedNodes()
@@ -9812,15 +9812,15 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundUnavailableKeyword = unexpectedBeforePoundUnavailableKeyword?.createUnexpectedNodes()
     self.poundUnavailableKeyword = poundUnavailableKeyword
-    assert(poundUnavailableKeyword.text == #"#unavailable"# || poundUnavailableKeyword.text == #"#unavailable"#)
+    assert(poundUnavailableKeyword.text == #"#unavailable"#)
     self.unexpectedBetweenPoundUnavailableKeywordAndLeftParen = unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndAvailabilitySpec = unexpectedBetweenLeftParenAndAvailabilitySpec?.createUnexpectedNodes()
     self.availabilitySpec = availabilitySpec.createAvailabilitySpecList()
     self.unexpectedBetweenAvailabilitySpecAndRightParen = unexpectedBetweenAvailabilitySpecAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `UnavailabilityConditionSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -9914,7 +9914,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeThrowKeyword = unexpectedBeforeThrowKeyword?.createUnexpectedNodes()
     self.throwKeyword = throwKeyword
-    assert(throwKeyword.text == #"throw"# || throwKeyword.text == #"throw"#)
+    assert(throwKeyword.text == #"throw"#)
     self.unexpectedBetweenThrowKeywordAndExpression = unexpectedBetweenThrowKeywordAndExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
   }
@@ -9981,14 +9981,14 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIfKeyword = unexpectedBeforeIfKeyword?.createUnexpectedNodes()
     self.ifKeyword = ifKeyword
-    assert(ifKeyword.text == #"if"# || ifKeyword.text == #"if"#)
+    assert(ifKeyword.text == #"if"#)
     self.unexpectedBetweenIfKeywordAndConditions = unexpectedBetweenIfKeywordAndConditions?.createUnexpectedNodes()
     self.conditions = conditions.createConditionElementList()
     self.unexpectedBetweenConditionsAndBody = unexpectedBetweenConditionsAndBody?.createUnexpectedNodes()
     self.body = body.createCodeBlock()
     self.unexpectedBetweenBodyAndElseKeyword = unexpectedBetweenBodyAndElseKeyword?.createUnexpectedNodes()
     self.elseKeyword = elseKeyword
-    assert(elseKeyword == nil || elseKeyword!.text == #"else"# || elseKeyword!.text == #"else"#)
+    assert(elseKeyword == nil || elseKeyword!.text == #"else"#)
     self.unexpectedBetweenElseKeywordAndElseBody = unexpectedBetweenElseKeywordAndElseBody?.createUnexpectedNodes()
     self.elseBody = elseBody?.createSyntaxBuildable()
   }
@@ -10092,7 +10092,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeElseKeyword = unexpectedBeforeElseKeyword?.createUnexpectedNodes()
     self.elseKeyword = elseKeyword
-    assert(elseKeyword.text == #"else"# || elseKeyword.text == #"else"#)
+    assert(elseKeyword.text == #"else"#)
     self.unexpectedBetweenElseKeywordAndBody = unexpectedBetweenElseKeywordAndBody?.createUnexpectedNodes()
     self.body = body.createCodeBlock()
   }
@@ -10209,10 +10209,10 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDefaultKeyword = unexpectedBeforeDefaultKeyword?.createUnexpectedNodes()
     self.defaultKeyword = defaultKeyword
-    assert(defaultKeyword.text == #"default"# || defaultKeyword.text == #"default"#)
+    assert(defaultKeyword.text == #"default"#)
     self.unexpectedBetweenDefaultKeywordAndColon = unexpectedBetweenDefaultKeywordAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
   }
   /// Builds a `SwitchDefaultLabelSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -10266,7 +10266,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
     self.whereClause = whereClause?.createWhereClause()
     self.unexpectedBetweenWhereClauseAndTrailingComma = unexpectedBetweenWhereClauseAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `CaseItemSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -10324,7 +10324,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
     self.whereClause = whereClause?.createWhereClause()
     self.unexpectedBetweenWhereClauseAndTrailingComma = unexpectedBetweenWhereClauseAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `CatchItemSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -10378,12 +10378,12 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCaseKeyword = unexpectedBeforeCaseKeyword?.createUnexpectedNodes()
     self.caseKeyword = caseKeyword
-    assert(caseKeyword.text == #"case"# || caseKeyword.text == #"case"#)
+    assert(caseKeyword.text == #"case"#)
     self.unexpectedBetweenCaseKeywordAndCaseItems = unexpectedBetweenCaseKeywordAndCaseItems?.createUnexpectedNodes()
     self.caseItems = caseItems.createCaseItemList()
     self.unexpectedBetweenCaseItemsAndColon = unexpectedBetweenCaseItemsAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -10441,7 +10441,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCatchKeyword = unexpectedBeforeCatchKeyword?.createUnexpectedNodes()
     self.catchKeyword = catchKeyword
-    assert(catchKeyword.text == #"catch"# || catchKeyword.text == #"catch"#)
+    assert(catchKeyword.text == #"catch"#)
     self.unexpectedBetweenCatchKeywordAndCatchItems = unexpectedBetweenCatchKeywordAndCatchItems?.createUnexpectedNodes()
     self.catchItems = catchItems?.createCatchItemList()
     self.unexpectedBetweenCatchItemsAndBody = unexpectedBetweenCatchItemsAndBody?.createUnexpectedNodes()
@@ -10515,20 +10515,20 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundAssert = unexpectedBeforePoundAssert?.createUnexpectedNodes()
     self.poundAssert = poundAssert
-    assert(poundAssert.text == #"#assert"# || poundAssert.text == #"#assert"#)
+    assert(poundAssert.text == #"#assert"#)
     self.unexpectedBetweenPoundAssertAndLeftParen = unexpectedBetweenPoundAssertAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndCondition = unexpectedBetweenLeftParenAndCondition?.createUnexpectedNodes()
     self.condition = condition.createExprBuildable()
     self.unexpectedBetweenConditionAndComma = unexpectedBetweenConditionAndComma?.createUnexpectedNodes()
     self.comma = comma
-    assert(comma == nil || comma!.text == #","# || comma!.text == #","#)
+    assert(comma == nil || comma!.text == #","#)
     self.unexpectedBetweenCommaAndMessage = unexpectedBetweenCommaAndMessage?.createUnexpectedNodes()
     self.message = message
     self.unexpectedBetweenMessageAndRightParen = unexpectedBetweenMessageAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -10589,7 +10589,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWhereKeyword = unexpectedBeforeWhereKeyword?.createUnexpectedNodes()
     self.whereKeyword = whereKeyword
-    assert(whereKeyword.text == #"where"# || whereKeyword.text == #"where"#)
+    assert(whereKeyword.text == #"where"#)
     self.unexpectedBetweenWhereKeywordAndRequirementList = unexpectedBetweenWhereKeywordAndRequirementList?.createUnexpectedNodes()
     self.requirementList = requirementList.createGenericRequirementList()
   }
@@ -10647,7 +10647,7 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
     self.body = body.createSyntaxBuildable()
     self.unexpectedBetweenBodyAndTrailingComma = unexpectedBetweenBodyAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `GenericRequirementSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -10776,22 +10776,22 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
     self.typeIdentifier = typeIdentifier.createTypeBuildable()
     self.unexpectedBetweenTypeIdentifierAndColon = unexpectedBetweenTypeIdentifierAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndLayoutConstraint = unexpectedBetweenColonAndLayoutConstraint?.createUnexpectedNodes()
     self.layoutConstraint = layoutConstraint
     self.unexpectedBetweenLayoutConstraintAndLeftParen = unexpectedBetweenLayoutConstraintAndLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen == nil || leftParen!.text == #"("# || leftParen!.text == #"("#)
+    assert(leftParen == nil || leftParen!.text == #"("#)
     self.unexpectedBetweenLeftParenAndSize = unexpectedBetweenLeftParenAndSize?.createUnexpectedNodes()
     self.size = size
     self.unexpectedBetweenSizeAndComma = unexpectedBetweenSizeAndComma?.createUnexpectedNodes()
     self.comma = comma
-    assert(comma == nil || comma!.text == #","# || comma!.text == #","#)
+    assert(comma == nil || comma!.text == #","#)
     self.unexpectedBetweenCommaAndAlignment = unexpectedBetweenCommaAndAlignment?.createUnexpectedNodes()
     self.alignment = alignment
     self.unexpectedBetweenAlignmentAndRightParen = unexpectedBetweenAlignmentAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen == nil || rightParen!.text == #")"# || rightParen!.text == #")"#)
+    assert(rightParen == nil || rightParen!.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -10863,12 +10863,12 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
     self.name = name
     self.unexpectedBetweenNameAndColon = unexpectedBetweenNameAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon == nil || colon!.text == #":"# || colon!.text == #":"#)
+    assert(colon == nil || colon!.text == #":"#)
     self.unexpectedBetweenColonAndInheritedType = unexpectedBetweenColonAndInheritedType?.createUnexpectedNodes()
     self.inheritedType = inheritedType?.createTypeBuildable()
     self.unexpectedBetweenInheritedTypeAndTrailingComma = unexpectedBetweenInheritedTypeAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -10926,7 +10926,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
     self.name = name
     self.unexpectedBetweenNameAndTrailingComma = unexpectedBetweenNameAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -10986,12 +10986,12 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
     self.leftAngleBracket = leftAngleBracket
-    assert(leftAngleBracket.text == #"<"# || leftAngleBracket.text == #"<"#)
+    assert(leftAngleBracket.text == #"<"#)
     self.unexpectedBetweenLeftAngleBracketAndGenericParameterList = unexpectedBetweenLeftAngleBracketAndGenericParameterList?.createUnexpectedNodes()
     self.genericParameterList = genericParameterList.createGenericParameterList()
     self.unexpectedBetweenGenericParameterListAndRightAngleBracket = unexpectedBetweenGenericParameterListAndRightAngleBracket?.createUnexpectedNodes()
     self.rightAngleBracket = rightAngleBracket
-    assert(rightAngleBracket.text == #">"# || rightAngleBracket.text == #">"#)
+    assert(rightAngleBracket.text == #">"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -11051,7 +11051,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
     self.unexpectedBetweenLeftTypeIdentifierAndColon = unexpectedBetweenLeftTypeIdentifierAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndRightTypeIdentifier = unexpectedBetweenColonAndRightTypeIdentifier?.createUnexpectedNodes()
     self.rightTypeIdentifier = rightTypeIdentifier.createTypeBuildable()
   }
@@ -11103,12 +11103,12 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
     self.leftAngleBracket = leftAngleBracket
-    assert(leftAngleBracket.text == #"<"# || leftAngleBracket.text == #"<"#)
+    assert(leftAngleBracket.text == #"<"#)
     self.unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList = unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.createUnexpectedNodes()
     self.primaryAssociatedTypeList = primaryAssociatedTypeList.createPrimaryAssociatedTypeList()
     self.unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket = unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.createUnexpectedNodes()
     self.rightAngleBracket = rightAngleBracket
-    assert(rightAngleBracket.text == #">"# || rightAngleBracket.text == #">"#)
+    assert(rightAngleBracket.text == #">"#)
   }
   /// Builds a `PrimaryAssociatedTypeClauseSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11271,7 +11271,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeClassKeyword = unexpectedBeforeClassKeyword?.createUnexpectedNodes()
     self.classKeyword = classKeyword
-    assert(classKeyword.text == #"class"# || classKeyword.text == #"class"#)
+    assert(classKeyword.text == #"class"#)
   }
   /// Builds a `ClassRestrictionTypeSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11328,12 +11328,12 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquareBracket = unexpectedBeforeLeftSquareBracket?.createUnexpectedNodes()
     self.leftSquareBracket = leftSquareBracket
-    assert(leftSquareBracket.text == #"["# || leftSquareBracket.text == #"["#)
+    assert(leftSquareBracket.text == #"["#)
     self.unexpectedBetweenLeftSquareBracketAndElementType = unexpectedBetweenLeftSquareBracketAndElementType?.createUnexpectedNodes()
     self.elementType = elementType.createTypeBuildable()
     self.unexpectedBetweenElementTypeAndRightSquareBracket = unexpectedBetweenElementTypeAndRightSquareBracket?.createUnexpectedNodes()
     self.rightSquareBracket = rightSquareBracket
-    assert(rightSquareBracket.text == #"]"# || rightSquareBracket.text == #"]"#)
+    assert(rightSquareBracket.text == #"]"#)
   }
   /// Builds a `ArrayTypeSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11398,17 +11398,17 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquareBracket = unexpectedBeforeLeftSquareBracket?.createUnexpectedNodes()
     self.leftSquareBracket = leftSquareBracket
-    assert(leftSquareBracket.text == #"["# || leftSquareBracket.text == #"["#)
+    assert(leftSquareBracket.text == #"["#)
     self.unexpectedBetweenLeftSquareBracketAndKeyType = unexpectedBetweenLeftSquareBracketAndKeyType?.createUnexpectedNodes()
     self.keyType = keyType.createTypeBuildable()
     self.unexpectedBetweenKeyTypeAndColon = unexpectedBetweenKeyTypeAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndValueType = unexpectedBetweenColonAndValueType?.createUnexpectedNodes()
     self.valueType = valueType.createTypeBuildable()
     self.unexpectedBetweenValueTypeAndRightSquareBracket = unexpectedBetweenValueTypeAndRightSquareBracket?.createUnexpectedNodes()
     self.rightSquareBracket = rightSquareBracket
-    assert(rightSquareBracket.text == #"]"# || rightSquareBracket.text == #"]"#)
+    assert(rightSquareBracket.text == #"]"#)
   }
   /// Builds a `DictionaryTypeSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11467,7 +11467,7 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
     self.baseType = baseType.createTypeBuildable()
     self.unexpectedBetweenBaseTypeAndPeriod = unexpectedBetweenBaseTypeAndPeriod?.createUnexpectedNodes()
     self.period = period
-    assert(period.text == #"."# || period.text == #"."#)
+    assert(period.text == #"."#)
     self.unexpectedBetweenPeriodAndTypeOrProtocol = unexpectedBetweenPeriodAndTypeOrProtocol?.createUnexpectedNodes()
     self.typeOrProtocol = typeOrProtocol
     assert(typeOrProtocol.text == #"Type"# || typeOrProtocol.text == #"Protocol"#)
@@ -11531,7 +11531,7 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
     self.wrappedType = wrappedType.createTypeBuildable()
     self.unexpectedBetweenWrappedTypeAndQuestionMark = unexpectedBetweenWrappedTypeAndQuestionMark?.createUnexpectedNodes()
     self.questionMark = questionMark
-    assert(questionMark.text == #"?"# || questionMark.text == #"?"#)
+    assert(questionMark.text == #"?"#)
   }
   /// Builds a `OptionalTypeSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11647,7 +11647,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
     self.wrappedType = wrappedType.createTypeBuildable()
     self.unexpectedBetweenWrappedTypeAndExclamationMark = unexpectedBetweenWrappedTypeAndExclamationMark?.createUnexpectedNodes()
     self.exclamationMark = exclamationMark
-    assert(exclamationMark.text == #"!"# || exclamationMark.text == #"!"#)
+    assert(exclamationMark.text == #"!"#)
   }
   /// Builds a `ImplicitlyUnwrappedOptionalTypeSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11820,24 +11820,24 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeInOut = unexpectedBeforeInOut?.createUnexpectedNodes()
     self.inOut = inOut
-    assert(inOut == nil || inOut!.text == #"inout"# || inOut!.text == #"inout"#)
+    assert(inOut == nil || inOut!.text == #"inout"#)
     self.unexpectedBetweenInOutAndName = unexpectedBetweenInOutAndName?.createUnexpectedNodes()
     self.name = name
     self.unexpectedBetweenNameAndSecondName = unexpectedBetweenNameAndSecondName?.createUnexpectedNodes()
     self.secondName = secondName
     self.unexpectedBetweenSecondNameAndColon = unexpectedBetweenSecondNameAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon == nil || colon!.text == #":"# || colon!.text == #":"#)
+    assert(colon == nil || colon!.text == #":"#)
     self.unexpectedBetweenColonAndType = unexpectedBetweenColonAndType?.createUnexpectedNodes()
     self.type = type.createTypeBuildable()
     self.unexpectedBetweenTypeAndEllipsis = unexpectedBetweenTypeAndEllipsis?.createUnexpectedNodes()
     self.ellipsis = ellipsis
-    assert(ellipsis == nil || ellipsis!.text == #"..."# || ellipsis!.text == #"..."#)
+    assert(ellipsis == nil || ellipsis!.text == #"..."#)
     self.unexpectedBetweenEllipsisAndInitializer = unexpectedBetweenEllipsisAndInitializer?.createUnexpectedNodes()
     self.initializer = initializer?.createInitializerClause()
     self.unexpectedBetweenInitializerAndTrailingComma = unexpectedBetweenInitializerAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `TupleTypeElementSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11891,12 +11891,12 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndElements = unexpectedBetweenLeftParenAndElements?.createUnexpectedNodes()
     self.elements = elements.createTupleTypeElementList()
     self.unexpectedBetweenElementsAndRightParen = unexpectedBetweenElementsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// Builds a `TupleTypeSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -11969,12 +11969,12 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndArguments = unexpectedBetweenLeftParenAndArguments?.createUnexpectedNodes()
     self.arguments = arguments.createTupleTypeElementList()
     self.unexpectedBetweenArgumentsAndRightParen = unexpectedBetweenArgumentsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
     self.unexpectedBetweenRightParenAndAsyncKeyword = unexpectedBetweenRightParenAndAsyncKeyword?.createUnexpectedNodes()
     self.asyncKeyword = asyncKeyword
     assert(asyncKeyword == nil || asyncKeyword!.text == #"async"#)
@@ -11983,7 +11983,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
     assert(throwsOrRethrowsKeyword == nil || throwsOrRethrowsKeyword!.text == #"throws"# || throwsOrRethrowsKeyword!.text == #"rethrows"# || throwsOrRethrowsKeyword!.text == #"throw"#)
     self.unexpectedBetweenThrowsOrRethrowsKeywordAndArrow = unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.createUnexpectedNodes()
     self.arrow = arrow
-    assert(arrow.text == #"->"# || arrow.text == #"->"#)
+    assert(arrow.text == #"->"#)
     self.unexpectedBetweenArrowAndReturnType = unexpectedBetweenArrowAndReturnType?.createUnexpectedNodes()
     self.returnType = returnType.createTypeBuildable()
   }
@@ -12101,7 +12101,7 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
     self.argumentType = argumentType.createTypeBuildable()
     self.unexpectedBetweenArgumentTypeAndTrailingComma = unexpectedBetweenArgumentTypeAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `GenericArgumentSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -12155,12 +12155,12 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
     self.leftAngleBracket = leftAngleBracket
-    assert(leftAngleBracket.text == #"<"# || leftAngleBracket.text == #"<"#)
+    assert(leftAngleBracket.text == #"<"#)
     self.unexpectedBetweenLeftAngleBracketAndArguments = unexpectedBetweenLeftAngleBracketAndArguments?.createUnexpectedNodes()
     self.arguments = arguments.createGenericArgumentList()
     self.unexpectedBetweenArgumentsAndRightAngleBracket = unexpectedBetweenArgumentsAndRightAngleBracket?.createUnexpectedNodes()
     self.rightAngleBracket = rightAngleBracket
-    assert(rightAngleBracket.text == #">"# || rightAngleBracket.text == #">"#)
+    assert(rightAngleBracket.text == #">"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -12214,7 +12214,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndType = unexpectedBetweenColonAndType?.createUnexpectedNodes()
     self.type = type.createTypeBuildable()
   }
@@ -12272,7 +12272,7 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
     self.type = type?.createTypeBuildable()
     self.unexpectedBetweenTypeAndPeriod = unexpectedBetweenTypeAndPeriod?.createUnexpectedNodes()
     self.period = period
-    assert(period.text == #"."# || period.text == #"."#)
+    assert(period.text == #"."#)
     self.unexpectedBetweenPeriodAndCaseName = unexpectedBetweenPeriodAndCaseName?.createUnexpectedNodes()
     self.caseName = caseName
     self.unexpectedBetweenCaseNameAndAssociatedTuple = unexpectedBetweenCaseNameAndAssociatedTuple?.createUnexpectedNodes()
@@ -12335,7 +12335,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIsKeyword = unexpectedBeforeIsKeyword?.createUnexpectedNodes()
     self.isKeyword = isKeyword
-    assert(isKeyword.text == #"is"# || isKeyword.text == #"is"#)
+    assert(isKeyword.text == #"is"#)
     self.unexpectedBetweenIsKeywordAndType = unexpectedBetweenIsKeywordAndType?.createUnexpectedNodes()
     self.type = type.createTypeBuildable()
   }
@@ -12392,7 +12392,7 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
     self.subPattern = subPattern.createPatternBuildable()
     self.unexpectedBetweenSubPatternAndQuestionMark = unexpectedBetweenSubPatternAndQuestionMark?.createUnexpectedNodes()
     self.questionMark = questionMark
-    assert(questionMark.text == #"?"# || questionMark.text == #"?"#)
+    assert(questionMark.text == #"?"#)
   }
   /// Builds a `OptionalPatternSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -12499,7 +12499,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
     self.pattern = pattern.createPatternBuildable()
     self.unexpectedBetweenPatternAndAsKeyword = unexpectedBetweenPatternAndAsKeyword?.createUnexpectedNodes()
     self.asKeyword = asKeyword
-    assert(asKeyword.text == #"as"# || asKeyword.text == #"as"#)
+    assert(asKeyword.text == #"as"#)
     self.unexpectedBetweenAsKeywordAndType = unexpectedBetweenAsKeywordAndType?.createUnexpectedNodes()
     self.type = type.createTypeBuildable()
   }
@@ -12558,12 +12558,12 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
-    assert(leftParen.text == #"("# || leftParen.text == #"("#)
+    assert(leftParen.text == #"("#)
     self.unexpectedBetweenLeftParenAndElements = unexpectedBetweenLeftParenAndElements?.createUnexpectedNodes()
     self.elements = elements.createTuplePatternElementList()
     self.unexpectedBetweenElementsAndRightParen = unexpectedBetweenElementsAndRightParen?.createUnexpectedNodes()
     self.rightParen = rightParen
-    assert(rightParen.text == #")"# || rightParen.text == #")"#)
+    assert(rightParen.text == #")"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -12624,7 +12624,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWildcard = unexpectedBeforeWildcard?.createUnexpectedNodes()
     self.wildcard = wildcard
-    assert(wildcard.text == #"_"# || wildcard.text == #"_"#)
+    assert(wildcard.text == #"_"#)
     self.unexpectedBetweenWildcardAndTypeAnnotation = unexpectedBetweenWildcardAndTypeAnnotation?.createUnexpectedNodes()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
   }
@@ -12689,12 +12689,12 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
     self.labelName = labelName
     self.unexpectedBetweenLabelNameAndLabelColon = unexpectedBetweenLabelNameAndLabelColon?.createUnexpectedNodes()
     self.labelColon = labelColon
-    assert(labelColon == nil || labelColon!.text == #":"# || labelColon!.text == #":"#)
+    assert(labelColon == nil || labelColon!.text == #":"#)
     self.unexpectedBetweenLabelColonAndPattern = unexpectedBetweenLabelColonAndPattern?.createUnexpectedNodes()
     self.pattern = pattern.createPatternBuildable()
     self.unexpectedBetweenPatternAndTrailingComma = unexpectedBetweenPatternAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
@@ -12858,7 +12858,7 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
     self.entry = entry.createSyntaxBuildable()
     self.unexpectedBetweenEntryAndTrailingComma = unexpectedBetweenEntryAndTrailingComma?.createUnexpectedNodes()
     self.trailingComma = trailingComma
-    assert(trailingComma == nil || trailingComma!.text == #","# || trailingComma!.text == #","#)
+    assert(trailingComma == nil || trailingComma!.text == #","#)
   }
   /// Builds a `AvailabilityArgumentSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -12911,7 +12911,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
     self.label = label
     self.unexpectedBetweenLabelAndColon = unexpectedBetweenLabelAndColon?.createUnexpectedNodes()
     self.colon = colon
-    assert(colon.text == #":"# || colon.text == #":"#)
+    assert(colon.text == #":"#)
     self.unexpectedBetweenColonAndValue = unexpectedBetweenColonAndValue?.createUnexpectedNodes()
     self.value = value.createSyntaxBuildable()
   }
@@ -13026,7 +13026,7 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
     self.majorMinor = majorMinor.createSyntaxBuildable()
     self.unexpectedBetweenMajorMinorAndPatchPeriod = unexpectedBetweenMajorMinorAndPatchPeriod?.createUnexpectedNodes()
     self.patchPeriod = patchPeriod
-    assert(patchPeriod == nil || patchPeriod!.text == #"."# || patchPeriod!.text == #"."#)
+    assert(patchPeriod == nil || patchPeriod!.text == #"."#)
     self.unexpectedBetweenPatchPeriodAndPatchVersion = unexpectedBetweenPatchPeriodAndPatchVersion?.createUnexpectedNodes()
     self.patchVersion = patchVersion
   }

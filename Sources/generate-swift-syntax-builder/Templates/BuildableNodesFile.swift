@@ -330,33 +330,6 @@ private func createFormatAdditionalLeadingTriviaParams() -> ParameterClause {
   }
 }
 
-/// Generate the `create...` function for an `ExpressibleAs...` conformance.
-private func createExpressibleAsCreateFunction(type: SyntaxBuildableType, additionalDocComments: [String] = []) -> FunctionDecl {
-  FunctionDecl(
-    leadingTrivia: ([
-      "/// Conformance to `\(type.expressibleAsBaseName)`.",
-    ] + additionalDocComments).map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [TokenSyntax.public],
-    identifier: .identifier("create\(type.buildableBaseName)"),
-    signature: FunctionSignature(
-      input: ParameterClause(),
-      output: type.buildable
-    )
-  ) {
-    ReturnStmt(expression: "self")
-  }
-}
-
-/// Generate the `create...` function for an `ExpressibleAs...` conformance
-/// that includes an explanation as to how the function disambiguates a conformance.
-private func createDisambiguatingExpressibleAsCreateFunction(type: SyntaxBuildableType, baseType: SyntaxBuildableType) -> FunctionDecl {
-  createExpressibleAsCreateFunction(type: baseType, additionalDocComments: [
-    "/// `\(type.buildableBaseName)` may conform to `\(baseType.expressibleAsBaseName)` via different `ExpressibleAs*` paths.",
-    "/// Thus, there are multiple default implementations of `create\(baseType.buildableBaseName)`, some of which perform conversions",
-    "/// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.",
-  ]) 
-}
-
 /// Generate the `withTrailingComma` function.
 private func createWithTrailingCommaFunction(node: Node) -> FunctionDecl {
   let children = node.children

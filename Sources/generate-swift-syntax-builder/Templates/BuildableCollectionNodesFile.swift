@@ -44,8 +44,8 @@ let buildableCollectionNodesFile = SourceFile {
       // Generate function declarations
       createBuildFunction(node: node)
       createBuildSyntaxFunction(node: node)
-      createExpressibleAsCreateFunction(node: node)
-      createSyntaxBuildableCreateFunction(node: node)
+      createExpressibleAsCreateFunction(type: type)
+      createDisambiguatingExpressibleAsCreateFunction(type: type, baseType: .init(syntaxKind: "Syntax"))
     }
 
     // For nodes without expressible-as conformances, conform Array to the corresponding expressible-as
@@ -256,41 +256,5 @@ private func createBuildSyntaxFunction(node: Node) -> FunctionDecl {
         TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
       })
     })
-  }
-}
-
-/// Generate the `create...` function for the `ExpressibleAs...` conformance.
-private func createExpressibleAsCreateFunction(node: Node) -> FunctionDecl {
-  let type = node.type
-  return FunctionDecl(
-    leadingTrivia: .docLineComment("/// Conformance to `\(type.expressibleAsBaseName)`") + .newline,
-    modifiers: [TokenSyntax.public],
-    identifier: .identifier("create\(type.buildableBaseName)"),
-    signature: FunctionSignature(
-      input: ParameterClause(),
-      output: type.buildable
-    )
-  ) {
-    ReturnStmt(expression: "self")
-  }
-}
-
-/// Generate the `createSyntaxBuildable` function for the `SyntaxBuildable` conformance.
-private func createSyntaxBuildableCreateFunction(node: Node) -> FunctionDecl {
-  let type = node.type
-  return FunctionDecl(
-    leadingTrivia: [
-      "/// `\(type.buildableBaseName)` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.",
-      "/// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.",
-      "/// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.",
-    ].map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [TokenSyntax.public],
-    identifier: .identifier("createSyntaxBuildable"),
-    signature: FunctionSignature(
-      input: ParameterClause(),
-      output: "SyntaxBuildable"
-    )
-  ) {
-    ReturnStmt(expression: "self")
   }
 }

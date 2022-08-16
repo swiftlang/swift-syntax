@@ -45,7 +45,7 @@ Then, import `SwiftSyntax` in your Swift code.
 
 ## Documentation
 
-Documentation can be found [here](Documentation) and some examples of using SwiftSyntax can be found [here](Snippets).
+Documentation can be found [here](Documentation) and some examples of using SwiftSyntax can be found [here](Examples).
 
 ## Contributing
 

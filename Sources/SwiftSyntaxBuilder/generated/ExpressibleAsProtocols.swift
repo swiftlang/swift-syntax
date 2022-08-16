@@ -56,13 +56,13 @@ public extension ExpressibleAsStmtBuildable {
     return CodeBlockItem(item: self)
   }
 }
-public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsGarbageNodes, ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList {
+public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsUnexpectedNodes, ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList {
   func createSyntaxBuildable() -> SyntaxBuildable
 }
 public extension ExpressibleAsSyntaxBuildable {
-  /// Conformance to `ExpressibleAsGarbageNodes`
-  func createGarbageNodes() -> GarbageNodes {
-    return GarbageNodes([self])
+  /// Conformance to `ExpressibleAsUnexpectedNodes`
+  func createUnexpectedNodes() -> UnexpectedNodes {
+    return UnexpectedNodes([self])
   }
   /// Conformance to `ExpressibleAsStringLiteralSegments`
   func createStringLiteralSegments() -> StringLiteralSegments {
@@ -131,8 +131,8 @@ public extension ExpressibleAsCodeBlock {
     return createCodeBlock()
   }
 }
-public protocol ExpressibleAsGarbageNodes {
-  func createGarbageNodes() -> GarbageNodes
+public protocol ExpressibleAsUnexpectedNodes {
+  func createUnexpectedNodes() -> UnexpectedNodes
 }
 public protocol ExpressibleAsInOutExpr: ExpressibleAsExprBuildable {
   func createInOutExpr() -> InOutExpr

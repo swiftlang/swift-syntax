@@ -5,7 +5,7 @@ import SwiftSyntaxBuilder
 final class CollectionNodeFlatteningTests: XCTestCase {
   
   func test_FlattenCodeBlockItemListWithBuilder() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     
     @CodeBlockItemListBuilder
     func buildInnerCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
@@ -38,7 +38,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
   }
   
   func test_FlattenCodeBlockItemListWithConstructor() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     
     func buildInnerCodeBlockItemList() -> ExpressibleAsCodeBlockItemList {
       CodeBlockItemList([FunctionCallExpr("innerBuilder")])

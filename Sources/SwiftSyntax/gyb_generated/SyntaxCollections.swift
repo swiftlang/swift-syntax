@@ -271,13 +271,13 @@ extension CodeBlockItemListSyntax: BidirectionalCollection {
 /// A collection of syntax nodes that occurred in the source code but
 /// could not be used to form a valid syntax tree.
 /// 
-public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
+public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `GarbageNodesSyntax` if possible. Returns 
+  /// Converts the given `Syntax` node to a `UnexpectedNodesSyntax` if possible. Returns 
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .garbageNodes else { return nil }
+    guard syntax.raw.kind == .unexpectedNodes else { return nil }
     self._syntaxNode = syntax
   }
 
@@ -285,12 +285,12 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .garbageNodes)
+    assert(data.raw.kind == .unexpectedNodes)
     self._syntaxNode = Syntax(data)
   }
 
   public init(_ children: [Syntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.garbageNodes,
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unexpectedNodes,
       layout: children.map { $0.raw }, presence: SourcePresence.present)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
@@ -303,52 +303,52 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
-  /// Creates a new `GarbageNodesSyntax` by replacing the underlying layout with
+  /// Creates a new `UnexpectedNodesSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `GarbageNodesSyntax` with the new layout underlying it.
+  /// - Returns: A new `UnexpectedNodesSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> GarbageNodesSyntax {
+    _ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
     let newRaw = data.raw.replacingLayout(layout)
     let newData = data.replacingSelf(newRaw)
-    return GarbageNodesSyntax(newData)
+    return UnexpectedNodesSyntax(newData)
   }
 
-  /// Creates a new `GarbageNodesSyntax` by appending the provided syntax element
+  /// Creates a new `UnexpectedNodesSyntax` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `GarbageNodesSyntax` with that element appended to the end.
+  /// - Returns: A new `UnexpectedNodesSyntax` with that element appended to the end.
   public func appending(
-    _ syntax: Syntax) -> GarbageNodesSyntax {
+    _ syntax: Syntax) -> UnexpectedNodesSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `GarbageNodesSyntax` by prepending the provided syntax element
+  /// Creates a new `UnexpectedNodesSyntax` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `GarbageNodesSyntax` with that element prepended to the
+  /// - Returns: A new `UnexpectedNodesSyntax` with that element prepended to the
   ///            beginning.
   public func prepending(
-    _ syntax: Syntax) -> GarbageNodesSyntax {
+    _ syntax: Syntax) -> UnexpectedNodesSyntax {
     return inserting(syntax, at: 0)
   }
 
-  /// Creates a new `GarbageNodesSyntax` by inserting the provided syntax element
+  /// Creates a new `UnexpectedNodesSyntax` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `GarbageNodesSyntax` with that element appended to the end.
+  /// - Returns: A new `UnexpectedNodesSyntax` with that element appended to the end.
   public func inserting(_ syntax: Syntax,
-                        at index: Int) -> GarbageNodesSyntax {
+                        at index: Int) -> UnexpectedNodesSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
@@ -357,16 +357,16 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `GarbageNodesSyntax` by replacing the syntax element
+  /// Creates a new `UnexpectedNodesSyntax` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `GarbageNodesSyntax` with the new element at the provided index.
+  /// - Returns: A new `UnexpectedNodesSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
-                        with syntax: Syntax) -> GarbageNodesSyntax {
+                        with syntax: Syntax) -> UnexpectedNodesSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
@@ -375,64 +375,64 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `GarbageNodesSyntax` by removing the syntax element at the
+  /// Creates a new `UnexpectedNodesSyntax` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `GarbageNodesSyntax` with the element at the provided index
+  /// - Returns: A new `UnexpectedNodesSyntax` with the element at the provided index
   ///            removed.
-  public func removing(childAt index: Int) -> GarbageNodesSyntax {
+  public func removing(childAt index: Int) -> UnexpectedNodesSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `GarbageNodesSyntax` by removing the first element.
+  /// Creates a new `UnexpectedNodesSyntax` by removing the first element.
   ///
-  /// - Returns: A new `GarbageNodesSyntax` with the first element removed.
-  public func removingFirst() -> GarbageNodesSyntax {
+  /// - Returns: A new `UnexpectedNodesSyntax` with the first element removed.
+  public func removingFirst() -> UnexpectedNodesSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `GarbageNodesSyntax` by removing the last element.
+  /// Creates a new `UnexpectedNodesSyntax` by removing the last element.
   ///
-  /// - Returns: A new `GarbageNodesSyntax` with the last element removed.
-  public func removingLast() -> GarbageNodesSyntax {
+  /// - Returns: A new `UnexpectedNodesSyntax` with the last element removed.
+  public func removingLast() -> UnexpectedNodesSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
 
-  /// Returns a new `GarbageNodesSyntax` with its leading trivia replaced
+  /// Returns a new `UnexpectedNodesSyntax` with its leading trivia replaced
   /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> GarbageNodesSyntax {
-    return GarbageNodesSyntax(data.withLeadingTrivia(leadingTrivia))
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> UnexpectedNodesSyntax {
+    return UnexpectedNodesSyntax(data.withLeadingTrivia(leadingTrivia))
   }
 
-  /// Returns a new `GarbageNodesSyntax` with its trailing trivia replaced
+  /// Returns a new `UnexpectedNodesSyntax` with its trailing trivia replaced
   /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> GarbageNodesSyntax {
-    return GarbageNodesSyntax(data.withTrailingTrivia(trailingTrivia))
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> UnexpectedNodesSyntax {
+    return UnexpectedNodesSyntax(data.withTrailingTrivia(trailingTrivia))
   }
 
-  /// Returns a new `GarbageNodesSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> GarbageNodesSyntax {
+  /// Returns a new `UnexpectedNodesSyntax` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> UnexpectedNodesSyntax {
     return withLeadingTrivia([])
   }
 
-  /// Returns a new `GarbageNodesSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> GarbageNodesSyntax {
+  /// Returns a new `UnexpectedNodesSyntax` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> UnexpectedNodesSyntax {
     return withTrailingTrivia([])
   }
 
-  /// Returns a new `GarbageNodesSyntax` with all trivia removed.
-  public func withoutTrivia() -> GarbageNodesSyntax {
+  /// Returns a new `UnexpectedNodesSyntax` with all trivia removed.
+  public func withoutTrivia() -> UnexpectedNodesSyntax {
     return withoutLeadingTrivia().withoutTrailingTrivia()
   }
 
-  /// The leading trivia (spaces, newlines, etc.) associated with this `GarbageNodesSyntax`.
+  /// The leading trivia (spaces, newlines, etc.) associated with this `UnexpectedNodesSyntax`.
   public var leadingTrivia: Trivia? {
     get {
       return raw.formLeadingTrivia()
@@ -442,7 +442,7 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
     }
   }
 
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `GarbageNodesSyntax`.
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `UnexpectedNodesSyntax`.
   public var trailingTrivia: Trivia? {
     get {
       return raw.formTrailingTrivia()
@@ -453,8 +453,8 @@ public struct GarbageNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `GarbageNodesSyntax` to the `BidirectionalCollection` protocol.
-extension GarbageNodesSyntax: BidirectionalCollection {
+/// Conformance for `UnexpectedNodesSyntax` to the `BidirectionalCollection` protocol.
+extension UnexpectedNodesSyntax: BidirectionalCollection {
   public typealias Element = Syntax
   public typealias Index = SyntaxChildrenIndex
 
@@ -10975,7 +10975,7 @@ extension CodeBlockItemListSyntax: CustomReflectable {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }
 }
-extension GarbageNodesSyntax: CustomReflectable {
+extension UnexpectedNodesSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }

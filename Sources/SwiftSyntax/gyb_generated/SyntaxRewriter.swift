@@ -121,10 +121,10 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GarbageNodesSyntax`.
+  /// Visit a `UnexpectedNodesSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: GarbageNodesSyntax) -> Syntax {
+  open func visit(_ node: UnexpectedNodesSyntax) -> Syntax {
     return Syntax(visitChildren(node))
   }
 
@@ -2075,8 +2075,8 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGarbageNodesSyntax(_ data: SyntaxData) -> Syntax {
-      let node = GarbageNodesSyntax(data)
+  private func visitImplUnexpectedNodesSyntax(_ data: SyntaxData) -> Syntax {
+      let node = UnexpectedNodesSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4614,8 +4614,8 @@ open class SyntaxRewriter {
       return visitImplCodeBlockItemListSyntax
     case .codeBlock:
       return visitImplCodeBlockSyntax
-    case .garbageNodes:
-      return visitImplGarbageNodesSyntax
+    case .unexpectedNodes:
+      return visitImplUnexpectedNodesSyntax
     case .inOutExpr:
       return visitImplInOutExprSyntax
     case .poundColumnExpr:
@@ -5149,8 +5149,8 @@ open class SyntaxRewriter {
       return visitImplCodeBlockItemListSyntax(data)
     case .codeBlock:
       return visitImplCodeBlockSyntax(data)
-    case .garbageNodes:
-      return visitImplGarbageNodesSyntax(data)
+    case .unexpectedNodes:
+      return visitImplUnexpectedNodesSyntax(data)
     case .inOutExpr:
       return visitImplInOutExprSyntax(data)
     case .poundColumnExpr:

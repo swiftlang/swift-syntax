@@ -120,7 +120,7 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
     % parameters = []
     % for (index, child) in enumerate(children):
     %   comma = ',' if index != len(children) - 1 else ''
-    %   if child.child.is_garbage_nodes():
+    %   if child.child.is_unexpected_nodes():
       ${child.generate_expr_build_syntax_node(child.name(), 'format')}${comma}
     %   else:
       ${child.name()}: ${child.generate_expr_build_syntax_node(child.name(), 'format')}${comma}

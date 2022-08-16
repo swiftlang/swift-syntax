@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class FunctionTests: XCTestCase {
   func testFibonacci() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let input = ParameterClause {
       FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int")

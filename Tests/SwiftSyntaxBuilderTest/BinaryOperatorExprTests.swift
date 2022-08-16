@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class BinaryOperatorExprTests: XCTestCase {
   func testBinaryOperatorExprConvenienceInitializers() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (ExpressibleAsBinaryOperatorExpr, String)] = [
       #line: (BinaryOperatorExpr("=="), "␣ == "),
       #line: (TokenSyntax.unspacedBinaryOperator("=="), "␣=="),

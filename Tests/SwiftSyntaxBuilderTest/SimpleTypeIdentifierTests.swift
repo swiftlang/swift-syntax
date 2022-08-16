@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class SimpleTypeIdentifierTests: XCTestCase {
   func testExpressibleAsSimpleTypeIdentifier() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (ExpressibleAsSimpleTypeIdentifier, String)] = [
       #line: (SimpleTypeIdentifier(name: .identifier("Foo")), "␣Foo"),

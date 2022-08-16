@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class IntegerLiteralTests: XCTestCase {
   func testIntegerLiteral() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (IntegerLiteralExpr, String)] = [
       #line: (IntegerLiteralExpr(digits: .integerLiteral(String(123))), "␣123"),

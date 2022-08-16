@@ -90,7 +90,7 @@ public extension CodeBlockItemList {
 }
 
 @resultBuilder
-public struct GarbageNodesBuilder {
+public struct UnexpectedNodesBuilder {
 
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
@@ -102,7 +102,7 @@ public struct GarbageNodesBuilder {
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = GarbageNodes
+  public typealias FinalResult = UnexpectedNodes
 
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -117,8 +117,8 @@ public struct GarbageNodesBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
-  public static func buildExpression(_ expression: ExpressibleAsGarbageNodes) -> Component {
-    return expression.createGarbageNodes().elements
+  public static func buildExpression(_ expression: ExpressibleAsUnexpectedNodes) -> Component {
+    return expression.createUnexpectedNodes().elements
   }
   
   /// Enables support for `if` statements that do not have an `else`.
@@ -158,8 +158,8 @@ public struct GarbageNodesBuilder {
   }
 }
 
-public extension GarbageNodes {
-  init(@GarbageNodesBuilder itemsBuilder: () -> GarbageNodes) {
+public extension UnexpectedNodes {
+  init(@UnexpectedNodesBuilder itemsBuilder: () -> UnexpectedNodes) {
     self = itemsBuilder()
   }
 }

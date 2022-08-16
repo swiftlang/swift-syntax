@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class IdentifierPatternTests: XCTestCase {
   func testStringLiteral() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (ExpressibleAsIdentifierPattern, String)] = [
       #line: (IdentifierPattern(identifier: .identifier("Test")), "␣Test"),

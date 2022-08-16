@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class IdentifierExprTests: XCTestCase {
   func testStringLiteral() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (ExpressibleAsIdentifierExpr, String)] = [
       #line: (IdentifierExpr(identifier: .identifier("Test")), "␣Test"),

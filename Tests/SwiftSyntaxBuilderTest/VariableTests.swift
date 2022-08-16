@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class VariableTests: XCTestCase {
   func testVariableDecl() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let buildable = VariableDecl(letOrVarKeyword: .let) {
       PatternBinding(pattern: "a", typeAnnotation: ArrayType(elementType: "Int"))
@@ -15,7 +15,7 @@ final class VariableTests: XCTestCase {
   }
 
   func testVariableDeclWithValue() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let buildable = VariableDecl(letOrVarKeyword: .var) {
       PatternBinding(
@@ -71,7 +71,7 @@ final class VariableTests: XCTestCase {
   }
 
   func testConvenienceInitializer() {
-    let leadingTrivia = Trivia.garbageText("␣")
+    let leadingTrivia = Trivia.unexpectedText("␣")
 
     let testCases: [UInt: (TokenSyntax, String, String?, ExpressibleAsExprBuildable?, String)] = [
       #line: (.let, "foo", "Int", nil, "␣let foo: Int"),

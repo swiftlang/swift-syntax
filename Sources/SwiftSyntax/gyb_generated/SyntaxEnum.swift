@@ -30,7 +30,7 @@ public enum SyntaxEnum {
   case codeBlockItem(CodeBlockItemSyntax)
   case codeBlockItemList(CodeBlockItemListSyntax)
   case codeBlock(CodeBlockSyntax)
-  case garbageNodes(GarbageNodesSyntax)
+  case unexpectedNodes(UnexpectedNodesSyntax)
   case inOutExpr(InOutExprSyntax)
   case poundColumnExpr(PoundColumnExprSyntax)
   case tupleExprElementList(TupleExprElementListSyntax)
@@ -314,8 +314,8 @@ public extension Syntax {
       return .codeBlockItemList(CodeBlockItemListSyntax(self)!)
     case .codeBlock:
       return .codeBlock(CodeBlockSyntax(self)!)
-    case .garbageNodes:
-      return .garbageNodes(GarbageNodesSyntax(self)!)
+    case .unexpectedNodes:
+      return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .inOutExpr:
       return .inOutExpr(InOutExprSyntax(self)!)
     case .poundColumnExpr:

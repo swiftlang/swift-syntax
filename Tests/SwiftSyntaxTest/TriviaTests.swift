@@ -51,10 +51,10 @@ public class TriviaTests: XCTestCase {
 
     XCTAssertEqual(TriviaPiece.docBlockComment("d"), .docBlockComment("d"))
     XCTAssertNotEqual(TriviaPiece.docBlockComment("d"), .docBlockComment("e"))
-    XCTAssertNotEqual(TriviaPiece.docBlockComment("d"), .garbageText("d"))
+    XCTAssertNotEqual(TriviaPiece.docBlockComment("d"), .unexpectedText("d"))
 
-    XCTAssertEqual(TriviaPiece.garbageText("e"), .garbageText("e"))
-    XCTAssertNotEqual(TriviaPiece.garbageText("e"), .garbageText("f"))
-    XCTAssertNotEqual(TriviaPiece.garbageText("e"), .lineComment("e"))
+    XCTAssertEqual(TriviaPiece.unexpectedText("e"), .unexpectedText("e"))
+    XCTAssertNotEqual(TriviaPiece.unexpectedText("e"), .unexpectedText("f"))
+    XCTAssertNotEqual(TriviaPiece.unexpectedText("e"), .lineComment("e"))
   }
 }

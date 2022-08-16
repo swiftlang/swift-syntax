@@ -79,7 +79,6 @@ let package = Package(
       dependencies: ["SwiftSyntax"],
       exclude: [
         "gyb_helpers",
-        "BuildableNodes.swift.gyb",
         "ResultBuilders.swift.gyb",
       ]
     ),

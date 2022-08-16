@@ -1496,6 +1496,424 @@ public enum RawTokenKind {
     default: return nil
     }
   }
+
+  /// Returns `true` if the token is a Swift keyword.
+  ///
+  /// Keywords are reserved unconditionally for use by Swift and may not
+  /// appear as identifiers in any position without being escaped. For example,
+  /// `class`, `func`, or `import`.
+  public var isKeyword: Bool {
+    switch self {
+    case .eof: return false
+    case .associatedtypeKeyword: return true
+    case .classKeyword: return true
+    case .deinitKeyword: return true
+    case .enumKeyword: return true
+    case .extensionKeyword: return true
+    case .funcKeyword: return true
+    case .importKeyword: return true
+    case .initKeyword: return true
+    case .inoutKeyword: return true
+    case .letKeyword: return true
+    case .operatorKeyword: return true
+    case .precedencegroupKeyword: return true
+    case .protocolKeyword: return true
+    case .structKeyword: return true
+    case .subscriptKeyword: return true
+    case .typealiasKeyword: return true
+    case .varKeyword: return true
+    case .fileprivateKeyword: return true
+    case .internalKeyword: return true
+    case .privateKeyword: return true
+    case .publicKeyword: return true
+    case .staticKeyword: return true
+    case .deferKeyword: return true
+    case .ifKeyword: return true
+    case .guardKeyword: return true
+    case .doKeyword: return true
+    case .repeatKeyword: return true
+    case .elseKeyword: return true
+    case .forKeyword: return true
+    case .inKeyword: return true
+    case .whileKeyword: return true
+    case .returnKeyword: return true
+    case .breakKeyword: return true
+    case .continueKeyword: return true
+    case .fallthroughKeyword: return true
+    case .switchKeyword: return true
+    case .caseKeyword: return true
+    case .defaultKeyword: return true
+    case .whereKeyword: return true
+    case .catchKeyword: return true
+    case .throwKeyword: return true
+    case .asKeyword: return true
+    case .anyKeyword: return true
+    case .falseKeyword: return true
+    case .isKeyword: return true
+    case .nilKeyword: return true
+    case .rethrowsKeyword: return true
+    case .superKeyword: return true
+    case .selfKeyword: return true
+    case .capitalSelfKeyword: return true
+    case .trueKeyword: return true
+    case .tryKeyword: return true
+    case .throwsKeyword: return true
+    case .__file__Keyword: return true
+    case .__line__Keyword: return true
+    case .__column__Keyword: return true
+    case .__function__Keyword: return true
+    case .__dso_handle__Keyword: return true
+    case .wildcardKeyword: return true
+    case .leftParen: return false
+    case .rightParen: return false
+    case .leftBrace: return false
+    case .rightBrace: return false
+    case .leftSquareBracket: return false
+    case .rightSquareBracket: return false
+    case .leftAngle: return false
+    case .rightAngle: return false
+    case .period: return false
+    case .prefixPeriod: return false
+    case .comma: return false
+    case .ellipsis: return false
+    case .colon: return false
+    case .semicolon: return false
+    case .equal: return false
+    case .atSign: return false
+    case .pound: return false
+    case .prefixAmpersand: return false
+    case .arrow: return false
+    case .backtick: return false
+    case .backslash: return false
+    case .exclamationMark: return false
+    case .postfixQuestionMark: return false
+    case .infixQuestionMark: return false
+    case .stringQuote: return false
+    case .singleQuote: return false
+    case .multilineStringQuote: return false
+    case .poundKeyPathKeyword: return true
+    case .poundLineKeyword: return true
+    case .poundSelectorKeyword: return true
+    case .poundFileKeyword: return true
+    case .poundFileIDKeyword: return true
+    case .poundFilePathKeyword: return true
+    case .poundColumnKeyword: return true
+    case .poundFunctionKeyword: return true
+    case .poundDsohandleKeyword: return true
+    case .poundAssertKeyword: return true
+    case .poundSourceLocationKeyword: return true
+    case .poundWarningKeyword: return true
+    case .poundErrorKeyword: return true
+    case .poundIfKeyword: return true
+    case .poundElseKeyword: return true
+    case .poundElseifKeyword: return true
+    case .poundEndifKeyword: return true
+    case .poundAvailableKeyword: return true
+    case .poundUnavailableKeyword: return true
+    case .poundFileLiteralKeyword: return true
+    case .poundImageLiteralKeyword: return true
+    case .poundColorLiteralKeyword: return true
+    case .integerLiteral: return false
+    case .floatingLiteral: return false
+    case .stringLiteral: return false
+    case .regexLiteral: return false
+    case .unknown: return false
+    case .identifier: return false
+    case .unspacedBinaryOperator: return false
+    case .spacedBinaryOperator: return false
+    case .postfixOperator: return false
+    case .prefixOperator: return false
+    case .dollarIdentifier: return false
+    case .contextualKeyword: return false
+    case .rawStringDelimiter: return false
+    case .stringSegment: return false
+    case .stringInterpolationAnchor: return false
+    case .yield: return false
+    }
+  }
+
+  /// Returns `true` if the token is a Swift punctuator.
+  ///
+  /// Punctuation tokens generally separate identifiers from each other. For
+  /// example, the '<' and '>' characters in a generic parameter list, or the
+  /// quote characters in a string literal.
+  public var isPunctuation: Bool {
+    switch self {
+    case .eof: return false
+    case .associatedtypeKeyword: return false
+    case .classKeyword: return false
+    case .deinitKeyword: return false
+    case .enumKeyword: return false
+    case .extensionKeyword: return false
+    case .funcKeyword: return false
+    case .importKeyword: return false
+    case .initKeyword: return false
+    case .inoutKeyword: return false
+    case .letKeyword: return false
+    case .operatorKeyword: return false
+    case .precedencegroupKeyword: return false
+    case .protocolKeyword: return false
+    case .structKeyword: return false
+    case .subscriptKeyword: return false
+    case .typealiasKeyword: return false
+    case .varKeyword: return false
+    case .fileprivateKeyword: return false
+    case .internalKeyword: return false
+    case .privateKeyword: return false
+    case .publicKeyword: return false
+    case .staticKeyword: return false
+    case .deferKeyword: return false
+    case .ifKeyword: return false
+    case .guardKeyword: return false
+    case .doKeyword: return false
+    case .repeatKeyword: return false
+    case .elseKeyword: return false
+    case .forKeyword: return false
+    case .inKeyword: return false
+    case .whileKeyword: return false
+    case .returnKeyword: return false
+    case .breakKeyword: return false
+    case .continueKeyword: return false
+    case .fallthroughKeyword: return false
+    case .switchKeyword: return false
+    case .caseKeyword: return false
+    case .defaultKeyword: return false
+    case .whereKeyword: return false
+    case .catchKeyword: return false
+    case .throwKeyword: return false
+    case .asKeyword: return false
+    case .anyKeyword: return false
+    case .falseKeyword: return false
+    case .isKeyword: return false
+    case .nilKeyword: return false
+    case .rethrowsKeyword: return false
+    case .superKeyword: return false
+    case .selfKeyword: return false
+    case .capitalSelfKeyword: return false
+    case .trueKeyword: return false
+    case .tryKeyword: return false
+    case .throwsKeyword: return false
+    case .__file__Keyword: return false
+    case .__line__Keyword: return false
+    case .__column__Keyword: return false
+    case .__function__Keyword: return false
+    case .__dso_handle__Keyword: return false
+    case .wildcardKeyword: return false
+    case .leftParen: return true
+    case .rightParen: return true
+    case .leftBrace: return true
+    case .rightBrace: return true
+    case .leftSquareBracket: return true
+    case .rightSquareBracket: return true
+    case .leftAngle: return true
+    case .rightAngle: return true
+    case .period: return true
+    case .prefixPeriod: return true
+    case .comma: return true
+    case .ellipsis: return true
+    case .colon: return true
+    case .semicolon: return true
+    case .equal: return true
+    case .atSign: return true
+    case .pound: return true
+    case .prefixAmpersand: return true
+    case .arrow: return true
+    case .backtick: return true
+    case .backslash: return true
+    case .exclamationMark: return true
+    case .postfixQuestionMark: return true
+    case .infixQuestionMark: return true
+    case .stringQuote: return true
+    case .singleQuote: return true
+    case .multilineStringQuote: return true
+    case .poundKeyPathKeyword: return false
+    case .poundLineKeyword: return false
+    case .poundSelectorKeyword: return false
+    case .poundFileKeyword: return false
+    case .poundFileIDKeyword: return false
+    case .poundFilePathKeyword: return false
+    case .poundColumnKeyword: return false
+    case .poundFunctionKeyword: return false
+    case .poundDsohandleKeyword: return false
+    case .poundAssertKeyword: return false
+    case .poundSourceLocationKeyword: return false
+    case .poundWarningKeyword: return false
+    case .poundErrorKeyword: return false
+    case .poundIfKeyword: return false
+    case .poundElseKeyword: return false
+    case .poundElseifKeyword: return false
+    case .poundEndifKeyword: return false
+    case .poundAvailableKeyword: return false
+    case .poundUnavailableKeyword: return false
+    case .poundFileLiteralKeyword: return false
+    case .poundImageLiteralKeyword: return false
+    case .poundColorLiteralKeyword: return false
+    case .integerLiteral: return false
+    case .floatingLiteral: return false
+    case .stringLiteral: return false
+    case .regexLiteral: return false
+    case .unknown: return false
+    case .identifier: return false
+    case .unspacedBinaryOperator: return false
+    case .spacedBinaryOperator: return false
+    case .postfixOperator: return false
+    case .prefixOperator: return false
+    case .dollarIdentifier: return false
+    case .contextualKeyword: return false
+    case .rawStringDelimiter: return false
+    case .stringSegment: return false
+    case .stringInterpolationAnchor: return false
+    case .yield: return false
+    }
+  }
+  
+  @_spi(RawSyntax)
+  public init?(keyword text: SyntaxText) {
+    switch text.count {
+    case 1:
+      switch text {
+      case "_": self = .wildcardKeyword
+      default: return nil
+      }
+    case 2:
+      switch text {
+      case "if": self = .ifKeyword
+      case "do": self = .doKeyword
+      case "in": self = .inKeyword
+      case "as": self = .asKeyword
+      case "is": self = .isKeyword
+      default: return nil
+      }
+    case 3:
+      switch text {
+      case "let": self = .letKeyword
+      case "var": self = .varKeyword
+      case "for": self = .forKeyword
+      case "Any": self = .anyKeyword
+      case "nil": self = .nilKeyword
+      case "try": self = .tryKeyword
+      case "#if": self = .poundIfKeyword
+      default: return nil
+      }
+    case 4:
+      switch text {
+      case "enum": self = .enumKeyword
+      case "func": self = .funcKeyword
+      case "init": self = .initKeyword
+      case "else": self = .elseKeyword
+      case "case": self = .caseKeyword
+      case "self": self = .selfKeyword
+      case "Self": self = .capitalSelfKeyword
+      case "true": self = .trueKeyword
+      default: return nil
+      }
+    case 5:
+      switch text {
+      case "class": self = .classKeyword
+      case "inout": self = .inoutKeyword
+      case "defer": self = .deferKeyword
+      case "guard": self = .guardKeyword
+      case "while": self = .whileKeyword
+      case "break": self = .breakKeyword
+      case "where": self = .whereKeyword
+      case "catch": self = .catchKeyword
+      case "throw": self = .throwKeyword
+      case "false": self = .falseKeyword
+      case "super": self = .superKeyword
+      case "#line": self = .poundLineKeyword
+      case "#file": self = .poundFileKeyword
+      case "#else": self = .poundElseKeyword
+      default: return nil
+      }
+    case 6:
+      switch text {
+      case "deinit": self = .deinitKeyword
+      case "import": self = .importKeyword
+      case "struct": self = .structKeyword
+      case "public": self = .publicKeyword
+      case "static": self = .staticKeyword
+      case "repeat": self = .repeatKeyword
+      case "return": self = .returnKeyword
+      case "switch": self = .switchKeyword
+      case "throws": self = .throwsKeyword
+      case "#error": self = .poundErrorKeyword
+      case "#endif": self = .poundEndifKeyword
+      default: return nil
+      }
+    case 7:
+      switch text {
+      case "private": self = .privateKeyword
+      case "default": self = .defaultKeyword
+      case "#fileID": self = .poundFileIDKeyword
+      case "#column": self = .poundColumnKeyword
+      case "#assert": self = .poundAssertKeyword
+      case "#elseif": self = .poundElseifKeyword
+      default: return nil
+      }
+    case 8:
+      switch text {
+      case "operator": self = .operatorKeyword
+      case "protocol": self = .protocolKeyword
+      case "internal": self = .internalKeyword
+      case "continue": self = .continueKeyword
+      case "rethrows": self = .rethrowsKeyword
+      case "__FILE__": self = .__file__Keyword
+      case "__LINE__": self = .__line__Keyword
+      case "#keyPath": self = .poundKeyPathKeyword
+      case "#warning": self = .poundWarningKeyword
+      default: return nil
+      }
+    case 9:
+      switch text {
+      case "extension": self = .extensionKeyword
+      case "subscript": self = .subscriptKeyword
+      case "typealias": self = .typealiasKeyword
+      case "#selector": self = .poundSelectorKeyword
+      case "#filePath": self = .poundFilePathKeyword
+      case "#function": self = .poundFunctionKeyword
+      default: return nil
+      }
+    case 10:
+      switch text {
+      case "__COLUMN__": self = .__column__Keyword
+      case "#dsohandle": self = .poundDsohandleKeyword
+      case "#available": self = .poundAvailableKeyword
+      default: return nil
+      }
+    case 11:
+      switch text {
+      case "fileprivate": self = .fileprivateKeyword
+      case "fallthrough": self = .fallthroughKeyword
+      default: return nil
+      }
+    case 12:
+      switch text {
+      case "__FUNCTION__": self = .__function__Keyword
+      case "#unavailable": self = .poundUnavailableKeyword
+      case "#fileLiteral": self = .poundFileLiteralKeyword
+      default: return nil
+      }
+    case 13:
+      switch text {
+      case "#imageLiteral": self = .poundImageLiteralKeyword
+      case "#colorLiteral": self = .poundColorLiteralKeyword
+      default: return nil
+      }
+    case 14:
+      switch text {
+      case "associatedtype": self = .associatedtypeKeyword
+      case "__DSO_HANDLE__": self = .__dso_handle__Keyword
+      default: return nil
+      }
+    case 15:
+      switch text {
+      case "precedencegroup": self = .precedencegroupKeyword
+      case "#sourceLocation": self = .poundSourceLocationKeyword
+      default: return nil
+      }
+    default: return nil
+    }
+  }
 }
 
 extension TokenKind {

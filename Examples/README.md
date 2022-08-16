@@ -5,32 +5,34 @@
 
 ## Some Example Usages
 
-[**Swift AST Explorer**](https://swift-ast-explorer.com/): a Swift AST visualizer.
+[**BartyCrouch**](https://github.com/Flinesoft/BartyCrouch): A tool to incrementally update strings files to help with localization.
 
-[**swift-format**](https://github.com/apple/swift-format): formatting technology for Swift source code.
+[**Hatch**](https://github.com/sdidla/Hatch): Provides a simple, extensible parser to obtain a hierarchical list of symbols.
 
-[**Swift Stress Tester**](https://github.com/apple/swift-stress-tester): a test driver for sourcekitd and Swift evolution.
+[**Muter**](https://github.com/muter-mutation-testing/muter): Automated mutation testing for Swift.
 
-[**SwiftSemantics**](https://github.com/SwiftDocOrg/SwiftSemantics): parses Swift code into its constituent declarations.
+[**Pecker**](https://github.com/woshiccm/Pecker): A tool to detect unused code.
 
-[**Sitrep**](https://github.com/twostraws/Sitrep): A source code analyzer for Swift projects
+[**Periphery**](https://github.com/peripheryapp/periphery): A tool to detect unused code.
 
-[**SwiftRewriter**](https://github.com/inamiy/SwiftRewriter): a Swift code formatter.
+[**Piranha**](https://github.com/uber/piranha): A tool for refactoring code related to feature flags.
 
-[**SwiftPack**](https://github.com/omochi/SwiftPack): a tool for automatically embedding Swift library source.
+[**Sitrep**](https://github.com/twostraws/Sitrep): A source code analyzer for Swift projects.
 
-[**Periphery**](https://github.com/peripheryapp/periphery): a tool to detect unused code.
+[**STAR**](https://github.com/thumbtack/star): A tool to find how often specified Swift type(s) are used in a project.
 
-[**BartyCrouch**](https://github.com/Flinesoft/BartyCrouch): a tool to incrementally update strings files to help App localization.
+[**Swift AST Explorer**](https://swift-ast-explorer.com/): A Swift AST visualizer.
 
-[**Muter**](https://github.com/muter-mutation-testing/muter): Automated mutation testing for Swift
+[**Swift Stress Tester**](https://github.com/apple/swift-stress-tester): A test driver for `sourcekitd` and Swift evolution.
 
-[**Swift Variable Injector**](https://github.com/LucianoPAlmeida/variable-injector): a tool to replace string literals with environment variables values.
+[**Swift Variable Injector**](https://github.com/LucianoPAlmeida/variable-injector): A tool to replace string literals with the values of environment variables.
 
-[**Pecker**](https://github.com/woshiccm/Pecker): a tool to detect unused code based on [SwiftSyntax](https://github.com/apple/swift-syntax.git) and [IndexStoreDB](https://github.com/apple/indexstore-db.git).
+[**swift-format**](https://github.com/apple/swift-format): Formatting technology for Swift source code.
 
-[**Piranha**](https://github.com/uber/piranha): a tool for refactoring code related to feature flags.
+[**SwiftLint**](https://github.com/realm/SwiftLint): A tool to enforce Swift style and conventions.
 
-[**STAR**](https://github.com/thumbtack/star): a tool to find how often specified Swift type(s) are used in a project.
+[**SwiftPack**](https://github.com/omochi/SwiftPack): A tool for automatically embedding Swift library source.
 
-[**Hatch**](https://github.com/sdidla/Hatch): Provides a simple, extensible parser to obtain a hierarchical list of symbols
+[**SwiftRewriter**](https://github.com/inamiy/SwiftRewriter): A Swift code formatter.
+
+[**SwiftSemantics**](https://github.com/SwiftDocOrg/SwiftSemantics): Parses Swift code into its constituent declarations.

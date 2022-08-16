@@ -18,6 +18,7 @@ import SwiftSyntaxBuilder
 let sourceTemplates = [
   (buildableBaseProtocolsFile, "BuildableBaseProtocols.swift"),
   (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
+  (buildableNodesFile, "BuildableNodes.swift"),
   (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
   (tokensFile, "Tokens.swift"),
   (tokenSyntaxFile, "TokenSyntax.swift"),

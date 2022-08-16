@@ -46,7 +46,7 @@ struct SyntaxBuildableType: Hashable {
       return NilLiteralExpr()
     } else if isToken {
       if let token = token, token.text != nil {
-        return MemberAccessExpr(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name))
+        return MemberAccessExpr(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name).backticked)
       } else if tokenKind == "EOFToken" {
         return MemberAccessExpr(base: "TokenSyntax", name: "eof")
       }

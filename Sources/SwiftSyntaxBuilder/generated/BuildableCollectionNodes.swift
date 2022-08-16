@@ -47,13 +47,14 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCodeBlockItemList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsCodeBlockItemList`
+  /// Conformance to `ExpressibleAsCodeBlockItemList`.
   public func createCodeBlockItemList() -> CodeBlockItemList {
     return self
   }
-  /// `CodeBlockItemList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `CodeBlockItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -91,13 +92,14 @@ public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildUnexpectedNodes(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsUnexpectedNodes`
+  /// Conformance to `ExpressibleAsUnexpectedNodes`.
   public func createUnexpectedNodes() -> UnexpectedNodes {
     return self
   }
-  /// `UnexpectedNodes` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `UnexpectedNodes` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -140,13 +142,14 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTupleExprElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsTupleExprElementList`
+  /// Conformance to `ExpressibleAsTupleExprElementList`.
   public func createTupleExprElementList() -> TupleExprElementList {
     return self
   }
-  /// `TupleExprElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `TupleExprElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -189,13 +192,14 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildArrayElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsArrayElementList`
+  /// Conformance to `ExpressibleAsArrayElementList`.
   public func createArrayElementList() -> ArrayElementList {
     return self
   }
-  /// `ArrayElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ArrayElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -233,13 +237,14 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildDictionaryElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsDictionaryElementList`
+  /// Conformance to `ExpressibleAsDictionaryElementList`.
   public func createDictionaryElementList() -> DictionaryElementList {
     return self
   }
-  /// `DictionaryElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `DictionaryElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -282,13 +287,14 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildStringLiteralSegments(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsStringLiteralSegments`
+  /// Conformance to `ExpressibleAsStringLiteralSegments`.
   public func createStringLiteralSegments() -> StringLiteralSegments {
     return self
   }
-  /// `StringLiteralSegments` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `StringLiteralSegments` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -331,13 +337,14 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildDeclNameArgumentList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsDeclNameArgumentList`
+  /// Conformance to `ExpressibleAsDeclNameArgumentList`.
   public func createDeclNameArgumentList() -> DeclNameArgumentList {
     return self
   }
-  /// `DeclNameArgumentList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `DeclNameArgumentList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -380,13 +387,14 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildExprList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsExprList`
+  /// Conformance to `ExpressibleAsExprList`.
   public func createExprList() -> ExprList {
     return self
   }
-  /// `ExprList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ExprList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -424,13 +432,14 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildClosureCaptureItemList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsClosureCaptureItemList`
+  /// Conformance to `ExpressibleAsClosureCaptureItemList`.
   public func createClosureCaptureItemList() -> ClosureCaptureItemList {
     return self
   }
-  /// `ClosureCaptureItemList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ClosureCaptureItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -473,13 +482,14 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildClosureParamList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsClosureParamList`
+  /// Conformance to `ExpressibleAsClosureParamList`.
   public func createClosureParamList() -> ClosureParamList {
     return self
   }
-  /// `ClosureParamList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ClosureParamList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -522,13 +532,14 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildMultipleTrailingClosureElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsMultipleTrailingClosureElementList`
+  /// Conformance to `ExpressibleAsMultipleTrailingClosureElementList`.
   public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
     return self
   }
-  /// `MultipleTrailingClosureElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `MultipleTrailingClosureElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -571,13 +582,14 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildObjcName(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsObjcName`
+  /// Conformance to `ExpressibleAsObjcName`.
   public func createObjcName() -> ObjcName {
     return self
   }
-  /// `ObjcName` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ObjcName` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -620,13 +632,14 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildFunctionParameterList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsFunctionParameterList`
+  /// Conformance to `ExpressibleAsFunctionParameterList`.
   public func createFunctionParameterList() -> FunctionParameterList {
     return self
   }
-  /// `FunctionParameterList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `FunctionParameterList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -669,13 +682,14 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildIfConfigClauseList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsIfConfigClauseList`
+  /// Conformance to `ExpressibleAsIfConfigClauseList`.
   public func createIfConfigClauseList() -> IfConfigClauseList {
     return self
   }
-  /// `IfConfigClauseList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `IfConfigClauseList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -718,13 +732,14 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildInheritedTypeList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsInheritedTypeList`
+  /// Conformance to `ExpressibleAsInheritedTypeList`.
   public func createInheritedTypeList() -> InheritedTypeList {
     return self
   }
-  /// `InheritedTypeList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `InheritedTypeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -767,13 +782,14 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildMemberDeclList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsMemberDeclList`
+  /// Conformance to `ExpressibleAsMemberDeclList`.
   public func createMemberDeclList() -> MemberDeclList {
     return self
   }
-  /// `MemberDeclList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `MemberDeclList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -811,13 +827,14 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildModifierList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsModifierList`
+  /// Conformance to `ExpressibleAsModifierList`.
   public func createModifierList() -> ModifierList {
     return self
   }
-  /// `ModifierList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ModifierList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -860,13 +877,14 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAccessPath(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsAccessPath`
+  /// Conformance to `ExpressibleAsAccessPath`.
   public func createAccessPath() -> AccessPath {
     return self
   }
-  /// `AccessPath` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `AccessPath` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -909,13 +927,14 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAccessorList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsAccessorList`
+  /// Conformance to `ExpressibleAsAccessorList`.
   public func createAccessorList() -> AccessorList {
     return self
   }
-  /// `AccessorList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `AccessorList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -953,13 +972,14 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPatternBindingList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsPatternBindingList`
+  /// Conformance to `ExpressibleAsPatternBindingList`.
   public func createPatternBindingList() -> PatternBindingList {
     return self
   }
-  /// `PatternBindingList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `PatternBindingList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1002,13 +1022,14 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildEnumCaseElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsEnumCaseElementList`
+  /// Conformance to `ExpressibleAsEnumCaseElementList`.
   public func createEnumCaseElementList() -> EnumCaseElementList {
     return self
   }
-  /// `EnumCaseElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `EnumCaseElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1047,13 +1068,14 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildIdentifierList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsIdentifierList`
+  /// Conformance to `ExpressibleAsIdentifierList`.
   public func createIdentifierList() -> IdentifierList {
     return self
   }
-  /// `IdentifierList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `IdentifierList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1096,13 +1118,14 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPrecedenceGroupAttributeList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsPrecedenceGroupAttributeList`
+  /// Conformance to `ExpressibleAsPrecedenceGroupAttributeList`.
   public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
     return self
   }
-  /// `PrecedenceGroupAttributeList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `PrecedenceGroupAttributeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1145,13 +1168,14 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPrecedenceGroupNameList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsPrecedenceGroupNameList`
+  /// Conformance to `ExpressibleAsPrecedenceGroupNameList`.
   public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
     return self
   }
-  /// `PrecedenceGroupNameList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `PrecedenceGroupNameList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1190,13 +1214,14 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTokenList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsTokenList`
+  /// Conformance to `ExpressibleAsTokenList`.
   public func createTokenList() -> TokenList {
     return self
   }
-  /// `TokenList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `TokenList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1235,13 +1260,14 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildNonEmptyTokenList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsNonEmptyTokenList`
+  /// Conformance to `ExpressibleAsNonEmptyTokenList`.
   public func createNonEmptyTokenList() -> NonEmptyTokenList {
     return self
   }
-  /// `NonEmptyTokenList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `NonEmptyTokenList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1284,13 +1310,14 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAttributeList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsAttributeList`
+  /// Conformance to `ExpressibleAsAttributeList`.
   public func createAttributeList() -> AttributeList {
     return self
   }
-  /// `AttributeList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `AttributeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1333,13 +1360,14 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildSpecializeAttributeSpecList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsSpecializeAttributeSpecList`
+  /// Conformance to `ExpressibleAsSpecializeAttributeSpecList`.
   public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
     return self
   }
-  /// `SpecializeAttributeSpecList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `SpecializeAttributeSpecList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1382,13 +1410,14 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildObjCSelector(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsObjCSelector`
+  /// Conformance to `ExpressibleAsObjCSelector`.
   public func createObjCSelector() -> ObjCSelector {
     return self
   }
-  /// `ObjCSelector` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ObjCSelector` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1431,13 +1460,14 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildDifferentiabilityParamList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsDifferentiabilityParamList`
+  /// Conformance to `ExpressibleAsDifferentiabilityParamList`.
   public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
     return self
   }
-  /// `DifferentiabilityParamList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `DifferentiabilityParamList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1480,13 +1510,14 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildBackDeployVersionList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsBackDeployVersionList`
+  /// Conformance to `ExpressibleAsBackDeployVersionList`.
   public func createBackDeployVersionList() -> BackDeployVersionList {
     return self
   }
-  /// `BackDeployVersionList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `BackDeployVersionList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1529,13 +1560,14 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildSwitchCaseList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsSwitchCaseList`
+  /// Conformance to `ExpressibleAsSwitchCaseList`.
   public func createSwitchCaseList() -> SwitchCaseList {
     return self
   }
-  /// `SwitchCaseList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `SwitchCaseList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1578,13 +1610,14 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCatchClauseList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsCatchClauseList`
+  /// Conformance to `ExpressibleAsCatchClauseList`.
   public func createCatchClauseList() -> CatchClauseList {
     return self
   }
-  /// `CatchClauseList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `CatchClauseList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1627,13 +1660,14 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCaseItemList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsCaseItemList`
+  /// Conformance to `ExpressibleAsCaseItemList`.
   public func createCaseItemList() -> CaseItemList {
     return self
   }
-  /// `CaseItemList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `CaseItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1676,13 +1710,14 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCatchItemList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsCatchItemList`
+  /// Conformance to `ExpressibleAsCatchItemList`.
   public func createCatchItemList() -> CatchItemList {
     return self
   }
-  /// `CatchItemList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `CatchItemList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1725,13 +1760,14 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildConditionElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsConditionElementList`
+  /// Conformance to `ExpressibleAsConditionElementList`.
   public func createConditionElementList() -> ConditionElementList {
     return self
   }
-  /// `ConditionElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ConditionElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1774,13 +1810,14 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildGenericRequirementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsGenericRequirementList`
+  /// Conformance to `ExpressibleAsGenericRequirementList`.
   public func createGenericRequirementList() -> GenericRequirementList {
     return self
   }
-  /// `GenericRequirementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `GenericRequirementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1823,13 +1860,14 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildGenericParameterList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsGenericParameterList`
+  /// Conformance to `ExpressibleAsGenericParameterList`.
   public func createGenericParameterList() -> GenericParameterList {
     return self
   }
-  /// `GenericParameterList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `GenericParameterList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1872,13 +1910,14 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildPrimaryAssociatedTypeList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsPrimaryAssociatedTypeList`
+  /// Conformance to `ExpressibleAsPrimaryAssociatedTypeList`.
   public func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
     return self
   }
-  /// `PrimaryAssociatedTypeList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `PrimaryAssociatedTypeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1921,13 +1960,14 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildCompositionTypeElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsCompositionTypeElementList`
+  /// Conformance to `ExpressibleAsCompositionTypeElementList`.
   public func createCompositionTypeElementList() -> CompositionTypeElementList {
     return self
   }
-  /// `CompositionTypeElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `CompositionTypeElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -1970,13 +2010,14 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTupleTypeElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsTupleTypeElementList`
+  /// Conformance to `ExpressibleAsTupleTypeElementList`.
   public func createTupleTypeElementList() -> TupleTypeElementList {
     return self
   }
-  /// `TupleTypeElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `TupleTypeElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -2019,13 +2060,14 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildGenericArgumentList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsGenericArgumentList`
+  /// Conformance to `ExpressibleAsGenericArgumentList`.
   public func createGenericArgumentList() -> GenericArgumentList {
     return self
   }
-  /// `GenericArgumentList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `GenericArgumentList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -2068,13 +2110,14 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildTuplePatternElementList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsTuplePatternElementList`
+  /// Conformance to `ExpressibleAsTuplePatternElementList`.
   public func createTuplePatternElementList() -> TuplePatternElementList {
     return self
   }
-  /// `TuplePatternElementList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `TuplePatternElementList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
@@ -2117,13 +2160,14 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     return Syntax(buildAvailabilitySpecList(format: format, leadingTrivia: leadingTrivia))
   }
-  /// Conformance to `ExpressibleAsAvailabilitySpecList`
+  /// Conformance to `ExpressibleAsAvailabilitySpecList`.
   public func createAvailabilitySpecList() -> AvailabilitySpecList {
     return self
   }
-  /// `AvailabilitySpecList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
-  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
-  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `AvailabilitySpecList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }

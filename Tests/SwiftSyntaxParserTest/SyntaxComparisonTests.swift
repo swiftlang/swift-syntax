@@ -160,7 +160,7 @@ public class SyntaxComparisonTests: XCTestCase {
   private func makeFunc(identifier: TokenSyntax, keyword: TokenSyntax = .funcKeyword(),
                         body: CodeBlockSyntax? = nil, indent: Int = 0) -> FunctionDeclSyntax {
     let funcBody: CodeBlockSyntax
-    if let body {
+    if let body = body {
       funcBody = body
     } else {
       funcBody = makeBody()

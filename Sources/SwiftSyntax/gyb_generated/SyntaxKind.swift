@@ -339,6 +339,18 @@ internal enum SyntaxKind: CSyntaxKind {
     default: return false
     }
   }
+
+  var isMissing: Bool {
+    switch self {
+    case .missingDecl: return true
+    case .missingExpr: return true
+    case .missingPattern: return true
+    case .missingStmt: return true
+    case .missingType: return true
+    case .missing: return true
+    default: return false
+    }
+  }
 }
 
 extension SyntaxKind {

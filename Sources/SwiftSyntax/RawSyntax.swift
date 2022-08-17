@@ -13,6 +13,20 @@
 typealias RawSyntaxBuffer = UnsafeBufferPointer<RawSyntax?>
 typealias RawTriviaPieceBuffer = UnsafeBufferPointer<RawTriviaPiece>
 
+fileprivate extension SyntaxKind {
+  /// Whether this node kind should be considered as `hasError` for purposes of `RecursiveRawSyntaxFlags`.
+  var hasError: Bool {
+    return self == .unexpectedNodes || self.isMissing
+  }
+}
+
+struct RecursiveRawSyntaxFlags: OptionSet {
+  let rawValue: UInt8
+
+  /// Whether the tree contained by this layout has any missing or unexpected nodes.
+  static let hasError = RecursiveRawSyntaxFlags(rawValue: 1 << 0)
+}
+
 /// Node data for RawSyntax tree. Tagged union plus common data.
 internal struct RawSyntaxData {
   internal enum Payload {
@@ -54,6 +68,7 @@ internal struct RawSyntaxData {
     var byteLength: Int
     /// Number of nodes in this subtree, excluding this node.
     var descendantCount: Int
+    var recursiveFlags: RecursiveRawSyntaxFlags
   }
 
   fileprivate var payload: Payload
@@ -213,6 +228,19 @@ extension RawSyntax {
   /// Whether or not this node is an unknown one.
   var isUnknown: Bool {
     kind.isUnknown
+  }
+
+  var recursiveFlags: RecursiveRawSyntaxFlags {
+    switch rawData.payload {
+    case .materializedToken, .parsedToken:
+      var recursiveFlags: RecursiveRawSyntaxFlags = []
+      if presence == .missing {
+        recursiveFlags.insert(.hasError)
+      }
+      return recursiveFlags
+    case .layout(let dat):
+      return dat.recursiveFlags
+    }
   }
 
   /// Child nodes.
@@ -815,12 +843,13 @@ extension RawSyntax {
     layout: RawSyntaxBuffer,
     byteLength: Int,
     descendantCount: Int,
+    recursiveFlags: RecursiveRawSyntaxFlags,
     arena: SyntaxArena
   ) -> RawSyntax {
     validateLayout(layout: layout, as: kind)
     let payload = RawSyntaxData.Layout(
       kind: kind, layout: layout,
-      byteLength: byteLength, descendantCount: descendantCount)
+      byteLength: byteLength, descendantCount: descendantCount, recursiveFlags: recursiveFlags)
     return RawSyntax(arena: arena, payload: .layout(payload))
   }
 
@@ -844,23 +873,42 @@ extension RawSyntax {
     // Calculate the "byte width".
     var byteLength = 0
     var descendantCount = 0
+    var recursiveFlags = RecursiveRawSyntaxFlags()
+    if kind.hasError {
+      recursiveFlags.insert(.hasError)
+    }
     for case let node? in layoutBuffer {
       byteLength += node.byteLength
       descendantCount += node.totalNodes
+      recursiveFlags.insert(node.recursiveFlags)
       arena.addChild(node.arenaReference)
     }
     return .layout(
-      kind: kind, layout: RawSyntaxBuffer(layoutBuffer),
-      byteLength: byteLength, descendantCount: descendantCount, arena: arena)
+      kind: kind,
+      layout: RawSyntaxBuffer(layoutBuffer),
+      byteLength: byteLength,
+      descendantCount: descendantCount,
+      recursiveFlags: recursiveFlags,
+      arena: arena
+    )
   }
 
   static func makeEmptyLayout(
     kind: SyntaxKind,
     arena: SyntaxArena
   ) -> RawSyntax {
+    var recursiveFlags = RecursiveRawSyntaxFlags()
+    if kind.hasError {
+      recursiveFlags.insert(.hasError)
+    }
     return .layout(
-      kind: kind, layout: .init(start: nil, count: 0),
-      byteLength: 0, descendantCount: 0, arena: arena)
+      kind: kind,
+      layout: .init(start: nil, count: 0),
+      byteLength: 0,
+      descendantCount: 0,
+      recursiveFlags: recursiveFlags,
+      arena: arena
+    )
   }
 
   static func makeLayout<C: Collection>(

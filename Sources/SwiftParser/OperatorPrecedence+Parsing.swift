@@ -17,6 +17,7 @@ extension PrecedenceGroup {
   /// TODO: This ignores all semantic errors.
   init(from syntax: PrecedenceGroupDeclSyntax) {
     self.name = syntax.identifier.text
+    self.syntax = syntax
 
     for attr in syntax.groupAttributes {
       // Relation (lowerThan, higherThan)
@@ -24,8 +25,11 @@ extension PrecedenceGroup {
         let isLowerThan = relation.higherThanOrLowerThan.text == "lowerThan"
         for otherGroup in relation.otherNames {
           let otherGroupName = otherGroup.name.text
-          self.relations.append(isLowerThan ? .lowerThan(otherGroupName)
-                                            : .higherThan(otherGroupName))
+          let relationKind: PrecedenceRelation.Kind = isLowerThan ? .lowerThan
+                                                                  : .higherThan
+          let relation = PrecedenceRelation(
+            kind: relationKind, groupName: otherGroupName, syntax: otherGroup)
+          self.relations.append(relation)
         }
 
         continue
@@ -62,6 +66,8 @@ extension Operator {
   ///
   /// TODO: This ignores all semantic errors.
   init(from syntax: OperatorDeclSyntax) {
+    self.syntax = syntax
+
     let kindModifier = syntax.modifiers?.first { modifier in
       OperatorKind(rawValue: modifier.name.text) != nil
     }

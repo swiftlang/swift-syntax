@@ -43,15 +43,41 @@ public enum Associativity: String {
   case right
 }
 
-/// Describes the relationship between two different precedence groups.
-public enum PrecedenceRelation {
-  /// The precedence group storing this relation has higher precedence than
-  /// the named group.
-  case higherThan(PrecedenceGroupName)
+/// Describes the relationship of a precedence group to another precedence
+/// group.
+public struct PrecedenceRelation {
+  /// Describes the kind of a precedence relation.
+  public enum Kind {
+    case higherThan
+    case lowerThan
+  }
 
-  /// The precedence group storing this relation has lower precedence than
-  /// the named group.
-  case lowerThan(PrecedenceGroupName)
+  /// The relationship to the other group.
+  public var kind: Kind
+
+  /// The group name.
+  public var groupName: PrecedenceGroupName
+
+  /// The syntax that provides the relation. This specifically refers to the
+  /// group name itself, but one can follow the parent pointer to find its
+  /// position.
+  public var syntax: PrecedenceGroupNameElementSyntax?
+
+  /// Return a higher-than precedence relation.
+  public static func higherThan(
+    _ groupName: PrecedenceGroupName,
+    syntax: PrecedenceGroupNameElementSyntax? = nil
+  ) -> PrecedenceRelation {
+    return .init(kind: .higherThan, groupName: groupName, syntax: syntax)
+  }
+
+  /// Return a lower-than precedence relation.
+  public static func lowerThan(
+    _ groupName: PrecedenceGroupName,
+    syntax: PrecedenceGroupNameElementSyntax? = nil
+  ) -> PrecedenceRelation {
+    return .init(kind: .lowerThan, groupName: groupName, syntax: syntax)
+  }
 }
 
 /// Precedence groups are used for parsing sequences of expressions in Swift
@@ -82,16 +108,21 @@ public struct PrecedenceGroup {
   /// this precedence group.
   public var relations: [PrecedenceRelation] = []
 
+  /// The syntax node that describes this precedence group.
+  public var syntax: PrecedenceGroupDeclSyntax? = nil
+
   public init(
     name: PrecedenceGroupName,
     associativity: Associativity = .none,
     assignment: Bool = false,
-    relations: [PrecedenceRelation] = []
+    relations: [PrecedenceRelation] = [],
+    syntax: PrecedenceGroupDeclSyntax? = nil
   ) {
     self.name = name
     self.associativity = associativity
     self.assignment = assignment
     self.relations = relations
+    self.syntax = syntax
   }
 }
 
@@ -172,8 +203,9 @@ struct PrecedenceGraph {
       let currentGroup = try lookupGroup(currentGroupName)
 
       for relation in currentGroup.relations {
-        if case let .lowerThan(otherGroupName) = relation {
+        if relation.kind == .lowerThan {
           // If we hit our start group, we're done.
+          let otherGroupName = relation.groupName
           if otherGroupName == startGroupName {
             return .lowerThan
           }
@@ -194,8 +226,9 @@ struct PrecedenceGraph {
       let currentGroup = try lookupGroup(currentGroupName)
 
       for relation in currentGroup.relations {
-        if case let .higherThan(otherGroupName) = relation {
+        if relation.kind == .higherThan {
           // If we hit our end group, we're done.
+          let otherGroupName = relation.groupName
           if otherGroupName == endGroupName {
             return .higherThan
           }
@@ -229,14 +262,17 @@ public struct Operator {
   public let kind: OperatorKind
   public let name: OperatorName
   public let precedenceGroup: PrecedenceGroupName?
+  public let syntax: OperatorDeclSyntax?
 
   public init(
     kind: OperatorKind, name: OperatorName,
-    precedenceGroup: PrecedenceGroupName?
+    precedenceGroup: PrecedenceGroupName?,
+    syntax: OperatorDeclSyntax? = nil
   ) {
     self.kind = kind
     self.name = name
     self.precedenceGroup = precedenceGroup
+    self.syntax = syntax
   }
 }
 

@@ -155,7 +155,8 @@ extension UnsafeMutableRawPointer {
   /// - Parameter alignment: The alignment of the returned pointer, in bytes.
   ///                        Alignment must be a whole power of 2.
   /// - Returns: A pointer aligned to `alignment`.
-  fileprivate func alignedUp(toMultipleOf alignment: Int) -> Self {
+  @_spi(Testing)
+  public func alignedUp(toMultipleOf alignment: Int) -> Self {
     let mask = UInt(alignment) &- 1
     assert(
       alignment > 0 && UInt(alignment) & mask == 0,

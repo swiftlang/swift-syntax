@@ -144,7 +144,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {
-      return raw.formTokenLeadingTrivia()!
+      return raw.formTokenLeadingTrivia()
     }
     set {
       self = withLeadingTrivia(newValue)
@@ -154,7 +154,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
     get {
-      return raw.formTokenTrailingTrivia()!
+      return raw.formTokenTrailingTrivia()
     }
     set {
       self = withTrailingTrivia(newValue)

@@ -276,9 +276,9 @@ fileprivate struct FastTokenSequence: Sequence {
 /// Provides a sequence of `SyntaxClassifiedRange`s for a token.
 fileprivate struct TokenClassificationIterator: IteratorProtocol {
   enum State {
-    case atLeadingTrivia(RawTriviaPieceBuffer, Int)
+    case atLeadingTrivia([RawTriviaPiece], Int)
     case atTokenText
-    case atTrailingTrivia(RawTriviaPieceBuffer, Int)
+    case atTrailingTrivia([RawTriviaPiece], Int)
   }
 
   let token: AbsoluteNode

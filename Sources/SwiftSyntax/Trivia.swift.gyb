@@ -17,6 +17,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+public enum TriviaPosition {
+  case leading
+  case trailing
+}
+
 /// A contiguous stretch of a single kind of trivia. The constituent part of
 /// a `Trivia` collection.
 ///
@@ -70,7 +75,7 @@ extension TriviaPiece: CustomDebugStringConvertible {
       return "${trivia.lower_name}s(\(data))"
 %   else:
     case .${trivia.lower_name}(let name):
-      return "${trivia.lower_name}(\(name))"
+      return "${trivia.lower_name}(\(name.debugDescription))"
 %   end
 % end
     }
@@ -261,6 +266,11 @@ public enum RawTriviaPiece: Equatable {
 extension RawTriviaPiece: TextOutputStreamable {
   public func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)
+  }
+}
+extension RawTriviaPiece: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    TriviaPiece(raw: self).debugDescription
   }
 }
 

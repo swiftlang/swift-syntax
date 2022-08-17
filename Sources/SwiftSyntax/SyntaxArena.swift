@@ -11,6 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 public class SyntaxArena {
+
+  @_spi(RawSyntax)
+  public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
+
   /// Bump-pointer allocator for all "intern" methods.
   private var allocator: BumpPtrAllocator
   /// Source file buffer the Syntax tree represents.
@@ -22,12 +26,19 @@ public class SyntaxArena {
   /// Whether or not this arena has been added to other arenas as a child.
   /// Used to make sure we don’t introduce retain cycles between arenas.
   private var hasParent: Bool
+  private var parseTriviaFunction: ParseTriviaFunction
 
-  public init() {
+  @_spi(RawSyntax)
+  public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
     allocator = BumpPtrAllocator()
     children = []
     sourceBuffer = .init(start: nil, count: 0)
     hasParent = false
+    self.parseTriviaFunction = parseTriviaFunction
+  }
+
+  public convenience init() {
+    self.init(parseTriviaFunction: _defaultParseTriviaFunction(_:_:))
   }
 
   /// Copies a source buffer in to the memory this arena manages, and returns
@@ -145,6 +156,11 @@ public class SyntaxArena {
             sourceBufferContains(text.baseAddress!) ||
             allocator.contains(address: text.baseAddress!))
   }
+
+  @_spi(RawSyntax)
+  public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+    return self.parseTriviaFunction(source, position)
+  }
 }
 
 extension SyntaxArena: Hashable {
@@ -183,4 +199,8 @@ extension SyntaxArena {
   // FIXME: This is only for migration. All clients should move to "arena" model.
   //@available(*, deprecated, message: ".default SyntaxArena is subject to remove soon")
   public static let `default` = SyntaxArena()
+}
+
+private func _defaultParseTriviaFunction(_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece] {
+  preconditionFailure("Trivia parsing not supported")
 }

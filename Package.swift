@@ -37,6 +37,13 @@ if let parserLibSearchPath = ProcessInfo.processInfo.environment["SWIFT_SYNTAX_P
 
 let package = Package(
   name: "SwiftSyntax",
+  platforms: [
+    .macOS(.v10_15),
+    .iOS(.v13),
+    .tvOS(.v13),
+    .watchOS(.v6),
+    .macCatalyst(.v13),
+  ],
   products: [
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),

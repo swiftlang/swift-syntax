@@ -821,7 +821,7 @@ extension OperatorPrecedence {
     lhs: ExprSyntax, op: ExprSyntax, rhs: ExprSyntax
   ) -> ExprSyntax {
     ExprSyntax(
-      SyntaxFactory.makeInfixOperatorExpr(
+      InfixOperatorExprSyntax(
         leftOperand: lhs, operatorOperand: op, rightOperand: rhs)
       )
   }

@@ -55,4 +55,29 @@ public class OperatorPrecedenceTests: XCTestCase {
     XCTAssertEqual("\(foldedExpr)", "x && y || w && v || z")
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
   }
+
+  func testParseErrors() throws {
+    let sources =
+    """
+    infix operator +
+    infix operator +
+    """
+
+    let parsedOperatorPrecedence = try Parser.parse(source: sources)
+
+    var opPrecedence = OperatorPrecedence()
+    var errors: [OperatorPrecedenceError] = []
+    opPrecedence.addSourceFile(parsedOperatorPrecedence) { error in
+      errors.append(error)
+    }
+
+    XCTAssertEqual(errors.count, 1)
+    guard case let .operatorAlreadyExists(existing, new) = errors[0] else {
+      XCTFail("expected an 'operator already exists' error")
+      return
+    }
+
+    _ = existing
+    _ = new
+  }
 }

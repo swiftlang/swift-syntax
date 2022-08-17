@@ -133,14 +133,25 @@ public enum OperatorPrecedenceError: Error {
   case groupAlreadyExists(existing: PrecedenceGroup, new: PrecedenceGroup)
 
   /// The named precedence group is missing from the precedence graph.
-  case missingGroup(PrecedenceGroupName)
+  case missingGroup(PrecedenceGroupName, referencedFrom: SyntaxProtocol?)
 
   /// Error produced when a given operator already exists.
   case operatorAlreadyExists(existing: Operator, new: Operator)
 
   /// The named operator is missing from the precedence graph.
-  case missingOperator(OperatorName)
+  case missingOperator(OperatorName, referencedFrom: SyntaxProtocol?)
 }
+
+/// A function that receives an operator precedence error and may do with it
+/// whatever it likes.
+///
+/// Operator precedence error handlers are passed into each function in the
+/// operator-precedence parser that can produce a failure. The handler
+/// may choose to throw (in which case the error will propagate outward) or
+/// may separately record/drop the error and return without throwing (in
+/// which case the operator-precedence parser will recover).
+public typealias OperatorPrecedenceErrorHandler =
+    (OperatorPrecedenceError) throws -> Void
 
 /// Describes the relative precedence of two groups.
 public enum Precedence {
@@ -159,25 +170,23 @@ struct PrecedenceGraph {
   ///
   /// - throws: If there is already a precedence group with the given name,
   ///   throws PrecedenceGraphError.groupAlreadyExists.
-  mutating func add(_ group: PrecedenceGroup) throws {
+  mutating func add(
+    _ group: PrecedenceGroup,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows {
     if let existing = precedenceGroups[group.name] {
-      throw OperatorPrecedenceError.groupAlreadyExists(
-        existing: existing, new: group)
+      try errorHandler(
+        OperatorPrecedenceError.groupAlreadyExists(
+          existing: existing, new: group))
+    } else {
+      precedenceGroups[group.name] = group
     }
-
-    precedenceGroups[group.name] = group
   }
 
-  /// Look for the precedence group with the given name, or produce an error
-  /// if such a group is not known.
-  func lookupGroup(
-    _ groupName: PrecedenceGroupName
-  ) throws -> PrecedenceGroup {
-    guard let group = precedenceGroups[groupName] else {
-      throw OperatorPrecedenceError.missingGroup(groupName)
-    }
-
-    return group
+  /// Look for the precedence group with the given name, or return nil if
+  /// no such group is known.
+  func lookupGroup(_ groupName: PrecedenceGroupName) -> PrecedenceGroup? {
+    return precedenceGroups[groupName]
   }
 
   /// Determine the precedence relationship between two precedence groups.
@@ -186,8 +195,11 @@ struct PrecedenceGraph {
   /// determine the precedence of the start group relative to the end group.
   func precedence(
     relating startGroupName: PrecedenceGroupName,
-    to endGroupName: PrecedenceGroupName
-  ) throws -> Precedence {
+    to endGroupName: PrecedenceGroupName,
+    startSyntax: SyntaxProtocol?,
+    endSyntax: SyntaxProtocol?,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> Precedence {
     if startGroupName == endGroupName {
       return .unrelated
     }
@@ -198,9 +210,14 @@ struct PrecedenceGraph {
 
     // Walk all of the lower-than relationships from the end group. If we
     // reach the start group, the start has lower precedence than the end.
-    var stack: [PrecedenceGroupName] = [endGroupName]
-    while let currentGroupName = stack.popLast() {
-      let currentGroup = try lookupGroup(currentGroupName)
+    var stack: [(PrecedenceGroupName, SyntaxProtocol?)] =
+      [(endGroupName, endSyntax)]
+    while let (currentGroupName, currentGroupSyntax) = stack.popLast() {
+      guard let currentGroup = lookupGroup(currentGroupName) else {
+        try errorHandler(
+          .missingGroup(currentGroupName, referencedFrom: currentGroupSyntax))
+        continue
+      }
 
       for relation in currentGroup.relations {
         if relation.kind == .lowerThan {
@@ -211,7 +228,7 @@ struct PrecedenceGraph {
           }
 
           if !groupsSeen.insert(otherGroupName).inserted {
-            stack.append(otherGroupName)
+            stack.append((otherGroupName, relation.syntax))
           }
         }
       }
@@ -221,9 +238,13 @@ struct PrecedenceGraph {
     // reach the end group, the start has higher precedence than the end.
     assert(stack.isEmpty)
     groupsSeen.removeAll()
-    stack.append(startGroupName)
-    while let currentGroupName = stack.popLast() {
-      let currentGroup = try lookupGroup(currentGroupName)
+    stack.append((startGroupName, startSyntax))
+    while let (currentGroupName, currentGroupSyntax) = stack.popLast() {
+      guard let currentGroup = lookupGroup(currentGroupName) else {
+        try errorHandler(
+          .missingGroup(currentGroupName, referencedFrom: currentGroupSyntax))
+        continue
+      }
 
       for relation in currentGroup.relations {
         if relation.kind == .higherThan {
@@ -234,7 +255,7 @@ struct PrecedenceGraph {
           }
 
           if !groupsSeen.insert(otherGroupName).inserted {
-            stack.append(otherGroupName)
+            stack.append((otherGroupName, relation.syntax))
           }
         }
       }
@@ -287,21 +308,28 @@ public struct OperatorPrecedence {
 
   /// Record the operator, if it matters.
   /// FIXME: Terrible API used only for tests
-  public mutating func record(_ op: Operator) throws {
+  public mutating func record(
+    _ op: Operator,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows {
+    // FIXME: Could do operator-already-exists checking for prefix/postfix
+    // operators as well, since we parse them.
     if op.kind != .infix { return }
 
     if let existing = operators[op.name] {
-      throw OperatorPrecedenceError.operatorAlreadyExists(
-          existing: existing, new: op)
+      try errorHandler(.operatorAlreadyExists(existing: existing, new: op))
+    } else {
+      operators[op.name] = op
     }
-
-    operators[op.name] = op
   }
 
   /// Record the precedence group.
   /// FIXME: Terrible API used only for tests
-  public mutating func record(_ group: PrecedenceGroup) throws {
-    try precedenceGraph.add(group)
+  public mutating func record(
+    _ group: PrecedenceGroup,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows {
+    try precedenceGraph.add(group, errorHandler: errorHandler)
   }
 }
 
@@ -775,10 +803,14 @@ extension OperatorPrecedence {
 extension OperatorPrecedence {
   /// Look for the precedence group corresponding to the given operator.
   func lookupOperatorPrecedenceGroupName(
-    _ operatorName: OperatorName
-  ) throws -> PrecedenceGroupName? {
+    _ operatorName: OperatorName,
+    referencedFrom syntax: SyntaxProtocol?,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> PrecedenceGroupName? {
     guard let op = operators[operatorName] else {
-      throw OperatorPrecedenceError.missingOperator(operatorName)
+      try errorHandler(
+        .missingOperator(operatorName, referencedFrom: syntax))
+      return nil
     }
 
     return op.precedenceGroup
@@ -786,27 +818,41 @@ extension OperatorPrecedence {
 
   /// Look for the precedence group corresponding to the given operator.
   func lookupOperatorPrecedenceGroup(
-    _ operatorName: OperatorName
-  ) throws -> PrecedenceGroup? {
-    guard let groupName = try lookupOperatorPrecedenceGroupName(operatorName)
+    _ operatorName: OperatorName,
+    referencedFrom syntax: SyntaxProtocol?,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> PrecedenceGroup? {
+    guard let groupName = try lookupOperatorPrecedenceGroupName(
+      operatorName, referencedFrom: syntax, errorHandler: errorHandler)
     else {
       return nil
     }
-    return try precedenceGraph.lookupGroup(groupName)
+
+    guard let group = precedenceGraph.lookupGroup(groupName) else {
+      try errorHandler(.missingGroup(groupName, referencedFrom: syntax))
+      return nil
+    }
+
+    return group
   }
 
   /// Determine the relative precedence between two precedence groups.
   func precedence(
     relating startGroupName: PrecedenceGroupName?,
-    to endGroupName: PrecedenceGroupName?
-  ) throws -> Precedence {
+    to endGroupName: PrecedenceGroupName?,
+    startSyntax: SyntaxProtocol?,
+    endSyntax: SyntaxProtocol?,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> Precedence {
     guard let startGroupName = startGroupName, let endGroupName = endGroupName
     else {
       return .unrelated
     }
 
     return try precedenceGraph.precedence(
-      relating: startGroupName, to: endGroupName
+      relating: startGroupName, to: endGroupName,
+      startSyntax: startSyntax, endSyntax: endSyntax,
+      errorHandler: errorHandler
     )
   }
 }
@@ -815,13 +861,17 @@ extension OperatorPrecedence {
   private struct PrecedenceBound {
     let groupName: PrecedenceGroupName?
     let isStrict: Bool
+    let syntax: SyntaxProtocol?
   }
 
   /// Determine whether we should consider an operator in the given group
   /// based on the specified bound.
   private func shouldConsiderOperator(
-    fromGroup groupName: PrecedenceGroupName?, in bound: PrecedenceBound
-  ) throws -> Bool {
+    fromGroup groupName: PrecedenceGroupName?,
+    in bound: PrecedenceBound,
+    fromGroupSyntax: SyntaxProtocol?,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> Bool {
     guard let boundGroupName = bound.groupName else {
       return true
     }
@@ -834,18 +884,25 @@ extension OperatorPrecedence {
       return !bound.isStrict
     }
 
-    return try precedence(relating: groupName, to: boundGroupName) != .lowerThan
+    return try precedence(
+      relating: groupName, to: boundGroupName,
+      startSyntax: fromGroupSyntax, endSyntax: bound.syntax,
+      errorHandler: errorHandler
+    ) != .lowerThan
   }
 
   /// Look up the precedence group for the given expression syntax.
-  private func lookupPrecedence(of expr: ExprSyntax) -> PrecedenceGroupName? {
+  private func lookupPrecedence(
+    of expr: ExprSyntax,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> PrecedenceGroupName? {
+    // A binary operator.
     if let binaryExpr = expr.as(BinaryOperatorExprSyntax.self) {
-      guard let op = operators[binaryExpr.operatorToken.text] else {
-        // FIXME: Report unknown operator.
-        return nil
-      }
-
-      return op.precedenceGroup
+      let operatorName = binaryExpr.operatorToken.text
+      return try lookupOperatorPrecedenceGroupName(
+        operatorName, referencedFrom: binaryExpr.operatorToken,
+        errorHandler: errorHandler
+      )
     }
 
     // FIXME: Handle all of the language-defined precedence relationships.
@@ -864,22 +921,40 @@ extension OperatorPrecedence {
 
   /// Determine the associativity between two precedence groups.
   private func associativity(
-    firstGroup: PrecedenceGroupName?, secondGroup: PrecedenceGroupName?
-  ) throws -> Associativity {
+    firstGroup: PrecedenceGroupName?,
+    firstGroupSyntax: SyntaxProtocol?,
+    secondGroup: PrecedenceGroupName?,
+    secondGroupSyntax: SyntaxProtocol?,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> Associativity {
     guard let firstGroup = firstGroup, let secondGroup = secondGroup else {
       return .none
     }
 
     // If we have the same group, query its associativity.
     if firstGroup == secondGroup {
-      return try precedenceGraph.lookupGroup(firstGroup).associativity
+      guard let group = precedenceGraph.lookupGroup(firstGroup) else {
+        try errorHandler(
+          .missingGroup(firstGroup, referencedFrom: firstGroupSyntax))
+        return .none
+      }
+
+      return group.associativity
     }
 
-    if try precedence(relating: firstGroup, to: secondGroup) == .higherThan {
+    if try precedence(
+      relating: firstGroup, to: secondGroup,
+      startSyntax: firstGroupSyntax, endSyntax: secondGroupSyntax,
+      errorHandler: errorHandler
+    ) == .higherThan {
       return .left
     }
 
-    if try precedence(relating: secondGroup, to: firstGroup) == .higherThan {
+    if try precedence(
+      relating: secondGroup, to: firstGroup,
+      startSyntax: secondGroupSyntax, endSyntax: firstGroupSyntax,
+      errorHandler: errorHandler
+    ) == .higherThan {
       return .right
     }
 
@@ -891,8 +966,9 @@ extension OperatorPrecedence {
   /// consumed along the way
   private func fold(
     _ lhs: ExprSyntax, rest: inout Slice<ExprListSyntax>,
-    bound: PrecedenceBound
-  ) throws -> ExprSyntax {
+    bound: PrecedenceBound,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> ExprSyntax {
     if rest.isEmpty { return lhs }
 
     // We mutate the left-hand side in place as we fold the sequence.
@@ -903,8 +979,11 @@ extension OperatorPrecedence {
       let op = rest.first!
 
       // If the operator's precedence is lower than the minimum, stop here.
-      let opPrecedence = lookupPrecedence(of: op)
-      if try !shouldConsiderOperator(fromGroup: opPrecedence, in: bound) {
+      let opPrecedence = try lookupPrecedence(
+        of: op, errorHandler: errorHandler)
+      if try !shouldConsiderOperator(
+        fromGroup: opPrecedence, in: bound, fromGroupSyntax: op
+      ) {
         return nil
       }
 
@@ -923,10 +1002,6 @@ extension OperatorPrecedence {
     rest = rest.dropFirst()
 
     while !rest.isEmpty {
-      assert(
-        try! shouldConsiderOperator(fromGroup: op1Precedence, in: bound)
-      )
-
       #if compiler(>=10.0) && false
       // If the operator is a cast operator, the RHS can't extend past the type
       // that's part of the cast production.
@@ -942,16 +1017,24 @@ extension OperatorPrecedence {
 
       // Pull out the next binary operator.
       let op2 = rest.first!
-      let op2Precedence = lookupPrecedence(of: op2)
+      let op2Precedence = try lookupPrecedence(
+        of: op2, errorHandler: errorHandler)
 
       // If the second operator's precedence is lower than the
       // precedence bound, break out of the loop.
-      if try !shouldConsiderOperator(fromGroup: op2Precedence, in: bound) {
+      if try !shouldConsiderOperator(
+        fromGroup: op2Precedence, in: bound, fromGroupSyntax: op1,
+        errorHandler: errorHandler
+      ) {
         break
       }
 
       let associativity = try associativity(
-        firstGroup: op1Precedence, secondGroup: op2Precedence
+        firstGroup: op1Precedence,
+        firstGroupSyntax: op1,
+        secondGroup: op2Precedence,
+        secondGroupSyntax: op2,
+        errorHandler: errorHandler
       )
 
       switch associativity {
@@ -972,14 +1055,21 @@ extension OperatorPrecedence {
         // repeat.
         rhs = try fold(
           rhs, rest: &rest,
-          bound: PrecedenceBound(groupName: op1Precedence, isStrict: true))
+          bound: PrecedenceBound(
+            groupName: op1Precedence, isStrict: true, syntax: op1
+          ),
+          errorHandler: errorHandler
+        )
 
       case .right:
         // Apply right-associativity by recursively folding operators
         // starting from this point, then immediately folding the LHS and RHS.
         rhs = try fold(
           rhs, rest: &rest,
-          bound: PrecedenceBound(groupName: op1Precedence, isStrict: false)
+          bound: PrecedenceBound(
+            groupName: op1Precedence, isStrict: false, syntax: op1
+          ),
+          errorHandler: errorHandler
         )
 
         lhs = makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
@@ -990,7 +1080,9 @@ extension OperatorPrecedence {
         }
 
         // Otherwise, start all over with our new LHS.
-        return try fold(lhs, rest: &rest, bound: bound)
+        return try fold(
+          lhs, rest: &rest, bound: bound, errorHandler: errorHandler
+        )
 
       case .none:
         // If we ended up here, it's because we're either:
@@ -1008,7 +1100,7 @@ extension OperatorPrecedence {
 
         // Recover by folding arbitrarily at this operator, then continuing.
         lhs = makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
-        return try fold(lhs, rest: &rest, bound: bound)
+        return try fold(lhs, rest: &rest, bound: bound, errorHandler: errorHandler)
       }
     }
 
@@ -1017,11 +1109,16 @@ extension OperatorPrecedence {
   }
 
   /// "Fold" an expression sequence into a structured syntax tree.
-  public func fold(_ sequence: SequenceExprSyntax) throws -> ExprSyntax {
+  public func fold(
+    _ sequence: SequenceExprSyntax,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> ExprSyntax {
     let lhs = sequence.elements.first!
     var rest = sequence.elements.dropFirst()
     return try fold(
-      lhs, rest: &rest, bound: PrecedenceBound(groupName: nil, isStrict: false)
+      lhs, rest: &rest,
+      bound: PrecedenceBound(groupName: nil, isStrict: false, syntax: nil),
+      errorHandler: errorHandler
     )
   }
 }

@@ -92,35 +92,36 @@ extension Operator {
 extension OperatorPrecedence {
   /// Integrate the operator and precedence group declarations from the given
   /// source file into the operator precedence tables.
-  public mutating func addSourceFile(_ sourceFile: SourceFileSyntax) throws {
+  public mutating func addSourceFile(
+    _ sourceFile: SourceFileSyntax,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows {
     class OperatorAndGroupVisitor : SyntaxAnyVisitor {
       var opPrecedence: OperatorPrecedence
-      var errors: [Error] = []
+      var errors: [OperatorPrecedenceError] = []
 
       init(opPrecedence: OperatorPrecedence) {
         self.opPrecedence = opPrecedence
         super.init(viewMode: .fixedUp)
       }
 
+      private func errorHandler(error: OperatorPrecedenceError) {
+        errors.append(error)
+      }
+
       override func visit(
         _ node: OperatorDeclSyntax
       ) -> SyntaxVisitorContinueKind {
-        do {
-          try opPrecedence.record(Operator(from: node))
-        } catch {
-          errors.append(error)
-        }
+        opPrecedence.record(
+          Operator(from: node), errorHandler: errorHandler)
         return .skipChildren
       }
 
       override func visit(
         _ node: PrecedenceGroupDeclSyntax
       ) -> SyntaxVisitorContinueKind {
-        do {
-          try opPrecedence.record(PrecedenceGroup(from: node))
-        } catch {
-          errors.append(error)
-        }
+        opPrecedence.record(
+          PrecedenceGroup(from: node), errorHandler: errorHandler)
         return .skipChildren
       }
 
@@ -150,10 +151,8 @@ extension OperatorPrecedence {
     }
 
     let visitor = OperatorAndGroupVisitor(opPrecedence: self)
-    _ = visitor.visit(sourceFile)
-    if let firstError = visitor.errors.first {
-      throw firstError
-    }
+    visitor.walk(sourceFile)
+    try visitor.errors.forEach(errorHandler)
     self = visitor.opPrecedence
   }
 }

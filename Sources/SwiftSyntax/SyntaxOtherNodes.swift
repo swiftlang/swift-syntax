@@ -169,7 +169,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The kind of token this node represents.
   public var tokenKind: TokenKind {
     get {
-      return raw.formTokenKind()!
+      return raw.tokenView.formKind()
     }
     set {
       self = withKind(newValue)

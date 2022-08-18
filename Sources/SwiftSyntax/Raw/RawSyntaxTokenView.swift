@@ -171,4 +171,15 @@ struct RawSyntaxTokenView {
   var contentLength: SourceLength {
     SourceLength(utf8Length: textByteLength)
   }
+
+  func formKind() -> TokenKind {
+    switch raw.rawData.payload {
+    case .parsedToken(let dat):
+      return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
+    case .materializedToken(let dat):
+      return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
+    case .layout(_):
+      preconditionFailure("Must be invoked on a token")
+    }
+  }
 }

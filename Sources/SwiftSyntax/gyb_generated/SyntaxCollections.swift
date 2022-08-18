@@ -74,7 +74,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CodeBlockItemListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: CodeBlockItemSyntax) -> CodeBlockItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -100,7 +100,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CodeBlockItemListSyntax` with that element appended to the end.
   public func inserting(_ syntax: CodeBlockItemSyntax,
                         at index: Int) -> CodeBlockItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -118,7 +118,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CodeBlockItemListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: CodeBlockItemSyntax) -> CodeBlockItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -133,7 +133,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CodeBlockItemListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CodeBlockItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -142,7 +142,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CodeBlockItemListSyntax` with the first element removed.
   public func removingFirst() -> CodeBlockItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -151,7 +151,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CodeBlockItemListSyntax` with the last element removed.
   public func removingLast() -> CodeBlockItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -323,7 +323,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `UnexpectedNodesSyntax` with that element appended to the end.
   public func appending(
     _ syntax: Syntax) -> UnexpectedNodesSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -349,7 +349,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `UnexpectedNodesSyntax` with that element appended to the end.
   public func inserting(_ syntax: Syntax,
                         at index: Int) -> UnexpectedNodesSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -367,7 +367,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `UnexpectedNodesSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: Syntax) -> UnexpectedNodesSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -382,7 +382,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `UnexpectedNodesSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> UnexpectedNodesSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -391,7 +391,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `UnexpectedNodesSyntax` with the first element removed.
   public func removingFirst() -> UnexpectedNodesSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -400,7 +400,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `UnexpectedNodesSyntax` with the last element removed.
   public func removingLast() -> UnexpectedNodesSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -572,7 +572,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleExprElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: TupleExprElementSyntax) -> TupleExprElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -598,7 +598,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleExprElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: TupleExprElementSyntax,
                         at index: Int) -> TupleExprElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -616,7 +616,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleExprElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: TupleExprElementSyntax) -> TupleExprElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -631,7 +631,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleExprElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> TupleExprElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -640,7 +640,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TupleExprElementListSyntax` with the first element removed.
   public func removingFirst() -> TupleExprElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -649,7 +649,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TupleExprElementListSyntax` with the last element removed.
   public func removingLast() -> TupleExprElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -821,7 +821,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ArrayElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: ArrayElementSyntax) -> ArrayElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -847,7 +847,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ArrayElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: ArrayElementSyntax,
                         at index: Int) -> ArrayElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -865,7 +865,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ArrayElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: ArrayElementSyntax) -> ArrayElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -880,7 +880,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ArrayElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ArrayElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -889,7 +889,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ArrayElementListSyntax` with the first element removed.
   public func removingFirst() -> ArrayElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -898,7 +898,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ArrayElementListSyntax` with the last element removed.
   public func removingLast() -> ArrayElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -1070,7 +1070,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DictionaryElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: DictionaryElementSyntax) -> DictionaryElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -1096,7 +1096,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DictionaryElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: DictionaryElementSyntax,
                         at index: Int) -> DictionaryElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -1114,7 +1114,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DictionaryElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: DictionaryElementSyntax) -> DictionaryElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -1129,7 +1129,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DictionaryElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DictionaryElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -1138,7 +1138,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `DictionaryElementListSyntax` with the first element removed.
   public func removingFirst() -> DictionaryElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -1147,7 +1147,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `DictionaryElementListSyntax` with the last element removed.
   public func removingLast() -> DictionaryElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -1319,7 +1319,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `StringLiteralSegmentsSyntax` with that element appended to the end.
   public func appending(
     _ syntax: Syntax) -> StringLiteralSegmentsSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -1345,7 +1345,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `StringLiteralSegmentsSyntax` with that element appended to the end.
   public func inserting(_ syntax: Syntax,
                         at index: Int) -> StringLiteralSegmentsSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -1363,7 +1363,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: Syntax) -> StringLiteralSegmentsSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -1378,7 +1378,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> StringLiteralSegmentsSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -1387,7 +1387,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the first element removed.
   public func removingFirst() -> StringLiteralSegmentsSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -1396,7 +1396,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the last element removed.
   public func removingLast() -> StringLiteralSegmentsSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -1568,7 +1568,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DeclNameArgumentListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: DeclNameArgumentSyntax) -> DeclNameArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -1594,7 +1594,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DeclNameArgumentListSyntax` with that element appended to the end.
   public func inserting(_ syntax: DeclNameArgumentSyntax,
                         at index: Int) -> DeclNameArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -1612,7 +1612,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DeclNameArgumentListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: DeclNameArgumentSyntax) -> DeclNameArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -1627,7 +1627,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DeclNameArgumentListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DeclNameArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -1636,7 +1636,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `DeclNameArgumentListSyntax` with the first element removed.
   public func removingFirst() -> DeclNameArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -1645,7 +1645,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `DeclNameArgumentListSyntax` with the last element removed.
   public func removingLast() -> DeclNameArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -1817,7 +1817,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ExprListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: ExprSyntax) -> ExprListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -1843,7 +1843,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ExprListSyntax` with that element appended to the end.
   public func inserting(_ syntax: ExprSyntax,
                         at index: Int) -> ExprListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -1861,7 +1861,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ExprListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: ExprSyntax) -> ExprListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -1876,7 +1876,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ExprListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ExprListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -1885,7 +1885,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ExprListSyntax` with the first element removed.
   public func removingFirst() -> ExprListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -1894,7 +1894,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ExprListSyntax` with the last element removed.
   public func removingLast() -> ExprListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -2066,7 +2066,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureCaptureItemListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: ClosureCaptureItemSyntax) -> ClosureCaptureItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -2092,7 +2092,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureCaptureItemListSyntax` with that element appended to the end.
   public func inserting(_ syntax: ClosureCaptureItemSyntax,
                         at index: Int) -> ClosureCaptureItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -2110,7 +2110,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: ClosureCaptureItemSyntax) -> ClosureCaptureItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -2125,7 +2125,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ClosureCaptureItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -2134,7 +2134,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the first element removed.
   public func removingFirst() -> ClosureCaptureItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -2143,7 +2143,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the last element removed.
   public func removingLast() -> ClosureCaptureItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -2315,7 +2315,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureParamListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: ClosureParamSyntax) -> ClosureParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -2341,7 +2341,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureParamListSyntax` with that element appended to the end.
   public func inserting(_ syntax: ClosureParamSyntax,
                         at index: Int) -> ClosureParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -2359,7 +2359,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureParamListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: ClosureParamSyntax) -> ClosureParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -2374,7 +2374,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureParamListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ClosureParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -2383,7 +2383,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ClosureParamListSyntax` with the first element removed.
   public func removingFirst() -> ClosureParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -2392,7 +2392,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ClosureParamListSyntax` with the last element removed.
   public func removingLast() -> ClosureParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -2564,7 +2564,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -2590,7 +2590,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: MultipleTrailingClosureElementSyntax,
                         at index: Int) -> MultipleTrailingClosureElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -2608,7 +2608,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -2623,7 +2623,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> MultipleTrailingClosureElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -2632,7 +2632,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   ///
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the first element removed.
   public func removingFirst() -> MultipleTrailingClosureElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -2641,7 +2641,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   ///
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the last element removed.
   public func removingLast() -> MultipleTrailingClosureElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -2813,7 +2813,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjcNameSyntax` with that element appended to the end.
   public func appending(
     _ syntax: ObjcNamePieceSyntax) -> ObjcNameSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -2839,7 +2839,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjcNameSyntax` with that element appended to the end.
   public func inserting(_ syntax: ObjcNamePieceSyntax,
                         at index: Int) -> ObjcNameSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -2857,7 +2857,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjcNameSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: ObjcNamePieceSyntax) -> ObjcNameSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -2872,7 +2872,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjcNameSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ObjcNameSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -2881,7 +2881,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ObjcNameSyntax` with the first element removed.
   public func removingFirst() -> ObjcNameSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -2890,7 +2890,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ObjcNameSyntax` with the last element removed.
   public func removingLast() -> ObjcNameSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -3062,7 +3062,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `FunctionParameterListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: FunctionParameterSyntax) -> FunctionParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -3088,7 +3088,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `FunctionParameterListSyntax` with that element appended to the end.
   public func inserting(_ syntax: FunctionParameterSyntax,
                         at index: Int) -> FunctionParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -3106,7 +3106,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `FunctionParameterListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: FunctionParameterSyntax) -> FunctionParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -3121,7 +3121,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `FunctionParameterListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> FunctionParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -3130,7 +3130,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `FunctionParameterListSyntax` with the first element removed.
   public func removingFirst() -> FunctionParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -3139,7 +3139,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `FunctionParameterListSyntax` with the last element removed.
   public func removingLast() -> FunctionParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -3311,7 +3311,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IfConfigClauseListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: IfConfigClauseSyntax) -> IfConfigClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -3337,7 +3337,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IfConfigClauseListSyntax` with that element appended to the end.
   public func inserting(_ syntax: IfConfigClauseSyntax,
                         at index: Int) -> IfConfigClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -3355,7 +3355,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IfConfigClauseListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: IfConfigClauseSyntax) -> IfConfigClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -3370,7 +3370,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IfConfigClauseListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> IfConfigClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -3379,7 +3379,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `IfConfigClauseListSyntax` with the first element removed.
   public func removingFirst() -> IfConfigClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -3388,7 +3388,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `IfConfigClauseListSyntax` with the last element removed.
   public func removingLast() -> IfConfigClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -3560,7 +3560,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `InheritedTypeListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: InheritedTypeSyntax) -> InheritedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -3586,7 +3586,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `InheritedTypeListSyntax` with that element appended to the end.
   public func inserting(_ syntax: InheritedTypeSyntax,
                         at index: Int) -> InheritedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -3604,7 +3604,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `InheritedTypeListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: InheritedTypeSyntax) -> InheritedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -3619,7 +3619,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `InheritedTypeListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> InheritedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -3628,7 +3628,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `InheritedTypeListSyntax` with the first element removed.
   public func removingFirst() -> InheritedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -3637,7 +3637,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `InheritedTypeListSyntax` with the last element removed.
   public func removingLast() -> InheritedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -3809,7 +3809,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `MemberDeclListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: MemberDeclListItemSyntax) -> MemberDeclListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -3835,7 +3835,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `MemberDeclListSyntax` with that element appended to the end.
   public func inserting(_ syntax: MemberDeclListItemSyntax,
                         at index: Int) -> MemberDeclListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -3853,7 +3853,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `MemberDeclListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: MemberDeclListItemSyntax) -> MemberDeclListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -3868,7 +3868,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `MemberDeclListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> MemberDeclListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -3877,7 +3877,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `MemberDeclListSyntax` with the first element removed.
   public func removingFirst() -> MemberDeclListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -3886,7 +3886,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `MemberDeclListSyntax` with the last element removed.
   public func removingLast() -> MemberDeclListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -4058,7 +4058,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ModifierListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: DeclModifierSyntax) -> ModifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -4084,7 +4084,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ModifierListSyntax` with that element appended to the end.
   public func inserting(_ syntax: DeclModifierSyntax,
                         at index: Int) -> ModifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -4102,7 +4102,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ModifierListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: DeclModifierSyntax) -> ModifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -4117,7 +4117,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ModifierListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ModifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -4126,7 +4126,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ModifierListSyntax` with the first element removed.
   public func removingFirst() -> ModifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -4135,7 +4135,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ModifierListSyntax` with the last element removed.
   public func removingLast() -> ModifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -4307,7 +4307,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessPathSyntax` with that element appended to the end.
   public func appending(
     _ syntax: AccessPathComponentSyntax) -> AccessPathSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -4333,7 +4333,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessPathSyntax` with that element appended to the end.
   public func inserting(_ syntax: AccessPathComponentSyntax,
                         at index: Int) -> AccessPathSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -4351,7 +4351,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessPathSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: AccessPathComponentSyntax) -> AccessPathSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -4366,7 +4366,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessPathSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AccessPathSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -4375,7 +4375,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AccessPathSyntax` with the first element removed.
   public func removingFirst() -> AccessPathSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -4384,7 +4384,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AccessPathSyntax` with the last element removed.
   public func removingLast() -> AccessPathSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -4556,7 +4556,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessorListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: AccessorDeclSyntax) -> AccessorListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -4582,7 +4582,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessorListSyntax` with that element appended to the end.
   public func inserting(_ syntax: AccessorDeclSyntax,
                         at index: Int) -> AccessorListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -4600,7 +4600,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessorListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: AccessorDeclSyntax) -> AccessorListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -4615,7 +4615,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessorListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AccessorListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -4624,7 +4624,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AccessorListSyntax` with the first element removed.
   public func removingFirst() -> AccessorListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -4633,7 +4633,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AccessorListSyntax` with the last element removed.
   public func removingLast() -> AccessorListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -4805,7 +4805,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PatternBindingListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: PatternBindingSyntax) -> PatternBindingListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -4831,7 +4831,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PatternBindingListSyntax` with that element appended to the end.
   public func inserting(_ syntax: PatternBindingSyntax,
                         at index: Int) -> PatternBindingListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -4849,7 +4849,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PatternBindingListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: PatternBindingSyntax) -> PatternBindingListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -4864,7 +4864,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PatternBindingListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PatternBindingListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -4873,7 +4873,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `PatternBindingListSyntax` with the first element removed.
   public func removingFirst() -> PatternBindingListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -4882,7 +4882,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `PatternBindingListSyntax` with the last element removed.
   public func removingLast() -> PatternBindingListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -5051,7 +5051,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `EnumCaseElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: EnumCaseElementSyntax) -> EnumCaseElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -5077,7 +5077,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `EnumCaseElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: EnumCaseElementSyntax,
                         at index: Int) -> EnumCaseElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -5095,7 +5095,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `EnumCaseElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: EnumCaseElementSyntax) -> EnumCaseElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -5110,7 +5110,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `EnumCaseElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> EnumCaseElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -5119,7 +5119,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `EnumCaseElementListSyntax` with the first element removed.
   public func removingFirst() -> EnumCaseElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -5128,7 +5128,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `EnumCaseElementListSyntax` with the last element removed.
   public func removingLast() -> EnumCaseElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -5300,7 +5300,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IdentifierListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: TokenSyntax) -> IdentifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -5326,7 +5326,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IdentifierListSyntax` with that element appended to the end.
   public func inserting(_ syntax: TokenSyntax,
                         at index: Int) -> IdentifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -5344,7 +5344,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IdentifierListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: TokenSyntax) -> IdentifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -5359,7 +5359,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IdentifierListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> IdentifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -5368,7 +5368,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `IdentifierListSyntax` with the first element removed.
   public func removingFirst() -> IdentifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -5377,7 +5377,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `IdentifierListSyntax` with the last element removed.
   public func removingLast() -> IdentifierListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -5549,7 +5549,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: Syntax) -> PrecedenceGroupAttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -5575,7 +5575,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with that element appended to the end.
   public func inserting(_ syntax: Syntax,
                         at index: Int) -> PrecedenceGroupAttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -5593,7 +5593,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: Syntax) -> PrecedenceGroupAttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -5608,7 +5608,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PrecedenceGroupAttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -5617,7 +5617,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   ///
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the first element removed.
   public func removingFirst() -> PrecedenceGroupAttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -5626,7 +5626,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   ///
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the last element removed.
   public func removingLast() -> PrecedenceGroupAttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -5798,7 +5798,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -5824,7 +5824,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with that element appended to the end.
   public func inserting(_ syntax: PrecedenceGroupNameElementSyntax,
                         at index: Int) -> PrecedenceGroupNameListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -5842,7 +5842,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -5857,7 +5857,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PrecedenceGroupNameListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -5866,7 +5866,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the first element removed.
   public func removingFirst() -> PrecedenceGroupNameListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -5875,7 +5875,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the last element removed.
   public func removingLast() -> PrecedenceGroupNameListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -6047,7 +6047,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TokenListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: TokenSyntax) -> TokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -6073,7 +6073,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TokenListSyntax` with that element appended to the end.
   public func inserting(_ syntax: TokenSyntax,
                         at index: Int) -> TokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -6091,7 +6091,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TokenListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: TokenSyntax) -> TokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -6106,7 +6106,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TokenListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> TokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -6115,7 +6115,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TokenListSyntax` with the first element removed.
   public func removingFirst() -> TokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -6124,7 +6124,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TokenListSyntax` with the last element removed.
   public func removingLast() -> TokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -6296,7 +6296,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `NonEmptyTokenListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: TokenSyntax) -> NonEmptyTokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -6322,7 +6322,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `NonEmptyTokenListSyntax` with that element appended to the end.
   public func inserting(_ syntax: TokenSyntax,
                         at index: Int) -> NonEmptyTokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -6340,7 +6340,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `NonEmptyTokenListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: TokenSyntax) -> NonEmptyTokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -6355,7 +6355,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `NonEmptyTokenListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> NonEmptyTokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -6364,7 +6364,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `NonEmptyTokenListSyntax` with the first element removed.
   public func removingFirst() -> NonEmptyTokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -6373,7 +6373,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `NonEmptyTokenListSyntax` with the last element removed.
   public func removingLast() -> NonEmptyTokenListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -6545,7 +6545,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AttributeListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: Syntax) -> AttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -6571,7 +6571,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AttributeListSyntax` with that element appended to the end.
   public func inserting(_ syntax: Syntax,
                         at index: Int) -> AttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -6589,7 +6589,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AttributeListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: Syntax) -> AttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -6604,7 +6604,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AttributeListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -6613,7 +6613,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AttributeListSyntax` with the first element removed.
   public func removingFirst() -> AttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -6622,7 +6622,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AttributeListSyntax` with the last element removed.
   public func removingLast() -> AttributeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -6793,7 +6793,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: Syntax) -> SpecializeAttributeSpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -6819,7 +6819,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with that element appended to the end.
   public func inserting(_ syntax: Syntax,
                         at index: Int) -> SpecializeAttributeSpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -6837,7 +6837,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: Syntax) -> SpecializeAttributeSpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -6852,7 +6852,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> SpecializeAttributeSpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -6861,7 +6861,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   ///
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the first element removed.
   public func removingFirst() -> SpecializeAttributeSpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -6870,7 +6870,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   ///
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the last element removed.
   public func removingLast() -> SpecializeAttributeSpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -7042,7 +7042,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjCSelectorSyntax` with that element appended to the end.
   public func appending(
     _ syntax: ObjCSelectorPieceSyntax) -> ObjCSelectorSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -7068,7 +7068,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjCSelectorSyntax` with that element appended to the end.
   public func inserting(_ syntax: ObjCSelectorPieceSyntax,
                         at index: Int) -> ObjCSelectorSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -7086,7 +7086,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjCSelectorSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: ObjCSelectorPieceSyntax) -> ObjCSelectorSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -7101,7 +7101,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjCSelectorSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ObjCSelectorSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -7110,7 +7110,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ObjCSelectorSyntax` with the first element removed.
   public func removingFirst() -> ObjCSelectorSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -7119,7 +7119,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ObjCSelectorSyntax` with the last element removed.
   public func removingLast() -> ObjCSelectorSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -7291,7 +7291,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `DifferentiabilityParamListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -7317,7 +7317,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `DifferentiabilityParamListSyntax` with that element appended to the end.
   public func inserting(_ syntax: DifferentiabilityParamSyntax,
                         at index: Int) -> DifferentiabilityParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -7335,7 +7335,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -7350,7 +7350,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DifferentiabilityParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -7359,7 +7359,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   ///
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the first element removed.
   public func removingFirst() -> DifferentiabilityParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -7368,7 +7368,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   ///
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the last element removed.
   public func removingLast() -> DifferentiabilityParamListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -7540,7 +7540,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `BackDeployVersionListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: BackDeployVersionArgumentSyntax) -> BackDeployVersionListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -7566,7 +7566,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `BackDeployVersionListSyntax` with that element appended to the end.
   public func inserting(_ syntax: BackDeployVersionArgumentSyntax,
                         at index: Int) -> BackDeployVersionListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -7584,7 +7584,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `BackDeployVersionListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: BackDeployVersionArgumentSyntax) -> BackDeployVersionListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -7599,7 +7599,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `BackDeployVersionListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> BackDeployVersionListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -7608,7 +7608,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `BackDeployVersionListSyntax` with the first element removed.
   public func removingFirst() -> BackDeployVersionListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -7617,7 +7617,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `BackDeployVersionListSyntax` with the last element removed.
   public func removingLast() -> BackDeployVersionListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -7789,7 +7789,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `SwitchCaseListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: Syntax) -> SwitchCaseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -7815,7 +7815,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `SwitchCaseListSyntax` with that element appended to the end.
   public func inserting(_ syntax: Syntax,
                         at index: Int) -> SwitchCaseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -7833,7 +7833,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `SwitchCaseListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: Syntax) -> SwitchCaseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -7848,7 +7848,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `SwitchCaseListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> SwitchCaseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -7857,7 +7857,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `SwitchCaseListSyntax` with the first element removed.
   public func removingFirst() -> SwitchCaseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -7866,7 +7866,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `SwitchCaseListSyntax` with the last element removed.
   public func removingLast() -> SwitchCaseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -8038,7 +8038,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchClauseListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: CatchClauseSyntax) -> CatchClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -8064,7 +8064,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchClauseListSyntax` with that element appended to the end.
   public func inserting(_ syntax: CatchClauseSyntax,
                         at index: Int) -> CatchClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -8082,7 +8082,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchClauseListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: CatchClauseSyntax) -> CatchClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -8097,7 +8097,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchClauseListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CatchClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -8106,7 +8106,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CatchClauseListSyntax` with the first element removed.
   public func removingFirst() -> CatchClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -8115,7 +8115,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CatchClauseListSyntax` with the last element removed.
   public func removingLast() -> CatchClauseListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -8287,7 +8287,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CaseItemListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: CaseItemSyntax) -> CaseItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -8313,7 +8313,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CaseItemListSyntax` with that element appended to the end.
   public func inserting(_ syntax: CaseItemSyntax,
                         at index: Int) -> CaseItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -8331,7 +8331,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CaseItemListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: CaseItemSyntax) -> CaseItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -8346,7 +8346,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CaseItemListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CaseItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -8355,7 +8355,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CaseItemListSyntax` with the first element removed.
   public func removingFirst() -> CaseItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -8364,7 +8364,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CaseItemListSyntax` with the last element removed.
   public func removingLast() -> CaseItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -8536,7 +8536,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchItemListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: CatchItemSyntax) -> CatchItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -8562,7 +8562,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchItemListSyntax` with that element appended to the end.
   public func inserting(_ syntax: CatchItemSyntax,
                         at index: Int) -> CatchItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -8580,7 +8580,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchItemListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: CatchItemSyntax) -> CatchItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -8595,7 +8595,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchItemListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CatchItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -8604,7 +8604,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CatchItemListSyntax` with the first element removed.
   public func removingFirst() -> CatchItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -8613,7 +8613,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `CatchItemListSyntax` with the last element removed.
   public func removingLast() -> CatchItemListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -8785,7 +8785,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ConditionElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: ConditionElementSyntax) -> ConditionElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -8811,7 +8811,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ConditionElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: ConditionElementSyntax,
                         at index: Int) -> ConditionElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -8829,7 +8829,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ConditionElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: ConditionElementSyntax) -> ConditionElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -8844,7 +8844,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ConditionElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ConditionElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -8853,7 +8853,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ConditionElementListSyntax` with the first element removed.
   public func removingFirst() -> ConditionElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -8862,7 +8862,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ConditionElementListSyntax` with the last element removed.
   public func removingLast() -> ConditionElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -9034,7 +9034,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericRequirementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: GenericRequirementSyntax) -> GenericRequirementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -9060,7 +9060,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericRequirementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: GenericRequirementSyntax,
                         at index: Int) -> GenericRequirementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -9078,7 +9078,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericRequirementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: GenericRequirementSyntax) -> GenericRequirementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -9093,7 +9093,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericRequirementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> GenericRequirementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -9102,7 +9102,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `GenericRequirementListSyntax` with the first element removed.
   public func removingFirst() -> GenericRequirementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -9111,7 +9111,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `GenericRequirementListSyntax` with the last element removed.
   public func removingLast() -> GenericRequirementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -9283,7 +9283,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericParameterListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: GenericParameterSyntax) -> GenericParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -9309,7 +9309,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericParameterListSyntax` with that element appended to the end.
   public func inserting(_ syntax: GenericParameterSyntax,
                         at index: Int) -> GenericParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -9327,7 +9327,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericParameterListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: GenericParameterSyntax) -> GenericParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -9342,7 +9342,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericParameterListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> GenericParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -9351,7 +9351,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `GenericParameterListSyntax` with the first element removed.
   public func removingFirst() -> GenericParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -9360,7 +9360,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `GenericParameterListSyntax` with the last element removed.
   public func removingLast() -> GenericParameterListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -9532,7 +9532,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -9558,7 +9558,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element appended to the end.
   public func inserting(_ syntax: PrimaryAssociatedTypeSyntax,
                         at index: Int) -> PrimaryAssociatedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -9576,7 +9576,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -9591,7 +9591,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PrimaryAssociatedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -9600,7 +9600,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   ///
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the first element removed.
   public func removingFirst() -> PrimaryAssociatedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -9609,7 +9609,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   ///
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the last element removed.
   public func removingLast() -> PrimaryAssociatedTypeListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -9781,7 +9781,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `CompositionTypeElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: CompositionTypeElementSyntax) -> CompositionTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -9807,7 +9807,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `CompositionTypeElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: CompositionTypeElementSyntax,
                         at index: Int) -> CompositionTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -9825,7 +9825,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `CompositionTypeElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: CompositionTypeElementSyntax) -> CompositionTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -9840,7 +9840,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `CompositionTypeElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CompositionTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -9849,7 +9849,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   ///
   /// - Returns: A new `CompositionTypeElementListSyntax` with the first element removed.
   public func removingFirst() -> CompositionTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -9858,7 +9858,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   ///
   /// - Returns: A new `CompositionTypeElementListSyntax` with the last element removed.
   public func removingLast() -> CompositionTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -10030,7 +10030,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleTypeElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: TupleTypeElementSyntax) -> TupleTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -10056,7 +10056,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleTypeElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: TupleTypeElementSyntax,
                         at index: Int) -> TupleTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -10074,7 +10074,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleTypeElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: TupleTypeElementSyntax) -> TupleTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -10089,7 +10089,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleTypeElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> TupleTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -10098,7 +10098,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TupleTypeElementListSyntax` with the first element removed.
   public func removingFirst() -> TupleTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -10107,7 +10107,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TupleTypeElementListSyntax` with the last element removed.
   public func removingLast() -> TupleTypeElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -10279,7 +10279,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericArgumentListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: GenericArgumentSyntax) -> GenericArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -10305,7 +10305,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericArgumentListSyntax` with that element appended to the end.
   public func inserting(_ syntax: GenericArgumentSyntax,
                         at index: Int) -> GenericArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -10323,7 +10323,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericArgumentListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: GenericArgumentSyntax) -> GenericArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -10338,7 +10338,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericArgumentListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> GenericArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -10347,7 +10347,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `GenericArgumentListSyntax` with the first element removed.
   public func removingFirst() -> GenericArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -10356,7 +10356,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `GenericArgumentListSyntax` with the last element removed.
   public func removingLast() -> GenericArgumentListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -10528,7 +10528,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TuplePatternElementListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: TuplePatternElementSyntax) -> TuplePatternElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -10554,7 +10554,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TuplePatternElementListSyntax` with that element appended to the end.
   public func inserting(_ syntax: TuplePatternElementSyntax,
                         at index: Int) -> TuplePatternElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -10572,7 +10572,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TuplePatternElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: TuplePatternElementSyntax) -> TuplePatternElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -10587,7 +10587,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TuplePatternElementListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> TuplePatternElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -10596,7 +10596,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TuplePatternElementListSyntax` with the first element removed.
   public func removingFirst() -> TuplePatternElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -10605,7 +10605,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `TuplePatternElementListSyntax` with the last element removed.
   public func removingLast() -> TuplePatternElementListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
@@ -10777,7 +10777,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AvailabilitySpecListSyntax` with that element appended to the end.
   public func appending(
     _ syntax: AvailabilityArgumentSyntax) -> AvailabilitySpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
@@ -10803,7 +10803,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AvailabilitySpecListSyntax` with that element appended to the end.
   public func inserting(_ syntax: AvailabilityArgumentSyntax,
                         at index: Int) -> AvailabilitySpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
                  "inserting node at invalid index \(index)")
@@ -10821,7 +10821,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AvailabilitySpecListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
                         with syntax: AvailabilityArgumentSyntax) -> AvailabilitySpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
                  "replacing node at invalid index \(index)")
@@ -10836,7 +10836,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AvailabilitySpecListSyntax` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AvailabilitySpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
@@ -10845,7 +10845,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AvailabilitySpecListSyntax` with the first element removed.
   public func removingFirst() -> AvailabilitySpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
@@ -10854,7 +10854,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `AvailabilitySpecListSyntax` with the last element removed.
   public func removingLast() -> AvailabilitySpecListSyntax {
-    var newLayout = data.raw.formLayoutArray()
+    var newLayout = data.raw.layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }

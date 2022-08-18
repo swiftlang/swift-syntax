@@ -241,21 +241,6 @@ extension RawSyntax {
     SourceLength(utf8Length: byteLength)
   }
 
-  func formTokenKind() -> TokenKind? {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
-    case .materializedToken(let dat):
-      return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
-    case .layout(_):
-      return nil
-    }
-  }
-
-  func formLayoutArray() -> [RawSyntax?] {
-    Array(children)
-  }
-
   /// Replaces the leading trivia of the first token in this syntax tree by `leadingTrivia`.
   /// If the syntax tree did not contain a token and thus no trivia could be attached to it, `nil` is returned.
   /// - Parameters:
@@ -263,7 +248,7 @@ extension RawSyntax {
   func withLeadingTrivia(_ leadingTrivia: Trivia) -> RawSyntax? {
     if isToken {
       return .makeMaterializedToken(
-        kind: formTokenKind()!,
+        kind: tokenView.formKind(),
         leadingTrivia: leadingTrivia,
         trailingTrivia: tokenView.formTrailingTrivia(),
         arena: arena)
@@ -284,7 +269,7 @@ extension RawSyntax {
   func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax? {
     if isToken {
       return .makeMaterializedToken(
-        kind: formTokenKind()!,
+        kind: tokenView.formKind(),
         leadingTrivia: tokenView.formLeadingTrivia(),
         trailingTrivia: trailingTrivia,
         arena: arena)

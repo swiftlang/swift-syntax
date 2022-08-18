@@ -128,5 +128,9 @@ struct RawSyntaxLayout {
       buffer[index] = newChild
     }
   }
+
+  func formLayoutArray() -> [RawSyntax?] {
+    Array(raw.children)
+  }
 }
 

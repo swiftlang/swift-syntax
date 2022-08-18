@@ -499,7 +499,7 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawCodeBlockItemSyntax {
+  public init(elements: [RawCodeBlockItemSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .codeBlockItemList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -585,7 +585,7 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawSyntax {
+  public init(elements: [RawSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .unexpectedNodes, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -700,7 +700,7 @@ public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawTupleExprElementSyntax {
+  public init(elements: [RawTupleExprElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .tupleExprElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -727,7 +727,7 @@ public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawArrayElementSyntax {
+  public init(elements: [RawArrayElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .arrayElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -754,7 +754,7 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawDictionaryElementSyntax {
+  public init(elements: [RawDictionaryElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .dictionaryElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -781,7 +781,7 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawSyntax {
+  public init(elements: [RawSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .stringLiteralSegments, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -1014,7 +1014,7 @@ public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawDeclNameArgumentSyntax {
+  public init(elements: [RawDeclNameArgumentSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .declNameArgumentList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -1344,7 +1344,7 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawExprSyntax {
+  public init(elements: [RawExprSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .exprList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -2715,7 +2715,7 @@ public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawClosureCaptureItemSyntax {
+  public init(elements: [RawClosureCaptureItemSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .closureCaptureItemList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -2850,7 +2850,7 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawClosureParamSyntax {
+  public init(elements: [RawClosureParamSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .closureParamList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -3143,7 +3143,7 @@ public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawMultipleTrailingClosureElementSyntax {
+  public init(elements: [RawMultipleTrailingClosureElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .multipleTrailingClosureElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -3927,7 +3927,7 @@ public struct RawObjcNameSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawObjcNamePieceSyntax {
+  public init(elements: [RawObjcNamePieceSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .objcName, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -4516,7 +4516,7 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawFunctionParameterSyntax {
+  public init(elements: [RawFunctionParameterSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .functionParameterList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -4779,7 +4779,7 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawIfConfigClauseSyntax {
+  public init(elements: [RawIfConfigClauseSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .ifConfigClauseList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -5318,7 +5318,7 @@ public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawInheritedTypeSyntax {
+  public init(elements: [RawInheritedTypeSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .inheritedTypeList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -5988,7 +5988,7 @@ public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawMemberDeclListItemSyntax {
+  public init(elements: [RawMemberDeclListItemSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .memberDeclList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -6271,7 +6271,7 @@ public struct RawModifierListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawDeclModifierSyntax {
+  public init(elements: [RawDeclModifierSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .modifierList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -6792,7 +6792,7 @@ public struct RawAccessPathSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawAccessPathComponentSyntax {
+  public init(elements: [RawAccessPathComponentSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .accessPath, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -7056,7 +7056,7 @@ public struct RawAccessorListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawAccessorDeclSyntax {
+  public init(elements: [RawAccessorDeclSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .accessorList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -7221,7 +7221,7 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawPatternBindingSyntax {
+  public init(elements: [RawPatternBindingSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .patternBindingList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -7386,7 +7386,7 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawEnumCaseElementSyntax {
+  public init(elements: [RawEnumCaseElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .enumCaseElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -7670,7 +7670,7 @@ public struct RawIdentifierListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawTokenSyntax {
+  public init(elements: [RawTokenSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .identifierList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -7845,7 +7845,7 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawSyntax {
+  public init(elements: [RawSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .precedenceGroupAttributeList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -7931,7 +7931,7 @@ public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawPrecedenceGroupNameElementSyntax {
+  public init(elements: [RawPrecedenceGroupNameElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .precedenceGroupNameList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -8125,7 +8125,7 @@ public struct RawTokenListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawTokenSyntax {
+  public init(elements: [RawTokenSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .tokenList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -8152,7 +8152,7 @@ public struct RawNonEmptyTokenListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawTokenSyntax {
+  public init(elements: [RawTokenSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .nonEmptyTokenList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -8347,7 +8347,7 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawSyntax {
+  public init(elements: [RawSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .attributeList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -8374,7 +8374,7 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawSyntax {
+  public init(elements: [RawSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .specializeAttributeSpecList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -8834,7 +8834,7 @@ public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawObjCSelectorPieceSyntax {
+  public init(elements: [RawObjCSelectorPieceSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .objCSelector, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -9058,7 +9058,7 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawDifferentiabilityParamSyntax {
+  public init(elements: [RawDifferentiabilityParamSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .differentiabilityParamList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -9410,7 +9410,7 @@ public struct RawBackDeployVersionListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawBackDeployVersionArgumentSyntax {
+  public init(elements: [RawBackDeployVersionArgumentSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .backDeployVersionList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -9741,7 +9741,7 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawSyntax {
+  public init(elements: [RawSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .switchCaseList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -10163,7 +10163,7 @@ public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawCatchClauseSyntax {
+  public init(elements: [RawCatchClauseSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .catchClauseList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -10504,7 +10504,7 @@ public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawCaseItemSyntax {
+  public init(elements: [RawCaseItemSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .caseItemList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -10531,7 +10531,7 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawCatchItemSyntax {
+  public init(elements: [RawCatchItemSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .catchItemList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -10883,7 +10883,7 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawConditionElementSyntax {
+  public init(elements: [RawConditionElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .conditionElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -11647,7 +11647,7 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawGenericRequirementSyntax {
+  public init(elements: [RawGenericRequirementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .genericRequirementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -11891,7 +11891,7 @@ public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawGenericParameterSyntax {
+  public init(elements: [RawGenericParameterSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .genericParameterList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -11997,7 +11997,7 @@ public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawPrimaryAssociatedTypeSyntax {
+  public init(elements: [RawPrimaryAssociatedTypeSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .primaryAssociatedTypeList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -12800,7 +12800,7 @@ public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawCompositionTypeElementSyntax {
+  public init(elements: [RawCompositionTypeElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .compositionTypeElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -12975,7 +12975,7 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawTupleTypeElementSyntax {
+  public init(elements: [RawTupleTypeElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .tupleTypeElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -13219,7 +13219,7 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawGenericArgumentSyntax {
+  public init(elements: [RawGenericArgumentSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .genericArgumentList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -13884,7 +13884,7 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawTuplePatternElementSyntax {
+  public init(elements: [RawTuplePatternElementSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .tuplePatternElementList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }
@@ -13960,7 +13960,7 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol {
     self.init(raw: other.raw)
   }
 
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == RawAvailabilityArgumentSyntax {
+  public init(elements: [RawAvailabilityArgumentSyntax], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .availabilitySpecList, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }

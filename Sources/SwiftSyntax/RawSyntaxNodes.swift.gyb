@@ -59,7 +59,7 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
 %   end
 %
 %   if node.is_syntax_collection():
-  public init<C: Collection>(elements: C, arena: SyntaxArena)  where C.Element == Raw${node.collection_element_type} {
+  public init(elements: [Raw${node.collection_element_type}], arena: SyntaxArena) {
     let raw = RawSyntax.makeLayout(kind: .${node.swift_syntax_kind}, from: elements.map { $0.raw }, arena: arena)
     self.init(raw: raw)
   }

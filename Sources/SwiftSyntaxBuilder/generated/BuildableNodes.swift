@@ -1965,6 +1965,68 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
     return self
   }
 }
+public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTernaryExpr {
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+  let unexpectedBeforeQuestionMark: UnexpectedNodes?
+  let questionMark: TokenSyntax
+  let unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodes?
+  let firstChoice: ExprBuildable
+  let unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodes?
+  let colonMark: TokenSyntax
+  /// Creates a `UnresolvedTernaryExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeQuestionMark: 
+  ///   - questionMark: 
+  ///   - unexpectedBetweenQuestionMarkAndFirstChoice: 
+  ///   - firstChoice: 
+  ///   - unexpectedBetweenFirstChoiceAndColonMark: 
+  ///   - colonMark: 
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: TokenSyntax = TokenSyntax.`infixQuestionMark`, unexpectedBetweenQuestionMarkAndFirstChoice: ExpressibleAsUnexpectedNodes? = nil, firstChoice: ExpressibleAsExprBuildable, unexpectedBetweenFirstChoiceAndColonMark: ExpressibleAsUnexpectedNodes? = nil, colonMark: TokenSyntax = TokenSyntax.`colon`) {
+    self.leadingTrivia = leadingTrivia
+    self.unexpectedBeforeQuestionMark = unexpectedBeforeQuestionMark?.createUnexpectedNodes()
+    self.questionMark = questionMark
+    assert(questionMark.text == #"?"#)
+    self.unexpectedBetweenQuestionMarkAndFirstChoice = unexpectedBetweenQuestionMarkAndFirstChoice?.createUnexpectedNodes()
+    self.firstChoice = firstChoice.createExprBuildable()
+    self.unexpectedBetweenFirstChoiceAndColonMark = unexpectedBetweenFirstChoiceAndColonMark?.createUnexpectedNodes()
+    self.colonMark = colonMark
+    assert(colonMark.text == #":"#)
+  }
+  /// Builds a `UnresolvedTernaryExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `UnresolvedTernaryExprSyntax`.
+  func buildUnresolvedTernaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedTernaryExprSyntax {
+    let result = UnresolvedTernaryExprSyntax(unexpectedBeforeQuestionMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionMark: questionMark, unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format, leadingTrivia: nil), firstChoice: firstChoice.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colonMark: colonMark)
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  }
+  /// Conformance to `ExprBuildable`.
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildUnresolvedTernaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+    return ExprSyntax(result)
+  }
+  /// Conformance to `ExpressibleAsUnresolvedTernaryExpr`.
+  public func createUnresolvedTernaryExpr() -> UnresolvedTernaryExpr {
+    return self
+  }
+  /// Conformance to `ExpressibleAsExprBuildable`.
+  /// `UnresolvedTernaryExpr` may conform to `ExpressibleAsExprBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createExprBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createExprBuildable() -> ExprBuildable {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ExprBuildable` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
 public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).

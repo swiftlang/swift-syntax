@@ -503,6 +503,23 @@ let EXPR_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "UnresolvedTernaryExpr",
+       kind: "Expr",
+       children: [
+         Child(name: "QuestionMark",
+               kind: "InfixQuestionMarkToken",
+               tokenChoices: [
+                 "InfixQuestionMark"
+               ]),
+         Child(name: "FirstChoice",
+               kind: "Expr"),
+         Child(name: "ColonMark",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ])
+       ]),
+
   Node(name: "TernaryExpr",
        kind: "Expr",
        children: [

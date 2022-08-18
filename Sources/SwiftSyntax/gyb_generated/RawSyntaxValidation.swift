@@ -342,6 +342,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawTokenSyntax.self)
     break
+  case .unresolvedTernaryExpr:
+    assert(layout.count == 6)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawExprSyntax.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawTokenSyntax.self)
+    break
   case .ternaryExpr:
     assert(layout.count == 10)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)

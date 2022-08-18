@@ -343,6 +343,12 @@ extension SyntaxNode {
     return BooleanLiteralExprSyntax(asSyntaxData)
   }
 
+  public var isUnresolvedTernaryExpr: Bool { return raw.kind == .unresolvedTernaryExpr }
+  public var asUnresolvedTernaryExpr: UnresolvedTernaryExprSyntax? {
+    guard isUnresolvedTernaryExpr else { return nil }
+    return UnresolvedTernaryExprSyntax(asSyntaxData)
+  }
+
   public var isTernaryExpr: Bool { return raw.kind == .ternaryExpr }
   public var asTernaryExpr: TernaryExprSyntax? {
     guard isTernaryExpr else { return nil }
@@ -1704,6 +1710,8 @@ extension Syntax {
     case .integerLiteralExpr(let node):
       return node
     case .booleanLiteralExpr(let node):
+      return node
+    case .unresolvedTernaryExpr(let node):
       return node
     case .ternaryExpr(let node):
       return node

@@ -70,6 +70,7 @@ public enum SyntaxEnum {
   case dictionaryElement(DictionaryElementSyntax)
   case integerLiteralExpr(IntegerLiteralExprSyntax)
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
+  case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case ternaryExpr(TernaryExprSyntax)
   case memberAccessExpr(MemberAccessExprSyntax)
   case isExpr(IsExprSyntax)
@@ -394,6 +395,8 @@ public extension Syntax {
       return .integerLiteralExpr(IntegerLiteralExprSyntax(self)!)
     case .booleanLiteralExpr:
       return .booleanLiteralExpr(BooleanLiteralExprSyntax(self)!)
+    case .unresolvedTernaryExpr:
+      return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
     case .ternaryExpr:
       return .ternaryExpr(TernaryExprSyntax(self)!)
     case .memberAccessExpr:

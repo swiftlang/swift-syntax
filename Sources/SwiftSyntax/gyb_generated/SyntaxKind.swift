@@ -70,6 +70,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case dictionaryElement = 99
   case integerLiteralExpr = 47
   case booleanLiteralExpr = 49
+  case unresolvedTernaryExpr = 270
   case ternaryExpr = 50
   case memberAccessExpr = 51
   case isExpr = 53

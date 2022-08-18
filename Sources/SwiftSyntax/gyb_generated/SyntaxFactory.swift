@@ -1144,6 +1144,35 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return BooleanLiteralExprSyntax(data)
   }
+  @available(*, deprecated, message: "Use initializer on UnresolvedTernaryExprSyntax")
+  public static func makeUnresolvedTernaryExpr(_ unexpectedBeforeQuestionMark: UnexpectedNodesSyntax? = nil, questionMark: TokenSyntax, _ unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? = nil, firstChoice: ExprSyntax, _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil, colonMark: TokenSyntax) -> UnresolvedTernaryExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeQuestionMark?.raw,
+      questionMark.raw,
+      unexpectedBetweenQuestionMarkAndFirstChoice?.raw,
+      firstChoice.raw,
+      unexpectedBetweenFirstChoiceAndColonMark?.raw,
+      colonMark.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unresolvedTernaryExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return UnresolvedTernaryExprSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on UnresolvedTernaryExprSyntax")
+  public static func makeBlankUnresolvedTernaryExpr(presence: SourcePresence = .present) -> UnresolvedTernaryExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unresolvedTernaryExpr,
+      layout: [
+      nil,
+      RawSyntax.missingToken(TokenKind.infixQuestionMark),
+      nil,
+      RawSyntax.missing(SyntaxKind.missingExpr),
+      nil,
+      RawSyntax.missingToken(TokenKind.colon),
+    ], length: .zero, presence: presence))
+    return UnresolvedTernaryExprSyntax(data)
+  }
   @available(*, deprecated, message: "Use initializer on TernaryExprSyntax")
   public static func makeTernaryExpr(_ unexpectedBeforeConditionExpression: UnexpectedNodesSyntax? = nil, conditionExpression: ExprSyntax, _ unexpectedBetweenConditionExpressionAndQuestionMark: UnexpectedNodesSyntax? = nil, questionMark: TokenSyntax, _ unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? = nil, firstChoice: ExprSyntax, _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil, colonMark: TokenSyntax, _ unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodesSyntax? = nil, secondChoice: ExprSyntax) -> TernaryExprSyntax {
     let layout: [RawSyntax?] = [

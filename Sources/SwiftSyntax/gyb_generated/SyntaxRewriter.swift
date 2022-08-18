@@ -401,6 +401,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `UnresolvedTernaryExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnresolvedTernaryExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `TernaryExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2467,6 +2474,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = BooleanLiteralExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnresolvedTernaryExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = UnresolvedTernaryExprSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4694,6 +4711,8 @@ open class SyntaxRewriter {
       return visitImplIntegerLiteralExprSyntax
     case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax
+    case .unresolvedTernaryExpr:
+      return visitImplUnresolvedTernaryExprSyntax
     case .ternaryExpr:
       return visitImplTernaryExprSyntax
     case .memberAccessExpr:
@@ -5229,6 +5248,8 @@ open class SyntaxRewriter {
       return visitImplIntegerLiteralExprSyntax(data)
     case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax(data)
+    case .unresolvedTernaryExpr:
+      return visitImplUnresolvedTernaryExprSyntax(data)
     case .ternaryExpr:
       return visitImplTernaryExprSyntax(data)
     case .memberAccessExpr:

@@ -53,7 +53,7 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol {
 public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .unknownExpr, .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFileIDExpr, .poundFilePathExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .ternaryExpr, .memberAccessExpr, .isExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .postfixIfConfigExpr, .editorPlaceholderExpr, .objectLiteralExpr: return true
+    case .unknownExpr, .missingExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .moveExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFileIDExpr, .poundFilePathExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .infixOperatorExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .unresolvedTernaryExpr, .ternaryExpr, .memberAccessExpr, .isExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .postfixIfConfigExpr, .editorPlaceholderExpr, .objectLiteralExpr: return true
     default: return false
     }
   }
@@ -2377,6 +2377,65 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
   }
   public var booleanLiteral: RawTokenSyntax {
     raw.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .unresolvedTernaryExpr
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeQuestionMark: RawUnexpectedNodesSyntax? = nil,
+    questionMark: RawTokenSyntax,
+    _ unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax? = nil,
+    firstChoice: RawExprSyntax,
+    _ unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax? = nil,
+    colonMark: RawTokenSyntax,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .unresolvedTernaryExpr, uninitializedCount: 6, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeQuestionMark?.raw
+      layout[1] = questionMark.raw
+      layout[2] = unexpectedBetweenQuestionMarkAndFirstChoice?.raw
+      layout[3] = firstChoice.raw
+      layout[4] = unexpectedBetweenFirstChoiceAndColonMark?.raw
+      layout[5] = colonMark.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforeQuestionMark: RawUnexpectedNodesSyntax? {
+    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var questionMark: RawTokenSyntax {
+    raw.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax? {
+    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var firstChoice: RawExprSyntax {
+    raw.children[3].map(RawExprSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax? {
+    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var colonMark: RawTokenSyntax {
+    raw.children[5].map(RawTokenSyntax.init(raw:))!
   }
 }
 

@@ -581,6 +581,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `BooleanLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BooleanLiteralExprSyntax) {}
+  /// Visiting `UnresolvedTernaryExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `UnresolvedTernaryExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: UnresolvedTernaryExprSyntax) {}
   /// Visiting `TernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3314,6 +3324,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnresolvedTernaryExprSyntax(_ data: SyntaxData) {
+      let node = UnresolvedTernaryExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTernaryExprSyntax(_ data: SyntaxData) {
       let node = TernaryExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5707,6 +5728,8 @@ open class SyntaxVisitor {
       visitImplIntegerLiteralExprSyntax(data)
     case .booleanLiteralExpr:
       visitImplBooleanLiteralExprSyntax(data)
+    case .unresolvedTernaryExpr:
+      visitImplUnresolvedTernaryExprSyntax(data)
     case .ternaryExpr:
       visitImplTernaryExprSyntax(data)
     case .memberAccessExpr:

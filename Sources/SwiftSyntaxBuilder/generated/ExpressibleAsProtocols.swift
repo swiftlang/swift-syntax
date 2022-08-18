@@ -452,6 +452,14 @@ public extension ExpressibleAsBooleanLiteralExpr {
     return createBooleanLiteralExpr()
   }
 }
+public protocol ExpressibleAsUnresolvedTernaryExpr: ExpressibleAsExprBuildable {
+  func createUnresolvedTernaryExpr() -> UnresolvedTernaryExpr
+}
+public extension ExpressibleAsUnresolvedTernaryExpr {
+  func createExprBuildable() -> ExprBuildable {
+    return createUnresolvedTernaryExpr()
+  }
+}
 public protocol ExpressibleAsTernaryExpr: ExpressibleAsExprBuildable {
   func createTernaryExpr() -> TernaryExpr
 }

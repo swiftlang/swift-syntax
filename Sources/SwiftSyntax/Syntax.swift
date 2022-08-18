@@ -174,6 +174,11 @@ public extension SyntaxProtocol {
     return raw.kind.isUnknown
   }
 
+  /// Whether this tree contains a missing token or unexpected node.
+  var hasError: Bool {
+    return raw.recursiveFlags.contains(.hasError)
+  }
+
   /// The parent of this syntax node, or `nil` if this node is the root.
   var parent: Syntax? {
     return data.parent

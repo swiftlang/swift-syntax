@@ -49,6 +49,18 @@ internal enum SyntaxKind: CSyntaxKind {
     default: return false
     }
   }
+
+  var isMissing: Bool {
+    switch self {
+% for name in SYNTAX_BASE_KINDS:
+%   if name not in ["Syntax", "SyntaxCollection"]:
+    case .missing${name}: return true
+%   end
+% end
+    case .missing: return true
+    default: return false
+    }
+  }
 }
 
 extension SyntaxKind {

@@ -269,7 +269,10 @@ class Reduce: ParsableCommand {
         printerr("Current source size \(reduced.count), reducing with chunk size \(chunkSize)")
       }
       reduced = try reduceImpl(source: reduced, chunkSize: chunkSize, testPasses: testPasses)
-      chunkSize = min(reduced.count / 2, chunkSize / 2)
+      chunkSize = min(
+        reduced.count / 2,
+        chunkSize / 2
+      )
     }
     return reduced
   }

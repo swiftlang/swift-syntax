@@ -403,7 +403,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `statements` collection.
   public func addStatement(_ element: CodeBlockItemSyntax) -> CodeBlockSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.statements] {
+    if let col = raw.layoutView![Cursor.statements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
@@ -767,7 +767,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `arguments` collection.
   public func addArgument(_ element: DeclNameArgumentSyntax) -> DeclNameArgumentsSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.arguments] {
+    if let col = raw.layoutView![Cursor.arguments] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
@@ -1604,7 +1604,7 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `specifier` collection.
   public func addSpecifierToken(_ element: TokenSyntax) -> ClosureCaptureItemSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.specifier] {
+    if let col = raw.layoutView![Cursor.specifier] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
@@ -1958,7 +1958,7 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `items` collection.
   public func addItem(_ element: ClosureCaptureItemSyntax) -> ClosureCaptureSignatureSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.items] {
+    if let col = raw.layoutView![Cursor.items] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
@@ -2305,7 +2305,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ClosureSignatureSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -3143,7 +3143,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `expressions` collection.
   public func addExpression(_ element: TupleExprElementSyntax) -> ExpressionSegmentSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.expressions] {
+    if let col = raw.layoutView![Cursor.expressions] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
@@ -3659,7 +3659,7 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `parameterList` collection.
   public func addParameter(_ element: FunctionParameterSyntax) -> ParameterClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.parameterList] {
+    if let col = raw.layoutView![Cursor.parameterList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
@@ -5364,7 +5364,7 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `inheritedTypeCollection` collection.
   public func addInheritedType(_ element: InheritedTypeSyntax) -> TypeInheritanceClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.inheritedTypeCollection] {
+    if let col = raw.layoutView![Cursor.inheritedTypeCollection] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
@@ -5536,7 +5536,7 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `members` collection.
   public func addMember(_ element: MemberDeclListItemSyntax) -> MemberDeclBlockSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.members] {
+    if let col = raw.layoutView![Cursor.members] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
@@ -5858,7 +5858,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `statements` collection.
   public func addStatement(_ element: CodeBlockItemSyntax) -> SourceFileSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.statements] {
+    if let col = raw.layoutView![Cursor.statements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
@@ -6208,7 +6208,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> FunctionParameterSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -7194,7 +7194,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `accessors` collection.
   public func addAccessor(_ element: AccessorDeclSyntax) -> AccessorBlockSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.accessors] {
+    if let col = raw.layoutView![Cursor.accessors] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
@@ -7980,7 +7980,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `precedenceGroupAndDesignatedTypes` collection.
   public func addPrecedenceGroupAndDesignatedType(_ element: TokenSyntax) -> OperatorPrecedenceAndTypesSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.precedenceGroupAndDesignatedTypes] {
+    if let col = raw.layoutView![Cursor.precedenceGroupAndDesignatedTypes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.identifierList,
@@ -8206,7 +8206,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `otherNames` collection.
   public func addOtherName(_ element: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupRelationSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.otherNames] {
+    if let col = raw.layoutView![Cursor.otherNames] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
@@ -9050,7 +9050,7 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `argumentList` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> CustomAttributeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.argumentList] {
+    if let col = raw.layoutView![Cursor.argumentList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
@@ -9482,7 +9482,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `tokenList` collection.
   public func addToken(_ element: TokenSyntax) -> AttributeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.tokenList] {
+    if let col = raw.layoutView![Cursor.tokenList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
@@ -9716,7 +9716,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `availabilityList` collection.
   public func addAvailability(_ element: AvailabilityArgumentSyntax) -> AvailabilityEntrySyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.availabilityList] {
+    if let col = raw.layoutView![Cursor.availabilityList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
@@ -11760,7 +11760,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `diffParams` collection.
   public func addDifferentiabilityParam(_ element: DifferentiabilityParamSyntax) -> DifferentiabilityParamsSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.diffParams] {
+    if let col = raw.layoutView![Cursor.diffParams] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
@@ -13027,7 +13027,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   ///            appended to its `versionList` collection.
   public func addAvailability(_ element: BackDeployVersionArgumentSyntax) -> BackDeployAttributeSpecListSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.versionList] {
+    if let col = raw.layoutView![Cursor.versionList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionList,
@@ -13510,7 +13510,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `elementList` collection.
   public func addElement(_ element: ExprSyntax) -> YieldListSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elementList] {
+    if let col = raw.layoutView![Cursor.elementList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
@@ -13970,7 +13970,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `availabilitySpec` collection.
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> AvailabilityConditionSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.availabilitySpec] {
+    if let col = raw.layoutView![Cursor.availabilitySpec] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
@@ -14739,7 +14739,7 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `availabilitySpec` collection.
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> UnavailabilityConditionSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.availabilitySpec] {
+    if let col = raw.layoutView![Cursor.availabilitySpec] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
@@ -15245,7 +15245,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `statements` collection.
   public func addStatement(_ element: CodeBlockItemSyntax) -> SwitchCaseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.statements] {
+    if let col = raw.layoutView![Cursor.statements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
@@ -15967,7 +15967,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `caseItems` collection.
   public func addCaseItem(_ element: CaseItemSyntax) -> SwitchCaseLabelSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.caseItems] {
+    if let col = raw.layoutView![Cursor.caseItems] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
@@ -16185,7 +16185,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `catchItems` collection.
   public func addCatchItem(_ element: CatchItemSyntax) -> CatchClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.catchItems] {
+    if let col = raw.layoutView![Cursor.catchItems] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
@@ -16396,7 +16396,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `requirementList` collection.
   public func addRequirement(_ element: GenericRequirementSyntax) -> GenericWhereClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.requirementList] {
+    if let col = raw.layoutView![Cursor.requirementList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
@@ -17342,7 +17342,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> GenericParameterSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -17843,7 +17843,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `genericParameterList` collection.
   public func addGenericParameter(_ element: GenericParameterSyntax) -> GenericParameterClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.genericParameterList] {
+    if let col = raw.layoutView![Cursor.genericParameterList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
@@ -18258,7 +18258,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   ///            appended to its `primaryAssociatedTypeList` collection.
   public func addPrimaryAssociatedType(_ element: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.primaryAssociatedTypeList] {
+    if let col = raw.layoutView![Cursor.primaryAssociatedTypeList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
@@ -19231,7 +19231,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `arguments` collection.
   public func addArgument(_ element: GenericArgumentSyntax) -> GenericArgumentClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.arguments] {
+    if let col = raw.layoutView![Cursor.arguments] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,

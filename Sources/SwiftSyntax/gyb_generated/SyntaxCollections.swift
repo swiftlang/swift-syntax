@@ -56,7 +56,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `CodeBlockItemListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -309,7 +309,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `UnexpectedNodesSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -562,7 +562,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `TupleExprElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -815,7 +815,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ArrayElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -1068,7 +1068,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `DictionaryElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -1321,7 +1321,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `StringLiteralSegmentsSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -1574,7 +1574,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `DeclNameArgumentListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -1827,7 +1827,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ExprListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -2080,7 +2080,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ClosureCaptureItemListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -2333,7 +2333,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ClosureParamListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -2586,7 +2586,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `MultipleTrailingClosureElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -2839,7 +2839,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ObjcNameSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -3092,7 +3092,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `FunctionParameterListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -3345,7 +3345,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `IfConfigClauseListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -3598,7 +3598,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `InheritedTypeListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -3851,7 +3851,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `MemberDeclListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -4104,7 +4104,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ModifierListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -4357,7 +4357,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `AccessPathSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -4610,7 +4610,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `AccessorListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -4863,7 +4863,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `PatternBindingListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -5113,7 +5113,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `EnumCaseElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -5366,7 +5366,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `IdentifierListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -5619,7 +5619,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `PrecedenceGroupAttributeListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -5872,7 +5872,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `PrecedenceGroupNameListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -6125,7 +6125,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `TokenListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -6378,7 +6378,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `NonEmptyTokenListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -6631,7 +6631,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `AttributeListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -6883,7 +6883,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `SpecializeAttributeSpecListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -7136,7 +7136,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ObjCSelectorSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -7389,7 +7389,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `DifferentiabilityParamListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -7642,7 +7642,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `BackDeployVersionListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -7895,7 +7895,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `SwitchCaseListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -8148,7 +8148,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `CatchClauseListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -8401,7 +8401,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `CaseItemListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -8654,7 +8654,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `CatchItemListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -8907,7 +8907,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `ConditionElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -9160,7 +9160,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `GenericRequirementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -9413,7 +9413,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `GenericParameterListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -9666,7 +9666,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `PrimaryAssociatedTypeListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -9919,7 +9919,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `CompositionTypeElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -10172,7 +10172,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `TupleTypeElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -10425,7 +10425,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `GenericArgumentListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -10678,7 +10678,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `TuplePatternElementListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -10931,7 +10931,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `AvailabilitySpecListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.

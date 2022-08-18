@@ -1451,7 +1451,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: ExprSyntax) -> SequenceExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
+    if let col = raw.layoutView![Cursor.elements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
@@ -3083,7 +3083,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elementList` collection.
   public func addElement(_ element: TupleExprElementSyntax) -> TupleExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elementList] {
+    if let col = raw.layoutView![Cursor.elementList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
@@ -3300,7 +3300,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: ArrayElementSyntax) -> ArrayExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
+    if let col = raw.layoutView![Cursor.elements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
@@ -5148,7 +5148,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `statements` collection.
   public func addStatement(_ element: CodeBlockItemSyntax) -> ClosureExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.statements] {
+    if let col = raw.layoutView![Cursor.statements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
@@ -5525,7 +5525,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `argumentList` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.argumentList] {
+    if let col = raw.layoutView![Cursor.argumentList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
@@ -5676,7 +5676,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `additionalTrailingClosures` collection.
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.additionalTrailingClosures] {
+    if let col = raw.layoutView![Cursor.additionalTrailingClosures] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
@@ -5917,7 +5917,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `argumentList` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> SubscriptExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.argumentList] {
+    if let col = raw.layoutView![Cursor.argumentList] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
@@ -6067,7 +6067,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `additionalTrailingClosures` collection.
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.additionalTrailingClosures] {
+    if let col = raw.layoutView![Cursor.additionalTrailingClosures] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
@@ -6891,7 +6891,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `segments` collection.
   public func addSegment(_ element: Syntax) -> StringLiteralExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.segments] {
+    if let col = raw.layoutView![Cursor.segments] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
@@ -7596,7 +7596,7 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `name` collection.
   public func addNamePiece(_ element: ObjcNamePieceSyntax) -> ObjcKeyPathExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.name] {
+    if let col = raw.layoutView![Cursor.name] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.objcName,
@@ -8461,7 +8461,7 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///            appended to its `arguments` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> ObjectLiteralExprSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.arguments] {
+    if let col = raw.layoutView![Cursor.arguments] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,

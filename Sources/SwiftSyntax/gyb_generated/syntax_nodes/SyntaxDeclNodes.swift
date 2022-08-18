@@ -147,7 +147,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> MissingDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -210,7 +210,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> MissingDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -364,7 +364,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> TypealiasDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -427,7 +427,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> TypealiasDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -808,7 +808,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AssociatedtypeDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -871,7 +871,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> AssociatedtypeDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -1222,7 +1222,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `clauses` collection.
   public func addClause(_ element: IfConfigClauseSyntax) -> IfConfigDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.clauses] {
+    if let col = raw.layoutView![Cursor.clauses] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
@@ -2173,7 +2173,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ClassDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -2236,7 +2236,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ClassDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -2669,7 +2669,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ActorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -2732,7 +2732,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ActorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -3165,7 +3165,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> StructDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -3228,7 +3228,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> StructDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -3661,7 +3661,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -3724,7 +3724,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -4151,7 +4151,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -4214,7 +4214,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -4601,7 +4601,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -4664,7 +4664,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -5097,7 +5097,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -5160,7 +5160,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -5570,7 +5570,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -5633,7 +5633,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -5884,7 +5884,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -5947,7 +5947,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -6362,7 +6362,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ImportDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -6425,7 +6425,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -6574,7 +6574,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `path` collection.
   public func addPathComponent(_ element: AccessPathComponentSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.path] {
+    if let col = raw.layoutView![Cursor.path] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
@@ -6734,7 +6734,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AccessorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -7143,7 +7143,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> VariableDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -7206,7 +7206,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -7311,7 +7311,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `bindings` collection.
   public func addBinding(_ element: PatternBindingSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.bindings] {
+    if let col = raw.layoutView![Cursor.bindings] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
@@ -7459,7 +7459,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -7525,7 +7525,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -7632,7 +7632,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: EnumCaseElementSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
+    if let col = raw.layoutView![Cursor.elements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
@@ -7800,7 +7800,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> EnumDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -7866,7 +7866,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> EnumDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -8305,7 +8305,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> OperatorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -8372,7 +8372,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> OperatorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -8669,7 +8669,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
@@ -8736,7 +8736,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.modifiers] {
+    if let col = raw.layoutView![Cursor.modifiers] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
@@ -8933,7 +8933,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `groupAttributes` collection.
   public func addGroupAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.groupAttributes] {
+    if let col = raw.layoutView![Cursor.groupAttributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,

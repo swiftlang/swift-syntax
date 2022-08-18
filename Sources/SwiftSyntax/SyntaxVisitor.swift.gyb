@@ -90,7 +90,7 @@ open class SyntaxVisitor {
       let node = Unknown${node.name}(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -98,7 +98,7 @@ open class SyntaxVisitor {
       let node = ${node.name}(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -118,7 +118,7 @@ open class SyntaxVisitor {
       let node = UnknownSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)

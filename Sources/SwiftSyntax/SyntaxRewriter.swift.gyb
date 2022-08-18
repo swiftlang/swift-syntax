@@ -229,9 +229,9 @@ open class SyntaxRewriter {
           // The below implementation is based on Collection.map but directly
           // reserves enough capacity for the entire layout.
           newLayout = ContiguousArray<RawSyntax?>()
-          newLayout!.reserveCapacity(node.raw.numberOfChildren)
+          newLayout!.reserveCapacity(node.raw.layoutView!.children.count)
           for j in 0..<childIndex {
-            newLayout!.append(node.raw.child(at: j))
+            newLayout!.append(node.raw.layoutView!.child(at: j))
           }
         }
         
@@ -251,7 +251,7 @@ open class SyntaxRewriter {
       // A child node was rewritten. Build the updated node.
       
       // Sanity check, ensure the new children are the same length.
-      assert(newLayout.count == node.raw.numberOfChildren)
+      assert(newLayout.count == node.raw.layoutView!.children.count)
       
       let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: .default)
       let newNode = SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!

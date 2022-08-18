@@ -170,31 +170,6 @@ extension RawSyntax {
     }
   }
 
-  /// Child nodes.
-  var children: RawSyntaxBuffer {
-    switch rawData.payload {
-    case .parsedToken(_),
-         .materializedToken(_):
-      return .init(start: nil, count: 0)
-    case .layout(let dat):
-      return dat.layout
-    }
-  }
-
-  func child(at index: Int) -> RawSyntax? {
-    guard hasChild(at: index) else { return nil }
-    return children[index]
-  }
-
-  func hasChild(at index: Int) -> Bool {
-    children[index] != nil
-  }
-
-  /// The number of children, `present` or `missing`, in this node.
-  var numberOfChildren: Int {
-    return children.count
-  }
-
   /// Total number of nodes in this sub-tree, including `self` node.
   var totalNodes: Int {
     switch rawData.payload {
@@ -254,7 +229,7 @@ extension RawSyntax {
         trailingTrivia: tokenView.formTrailingTrivia(),
         arena: arena)
     case .layout(let layoutView):
-      for (index, child) in children.enumerated() {
+      for (index, child) in layoutView.children.enumerated() {
         if let replaced = child?.withLeadingTrivia(leadingTrivia) {
           return layoutView.replacingChild(at: index, with: replaced, arena: arena)
         }
@@ -276,21 +251,13 @@ extension RawSyntax {
         trailingTrivia: trailingTrivia,
         arena: arena)
     case .layout(let layoutView):
-      for (index, child) in children.enumerated().reversed() {
+      for (index, child) in layoutView.children.enumerated().reversed() {
         if let replaced = child?.withTrailingTrivia(trailingTrivia) {
           return layoutView.replacingChild(at: index, with: replaced, arena: arena)
         }
       }
       return nil
     }
-  }
-
-  /// Returns the child at the provided cursor in the layout.
-  /// - Parameter index: The index of the child you're accessing.
-  /// - Returns: The child at the provided index.
-  subscript<CursorType: RawRepresentable>(_ index: CursorType) -> RawSyntax?
-    where CursorType.RawValue == Int {
-    return child(at: index.rawValue)
   }
 }
 
@@ -341,8 +308,8 @@ extension RawSyntax {
     switch view {
     case .token(let tokenView):
       return tokenView
-    case .layout:
-      for child in children {
+    case .layout(let layoutView):
+      for child in layoutView.children {
         if let token = child?.firstToken(viewMode: viewMode) {
           return token
         }
@@ -357,8 +324,8 @@ extension RawSyntax {
     switch view {
     case .token(let tokenView):
       return tokenView
-    case .layout:
-      for child in children.reversed() {
+    case .layout(let layoutView):
+      for child in layoutView.children.reversed() {
         if let token = child?.lastToken(viewMode: viewMode) {
           return token
         }
@@ -676,8 +643,15 @@ extension RawSyntax: CustomDebugStringConvertible {
 
 extension RawSyntax: CustomReflectable {
   public var customMirror: Mirror {
-    let mirrorChildren: [Any] = children.map {
-      child in child ?? (nil as Any?) as Any
+
+    let mirrorChildren: [Any]
+    switch view {
+    case .token:
+      mirrorChildren = []
+    case .layout(let layoutView):
+      mirrorChildren = layoutView.children.map {
+        child in child ?? (nil as Any?) as Any
+      }
     }
     return Mirror(self, unlabeledChildren: mirrorChildren)
   }

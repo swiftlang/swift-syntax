@@ -55,11 +55,11 @@ struct RawSyntaxLayoutView {
     at index: Int,
     arena: SyntaxArena
   ) -> RawSyntax {
-    precondition(raw.children.count >= index)
+    precondition(children.count >= index)
     return .makeLayout(kind: raw.kind,
-                       uninitializedCount: raw.children.count + 1,
+                       uninitializedCount: children.count + 1,
                        arena: arena) { buffer in
-      var childIterator = raw.children.makeIterator()
+      var childIterator = children.makeIterator()
       let base = buffer.baseAddress!
       for i in 0..<buffer.count {
         base.advanced(by: i)
@@ -72,14 +72,14 @@ struct RawSyntaxLayoutView {
     at index: Int,
     arena: SyntaxArena
   ) -> RawSyntax {
-    precondition(raw.children.count > index)
-    let count = raw.children.count - 1
+    precondition(children.count > index)
+    let count = children.count - 1
     return .makeLayout(kind: raw.kind,
                        uninitializedCount: count,
                        arena: arena) { buffer in
       if buffer.isEmpty { return }
       let newBase = buffer.baseAddress!
-      let oldBase = raw.children.baseAddress!
+      let oldBase = children.baseAddress!
 
       // Copy elements up to the index.
       newBase.initialize(from: oldBase, count: index)
@@ -87,12 +87,12 @@ struct RawSyntaxLayoutView {
       // Copy elements from the index + 1.
       newBase.advanced(by: index)
         .initialize(from: oldBase.advanced(by: index + 1),
-                    count: raw.children.count - index - 1)
+                    count: children.count - index - 1)
     }
   }
 
   func appending(_ newChild: RawSyntax?, arena: SyntaxArena) -> RawSyntax {
-    insertingChild(newChild, at: raw.children.count, arena: arena)
+    insertingChild(newChild, at: children.count, arena: arena)
   }
 
   func replacingChildSubrange<C: Collection>(
@@ -101,7 +101,7 @@ struct RawSyntaxLayoutView {
     arena: SyntaxArena
   ) -> RawSyntax where C.Element == RawSyntax? {
     precondition(!raw.isToken)
-    let newCount = raw.children.count - range.count + elements.count
+    let newCount = children.count - range.count + elements.count
     return .makeLayout(kind: raw.kind,
                        uninitializedCount: newCount,
                        arena: arena) { buffer in
@@ -109,14 +109,14 @@ struct RawSyntaxLayoutView {
       var current = buffer.baseAddress!
 
       // Intialize
-      current.initialize(from: raw.children.baseAddress!, count: range.lowerBound)
+      current.initialize(from: children.baseAddress!, count: range.lowerBound)
       current = current.advanced(by: range.lowerBound)
       for elem in elements {
         current.initialize(to: elem)
         current += 1
       }
-      current.initialize(from: raw.children.baseAddress!.advanced(by: range.upperBound),
-                         count: raw.children.count - range.upperBound)
+      current.initialize(from: children.baseAddress!.advanced(by: range.upperBound),
+                         count: children.count - range.upperBound)
     }
   }
 
@@ -125,17 +125,50 @@ struct RawSyntaxLayoutView {
     with newChild: RawSyntax?,
     arena: SyntaxArena
   ) -> RawSyntax {
-    precondition(!raw.isToken && raw.children.count > index)
+    precondition(!raw.isToken && children.count > index)
     return .makeLayout(kind: raw.kind,
-                       uninitializedCount: raw.children.count,
+                       uninitializedCount: children.count,
                        arena: arena) { buffer in
-      _ = buffer.initialize(from: raw.children)
+      _ = buffer.initialize(from: children)
       buffer[index] = newChild
     }
   }
 
   func formLayoutArray() -> [RawSyntax?] {
-    Array(raw.children)
+    Array(children)
+  }
+
+  /// Child nodes.
+  var children: RawSyntaxBuffer {
+    switch raw.rawData.payload {
+    case .parsedToken(_),
+         .materializedToken(_):
+      preconditionFailure("RawSyntax must be a layout")
+    case .layout(let dat):
+      return dat.layout
+    }
+  }
+
+  func child(at index: Int) -> RawSyntax? {
+    guard hasChild(at: index) else { return nil }
+    return children[index]
+  }
+
+  func hasChild(at index: Int) -> Bool {
+    children[index] != nil
+  }
+
+  /// Returns the child at the provided cursor in the layout.
+  /// - Parameter index: The index of the child you're accessing.
+  /// - Returns: The child at the provided index.
+  subscript<CursorType: RawRepresentable>(_ index: CursorType) -> RawSyntax?
+    where CursorType.RawValue == Int {
+    return child(at: index.rawValue)
+  }
+
+  /// The number of children, `present` or `missing`, in this node.
+  var numberOfChildren: Int {
+    return children.count
   }
 }
 

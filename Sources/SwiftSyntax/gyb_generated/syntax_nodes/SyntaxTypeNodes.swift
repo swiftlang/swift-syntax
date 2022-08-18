@@ -1814,7 +1814,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: CompositionTypeElementSyntax) -> CompositionTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
+    if let col = raw.layoutView![Cursor.elements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
@@ -1984,7 +1984,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: TupleTypeElementSyntax) -> TupleTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
+    if let col = raw.layoutView![Cursor.elements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
@@ -2225,7 +2225,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `arguments` collection.
   public func addArgument(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.arguments] {
+    if let col = raw.layoutView![Cursor.arguments] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
@@ -2626,7 +2626,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AttributedTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
+    if let col = raw.layoutView![Cursor.attributes] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,

@@ -71,7 +71,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
-  public var count: Int { return raw.numberOfChildren }
+  public var count: Int { return raw.layoutView!.children.count }
 
   /// Creates a new `${node.name}` by replacing the underlying layout with
   /// a different set of raw syntax nodes.

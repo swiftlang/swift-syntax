@@ -1077,7 +1077,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: TuplePatternElementSyntax) -> TuplePatternSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
+    if let col = raw.layoutView![Cursor.elements] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,

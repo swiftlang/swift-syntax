@@ -260,9 +260,10 @@ extension RawSyntax {
       // We always consider collections 'present' because they can just be empty.
       return .present
     }
-    if isToken && self.rawTokenKind == .eof {
+    if isToken && (self.rawTokenKind == .eof || self.rawTokenKind == .stringSegment) {
       // The end of file token never has source code associated with it but we
       // still consider it valid.
+      // String segments can be empty if they occur in an empty string literal or in between two interpolation segments.
       return .present
     }
 

@@ -3768,6 +3768,204 @@ extension BooleanLiteralExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - UnresolvedTernaryExprSyntax
+
+public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case unexpectedBeforeQuestionMark
+    case questionMark
+    case unexpectedBetweenQuestionMarkAndFirstChoice
+    case firstChoice
+    case unexpectedBetweenFirstChoiceAndColonMark
+    case colonMark
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnresolvedTernaryExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unresolvedTernaryExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnresolvedTernaryExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .unresolvedTernaryExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeQuestionMark: UnexpectedNodesSyntax? = nil,
+    questionMark: TokenSyntax,
+    _ unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? = nil,
+    firstChoice: ExprSyntax,
+    _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil,
+    colonMark: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeQuestionMark?.raw,
+      questionMark.raw,
+      unexpectedBetweenQuestionMarkAndFirstChoice?.raw,
+      firstChoice.raw,
+      unexpectedBetweenFirstChoiceAndColonMark?.raw,
+      colonMark.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unresolvedTernaryExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var unexpectedBeforeQuestionMark: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.unexpectedBeforeQuestionMark,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeQuestionMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeQuestionMark` replaced.
+  /// - param newChild: The new `unexpectedBeforeQuestionMark` to replace the node's
+  ///                   current `unexpectedBeforeQuestionMark`, if present.
+  public func withUnexpectedBeforeQuestionMark(
+    _ newChild: UnexpectedNodesSyntax?) -> UnresolvedTernaryExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeQuestionMark)
+    return UnresolvedTernaryExprSyntax(newData)
+  }
+
+  public var questionMark: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.questionMark,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `questionMark` replaced.
+  /// - param newChild: The new `questionMark` to replace the node's
+  ///                   current `questionMark`, if present.
+  public func withQuestionMark(
+    _ newChild: TokenSyntax?) -> UnresolvedTernaryExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.infixQuestionMark)
+    let newData = data.replacingChild(raw, at: Cursor.questionMark)
+    return UnresolvedTernaryExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.unexpectedBetweenQuestionMarkAndFirstChoice,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenQuestionMarkAndFirstChoice(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenQuestionMarkAndFirstChoice` replaced.
+  /// - param newChild: The new `unexpectedBetweenQuestionMarkAndFirstChoice` to replace the node's
+  ///                   current `unexpectedBetweenQuestionMarkAndFirstChoice`, if present.
+  public func withUnexpectedBetweenQuestionMarkAndFirstChoice(
+    _ newChild: UnexpectedNodesSyntax?) -> UnresolvedTernaryExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenQuestionMarkAndFirstChoice)
+    return UnresolvedTernaryExprSyntax(newData)
+  }
+
+  public var firstChoice: ExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.firstChoice,
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withFirstChoice(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `firstChoice` replaced.
+  /// - param newChild: The new `firstChoice` to replace the node's
+  ///                   current `firstChoice`, if present.
+  public func withFirstChoice(
+    _ newChild: ExprSyntax?) -> UnresolvedTernaryExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let newData = data.replacingChild(raw, at: Cursor.firstChoice)
+    return UnresolvedTernaryExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: Cursor.unexpectedBetweenFirstChoiceAndColonMark,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenFirstChoiceAndColonMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenFirstChoiceAndColonMark` replaced.
+  /// - param newChild: The new `unexpectedBetweenFirstChoiceAndColonMark` to replace the node's
+  ///                   current `unexpectedBetweenFirstChoiceAndColonMark`, if present.
+  public func withUnexpectedBetweenFirstChoiceAndColonMark(
+    _ newChild: UnexpectedNodesSyntax?) -> UnresolvedTernaryExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenFirstChoiceAndColonMark)
+    return UnresolvedTernaryExprSyntax(newData)
+  }
+
+  public var colonMark: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colonMark,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColonMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colonMark` replaced.
+  /// - param newChild: The new `colonMark` to replace the node's
+  ///                   current `colonMark`, if present.
+  public func withColonMark(
+    _ newChild: TokenSyntax?) -> UnresolvedTernaryExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colonMark)
+    return UnresolvedTernaryExprSyntax(newData)
+  }
+}
+
+extension UnresolvedTernaryExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeQuestionMark": unexpectedBeforeQuestionMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenQuestionMarkAndFirstChoice": unexpectedBetweenQuestionMarkAndFirstChoice.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "firstChoice": Syntax(firstChoice).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenFirstChoiceAndColonMark": unexpectedBetweenFirstChoiceAndColonMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colonMark": Syntax(colonMark).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - TernaryExprSyntax
 
 public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

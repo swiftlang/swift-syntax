@@ -439,6 +439,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: BooleanLiteralExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: UnresolvedTernaryExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

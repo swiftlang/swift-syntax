@@ -112,7 +112,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     kind: RawTokenKind,
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) {
     assert(arena.contains(text: wholeText),
            "token text must be managed by the arena")
@@ -128,7 +128,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     text: SyntaxText,
     leadingTriviaPieces: [RawTriviaPiece],
     trailingTriviaPieces: [RawTriviaPiece],
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) {
     assert(arena.contains(text: text), "token text must be managed by the arena")
     let totalTriviaCount = leadingTriviaPieces.count + trailingTriviaPieces.count
@@ -153,7 +153,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   /// Creates a missing `TokenSyntax` with the specified kind.
-  public init(missing kind: RawTokenKind, arena: SyntaxArena) {
+  public init(missing kind: RawTokenKind, arena: __shared SyntaxArena) {
     self.init(
       kind: kind, text: "", leadingTriviaPieces: [], trailingTriviaPieces: [],
       arena: arena)

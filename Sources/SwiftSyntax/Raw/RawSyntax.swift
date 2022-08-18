@@ -71,8 +71,8 @@ internal struct RawSyntaxData {
     var recursiveFlags: RecursiveRawSyntaxFlags
   }
 
-  fileprivate var payload: Payload
-  fileprivate var arenaReference: SyntaxArenaRef
+  var payload: Payload
+  var arenaReference: SyntaxArenaRef
 }
 
 extension RawSyntaxData.ParsedToken {
@@ -113,7 +113,7 @@ public struct RawSyntax {
     self.init(pointer: arena.intern(RawSyntaxData(payload: payload, arenaReference: arenaRef)))
   }
 
-  private var rawData: RawSyntaxData {
+  var rawData: RawSyntaxData {
     unsafeAddress { pointer }
   }
 
@@ -131,79 +131,6 @@ public struct RawSyntax {
 }
 
 // MARK: - Accessors
-
-/// APIs only for token syntax node.
-extension RawSyntax {
-  /// Token kind of this node assuming this node is a token.
-  var rawTokenKind: RawTokenKind {
-    switch rawData.payload {
-    case .materializedToken(let dat):
-      return dat.tokenKind
-    case .parsedToken(let dat):
-      return dat.tokenKind
-    case .layout(_):
-      preconditionFailure("'tokenKind' is not available for non-token node")
-    }
-  }
-
-  /// Token text of this node assuming this node is a token.
-  var rawTokenText: SyntaxText {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      return dat.tokenText
-    case .materializedToken(let dat):
-      return dat.tokenText
-    case .layout(_):
-      preconditionFailure("'tokenText' is not available for non-token node")
-    }
-  }
-
-  /// The UTF-8 byte length of the leading trivia, assuming this node is a token.
-  var tokenLeadingTriviaByteLength: Int {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      return dat.leadingTriviaText.count
-    case .materializedToken(let dat):
-      return dat.leadingTrivia.reduce(0) { $0 + $1.byteLength }
-    case .layout(_):
-      preconditionFailure("'tokenLeadingTriviaByteLength' is not available for non-token node")
-    }
-  }
-
-  /// The UTF-8 byte length of the trailing trivia, assuming this node is a token.
-  var tokenTrailingTriviaByteLength: Int {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      return dat.trailingTriviaText.count
-    case .materializedToken(let dat):
-      return dat.trailingTrivia.reduce(0) { $0 + $1.byteLength }
-    case .layout(_):
-      preconditionFailure("'tokenTrailingTriviaByteLength' is not available for non-token node")
-    }
-  }
-
-  var tokenLeadingRawTriviaPieces: [RawTriviaPiece] {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      return self.arena.parseTrivia(source: dat.leadingTriviaText, position: .leading)
-    case .materializedToken(let dat):
-      return Array(dat.leadingTrivia)
-    case .layout(_):
-      preconditionFailure("'tokenLeadingRawTriviaPieces' is called on non-token raw syntax")
-    }
-  }
-
-  var tokenTrailingRawTriviaPieces: [RawTriviaPiece] {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      return self.arena.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
-    case .materializedToken(let dat):
-      return Array(dat.trailingTrivia)
-    case .layout(_):
-      preconditionFailure("'tokenTrailingRawTriviaPieces' is called on non-token raw syntax")
-    }
-  }
-}
 
 extension RawSyntax {
   /// The syntax kind of this raw syntax.
@@ -288,7 +215,7 @@ extension RawSyntax {
       // We always consider collections 'present' because they can just be empty.
       return .present
     }
-    if isToken && (self.rawTokenKind == .eof || self.rawTokenKind == .stringSegment) {
+    if isToken && (self.tokenView.rawKind == .eof || self.tokenView.rawKind == .stringSegment) {
       // The end of file token never has source code associated with it but we
       // still consider it valid.
       // String segments can be empty if they occur in an empty string literal or in between two interpolation segments.
@@ -325,62 +252,8 @@ extension RawSyntax {
     }
   }
 
-  /// Returns the leading `Trivia` length, assuming this node is a token.
-  var tokenLeadingTriviaLength: SourceLength {
-    return SourceLength(utf8Length: tokenLeadingTriviaByteLength)
-  }
-
-  /// Returns the trailing `Trivia` length, assuming this node is a token.
-  var tokenTrailingTriviaLength: SourceLength {
-    return SourceLength(utf8Length: tokenTrailingTriviaByteLength)
-  }
-
-  /// Returns the leading `Trivia`, assuming this node is a token.
-  func formTokenLeadingTrivia() -> Trivia {
-    return Trivia(pieces: tokenLeadingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
-  }
-
-  /// Returns the trailing `Trivia`, assuming this node is a token.
-  /// - Returns: nil if called on a layout node.
-  func formTokenTrailingTrivia() -> Trivia {
-    return Trivia(pieces: tokenTrailingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
-  }
-
-  /// Calls `body` with the token text, assuming this node is a token. The token
-  /// text value must not escape the closure.
-  func withUnsafeTokenText<Result>(
-    _ body: (SyntaxText?) -> Result
-  ) -> Result {
-    body(rawTokenText)
-  }
-
   func formLayoutArray() -> [RawSyntax?] {
     Array(children)
-  }
-
-  /// Assuming this node is a token, returns a `RawSyntax` node with the same
-  /// source text but with the token kind changed to `newValue`.
-  func withTokenKind(_ newValue: TokenKind) -> RawSyntax {
-    switch rawData.payload {
-    case .parsedToken(_):
-      // The wholeText can't be continuous anymore. Make a materialized token.
-      return .makeMaterializedToken(
-        kind: newValue,
-        leadingTrivia: formTokenLeadingTrivia(),
-        trailingTrivia: formTokenTrailingTrivia(),
-        arena: arena)
-    case .materializedToken(var payload):
-      let decomposed = newValue.decomposeToRaw()
-      let rawKind = decomposed.rawKind
-      let text: SyntaxText = (decomposed.string.map({arena.intern($0)}) ??
-                              decomposed.rawKind.defaultText ??
-                              "")
-      payload.tokenKind = rawKind
-      payload.tokenText = text
-      return RawSyntax(arena: arena, payload: .materializedToken(payload))
-    default:
-      preconditionFailure("'withTokenKind()' is called on non-token raw syntax")
-    }
   }
 
   /// Replaces the leading trivia of the first token in this syntax tree by `leadingTrivia`.
@@ -392,13 +265,13 @@ extension RawSyntax {
       return .makeMaterializedToken(
         kind: formTokenKind()!,
         leadingTrivia: leadingTrivia,
-        trailingTrivia: formTokenTrailingTrivia(),
+        trailingTrivia: tokenView.formTrailingTrivia(),
         arena: arena)
     }
 
     for (index, child) in children.enumerated() {
       if let replaced = child?.withLeadingTrivia(leadingTrivia) {
-        return replacingChild(at: index, with: replaced, arena: arena)
+        return layoutView.replacingChild(at: index, with: replaced, arena: arena)
       }
     }
     return nil
@@ -412,14 +285,14 @@ extension RawSyntax {
     if isToken {
       return .makeMaterializedToken(
         kind: formTokenKind()!,
-        leadingTrivia: formTokenLeadingTrivia(),
+        leadingTrivia: tokenView.formLeadingTrivia(),
         trailingTrivia: trailingTrivia,
         arena: arena)
     }
 
     for (index, child) in children.enumerated().reversed() {
       if let replaced = child?.withTrailingTrivia(trailingTrivia) {
-        return replacingChild(at: index, with: replaced, arena: arena)
+        return layoutView.replacingChild(at: index, with: replaced, arena: arena)
       }
     }
     return nil
@@ -447,21 +320,6 @@ extension RawSyntax {
     .makeMissingToken(kind: kind, arena: .default)
   }
 
-  /// Assuming this node is a layout node, creates a new node of the same kind
-  /// but with children replaced by `elements`.
-  func replacingLayout<C: Collection>(
-    with elements: C,
-    arena: SyntaxArena
-  ) -> RawSyntax where C.Element == RawSyntax? {
-    assert(!isToken)
-    return .makeLayout(kind: kind,
-                       uninitializedCount: elements.count,
-                       arena: arena) { buffer in
-      if buffer.isEmpty { return }
-      _ = buffer.initialize(from: elements)
-    }
-  }
-
   /// Returns a new RawSyntax node with the provided layout instead of the
   /// existing layout.
   /// - Note: This function does nothing with `.token` nodes --- the same token
@@ -470,63 +328,7 @@ extension RawSyntax {
   // @available(*, deprecated, message: "use 'replacingLayout(with:arena:)'")
   func replacingLayout(_ layout: [RawSyntax?]) -> RawSyntax {
     if isToken { return self }
-    return self.replacingLayout(with: layout, arena: .default)
-  }
-
-  func insertingChild(
-    _ newChild: RawSyntax?,
-    at index: Int,
-    arena: SyntaxArena
-  ) -> RawSyntax {
-    precondition(!self.isToken && self.children.count >= index)
-    return .makeLayout(kind: kind,
-                       uninitializedCount: self.children.count + 1,
-                       arena: arena) { buffer in
-      var childIterator = self.children.makeIterator()
-      let base = buffer.baseAddress!
-      for i in 0..<buffer.count {
-        base.advanced(by: i)
-          .initialize(to: i == index ? newChild : childIterator.next()!)
-      }
-    }
-  }
-
-  func removingChild(
-    at index: Int,
-    arena: SyntaxArena
-  ) -> RawSyntax {
-    precondition(self.children.count > index)
-    let count = self.children.count - 1
-    return .makeLayout(kind: kind,
-                       uninitializedCount: count,
-                       arena: arena) { buffer in
-      if buffer.isEmpty { return }
-      let newBase = buffer.baseAddress!
-      let oldBase = children.baseAddress!
-
-      // Copy elements up to the index.
-      newBase.initialize(from: oldBase, count: index)
-
-      // Copy elements from the index + 1.
-      newBase.advanced(by: index)
-        .initialize(from: oldBase.advanced(by: index + 1),
-                    count: children.count - index - 1)
-    }
-  }
-
-  func appending(_ newChild: RawSyntax?, arena: SyntaxArena) -> RawSyntax {
-    self.insertingChild(newChild, at: children.count, arena: arena)
-  }
-
-  /// Creates a new RawSyntax with the provided child appended to its layout.
-  /// - Parameter child: The child to append
-  /// - Note: This function does nothing with `.token` nodes --- the same token
-  ///         is returned.
-  /// - Return: A new RawSyntax node with the provided child at the end.
-  // @available(*, deprecated, message: "use 'appending(_:arena:)'")
-  func appending(_ child: RawSyntax?) -> RawSyntax {
-    if isToken { return self }
-    return self.insertingChild(child, at: children.count, arena: arena)
+    return layoutView.replacingLayout(with: layout, arena: .default)
   }
 
   /// Returns the child at the provided cursor in the layout.
@@ -535,45 +337,6 @@ extension RawSyntax {
   subscript<CursorType: RawRepresentable>(_ index: CursorType) -> RawSyntax?
     where CursorType.RawValue == Int {
     return child(at: index.rawValue)
-  }
-
-  func replacingChildSubrange<C: Collection>(
-    _ range: Range<Int>,
-    with elements: C,
-    arena: SyntaxArena
-  ) -> RawSyntax where C.Element == RawSyntax? {
-    precondition(!self.isToken)
-    let newCount = children.count - range.count + elements.count
-    return .makeLayout(kind: kind,
-                       uninitializedCount: newCount,
-                       arena: arena) { buffer in
-      if buffer.isEmpty { return }
-      var current = buffer.baseAddress!
-
-      // Intialize
-      current.initialize(from: children.baseAddress!, count: range.lowerBound)
-      current = current.advanced(by: range.lowerBound)
-      for elem in elements {
-        current.initialize(to: elem)
-        current += 1
-      }
-      current.initialize(from: children.baseAddress!.advanced(by: range.upperBound),
-                         count: children.count - range.upperBound)
-    }
-  }
-
-  func replacingChild(
-    at index: Int,
-    with newChild: RawSyntax?,
-    arena: SyntaxArena
-  ) -> RawSyntax {
-    precondition(!self.isToken && self.children.count > index)
-    return .makeLayout(kind: kind,
-                       uninitializedCount: self.children.count,
-                       arena: arena) { buffer in
-      _ = buffer.initialize(from: self.children)
-      buffer[index] = newChild
-    }
   }
 
   /// Replaces the child at the provided index in this node with the provided
@@ -585,7 +348,7 @@ extension RawSyntax {
   func replacingChild(_ index: Int,
                       with newChild: RawSyntax?) -> RawSyntax {
     if isToken { return self }
-    return self.replacingChild(at: index, with: newChild, arena: .default)
+    return layoutView.replacingChild(at: index, with: newChild, arena: .default)
   }
 }
 
@@ -655,21 +418,21 @@ extension RawSyntax {
   }
 
   func formLeadingTrivia() -> Trivia? {
-    firstToken(viewMode: .sourceAccurate)?.formTokenLeadingTrivia()
+    firstToken(viewMode: .sourceAccurate)?.tokenView.formLeadingTrivia()
   }
 
   func formTrailingTrivia() -> Trivia? {
-    lastToken(viewMode: .sourceAccurate)?.formTokenTrailingTrivia()
+    lastToken(viewMode: .sourceAccurate)?.tokenView.formTrailingTrivia()
   }
 }
 
 extension RawSyntax {
   var leadingTriviaByteLength: Int {
-    firstToken(viewMode: .sourceAccurate)?.tokenLeadingTriviaByteLength ?? 0
+    firstToken(viewMode: .sourceAccurate)?.tokenView.leadingTriviaByteLength ?? 0
   }
 
   var trailingTriviaByteLength: Int {
-    lastToken(viewMode: .sourceAccurate)?.tokenTrailingTriviaByteLength ?? 0
+    lastToken(viewMode: .sourceAccurate)?.tokenView.trailingTriviaByteLength ?? 0
   }
 
   /// The length of this node’s content, without the first leading and the last
@@ -679,19 +442,6 @@ extension RawSyntax {
     let result = byteLength - leadingTriviaByteLength - trailingTriviaByteLength
     assert(result >= 0)
     return result
-  }
-
-  /// The length of the token without leading or trailing trivia, assuming this
-  /// is a token node.
-  var tokenTextByteLength: Int {
-    switch rawData.payload {
-    case .parsedToken(let dat):
-      return dat.tokenText.count
-    case .materializedToken(let dat):
-      return dat.tokenText.count
-    case .layout(_):
-      preconditionFailure("'tokenTextByteLength' is not available for non-token node")
-    }
   }
 
   var leadingTriviaLength: SourceLength {
@@ -705,10 +455,6 @@ extension RawSyntax {
   /// The length of this node excluding its leading and trailing trivia.
   var contentLength: SourceLength {
     SourceLength(utf8Length: contentByteLength)
-  }
-
-  var tokenContentLength: SourceLength {
-    SourceLength(utf8Length: tokenTextByteLength)
   }
 }
 

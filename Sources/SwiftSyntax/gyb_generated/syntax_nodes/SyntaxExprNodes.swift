@@ -186,7 +186,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `ampersand`, if present.
   public func withAmpersand(
     _ newChild: TokenSyntax?) -> InOutExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.prefixAmpersand)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.prefixAmpersand, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.ampersand)
     return InOutExprSyntax(newData)
   }
@@ -229,7 +229,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> InOutExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return InOutExprSyntax(newData)
   }
@@ -327,7 +327,7 @@ public struct PoundColumnExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundColumn`, if present.
   public func withPoundColumn(
     _ newChild: TokenSyntax?) -> PoundColumnExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundColumnKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundColumnKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundColumn)
     return PoundColumnExprSyntax(newData)
   }
@@ -435,7 +435,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `tryKeyword`, if present.
   public func withTryKeyword(
     _ newChild: TokenSyntax?) -> TryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.tryKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.tryKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.tryKeyword)
     return TryExprSyntax(newData)
   }
@@ -522,7 +522,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> TryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return TryExprSyntax(newData)
   }
@@ -628,7 +628,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `awaitKeyword`, if present.
   public func withAwaitKeyword(
     _ newChild: TokenSyntax?) -> AwaitExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.contextualKeyword(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.awaitKeyword)
     return AwaitExprSyntax(newData)
   }
@@ -671,7 +671,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> AwaitExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return AwaitExprSyntax(newData)
   }
@@ -775,7 +775,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `moveKeyword`, if present.
   public func withMoveKeyword(
     _ newChild: TokenSyntax?) -> MoveExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.contextualKeyword(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.moveKeyword)
     return MoveExprSyntax(newData)
   }
@@ -818,7 +818,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> MoveExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return MoveExprSyntax(newData)
   }
@@ -922,7 +922,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `identifier`, if present.
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> IdentifierExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.identifier)
     return IdentifierExprSyntax(newData)
   }
@@ -1064,7 +1064,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `superKeyword`, if present.
   public func withSuperKeyword(
     _ newChild: TokenSyntax?) -> SuperRefExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.superKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.superKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.superKeyword)
     return SuperRefExprSyntax(newData)
   }
@@ -1160,7 +1160,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `nilKeyword`, if present.
   public func withNilKeyword(
     _ newChild: TokenSyntax?) -> NilLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.nilKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.nilKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.nilKeyword)
     return NilLiteralExprSyntax(newData)
   }
@@ -1256,7 +1256,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `wildcard`, if present.
   public func withWildcard(
     _ newChild: TokenSyntax?) -> DiscardAssignmentExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.wildcardKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.wildcardKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.wildcard)
     return DiscardAssignmentExprSyntax(newData)
   }
@@ -1352,7 +1352,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `assignToken`, if present.
   public func withAssignToken(
     _ newChild: TokenSyntax?) -> AssignmentExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.equal)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.assignToken)
     return AssignmentExprSyntax(newData)
   }
@@ -1452,7 +1452,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: ExprSyntax) -> SequenceExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.exprList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -1467,7 +1467,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: ExprListSyntax?) -> SequenceExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.exprList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.exprList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elements)
     return SequenceExprSyntax(newData)
   }
@@ -1563,7 +1563,7 @@ public struct PoundLineExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundLine`, if present.
   public func withPoundLine(
     _ newChild: TokenSyntax?) -> PoundLineExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundLineKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundLineKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundLine)
     return PoundLineExprSyntax(newData)
   }
@@ -1659,7 +1659,7 @@ public struct PoundFileExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundFile`, if present.
   public func withPoundFile(
     _ newChild: TokenSyntax?) -> PoundFileExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundFileKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundFileKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundFile)
     return PoundFileExprSyntax(newData)
   }
@@ -1755,7 +1755,7 @@ public struct PoundFileIDExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundFileID`, if present.
   public func withPoundFileID(
     _ newChild: TokenSyntax?) -> PoundFileIDExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundFileIDKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundFileIDKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundFileID)
     return PoundFileIDExprSyntax(newData)
   }
@@ -1851,7 +1851,7 @@ public struct PoundFilePathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundFilePath`, if present.
   public func withPoundFilePath(
     _ newChild: TokenSyntax?) -> PoundFilePathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundFilePathKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundFilePathKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundFilePath)
     return PoundFilePathExprSyntax(newData)
   }
@@ -1947,7 +1947,7 @@ public struct PoundFunctionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundFunction`, if present.
   public func withPoundFunction(
     _ newChild: TokenSyntax?) -> PoundFunctionExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundFunctionKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundFunctionKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundFunction)
     return PoundFunctionExprSyntax(newData)
   }
@@ -2043,7 +2043,7 @@ public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundDsohandle`, if present.
   public func withPoundDsohandle(
     _ newChild: TokenSyntax?) -> PoundDsohandleExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundDsohandleKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundDsohandleKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundDsohandle)
     return PoundDsohandleExprSyntax(newData)
   }
@@ -2145,7 +2145,7 @@ public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `identifier`, if present.
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> SymbolicReferenceExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.identifier)
     return SymbolicReferenceExprSyntax(newData)
   }
@@ -2337,7 +2337,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `postfixExpression`, if present.
   public func withPostfixExpression(
     _ newChild: ExprSyntax?) -> PrefixOperatorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.postfixExpression)
     return PrefixOperatorExprSyntax(newData)
   }
@@ -2435,7 +2435,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `operatorToken`, if present.
   public func withOperatorToken(
     _ newChild: TokenSyntax?) -> BinaryOperatorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.operatorToken)
     return BinaryOperatorExprSyntax(newData)
   }
@@ -2631,7 +2631,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `arrowToken`, if present.
   public func withArrowToken(
     _ newChild: TokenSyntax?) -> ArrowExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.arrow)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.arrow, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.arrowToken)
     return ArrowExprSyntax(newData)
   }
@@ -2743,7 +2743,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftOperand`, if present.
   public func withLeftOperand(
     _ newChild: ExprSyntax?) -> InfixOperatorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftOperand)
     return InfixOperatorExprSyntax(newData)
   }
@@ -2786,7 +2786,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `operatorOperand`, if present.
   public func withOperatorOperand(
     _ newChild: ExprSyntax?) -> InfixOperatorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.operatorOperand)
     return InfixOperatorExprSyntax(newData)
   }
@@ -2829,7 +2829,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightOperand`, if present.
   public func withRightOperand(
     _ newChild: ExprSyntax?) -> InfixOperatorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightOperand)
     return InfixOperatorExprSyntax(newData)
   }
@@ -2929,7 +2929,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `floatingDigits`, if present.
   public func withFloatingDigits(
     _ newChild: TokenSyntax?) -> FloatLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.floatingLiteral(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.floatingLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.floatingDigits)
     return FloatLiteralExprSyntax(newData)
   }
@@ -3037,7 +3037,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> TupleExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return TupleExprSyntax(newData)
   }
@@ -3084,7 +3084,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: TupleExprElementSyntax) -> TupleExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elementList] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -3099,7 +3099,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `elementList`, if present.
   public func withElementList(
     _ newChild: TupleExprElementListSyntax?) -> TupleExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleExprElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elementList)
     return TupleExprSyntax(newData)
   }
@@ -3142,7 +3142,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> TupleExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return TupleExprSyntax(newData)
   }
@@ -3254,7 +3254,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftSquare`, if present.
   public func withLeftSquare(
     _ newChild: TokenSyntax?) -> ArrayExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftSquare)
     return ArrayExprSyntax(newData)
   }
@@ -3301,7 +3301,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: ArrayElementSyntax) -> ArrayExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.arrayElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -3316,7 +3316,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: ArrayElementListSyntax?) -> ArrayExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.arrayElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.arrayElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elements)
     return ArrayExprSyntax(newData)
   }
@@ -3359,7 +3359,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightSquare`, if present.
   public func withRightSquare(
     _ newChild: TokenSyntax?) -> ArrayExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightSquare)
     return ArrayExprSyntax(newData)
   }
@@ -3471,7 +3471,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftSquare`, if present.
   public func withLeftSquare(
     _ newChild: TokenSyntax?) -> DictionaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftSquare)
     return DictionaryExprSyntax(newData)
   }
@@ -3514,7 +3514,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `content`, if present.
   public func withContent(
     _ newChild: Syntax?) -> DictionaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.content)
     return DictionaryExprSyntax(newData)
   }
@@ -3557,7 +3557,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightSquare`, if present.
   public func withRightSquare(
     _ newChild: TokenSyntax?) -> DictionaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightSquare)
     return DictionaryExprSyntax(newData)
   }
@@ -3657,7 +3657,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `digits`, if present.
   public func withDigits(
     _ newChild: TokenSyntax?) -> IntegerLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.integerLiteral(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.digits)
     return IntegerLiteralExprSyntax(newData)
   }
@@ -3753,7 +3753,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `booleanLiteral`, if present.
   public func withBooleanLiteral(
     _ newChild: TokenSyntax?) -> BooleanLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.trueKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.trueKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.booleanLiteral)
     return BooleanLiteralExprSyntax(newData)
   }
@@ -4071,7 +4071,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `conditionExpression`, if present.
   public func withConditionExpression(
     _ newChild: ExprSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.conditionExpression)
     return TernaryExprSyntax(newData)
   }
@@ -4114,7 +4114,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `questionMark`, if present.
   public func withQuestionMark(
     _ newChild: TokenSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.infixQuestionMark)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.infixQuestionMark, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.questionMark)
     return TernaryExprSyntax(newData)
   }
@@ -4157,7 +4157,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `firstChoice`, if present.
   public func withFirstChoice(
     _ newChild: ExprSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.firstChoice)
     return TernaryExprSyntax(newData)
   }
@@ -4200,7 +4200,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `colonMark`, if present.
   public func withColonMark(
     _ newChild: TokenSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colonMark)
     return TernaryExprSyntax(newData)
   }
@@ -4243,7 +4243,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `secondChoice`, if present.
   public func withSecondChoice(
     _ newChild: ExprSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.secondChoice)
     return TernaryExprSyntax(newData)
   }
@@ -4409,7 +4409,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `dot`, if present.
   public func withDot(
     _ newChild: TokenSyntax?) -> MemberAccessExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.period)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.dot)
     return MemberAccessExprSyntax(newData)
   }
@@ -4452,7 +4452,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> MemberAccessExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return MemberAccessExprSyntax(newData)
   }
@@ -4604,7 +4604,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `isTok`, if present.
   public func withIsTok(
     _ newChild: TokenSyntax?) -> IsExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.isKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.isTok)
     return IsExprSyntax(newData)
   }
@@ -4647,7 +4647,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `typeName`, if present.
   public func withTypeName(
     _ newChild: TypeSyntax?) -> IsExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.typeName)
     return IsExprSyntax(newData)
   }
@@ -4757,7 +4757,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `asTok`, if present.
   public func withAsTok(
     _ newChild: TokenSyntax?) -> AsExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.asKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.asKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.asTok)
     return AsExprSyntax(newData)
   }
@@ -4844,7 +4844,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `typeName`, if present.
   public func withTypeName(
     _ newChild: TypeSyntax?) -> AsExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.typeName)
     return AsExprSyntax(newData)
   }
@@ -4944,7 +4944,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> TypeExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return TypeExprSyntax(newData)
   }
@@ -5058,7 +5058,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftBrace`, if present.
   public func withLeftBrace(
     _ newChild: TokenSyntax?) -> ClosureExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftBrace)
     return ClosureExprSyntax(newData)
   }
@@ -5149,7 +5149,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addStatement(_ element: CodeBlockItemSyntax) -> ClosureExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.statements] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -5164,7 +5164,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `statements`, if present.
   public func withStatements(
     _ newChild: CodeBlockItemListSyntax?) -> ClosureExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.codeBlockItemList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.statements)
     return ClosureExprSyntax(newData)
   }
@@ -5207,7 +5207,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightBrace`, if present.
   public func withRightBrace(
     _ newChild: TokenSyntax?) -> ClosureExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightBrace)
     return ClosureExprSyntax(newData)
   }
@@ -5309,7 +5309,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> UnresolvedPatternExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return UnresolvedPatternExprSyntax(newData)
   }
@@ -5435,7 +5435,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `calledExpression`, if present.
   public func withCalledExpression(
     _ newChild: ExprSyntax?) -> FunctionCallExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.calledExpression)
     return FunctionCallExprSyntax(newData)
   }
@@ -5526,7 +5526,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.argumentList] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -5541,7 +5541,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `argumentList`, if present.
   public func withArgumentList(
     _ newChild: TupleExprElementListSyntax?) -> FunctionCallExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleExprElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.argumentList)
     return FunctionCallExprSyntax(newData)
   }
@@ -5677,7 +5677,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.additionalTrailingClosures] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -5828,7 +5828,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `calledExpression`, if present.
   public func withCalledExpression(
     _ newChild: ExprSyntax?) -> SubscriptExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.calledExpression)
     return SubscriptExprSyntax(newData)
   }
@@ -5871,7 +5871,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftBracket`, if present.
   public func withLeftBracket(
     _ newChild: TokenSyntax?) -> SubscriptExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftBracket)
     return SubscriptExprSyntax(newData)
   }
@@ -5918,7 +5918,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> SubscriptExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.argumentList] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -5933,7 +5933,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `argumentList`, if present.
   public func withArgumentList(
     _ newChild: TupleExprElementListSyntax?) -> SubscriptExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleExprElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.argumentList)
     return SubscriptExprSyntax(newData)
   }
@@ -5976,7 +5976,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightBracket`, if present.
   public func withRightBracket(
     _ newChild: TokenSyntax?) -> SubscriptExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightBracket)
     return SubscriptExprSyntax(newData)
   }
@@ -6068,7 +6068,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.additionalTrailingClosures] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -6195,7 +6195,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> OptionalChainingExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return OptionalChainingExprSyntax(newData)
   }
@@ -6238,7 +6238,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `questionMark`, if present.
   public func withQuestionMark(
     _ newChild: TokenSyntax?) -> OptionalChainingExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.postfixQuestionMark)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.postfixQuestionMark, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.questionMark)
     return OptionalChainingExprSyntax(newData)
   }
@@ -6342,7 +6342,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ForcedValueExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ForcedValueExprSyntax(newData)
   }
@@ -6385,7 +6385,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `exclamationMark`, if present.
   public func withExclamationMark(
     _ newChild: TokenSyntax?) -> ForcedValueExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.exclamationMark)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.exclamationMark, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.exclamationMark)
     return ForcedValueExprSyntax(newData)
   }
@@ -6489,7 +6489,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> PostfixUnaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return PostfixUnaryExprSyntax(newData)
   }
@@ -6532,7 +6532,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `operatorToken`, if present.
   public func withOperatorToken(
     _ newChild: TokenSyntax?) -> PostfixUnaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.postfixOperator(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.postfixOperator(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.operatorToken)
     return PostfixUnaryExprSyntax(newData)
   }
@@ -6636,7 +6636,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> SpecializeExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return SpecializeExprSyntax(newData)
   }
@@ -6679,7 +6679,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `genericArgumentClause`, if present.
   public func withGenericArgumentClause(
     _ newChild: GenericArgumentClauseSyntax?) -> SpecializeExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.genericArgumentClause)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericArgumentClause, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.genericArgumentClause)
     return SpecializeExprSyntax(newData)
   }
@@ -6845,7 +6845,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `openQuote`, if present.
   public func withOpenQuote(
     _ newChild: TokenSyntax?) -> StringLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.stringQuote)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringQuote, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.openQuote)
     return StringLiteralExprSyntax(newData)
   }
@@ -6892,7 +6892,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addSegment(_ element: Syntax) -> StringLiteralExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.segments] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.stringLiteralSegments,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -6907,7 +6907,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `segments`, if present.
   public func withSegments(
     _ newChild: StringLiteralSegmentsSyntax?) -> StringLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.stringLiteralSegments)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralSegments, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.segments)
     return StringLiteralExprSyntax(newData)
   }
@@ -6950,7 +6950,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `closeQuote`, if present.
   public func withCloseQuote(
     _ newChild: TokenSyntax?) -> StringLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.stringQuote)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringQuote, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.closeQuote)
     return StringLiteralExprSyntax(newData)
   }
@@ -7098,7 +7098,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `regex`, if present.
   public func withRegex(
     _ newChild: TokenSyntax?) -> RegexLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.regexLiteral(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.regexLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.regex)
     return RegexLiteralExprSyntax(newData)
   }
@@ -7206,7 +7206,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `backslash`, if present.
   public func withBackslash(
     _ newChild: TokenSyntax?) -> KeyPathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.backslash)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.backslash, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.backslash)
     return KeyPathExprSyntax(newData)
   }
@@ -7293,7 +7293,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> KeyPathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return KeyPathExprSyntax(newData)
   }
@@ -7393,7 +7393,7 @@ public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `period`, if present.
   public func withPeriod(
     _ newChild: TokenSyntax?) -> KeyPathBaseExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.period)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.period)
     return KeyPathBaseExprSyntax(newData)
   }
@@ -7507,7 +7507,7 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `keyPath`, if present.
   public func withKeyPath(
     _ newChild: TokenSyntax?) -> ObjcKeyPathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundKeyPathKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundKeyPathKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.keyPath)
     return ObjcKeyPathExprSyntax(newData)
   }
@@ -7550,7 +7550,7 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> ObjcKeyPathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return ObjcKeyPathExprSyntax(newData)
   }
@@ -7597,7 +7597,7 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addNamePiece(_ element: ObjcNamePieceSyntax) -> ObjcKeyPathExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.name] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.objcName,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -7612,7 +7612,7 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: ObjcNameSyntax?) -> ObjcKeyPathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.objcName)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.objcName, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return ObjcKeyPathExprSyntax(newData)
   }
@@ -7655,7 +7655,7 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> ObjcKeyPathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return ObjcKeyPathExprSyntax(newData)
   }
@@ -7787,7 +7787,7 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `poundSelector`, if present.
   public func withPoundSelector(
     _ newChild: TokenSyntax?) -> ObjcSelectorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundSelectorKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundSelectorKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundSelector)
     return ObjcSelectorExprSyntax(newData)
   }
@@ -7830,7 +7830,7 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> ObjcSelectorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return ObjcSelectorExprSyntax(newData)
   }
@@ -7961,7 +7961,7 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: ExprSyntax?) -> ObjcSelectorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return ObjcSelectorExprSyntax(newData)
   }
@@ -8004,7 +8004,7 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> ObjcSelectorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return ObjcSelectorExprSyntax(newData)
   }
@@ -8160,7 +8160,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `config`, if present.
   public func withConfig(
     _ newChild: IfConfigDeclSyntax?) -> PostfixIfConfigExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.ifConfigDecl)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.ifConfigDecl, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.config)
     return PostfixIfConfigExprSyntax(newData)
   }
@@ -8258,7 +8258,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `identifier`, if present.
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> EditorPlaceholderExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.identifier)
     return EditorPlaceholderExprSyntax(newData)
   }
@@ -8372,7 +8372,7 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `identifier`, if present.
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> ObjectLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundColorLiteralKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundColorLiteralKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.identifier)
     return ObjectLiteralExprSyntax(newData)
   }
@@ -8415,7 +8415,7 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> ObjectLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return ObjectLiteralExprSyntax(newData)
   }
@@ -8462,7 +8462,7 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> ObjectLiteralExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.arguments] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -8477,7 +8477,7 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `arguments`, if present.
   public func withArguments(
     _ newChild: TupleExprElementListSyntax?) -> ObjectLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleExprElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.arguments)
     return ObjectLiteralExprSyntax(newData)
   }
@@ -8520,7 +8520,7 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> ObjectLiteralExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return ObjectLiteralExprSyntax(newData)
   }

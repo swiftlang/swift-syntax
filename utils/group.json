@@ -2,8 +2,10 @@
   "RawSyntax": [
     "RawSyntax.swift",
     "RawSyntax+CSwiftSyntax.swift",
+    "RawSyntaxLayoutView.swift",
     "RawSyntaxNodeProtocol.swift",
     "RawSyntaxNodes.swift",
+    "RawSyntaxTokenView.swift",
     "RawSyntaxValidation.swift",
   ],
   "Syntax": [

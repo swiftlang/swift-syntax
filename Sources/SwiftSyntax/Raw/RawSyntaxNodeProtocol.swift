@@ -79,11 +79,11 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   public var tokenKind: RawTokenKind {
-    return raw.rawTokenKind
+    return raw.tokenView.rawKind
   }
 
   public var tokenText: SyntaxText {
-    return raw.rawTokenText
+    return raw.tokenView.rawText
   }
 
   public var byteLength: Int {
@@ -99,11 +99,11 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   public var leadingTriviaPieces: [RawTriviaPiece] {
-    raw.tokenLeadingRawTriviaPieces
+    raw.tokenView.leadingRawTriviaPieces
   }
 
   public var trailingTriviaPieces: [RawTriviaPiece] {
-    raw.tokenTrailingRawTriviaPieces
+    raw.tokenView.trailingRawTriviaPieces
   }
 
   /// Creates a `RawTokenSyntax`. `wholeText` must be managed by the same

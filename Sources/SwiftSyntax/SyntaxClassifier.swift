@@ -28,9 +28,9 @@ extension TokenSyntax {
   /// The `SyntaxClassifiedRange` for the token text, excluding trivia.
   public var tokenClassification: SyntaxClassifiedRange {
     let contextualClassification = self.data.contextualClassification
-    let relativeOffset = raw.tokenLeadingTriviaLength.utf8Length
+    let relativeOffset = raw.tokenView.leadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    return TokenKindAndText(kind: raw.rawTokenKind, text: raw.rawTokenText).classify(
+    return TokenKindAndText(kind: raw.tokenView.rawKind, text: raw.tokenView.rawText).classify(
       offset: absoluteOffset, contextualClassification: contextualClassification)
   }
 }
@@ -289,7 +289,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
     assert(token.raw.isToken)
     self.token = token
     self.offset = Int(token.position.offset)
-    self.state = .atLeadingTrivia(token.raw.tokenLeadingRawTriviaPieces, 0)
+    self.state = .atLeadingTrivia(token.raw.tokenView.leadingRawTriviaPieces, 0)
   }
 
   var relativeOffset: Int { return offset - Int(token.position.offset) }
@@ -310,11 +310,11 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
 
       case .atTokenText:
         let classifiedRange = TokenKindAndText(
-          kind: token.raw.rawTokenKind, text: token.raw.rawTokenText)
+          kind: token.raw.tokenView.rawKind, text: token.raw.tokenView.rawText)
           .classify(offset: offset, contextualClassification: token.classification)
 
         // Move on to trailing trivia.
-        state = .atTrailingTrivia(token.raw.tokenTrailingRawTriviaPieces, 0)
+        state = .atTrailingTrivia(token.raw.tokenView.trailingRawTriviaPieces, 0)
         offset = classifiedRange.endOffset
         guard classifiedRange.kind != .none else { break }
         return classifiedRange

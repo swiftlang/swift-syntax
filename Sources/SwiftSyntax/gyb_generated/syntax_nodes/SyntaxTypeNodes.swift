@@ -186,7 +186,7 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> SimpleTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return SimpleTypeIdentifierSyntax(newData)
   }
@@ -346,7 +346,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return MemberTypeIdentifierSyntax(newData)
   }
@@ -389,7 +389,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `period`, if present.
   public func withPeriod(
     _ newChild: TokenSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.period)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.period)
     return MemberTypeIdentifierSyntax(newData)
   }
@@ -432,7 +432,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return MemberTypeIdentifierSyntax(newData)
   }
@@ -578,7 +578,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `classKeyword`, if present.
   public func withClassKeyword(
     _ newChild: TokenSyntax?) -> ClassRestrictionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.classKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.classKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.classKeyword)
     return ClassRestrictionTypeSyntax(newData)
   }
@@ -686,7 +686,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `leftSquareBracket`, if present.
   public func withLeftSquareBracket(
     _ newChild: TokenSyntax?) -> ArrayTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftSquareBracket)
     return ArrayTypeSyntax(newData)
   }
@@ -729,7 +729,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `elementType`, if present.
   public func withElementType(
     _ newChild: TypeSyntax?) -> ArrayTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elementType)
     return ArrayTypeSyntax(newData)
   }
@@ -772,7 +772,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `rightSquareBracket`, if present.
   public func withRightSquareBracket(
     _ newChild: TokenSyntax?) -> ArrayTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightSquareBracket)
     return ArrayTypeSyntax(newData)
   }
@@ -896,7 +896,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `leftSquareBracket`, if present.
   public func withLeftSquareBracket(
     _ newChild: TokenSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftSquareBracket)
     return DictionaryTypeSyntax(newData)
   }
@@ -939,7 +939,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `keyType`, if present.
   public func withKeyType(
     _ newChild: TypeSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.keyType)
     return DictionaryTypeSyntax(newData)
   }
@@ -982,7 +982,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return DictionaryTypeSyntax(newData)
   }
@@ -1025,7 +1025,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `valueType`, if present.
   public func withValueType(
     _ newChild: TypeSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.valueType)
     return DictionaryTypeSyntax(newData)
   }
@@ -1068,7 +1068,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `rightSquareBracket`, if present.
   public func withRightSquareBracket(
     _ newChild: TokenSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightSquareBracket)
     return DictionaryTypeSyntax(newData)
   }
@@ -1184,7 +1184,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> MetatypeTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return MetatypeTypeSyntax(newData)
   }
@@ -1227,7 +1227,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `period`, if present.
   public func withPeriod(
     _ newChild: TokenSyntax?) -> MetatypeTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.period)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.period)
     return MetatypeTypeSyntax(newData)
   }
@@ -1270,7 +1270,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `typeOrProtocol`, if present.
   public func withTypeOrProtocol(
     _ newChild: TokenSyntax?) -> MetatypeTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.typeOrProtocol)
     return MetatypeTypeSyntax(newData)
   }
@@ -1376,7 +1376,7 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `wrappedType`, if present.
   public func withWrappedType(
     _ newChild: TypeSyntax?) -> OptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.wrappedType)
     return OptionalTypeSyntax(newData)
   }
@@ -1419,7 +1419,7 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `questionMark`, if present.
   public func withQuestionMark(
     _ newChild: TokenSyntax?) -> OptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.postfixQuestionMark)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.postfixQuestionMark, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.questionMark)
     return OptionalTypeSyntax(newData)
   }
@@ -1523,7 +1523,7 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `someOrAnySpecifier`, if present.
   public func withSomeOrAnySpecifier(
     _ newChild: TokenSyntax?) -> ConstrainedSugarTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.someOrAnySpecifier)
     return ConstrainedSugarTypeSyntax(newData)
   }
@@ -1566,7 +1566,7 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> ConstrainedSugarTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return ConstrainedSugarTypeSyntax(newData)
   }
@@ -1670,7 +1670,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
   ///                   current `wrappedType`, if present.
   public func withWrappedType(
     _ newChild: TypeSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.wrappedType)
     return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
@@ -1713,7 +1713,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
   ///                   current `exclamationMark`, if present.
   public func withExclamationMark(
     _ newChild: TokenSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.exclamationMark)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.exclamationMark, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.exclamationMark)
     return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
@@ -1815,7 +1815,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: CompositionTypeElementSyntax) -> CompositionTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.compositionTypeElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -1830,7 +1830,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: CompositionTypeElementListSyntax?) -> CompositionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.compositionTypeElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.compositionTypeElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elements)
     return CompositionTypeSyntax(newData)
   }
@@ -1938,7 +1938,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> TupleTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return TupleTypeSyntax(newData)
   }
@@ -1985,7 +1985,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: TupleTypeElementSyntax) -> TupleTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -2000,7 +2000,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: TupleTypeElementListSyntax?) -> TupleTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleTypeElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleTypeElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elements)
     return TupleTypeSyntax(newData)
   }
@@ -2043,7 +2043,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> TupleTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return TupleTypeSyntax(newData)
   }
@@ -2179,7 +2179,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return FunctionTypeSyntax(newData)
   }
@@ -2226,7 +2226,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.arguments] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -2241,7 +2241,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `arguments`, if present.
   public func withArguments(
     _ newChild: TupleTypeElementListSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleTypeElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleTypeElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.arguments)
     return FunctionTypeSyntax(newData)
   }
@@ -2284,7 +2284,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return FunctionTypeSyntax(newData)
   }
@@ -2415,7 +2415,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `arrow`, if present.
   public func withArrow(
     _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.arrow)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.arrow, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.arrow)
     return FunctionTypeSyntax(newData)
   }
@@ -2458,7 +2458,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `returnType`, if present.
   public func withReturnType(
     _ newChild: TypeSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.returnType)
     return FunctionTypeSyntax(newData)
   }
@@ -2627,7 +2627,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addAttribute(_ element: Syntax) -> AttributedTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.attributes] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.attributeList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -2685,7 +2685,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> AttributedTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return AttributedTypeSyntax(newData)
   }

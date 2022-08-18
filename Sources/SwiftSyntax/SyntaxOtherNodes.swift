@@ -103,7 +103,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = raw.withTokenKind(tokenKind)
+    let newRaw = raw.tokenView.withKind(tokenKind)
     let newData = data.replacingSelf(newRaw)
     return TokenSyntax(newData)
   }
@@ -144,7 +144,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {
-      return raw.formTokenLeadingTrivia()
+      return raw.tokenView.formLeadingTrivia()
     }
     set {
       self = withLeadingTrivia(newValue)
@@ -154,7 +154,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
     get {
-      return raw.formTokenTrailingTrivia()
+      return raw.tokenView.formTrailingTrivia()
     }
     set {
       self = withTrailingTrivia(newValue)
@@ -174,17 +174,17 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
   public var contentLength: SourceLength {
-    return raw.tokenContentLength
+    return raw.tokenView.contentLength
   }
 
   /// The length this node's leading trivia takes up spelled out in source.
   public var leadingTriviaLength: SourceLength {
-    return raw.tokenLeadingTriviaLength
+    return raw.tokenView.leadingTriviaLength
   }
 
   /// The length this node's trailing trivia takes up spelled out in source.
   public var trailingTriviaLength: SourceLength {
-    return raw.tokenTrailingTriviaLength
+    return raw.tokenView.trailingTriviaLength
   }
 
   /// The length of this node including all of its trivia.

@@ -242,7 +242,7 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `period`, if present.
   public func withPeriod(
     _ newChild: TokenSyntax?) -> EnumCasePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.period)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.period)
     return EnumCasePatternSyntax(newData)
   }
@@ -285,7 +285,7 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `caseName`, if present.
   public func withCaseName(
     _ newChild: TokenSyntax?) -> EnumCasePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.caseName)
     return EnumCasePatternSyntax(newData)
   }
@@ -437,7 +437,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `isKeyword`, if present.
   public func withIsKeyword(
     _ newChild: TokenSyntax?) -> IsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.isKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.isKeyword)
     return IsTypePatternSyntax(newData)
   }
@@ -480,7 +480,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> IsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return IsTypePatternSyntax(newData)
   }
@@ -584,7 +584,7 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `subPattern`, if present.
   public func withSubPattern(
     _ newChild: PatternSyntax?) -> OptionalPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.subPattern)
     return OptionalPatternSyntax(newData)
   }
@@ -627,7 +627,7 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `questionMark`, if present.
   public func withQuestionMark(
     _ newChild: TokenSyntax?) -> OptionalPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.postfixQuestionMark)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.postfixQuestionMark, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.questionMark)
     return OptionalPatternSyntax(newData)
   }
@@ -725,7 +725,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `identifier`, if present.
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> IdentifierPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.selfKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.selfKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.identifier)
     return IdentifierPatternSyntax(newData)
   }
@@ -833,7 +833,7 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> AsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return AsTypePatternSyntax(newData)
   }
@@ -876,7 +876,7 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `asKeyword`, if present.
   public func withAsKeyword(
     _ newChild: TokenSyntax?) -> AsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.asKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.asKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.asKeyword)
     return AsTypePatternSyntax(newData)
   }
@@ -919,7 +919,7 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> AsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return AsTypePatternSyntax(newData)
   }
@@ -1031,7 +1031,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> TuplePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return TuplePatternSyntax(newData)
   }
@@ -1078,7 +1078,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: TuplePatternElementSyntax) -> TuplePatternSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.appending(element.raw)
+      collection = col.layoutView.appending(element.raw)
     } else {
       collection = RawSyntax.create(kind: SyntaxKind.tuplePatternElementList,
         layout: [element.raw], length: element.raw.totalLength, presence: .present)
@@ -1093,7 +1093,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: TuplePatternElementListSyntax?) -> TuplePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tuplePatternElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tuplePatternElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elements)
     return TuplePatternSyntax(newData)
   }
@@ -1136,7 +1136,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> TuplePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return TuplePatternSyntax(newData)
   }
@@ -1242,7 +1242,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `wildcard`, if present.
   public func withWildcard(
     _ newChild: TokenSyntax?) -> WildcardPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.wildcardKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.wildcardKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.wildcard)
     return WildcardPatternSyntax(newData)
   }
@@ -1384,7 +1384,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ExpressionPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ExpressionPatternSyntax(newData)
   }
@@ -1486,7 +1486,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `letOrVarKeyword`, if present.
   public func withLetOrVarKeyword(
     _ newChild: TokenSyntax?) -> ValueBindingPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.letKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.letOrVarKeyword)
     return ValueBindingPatternSyntax(newData)
   }
@@ -1529,7 +1529,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `valuePattern`, if present.
   public func withValuePattern(
     _ newChild: PatternSyntax?) -> ValueBindingPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.valuePattern)
     return ValueBindingPatternSyntax(newData)
   }

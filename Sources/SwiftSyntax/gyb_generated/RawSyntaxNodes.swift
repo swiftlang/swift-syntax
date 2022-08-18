@@ -500,7 +500,14 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawCodeBlockItemSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .codeBlockItemList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .codeBlockItemList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -586,7 +593,14 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .unexpectedNodes, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .unexpectedNodes, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -701,7 +715,14 @@ public struct RawTupleExprElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawTupleExprElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .tupleExprElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .tupleExprElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -728,7 +749,14 @@ public struct RawArrayElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawArrayElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .arrayElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .arrayElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -755,7 +783,14 @@ public struct RawDictionaryElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawDictionaryElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .dictionaryElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .dictionaryElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -782,7 +817,14 @@ public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .stringLiteralSegments, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .stringLiteralSegments, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -1015,7 +1057,14 @@ public struct RawDeclNameArgumentListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawDeclNameArgumentSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .declNameArgumentList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .declNameArgumentList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -1345,7 +1394,14 @@ public struct RawExprListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawExprSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .exprList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .exprList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -2716,7 +2772,14 @@ public struct RawClosureCaptureItemListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawClosureCaptureItemSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .closureCaptureItemList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .closureCaptureItemList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -2851,7 +2914,14 @@ public struct RawClosureParamListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawClosureParamSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .closureParamList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .closureParamList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -3144,7 +3214,14 @@ public struct RawMultipleTrailingClosureElementListSyntax: RawSyntaxNodeProtocol
   }
 
   public init(elements: [RawMultipleTrailingClosureElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .multipleTrailingClosureElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .multipleTrailingClosureElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -3928,7 +4005,14 @@ public struct RawObjcNameSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawObjcNamePieceSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .objcName, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .objcName, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -4517,7 +4601,14 @@ public struct RawFunctionParameterListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawFunctionParameterSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .functionParameterList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .functionParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -4780,7 +4871,14 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawIfConfigClauseSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .ifConfigClauseList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .ifConfigClauseList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -5319,7 +5417,14 @@ public struct RawInheritedTypeListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawInheritedTypeSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .inheritedTypeList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .inheritedTypeList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -5989,7 +6094,14 @@ public struct RawMemberDeclListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawMemberDeclListItemSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .memberDeclList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .memberDeclList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -6272,7 +6384,14 @@ public struct RawModifierListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawDeclModifierSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .modifierList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .modifierList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -6793,7 +6912,14 @@ public struct RawAccessPathSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawAccessPathComponentSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .accessPath, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .accessPath, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -7057,7 +7183,14 @@ public struct RawAccessorListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawAccessorDeclSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .accessorList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .accessorList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -7222,7 +7355,14 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawPatternBindingSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .patternBindingList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .patternBindingList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -7387,7 +7527,14 @@ public struct RawEnumCaseElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawEnumCaseElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .enumCaseElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .enumCaseElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -7671,7 +7818,14 @@ public struct RawIdentifierListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawTokenSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .identifierList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .identifierList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -7846,7 +8000,14 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .precedenceGroupAttributeList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .precedenceGroupAttributeList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -7932,7 +8093,14 @@ public struct RawPrecedenceGroupNameListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawPrecedenceGroupNameElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .precedenceGroupNameList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .precedenceGroupNameList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -8126,7 +8294,14 @@ public struct RawTokenListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawTokenSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .tokenList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .tokenList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -8153,7 +8328,14 @@ public struct RawNonEmptyTokenListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawTokenSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .nonEmptyTokenList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .nonEmptyTokenList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -8348,7 +8530,14 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .attributeList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .attributeList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -8375,7 +8564,14 @@ public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .specializeAttributeSpecList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .specializeAttributeSpecList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -8835,7 +9031,14 @@ public struct RawObjCSelectorSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawObjCSelectorPieceSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .objCSelector, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .objCSelector, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -9059,7 +9262,14 @@ public struct RawDifferentiabilityParamListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawDifferentiabilityParamSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .differentiabilityParamList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .differentiabilityParamList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -9411,7 +9621,14 @@ public struct RawBackDeployVersionListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawBackDeployVersionArgumentSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .backDeployVersionList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .backDeployVersionList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -9742,7 +9959,14 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .switchCaseList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .switchCaseList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -10164,7 +10388,14 @@ public struct RawCatchClauseListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawCatchClauseSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .catchClauseList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .catchClauseList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -10505,7 +10736,14 @@ public struct RawCaseItemListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawCaseItemSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .caseItemList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .caseItemList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -10532,7 +10770,14 @@ public struct RawCatchItemListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawCatchItemSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .catchItemList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .catchItemList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -10884,7 +11129,14 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawConditionElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .conditionElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .conditionElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -11648,7 +11900,14 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawGenericRequirementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .genericRequirementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .genericRequirementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -11892,7 +12151,14 @@ public struct RawGenericParameterListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawGenericParameterSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .genericParameterList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .genericParameterList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -11998,7 +12264,14 @@ public struct RawPrimaryAssociatedTypeListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawPrimaryAssociatedTypeSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .primaryAssociatedTypeList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .primaryAssociatedTypeList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -12801,7 +13074,14 @@ public struct RawCompositionTypeElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawCompositionTypeElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .compositionTypeElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .compositionTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -12976,7 +13256,14 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawTupleTypeElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .tupleTypeElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .tupleTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -13220,7 +13507,14 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawGenericArgumentSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .genericArgumentList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .genericArgumentList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -13885,7 +14179,14 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawTuplePatternElementSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .tuplePatternElementList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .tuplePatternElementList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 
@@ -13961,7 +14262,14 @@ public struct RawAvailabilitySpecListSyntax: RawSyntaxNodeProtocol {
   }
 
   public init(elements: [RawAvailabilityArgumentSyntax], arena: SyntaxArena) {
-    let raw = RawSyntax.makeLayout(kind: .availabilitySpecList, from: elements.map { $0.raw }, arena: arena)
+    let raw = RawSyntax.makeLayout(
+      kind: .availabilitySpecList, uninitializedCount: elements.count, arena: arena) { layout in
+      guard var ptr = layout.baseAddress else { return }
+      for elem in elements {
+        ptr.initialize(to: elem.raw)
+        ptr += 1
+      }
+    }
     self.init(raw: raw)
   }
 

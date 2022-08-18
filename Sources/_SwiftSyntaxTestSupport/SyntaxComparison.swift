@@ -25,16 +25,18 @@ public struct TreeDifference {
   /// The `node` that's different to `baseline`, unless `reason` is
   /// `.missingNode`. In that case it's actually the parent that's missing a
   /// child node.
-  public let node: SyntaxProtocol
+  public let node: Syntax
   /// The corresponding `baseline` that does not match `node`, unless `reason`
   /// is `.additionalNode`. In that case it's what would be the parent (if the
   /// baseline node existed).
-  public let baseline: SyntaxProtocol
+  public let baseline: Syntax
   public let reason: DifferenceReason
 
-  public init(node: SyntaxProtocol, baseline: SyntaxProtocol, reason: DifferenceReason) {
-    self.node = node
-    self.baseline = baseline
+  public init<Difference, Baseline>(node: Difference, baseline: Baseline, reason: DifferenceReason)
+    where Difference: SyntaxProtocol, Baseline: SyntaxProtocol
+  {
+    self.node = Syntax(node)
+    self.baseline = Syntax(baseline)
     self.reason = reason
   }
 }
@@ -89,7 +91,7 @@ extension TreeDifference: CustomDebugStringConvertible {
 public extension SyntaxProtocol {
   /// Compares the current tree against a `baseline`, returning the first
   /// difference it finds.
-  func findFirstDifference(baseline: SyntaxProtocol, includeTrivia: Bool = false) -> TreeDifference? {
+  func findFirstDifference<Tree: SyntaxProtocol>(baseline: Tree, includeTrivia: Bool = false) -> TreeDifference? {
     if let reason = isDifferent(baseline: baseline, includeTrivia: includeTrivia) {
       return TreeDifference(node: self, baseline: baseline, reason: reason)
     }
@@ -112,7 +114,7 @@ public extension SyntaxProtocol {
     return nil
   }
 
-  private func isDifferent(baseline: SyntaxProtocol, includeTrivia: Bool = false) -> DifferenceReason? {
+  private func isDifferent<Tree: SyntaxProtocol>(baseline: Tree, includeTrivia: Bool = false) -> DifferenceReason? {
     if syntaxNodeType != baseline.syntaxNodeType {
       return .nodeType
     }

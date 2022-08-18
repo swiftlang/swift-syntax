@@ -16,7 +16,7 @@ public class VisitorTests: XCTestCase {
         return .visitChildren
       }
 
-      static func check(_ tree: SyntaxProtocol, viewMode: SyntaxTreeViewMode) -> Bool {
+      static func check<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> Bool {
         let visitor = MissingDeclChecker(viewMode: viewMode)
         visitor.walk(tree)
         return visitor.didSeeMissingDeclSyntax
@@ -56,7 +56,7 @@ public class VisitorTests: XCTestCase {
         return .visitChildren
       }
 
-      static func print(_ tree: SyntaxProtocol, viewMode: SyntaxTreeViewMode) -> String {
+      static func print<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> String {
         let printer = TreePrinter(viewMode: viewMode)
         printer.walk(tree)
         return printer.out
@@ -83,7 +83,7 @@ public class VisitorTests: XCTestCase {
       }
 
 
-      static func print(_ tree: SyntaxProtocol, viewMode: SyntaxTreeViewMode) -> String {
+      static func print<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> String {
         let printer = TreePrinter(viewMode: viewMode)
         printer.walk(tree)
         return printer.out
@@ -108,7 +108,7 @@ public class VisitorTests: XCTestCase {
       }
 
 
-      static func print(_ tree: SyntaxProtocol, viewMode: SyntaxTreeViewMode) -> String {
+      static func print<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> String {
         let printer = TreePrinter(viewMode: viewMode)
         printer.walk(tree)
         return printer.out

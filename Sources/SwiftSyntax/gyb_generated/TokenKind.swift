@@ -1122,7 +1122,7 @@ extension TokenKind: Equatable {
 }
 
 /// Plain token kind value, without an associated `String` value.
-public enum RawTokenKind {
+public enum RawTokenKind: Equatable, Hashable {
   case eof
   case associatedtypeKeyword
   case classKeyword

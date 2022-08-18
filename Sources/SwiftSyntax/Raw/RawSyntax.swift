@@ -215,7 +215,7 @@ extension RawSyntax {
       // We always consider collections 'present' because they can just be empty.
       return .present
     }
-    if isToken && (self.tokenView.rawKind == .eof || self.tokenView.rawKind == .stringSegment) {
+    if isToken && (self.tokenView!.rawKind == .eof || self.tokenView!.rawKind == .stringSegment) {
       // The end of file token never has source code associated with it but we
       // still consider it valid.
       // String segments can be empty if they occur in an empty string literal or in between two interpolation segments.
@@ -246,20 +246,21 @@ extension RawSyntax {
   /// - Parameters:
   ///   - leadingTrivia: The trivia to attach.
   func withLeadingTrivia(_ leadingTrivia: Trivia) -> RawSyntax? {
-    if isToken {
+    switch view {
+    case .token(let tokenView):
       return .makeMaterializedToken(
         kind: tokenView.formKind(),
         leadingTrivia: leadingTrivia,
         trailingTrivia: tokenView.formTrailingTrivia(),
         arena: arena)
-    }
-
-    for (index, child) in children.enumerated() {
-      if let replaced = child?.withLeadingTrivia(leadingTrivia) {
-        return layoutView.replacingChild(at: index, with: replaced, arena: arena)
+    case .layout(let layoutView):
+      for (index, child) in children.enumerated() {
+        if let replaced = child?.withLeadingTrivia(leadingTrivia) {
+          return layoutView.replacingChild(at: index, with: replaced, arena: arena)
+        }
       }
+      return nil
     }
-    return nil
   }
 
   /// Replaces the trailing trivia of the last token in this syntax tree by `trailingTrivia`.
@@ -267,20 +268,21 @@ extension RawSyntax {
   /// - Parameters:
   ///   - trailingTrivia: The trivia to attach.
   func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax? {
-    if isToken {
+    switch view {
+    case .token(let tokenView):
       return .makeMaterializedToken(
         kind: tokenView.formKind(),
         leadingTrivia: tokenView.formLeadingTrivia(),
         trailingTrivia: trailingTrivia,
         arena: arena)
-    }
-
-    for (index, child) in children.enumerated().reversed() {
-      if let replaced = child?.withTrailingTrivia(trailingTrivia) {
-        return layoutView.replacingChild(at: index, with: replaced, arena: arena)
+    case .layout(let layoutView):
+      for (index, child) in children.enumerated().reversed() {
+        if let replaced = child?.withTrailingTrivia(trailingTrivia) {
+          return layoutView.replacingChild(at: index, with: replaced, arena: arena)
+        }
       }
+      return nil
     }
-    return nil
   }
 
   /// Returns the child at the provided cursor in the layout.
@@ -334,45 +336,53 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
 
 extension RawSyntax {
   /// Return the first token of a layout node that should be traversed by `viewMode`.
-  func firstToken(viewMode: SyntaxTreeViewMode) -> RawSyntax? {
+  func firstToken(viewMode: SyntaxTreeViewMode) -> RawSyntaxTokenView? {
     guard viewMode.shouldTraverse(node: self) else { return nil }
-    if isToken { return self }
-    for child in children {
-      if let token = child?.firstToken(viewMode: viewMode) {
-        return token
+    switch view {
+    case .token(let tokenView):
+      return tokenView
+    case .layout:
+      for child in children {
+        if let token = child?.firstToken(viewMode: viewMode) {
+          return token
+        }
       }
+      return nil
     }
-    return nil
   }
 
   /// Return the last token of a layout node that should be traversed by `viewMode`.
-  func lastToken(viewMode: SyntaxTreeViewMode) -> RawSyntax? {
+  func lastToken(viewMode: SyntaxTreeViewMode) -> RawSyntaxTokenView? {
     guard viewMode.shouldTraverse(node: self) else { return nil }
-    if isToken { return self }
-    for child in children.reversed() {
-      if let token = child?.lastToken(viewMode: viewMode) {
-        return token
+    switch view {
+    case .token(let tokenView):
+      return tokenView
+    case .layout:
+      for child in children.reversed() {
+        if let token = child?.lastToken(viewMode: viewMode) {
+          return token
+        }
       }
+      return nil
     }
-    return nil
   }
 
   func formLeadingTrivia() -> Trivia? {
-    firstToken(viewMode: .sourceAccurate)?.tokenView.formLeadingTrivia()
+    firstToken(viewMode: .sourceAccurate)?.formLeadingTrivia()
   }
 
   func formTrailingTrivia() -> Trivia? {
-    lastToken(viewMode: .sourceAccurate)?.tokenView.formTrailingTrivia()
+    lastToken(viewMode: .sourceAccurate)?.formTrailingTrivia()
   }
 }
 
 extension RawSyntax {
   var leadingTriviaByteLength: Int {
-    firstToken(viewMode: .sourceAccurate)?.tokenView.leadingTriviaByteLength ?? 0
+    firstToken(viewMode: .sourceAccurate)?.leadingTriviaByteLength ?? 0
   }
 
   var trailingTriviaByteLength: Int {
-    lastToken(viewMode: .sourceAccurate)?.tokenView.trailingTriviaByteLength ?? 0
+    lastToken(viewMode: .sourceAccurate)?.trailingTriviaByteLength ?? 0
   }
 
   /// The length of this node’s content, without the first leading and the last
@@ -672,3 +682,20 @@ extension RawSyntax: CustomReflectable {
     return Mirror(self, unlabeledChildren: mirrorChildren)
   }
 }
+
+enum RawSyntaxView {
+  case token(RawSyntaxTokenView)
+  case layout(RawSyntaxLayoutView)
+}
+
+extension RawSyntax {
+  var view: RawSyntaxView {
+    switch raw.payload {
+    case .parsedToken, .materializedToken:
+      return .token(tokenView!)
+    case .layout:
+      return .layout(layoutView!)
+    }
+  }
+}
+

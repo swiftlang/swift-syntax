@@ -13,13 +13,18 @@
 extension RawSyntax {
   /// A view into the `RawSyntax` that exposes functionality that's specific to layout nodes.
   /// The token's payload must be a layout, otherwise this traps.
-  var layoutView: RawSyntaxLayout {
-    return RawSyntaxLayout(raw: self)
+  var layoutView: RawSyntaxLayoutView? {
+    switch raw.payload {
+    case .parsedToken, .materializedToken:
+      return nil
+    case .layout:
+      return RawSyntaxLayoutView(raw: self)
+    }
   }
 }
 
 /// A view into `RawSyntax` that exposes functionality that only applies to layout nodes.
-struct RawSyntaxLayout {
+struct RawSyntaxLayoutView {
   private let raw: RawSyntax
 
   fileprivate init(raw: RawSyntax) {

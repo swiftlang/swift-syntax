@@ -28,9 +28,9 @@ extension TokenSyntax {
   /// The `SyntaxClassifiedRange` for the token text, excluding trivia.
   public var tokenClassification: SyntaxClassifiedRange {
     let contextualClassification = self.data.contextualClassification
-    let relativeOffset = raw.tokenView.leadingTriviaLength.utf8Length
+    let relativeOffset = tokenView.leadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    return TokenKindAndText(kind: raw.tokenView.rawKind, text: raw.tokenView.rawText).classify(
+    return TokenKindAndText(kind: tokenView.rawKind, text: tokenView.rawText).classify(
       offset: absoluteOffset, contextualClassification: contextualClassification)
   }
 }
@@ -282,6 +282,9 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
   }
 
   let token: AbsoluteNode
+  var tokenView: RawSyntaxTokenView {
+    return token.raw.tokenView!
+  }
   var offset: Int
   var state: State
 
@@ -289,7 +292,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
     assert(token.raw.isToken)
     self.token = token
     self.offset = Int(token.position.offset)
-    self.state = .atLeadingTrivia(token.raw.tokenView.leadingRawTriviaPieces, 0)
+    self.state = .atLeadingTrivia(token.raw.tokenView!.leadingRawTriviaPieces, 0)
   }
 
   var relativeOffset: Int { return offset - Int(token.position.offset) }
@@ -310,11 +313,11 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
 
       case .atTokenText:
         let classifiedRange = TokenKindAndText(
-          kind: token.raw.tokenView.rawKind, text: token.raw.tokenView.rawText)
+          kind: tokenView.rawKind, text: tokenView.rawText)
           .classify(offset: offset, contextualClassification: token.classification)
 
         // Move on to trailing trivia.
-        state = .atTrailingTrivia(token.raw.tokenView.trailingRawTriviaPieces, 0)
+        state = .atTrailingTrivia(tokenView.trailingRawTriviaPieces, 0)
         offset = classifiedRange.endOffset
         guard classifiedRange.kind != .none else { break }
         return classifiedRange

@@ -62,6 +62,10 @@ extension RawSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawTokenSyntax: RawSyntaxNodeProtocol {
+  var tokenView: RawSyntaxTokenView {
+    return raw.tokenView!
+  }
+
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     return raw.kind == .token
   }
@@ -79,11 +83,11 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   public var tokenKind: RawTokenKind {
-    return raw.tokenView.rawKind
+    return tokenView.rawKind
   }
 
   public var tokenText: SyntaxText {
-    return raw.tokenView.rawText
+    return tokenView.rawText
   }
 
   public var byteLength: Int {
@@ -99,11 +103,11 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   public var leadingTriviaPieces: [RawTriviaPiece] {
-    raw.tokenView.leadingRawTriviaPieces
+    tokenView.leadingRawTriviaPieces
   }
 
   public var trailingTriviaPieces: [RawTriviaPiece] {
-    raw.tokenView.trailingRawTriviaPieces
+    tokenView.trailingRawTriviaPieces
   }
 
   /// Creates a `RawTokenSyntax`. `wholeText` must be managed by the same

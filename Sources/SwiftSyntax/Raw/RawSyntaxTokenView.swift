@@ -13,14 +13,19 @@
 extension RawSyntax {
   /// A view into the `RawSyntax` that exposes functionality that's specific to tokens.
   /// The token's payload must be a token, otherwise this traps.
-  var tokenView: RawSyntaxTokenView {
-    return RawSyntaxTokenView(raw: self)
+  var tokenView: RawSyntaxTokenView? {
+    switch raw.payload {
+    case .parsedToken, .materializedToken:
+      return RawSyntaxTokenView(raw: self)
+    case .layout(_):
+      return nil
+    }
   }
 }
 
 /// A view into `RawSyntax` that exposes functionality that only applies to tokens.
 struct RawSyntaxTokenView {
-  private let raw: RawSyntax
+  let raw: RawSyntax
 
   fileprivate init(raw: RawSyntax) {
     self.raw = raw

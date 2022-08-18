@@ -253,7 +253,7 @@ open class SyntaxRewriter {
       // Sanity check, ensure the new children are the same length.
       assert(newLayout.count == node.raw.numberOfChildren)
       
-      let newRaw = node.raw.layoutView.replacingLayout(with: Array(newLayout), arena: .default)
+      let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: .default)
       let newNode = SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
       return newNode
     } else {

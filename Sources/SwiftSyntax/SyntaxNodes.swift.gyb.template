@@ -161,7 +161,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   public func add${child_elt}(_ element: ${child_elt_type}) -> ${node.name} {
     var collection: RawSyntax
     if let col = raw[Cursor.${child.swift_name}] {
-      collection = col.layoutView.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.${child_node.swift_syntax_kind},
         from: [element.raw], arena: .default)

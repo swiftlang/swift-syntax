@@ -585,7 +585,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func addCondition(_ element: ConditionElementSyntax) -> WhileStmtSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.conditions] {
-      collection = col.layoutView.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
         from: [element.raw], arena: .default)
@@ -1300,7 +1300,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func addCondition(_ element: ConditionElementSyntax) -> GuardStmtSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.conditions] {
-      collection = col.layoutView.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
         from: [element.raw], arena: .default)
@@ -2220,7 +2220,7 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func addCase(_ element: Syntax) -> SwitchStmtSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.cases] {
-      collection = col.layoutView.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
         from: [element.raw], arena: .default)
@@ -2485,7 +2485,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func addCatchClause(_ element: CatchClauseSyntax) -> DoStmtSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.catchClauses] {
-      collection = col.layoutView.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
         from: [element.raw], arena: .default)
@@ -3453,7 +3453,7 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public func addCondition(_ element: ConditionElementSyntax) -> IfStmtSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.conditions] {
-      collection = col.layoutView.appending(element.raw, arena: .default)
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
         from: [element.raw], arena: .default)

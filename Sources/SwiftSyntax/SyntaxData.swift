@@ -345,7 +345,7 @@ struct SyntaxData {
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
   func replacingChild(_ child: RawSyntax?, at index: Int) -> SyntaxData {
-    let newRaw = raw.layoutView.replacingChild(at: index, with: child, arena: .default)
+    let newRaw = raw.layoutView!.replacingChild(at: index, with: child, arena: .default)
     return replacingSelf(newRaw)
   }
 

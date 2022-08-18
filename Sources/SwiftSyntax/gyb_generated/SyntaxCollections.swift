@@ -41,8 +41,8 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [CodeBlockItemSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItemList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -62,7 +62,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CodeBlockItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return CodeBlockItemListSyntax(newData)
   }
@@ -290,8 +290,8 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Syntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unexpectedNodes,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -311,7 +311,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `UnexpectedNodesSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return UnexpectedNodesSyntax(newData)
   }
@@ -539,8 +539,8 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [TupleExprElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -560,7 +560,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleExprElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return TupleExprElementListSyntax(newData)
   }
@@ -788,8 +788,8 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [ArrayElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -809,7 +809,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ArrayElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ArrayElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ArrayElementListSyntax(newData)
   }
@@ -1037,8 +1037,8 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [DictionaryElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1058,7 +1058,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DictionaryElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return DictionaryElementListSyntax(newData)
   }
@@ -1286,8 +1286,8 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Syntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringLiteralSegments,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1307,7 +1307,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `StringLiteralSegmentsSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return StringLiteralSegmentsSyntax(newData)
   }
@@ -1535,8 +1535,8 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [DeclNameArgumentSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgumentList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1556,7 +1556,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DeclNameArgumentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return DeclNameArgumentListSyntax(newData)
   }
@@ -1784,8 +1784,8 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [ExprSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.exprList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1805,7 +1805,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ExprListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ExprListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ExprListSyntax(newData)
   }
@@ -2033,8 +2033,8 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [ClosureCaptureItemSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItemList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2054,7 +2054,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureCaptureItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ClosureCaptureItemListSyntax(newData)
   }
@@ -2282,8 +2282,8 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [ClosureParamSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParamList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2303,7 +2303,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ClosureParamListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ClosureParamListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ClosureParamListSyntax(newData)
   }
@@ -2531,8 +2531,8 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   }
 
   public init(_ children: [MultipleTrailingClosureElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2552,7 +2552,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return MultipleTrailingClosureElementListSyntax(newData)
   }
@@ -2780,8 +2780,8 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [ObjcNamePieceSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcName,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objcName,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2801,7 +2801,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjcNameSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ObjcNameSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ObjcNameSyntax(newData)
   }
@@ -3029,8 +3029,8 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [FunctionParameterSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameterList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3050,7 +3050,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `FunctionParameterListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return FunctionParameterListSyntax(newData)
   }
@@ -3278,8 +3278,8 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [IfConfigClauseSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClauseList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3299,7 +3299,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IfConfigClauseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return IfConfigClauseListSyntax(newData)
   }
@@ -3527,8 +3527,8 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [InheritedTypeSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedTypeList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3548,7 +3548,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `InheritedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return InheritedTypeListSyntax(newData)
   }
@@ -3776,8 +3776,8 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [MemberDeclListItemSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3797,7 +3797,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `MemberDeclListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> MemberDeclListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return MemberDeclListSyntax(newData)
   }
@@ -4025,8 +4025,8 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [DeclModifierSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.modifierList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4046,7 +4046,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ModifierListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ModifierListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ModifierListSyntax(newData)
   }
@@ -4274,8 +4274,8 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [AccessPathComponentSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPath,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4295,7 +4295,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessPathSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AccessPathSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return AccessPathSyntax(newData)
   }
@@ -4523,8 +4523,8 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [AccessorDeclSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4544,7 +4544,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AccessorListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AccessorListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return AccessorListSyntax(newData)
   }
@@ -4772,8 +4772,8 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [PatternBindingSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBindingList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4793,7 +4793,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PatternBindingListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PatternBindingListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return PatternBindingListSyntax(newData)
   }
@@ -5018,8 +5018,8 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [EnumCaseElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5039,7 +5039,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `EnumCaseElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return EnumCaseElementListSyntax(newData)
   }
@@ -5267,8 +5267,8 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [TokenSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.identifierList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5288,7 +5288,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `IdentifierListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> IdentifierListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return IdentifierListSyntax(newData)
   }
@@ -5516,8 +5516,8 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   }
 
   public init(_ children: [Syntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAttributeList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5537,7 +5537,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return PrecedenceGroupAttributeListSyntax(newData)
   }
@@ -5765,8 +5765,8 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [PrecedenceGroupNameElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5786,7 +5786,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return PrecedenceGroupNameListSyntax(newData)
   }
@@ -6014,8 +6014,8 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [TokenSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tokenList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6035,7 +6035,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TokenListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TokenListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return TokenListSyntax(newData)
   }
@@ -6263,8 +6263,8 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [TokenSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.nonEmptyTokenList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.nonEmptyTokenList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6284,7 +6284,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `NonEmptyTokenListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> NonEmptyTokenListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return NonEmptyTokenListSyntax(newData)
   }
@@ -6512,8 +6512,8 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Syntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attributeList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6533,7 +6533,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AttributeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AttributeListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return AttributeListSyntax(newData)
   }
@@ -6760,8 +6760,8 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   }
 
   public init(_ children: [Syntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.specializeAttributeSpecList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6781,7 +6781,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return SpecializeAttributeSpecListSyntax(newData)
   }
@@ -7009,8 +7009,8 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [ObjCSelectorPieceSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelector,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7030,7 +7030,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ObjCSelectorSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ObjCSelectorSyntax(newData)
   }
@@ -7258,8 +7258,8 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   }
 
   public init(_ children: [DifferentiabilityParamSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7279,7 +7279,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `DifferentiabilityParamListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return DifferentiabilityParamListSyntax(newData)
   }
@@ -7507,8 +7507,8 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [BackDeployVersionArgumentSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7528,7 +7528,7 @@ public struct BackDeployVersionListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `BackDeployVersionListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> BackDeployVersionListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return BackDeployVersionListSyntax(newData)
   }
@@ -7756,8 +7756,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [Syntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7777,7 +7777,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `SwitchCaseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return SwitchCaseListSyntax(newData)
   }
@@ -8005,8 +8005,8 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [CatchClauseSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClauseList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8026,7 +8026,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchClauseListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CatchClauseListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return CatchClauseListSyntax(newData)
   }
@@ -8254,8 +8254,8 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [CaseItemSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItemList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8275,7 +8275,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CaseItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CaseItemListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return CaseItemListSyntax(newData)
   }
@@ -8503,8 +8503,8 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [CatchItemSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItemList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8524,7 +8524,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `CatchItemListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CatchItemListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return CatchItemListSyntax(newData)
   }
@@ -8752,8 +8752,8 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [ConditionElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8773,7 +8773,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ConditionElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ConditionElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return ConditionElementListSyntax(newData)
   }
@@ -9001,8 +9001,8 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [GenericRequirementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9022,7 +9022,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericRequirementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return GenericRequirementListSyntax(newData)
   }
@@ -9250,8 +9250,8 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [GenericParameterSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9271,7 +9271,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericParameterListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> GenericParameterListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return GenericParameterListSyntax(newData)
   }
@@ -9499,8 +9499,8 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   }
 
   public init(_ children: [PrimaryAssociatedTypeSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9520,7 +9520,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return PrimaryAssociatedTypeListSyntax(newData)
   }
@@ -9748,8 +9748,8 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   }
 
   public init(_ children: [CompositionTypeElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9769,7 +9769,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// - Returns: A new `CompositionTypeElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return CompositionTypeElementListSyntax(newData)
   }
@@ -9997,8 +9997,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [TupleTypeElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10018,7 +10018,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TupleTypeElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return TupleTypeElementListSyntax(newData)
   }
@@ -10246,8 +10246,8 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [GenericArgumentSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10267,7 +10267,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `GenericArgumentListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return GenericArgumentListSyntax(newData)
   }
@@ -10495,8 +10495,8 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [TuplePatternElementSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElementList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10516,7 +10516,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `TuplePatternElementListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return TuplePatternElementListSyntax(newData)
   }
@@ -10744,8 +10744,8 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   }
 
   public init(_ children: [AvailabilityArgumentSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilitySpecList,
-      layout: children.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+      from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10765,7 +10765,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `AvailabilitySpecListSyntax` with the new layout underlying it.
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
-    let newRaw = data.raw.replacingLayout(layout)
+    let newRaw = data.raw.layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
     return AvailabilitySpecListSyntax(newData)
   }

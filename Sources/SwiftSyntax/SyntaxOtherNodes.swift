@@ -38,8 +38,8 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(tokens: [TokenSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: .unknown,
-      layout: tokens.map { $0.raw }, presence: .present)
+    let raw = RawSyntax.makeLayout(kind: .unknown,
+      from: tokens.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -78,8 +78,13 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     trailingTrivia: Trivia = [],
     presence: SourcePresence
   ) {
-    let raw = RawSyntax.createAndCalcLength(kind: kind, leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia, presence: presence)
+    let raw = RawSyntax.makeMaterializedToken(
+      kind: kind,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence,
+      arena: .default
+    )
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }

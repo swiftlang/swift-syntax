@@ -38,8 +38,8 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missing,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.missing,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -105,8 +105,8 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenSemicolonAndErrorTokens?.raw,
       errorTokens?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -309,8 +309,8 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenStatementsAndRightBrace?.raw,
       rightBrace.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -404,10 +404,10 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public func addStatement(_ element: CodeBlockItemSyntax) -> CodeBlockSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.statements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.statements)
@@ -520,8 +520,8 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndColon?.raw,
       colon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -673,8 +673,8 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -768,10 +768,10 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: DeclNameArgumentSyntax) -> DeclNameArgumentsSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.arguments] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.declNameArgumentList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.arguments)
@@ -896,8 +896,8 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1136,8 +1136,8 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1296,8 +1296,8 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenValueExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1552,8 +1552,8 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1605,10 +1605,10 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   public func addSpecifierToken(_ element: TokenSyntax) -> ClosureCaptureItemSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.specifier] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tokenList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.specifier)
@@ -1863,8 +1863,8 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenItemsAndRightSquare?.raw,
       rightSquare.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureSignature,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureSignature,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1959,10 +1959,10 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public func addItem(_ element: ClosureCaptureItemSyntax) -> ClosureCaptureSignatureSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.items] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.closureCaptureItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.items)
@@ -2075,8 +2075,8 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParam,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParam,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2253,8 +2253,8 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenOutputAndInTok?.raw,
       inTok.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureSignature,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureSignature,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2306,10 +2306,10 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public func addAttribute(_ element: Syntax) -> ClosureSignatureSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.attributes] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.attributes)
@@ -2656,8 +2656,8 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
       unexpectedBetweenColonAndClosure?.raw,
       closure.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2842,8 +2842,8 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBeforeContent?.raw,
       content.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringSegment,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringSegment,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2962,8 +2962,8 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionSegment,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.expressionSegment,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3144,10 +3144,10 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public func addExpression(_ element: TupleExprElementSyntax) -> ExpressionSegmentSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.expressions] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.expressions)
@@ -3264,8 +3264,8 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndDot?.raw,
       dot?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcNamePiece,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objcNamePiece,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3412,8 +3412,8 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInitializerClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeInitializerClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3565,8 +3565,8 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenParameterListAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.parameterClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.parameterClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3660,10 +3660,10 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public func addParameter(_ element: FunctionParameterSyntax) -> ParameterClauseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.parameterList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.functionParameterList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.parameterList)
@@ -3776,8 +3776,8 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArrowAndReturnType?.raw,
       returnType.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.returnClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.returnClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3935,8 +3935,8 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.raw,
       output?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionSignature,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionSignature,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4181,8 +4181,8 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenConditionAndElements?.raw,
       elements.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4404,8 +4404,8 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenLineArgColonAndLineNumber?.raw,
       lineNumber.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundSourceLocationArgs,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundSourceLocationArgs,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4782,8 +4782,8 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDetailAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifierDetail,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declModifierDetail,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4974,8 +4974,8 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndDetail?.raw,
       detail?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifier,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declModifier,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5122,8 +5122,8 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5270,8 +5270,8 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndInheritedTypeCollection?.raw,
       inheritedTypeCollection.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInheritanceClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeInheritanceClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5365,10 +5365,10 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public func addInheritedType(_ element: InheritedTypeSyntax) -> TypeInheritanceClauseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.inheritedTypeCollection] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.inheritedTypeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.inheritedTypeCollection)
@@ -5442,8 +5442,8 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenMembersAndRightBrace?.raw,
       rightBrace.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5537,10 +5537,10 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public func addMember(_ element: MemberDeclListItemSyntax) -> MemberDeclBlockSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.members] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.memberDeclList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.members)
@@ -5657,8 +5657,8 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDeclAndSemicolon?.raw,
       semicolon?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclListItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclListItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5807,8 +5807,8 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenStatementsAndEOFToken?.raw,
       eofToken.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sourceFile,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.sourceFile,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5859,10 +5859,10 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   public func addStatement(_ element: CodeBlockItemSyntax) -> SourceFileSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.statements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.statements)
@@ -5973,8 +5973,8 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.initializerClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.initializerClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6156,8 +6156,8 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDefaultArgumentAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameter,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameter,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6209,10 +6209,10 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func addAttribute(_ element: Syntax) -> FunctionParameterSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.attributes] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.attributes)
@@ -6600,8 +6600,8 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndModifier?.raw,
       modifier?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessLevelModifier,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessLevelModifier,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6748,8 +6748,8 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingDot?.raw,
       trailingDot?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPathComponent,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPathComponent,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6902,8 +6902,8 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorParameter,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorParameter,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7100,8 +7100,8 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAccessorsAndRightBrace?.raw,
       rightBrace.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7195,10 +7195,10 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public func addAccessor(_ element: AccessorDeclSyntax) -> AccessorBlockSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.accessors] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.accessorList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.accessors)
@@ -7329,8 +7329,8 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAccessorAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBinding,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBinding,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7631,8 +7631,8 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenRawValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7883,8 +7883,8 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
       precedenceGroupAndDesignatedTypes.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.operatorPrecedenceAndTypes,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorPrecedenceAndTypes,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7981,10 +7981,10 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   public func addPrecedenceGroupAndDesignatedType(_ element: TokenSyntax) -> OperatorPrecedenceAndTypesSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.precedenceGroupAndDesignatedTypes] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.identifierList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.identifierList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.precedenceGroupAndDesignatedTypes)
@@ -8062,8 +8062,8 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndOtherNames?.raw,
       otherNames.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupRelation,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupRelation,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8207,10 +8207,10 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   public func addOtherName(_ element: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupRelationSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.otherNames] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.precedenceGroupNameList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.otherNames)
@@ -8280,8 +8280,8 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8438,8 +8438,8 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndFlag?.raw,
       flag.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssignment,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAssignment,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8647,8 +8647,8 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
       unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssociativity,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAssociativity,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8866,8 +8866,8 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentListAndRightParen?.raw,
       rightParen?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.customAttribute,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.customAttribute,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9051,10 +9051,10 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> CustomAttributeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.argumentList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.argumentList)
@@ -9199,8 +9199,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenRightParenAndTokenList?.raw,
       tokenList?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attribute,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.attribute,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9483,10 +9483,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public func addToken(_ element: TokenSyntax) -> AttributeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.tokenList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tokenList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.tokenList)
@@ -9577,8 +9577,8 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilityListAndSemicolon?.raw,
       semicolon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityEntry,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityEntry,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9717,10 +9717,10 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public func addAvailability(_ element: AvailabilityArgumentSyntax) -> AvailabilityEntrySyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.availabilityList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.availabilityList)
@@ -9851,8 +9851,8 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.labeledSpecializeEntry,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.labeledSpecializeEntry,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10112,8 +10112,8 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDeclnameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.targetFunctionEntry,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.targetFunctionEntry,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10367,8 +10367,8 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
       unexpectedBetweenColonAndStringOrDeclname?.raw,
       stringOrDeclname.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.namedAttributeStringArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.namedAttributeStringArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10561,8 +10561,8 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declName,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declName,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10732,8 +10732,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implementsAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.implementsAttributeArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10989,8 +10989,8 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndColon?.raw,
       colon?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelectorPiece,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelectorPiece,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11161,8 +11161,8 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
       unexpectedBetweenDiffParamsCommaAndWhereClause?.raw,
       whereClause?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiableAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiableAttributeArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11462,8 +11462,8 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
       unexpectedBetweenColonAndParameters?.raw,
       parameters.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamsClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamsClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11665,8 +11665,8 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDiffParamsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParams,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParams,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11761,10 +11761,10 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   public func addDifferentiabilityParam(_ element: DifferentiabilityParamSyntax) -> DifferentiabilityParamsSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.diffParams] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.differentiabilityParamList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.diffParams)
@@ -11881,8 +11881,8 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenParameterAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParam,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParam,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12064,8 +12064,8 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
       unexpectedBetweenCommaAndDiffParams?.raw,
       diffParams?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12467,8 +12467,8 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.qualifiedDeclName,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.qualifiedDeclName,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12718,8 +12718,8 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDeclName,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionDeclName,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12882,8 +12882,8 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       unexpectedBetweenColonAndVersionList?.raw,
       versionList.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployAttributeSpecList,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployAttributeSpecList,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13028,10 +13028,10 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   public func addAvailability(_ element: BackDeployVersionArgumentSyntax) -> BackDeployAttributeSpecListSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.versionList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.backDeployVersionList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.versionList)
@@ -13105,8 +13105,8 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13257,8 +13257,8 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereKeywordAndGuardResult?.raw,
       guardResult.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.whereClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.whereClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13416,8 +13416,8 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTrailingCommaAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.yieldList,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldList,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13511,10 +13511,10 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: ExprSyntax) -> YieldListSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elementList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.exprList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elementList)
@@ -13673,8 +13673,8 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenConditionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13833,8 +13833,8 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13971,10 +13971,10 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> AvailabilityConditionSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.availabilitySpec] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.availabilitySpec)
@@ -14101,8 +14101,8 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.matchingPatternCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.matchingPatternCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14351,8 +14351,8 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalBindingCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.optionalBindingCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14602,8 +14602,8 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unavailabilityCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unavailabilityCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14740,10 +14740,10 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> UnavailabilityConditionSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.availabilitySpec] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.availabilitySpec)
@@ -14852,8 +14852,8 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBeforeIfStatement?.raw,
       ifStatement.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseIfContinuation,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.elseIfContinuation,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14954,8 +14954,8 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenElseKeywordAndBody?.raw,
       body.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.elseBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15107,8 +15107,8 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenLabelAndStatements?.raw,
       statements.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCase,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCase,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15246,10 +15246,10 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   public func addStatement(_ element: CodeBlockItemSyntax) -> SwitchCaseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.statements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.statements)
@@ -15319,8 +15319,8 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDefaultKeywordAndColon?.raw,
       colon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchDefaultLabel,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchDefaultLabel,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15472,8 +15472,8 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15672,8 +15672,8 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15873,8 +15873,8 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenCaseItemsAndColon?.raw,
       colon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseLabel,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseLabel,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15968,10 +15968,10 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   public func addCaseItem(_ element: CaseItemSyntax) -> SwitchCaseLabelSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.caseItems] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.caseItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.caseItems)
@@ -16090,8 +16090,8 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenCatchItemsAndBody?.raw,
       body.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16186,10 +16186,10 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public func addCatchItem(_ element: CatchItemSyntax) -> CatchClauseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.catchItems] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.catchItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.catchItems)
@@ -16302,8 +16302,8 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereKeywordAndRequirementList?.raw,
       requirementList.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericWhereClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericWhereClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16397,10 +16397,10 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public func addRequirement(_ element: GenericRequirementSyntax) -> GenericWhereClauseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.requirementList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.genericRequirementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.requirementList)
@@ -16468,8 +16468,8 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenBodyAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16622,8 +16622,8 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sameTypeRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.sameTypeRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16850,8 +16850,8 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAlignmentAndRightParen?.raw,
       rightParen?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.layoutRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.layoutRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -17290,8 +17290,8 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenInheritedTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameter,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameter,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -17343,10 +17343,10 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public func addAttribute(_ element: Syntax) -> GenericParameterSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.attributes] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.attributes)
@@ -17595,8 +17595,8 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -17749,8 +17749,8 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -17844,10 +17844,10 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public func addGenericParameter(_ element: GenericParameterSyntax) -> GenericParameterClauseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.genericParameterList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.genericParameterList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.genericParameterList)
@@ -17966,8 +17966,8 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conformanceRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conformanceRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18164,8 +18164,8 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
       unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18259,10 +18259,10 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   public func addPrimaryAssociatedType(_ element: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.primaryAssociatedTypeList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.primaryAssociatedTypeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.primaryAssociatedTypeList)
@@ -18375,8 +18375,8 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeAndAmpersand?.raw,
       ampersand?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18559,8 +18559,8 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenInitializerAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18983,8 +18983,8 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19137,8 +19137,8 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentsAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19232,10 +19232,10 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: GenericArgumentSyntax) -> GenericArgumentClauseSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.arguments] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.genericArgumentList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.arguments)
@@ -19348,8 +19348,8 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndType?.raw,
       type.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeAnnotation,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeAnnotation,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19507,8 +19507,8 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenPatternAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19751,8 +19751,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEntryAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19914,8 +19914,8 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
       unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityLabeledArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityLabeledArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -20113,8 +20113,8 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
       unexpectedBetweenPlatformAndVersion?.raw,
       version?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityVersionRestriction,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestriction,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -20276,8 +20276,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenPatchPeriodAndPatchVersion?.raw,
       patchVersion?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.versionTuple,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.versionTuple,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }

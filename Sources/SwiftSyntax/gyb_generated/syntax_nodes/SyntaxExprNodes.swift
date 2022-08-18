@@ -38,8 +38,8 @@ public struct UnknownExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unknownExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unknownExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -81,8 +81,8 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missingExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -138,8 +138,8 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAmpersandAndExpression?.raw,
       expression.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inOutExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.inOutExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -279,8 +279,8 @@ public struct PoundColumnExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePoundColumn?.raw,
       poundColumn.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundColumnExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundColumnExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -387,8 +387,8 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenQuestionOrExclamationMarkAndExpression?.raw,
       expression.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tryExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tryExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -580,8 +580,8 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAwaitKeywordAndExpression?.raw,
       expression.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.awaitExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.awaitExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -727,8 +727,8 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenMoveKeywordAndExpression?.raw,
       expression.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.moveExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.moveExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -874,8 +874,8 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenIdentifierAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.identifierExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1016,8 +1016,8 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeSuperKeyword?.raw,
       superKeyword.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.superRefExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.superRefExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1112,8 +1112,8 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeNilKeyword?.raw,
       nilKeyword.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.nilLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.nilLiteralExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1208,8 +1208,8 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeWildcard?.raw,
       wildcard.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.discardAssignmentExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.discardAssignmentExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1304,8 +1304,8 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeAssignToken?.raw,
       assignToken.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.assignmentExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.assignmentExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1400,8 +1400,8 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeElements?.raw,
       elements.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sequenceExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.sequenceExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1452,10 +1452,10 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: ExprSyntax) -> SequenceExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.exprList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elements)
@@ -1515,8 +1515,8 @@ public struct PoundLineExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePoundLine?.raw,
       poundLine.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundLineExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundLineExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1611,8 +1611,8 @@ public struct PoundFileExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePoundFile?.raw,
       poundFile.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFileExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundFileExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1707,8 +1707,8 @@ public struct PoundFileIDExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePoundFileID?.raw,
       poundFileID.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFileIDExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundFileIDExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1803,8 +1803,8 @@ public struct PoundFilePathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePoundFilePath?.raw,
       poundFilePath.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFilePathExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundFilePathExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1899,8 +1899,8 @@ public struct PoundFunctionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePoundFunction?.raw,
       poundFunction.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFunctionExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundFunctionExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1995,8 +1995,8 @@ public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePoundDsohandle?.raw,
       poundDsohandle.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundDsohandleExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundDsohandleExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2097,8 +2097,8 @@ public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenIdentifierAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.symbolicReferenceExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.symbolicReferenceExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2245,8 +2245,8 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenOperatorTokenAndPostfixExpression?.raw,
       postfixExpression.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.prefixOperatorExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.prefixOperatorExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2387,8 +2387,8 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeOperatorToken?.raw,
       operatorToken.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.binaryOperatorExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.binaryOperatorExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2495,8 +2495,8 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenThrowsTokenAndArrowToken?.raw,
       arrowToken.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrowExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrowExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2695,8 +2695,8 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenOperatorOperandAndRightOperand?.raw,
       rightOperand.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.infixOperatorExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.infixOperatorExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2881,8 +2881,8 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeFloatingDigits?.raw,
       floatingDigits.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.floatLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.floatLiteralExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2989,8 +2989,8 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenElementListAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3084,10 +3084,10 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: TupleExprElementSyntax) -> TupleExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elementList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elementList)
@@ -3206,8 +3206,8 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenElementsAndRightSquare?.raw,
       rightSquare.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3301,10 +3301,10 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: ArrayElementSyntax) -> ArrayExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.arrayElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elements)
@@ -3423,8 +3423,8 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenContentAndRightSquare?.raw,
       rightSquare.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3609,8 +3609,8 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeDigits?.raw,
       digits.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.integerLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.integerLiteralExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3705,8 +3705,8 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeBooleanLiteral?.raw,
       booleanLiteral.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.booleanLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.booleanLiteralExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4023,8 +4023,8 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonMarkAndSecondChoice?.raw,
       secondChoice.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ternaryExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.ternaryExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4317,8 +4317,8 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberAccessExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberAccessExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4556,8 +4556,8 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenIsTokAndTypeName?.raw,
       typeName.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.isExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.isExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4709,8 +4709,8 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.raw,
       typeName.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.asExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.asExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4896,8 +4896,8 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeType?.raw,
       type.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5010,8 +5010,8 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenStatementsAndRightBrace?.raw,
       rightBrace.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5149,10 +5149,10 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addStatement(_ element: CodeBlockItemSyntax) -> ClosureExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.statements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.statements)
@@ -5261,8 +5261,8 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePattern?.raw,
       pattern.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unresolvedPatternExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unresolvedPatternExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5387,8 +5387,8 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
       additionalTrailingClosures?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionCallExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionCallExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5526,10 +5526,10 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.argumentList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.argumentList)
@@ -5677,10 +5677,10 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.additionalTrailingClosures] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.additionalTrailingClosures)
@@ -5780,8 +5780,8 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw,
       additionalTrailingClosures?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.subscriptExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.subscriptExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5918,10 +5918,10 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> SubscriptExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.argumentList] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.argumentList)
@@ -6068,10 +6068,10 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.additionalTrailingClosures] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.additionalTrailingClosures)
@@ -6147,8 +6147,8 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndQuestionMark?.raw,
       questionMark.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalChainingExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.optionalChainingExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6294,8 +6294,8 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndExclamationMark?.raw,
       exclamationMark.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.forcedValueExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.forcedValueExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6441,8 +6441,8 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndOperatorToken?.raw,
       operatorToken.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixUnaryExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.postfixUnaryExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6588,8 +6588,8 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndGenericArgumentClause?.raw,
       genericArgumentClause.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.specializeExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6753,8 +6753,8 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenCloseQuoteAndCloseDelimiter?.raw,
       closeDelimiter?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6892,10 +6892,10 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addSegment(_ element: Syntax) -> StringLiteralExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.segments] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.stringLiteralSegments,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.segments)
@@ -7050,8 +7050,8 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeRegex?.raw,
       regex.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.regexLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.regexLiteralExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7158,8 +7158,8 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenRootExprAndExpression?.raw,
       expression.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.keyPathExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7345,8 +7345,8 @@ public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforePeriod?.raw,
       period.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.keyPathBaseExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathBaseExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7459,8 +7459,8 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcKeyPathExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objcKeyPathExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7597,10 +7597,10 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addNamePiece(_ element: ObjcNamePieceSyntax) -> ObjcKeyPathExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.name] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.objcName,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.objcName,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.name)
@@ -7739,8 +7739,8 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcSelectorExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objcSelectorExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8068,8 +8068,8 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenBaseAndConfig?.raw,
       config.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixIfConfigExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.postfixIfConfigExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8210,8 +8210,8 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeIdentifier?.raw,
       identifier.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.editorPlaceholderExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.editorPlaceholderExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8324,8 +8324,8 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objectLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objectLiteralExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8462,10 +8462,10 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleExprElementSyntax) -> ObjectLiteralExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.arguments] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.arguments)

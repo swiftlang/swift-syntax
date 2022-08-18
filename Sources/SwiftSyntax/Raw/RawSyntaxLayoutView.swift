@@ -90,17 +90,6 @@ struct RawSyntaxLayout {
     insertingChild(newChild, at: raw.children.count, arena: arena)
   }
 
-  /// Creates a new RawSyntax with the provided child appended to its layout.
-  /// - Parameter child: The child to append
-  /// - Note: This function does nothing with `.token` nodes --- the same token
-  ///         is returned.
-  /// - Return: A new RawSyntax node with the provided child at the end.
-  // @available(*, deprecated, message: "use 'appending(_:arena:)'")
-  func appending(_ child: RawSyntax?) -> RawSyntax {
-    if raw.isToken { return raw }
-    return insertingChild(child, at: raw.children.count, arena: raw.arena)
-  }
-
   func replacingChildSubrange<C: Collection>(
     _ range: Range<Int>,
     with elements: C,

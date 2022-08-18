@@ -38,8 +38,8 @@ public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unknownType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unknownType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -81,8 +81,8 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missingType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -138,8 +138,8 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.simpleTypeIdentifier,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.simpleTypeIdentifier,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -298,8 +298,8 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndGenericArgumentClause?.raw,
       genericArgumentClause?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberTypeIdentifier,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberTypeIdentifier,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -530,8 +530,8 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeClassKeyword?.raw,
       classKeyword.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.classRestrictionType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.classRestrictionType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -638,8 +638,8 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenElementTypeAndRightSquareBracket?.raw,
       rightSquareBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -848,8 +848,8 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenValueTypeAndRightSquareBracket?.raw,
       rightSquareBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1136,8 +1136,8 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenPeriodAndTypeOrProtocol?.raw,
       typeOrProtocol.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.metatypeType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.metatypeType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1328,8 +1328,8 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWrappedTypeAndQuestionMark?.raw,
       questionMark.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.optionalType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1475,8 +1475,8 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenSomeOrAnySpecifierAndBaseType?.raw,
       baseType.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.constrainedSugarType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.constrainedSugarType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1622,8 +1622,8 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
       unexpectedBetweenWrappedTypeAndExclamationMark?.raw,
       exclamationMark.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implicitlyUnwrappedOptionalType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.implicitlyUnwrappedOptionalType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1763,8 +1763,8 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeElements?.raw,
       elements.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1815,10 +1815,10 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: CompositionTypeElementSyntax) -> CompositionTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.compositionTypeElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elements)
@@ -1890,8 +1890,8 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenElementsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1985,10 +1985,10 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: TupleTypeElementSyntax) -> TupleTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elements)
@@ -2131,8 +2131,8 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArrowAndReturnType?.raw,
       returnType.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2226,10 +2226,10 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addArgument(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.arguments] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.arguments)
@@ -2530,8 +2530,8 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAttributesAndBaseType?.raw,
       baseType.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attributedType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributedType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2627,10 +2627,10 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public func addAttribute(_ element: Syntax) -> AttributedTypeSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.attributes] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.attributes)

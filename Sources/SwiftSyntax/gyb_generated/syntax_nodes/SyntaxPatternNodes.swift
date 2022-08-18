@@ -38,8 +38,8 @@ public struct UnknownPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unknownPattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unknownPattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -81,8 +81,8 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missingPattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.missingPattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -150,8 +150,8 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenCaseNameAndAssociatedTuple?.raw,
       associatedTuple?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCasePattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCasePattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -389,8 +389,8 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenIsKeywordAndType?.raw,
       type.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.isTypePattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.isTypePattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -536,8 +536,8 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenSubPatternAndQuestionMark?.raw,
       questionMark.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalPattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.optionalPattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -677,8 +677,8 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeIdentifier?.raw,
       identifier.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierPattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.identifierPattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -785,8 +785,8 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAsKeywordAndType?.raw,
       type.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.asTypePattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.asTypePattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -983,8 +983,8 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenElementsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1078,10 +1078,10 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func addElement(_ element: TuplePatternElementSyntax) -> TuplePatternSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
-      collection = col.layoutView.appending(element.raw)
+      collection = col.layoutView.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tuplePatternElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elements)
@@ -1194,8 +1194,8 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWildcardAndTypeAnnotation?.raw,
       typeAnnotation?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.wildcardPattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.wildcardPattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1336,8 +1336,8 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBeforeExpression?.raw,
       expression.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionPattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.expressionPattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1438,8 +1438,8 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenLetOrVarKeywordAndValuePattern?.raw,
       valuePattern.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.valueBindingPattern,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.valueBindingPattern,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }

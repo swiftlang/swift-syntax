@@ -298,57 +298,12 @@ extension RawSyntax {
     return nil
   }
 
-  /// Creates a RawSyntax node that's marked missing in the source with the
-  /// provided kind and layout.
-  /// - Parameters:
-  ///   - kind: The syntax kind underlying this node.
-  ///   - layout: The children of this node.
-  /// - Returns: A new RawSyntax `.node` with the provided kind and layout, with
-  ///            `.missing` source presence.
-  // @available(*, deprecated, message: "use 'makeEmptyLayout()' with SyntaxArena")
-  static func missing(_ kind: SyntaxKind) -> RawSyntax {
-    .makeEmptyLayout(kind: kind, arena: .default)
-  }
-
-  /// Creates a RawSyntax token that's marked missing in the source with the
-  /// provided kind and no leading/trailing trivia.
-  /// - Parameter kind: The token kind.
-  /// - Returns: A new RawSyntax `.token` with the provided kind, no
-  ///            leading/trailing trivia, and `.missing` source presence.
-  // @available(*, deprecated, message: "use 'makeMissingToken()' with SyntaxArena")
-  static func missingToken(_ kind: TokenKind) -> RawSyntax {
-    .makeMissingToken(kind: kind, arena: .default)
-  }
-
-  /// Returns a new RawSyntax node with the provided layout instead of the
-  /// existing layout.
-  /// - Note: This function does nothing with `.token` nodes --- the same token
-  ///         is returned.
-  /// - Parameter newLayout: The children of the new node you're creating.
-  // @available(*, deprecated, message: "use 'replacingLayout(with:arena:)'")
-  func replacingLayout(_ layout: [RawSyntax?]) -> RawSyntax {
-    if isToken { return self }
-    return layoutView.replacingLayout(with: layout, arena: .default)
-  }
-
   /// Returns the child at the provided cursor in the layout.
   /// - Parameter index: The index of the child you're accessing.
   /// - Returns: The child at the provided index.
   subscript<CursorType: RawRepresentable>(_ index: CursorType) -> RawSyntax?
     where CursorType.RawValue == Int {
     return child(at: index.rawValue)
-  }
-
-  /// Replaces the child at the provided index in this node with the provided
-  /// child.
-  /// - Parameters:
-  ///   - index: The index of the child to replace.
-  ///   - newChild: The new child that should occupy that index in the node.
-  // @available(*, deprecated, message: "use 'replacingChild(at:with:arena:)'")
-  func replacingChild(_ index: Int,
-                      with newChild: RawSyntax?) -> RawSyntax {
-    if isToken { return self }
-    return layoutView.replacingChild(at: index, with: newChild, arena: .default)
   }
 }
 
@@ -538,13 +493,20 @@ extension RawSyntax {
     kind: TokenKind,
     leadingTrivia: Trivia,
     trailingTrivia: Trivia,
+    presence: SourcePresence = .present,
     arena: SyntaxArena
   ) -> RawSyntax {
     let decomposed = kind.decomposeToRaw()
     let rawKind = decomposed.rawKind
-    let text: SyntaxText = (decomposed.string.map({arena.intern($0)}) ??
-                            decomposed.rawKind.defaultText ??
-                            "")
+    let text: SyntaxText
+    switch presence {
+    case .present:
+      text = (decomposed.string.map({arena.intern($0)}) ??
+              decomposed.rawKind.defaultText ??
+              "")
+    case .missing:
+      text = SyntaxText()
+    }
 
     var byteLength = text.count
 
@@ -666,71 +628,6 @@ extension RawSyntax {
     .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
       _ = $0.initialize(from: collection)
     }
-  }
-}
-
-extension RawSyntax {
-  /// Convenience function to create a RawSyntax when its byte length is not
-  /// known in advance, e.g. it is programmatically constructed instead of
-  /// created by the parser.
-  ///
-  /// This is a separate function than in the initializer to make it more
-  /// explicit and visible in the code for the instances where we don't have
-  /// the length of the raw node already available.
-  // @available(*, deprecated, message: "use 'makeLayout()' with SyntaxArena")
-  static func createAndCalcLength(kind: SyntaxKind, layout: [RawSyntax?],
-      presence: SourcePresence) -> RawSyntax {
-    .makeLayout(kind: kind, from: layout, arena: .default)
-  }
-
-  /// Convenience function to create a RawSyntax when its byte length is not
-  /// known in advance, e.g. it is programmatically constructed instead of
-  /// created by the parser.
-  ///
-  /// This is a separate function than in the initializer to make it more
-  /// explicit and visible in the code for the instances where we don't have
-  /// the length of the raw node already available.
-  // @available(*, deprecated, message: "use 'makeMaterializedToken()' with SyntaxArena")
-  static func createAndCalcLength(kind: TokenKind, leadingTrivia: Trivia,
-      trailingTrivia: Trivia, presence: SourcePresence) -> RawSyntax {
-    let arena = SyntaxArena.default
-
-    // Translate 'TokenKind' to pure 'RawTokenKind'
-    let (rawTokenKind, tokenString) = kind.decomposeToRaw()
-    let tokenText: SyntaxText
-    if presence == .missing {
-      // If it's missing, the text should be empty.
-      tokenText = SyntaxText()
-    } else if tokenString != nil {
-      // If the TokenKind had a text. Copy it to the arena and use it.
-      tokenText = arena.intern(tokenString!)
-    } else {
-      // Otherwise, the token kind must have a default text.
-      // i.e. keyword or panctuator
-      tokenText = rawTokenKind.defaultText!
-    }
-
-    let triviaPieces = makeRawTriviaPieces(
-      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, arena: arena)
-
-    return .materializedToken(
-      kind: rawTokenKind, text: tokenText, triviaPieces: triviaPieces.pieces,
-      numLeadingTrivia: numericCast(leadingTrivia.count),
-      byteLength: numericCast(tokenText.count + triviaPieces.byteLength),
-      arena: arena)
-  }
-
-  /// Create a layout node using the programmatic APIs.
-  // @available(*, deprecated, message: "use 'makeLayout()' with SyntaxArena")
-  static func create(
-    kind: SyntaxKind,
-    layout: [RawSyntax?],
-    length: SourceLength,
-    presence: SourcePresence
-  ) -> RawSyntax {
-    let raw = createAndCalcLength(kind: kind, layout: layout, presence: presence)
-    assert(length.utf8Length == raw.totalLength.utf8Length)
-    return raw
   }
 }
 

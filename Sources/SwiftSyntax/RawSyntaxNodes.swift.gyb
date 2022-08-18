@@ -59,7 +59,7 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
 %   end
 %
 %   if node.is_syntax_collection():
-  public init(elements: [Raw${node.collection_element_type}], arena: SyntaxArena) {
+  public init(elements: [Raw${node.collection_element_type}], arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .${node.swift_syntax_kind}, uninitializedCount: elements.count, arena: arena) { layout in
       guard var ptr = layout.baseAddress else { return }
@@ -85,7 +85,7 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
 %       param_default = " = nil" if child.is_unexpected_nodes() else ""
     ${param_label}${child.swift_name}: ${param_type}${param_default},
 %     end
-    arena: SyntaxArena
+    arena: __shared SyntaxArena
   ) {
 %     if node.children:
     let raw = RawSyntax.makeLayout(

@@ -110,10 +110,16 @@ public class OperatorPrecedenceTests: XCTestCase {
         lowerThan: B
       }
 
+      precedencegroup D {
+        associativity: none
+      }
+
       infix operator +: A
       infix operator -: A
 
       infix operator *: C
+
+      infix operator ++: D
       """)
 
     var opPrecedence = OperatorPrecedence()
@@ -128,7 +134,7 @@ public class OperatorPrecedenceTests: XCTestCase {
         errors.append(error)
       }
 
-      XCTAssertEqual(errors.count, 1)
+      XCTAssertEqual(errors.count, 2)
       guard case let .missingGroup(groupName, location) = errors[0] else {
         XCTFail("expected a 'missing group' error")
         return
@@ -153,6 +159,44 @@ public class OperatorPrecedenceTests: XCTestCase {
       }
       XCTAssertEqual(operatorName, "/")
       _ = location
+    }
+
+    do {
+      var errors: [OperatorPrecedenceError] = []
+      let parsed = try Parser.parse(source: "a + b - c")
+      let sequenceExpr =
+        parsed.statements.first!.item.as(SequenceExprSyntax.self)!
+      _ = opPrecedence.fold(sequenceExpr) { error in
+        errors.append(error)
+      }
+
+      XCTAssertEqual(errors.count, 1)
+      guard case let .incomparableOperators(_, leftGroup, _, rightGroup) =
+              errors[0] else {
+        XCTFail("expected an 'incomparable operator' error")
+        return
+      }
+      XCTAssertEqual(leftGroup, "A")
+      XCTAssertEqual(rightGroup, "A")
+    }
+
+    do {
+      var errors: [OperatorPrecedenceError] = []
+      let parsed = try Parser.parse(source: "a ++ b - d")
+      let sequenceExpr =
+        parsed.statements.first!.item.as(SequenceExprSyntax.self)!
+      _ = opPrecedence.fold(sequenceExpr) { error in
+        errors.append(error)
+      }
+
+      XCTAssertEqual(errors.count, 1)
+      guard case let .incomparableOperators(_, leftGroup, _, rightGroup) =
+              errors[0] else {
+        XCTFail("expected an 'incomparable operator' error")
+        return
+      }
+      XCTAssertEqual(leftGroup, "D")
+      XCTAssertEqual(rightGroup, "A")
     }
   }
 }

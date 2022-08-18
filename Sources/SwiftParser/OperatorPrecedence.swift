@@ -140,6 +140,12 @@ public enum OperatorPrecedenceError: Error {
 
   /// The named operator is missing from the precedence graph.
   case missingOperator(OperatorName, referencedFrom: SyntaxProtocol?)
+
+  /// No associativity relationship between operators.
+  case incomparableOperators(
+    leftOperator: ExprSyntax, leftPrecedenceGroup: PrecedenceGroupName,
+    rightOperator: ExprSyntax, rightPrecedenceGroup: PrecedenceGroupName
+  )
 }
 
 /// A function that receives an operator precedence error and may do with it
@@ -1091,11 +1097,12 @@ extension OperatorPrecedence {
         //   - have the same precedence group with no associativity.
         if let op1Precedence = op1Precedence,
             let op2Precedence = op2Precedence {
-          if op1Precedence == op2Precedence {
-            // FIXME: Must be a nonassociative group, diagnose
-          } else {
-            // FIXME: Diagnose unrelated groups
-          }
+          try errorHandler(
+            .incomparableOperators(
+              leftOperator: op1, leftPrecedenceGroup: op1Precedence,
+              rightOperator: op2, rightPrecedenceGroup: op2Precedence
+            )
+          )
         }
 
         // Recover by folding arbitrarily at this operator, then continuing.

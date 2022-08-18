@@ -149,21 +149,12 @@ struct RawSyntaxLayoutView {
     }
   }
 
-  func child(at index: Int) -> RawSyntax? {
-    guard hasChild(at: index) else { return nil }
-    return children[index]
-  }
-
-  func hasChild(at index: Int) -> Bool {
-    children[index] != nil
-  }
-
   /// Returns the child at the provided cursor in the layout.
   /// - Parameter index: The index of the child you're accessing.
   /// - Returns: The child at the provided index.
   subscript<CursorType: RawRepresentable>(_ index: CursorType) -> RawSyntax?
     where CursorType.RawValue == Int {
-    return child(at: index.rawValue)
+    return children[index.rawValue]
   }
 
   /// The number of children, `present` or `missing`, in this node.

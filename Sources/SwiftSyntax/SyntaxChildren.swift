@@ -172,14 +172,14 @@ struct RawSyntaxChildren: BidirectionalCollection {
   }
 
   func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
-    let node = parent.layoutView!.child(at: Int(index.data!.indexInParent))
+    let node = parent.layoutView!.children[Int(index.data!.indexInParent)]
     return self.index(index, advancedBy: node)
   }
 
   func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
     if let index = index.data {
       // We are reversing a non-end index.
-      let previousNode = parent.layoutView!.child(at: Int(index.indexInParent - 1))
+      let previousNode = parent.layoutView!.children[Int(index.indexInParent - 1)]
       let previousNodeLength = UInt32(previousNode?.totalLength.utf8Length ?? 0)
       let reversedIndexInTree = index.indexInTree.reversedBy(previousNode)
       return SyntaxChildrenIndex(offset: index.offset - previousNodeLength,
@@ -231,7 +231,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
     // Accessing the end index is undefined. So we can assume a non-end index.
     let index = index.data!
 
-    let child = parent.layoutView!.child(at: Int(index.indexInParent))
+    let child = parent.layoutView!.children[Int(index.indexInParent)]
     let info = AbsoluteSyntaxInfo(index: index, rootId: rootId)
     return (child, info)
   }

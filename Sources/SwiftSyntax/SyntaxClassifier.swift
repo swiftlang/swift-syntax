@@ -118,8 +118,7 @@ fileprivate struct AbsoluteNode {
   var firstChild: AbsoluteNode? {
     guard let layoutView = raw.layoutView else { return nil }
     var curPos = position.advancedToFirstChild()
-    for i in 0..<layoutView.children.count {
-      let childOpt = layoutView.child(at: i)
+    for childOpt in layoutView.children {
       if let child = childOpt, viewMode.shouldTraverse(node: child) {
         return AbsoluteNode(raw: child, position: curPos, parent: self)
       }
@@ -130,9 +129,7 @@ fileprivate struct AbsoluteNode {
 
   func nextSibling(parent: AbsoluteNode) -> AbsoluteNode? {
     var curPos = position.advancedBySibling(raw)
-    let parentLayoutView = parent.raw.layoutView!
-    for i in Int(position.indexInParent+1) ..< parentLayoutView.children.count {
-      let siblingOpt = parent.raw.layoutView!.child(at: i)
+    for siblingOpt in parent.raw.layoutView!.children.dropFirst(Int(position.indexInParent + 1)) {
       if let sibling = siblingOpt, viewMode.shouldTraverse(node: sibling) {
         return AbsoluteNode(raw: sibling, position: curPos, parent: parent)
       }

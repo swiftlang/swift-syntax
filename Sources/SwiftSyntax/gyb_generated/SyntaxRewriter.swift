@@ -5713,7 +5713,7 @@ open class SyntaxRewriter {
           newLayout = ContiguousArray<RawSyntax?>()
           newLayout!.reserveCapacity(node.raw.layoutView!.children.count)
           for j in 0..<childIndex {
-            newLayout!.append(node.raw.layoutView!.child(at: j))
+            newLayout!.append(node.raw.layoutView!.children[j])
           }
         }
         

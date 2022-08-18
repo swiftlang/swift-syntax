@@ -16,7 +16,7 @@ public class SyntaxArena {
   public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
 
   /// Bump-pointer allocator for all "intern" methods.
-  private var allocator: BumpPtrAllocator
+  private let allocator: BumpPtrAllocator
   /// Source file buffer the Syntax tree represents.
   private var sourceBuffer: UnsafeBufferPointer<UInt8>
 

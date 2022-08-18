@@ -227,7 +227,7 @@ struct PrecedenceGraph {
             return .lowerThan
           }
 
-          if !groupsSeen.insert(otherGroupName).inserted {
+          if groupsSeen.insert(otherGroupName).inserted {
             stack.append((otherGroupName, relation.syntax))
           }
         }
@@ -254,7 +254,7 @@ struct PrecedenceGraph {
             return .higherThan
           }
 
-          if !groupsSeen.insert(otherGroupName).inserted {
+          if groupsSeen.insert(otherGroupName).inserted {
             stack.append((otherGroupName, relation.syntax))
           }
         }

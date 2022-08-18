@@ -61,6 +61,16 @@ public class OperatorPrecedenceTests: XCTestCase {
     """
     infix operator +
     infix operator +
+
+    precedencegroup A {
+      associativity: none
+      higherThan: B
+    }
+
+    precedencegroup A {
+      associativity: none
+      higherThan: B
+    }
     """
 
     let parsedOperatorPrecedence = try Parser.parse(source: sources)
@@ -71,7 +81,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       errors.append(error)
     }
 
-    XCTAssertEqual(errors.count, 1)
+    XCTAssertEqual(errors.count, 2)
     guard case let .operatorAlreadyExists(existing, new) = errors[0] else {
       XCTFail("expected an 'operator already exists' error")
       return
@@ -79,5 +89,70 @@ public class OperatorPrecedenceTests: XCTestCase {
 
     _ = existing
     _ = new
+
+    guard case let .groupAlreadyExists(existingGroup, newGroup) = errors[1] else {
+      XCTFail("expected a 'group already exists' error")
+      return
+    }
+    _ = newGroup
+    _ = existingGroup
+  }
+
+  func testFoldErrors() throws {
+    let parsedOperatorPrecedence = try Parser.parse(source:
+      """
+      precedencegroup A {
+        associativity: none
+      }
+
+      precedencegroup C {
+        associativity: none
+        lowerThan: B
+      }
+
+      infix operator +: A
+      infix operator -: A
+
+      infix operator *: C
+      """)
+
+    var opPrecedence = OperatorPrecedence()
+    try opPrecedence.addSourceFile(parsedOperatorPrecedence)
+
+    do {
+      var errors: [OperatorPrecedenceError] = []
+      let parsed = try Parser.parse(source: "a + b * c")
+      let sequenceExpr =
+        parsed.statements.first!.item.as(SequenceExprSyntax.self)!
+      _ = opPrecedence.fold(sequenceExpr) { error in
+        errors.append(error)
+      }
+
+      XCTAssertEqual(errors.count, 1)
+      guard case let .missingGroup(groupName, location) = errors[0] else {
+        XCTFail("expected a 'missing group' error")
+        return
+      }
+      XCTAssertEqual(groupName, "B")
+      _ = location
+    }
+
+    do {
+      var errors: [OperatorPrecedenceError] = []
+      let parsed = try Parser.parse(source: "a / c")
+      let sequenceExpr =
+        parsed.statements.first!.item.as(SequenceExprSyntax.self)!
+      _ = opPrecedence.fold(sequenceExpr) { error in
+        errors.append(error)
+      }
+
+      XCTAssertEqual(errors.count, 1)
+      guard case let .missingOperator(operatorName, location) = errors[0] else {
+        XCTFail("expected a 'missing operator' error")
+        return
+      }
+      XCTAssertEqual(operatorName, "/")
+      _ = location
+    }
   }
 }

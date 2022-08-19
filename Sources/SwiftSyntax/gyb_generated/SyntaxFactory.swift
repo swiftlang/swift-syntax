@@ -1154,23 +1154,23 @@ public enum SyntaxFactory {
       unexpectedBetweenFirstChoiceAndColonMark?.raw,
       colonMark.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unresolvedTernaryExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unresolvedTernaryExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     return UnresolvedTernaryExprSyntax(data)
   }
 
   @available(*, deprecated, message: "Use initializer on UnresolvedTernaryExprSyntax")
   public static func makeBlankUnresolvedTernaryExpr(presence: SourcePresence = .present) -> UnresolvedTernaryExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unresolvedTernaryExpr,
-      layout: [
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unresolvedTernaryExpr,
+      from: [
       nil,
-      RawSyntax.missingToken(TokenKind.infixQuestionMark),
+      RawSyntax.makeMissingToken(kind: TokenKind.infixQuestionMark, arena: .default),
       nil,
-      RawSyntax.missing(SyntaxKind.missingExpr),
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default),
       nil,
-      RawSyntax.missingToken(TokenKind.colon),
-    ], length: .zero, presence: presence))
+      RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default),
+    ], arena: .default))
     return UnresolvedTernaryExprSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TernaryExprSyntax")

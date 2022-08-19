@@ -3328,7 +3328,7 @@ open class SyntaxVisitor {
       let node = UnresolvedTernaryExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)

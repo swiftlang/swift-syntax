@@ -2618,6 +2618,10 @@ public struct RawBooleanLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     return raw.kind == .unresolvedTernaryExpr
   }
@@ -2656,22 +2660,22 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public var unexpectedBeforeQuestionMark: RawUnexpectedNodesSyntax? {
-    raw.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var questionMark: RawTokenSyntax {
-    raw.children[1].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   public var unexpectedBetweenQuestionMarkAndFirstChoice: RawUnexpectedNodesSyntax? {
-    raw.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var firstChoice: RawExprSyntax {
-    raw.children[3].map(RawExprSyntax.init(raw:))!
+    layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
   public var unexpectedBetweenFirstChoiceAndColonMark: RawUnexpectedNodesSyntax? {
-    raw.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var colonMark: RawTokenSyntax {
-    raw.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
 }
 

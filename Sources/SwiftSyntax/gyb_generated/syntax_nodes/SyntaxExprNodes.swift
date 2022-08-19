@@ -3813,8 +3813,8 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       unexpectedBetweenFirstChoiceAndColonMark?.raw,
       colonMark.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unresolvedTernaryExpr,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unresolvedTernaryExpr,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3861,7 +3861,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `questionMark`, if present.
   public func withQuestionMark(
     _ newChild: TokenSyntax?) -> UnresolvedTernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.infixQuestionMark)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.infixQuestionMark, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.questionMark)
     return UnresolvedTernaryExprSyntax(newData)
   }
@@ -3904,7 +3904,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `firstChoice`, if present.
   public func withFirstChoice(
     _ newChild: ExprSyntax?) -> UnresolvedTernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.firstChoice)
     return UnresolvedTernaryExprSyntax(newData)
   }
@@ -3947,7 +3947,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `colonMark`, if present.
   public func withColonMark(
     _ newChild: TokenSyntax?) -> UnresolvedTernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colonMark)
     return UnresolvedTernaryExprSyntax(newData)
   }

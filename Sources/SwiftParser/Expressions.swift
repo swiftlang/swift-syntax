@@ -42,23 +42,6 @@ extension Parser {
 }
 
 extension Parser {
-  struct PendingTernary {
-    var conditionExpression: RawExprSyntax
-    var questionMark: RawTokenSyntax
-    var firstChoice: RawExprSyntax
-    var unexpectedBeforeColon: RawUnexpectedNodesSyntax?
-    var colonMark: RawTokenSyntax
-    func withSecondChoice(_ sencondChoice: RawExprSyntax?, arena: SyntaxArena) -> RawTernaryExprSyntax {
-      return RawTernaryExprSyntax(
-        conditionExpression: conditionExpression,
-        questionMark: questionMark,
-        firstChoice: firstChoice,
-        unexpectedBeforeColon,
-        colonMark: colonMark,
-        secondChoice: sencondChoice ?? RawExprSyntax(RawMissingExprSyntax(arena: arena)),
-        arena: arena)
-    }
-  }
   /// Parse a sequence of expressions.
   ///
   /// Grammar
@@ -69,186 +52,193 @@ extension Parser {
   ///     infix-expression → conditional-operator try-operator? prefix-expression
   ///     infix-expression → type-casting-operator
   ///     infix-expressions → infix-expression infix-expressions?
-  ///
-  ///     assignment-operator → '='
-  ///     conditional-operator → '?' expression ':'
-  ///     type-casting-operator → 'is' type
-  ///     type-casting-operator → 'as' type
-  ///     type-casting-operator → 'as' '?' type
-  ///     type-casting-operator → 'as' '!' type
   @_spi(RawSyntax)
   public mutating func parseSequenceExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
     inVarOrLet: Bool = false
   ) -> RawExprSyntax {
+    if forDirective && self.currentToken.isAtStartOfLine {
+      return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+    }
+
+    // Parsed sequence elements except 'lastElement'.
     var elements = [RawExprSyntax]()
-    var pendingTernary: PendingTernary? = nil
-    var sequenceLoopCondition = LoopProgressCondition()
-    SEQUENCE_LOOP: while sequenceLoopCondition.evaluate(currentToken) {
-      if forDirective && self.currentToken.isAtStartOfLine {
-        break SEQUENCE_LOOP
+
+    // The last element parsed. we don't eagarly append to 'elements' because we
+    // don't want to populate the 'Array' unless the expression is actually
+    // sequenced.
+    var lastElement: RawExprSyntax
+
+    lastElement = self.parseSequenceExpressionElement(flavor, forDirective: forDirective)
+
+    var loopCondition = LoopProgressCondition()
+    while loopCondition.evaluate(currentToken) {
+      guard
+        !lastElement.is(RawMissingExprSyntax.self),
+        !(forDirective && self.currentToken.isAtStartOfLine)
+      else {
+        break
       }
 
-      // Parse a unary expression.
-      let unary = self.parseSequenceExpressionElement(flavor, forDirective: forDirective)
-      if unary.is(RawMissingExprSyntax.self) {
-        if !elements.isEmpty {
-          // If there are elements queued up we need to yield them all.
-          if let pendingTernary = pendingTernary {
-            elements.append(RawExprSyntax(pendingTernary.withSecondChoice(nil, arena: self.arena)))
-          }
-          return RawExprSyntax(RawSequenceExprSyntax(
-            elements: RawExprListSyntax(elements: elements, arena: self.arena),
-            arena: self.arena))
-        } else if let pendingTernary = pendingTernary {
-          // Okay, so there aren't any items, but we have a ternary expression
-          // to yield.
-          return RawExprSyntax(pendingTernary.withSecondChoice(nil, arena: self.arena))
-        } else {
-          // No items, no ternary expression, no other choice but to propagate
-          // our failure upwards.
-          return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
-        }
-      }
-      elements.append(unary)
-
-      // We know we can make a syntax node for ternary expression.
-      if let ternary = pendingTernary {
-        elements.append(RawExprSyntax(ternary.withSecondChoice(elements.popLast(), arena: self.arena)))
-        pendingTernary = nil
+      // Parse the operator.
+      guard
+        let (operatorExpr, rhsExpr) =
+          self.parseSequenceExpressionOperator(flavor, inVarOrLet: inVarOrLet)
+      else {
+        // Not an operator. We're done.
+        break
       }
 
-      if forDirective && self.currentToken.isAtStartOfLine {
-        break SEQUENCE_LOOP
-      }
+      elements.append(lastElement)
+      elements.append(operatorExpr)
 
-      var operatorLoopCondition = LoopProgressCondition()
-      OPERATOR_LOOP: while operatorLoopCondition.evaluate(currentToken) {
-        switch self.currentToken.tokenKind {
-        case .spacedBinaryOperator, .unspacedBinaryOperator:
-          // If this is an "&& #available()" expression (or related things that
-          // show up in a stmt-condition production), then don't eat it.
-          //
-          // These are not general expressions, and && is an infix operator,
-          // so the code is invalid.  We get better recovery if we bail out from
-          // this, because then we can produce a fixit to rewrite the && into a ,
-          // if we're in a stmt-condition.
-          if self.currentToken.tokenText == "&&"
-              && [RawTokenKind.poundAvailableKeyword, .poundUnavailableKeyword, .letKeyword, .varKeyword, .caseKeyword]
-            .contains(self.peek().tokenKind)   {
-            break SEQUENCE_LOOP
-          }
-
-          // Parse the operator.
-          let operatorToken = self.parseOperatorExpression()
-          elements.append(RawExprSyntax(RawBinaryOperatorExprSyntax(operatorToken: operatorToken, arena: self.arena)))
-          break OPERATOR_LOOP
-        case .infixQuestionMark:
-          // Save the '?'.
-          let question = self.eat(.infixQuestionMark)
-          let firstChoice = self.parseSequenceExpression(flavor)
-
-          // Make sure there's a matching ':' after the middle expr.
-          let (unexpectedBeforeColon, colon) = self.expect(.colon)
-
-          let condition = elements.popLast()!
-          pendingTernary = PendingTernary(
-            conditionExpression: condition,
-            questionMark: question,
-            firstChoice: RawExprSyntax(firstChoice),
-            unexpectedBeforeColon: unexpectedBeforeColon,
-            colonMark: colon)
-
-          // If the colon is missing there's not much more structure we can
-          // expect out of this expression sequence. Push the pending ternary
-          // node on and break out to end parsing here.
-          if colon.isMissing {
-            elements.append(RawExprSyntax(pendingTernary!.withSecondChoice(nil, arena: self.arena)))
-            break SEQUENCE_LOOP
-          }
-          break OPERATOR_LOOP
-        case .equal:
-          guard !inVarOrLet else {
-            break SEQUENCE_LOOP
-          }
-
-          let eq = self.eat(.equal)
-          elements.append(RawExprSyntax(RawAssignmentExprSyntax(
-            assignToken: eq,
-            arena: self.arena)))
-          break OPERATOR_LOOP
-        case .isKeyword:
-          let isKeyword = self.eat(.isKeyword)
-          let type = self.parseType()
-          elements.append(RawExprSyntax(RawIsExprSyntax(
-            isTok: isKeyword, typeName: type,
-            arena: self.arena)))
-          // We already parsed the right operand as part of the 'is' production.
-          // Jump directly to parsing another operator.
-          continue
-        case .asKeyword:
-          let asKeyword = self.eat(.asKeyword)
-          let failable: RawTokenSyntax?
-          if self.at(.postfixQuestionMark) || self.at(.exclamationMark) {
-            failable = self.consumeAnyToken()
-          } else {
-            failable = nil
-          }
-          let type = self.parseType()
-          elements.append(RawExprSyntax(RawAsExprSyntax(
-            asTok: asKeyword,
-            questionOrExclamationMark: failable,
-            typeName: type,
-            arena: self.arena)))
-          // We already parsed the right operand as part of the 'as' production.
-          // Jump directly to parsing another operator.
-          continue
-        case .identifier:
-          // 'async' followed by 'throws' or '->' implies that we have an arrow
-          // expression.
-          guard
-            self.currentToken.isContextualKeyword("async"),
-            (self.peek().tokenKind == .arrow || self.peek().tokenKind == .throwsKeyword)
-          else {
-            break SEQUENCE_LOOP
-          }
-          fallthrough
-        case .arrow, .throwsKeyword:
-          let asyncKeyword: RawTokenSyntax?
-          if self.currentToken.isContextualKeyword("async") {
-            asyncKeyword = self.consume(remapping: .contextualKeyword)
-          } else {
-            asyncKeyword = nil
-          }
-
-          let throwsKeyword = self.consume(if: .throwsKeyword)
-          let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
-
-          elements.append(RawExprSyntax(RawArrowExprSyntax(
-            asyncKeyword: asyncKeyword,
-            throwsToken: throwsKeyword,
-            unexpectedBeforeArrow,
-            arrowToken: arrow,
-            arena: self.arena)))
-          break OPERATOR_LOOP
-
-        default:
-          // If the next token is not a binary operator, we're done.
-          break SEQUENCE_LOOP
-        }
+      if let rhsExpr = rhsExpr {
+        // Operator parsing returned the RHS.
+        lastElement = rhsExpr
+      } else if forDirective && self.currentToken.isAtStartOfLine {
+        // Don't allow RHS at a newline for `#if` conditions.
+        lastElement = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+        break
+      } else {
+        lastElement = self.parseSequenceExpressionElement(flavor, forDirective: forDirective)
       }
     }
 
-    // If we saw no operators, don't build a sequence.
-    if elements.count == 1, let first = elements.first {
-      return first
+    // There was no operators. Return the only element we parsed.
+    if elements.isEmpty {
+      return lastElement
     }
+
+    assert(elements.count.isMultiple(of: 2),
+           "elements must have a even number of elements")
+
+    elements.append(lastElement)
+
     return RawExprSyntax(RawSequenceExprSyntax(
       elements: RawExprListSyntax(elements: elements, arena: self.arena),
       arena: self.arena))
   }
 
+  /// Parse an expression sequence operators.
+  ///
+  /// Returns `nil` if the current token is not at an operator.
+  /// Returns a tuple of an operator expression and a optional right operand
+  /// expression. The right operand is only returned if it is not a common
+  /// sequence element.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     infix-operator → operator
+  ///     assignment-operator → '='
+  ///     conditional-operator → '?' expression ':'
+  ///     type-casting-operator → 'is' type
+  ///     type-casting-operator → 'as' type
+  ///     type-casting-operator → 'as' '?' type
+  ///     type-casting-operator → 'as' '!' type
+  ///     arrow-operator -> 'async' '->'
+  ///     arrow-operator -> 'throws' '->'
+  ///     arrow-operator -> 'async' 'throws' '->'
+  mutating func parseSequenceExpressionOperator(
+    _ flavor: ExprFlavor, inVarOrLet: Bool
+  ) -> (operator: RawExprSyntax, rhs: RawExprSyntax?)? {
+    switch self.currentToken.tokenKind {
+    case .spacedBinaryOperator, .unspacedBinaryOperator:
+      // Parse the operator.
+      let operatorToken = self.consumeAnyToken()
+      let op = RawBinaryOperatorExprSyntax(operatorToken: operatorToken, arena: arena)
+      return (RawExprSyntax(op), nil)
+
+    case .infixQuestionMark:
+      // Save the '?'.
+      let question = self.eat(.infixQuestionMark)
+      let firstChoice = self.parseSequenceExpression(flavor)
+      // Make sure there's a matching ':' after the middle expr.
+      let (unexpectedBeforeColon, colon) = self.expect(.colon)
+
+      let op = RawUnresolvedTernaryExprSyntax(
+        questionMark: question,
+        firstChoice: firstChoice,
+        unexpectedBeforeColon,
+        colonMark: colon,
+        arena: self.arena)
+
+      let rhs: RawExprSyntax?
+      if colon.isMissing {
+        // If the colon is missing there's not much more structure we can
+        // expect out of this expression sequence. Emit a missing expression
+        // to end the parsing here.
+        rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+      } else {
+        rhs = nil
+      }
+      return (RawExprSyntax(op), rhs)
+
+    case .equal where !inVarOrLet:
+      let eq = self.eat(.equal)
+      let op = RawAssignmentExprSyntax(assignToken: eq, arena: self.arena)
+      return (RawExprSyntax(op), nil)
+
+    case .isKeyword:
+      let isKeyword = self.eat(.isKeyword)
+      let op = RawUnresolvedIsExprSyntax(isTok: isKeyword, arena: self.arena)
+
+      // Parse the right type expression operand as part of the 'is' production.
+      let type = self.parseType()
+      let rhs = RawTypeExprSyntax(type: type, arena: self.arena)
+
+      return (RawExprSyntax(op), RawExprSyntax(rhs))
+
+    case .asKeyword:
+      let asKeyword = self.eat(.asKeyword)
+      let failable: RawTokenSyntax?
+      if self.at(.postfixQuestionMark) || self.at(.exclamationMark) {
+        failable = self.consumeAnyToken()
+      } else {
+        failable = nil
+      }
+      let op = RawUnresolvedAsExprSyntax(
+        asTok: asKeyword, questionOrExclamationMark: failable, arena: self.arena)
+
+      // Parse the right type expression operand as part of the 'as' production.
+      let type = self.parseType()
+      let rhs = RawTypeExprSyntax(type: type, arena: self.arena)
+
+      return (RawExprSyntax(op), RawExprSyntax(rhs))
+
+    case .identifier:
+      guard
+        self.currentToken.isContextualKeyword("async"),
+        (self.peek().tokenKind == .arrow || self.peek().tokenKind == .throwsKeyword) else {
+        return nil
+      }
+      fallthrough
+    case .arrow, .throwsKeyword:
+      let asyncKeyword: RawTokenSyntax?
+      if self.currentToken.isContextualKeyword("async") {
+        asyncKeyword = self.consume(remapping: .contextualKeyword)
+      } else {
+        asyncKeyword = nil
+      }
+
+      let throwsKeyword = self.consume(if: .throwsKeyword)
+      let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
+
+      let op = RawArrowExprSyntax(
+        asyncKeyword: asyncKeyword,
+        throwsToken: throwsKeyword,
+        unexpectedBeforeArrow,
+        arrowToken: arrow,
+        arena: self.arena)
+
+      return (RawExprSyntax(op), nil)
+
+    default:
+      // Not an operator.
+      return nil
+    }
+  }
 
   /// Parse an expression sequence element.
   ///
@@ -328,7 +318,7 @@ extension Parser {
       return RawExprSyntax(self.parseKeyPathExpression(forDirective: forDirective))
 
     case .prefixOperator:
-      let op = self.parseOperatorExpression()
+      let op = self.eat(.prefixOperator)
       let postfix = self.parseUnaryExpression(flavor, forDirective: forDirective)
       return RawExprSyntax(RawPrefixOperatorExprSyntax(
         operatorToken: op, postfixExpression: postfix,
@@ -338,12 +328,6 @@ extension Parser {
       // If the next token is not an operator, just parse this as expr-postfix.
       return self.parsePostfixExpression(flavor, forDirective: forDirective)
     }
-  }
-
-  @_spi(RawSyntax)
-  public mutating func parseOperatorExpression() -> RawTokenSyntax {
-    assert(self.currentToken.isAnyOperator)
-    return self.consumeAnyToken()
   }
 
   /// Parse a postfix expression applied to another expression.
@@ -590,7 +574,7 @@ extension Parser {
         //        if (periodHasKeyPathBehavior && startsWithSymbol(Tok, '.'))
         //          break
 
-        let op = self.parseOperatorExpression()
+        let op = self.eat(.postfixOperator)
         leadingExpr = RawExprSyntax(RawPostfixUnaryExprSyntax(
           expression: leadingExpr, operatorToken: op,
           arena: self.arena))

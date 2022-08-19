@@ -8,9 +8,22 @@ final class ExpressionTests: XCTestCase {
       "let a ="
     }
 
-    try AssertParse({ $0.parseExpression() }) {
+    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
        """
        a ? b : c ? d : e
+       """
+    }
+    try AssertParse({ $0.parseExpression() }) {
+       """
+       a ? b :
+       """
+    }
+  }
+
+  func testSequence() throws {
+    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
+       """
+       A as? B + C -> D is E as! F ? G = 42 : H
        """
     }
   }

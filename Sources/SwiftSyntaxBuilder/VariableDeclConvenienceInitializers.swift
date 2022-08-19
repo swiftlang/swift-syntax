@@ -13,6 +13,7 @@
 import SwiftSyntax
 
 extension VariableDecl {
+  /// Creates an optionally initialized property.
   public init(
     leadingTrivia: Trivia = [],
     _ letOrVarKeyword: TokenSyntax,
@@ -25,6 +26,23 @@ extension VariableDecl {
         pattern: name,
         typeAnnotation: type,
         initializer: initializer
+      )
+    }
+  }
+
+  /// Creates a computed property with the given accessor.
+  public init(
+    leadingTrivia: Trivia = [],
+    modifiers: ModifierList? = nil,
+    name: ExpressibleAsIdentifierPattern,
+    type: ExpressibleAsTypeAnnotation,
+    @CodeBlockItemListBuilder accessor: () -> ExpressibleAsCodeBlockItemList
+  ) {
+    self.init(leadingTrivia: leadingTrivia, modifiers: modifiers, letOrVarKeyword: .var) {
+      PatternBinding(
+        pattern: name,
+        typeAnnotation: type,
+        accessor: CodeBlock(statements: accessor())
       )
     }
   }

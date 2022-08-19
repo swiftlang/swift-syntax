@@ -118,8 +118,6 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     textRange: Range<SyntaxText.Index>,
     arena: __shared SyntaxArena
   ) {
-    assert(arena.contains(text: wholeText),
-           "token text must be managed by the arena")
     let raw = RawSyntax.parsedToken(
       kind: kind, wholeText: wholeText, textRange: textRange, arena: arena)
     self = RawTokenSyntax(raw: raw)
@@ -134,25 +132,16 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     trailingTriviaPieces: [RawTriviaPiece],
     arena: __shared SyntaxArena
   ) {
-    assert(arena.contains(text: text), "token text must be managed by the arena")
-    let totalTriviaCount = leadingTriviaPieces.count + trailingTriviaPieces.count
-    let buffer = arena.allocateRawTriviaPieceBuffer(count: totalTriviaCount)
-    var byteLength = text.count
-    if totalTriviaCount != 0 {
-      var ptr = buffer.baseAddress!
-      for piece in leadingTriviaPieces + trailingTriviaPieces {
-        assert(piece.storedText.map(arena.contains(text:)) ?? true,
-               "trivia text must be managed by the arena")
-        byteLength += piece.byteLength
-        ptr.initialize(to: piece)
-        ptr = ptr.advanced(by: 1)
-      }
-    }
-    let raw = RawSyntax.materializedToken(
-      kind: kind, text: text, triviaPieces: RawTriviaPieceBuffer(buffer),
-      numLeadingTrivia: numericCast(leadingTriviaPieces.count),
-      byteLength: numericCast(byteLength),
-      arena: arena)
+    let raw = RawSyntax.makeMaterializedToken(
+      kind: kind, text: text,
+      leadingTriviaPieceCount: leadingTriviaPieces.count,
+      trailingTriviaPieceCount: trailingTriviaPieces.count,
+      arena: arena,
+      initializingLeadingTriviaWith: { buffer in
+        _ = buffer.initialize(from: leadingTriviaPieces)
+      }, initializingTrailingTriviaWith: { buffer in
+        _ = buffer.initialize(from: trailingTriviaPieces)
+      })
     self = RawTokenSyntax(raw: raw)
   }
 

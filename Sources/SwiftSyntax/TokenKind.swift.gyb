@@ -149,16 +149,6 @@ public enum RawTokenKind: Equatable, Hashable {
   case ${token.swift_kind()}
 % end
 
-  static func fromRawValue(_ rawValue: CTokenKind) -> RawTokenKind {
-    switch rawValue {
-    case 0: return .eof
-% for token in SYNTAX_TOKENS:
-    case ${token.serialization_code}: return .${token.swift_kind()}
-% end
-    default: fatalError("unknown raw value")
-    }
-  }
-
   var defaultText: SyntaxText? {
     switch self {
     case .eof: return ""

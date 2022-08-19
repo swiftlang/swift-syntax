@@ -19,11 +19,12 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-internal enum SyntaxKind: CSyntaxKind {
-  case token = 0
-  case unknown = 1
+@_spi(RawSyntax)
+public enum SyntaxKind {
+  case token
+  case unknown
 % for node in NON_BASE_SYNTAX_NODES:
-  case ${node.swift_syntax_kind} = ${SYNTAX_NODE_SERIALIZATION_CODES[node.syntax_kind]}
+  case ${node.swift_syntax_kind}
 % end
 
   var isSyntaxCollection: Bool {
@@ -60,11 +61,5 @@ internal enum SyntaxKind: CSyntaxKind {
     case .missing: return true
     default: return false
     }
-  }
-}
-
-extension SyntaxKind {
-  static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
-    return SyntaxKind(rawValue: rawValue)!
   }
 }

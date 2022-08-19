@@ -498,41 +498,6 @@ extension RawTriviaPiece {
 }
 
 extension RawTriviaPiece {
-  static func fromRawValue(kind: UInt8, text: SyntaxText) -> RawTriviaPiece {
-    switch kind {
-    case 0:
-      return .spaces(text.count)
-    case 1:
-      return .tabs(text.count)
-    case 2:
-      return .verticalTabs(text.count)
-    case 3:
-      return .formfeeds(text.count)
-    case 4:
-      return .newlines(text.count)
-    case 5:
-      return .carriageReturns(text.count)
-    case 6:
-      return .carriageReturnLineFeeds(text.count / 2)
-    case 8:
-      return .lineComment(text)
-    case 9:
-      return .blockComment(text)
-    case 10:
-      return .docLineComment(text)
-    case 11:
-      return .docBlockComment(text)
-    case 12:
-      return .unexpectedText(text)
-    case 13:
-      return .shebang(text)
-    default:
-      fatalError("unexpected trivia piece kind \(kind)")
-    }
-  }
-}
-
-extension RawTriviaPiece {
   /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
   public var isNewline: Bool {
     switch self {

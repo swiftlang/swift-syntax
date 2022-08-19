@@ -687,8 +687,13 @@ public struct SyntaxNode {
     self.parents = parents
   }
 
-  internal var raw: RawSyntax {
+  var raw: RawSyntax {
     return absoluteRaw.raw
+  }
+
+  @_spi(RawSyntax)
+  public func withUnsafeRawSyntax<R>(_ body: (RawSyntax) throws -> R) rethrows -> R {
+    return try body(raw)
   }
 
   /// Converts this node to a `SyntaxData` object.

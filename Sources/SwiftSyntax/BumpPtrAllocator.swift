@@ -20,18 +20,19 @@ public class BumpPtrAllocator {
   static private var SLAB_ALIGNMENT: Int = 8
 
   private var slabs: [Slab]
-  /// Points to the next unused address in `slabs.last`.
-  private var currentPtr: UnsafeMutableRawPointer?
-  /// Points to the end address of `slabs.last`. If `slabs` is not empty, this
-  /// is equivalent to `slabs.last!.baseAddress! + slabs.last!.count`
-  private var endPtr: UnsafeMutableRawPointer?
+  /// Pair of pointers in the current slab.
+  /// - pointer: Points to the next unused address in `slabs.last`.
+  /// - end: Points to the end address of `slabs.last`. This is equivalent to
+  ///        `slabs.last!.baseAddress! + slabs.last!.count`
+  /// 'nil' if `slabs` is empty.
+  private var current: (pointer: UnsafeMutableRawPointer,
+                        end: UnsafeMutableRawPointer)?
   private var customSizeSlabs: [Slab]
   private var _totalBytesAllocated: Int
 
   public init() {
     slabs = []
-    currentPtr = nil
-    endPtr = nil
+    current = nil
     customSizeSlabs = []
     _totalBytesAllocated = 0
   }
@@ -39,8 +40,7 @@ public class BumpPtrAllocator {
   deinit {
     /// Deallocate all memory.
     _totalBytesAllocated = 0
-    currentPtr = nil
-    endPtr = nil
+    current = nil
     while let slab = slabs.popLast() {
       slab.deallocate()
     }
@@ -59,9 +59,28 @@ public class BumpPtrAllocator {
     let newSlabSize = Self.slabSize(at: slabs.count)
     let newSlab = Slab.allocate(
       byteCount: newSlabSize, alignment: Self.SLAB_ALIGNMENT)
+    let pointer = newSlab.baseAddress!
+    current = (pointer, pointer.advanced(by: newSlabSize))
     slabs.append(newSlab)
-    currentPtr = newSlab.baseAddress!
-    endPtr = currentPtr!.advanced(by: newSlabSize)
+  }
+
+  /// Allocate 'byteCount' of memory from the current slab if available.
+  private func allocateFromCurrentSlab(
+    _ byteCount: Int,
+    _ alignment: Int
+  ) -> UnsafeMutableRawBufferPointer? {
+    guard let current = self.current else {
+      return nil
+    }
+
+    let aligned = current.pointer.alignedUp(toMultipleOf: alignment)
+    guard byteCount <= aligned.distance(to: current.end) else {
+      return nil
+    }
+
+    // Bump the pointer, and return the allocated buffer.
+    self.current = (aligned + byteCount, current.end)
+    return .init(start: aligned, count: byteCount)
   }
 
   /// Allocate 'byteCount' of memory.
@@ -70,7 +89,7 @@ public class BumpPtrAllocator {
   /// Clients should never call `deallocate()` on the returned buffer.
   public func allocate(byteCount: Int, alignment: Int) -> UnsafeMutableRawBufferPointer {
 
-    precondition(alignment <= Self.SLAB_ALIGNMENT)
+    assert(alignment <= Self.SLAB_ALIGNMENT)
     guard byteCount > 0 else {
       return .init(start: nil, count: 0)
     }
@@ -79,12 +98,8 @@ public class BumpPtrAllocator {
     _totalBytesAllocated += byteCount
 
     // Check if the current slab has enough space.
-    if !slabs.isEmpty {
-      let aligned = currentPtr!.alignedUp(toMultipleOf: alignment)
-      if aligned + byteCount <= endPtr! {
-        currentPtr = aligned + byteCount
-        return .init(start: aligned, count: byteCount)
-      }
+    if let allocated = allocateFromCurrentSlab(byteCount, alignment) {
+      return allocated
     }
 
     // If the size is too big, allocate a dedicated slab for it.
@@ -97,10 +112,10 @@ public class BumpPtrAllocator {
 
     // Otherwise, start a new slab and try again.
     startNewSlab()
-    let aligned = currentPtr!.alignedUp(toMultipleOf: alignment)
-    assert(aligned + byteCount <= endPtr!, "Unable to allocate memory!")
-    currentPtr = aligned + byteCount
-    return .init(start: aligned, count: byteCount)
+    if let allocated = allocateFromCurrentSlab(byteCount, alignment) {
+      return allocated
+    }
+    fatalError("Unable to allocate memory!")
   }
 
   /// Allocate a chunk of bound memory of `MemoryLayout<T>.stride * count'.

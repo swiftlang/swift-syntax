@@ -15,12 +15,13 @@ import SwiftSyntax
 extension VariableDecl {
   public init(
     leadingTrivia: Trivia = [],
+    modifiers: ModifierList? = nil,
     _ letOrVarKeyword: TokenSyntax,
     name: ExpressibleAsIdentifierPattern,
     type: ExpressibleAsTypeAnnotation? = nil,
     initializer: ExpressibleAsInitializerClause? = nil
   ) {
-    self.init(leadingTrivia: leadingTrivia, letOrVarKeyword: letOrVarKeyword) {
+    self.init(leadingTrivia: leadingTrivia, modifiers: modifiers, letOrVarKeyword: letOrVarKeyword) {
       PatternBinding(
         pattern: name,
         typeAnnotation: type,

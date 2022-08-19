@@ -45,6 +45,8 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
+    .library(name: "SwiftOperatorPrecedence", type: .static,
+             targets: ["SwiftOperatorPrecedence"]),
     .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
@@ -118,6 +120,10 @@ let package = Package(
         "DeclarationAttribute.swift.gyb",
       ]
     ),
+    .target(
+      name: "SwiftOperatorPrecedence",
+      dependencies: ["SwiftSyntax", "SwiftParser"]
+    ),
     .executableTarget(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
@@ -172,6 +178,10 @@ let package = Package(
     .testTarget(
       name: "SwiftParserTest",
       dependencies: ["SwiftDiagnostics", "SwiftParser", "_SwiftSyntaxTestSupport"]
+    ),
+    .testTarget(
+      name: "SwiftOperatorPrecedenceTest",
+      dependencies: ["SwiftOperatorPrecedence", "_SwiftSyntaxTestSupport"]
     ),
   ]
 )

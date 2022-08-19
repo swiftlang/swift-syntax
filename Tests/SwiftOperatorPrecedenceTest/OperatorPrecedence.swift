@@ -1,6 +1,7 @@
 import XCTest
 import SwiftSyntax
 import SwiftParser
+import SwiftOperatorPrecedence
 
 public class OperatorPrecedenceTests: XCTestCase {
   func testLogicalExprs() throws {

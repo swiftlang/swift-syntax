@@ -158,15 +158,15 @@ extension RawSyntax {
   }
 
   var recursiveFlags: RecursiveRawSyntaxFlags {
-    switch rawData.payload {
-    case .materializedToken, .parsedToken:
+    switch view {
+    case .token(let tokenView):
       var recursiveFlags: RecursiveRawSyntaxFlags = []
-      if presence == .missing {
+      if tokenView.presence == .missing {
         recursiveFlags.insert(.hasError)
       }
       return recursiveFlags
-    case .layout(let dat):
-      return dat.recursiveFlags
+    case .layout(let layoutView):
+      return layoutView.layoutData.recursiveFlags
     }
   }
 
@@ -179,26 +179,6 @@ extension RawSyntax {
     case .layout(let dat):
       return dat.descendantCount + 1
     }
-  }
-
-  var presence: SourcePresence {
-    if self.byteLength != 0 {
-      // The node has source text associated with it. It's present.
-      return .present
-    }
-    if self.isCollection || self.isUnknown {
-      // We always consider collections 'present' because they can just be empty.
-      return .present
-    }
-    if isToken && (self.tokenView!.rawKind == .eof || self.tokenView!.rawKind == .stringSegment) {
-      // The end of file token never has source code associated with it but we
-      // still consider it valid.
-      // String segments can be empty if they occur in an empty string literal or in between two interpolation segments.
-      return .present
-    }
-
-    // If none of the above apply, the node is missing.
-    return .missing
   }
 
   /// The "width" of the node.

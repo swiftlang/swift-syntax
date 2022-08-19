@@ -119,12 +119,11 @@ public extension SyntaxProtocol {
       return .nodeType
     }
 
-    if isPresent != baseline.isPresent {
-      return .presence
-    }
-
     if isToken {
       if let token = Syntax(self).as(TokenSyntax.self), let baselineToken = Syntax(baseline).as(TokenSyntax.self) {
+        if token.presence != baselineToken.presence {
+          return .presence
+        }
         if token.tokenKind != baselineToken.tokenKind {
           return .token
         }

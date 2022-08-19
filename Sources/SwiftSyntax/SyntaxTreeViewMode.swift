@@ -31,7 +31,10 @@ public enum SyntaxTreeViewMode {
   func shouldTraverse(node: RawSyntax) -> Bool {
     switch self {
     case .sourceAccurate:
-      return node.presence == .present
+      if let tokenView = node.tokenView {
+        return tokenView.presence == .present
+      }
+      return true
     case .fixedUp:
       return node.kind != .unexpectedNodes
     case .all:

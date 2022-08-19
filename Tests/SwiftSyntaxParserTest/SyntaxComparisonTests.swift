@@ -88,8 +88,8 @@ public class SyntaxComparisonTests: XCTestCase {
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .presence)
-      XCTAssertTrue(diff.baseline.isMissing)
-      XCTAssertFalse(diff.node.isMissing)
+      XCTAssertEqual(diff.baseline.as(TokenSyntax.self)?.presence, .missing)
+      XCTAssertEqual(diff.node.as(TokenSyntax.self)?.presence, .present)
     }
 
     let actual = Syntax(makeFunc(identifier: .identifier("f")))

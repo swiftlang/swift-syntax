@@ -187,4 +187,21 @@ struct RawSyntaxTokenView {
       preconditionFailure("Must be invoked on a token")
     }
   }
+
+  var presence: SourcePresence {
+    if self.raw.byteLength != 0 {
+      // The node has source text associated with it. It's present.
+      return .present
+    }
+    if rawKind == .eof || rawKind == .stringSegment {
+      // The end of file token never has source code associated with it but we
+      // still consider it valid.
+      // String segments can be empty if they occur in an empty string literal or in between two interpolation segments.
+      return .present
+    }
+
+    // If none of the above apply, the node is missing.
+    return .missing
+  }
+
 }

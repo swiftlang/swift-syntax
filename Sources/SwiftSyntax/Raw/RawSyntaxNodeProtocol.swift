@@ -95,7 +95,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   public var presence: SourcePresence {
-    raw.presence
+    tokenView.presence
   }
 
   public var isMissing: Bool {

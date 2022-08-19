@@ -56,7 +56,7 @@ public class SyntaxChildrenTests: XCTestCase {
     )))
 
     var sourceAccurateIt = node.children(viewMode: .sourceAccurate).makeIterator()
-    XCTAssertNextIsNil(&sourceAccurateIt)
+    try XCTAssertNext(&sourceAccurateIt) { $0.is(MissingDeclSyntax.self) }
     
     var fixedUpIt = node.children(viewMode: .fixedUp).makeIterator()
     try XCTAssertNext(&fixedUpIt) { $0.is(MissingDeclSyntax.self) }

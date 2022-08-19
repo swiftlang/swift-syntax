@@ -2679,7 +2679,7 @@ open class SyntaxVisitor {
       let node = UnknownDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2690,7 +2690,7 @@ open class SyntaxVisitor {
       let node = UnknownExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2701,7 +2701,7 @@ open class SyntaxVisitor {
       let node = UnknownStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2712,7 +2712,7 @@ open class SyntaxVisitor {
       let node = UnknownTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2723,7 +2723,7 @@ open class SyntaxVisitor {
       let node = UnknownPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2734,7 +2734,7 @@ open class SyntaxVisitor {
       let node = UnknownDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2745,7 +2745,7 @@ open class SyntaxVisitor {
       let node = UnknownExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2756,7 +2756,7 @@ open class SyntaxVisitor {
       let node = UnknownStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2767,7 +2767,7 @@ open class SyntaxVisitor {
       let node = UnknownTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2778,7 +2778,7 @@ open class SyntaxVisitor {
       let node = UnknownPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2789,7 +2789,7 @@ open class SyntaxVisitor {
       let node = MissingSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2800,7 +2800,7 @@ open class SyntaxVisitor {
       let node = MissingDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2811,7 +2811,7 @@ open class SyntaxVisitor {
       let node = MissingExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2822,7 +2822,7 @@ open class SyntaxVisitor {
       let node = MissingStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2833,7 +2833,7 @@ open class SyntaxVisitor {
       let node = MissingTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2844,7 +2844,7 @@ open class SyntaxVisitor {
       let node = MissingPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2855,7 +2855,7 @@ open class SyntaxVisitor {
       let node = CodeBlockItemSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2866,7 +2866,7 @@ open class SyntaxVisitor {
       let node = CodeBlockItemListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2877,7 +2877,7 @@ open class SyntaxVisitor {
       let node = CodeBlockSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2888,7 +2888,7 @@ open class SyntaxVisitor {
       let node = UnexpectedNodesSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2899,7 +2899,7 @@ open class SyntaxVisitor {
       let node = InOutExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2910,7 +2910,7 @@ open class SyntaxVisitor {
       let node = PoundColumnExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2921,7 +2921,7 @@ open class SyntaxVisitor {
       let node = TupleExprElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2932,7 +2932,7 @@ open class SyntaxVisitor {
       let node = ArrayElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2943,7 +2943,7 @@ open class SyntaxVisitor {
       let node = DictionaryElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2954,7 +2954,7 @@ open class SyntaxVisitor {
       let node = StringLiteralSegmentsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2965,7 +2965,7 @@ open class SyntaxVisitor {
       let node = TryExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2976,7 +2976,7 @@ open class SyntaxVisitor {
       let node = AwaitExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2987,7 +2987,7 @@ open class SyntaxVisitor {
       let node = MoveExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -2998,7 +2998,7 @@ open class SyntaxVisitor {
       let node = DeclNameArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3009,7 +3009,7 @@ open class SyntaxVisitor {
       let node = DeclNameArgumentListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3020,7 +3020,7 @@ open class SyntaxVisitor {
       let node = DeclNameArgumentsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3031,7 +3031,7 @@ open class SyntaxVisitor {
       let node = IdentifierExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3042,7 +3042,7 @@ open class SyntaxVisitor {
       let node = SuperRefExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3053,7 +3053,7 @@ open class SyntaxVisitor {
       let node = NilLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3064,7 +3064,7 @@ open class SyntaxVisitor {
       let node = DiscardAssignmentExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3075,7 +3075,7 @@ open class SyntaxVisitor {
       let node = AssignmentExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3086,7 +3086,7 @@ open class SyntaxVisitor {
       let node = SequenceExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3097,7 +3097,7 @@ open class SyntaxVisitor {
       let node = ExprListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3108,7 +3108,7 @@ open class SyntaxVisitor {
       let node = PoundLineExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3119,7 +3119,7 @@ open class SyntaxVisitor {
       let node = PoundFileExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3130,7 +3130,7 @@ open class SyntaxVisitor {
       let node = PoundFileIDExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3141,7 +3141,7 @@ open class SyntaxVisitor {
       let node = PoundFilePathExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3152,7 +3152,7 @@ open class SyntaxVisitor {
       let node = PoundFunctionExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3163,7 +3163,7 @@ open class SyntaxVisitor {
       let node = PoundDsohandleExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3174,7 +3174,7 @@ open class SyntaxVisitor {
       let node = SymbolicReferenceExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3185,7 +3185,7 @@ open class SyntaxVisitor {
       let node = PrefixOperatorExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3196,7 +3196,7 @@ open class SyntaxVisitor {
       let node = BinaryOperatorExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3207,7 +3207,7 @@ open class SyntaxVisitor {
       let node = ArrowExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3218,7 +3218,7 @@ open class SyntaxVisitor {
       let node = InfixOperatorExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3229,7 +3229,7 @@ open class SyntaxVisitor {
       let node = FloatLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3240,7 +3240,7 @@ open class SyntaxVisitor {
       let node = TupleExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3251,7 +3251,7 @@ open class SyntaxVisitor {
       let node = ArrayExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3262,7 +3262,7 @@ open class SyntaxVisitor {
       let node = DictionaryExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3273,7 +3273,7 @@ open class SyntaxVisitor {
       let node = TupleExprElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3284,7 +3284,7 @@ open class SyntaxVisitor {
       let node = ArrayElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3295,7 +3295,7 @@ open class SyntaxVisitor {
       let node = DictionaryElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3306,7 +3306,7 @@ open class SyntaxVisitor {
       let node = IntegerLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3317,7 +3317,7 @@ open class SyntaxVisitor {
       let node = BooleanLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3328,7 +3328,7 @@ open class SyntaxVisitor {
       let node = UnresolvedTernaryExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3339,7 +3339,7 @@ open class SyntaxVisitor {
       let node = TernaryExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3350,7 +3350,7 @@ open class SyntaxVisitor {
       let node = MemberAccessExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3361,7 +3361,7 @@ open class SyntaxVisitor {
       let node = IsExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3372,7 +3372,7 @@ open class SyntaxVisitor {
       let node = AsExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3383,7 +3383,7 @@ open class SyntaxVisitor {
       let node = TypeExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3394,7 +3394,7 @@ open class SyntaxVisitor {
       let node = ClosureCaptureItemSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3405,7 +3405,7 @@ open class SyntaxVisitor {
       let node = ClosureCaptureItemListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3416,7 +3416,7 @@ open class SyntaxVisitor {
       let node = ClosureCaptureSignatureSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3427,7 +3427,7 @@ open class SyntaxVisitor {
       let node = ClosureParamSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3438,7 +3438,7 @@ open class SyntaxVisitor {
       let node = ClosureParamListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3449,7 +3449,7 @@ open class SyntaxVisitor {
       let node = ClosureSignatureSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3460,7 +3460,7 @@ open class SyntaxVisitor {
       let node = ClosureExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3471,7 +3471,7 @@ open class SyntaxVisitor {
       let node = UnresolvedPatternExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3482,7 +3482,7 @@ open class SyntaxVisitor {
       let node = MultipleTrailingClosureElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3493,7 +3493,7 @@ open class SyntaxVisitor {
       let node = MultipleTrailingClosureElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3504,7 +3504,7 @@ open class SyntaxVisitor {
       let node = FunctionCallExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3515,7 +3515,7 @@ open class SyntaxVisitor {
       let node = SubscriptExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3526,7 +3526,7 @@ open class SyntaxVisitor {
       let node = OptionalChainingExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3537,7 +3537,7 @@ open class SyntaxVisitor {
       let node = ForcedValueExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3548,7 +3548,7 @@ open class SyntaxVisitor {
       let node = PostfixUnaryExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3559,7 +3559,7 @@ open class SyntaxVisitor {
       let node = SpecializeExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3570,7 +3570,7 @@ open class SyntaxVisitor {
       let node = StringSegmentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3581,7 +3581,7 @@ open class SyntaxVisitor {
       let node = ExpressionSegmentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3592,7 +3592,7 @@ open class SyntaxVisitor {
       let node = StringLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3603,7 +3603,7 @@ open class SyntaxVisitor {
       let node = RegexLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3614,7 +3614,7 @@ open class SyntaxVisitor {
       let node = KeyPathExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3625,7 +3625,7 @@ open class SyntaxVisitor {
       let node = KeyPathBaseExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3636,7 +3636,7 @@ open class SyntaxVisitor {
       let node = ObjcNamePieceSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3647,7 +3647,7 @@ open class SyntaxVisitor {
       let node = ObjcNameSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3658,7 +3658,7 @@ open class SyntaxVisitor {
       let node = ObjcKeyPathExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3669,7 +3669,7 @@ open class SyntaxVisitor {
       let node = ObjcSelectorExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3680,7 +3680,7 @@ open class SyntaxVisitor {
       let node = PostfixIfConfigExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3691,7 +3691,7 @@ open class SyntaxVisitor {
       let node = EditorPlaceholderExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3702,7 +3702,7 @@ open class SyntaxVisitor {
       let node = ObjectLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3713,7 +3713,7 @@ open class SyntaxVisitor {
       let node = TypeInitializerClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3724,7 +3724,7 @@ open class SyntaxVisitor {
       let node = TypealiasDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3735,7 +3735,7 @@ open class SyntaxVisitor {
       let node = AssociatedtypeDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3746,7 +3746,7 @@ open class SyntaxVisitor {
       let node = FunctionParameterListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3757,7 +3757,7 @@ open class SyntaxVisitor {
       let node = ParameterClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3768,7 +3768,7 @@ open class SyntaxVisitor {
       let node = ReturnClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3779,7 +3779,7 @@ open class SyntaxVisitor {
       let node = FunctionSignatureSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3790,7 +3790,7 @@ open class SyntaxVisitor {
       let node = IfConfigClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3801,7 +3801,7 @@ open class SyntaxVisitor {
       let node = IfConfigClauseListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3812,7 +3812,7 @@ open class SyntaxVisitor {
       let node = IfConfigDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3823,7 +3823,7 @@ open class SyntaxVisitor {
       let node = PoundErrorDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3834,7 +3834,7 @@ open class SyntaxVisitor {
       let node = PoundWarningDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3845,7 +3845,7 @@ open class SyntaxVisitor {
       let node = PoundSourceLocationSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3856,7 +3856,7 @@ open class SyntaxVisitor {
       let node = PoundSourceLocationArgsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3867,7 +3867,7 @@ open class SyntaxVisitor {
       let node = DeclModifierDetailSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3878,7 +3878,7 @@ open class SyntaxVisitor {
       let node = DeclModifierSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3889,7 +3889,7 @@ open class SyntaxVisitor {
       let node = InheritedTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3900,7 +3900,7 @@ open class SyntaxVisitor {
       let node = InheritedTypeListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3911,7 +3911,7 @@ open class SyntaxVisitor {
       let node = TypeInheritanceClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3922,7 +3922,7 @@ open class SyntaxVisitor {
       let node = ClassDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3933,7 +3933,7 @@ open class SyntaxVisitor {
       let node = ActorDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3944,7 +3944,7 @@ open class SyntaxVisitor {
       let node = StructDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3955,7 +3955,7 @@ open class SyntaxVisitor {
       let node = ProtocolDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3966,7 +3966,7 @@ open class SyntaxVisitor {
       let node = ExtensionDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3977,7 +3977,7 @@ open class SyntaxVisitor {
       let node = MemberDeclBlockSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3988,7 +3988,7 @@ open class SyntaxVisitor {
       let node = MemberDeclListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -3999,7 +3999,7 @@ open class SyntaxVisitor {
       let node = MemberDeclListItemSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4010,7 +4010,7 @@ open class SyntaxVisitor {
       let node = SourceFileSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4021,7 +4021,7 @@ open class SyntaxVisitor {
       let node = InitializerClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4032,7 +4032,7 @@ open class SyntaxVisitor {
       let node = FunctionParameterSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4043,7 +4043,7 @@ open class SyntaxVisitor {
       let node = ModifierListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4054,7 +4054,7 @@ open class SyntaxVisitor {
       let node = FunctionDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4065,7 +4065,7 @@ open class SyntaxVisitor {
       let node = InitializerDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4076,7 +4076,7 @@ open class SyntaxVisitor {
       let node = DeinitializerDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4087,7 +4087,7 @@ open class SyntaxVisitor {
       let node = SubscriptDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4098,7 +4098,7 @@ open class SyntaxVisitor {
       let node = AccessLevelModifierSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4109,7 +4109,7 @@ open class SyntaxVisitor {
       let node = AccessPathComponentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4120,7 +4120,7 @@ open class SyntaxVisitor {
       let node = AccessPathSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4131,7 +4131,7 @@ open class SyntaxVisitor {
       let node = ImportDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4142,7 +4142,7 @@ open class SyntaxVisitor {
       let node = AccessorParameterSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4153,7 +4153,7 @@ open class SyntaxVisitor {
       let node = AccessorDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4164,7 +4164,7 @@ open class SyntaxVisitor {
       let node = AccessorListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4175,7 +4175,7 @@ open class SyntaxVisitor {
       let node = AccessorBlockSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4186,7 +4186,7 @@ open class SyntaxVisitor {
       let node = PatternBindingSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4197,7 +4197,7 @@ open class SyntaxVisitor {
       let node = PatternBindingListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4208,7 +4208,7 @@ open class SyntaxVisitor {
       let node = VariableDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4219,7 +4219,7 @@ open class SyntaxVisitor {
       let node = EnumCaseElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4230,7 +4230,7 @@ open class SyntaxVisitor {
       let node = EnumCaseElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4241,7 +4241,7 @@ open class SyntaxVisitor {
       let node = EnumCaseDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4252,7 +4252,7 @@ open class SyntaxVisitor {
       let node = EnumDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4263,7 +4263,7 @@ open class SyntaxVisitor {
       let node = OperatorDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4274,7 +4274,7 @@ open class SyntaxVisitor {
       let node = IdentifierListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4285,7 +4285,7 @@ open class SyntaxVisitor {
       let node = OperatorPrecedenceAndTypesSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4296,7 +4296,7 @@ open class SyntaxVisitor {
       let node = PrecedenceGroupDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4307,7 +4307,7 @@ open class SyntaxVisitor {
       let node = PrecedenceGroupAttributeListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4318,7 +4318,7 @@ open class SyntaxVisitor {
       let node = PrecedenceGroupRelationSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4329,7 +4329,7 @@ open class SyntaxVisitor {
       let node = PrecedenceGroupNameListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4340,7 +4340,7 @@ open class SyntaxVisitor {
       let node = PrecedenceGroupNameElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4351,7 +4351,7 @@ open class SyntaxVisitor {
       let node = PrecedenceGroupAssignmentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4362,7 +4362,7 @@ open class SyntaxVisitor {
       let node = PrecedenceGroupAssociativitySyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4373,7 +4373,7 @@ open class SyntaxVisitor {
       let node = TokenListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4384,7 +4384,7 @@ open class SyntaxVisitor {
       let node = NonEmptyTokenListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4395,7 +4395,7 @@ open class SyntaxVisitor {
       let node = CustomAttributeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4406,7 +4406,7 @@ open class SyntaxVisitor {
       let node = AttributeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4417,7 +4417,7 @@ open class SyntaxVisitor {
       let node = AttributeListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4428,7 +4428,7 @@ open class SyntaxVisitor {
       let node = SpecializeAttributeSpecListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4439,7 +4439,7 @@ open class SyntaxVisitor {
       let node = AvailabilityEntrySyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4450,7 +4450,7 @@ open class SyntaxVisitor {
       let node = LabeledSpecializeEntrySyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4461,7 +4461,7 @@ open class SyntaxVisitor {
       let node = TargetFunctionEntrySyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4472,7 +4472,7 @@ open class SyntaxVisitor {
       let node = NamedAttributeStringArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4483,7 +4483,7 @@ open class SyntaxVisitor {
       let node = DeclNameSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4494,7 +4494,7 @@ open class SyntaxVisitor {
       let node = ImplementsAttributeArgumentsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4505,7 +4505,7 @@ open class SyntaxVisitor {
       let node = ObjCSelectorPieceSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4516,7 +4516,7 @@ open class SyntaxVisitor {
       let node = ObjCSelectorSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4527,7 +4527,7 @@ open class SyntaxVisitor {
       let node = DifferentiableAttributeArgumentsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4538,7 +4538,7 @@ open class SyntaxVisitor {
       let node = DifferentiabilityParamsClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4549,7 +4549,7 @@ open class SyntaxVisitor {
       let node = DifferentiabilityParamsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4560,7 +4560,7 @@ open class SyntaxVisitor {
       let node = DifferentiabilityParamListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4571,7 +4571,7 @@ open class SyntaxVisitor {
       let node = DifferentiabilityParamSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4582,7 +4582,7 @@ open class SyntaxVisitor {
       let node = DerivativeRegistrationAttributeArgumentsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4593,7 +4593,7 @@ open class SyntaxVisitor {
       let node = QualifiedDeclNameSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4604,7 +4604,7 @@ open class SyntaxVisitor {
       let node = FunctionDeclNameSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4615,7 +4615,7 @@ open class SyntaxVisitor {
       let node = BackDeployAttributeSpecListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4626,7 +4626,7 @@ open class SyntaxVisitor {
       let node = BackDeployVersionListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4637,7 +4637,7 @@ open class SyntaxVisitor {
       let node = BackDeployVersionArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4648,7 +4648,7 @@ open class SyntaxVisitor {
       let node = LabeledStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4659,7 +4659,7 @@ open class SyntaxVisitor {
       let node = ContinueStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4670,7 +4670,7 @@ open class SyntaxVisitor {
       let node = WhileStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4681,7 +4681,7 @@ open class SyntaxVisitor {
       let node = DeferStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4692,7 +4692,7 @@ open class SyntaxVisitor {
       let node = ExpressionStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4703,7 +4703,7 @@ open class SyntaxVisitor {
       let node = SwitchCaseListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4714,7 +4714,7 @@ open class SyntaxVisitor {
       let node = RepeatWhileStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4725,7 +4725,7 @@ open class SyntaxVisitor {
       let node = GuardStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4736,7 +4736,7 @@ open class SyntaxVisitor {
       let node = WhereClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4747,7 +4747,7 @@ open class SyntaxVisitor {
       let node = ForInStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4758,7 +4758,7 @@ open class SyntaxVisitor {
       let node = SwitchStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4769,7 +4769,7 @@ open class SyntaxVisitor {
       let node = CatchClauseListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4780,7 +4780,7 @@ open class SyntaxVisitor {
       let node = DoStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4791,7 +4791,7 @@ open class SyntaxVisitor {
       let node = ReturnStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4802,7 +4802,7 @@ open class SyntaxVisitor {
       let node = YieldStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4813,7 +4813,7 @@ open class SyntaxVisitor {
       let node = YieldListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4824,7 +4824,7 @@ open class SyntaxVisitor {
       let node = FallthroughStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4835,7 +4835,7 @@ open class SyntaxVisitor {
       let node = BreakStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4846,7 +4846,7 @@ open class SyntaxVisitor {
       let node = CaseItemListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4857,7 +4857,7 @@ open class SyntaxVisitor {
       let node = CatchItemListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4868,7 +4868,7 @@ open class SyntaxVisitor {
       let node = ConditionElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4879,7 +4879,7 @@ open class SyntaxVisitor {
       let node = AvailabilityConditionSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4890,7 +4890,7 @@ open class SyntaxVisitor {
       let node = MatchingPatternConditionSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4901,7 +4901,7 @@ open class SyntaxVisitor {
       let node = OptionalBindingConditionSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4912,7 +4912,7 @@ open class SyntaxVisitor {
       let node = UnavailabilityConditionSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4923,7 +4923,7 @@ open class SyntaxVisitor {
       let node = ConditionElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4934,7 +4934,7 @@ open class SyntaxVisitor {
       let node = DeclarationStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4945,7 +4945,7 @@ open class SyntaxVisitor {
       let node = ThrowStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4956,7 +4956,7 @@ open class SyntaxVisitor {
       let node = IfStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4967,7 +4967,7 @@ open class SyntaxVisitor {
       let node = ElseIfContinuationSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4978,7 +4978,7 @@ open class SyntaxVisitor {
       let node = ElseBlockSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -4989,7 +4989,7 @@ open class SyntaxVisitor {
       let node = SwitchCaseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5000,7 +5000,7 @@ open class SyntaxVisitor {
       let node = SwitchDefaultLabelSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5011,7 +5011,7 @@ open class SyntaxVisitor {
       let node = CaseItemSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5022,7 +5022,7 @@ open class SyntaxVisitor {
       let node = CatchItemSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5033,7 +5033,7 @@ open class SyntaxVisitor {
       let node = SwitchCaseLabelSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5044,7 +5044,7 @@ open class SyntaxVisitor {
       let node = CatchClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5055,7 +5055,7 @@ open class SyntaxVisitor {
       let node = PoundAssertStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5066,7 +5066,7 @@ open class SyntaxVisitor {
       let node = GenericWhereClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5077,7 +5077,7 @@ open class SyntaxVisitor {
       let node = GenericRequirementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5088,7 +5088,7 @@ open class SyntaxVisitor {
       let node = GenericRequirementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5099,7 +5099,7 @@ open class SyntaxVisitor {
       let node = SameTypeRequirementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5110,7 +5110,7 @@ open class SyntaxVisitor {
       let node = LayoutRequirementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5121,7 +5121,7 @@ open class SyntaxVisitor {
       let node = GenericParameterListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5132,7 +5132,7 @@ open class SyntaxVisitor {
       let node = GenericParameterSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5143,7 +5143,7 @@ open class SyntaxVisitor {
       let node = PrimaryAssociatedTypeListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5154,7 +5154,7 @@ open class SyntaxVisitor {
       let node = PrimaryAssociatedTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5165,7 +5165,7 @@ open class SyntaxVisitor {
       let node = GenericParameterClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5176,7 +5176,7 @@ open class SyntaxVisitor {
       let node = ConformanceRequirementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5187,7 +5187,7 @@ open class SyntaxVisitor {
       let node = PrimaryAssociatedTypeClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5198,7 +5198,7 @@ open class SyntaxVisitor {
       let node = SimpleTypeIdentifierSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5209,7 +5209,7 @@ open class SyntaxVisitor {
       let node = MemberTypeIdentifierSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5220,7 +5220,7 @@ open class SyntaxVisitor {
       let node = ClassRestrictionTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5231,7 +5231,7 @@ open class SyntaxVisitor {
       let node = ArrayTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5242,7 +5242,7 @@ open class SyntaxVisitor {
       let node = DictionaryTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5253,7 +5253,7 @@ open class SyntaxVisitor {
       let node = MetatypeTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5264,7 +5264,7 @@ open class SyntaxVisitor {
       let node = OptionalTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5275,7 +5275,7 @@ open class SyntaxVisitor {
       let node = ConstrainedSugarTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5286,7 +5286,7 @@ open class SyntaxVisitor {
       let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5297,7 +5297,7 @@ open class SyntaxVisitor {
       let node = CompositionTypeElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5308,7 +5308,7 @@ open class SyntaxVisitor {
       let node = CompositionTypeElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5319,7 +5319,7 @@ open class SyntaxVisitor {
       let node = CompositionTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5330,7 +5330,7 @@ open class SyntaxVisitor {
       let node = TupleTypeElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5341,7 +5341,7 @@ open class SyntaxVisitor {
       let node = TupleTypeElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5352,7 +5352,7 @@ open class SyntaxVisitor {
       let node = TupleTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5363,7 +5363,7 @@ open class SyntaxVisitor {
       let node = FunctionTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5374,7 +5374,7 @@ open class SyntaxVisitor {
       let node = AttributedTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5385,7 +5385,7 @@ open class SyntaxVisitor {
       let node = GenericArgumentListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5396,7 +5396,7 @@ open class SyntaxVisitor {
       let node = GenericArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5407,7 +5407,7 @@ open class SyntaxVisitor {
       let node = GenericArgumentClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5418,7 +5418,7 @@ open class SyntaxVisitor {
       let node = TypeAnnotationSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5429,7 +5429,7 @@ open class SyntaxVisitor {
       let node = EnumCasePatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5440,7 +5440,7 @@ open class SyntaxVisitor {
       let node = IsTypePatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5451,7 +5451,7 @@ open class SyntaxVisitor {
       let node = OptionalPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5462,7 +5462,7 @@ open class SyntaxVisitor {
       let node = IdentifierPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5473,7 +5473,7 @@ open class SyntaxVisitor {
       let node = AsTypePatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5484,7 +5484,7 @@ open class SyntaxVisitor {
       let node = TuplePatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5495,7 +5495,7 @@ open class SyntaxVisitor {
       let node = WildcardPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5506,7 +5506,7 @@ open class SyntaxVisitor {
       let node = TuplePatternElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5517,7 +5517,7 @@ open class SyntaxVisitor {
       let node = ExpressionPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5528,7 +5528,7 @@ open class SyntaxVisitor {
       let node = TuplePatternElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5539,7 +5539,7 @@ open class SyntaxVisitor {
       let node = ValueBindingPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5550,7 +5550,7 @@ open class SyntaxVisitor {
       let node = AvailabilitySpecListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5561,7 +5561,7 @@ open class SyntaxVisitor {
       let node = AvailabilityArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5572,7 +5572,7 @@ open class SyntaxVisitor {
       let node = AvailabilityLabeledArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5583,7 +5583,7 @@ open class SyntaxVisitor {
       let node = AvailabilityVersionRestrictionSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5594,7 +5594,7 @@ open class SyntaxVisitor {
       let node = VersionTupleSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)
@@ -5612,7 +5612,7 @@ open class SyntaxVisitor {
       let node = UnknownSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
         visitChildren(node)
       }
       visitPost(node)

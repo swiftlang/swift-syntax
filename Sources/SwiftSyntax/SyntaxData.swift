@@ -145,9 +145,9 @@ struct AbsoluteRawSyntax {
 
   /// Returns first `present` child.
   func firstChild(viewMode: SyntaxTreeViewMode) -> AbsoluteRawSyntax? {
+    guard let layoutView = raw.layoutView else { return nil }
     var curInfo = info.advancedToFirstChild()
-    for i in 0..<raw.numberOfChildren {
-      let childOpt = raw.child(at: i)
+    for childOpt in layoutView.children {
       if let child = childOpt, viewMode.shouldTraverse(node: child) {
         return AbsoluteRawSyntax(raw: child, info: curInfo)
       }
@@ -159,8 +159,7 @@ struct AbsoluteRawSyntax {
   /// Returns next `present` sibling.
   func nextSibling(parent: AbsoluteRawSyntax, viewMode: SyntaxTreeViewMode) -> AbsoluteRawSyntax? {
     var curInfo = info.advancedBySibling(raw)
-    for i in Int(info.indexInParent+1) ..< parent.raw.numberOfChildren {
-      let siblingOpt = parent.raw.child(at: i)
+    for siblingOpt in parent.raw.layoutView!.children.dropFirst(Int(info.indexInParent+1)) {
       if let sibling = siblingOpt, viewMode.shouldTraverse(node: sibling) {
         return AbsoluteRawSyntax(raw: sibling, info: curInfo)
       }
@@ -292,7 +291,7 @@ struct SyntaxData {
   ///             normally the Syntax node that this `SyntaxData` belongs to.
   /// - Returns: The child's data at the provided index.
   func child(at index: Int, parent: Syntax) -> SyntaxData? {
-    if !raw.hasChild(at: index) { return nil }
+    if raw.layoutView!.children[index] == nil { return nil }
     var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
     for _ in 0..<index { _ = iter.next() }
     let (raw, info) = iter.next()!
@@ -345,7 +344,7 @@ struct SyntaxData {
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
   func replacingChild(_ child: RawSyntax?, at index: Int) -> SyntaxData {
-    let newRaw = raw.replacingChild(at: index, with: child, arena: .default)
+    let newRaw = raw.layoutView!.replacingChild(at: index, with: child, arena: .default)
     return replacingSelf(newRaw)
   }
 

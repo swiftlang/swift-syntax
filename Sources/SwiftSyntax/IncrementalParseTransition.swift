@@ -305,7 +305,7 @@ public struct IncrementalParseLookup {
         return true
       }
       if let nextToken = nextSibling.raw.firstToken(viewMode: .sourceAccurate) {
-        nextLeafNodeLength = nextToken.totalLength - nextToken.trailingTriviaLength
+        nextLeafNodeLength = nextToken.raw.totalLength - nextToken.trailingTriviaLength
       }
     }
     let nodeAffectRange = ByteSourceRange(offset: node.position.utf8Offset,

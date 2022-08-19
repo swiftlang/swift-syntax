@@ -131,6 +131,11 @@ struct RawSyntaxChildren: BidirectionalCollection {
 
   /// The node whose children shall be accessed
   private let parent: RawSyntax
+
+  private var parentLayoutView: RawSyntaxLayoutView {
+    return parent.layoutView!
+  }
+
   /// The rootId of the tree the child nodes belong to
   private let rootId: UInt32
   /// The number of childer in `parent`. Cached to avoid reaching into `parent` for every index
@@ -167,14 +172,14 @@ struct RawSyntaxChildren: BidirectionalCollection {
   }
 
   func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
-    let node = parent.child(at: Int(index.data!.indexInParent))
+    let node = parent.layoutView!.children[Int(index.data!.indexInParent)]
     return self.index(index, advancedBy: node)
   }
 
   func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
     if let index = index.data {
       // We are reversing a non-end index.
-      let previousNode = parent.child(at: Int(index.indexInParent - 1))
+      let previousNode = parent.layoutView!.children[Int(index.indexInParent - 1)]
       let previousNodeLength = UInt32(previousNode?.totalLength.utf8Length ?? 0)
       let reversedIndexInTree = index.indexInTree.reversedBy(previousNode)
       return SyntaxChildrenIndex(offset: index.offset - previousNodeLength,
@@ -194,7 +199,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
       // Compute a materialized index.
       let offset = startIndex.offset + UInt32(parent.totalLength.utf8Length)
       let indexInParent = startIndex.indexInParent +
-                          UInt32(parent.numberOfChildren)
+                          UInt32(parentLayoutView.children.count)
       let indexInTree = startIndex.indexInTree.indexInTree +
                         UInt32(parent.totalNodes) - 1
       let syntaxIndexInTree = SyntaxIndexInTree(indexInTree: indexInTree)
@@ -213,9 +218,9 @@ struct RawSyntaxChildren: BidirectionalCollection {
     case (.some(let start), .some(let end)):
       return Int(end.indexInParent - start.indexInParent)
     case (.some(let start), .none):
-      return parent.numberOfChildren - Int(start.indexInParent)
+      return parentLayoutView.children.count - Int(start.indexInParent)
     case (.none, .some(let end)):
-      return Int(end.indexInParent) - parent.numberOfChildren
+      return Int(end.indexInParent) - parentLayoutView.children.count
     case (.none, .none):
       return 0
     }
@@ -226,7 +231,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
     // Accessing the end index is undefined. So we can assume a non-end index.
     let index = index.data!
 
-    let child = parent.child(at: Int(index.indexInParent))
+    let child = parent.layoutView!.children[Int(index.indexInParent)]
     let info = AbsoluteSyntaxInfo(index: index, rootId: rootId)
     return (child, info)
   }
@@ -234,7 +239,13 @@ struct RawSyntaxChildren: BidirectionalCollection {
   init(_ parent: AbsoluteRawSyntax) {
     self.parent = parent.raw
     self.rootId = parent.info.nodeId.rootId
-    self.numberOfChildren = parent.raw.numberOfChildren
+    switch parent.raw.view {
+    case .layout(let layoutView):
+      self.numberOfChildren = layoutView.children.count
+    case .token:
+      self.numberOfChildren = 0
+    }
+
 
     if self.numberOfChildren == 0 {
       self.startIndex = nil

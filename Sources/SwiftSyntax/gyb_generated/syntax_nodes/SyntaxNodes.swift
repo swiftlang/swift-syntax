@@ -38,8 +38,8 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   ) {
     let layout: [RawSyntax?] = [
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.missing,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.missing,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -105,8 +105,8 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenSemicolonAndErrorTokens?.raw,
       errorTokens?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -154,7 +154,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `item`, if present.
   public func withItem(
     _ newChild: Syntax?) -> CodeBlockItemSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.item)
     return CodeBlockItemSyntax(newData)
   }
@@ -309,8 +309,8 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenStatementsAndRightBrace?.raw,
       rightBrace.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -357,7 +357,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftBrace`, if present.
   public func withLeftBrace(
     _ newChild: TokenSyntax?) -> CodeBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftBrace)
     return CodeBlockSyntax(newData)
   }
@@ -403,11 +403,11 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `statements` collection.
   public func addStatement(_ element: CodeBlockItemSyntax) -> CodeBlockSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.statements] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.statements] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.statements)
@@ -419,7 +419,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `statements`, if present.
   public func withStatements(
     _ newChild: CodeBlockItemListSyntax?) -> CodeBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.codeBlockItemList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.statements)
     return CodeBlockSyntax(newData)
   }
@@ -462,7 +462,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightBrace`, if present.
   public func withRightBrace(
     _ newChild: TokenSyntax?) -> CodeBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightBrace)
     return CodeBlockSyntax(newData)
   }
@@ -520,8 +520,8 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndColon?.raw,
       colon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -568,7 +568,7 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> DeclNameArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return DeclNameArgumentSyntax(newData)
   }
@@ -611,7 +611,7 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> DeclNameArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return DeclNameArgumentSyntax(newData)
   }
@@ -673,8 +673,8 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -721,7 +721,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> DeclNameArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return DeclNameArgumentsSyntax(newData)
   }
@@ -767,11 +767,11 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `arguments` collection.
   public func addArgument(_ element: DeclNameArgumentSyntax) -> DeclNameArgumentsSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.arguments] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.arguments] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.declNameArgumentList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.arguments)
@@ -783,7 +783,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `arguments`, if present.
   public func withArguments(
     _ newChild: DeclNameArgumentListSyntax?) -> DeclNameArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.declNameArgumentList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.declNameArgumentList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.arguments)
     return DeclNameArgumentsSyntax(newData)
   }
@@ -826,7 +826,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> DeclNameArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return DeclNameArgumentsSyntax(newData)
   }
@@ -896,8 +896,8 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1032,7 +1032,7 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> TupleExprElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return TupleExprElementSyntax(newData)
   }
@@ -1136,8 +1136,8 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1184,7 +1184,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ArrayElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ArrayElementSyntax(newData)
   }
@@ -1296,8 +1296,8 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenValueExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1344,7 +1344,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `keyExpression`, if present.
   public func withKeyExpression(
     _ newChild: ExprSyntax?) -> DictionaryElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.keyExpression)
     return DictionaryElementSyntax(newData)
   }
@@ -1387,7 +1387,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> DictionaryElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return DictionaryElementSyntax(newData)
   }
@@ -1430,7 +1430,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `valueExpression`, if present.
   public func withValueExpression(
     _ newChild: ExprSyntax?) -> DictionaryElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.valueExpression)
     return DictionaryElementSyntax(newData)
   }
@@ -1552,8 +1552,8 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1604,11 +1604,11 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `specifier` collection.
   public func addSpecifierToken(_ element: TokenSyntax) -> ClosureCaptureItemSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.specifier] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.specifier] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tokenList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.specifier)
@@ -1751,7 +1751,7 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ClosureCaptureItemSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ClosureCaptureItemSyntax(newData)
   }
@@ -1863,8 +1863,8 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenItemsAndRightSquare?.raw,
       rightSquare.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureSignature,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureSignature,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -1911,7 +1911,7 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftSquare`, if present.
   public func withLeftSquare(
     _ newChild: TokenSyntax?) -> ClosureCaptureSignatureSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftSquare)
     return ClosureCaptureSignatureSyntax(newData)
   }
@@ -1958,11 +1958,11 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `items` collection.
   public func addItem(_ element: ClosureCaptureItemSyntax) -> ClosureCaptureSignatureSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.items] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.items] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.closureCaptureItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.items)
@@ -2017,7 +2017,7 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightSquare`, if present.
   public func withRightSquare(
     _ newChild: TokenSyntax?) -> ClosureCaptureSignatureSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightSquareBracket, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightSquare)
     return ClosureCaptureSignatureSyntax(newData)
   }
@@ -2075,8 +2075,8 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParam,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParam,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2123,7 +2123,7 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> ClosureParamSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return ClosureParamSyntax(newData)
   }
@@ -2253,8 +2253,8 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenOutputAndInTok?.raw,
       inTok.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureSignature,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureSignature,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2305,11 +2305,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ClosureSignatureSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.attributes] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.attributes)
@@ -2584,7 +2584,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `inTok`, if present.
   public func withInTok(
     _ newChild: TokenSyntax?) -> ClosureSignatureSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.inKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.inKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.inTok)
     return ClosureSignatureSyntax(newData)
   }
@@ -2656,8 +2656,8 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
       unexpectedBetweenColonAndClosure?.raw,
       closure.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2704,7 +2704,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   ///                   current `label`, if present.
   public func withLabel(
     _ newChild: TokenSyntax?) -> MultipleTrailingClosureElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.label)
     return MultipleTrailingClosureElementSyntax(newData)
   }
@@ -2747,7 +2747,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> MultipleTrailingClosureElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return MultipleTrailingClosureElementSyntax(newData)
   }
@@ -2790,7 +2790,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   ///                   current `closure`, if present.
   public func withClosure(
     _ newChild: ClosureExprSyntax?) -> MultipleTrailingClosureElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.closureExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.closureExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.closure)
     return MultipleTrailingClosureElementSyntax(newData)
   }
@@ -2842,8 +2842,8 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBeforeContent?.raw,
       content.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringSegment,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringSegment,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -2890,7 +2890,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `content`, if present.
   public func withContent(
     _ newChild: TokenSyntax?) -> StringSegmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.stringSegment(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringSegment(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.content)
     return StringSegmentSyntax(newData)
   }
@@ -2962,8 +2962,8 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenExpressionsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionSegment,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.expressionSegment,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3010,7 +3010,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `backslash`, if present.
   public func withBackslash(
     _ newChild: TokenSyntax?) -> ExpressionSegmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.backslash)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.backslash, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.backslash)
     return ExpressionSegmentSyntax(newData)
   }
@@ -3097,7 +3097,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> ExpressionSegmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return ExpressionSegmentSyntax(newData)
   }
@@ -3143,11 +3143,11 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `expressions` collection.
   public func addExpression(_ element: TupleExprElementSyntax) -> ExpressionSegmentSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.expressions] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.expressions] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.expressions)
@@ -3159,7 +3159,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `expressions`, if present.
   public func withExpressions(
     _ newChild: TupleExprElementListSyntax?) -> ExpressionSegmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleExprElementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tupleExprElementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.expressions)
     return ExpressionSegmentSyntax(newData)
   }
@@ -3202,7 +3202,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> ExpressionSegmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.stringInterpolationAnchor)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringInterpolationAnchor, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return ExpressionSegmentSyntax(newData)
   }
@@ -3264,8 +3264,8 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndDot?.raw,
       dot?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcNamePiece,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objcNamePiece,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3312,7 +3312,7 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> ObjcNamePieceSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return ObjcNamePieceSyntax(newData)
   }
@@ -3412,8 +3412,8 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInitializerClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeInitializerClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3460,7 +3460,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `equal`, if present.
   public func withEqual(
     _ newChild: TokenSyntax?) -> TypeInitializerClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.equal)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.equal)
     return TypeInitializerClauseSyntax(newData)
   }
@@ -3503,7 +3503,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `value`, if present.
   public func withValue(
     _ newChild: TypeSyntax?) -> TypeInitializerClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.value)
     return TypeInitializerClauseSyntax(newData)
   }
@@ -3565,8 +3565,8 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenParameterListAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.parameterClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.parameterClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3613,7 +3613,7 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> ParameterClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return ParameterClauseSyntax(newData)
   }
@@ -3659,11 +3659,11 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `parameterList` collection.
   public func addParameter(_ element: FunctionParameterSyntax) -> ParameterClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.parameterList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.parameterList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.functionParameterList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.parameterList)
@@ -3675,7 +3675,7 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `parameterList`, if present.
   public func withParameterList(
     _ newChild: FunctionParameterListSyntax?) -> ParameterClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.functionParameterList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionParameterList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.parameterList)
     return ParameterClauseSyntax(newData)
   }
@@ -3718,7 +3718,7 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> ParameterClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return ParameterClauseSyntax(newData)
   }
@@ -3776,8 +3776,8 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArrowAndReturnType?.raw,
       returnType.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.returnClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.returnClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3824,7 +3824,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `arrow`, if present.
   public func withArrow(
     _ newChild: TokenSyntax?) -> ReturnClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.arrow)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.arrow, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.arrow)
     return ReturnClauseSyntax(newData)
   }
@@ -3867,7 +3867,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `returnType`, if present.
   public func withReturnType(
     _ newChild: TypeSyntax?) -> ReturnClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.returnType)
     return ReturnClauseSyntax(newData)
   }
@@ -3935,8 +3935,8 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.raw,
       output?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionSignature,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionSignature,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -3983,7 +3983,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `input`, if present.
   public func withInput(
     _ newChild: ParameterClauseSyntax?) -> FunctionSignatureSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.parameterClause)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.parameterClause, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.input)
     return FunctionSignatureSyntax(newData)
   }
@@ -4181,8 +4181,8 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenConditionAndElements?.raw,
       elements.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4229,7 +4229,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `poundKeyword`, if present.
   public func withPoundKeyword(
     _ newChild: TokenSyntax?) -> IfConfigClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundIfKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundIfKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundKeyword)
     return IfConfigClauseSyntax(newData)
   }
@@ -4316,7 +4316,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: Syntax?) -> IfConfigClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elements)
     return IfConfigClauseSyntax(newData)
   }
@@ -4404,8 +4404,8 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenLineArgColonAndLineNumber?.raw,
       lineNumber.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundSourceLocationArgs,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.poundSourceLocationArgs,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4452,7 +4452,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `fileArgLabel`, if present.
   public func withFileArgLabel(
     _ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.fileArgLabel)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -4495,7 +4495,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `fileArgColon`, if present.
   public func withFileArgColon(
     _ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.fileArgColon)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -4538,7 +4538,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `fileName`, if present.
   public func withFileName(
     _ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.stringLiteral(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.fileName)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -4581,7 +4581,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `comma`, if present.
   public func withComma(
     _ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.comma)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.comma)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -4624,7 +4624,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `lineArgLabel`, if present.
   public func withLineArgLabel(
     _ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.lineArgLabel)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -4667,7 +4667,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `lineArgColon`, if present.
   public func withLineArgColon(
     _ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.lineArgColon)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -4710,7 +4710,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `lineNumber`, if present.
   public func withLineNumber(
     _ newChild: TokenSyntax?) -> PoundSourceLocationArgsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.integerLiteral(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.lineNumber)
     return PoundSourceLocationArgsSyntax(newData)
   }
@@ -4782,8 +4782,8 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDetailAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifierDetail,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declModifierDetail,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -4830,7 +4830,7 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return DeclModifierDetailSyntax(newData)
   }
@@ -4873,7 +4873,7 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `detail`, if present.
   public func withDetail(
     _ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.detail)
     return DeclModifierDetailSyntax(newData)
   }
@@ -4916,7 +4916,7 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return DeclModifierDetailSyntax(newData)
   }
@@ -4974,8 +4974,8 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndDetail?.raw,
       detail?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifier,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declModifier,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5022,7 +5022,7 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> DeclModifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return DeclModifierSyntax(newData)
   }
@@ -5122,8 +5122,8 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5170,7 +5170,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `typeName`, if present.
   public func withTypeName(
     _ newChild: TypeSyntax?) -> InheritedTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.typeName)
     return InheritedTypeSyntax(newData)
   }
@@ -5270,8 +5270,8 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndInheritedTypeCollection?.raw,
       inheritedTypeCollection.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInheritanceClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeInheritanceClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5318,7 +5318,7 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> TypeInheritanceClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return TypeInheritanceClauseSyntax(newData)
   }
@@ -5364,11 +5364,11 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `inheritedTypeCollection` collection.
   public func addInheritedType(_ element: InheritedTypeSyntax) -> TypeInheritanceClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.inheritedTypeCollection] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.inheritedTypeCollection] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.inheritedTypeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.inheritedTypeCollection)
@@ -5380,7 +5380,7 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `inheritedTypeCollection`, if present.
   public func withInheritedTypeCollection(
     _ newChild: InheritedTypeListSyntax?) -> TypeInheritanceClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.inheritedTypeList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.inheritedTypeList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.inheritedTypeCollection)
     return TypeInheritanceClauseSyntax(newData)
   }
@@ -5442,8 +5442,8 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenMembersAndRightBrace?.raw,
       rightBrace.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5490,7 +5490,7 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftBrace`, if present.
   public func withLeftBrace(
     _ newChild: TokenSyntax?) -> MemberDeclBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftBrace)
     return MemberDeclBlockSyntax(newData)
   }
@@ -5536,11 +5536,11 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `members` collection.
   public func addMember(_ element: MemberDeclListItemSyntax) -> MemberDeclBlockSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.members] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.members] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.memberDeclList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.members)
@@ -5552,7 +5552,7 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `members`, if present.
   public func withMembers(
     _ newChild: MemberDeclListSyntax?) -> MemberDeclBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.memberDeclList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.members)
     return MemberDeclBlockSyntax(newData)
   }
@@ -5595,7 +5595,7 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightBrace`, if present.
   public func withRightBrace(
     _ newChild: TokenSyntax?) -> MemberDeclBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightBrace)
     return MemberDeclBlockSyntax(newData)
   }
@@ -5657,8 +5657,8 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDeclAndSemicolon?.raw,
       semicolon?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclListItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclListItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5706,7 +5706,7 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `decl`, if present.
   public func withDecl(
     _ newChild: DeclSyntax?) -> MemberDeclListItemSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingDecl)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingDecl, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.decl)
     return MemberDeclListItemSyntax(newData)
   }
@@ -5807,8 +5807,8 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenStatementsAndEOFToken?.raw,
       eofToken.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sourceFile,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.sourceFile,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -5858,11 +5858,11 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `statements` collection.
   public func addStatement(_ element: CodeBlockItemSyntax) -> SourceFileSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.statements] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.statements] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.statements)
@@ -5874,7 +5874,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `statements`, if present.
   public func withStatements(
     _ newChild: CodeBlockItemListSyntax?) -> SourceFileSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.codeBlockItemList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.statements)
     return SourceFileSyntax(newData)
   }
@@ -5917,7 +5917,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `eofToken`, if present.
   public func withEOFToken(
     _ newChild: TokenSyntax?) -> SourceFileSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.eofToken)
     return SourceFileSyntax(newData)
   }
@@ -5973,8 +5973,8 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEqualAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.initializerClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.initializerClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6021,7 +6021,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `equal`, if present.
   public func withEqual(
     _ newChild: TokenSyntax?) -> InitializerClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.equal)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.equal, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.equal)
     return InitializerClauseSyntax(newData)
   }
@@ -6064,7 +6064,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `value`, if present.
   public func withValue(
     _ newChild: ExprSyntax?) -> InitializerClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.value)
     return InitializerClauseSyntax(newData)
   }
@@ -6156,8 +6156,8 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDefaultArgumentAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameter,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameter,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6208,11 +6208,11 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> FunctionParameterSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.attributes] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.attributes)
@@ -6600,8 +6600,8 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndModifier?.raw,
       modifier?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessLevelModifier,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessLevelModifier,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6648,7 +6648,7 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> AccessLevelModifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return AccessLevelModifierSyntax(newData)
   }
@@ -6748,8 +6748,8 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingDot?.raw,
       trailingDot?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPathComponent,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPathComponent,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6796,7 +6796,7 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> AccessPathComponentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return AccessPathComponentSyntax(newData)
   }
@@ -6902,8 +6902,8 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorParameter,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorParameter,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -6950,7 +6950,7 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> AccessorParameterSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return AccessorParameterSyntax(newData)
   }
@@ -6993,7 +6993,7 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> AccessorParameterSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return AccessorParameterSyntax(newData)
   }
@@ -7036,7 +7036,7 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> AccessorParameterSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return AccessorParameterSyntax(newData)
   }
@@ -7100,8 +7100,8 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAccessorsAndRightBrace?.raw,
       rightBrace.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7148,7 +7148,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftBrace`, if present.
   public func withLeftBrace(
     _ newChild: TokenSyntax?) -> AccessorBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftBrace)
     return AccessorBlockSyntax(newData)
   }
@@ -7194,11 +7194,11 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `accessors` collection.
   public func addAccessor(_ element: AccessorDeclSyntax) -> AccessorBlockSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.accessors] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.accessors] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.accessorList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.accessors)
@@ -7210,7 +7210,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `accessors`, if present.
   public func withAccessors(
     _ newChild: AccessorListSyntax?) -> AccessorBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.accessorList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.accessorList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.accessors)
     return AccessorBlockSyntax(newData)
   }
@@ -7253,7 +7253,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightBrace`, if present.
   public func withRightBrace(
     _ newChild: TokenSyntax?) -> AccessorBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightBrace)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightBrace)
     return AccessorBlockSyntax(newData)
   }
@@ -7329,8 +7329,8 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAccessorAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBinding,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBinding,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7377,7 +7377,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> PatternBindingSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return PatternBindingSyntax(newData)
   }
@@ -7631,8 +7631,8 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenRawValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7680,7 +7680,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `identifier`, if present.
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> EnumCaseElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.identifier)
     return EnumCaseElementSyntax(newData)
   }
@@ -7883,8 +7883,8 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
       precedenceGroupAndDesignatedTypes.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.operatorPrecedenceAndTypes,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorPrecedenceAndTypes,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -7931,7 +7931,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> OperatorPrecedenceAndTypesSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
@@ -7980,11 +7980,11 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `precedenceGroupAndDesignatedTypes` collection.
   public func addPrecedenceGroupAndDesignatedType(_ element: TokenSyntax) -> OperatorPrecedenceAndTypesSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.precedenceGroupAndDesignatedTypes] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.precedenceGroupAndDesignatedTypes] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.identifierList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.identifierList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.precedenceGroupAndDesignatedTypes)
@@ -7996,7 +7996,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `precedenceGroupAndDesignatedTypes`, if present.
   public func withPrecedenceGroupAndDesignatedTypes(
     _ newChild: IdentifierListSyntax?) -> OperatorPrecedenceAndTypesSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.identifierList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.identifierList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.precedenceGroupAndDesignatedTypes)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
@@ -8062,8 +8062,8 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndOtherNames?.raw,
       otherNames.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupRelation,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupRelation,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8113,7 +8113,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `higherThanOrLowerThan`, if present.
   public func withHigherThanOrLowerThan(
     _ newChild: TokenSyntax?) -> PrecedenceGroupRelationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.higherThanOrLowerThan)
     return PrecedenceGroupRelationSyntax(newData)
   }
@@ -8156,7 +8156,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> PrecedenceGroupRelationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return PrecedenceGroupRelationSyntax(newData)
   }
@@ -8206,11 +8206,11 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `otherNames` collection.
   public func addOtherName(_ element: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupRelationSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.otherNames] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.otherNames] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.precedenceGroupNameList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.otherNames)
@@ -8222,7 +8222,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `otherNames`, if present.
   public func withOtherNames(
     _ newChild: PrecedenceGroupNameListSyntax?) -> PrecedenceGroupRelationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.precedenceGroupNameList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.precedenceGroupNameList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.otherNames)
     return PrecedenceGroupRelationSyntax(newData)
   }
@@ -8280,8 +8280,8 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8328,7 +8328,7 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> PrecedenceGroupNameElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return PrecedenceGroupNameElementSyntax(newData)
   }
@@ -8438,8 +8438,8 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndFlag?.raw,
       flag.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssignment,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAssignment,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8486,7 +8486,7 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `assignmentKeyword`, if present.
   public func withAssignmentKeyword(
     _ newChild: TokenSyntax?) -> PrecedenceGroupAssignmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.assignmentKeyword)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
@@ -8529,7 +8529,7 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> PrecedenceGroupAssignmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
@@ -8579,7 +8579,7 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `flag`, if present.
   public func withFlag(
     _ newChild: TokenSyntax?) -> PrecedenceGroupAssignmentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.trueKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.trueKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.flag)
     return PrecedenceGroupAssignmentSyntax(newData)
   }
@@ -8647,8 +8647,8 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
       unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssociativity,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAssociativity,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8695,7 +8695,7 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `associativityKeyword`, if present.
   public func withAssociativityKeyword(
     _ newChild: TokenSyntax?) -> PrecedenceGroupAssociativitySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.associativityKeyword)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
@@ -8738,7 +8738,7 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> PrecedenceGroupAssociativitySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
@@ -8787,7 +8787,7 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `value`, if present.
   public func withValue(
     _ newChild: TokenSyntax?) -> PrecedenceGroupAssociativitySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.value)
     return PrecedenceGroupAssociativitySyntax(newData)
   }
@@ -8866,8 +8866,8 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentListAndRightParen?.raw,
       rightParen?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.customAttribute,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.customAttribute,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -8915,7 +8915,7 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `atSignToken`, if present.
   public func withAtSignToken(
     _ newChild: TokenSyntax?) -> CustomAttributeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.atSign)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.atSign, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.atSignToken)
     return CustomAttributeSyntax(newData)
   }
@@ -8959,7 +8959,7 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `attributeName`, if present.
   public func withAttributeName(
     _ newChild: TypeSyntax?) -> CustomAttributeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.attributeName)
     return CustomAttributeSyntax(newData)
   }
@@ -9050,11 +9050,11 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `argumentList` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> CustomAttributeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.argumentList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.argumentList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.argumentList)
@@ -9199,8 +9199,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenRightParenAndTokenList?.raw,
       tokenList?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attribute,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.attribute,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9248,7 +9248,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `atSignToken`, if present.
   public func withAtSignToken(
     _ newChild: TokenSyntax?) -> AttributeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.atSign)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.atSign, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.atSignToken)
     return AttributeSyntax(newData)
   }
@@ -9292,7 +9292,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `attributeName`, if present.
   public func withAttributeName(
     _ newChild: TokenSyntax?) -> AttributeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.attributeName)
     return AttributeSyntax(newData)
   }
@@ -9482,11 +9482,11 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `tokenList` collection.
   public func addToken(_ element: TokenSyntax) -> AttributeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.tokenList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.tokenList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tokenList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tokenList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.tokenList)
@@ -9577,8 +9577,8 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilityListAndSemicolon?.raw,
       semicolon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityEntry,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityEntry,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9626,7 +9626,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `label`, if present.
   public func withLabel(
     _ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.label)
     return AvailabilityEntrySyntax(newData)
   }
@@ -9670,7 +9670,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return AvailabilityEntrySyntax(newData)
   }
@@ -9716,11 +9716,11 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `availabilityList` collection.
   public func addAvailability(_ element: AvailabilityArgumentSyntax) -> AvailabilityEntrySyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.availabilityList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.availabilityList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.availabilityList)
@@ -9732,7 +9732,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `availabilityList`, if present.
   public func withAvailabilityList(
     _ newChild: AvailabilitySpecListSyntax?) -> AvailabilityEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.availabilitySpecList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.availabilityList)
     return AvailabilityEntrySyntax(newData)
   }
@@ -9775,7 +9775,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `semicolon`, if present.
   public func withSemicolon(
     _ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.semicolon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.semicolon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.semicolon)
     return AvailabilityEntrySyntax(newData)
   }
@@ -9851,8 +9851,8 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenValueAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.labeledSpecializeEntry,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.labeledSpecializeEntry,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -9900,7 +9900,7 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `label`, if present.
   public func withLabel(
     _ newChild: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.label)
     return LabeledSpecializeEntrySyntax(newData)
   }
@@ -9944,7 +9944,7 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return LabeledSpecializeEntrySyntax(newData)
   }
@@ -9988,7 +9988,7 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `value`, if present.
   public func withValue(
     _ newChild: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.value)
     return LabeledSpecializeEntrySyntax(newData)
   }
@@ -10112,8 +10112,8 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDeclnameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.targetFunctionEntry,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.targetFunctionEntry,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10161,7 +10161,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `label`, if present.
   public func withLabel(
     _ newChild: TokenSyntax?) -> TargetFunctionEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.label)
     return TargetFunctionEntrySyntax(newData)
   }
@@ -10205,7 +10205,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> TargetFunctionEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return TargetFunctionEntrySyntax(newData)
   }
@@ -10249,7 +10249,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `declname`, if present.
   public func withDeclname(
     _ newChild: DeclNameSyntax?) -> TargetFunctionEntrySyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.declName)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.declName, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.declname)
     return TargetFunctionEntrySyntax(newData)
   }
@@ -10367,8 +10367,8 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
       unexpectedBetweenColonAndStringOrDeclname?.raw,
       stringOrDeclname.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.namedAttributeStringArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.namedAttributeStringArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10416,7 +10416,7 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `nameTok`, if present.
   public func withNameTok(
     _ newChild: TokenSyntax?) -> NamedAttributeStringArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.unknown(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.nameTok)
     return NamedAttributeStringArgumentSyntax(newData)
   }
@@ -10460,7 +10460,7 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> NamedAttributeStringArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return NamedAttributeStringArgumentSyntax(newData)
   }
@@ -10503,7 +10503,7 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `stringOrDeclname`, if present.
   public func withStringOrDeclname(
     _ newChild: Syntax?) -> NamedAttributeStringArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.stringOrDeclname)
     return NamedAttributeStringArgumentSyntax(newData)
   }
@@ -10561,8 +10561,8 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declName,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declName,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10612,7 +10612,7 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `declBaseName`, if present.
   public func withDeclBaseName(
     _ newChild: Syntax?) -> DeclNameSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.declBaseName)
     return DeclNameSyntax(newData)
   }
@@ -10732,8 +10732,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw,
       declNameArguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implementsAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.implementsAttributeArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -10784,7 +10784,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `type`, if present.
   public func withType(
     _ newChild: SimpleTypeIdentifierSyntax?) -> ImplementsAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.simpleTypeIdentifier)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.simpleTypeIdentifier, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
@@ -10830,7 +10830,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `comma`, if present.
   public func withComma(
     _ newChild: TokenSyntax?) -> ImplementsAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.comma)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.comma)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
@@ -10876,7 +10876,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   ///                   current `declBaseName`, if present.
   public func withDeclBaseName(
     _ newChild: Syntax?) -> ImplementsAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.declBaseName)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
@@ -10989,8 +10989,8 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndColon?.raw,
       colon?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelectorPiece,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelectorPiece,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11161,8 +11161,8 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
       unexpectedBetweenDiffParamsCommaAndWhereClause?.raw,
       whereClause?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiableAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiableAttributeArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11462,8 +11462,8 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
       unexpectedBetweenColonAndParameters?.raw,
       parameters.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamsClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamsClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11511,7 +11511,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   ///                   current `wrtLabel`, if present.
   public func withWrtLabel(
     _ newChild: TokenSyntax?) -> DifferentiabilityParamsClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.wrtLabel)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
@@ -11557,7 +11557,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> DifferentiabilityParamsClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
@@ -11600,7 +11600,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   ///                   current `parameters`, if present.
   public func withParameters(
     _ newChild: Syntax?) -> DifferentiabilityParamsClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.parameters)
     return DifferentiabilityParamsClauseSyntax(newData)
   }
@@ -11665,8 +11665,8 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDiffParamsAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParams,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParams,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11713,7 +11713,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> DifferentiabilityParamsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return DifferentiabilityParamsSyntax(newData)
   }
@@ -11760,11 +11760,11 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `diffParams` collection.
   public func addDifferentiabilityParam(_ element: DifferentiabilityParamSyntax) -> DifferentiabilityParamsSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.diffParams] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.diffParams] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.differentiabilityParamList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.diffParams)
@@ -11776,7 +11776,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `diffParams`, if present.
   public func withDiffParams(
     _ newChild: DifferentiabilityParamListSyntax?) -> DifferentiabilityParamsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.differentiabilityParamList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.differentiabilityParamList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.diffParams)
     return DifferentiabilityParamsSyntax(newData)
   }
@@ -11819,7 +11819,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> DifferentiabilityParamsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return DifferentiabilityParamsSyntax(newData)
   }
@@ -11881,8 +11881,8 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenParameterAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParam,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParam,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -11929,7 +11929,7 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `parameter`, if present.
   public func withParameter(
     _ newChild: Syntax?) -> DifferentiabilityParamSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.parameter)
     return DifferentiabilityParamSyntax(newData)
   }
@@ -12064,8 +12064,8 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
       unexpectedBetweenCommaAndDiffParams?.raw,
       diffParams?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12113,7 +12113,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   ///                   current `ofLabel`, if present.
   public func withOfLabel(
     _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.ofLabel)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
@@ -12160,7 +12160,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
@@ -12204,7 +12204,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   ///                   current `originalDeclName`, if present.
   public func withOriginalDeclName(
     _ newChild: QualifiedDeclNameSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.qualifiedDeclName)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.qualifiedDeclName, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.originalDeclName)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
@@ -12467,8 +12467,8 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.qualifiedDeclName,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.qualifiedDeclName,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12609,7 +12609,7 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> QualifiedDeclNameSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return QualifiedDeclNameSyntax(newData)
   }
@@ -12718,8 +12718,8 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndArguments?.raw,
       arguments?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDeclName,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionDeclName,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12769,7 +12769,7 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: Syntax?) -> FunctionDeclNameSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return FunctionDeclNameSyntax(newData)
   }
@@ -12882,8 +12882,8 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       unexpectedBetweenColonAndVersionList?.raw,
       versionList.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployAttributeSpecList,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployAttributeSpecList,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -12931,7 +12931,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `beforeLabel`, if present.
   public func withBeforeLabel(
     _ newChild: TokenSyntax?) -> BackDeployAttributeSpecListSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.beforeLabel)
     return BackDeployAttributeSpecListSyntax(newData)
   }
@@ -12977,7 +12977,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> BackDeployAttributeSpecListSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return BackDeployAttributeSpecListSyntax(newData)
   }
@@ -13027,11 +13027,11 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   ///            appended to its `versionList` collection.
   public func addAvailability(_ element: BackDeployVersionArgumentSyntax) -> BackDeployAttributeSpecListSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.versionList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.versionList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.backDeployVersionList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.versionList)
@@ -13043,7 +13043,7 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `versionList`, if present.
   public func withVersionList(
     _ newChild: BackDeployVersionListSyntax?) -> BackDeployAttributeSpecListSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.backDeployVersionList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.backDeployVersionList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.versionList)
     return BackDeployAttributeSpecListSyntax(newData)
   }
@@ -13105,8 +13105,8 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.backDeployVersionArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13153,7 +13153,7 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `availabilityVersionRestriction`, if present.
   public func withAvailabilityVersionRestriction(
     _ newChild: AvailabilityVersionRestrictionSyntax?) -> BackDeployVersionArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.availabilityVersionRestriction)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilityVersionRestriction, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.availabilityVersionRestriction)
     return BackDeployVersionArgumentSyntax(newData)
   }
@@ -13257,8 +13257,8 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereKeywordAndGuardResult?.raw,
       guardResult.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.whereClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.whereClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13305,7 +13305,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `whereKeyword`, if present.
   public func withWhereKeyword(
     _ newChild: TokenSyntax?) -> WhereClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.whereKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.whereKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.whereKeyword)
     return WhereClauseSyntax(newData)
   }
@@ -13348,7 +13348,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `guardResult`, if present.
   public func withGuardResult(
     _ newChild: ExprSyntax?) -> WhereClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.guardResult)
     return WhereClauseSyntax(newData)
   }
@@ -13416,8 +13416,8 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTrailingCommaAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.yieldList,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldList,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13464,7 +13464,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> YieldListSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return YieldListSyntax(newData)
   }
@@ -13510,11 +13510,11 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `elementList` collection.
   public func addElement(_ element: ExprSyntax) -> YieldListSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elementList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.elementList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.exprList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.elementList)
@@ -13526,7 +13526,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `elementList`, if present.
   public func withElementList(
     _ newChild: ExprListSyntax?) -> YieldListSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.exprList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.exprList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elementList)
     return YieldListSyntax(newData)
   }
@@ -13613,7 +13613,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> YieldListSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return YieldListSyntax(newData)
   }
@@ -13673,8 +13673,8 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenConditionAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13721,7 +13721,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `condition`, if present.
   public func withCondition(
     _ newChild: Syntax?) -> ConditionElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.condition)
     return ConditionElementSyntax(newData)
   }
@@ -13833,8 +13833,8 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -13881,7 +13881,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `poundAvailableKeyword`, if present.
   public func withPoundAvailableKeyword(
     _ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundAvailableKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundAvailableKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundAvailableKeyword)
     return AvailabilityConditionSyntax(newData)
   }
@@ -13924,7 +13924,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return AvailabilityConditionSyntax(newData)
   }
@@ -13970,11 +13970,11 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `availabilitySpec` collection.
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> AvailabilityConditionSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.availabilitySpec] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.availabilitySpec] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.availabilitySpec)
@@ -13986,7 +13986,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `availabilitySpec`, if present.
   public func withAvailabilitySpec(
     _ newChild: AvailabilitySpecListSyntax?) -> AvailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.availabilitySpecList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.availabilitySpec)
     return AvailabilityConditionSyntax(newData)
   }
@@ -14029,7 +14029,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> AvailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return AvailabilityConditionSyntax(newData)
   }
@@ -14101,8 +14101,8 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.matchingPatternCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.matchingPatternCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14149,7 +14149,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `caseKeyword`, if present.
   public func withCaseKeyword(
     _ newChild: TokenSyntax?) -> MatchingPatternConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.caseKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.caseKeyword)
     return MatchingPatternConditionSyntax(newData)
   }
@@ -14192,7 +14192,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> MatchingPatternConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return MatchingPatternConditionSyntax(newData)
   }
@@ -14279,7 +14279,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `initializer`, if present.
   public func withInitializer(
     _ newChild: InitializerClauseSyntax?) -> MatchingPatternConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.initializerClause)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.initializerClause, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.initializer)
     return MatchingPatternConditionSyntax(newData)
   }
@@ -14351,8 +14351,8 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeAnnotationAndInitializer?.raw,
       initializer?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalBindingCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.optionalBindingCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14399,7 +14399,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `letOrVarKeyword`, if present.
   public func withLetOrVarKeyword(
     _ newChild: TokenSyntax?) -> OptionalBindingConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.letKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.letOrVarKeyword)
     return OptionalBindingConditionSyntax(newData)
   }
@@ -14442,7 +14442,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> OptionalBindingConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return OptionalBindingConditionSyntax(newData)
   }
@@ -14602,8 +14602,8 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAvailabilitySpecAndRightParen?.raw,
       rightParen.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unavailabilityCondition,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unavailabilityCondition,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14650,7 +14650,7 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `poundUnavailableKeyword`, if present.
   public func withPoundUnavailableKeyword(
     _ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundUnavailableKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundUnavailableKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.poundUnavailableKeyword)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -14693,7 +14693,7 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftParen`, if present.
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftParen)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -14739,11 +14739,11 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `availabilitySpec` collection.
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> UnavailabilityConditionSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.availabilitySpec] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.availabilitySpec] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.availabilitySpec)
@@ -14755,7 +14755,7 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `availabilitySpec`, if present.
   public func withAvailabilitySpec(
     _ newChild: AvailabilitySpecListSyntax?) -> UnavailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.availabilitySpecList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.availabilitySpecList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.availabilitySpec)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -14798,7 +14798,7 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightParen`, if present.
   public func withRightParen(
     _ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return UnavailabilityConditionSyntax(newData)
   }
@@ -14852,8 +14852,8 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBeforeIfStatement?.raw,
       ifStatement.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseIfContinuation,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.elseIfContinuation,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -14900,7 +14900,7 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `ifStatement`, if present.
   public func withIfStatement(
     _ newChild: IfStmtSyntax?) -> ElseIfContinuationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.ifStmt)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.ifStmt, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.ifStatement)
     return ElseIfContinuationSyntax(newData)
   }
@@ -14954,8 +14954,8 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenElseKeywordAndBody?.raw,
       body.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseBlock,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.elseBlock,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15002,7 +15002,7 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `elseKeyword`, if present.
   public func withElseKeyword(
     _ newChild: TokenSyntax?) -> ElseBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.elseKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.elseKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.elseKeyword)
     return ElseBlockSyntax(newData)
   }
@@ -15045,7 +15045,7 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `body`, if present.
   public func withBody(
     _ newChild: CodeBlockSyntax?) -> ElseBlockSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.codeBlock)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlock, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.body)
     return ElseBlockSyntax(newData)
   }
@@ -15107,8 +15107,8 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenLabelAndStatements?.raw,
       statements.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCase,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCase,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15199,7 +15199,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `label`, if present.
   public func withLabel(
     _ newChild: Syntax?) -> SwitchCaseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.label)
     return SwitchCaseSyntax(newData)
   }
@@ -15245,11 +15245,11 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `statements` collection.
   public func addStatement(_ element: CodeBlockItemSyntax) -> SwitchCaseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.statements] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.statements] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.statements)
@@ -15261,7 +15261,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `statements`, if present.
   public func withStatements(
     _ newChild: CodeBlockItemListSyntax?) -> SwitchCaseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.codeBlockItemList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlockItemList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.statements)
     return SwitchCaseSyntax(newData)
   }
@@ -15319,8 +15319,8 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenDefaultKeywordAndColon?.raw,
       colon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchDefaultLabel,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchDefaultLabel,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15367,7 +15367,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `defaultKeyword`, if present.
   public func withDefaultKeyword(
     _ newChild: TokenSyntax?) -> SwitchDefaultLabelSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.defaultKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.defaultKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.defaultKeyword)
     return SwitchDefaultLabelSyntax(newData)
   }
@@ -15410,7 +15410,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> SwitchDefaultLabelSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return SwitchDefaultLabelSyntax(newData)
   }
@@ -15472,8 +15472,8 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15520,7 +15520,7 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> CaseItemSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return CaseItemSyntax(newData)
   }
@@ -15672,8 +15672,8 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereClauseAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItem,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItem,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15873,8 +15873,8 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenCaseItemsAndColon?.raw,
       colon.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseLabel,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseLabel,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -15921,7 +15921,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `caseKeyword`, if present.
   public func withCaseKeyword(
     _ newChild: TokenSyntax?) -> SwitchCaseLabelSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.caseKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.caseKeyword)
     return SwitchCaseLabelSyntax(newData)
   }
@@ -15967,11 +15967,11 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `caseItems` collection.
   public func addCaseItem(_ element: CaseItemSyntax) -> SwitchCaseLabelSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.caseItems] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.caseItems] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.caseItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.caseItems)
@@ -15983,7 +15983,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `caseItems`, if present.
   public func withCaseItems(
     _ newChild: CaseItemListSyntax?) -> SwitchCaseLabelSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.caseItemList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.caseItemList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.caseItems)
     return SwitchCaseLabelSyntax(newData)
   }
@@ -16026,7 +16026,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> SwitchCaseLabelSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return SwitchCaseLabelSyntax(newData)
   }
@@ -16090,8 +16090,8 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenCatchItemsAndBody?.raw,
       body.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16138,7 +16138,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `catchKeyword`, if present.
   public func withCatchKeyword(
     _ newChild: TokenSyntax?) -> CatchClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.catchKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.catchKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.catchKeyword)
     return CatchClauseSyntax(newData)
   }
@@ -16185,11 +16185,11 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `catchItems` collection.
   public func addCatchItem(_ element: CatchItemSyntax) -> CatchClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.catchItems] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.catchItems] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.catchItemList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.catchItems)
@@ -16244,7 +16244,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `body`, if present.
   public func withBody(
     _ newChild: CodeBlockSyntax?) -> CatchClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.codeBlock)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.codeBlock, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.body)
     return CatchClauseSyntax(newData)
   }
@@ -16302,8 +16302,8 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenWhereKeywordAndRequirementList?.raw,
       requirementList.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericWhereClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericWhereClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16350,7 +16350,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `whereKeyword`, if present.
   public func withWhereKeyword(
     _ newChild: TokenSyntax?) -> GenericWhereClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.whereKeyword)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.whereKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.whereKeyword)
     return GenericWhereClauseSyntax(newData)
   }
@@ -16396,11 +16396,11 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `requirementList` collection.
   public func addRequirement(_ element: GenericRequirementSyntax) -> GenericWhereClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.requirementList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.requirementList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.genericRequirementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.requirementList)
@@ -16412,7 +16412,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `requirementList`, if present.
   public func withRequirementList(
     _ newChild: GenericRequirementListSyntax?) -> GenericWhereClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.genericRequirementList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericRequirementList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.requirementList)
     return GenericWhereClauseSyntax(newData)
   }
@@ -16468,8 +16468,8 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenBodyAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16516,7 +16516,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `body`, if present.
   public func withBody(
     _ newChild: Syntax?) -> GenericRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.body)
     return GenericRequirementSyntax(newData)
   }
@@ -16622,8 +16622,8 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sameTypeRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.sameTypeRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16670,7 +16670,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftTypeIdentifier`, if present.
   public func withLeftTypeIdentifier(
     _ newChild: TypeSyntax?) -> SameTypeRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftTypeIdentifier)
     return SameTypeRequirementSyntax(newData)
   }
@@ -16713,7 +16713,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `equalityToken`, if present.
   public func withEqualityToken(
     _ newChild: TokenSyntax?) -> SameTypeRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.spacedBinaryOperator(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.spacedBinaryOperator(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.equalityToken)
     return SameTypeRequirementSyntax(newData)
   }
@@ -16756,7 +16756,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightTypeIdentifier`, if present.
   public func withRightTypeIdentifier(
     _ newChild: TypeSyntax?) -> SameTypeRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightTypeIdentifier)
     return SameTypeRequirementSyntax(newData)
   }
@@ -16850,8 +16850,8 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenAlignmentAndRightParen?.raw,
       rightParen?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.layoutRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.layoutRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -16898,7 +16898,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `typeIdentifier`, if present.
   public func withTypeIdentifier(
     _ newChild: TypeSyntax?) -> LayoutRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.typeIdentifier)
     return LayoutRequirementSyntax(newData)
   }
@@ -16941,7 +16941,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return LayoutRequirementSyntax(newData)
   }
@@ -16984,7 +16984,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `layoutConstraint`, if present.
   public func withLayoutConstraint(
     _ newChild: TokenSyntax?) -> LayoutRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.layoutConstraint)
     return LayoutRequirementSyntax(newData)
   }
@@ -17290,8 +17290,8 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenInheritedTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameter,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameter,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -17342,11 +17342,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> GenericParameterSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.attributes] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.attributes)
@@ -17401,7 +17401,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> GenericParameterSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return GenericParameterSyntax(newData)
   }
@@ -17595,8 +17595,8 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenNameAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedType,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -17643,7 +17643,7 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return PrimaryAssociatedTypeSyntax(newData)
   }
@@ -17749,8 +17749,8 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -17797,7 +17797,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftAngleBracket`, if present.
   public func withLeftAngleBracket(
     _ newChild: TokenSyntax?) -> GenericParameterClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftAngle)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftAngleBracket)
     return GenericParameterClauseSyntax(newData)
   }
@@ -17843,11 +17843,11 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `genericParameterList` collection.
   public func addGenericParameter(_ element: GenericParameterSyntax) -> GenericParameterClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.genericParameterList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.genericParameterList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.genericParameterList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.genericParameterList)
@@ -17859,7 +17859,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `genericParameterList`, if present.
   public func withGenericParameterList(
     _ newChild: GenericParameterListSyntax?) -> GenericParameterClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.genericParameterList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericParameterList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.genericParameterList)
     return GenericParameterClauseSyntax(newData)
   }
@@ -17902,7 +17902,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightAngleBracket`, if present.
   public func withRightAngleBracket(
     _ newChild: TokenSyntax?) -> GenericParameterClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightAngle)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightAngleBracket)
     return GenericParameterClauseSyntax(newData)
   }
@@ -17966,8 +17966,8 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndRightTypeIdentifier?.raw,
       rightTypeIdentifier.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conformanceRequirement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conformanceRequirement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18014,7 +18014,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftTypeIdentifier`, if present.
   public func withLeftTypeIdentifier(
     _ newChild: TypeSyntax?) -> ConformanceRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftTypeIdentifier)
     return ConformanceRequirementSyntax(newData)
   }
@@ -18057,7 +18057,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> ConformanceRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return ConformanceRequirementSyntax(newData)
   }
@@ -18100,7 +18100,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightTypeIdentifier`, if present.
   public func withRightTypeIdentifier(
     _ newChild: TypeSyntax?) -> ConformanceRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightTypeIdentifier)
     return ConformanceRequirementSyntax(newData)
   }
@@ -18164,8 +18164,8 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
       unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18212,7 +18212,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `leftAngleBracket`, if present.
   public func withLeftAngleBracket(
     _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftAngle)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftAngleBracket)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
@@ -18258,11 +18258,11 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   ///            appended to its `primaryAssociatedTypeList` collection.
   public func addPrimaryAssociatedType(_ element: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.primaryAssociatedTypeList] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.primaryAssociatedTypeList] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.primaryAssociatedTypeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.primaryAssociatedTypeList)
@@ -18274,7 +18274,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `primaryAssociatedTypeList`, if present.
   public func withPrimaryAssociatedTypeList(
     _ newChild: PrimaryAssociatedTypeListSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.primaryAssociatedTypeList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.primaryAssociatedTypeList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.primaryAssociatedTypeList)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
@@ -18317,7 +18317,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `rightAngleBracket`, if present.
   public func withRightAngleBracket(
     _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightAngle)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightAngleBracket)
     return PrimaryAssociatedTypeClauseSyntax(newData)
   }
@@ -18375,8 +18375,8 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenTypeAndAmpersand?.raw,
       ampersand?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18423,7 +18423,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> CompositionTypeElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return CompositionTypeElementSyntax(newData)
   }
@@ -18559,8 +18559,8 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenInitializerAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -18783,7 +18783,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> TupleTypeElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return TupleTypeElementSyntax(newData)
   }
@@ -18983,8 +18983,8 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentTypeAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19031,7 +19031,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `argumentType`, if present.
   public func withArgumentType(
     _ newChild: TypeSyntax?) -> GenericArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.argumentType)
     return GenericArgumentSyntax(newData)
   }
@@ -19137,8 +19137,8 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenArgumentsAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentClause,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentClause,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19185,7 +19185,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftAngleBracket`, if present.
   public func withLeftAngleBracket(
     _ newChild: TokenSyntax?) -> GenericArgumentClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftAngle)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.leftAngleBracket)
     return GenericArgumentClauseSyntax(newData)
   }
@@ -19231,11 +19231,11 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///            appended to its `arguments` collection.
   public func addArgument(_ element: GenericArgumentSyntax) -> GenericArgumentClauseSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.arguments] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.arguments] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.genericArgumentList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.arguments)
@@ -19247,7 +19247,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `arguments`, if present.
   public func withArguments(
     _ newChild: GenericArgumentListSyntax?) -> GenericArgumentClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.genericArgumentList)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericArgumentList, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.arguments)
     return GenericArgumentClauseSyntax(newData)
   }
@@ -19290,7 +19290,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightAngleBracket`, if present.
   public func withRightAngleBracket(
     _ newChild: TokenSyntax?) -> GenericArgumentClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightAngle)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.rightAngleBracket)
     return GenericArgumentClauseSyntax(newData)
   }
@@ -19348,8 +19348,8 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenColonAndType?.raw,
       type.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeAnnotation,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.typeAnnotation,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19396,7 +19396,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> TypeAnnotationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return TypeAnnotationSyntax(newData)
   }
@@ -19439,7 +19439,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> TypeAnnotationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return TypeAnnotationSyntax(newData)
   }
@@ -19507,8 +19507,8 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenPatternAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElement,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElement,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19643,7 +19643,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> TuplePatternElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return TuplePatternElementSyntax(newData)
   }
@@ -19751,8 +19751,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenEntryAndTrailingComma?.raw,
       trailingComma?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19800,7 +19800,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `entry`, if present.
   public func withEntry(
     _ newChild: Syntax?) -> AvailabilityArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.entry)
     return AvailabilityArgumentSyntax(newData)
   }
@@ -19914,8 +19914,8 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
       unexpectedBetweenColonAndValue?.raw,
       value.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityLabeledArgument,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityLabeledArgument,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -19963,7 +19963,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `label`, if present.
   public func withLabel(
     _ newChild: TokenSyntax?) -> AvailabilityLabeledArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.label)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
@@ -20007,7 +20007,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `colon`, if present.
   public func withColon(
     _ newChild: TokenSyntax?) -> AvailabilityLabeledArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.colon)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
@@ -20051,7 +20051,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   ///                   current `value`, if present.
   public func withValue(
     _ newChild: Syntax?) -> AvailabilityLabeledArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.value)
     return AvailabilityLabeledArgumentSyntax(newData)
   }
@@ -20113,8 +20113,8 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
       unexpectedBetweenPlatformAndVersion?.raw,
       version?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityVersionRestriction,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestriction,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -20166,7 +20166,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   ///                   current `platform`, if present.
   public func withPlatform(
     _ newChild: TokenSyntax?) -> AvailabilityVersionRestrictionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.platform)
     return AvailabilityVersionRestrictionSyntax(newData)
   }
@@ -20276,8 +20276,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
       unexpectedBetweenPatchPeriodAndPatchVersion?.raw,
       patchVersion?.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.versionTuple,
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.versionTuple,
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -20331,7 +20331,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `majorMinor`, if present.
   public func withMajorMinor(
     _ newChild: Syntax?) -> VersionTupleSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: Cursor.majorMinor)
     return VersionTupleSyntax(newData)
   }

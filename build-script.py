@@ -289,12 +289,14 @@ def generate_syntax_node_template_gyb_files(
 # live in.
 def gyb_dir_mapping(
     swiftsyntax_destination: Optional[str] = None,
+    swiftsyntax_raw_destination: Optional[str] = None,
     swiftsyntaxbuilder_destination: Optional[str] = None,
     swiftsyntaxparser_destination: Optional[str] = None,
     generateswiftsyntaxbuilder_destination: Optional[str] = None,
 ) -> Dict[str, Optional[str]]:
     return {
         SWIFTSYNTAX_DIR: swiftsyntax_destination,
+        os.path.join(SWIFTSYNTAX_DIR, "Raw"): swiftsyntax_raw_destination,
         SWIFTSYNTAXBUILDER_DIR: swiftsyntaxbuilder_destination,
         SWIFTSYNTAXPARSER_DIR: swiftsyntaxparser_destination,
         GENERATESWIFTSYNTAXBUILDER_DIR: generateswiftsyntaxbuilder_destination,
@@ -454,6 +456,7 @@ class Builder(object):
 def verify_generated_files(gyb_exec: str, verbose: bool) -> None:
     gyb_dirs = gyb_dir_mapping(
         swiftsyntax_destination=tempfile.mkdtemp(),
+        swiftsyntax_raw_destination=tempfile.mkdtemp(),
         swiftsyntaxbuilder_destination=tempfile.mkdtemp(),
         swiftsyntaxparser_destination=tempfile.mkdtemp(),
         generateswiftsyntaxbuilder_destination=tempfile.mkdtemp(),

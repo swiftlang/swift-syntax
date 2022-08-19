@@ -102,8 +102,8 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       end
 %     end
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.${node.swift_syntax_kind},
+      from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -160,11 +160,11 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   ///            appended to its `${child.swift_name}` collection.
   public func add${child_elt}(_ element: ${child_elt_type}) -> ${node.name} {
     var collection: RawSyntax
-    if let col = raw[Cursor.${child.swift_name}] {
-      collection = col.appending(element.raw)
+    if let col = raw.layoutView![Cursor.${child.swift_name}] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.${child_node.swift_syntax_kind},
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.${child_node.swift_syntax_kind},
+        from: [element.raw], arena: .default)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.${child.swift_name})

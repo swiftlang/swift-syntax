@@ -38,8 +38,8 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public init(tokens: [TokenSyntax]) {
-    let raw = RawSyntax.createAndCalcLength(kind: .unknown,
-      layout: tokens.map { $0.raw }, presence: .present)
+    let raw = RawSyntax.makeLayout(kind: .unknown,
+      from: tokens.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -56,6 +56,10 @@ extension UnknownSyntax: CustomReflectable {
 /// A Syntax node representing a single token.
 public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
+
+  var tokenView: RawSyntaxTokenView {
+    return raw.tokenView!
+  }
 
   /// Converts the given `Syntax` node to a `TokenSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
@@ -78,8 +82,13 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     trailingTrivia: Trivia = [],
     presence: SourcePresence
   ) {
-    let raw = RawSyntax.createAndCalcLength(kind: kind, leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia, presence: presence)
+    let raw = RawSyntax.makeMaterializedToken(
+      kind: kind,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence,
+      arena: .default
+    )
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
@@ -103,7 +112,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = raw.withTokenKind(tokenKind)
+    let newRaw = tokenView.withKind(tokenKind)
     let newData = data.replacingSelf(newRaw)
     return TokenSyntax(newData)
   }
@@ -144,7 +153,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {
-      return raw.formTokenLeadingTrivia()
+      return tokenView.formLeadingTrivia()
     }
     set {
       self = withLeadingTrivia(newValue)
@@ -154,7 +163,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
     get {
-      return raw.formTokenTrailingTrivia()
+      return tokenView.formTrailingTrivia()
     }
     set {
       self = withTrailingTrivia(newValue)
@@ -164,7 +173,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The kind of token this node represents.
   public var tokenKind: TokenKind {
     get {
-      return raw.formTokenKind()!
+      return tokenView.formKind()
     }
     set {
       self = withKind(newValue)
@@ -174,17 +183,17 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
   public var contentLength: SourceLength {
-    return raw.tokenContentLength
+    return tokenView.contentLength
   }
 
   /// The length this node's leading trivia takes up spelled out in source.
   public var leadingTriviaLength: SourceLength {
-    return raw.tokenLeadingTriviaLength
+    return tokenView.leadingTriviaLength
   }
 
   /// The length this node's trailing trivia takes up spelled out in source.
   public var trailingTriviaLength: SourceLength {
-    return raw.tokenTrailingTriviaLength
+    return tokenView.trailingTriviaLength
   }
 
   /// The length of this node including all of its trivia.

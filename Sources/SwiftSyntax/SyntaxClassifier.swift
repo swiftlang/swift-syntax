@@ -28,9 +28,9 @@ extension TokenSyntax {
   /// The `SyntaxClassifiedRange` for the token text, excluding trivia.
   public var tokenClassification: SyntaxClassifiedRange {
     let contextualClassification = self.data.contextualClassification
-    let relativeOffset = raw.tokenLeadingTriviaLength.utf8Length
+    let relativeOffset = tokenView.leadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    return TokenKindAndText(kind: raw.rawTokenKind, text: raw.rawTokenText).classify(
+    return TokenKindAndText(kind: tokenView.rawKind, text: tokenView.rawText).classify(
       offset: absoluteOffset, contextualClassification: contextualClassification)
   }
 }
@@ -116,9 +116,9 @@ fileprivate struct AbsoluteNode {
   }
 
   var firstChild: AbsoluteNode? {
+    guard let layoutView = raw.layoutView else { return nil }
     var curPos = position.advancedToFirstChild()
-    for i in 0..<raw.numberOfChildren {
-      let childOpt = raw.child(at: i)
+    for childOpt in layoutView.children {
       if let child = childOpt, viewMode.shouldTraverse(node: child) {
         return AbsoluteNode(raw: child, position: curPos, parent: self)
       }
@@ -129,8 +129,7 @@ fileprivate struct AbsoluteNode {
 
   func nextSibling(parent: AbsoluteNode) -> AbsoluteNode? {
     var curPos = position.advancedBySibling(raw)
-    for i in Int(position.indexInParent+1) ..< parent.raw.numberOfChildren {
-      let siblingOpt = parent.raw.child(at: i)
+    for siblingOpt in parent.raw.layoutView!.children.dropFirst(Int(position.indexInParent + 1)) {
       if let sibling = siblingOpt, viewMode.shouldTraverse(node: sibling) {
         return AbsoluteNode(raw: sibling, position: curPos, parent: parent)
       }
@@ -282,6 +281,9 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
   }
 
   let token: AbsoluteNode
+  var tokenView: RawSyntaxTokenView {
+    return token.raw.tokenView!
+  }
   var offset: Int
   var state: State
 
@@ -289,7 +291,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
     assert(token.raw.isToken)
     self.token = token
     self.offset = Int(token.position.offset)
-    self.state = .atLeadingTrivia(token.raw.tokenLeadingRawTriviaPieces, 0)
+    self.state = .atLeadingTrivia(token.raw.tokenView!.leadingRawTriviaPieces, 0)
   }
 
   var relativeOffset: Int { return offset - Int(token.position.offset) }
@@ -310,11 +312,11 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
 
       case .atTokenText:
         let classifiedRange = TokenKindAndText(
-          kind: token.raw.rawTokenKind, text: token.raw.rawTokenText)
+          kind: tokenView.rawKind, text: tokenView.rawText)
           .classify(offset: offset, contextualClassification: token.classification)
 
         // Move on to trailing trivia.
-        state = .atTrailingTrivia(token.raw.tokenTrailingRawTriviaPieces, 0)
+        state = .atTrailingTrivia(tokenView.trailingRawTriviaPieces, 0)
         offset = classifiedRange.endOffset
         guard classifiedRange.kind != .none else { break }
         return classifiedRange

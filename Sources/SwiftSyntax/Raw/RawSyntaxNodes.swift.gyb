@@ -29,6 +29,10 @@ public protocol Raw${node.name}NodeProtocol: Raw${node.base_type}NodeProtocol {}
 
 @_spi(RawSyntax)
 public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_type}NodeProtocol {
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
 %   if node.is_base():
 %     sub_kinds = ['.' + n.swift_syntax_kind for n in SYNTAX_NODES if n.base_kind == node.syntax_kind]
@@ -72,7 +76,7 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
   }
 
   public var elements: [Raw${node.collection_element_type}] {
-    raw.children.map { Raw${node.collection_element_type}(raw: $0!) }
+    layoutView.children.map { Raw${node.collection_element_type}(raw: $0!) }
   }
 %   end
 %
@@ -107,9 +111,9 @@ public struct Raw${node.name}: Raw${node.name if node.is_base() else node.base_t
 %       iuo_mark = "!" if not child.is_optional else ""
   public var ${child.swift_name}: Raw${child.type_name + optional_mark} {
 %       if child.type_name == "Syntax":
-    raw.children[${idx}]${iuo_mark}
+    layoutView.children[${idx}]${iuo_mark}
 %       else:
-    raw.children[${idx}].map(Raw${child.type_name}.init(raw:))${iuo_mark}
+    layoutView.children[${idx}].map(Raw${child.type_name}.init(raw:))${iuo_mark}
 %       end
   }
 %     end

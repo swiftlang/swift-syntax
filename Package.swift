@@ -122,7 +122,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftOperatorPrecedence",
-      dependencies: ["SwiftSyntax", "SwiftParser"]
+      dependencies: ["SwiftSyntax"]
     ),
     .executableTarget(
       name: "lit-test-helper",
@@ -181,7 +181,8 @@ let package = Package(
     ),
     .testTarget(
       name: "SwiftOperatorPrecedenceTest",
-      dependencies: ["SwiftOperatorPrecedence", "_SwiftSyntaxTestSupport"]
+      dependencies: ["SwiftOperatorPrecedence", "_SwiftSyntaxTestSupport",
+                     "SwiftParser"]
     ),
   ]
 )

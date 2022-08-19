@@ -355,11 +355,9 @@ private func createWithTrailingCommaFunction(node: Node) -> FunctionDecl {
           label: child.swiftName,
           expression: child.name == "TrailingComma" ? SequenceExpr {
             TernaryExpr(
-              conditionExpression: "withComma",
-              questionMark: .infixQuestionMark.withLeadingTrivia(.space).withTrailingTrivia(.space),
-              firstChoice: MemberAccessExpr(name: "comma"),
-              colonMark: .colon.withLeadingTrivia(.space).withTrailingTrivia(.space),
-              secondChoice: NilLiteralExpr()
+              if: "withComma",
+              then: MemberAccessExpr(name: "comma"),
+              else: NilLiteralExpr()
             )
           } : child.swiftName
         )

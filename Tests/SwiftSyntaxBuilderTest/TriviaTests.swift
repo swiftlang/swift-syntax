@@ -24,4 +24,12 @@ final class TriviaTests: XCTestCase {
       /* An inline comment */ static var test: String
       """)
   }
+
+  func testTriviaConcatenation() {
+    let x = Trivia.newline
+    var y = x
+    y += .space
+    XCTAssertEqual(y, x + .space)
+    XCTAssertEqual(y, [.newlines(1), .spaces(1)])
+  }
 }

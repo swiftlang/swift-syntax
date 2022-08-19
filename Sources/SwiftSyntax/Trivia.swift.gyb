@@ -210,9 +210,16 @@ extension Trivia: CustomStringConvertible {
   }
 }
 
-/// Concatenates two collections of `Trivia` into one collection.
-public func +(lhs: Trivia, rhs: Trivia) -> Trivia {
-  return Trivia(pieces: lhs.pieces + rhs.pieces)
+extension Trivia {
+  /// Concatenates two collections of `Trivia` into one collection.
+  public static func +(lhs: Trivia, rhs: Trivia) -> Trivia {
+    return Trivia(pieces: lhs.pieces + rhs.pieces)
+  }
+
+  /// Concatenates two collections of `Trivia` into the left-hand side.
+  public static func +=(lhs: inout Trivia, rhs: Trivia) {
+    lhs = lhs + rhs
+  }
 }
 
 extension TriviaPiece: Equatable {}

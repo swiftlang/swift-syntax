@@ -88,4 +88,21 @@ final class VariableTests: XCTestCase {
       XCTAssertEqual(syntax.description, expected, line: line)
     }
   }
+
+  func testComputedProperty() {
+    let buildable = VariableDecl(name: "test", type: "Int") {
+      SequenceExpr {
+        IntegerLiteralExpr(4)
+        BinaryOperatorExpr("+")
+        IntegerLiteralExpr(5)
+      }
+    }
+
+    let syntax = buildable.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, """
+      var test: Int {
+          4 + 5
+      }
+      """)
+  }
 }

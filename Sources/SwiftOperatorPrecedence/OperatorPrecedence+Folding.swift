@@ -263,8 +263,16 @@ extension OperatorPrecedence {
     return makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
   }
 
-  /// "Fold" an expression sequence into a structured syntax tree.
-  public func fold(
+  /// "Fold" a sequence expression into a structured syntax tree.
+  ///
+  /// A sequence expression results from parsing an expression involving
+  /// infix operators, such as `x + y * z`. Swift's grammar does not
+  /// involve operator precedence, so a sequence expression is a flat list
+  /// of all of the terms `x`, `+`, `y`, `*`, and `z`. This operation folds
+  /// a single sequence expression into a structured syntax tree that
+  /// represents the same source code, but describes the order of operations
+  /// as if the expression has been parenthesized `x + (y * z)`.
+  public func foldSingle(
     _ sequence: SequenceExprSyntax,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows -> ExprSyntax {
@@ -275,5 +283,82 @@ extension OperatorPrecedence {
       bound: PrecedenceBound(groupName: nil, isStrict: false, syntax: nil),
       errorHandler: errorHandler
     )
+  }
+
+  /// Syntax rewriter that folds all of the sequence expressions it
+  /// encounters.
+  private class SequenceFolder : SyntaxRewriter {
+    /// The first operator precedecence that caused the error handler to
+    /// also throw.
+    var firstFatalError: OperatorPrecedenceError? = nil
+
+    let opPrecedence: OperatorPrecedence
+    let errorHandler: OperatorPrecedenceErrorHandler
+
+    init(
+      opPrecedence: OperatorPrecedence,
+      errorHandler: @escaping OperatorPrecedenceErrorHandler
+    ) {
+      self.opPrecedence = opPrecedence
+      self.errorHandler = errorHandler
+    }
+
+    override func visit(_ node: SequenceExprSyntax) -> ExprSyntax {
+      // If the error handler threw in response to an error, don't
+      // continue folding.
+      if firstFatalError != nil {
+        return ExprSyntax(node)
+      }
+
+      let newNode = super.visit(node).as(SequenceExprSyntax.self)!
+
+      // If the error handler threw in response to an error, don't
+      // continue folding.
+      if firstFatalError != nil {
+        return ExprSyntax(newNode)
+      }
+
+      // Try to fold this sequence expression.
+      do {
+        return try opPrecedence.foldSingle(newNode) { origError in
+          do {
+            try errorHandler(origError)
+          } catch {
+            firstFatalError = origError
+            throw error
+          }
+        }
+      } catch {
+        return ExprSyntax(newNode)
+      }
+    }
+  }
+
+  /// Fold all sequence expressions within the given syntax tree into a
+  /// structured syntax tree.
+  ///
+  /// This operation replaces all sequence expressions in the given syntax
+  /// tree with structured syntax trees, by walking the tree and invoking
+  /// `foldSingle` on each sequence expression it encounters. Use this to
+  /// provide structure to an entire tree.
+  public func foldAll<Node: SyntaxProtocol>(
+    _ node: Node,
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows -> SyntaxProtocol {
+    return try withoutActuallyEscaping(errorHandler) { errorHandler in
+      let folder = SequenceFolder(
+        opPrecedence: self, errorHandler: errorHandler
+      )
+      let result = folder.visit(Syntax(node))
+
+      // If the sequence folder encountered an error that caused the error
+      // handler to throw, invoke the error handler again with the original
+      // error.
+      if let origFatalError = folder.firstFatalError {
+        try errorHandler(origFatalError)
+      }
+
+      return result
+    }
   }
 }

@@ -44,10 +44,9 @@ import SwiftOperatorPrecedence
 
 var opPrecedence = OperatorPrecedence.standardOperators // Use the Swift standard library operators
 let parsed = try Parser.parse(source: "x + y * z")
-let sequenceExpr = parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-dump(sequenceExpr) // SequenceExprSyntax(x, +, y, *, z)
-let foldedExpr = try opPrecedence.fold(sequenceExpr)
-dump(foldedExpr) // InfixOperatorExpr(x, +, InfixOperatorExpr(y, *, z))
+dump(parsed) // contains SequenceExprSyntax(x, +, y, *, z)
+let folded = try opPrecedence.foldAll(parsed)
+dump(folded) // contains InfixOperatorExpr(x, +, InfixOperatorExpr(y, *, z))
 ```
 
 The <doc:OperatorPrecedence> type maintains the table of known operators and precedence groups, and is the primary way in which one interacts with this library. The standard operators are provided as a static variable of this type, which will work to fold most Swift code, such as in the example above that folds `x + y * z`.
@@ -70,24 +69,21 @@ let parsedOperators = try Parser.parse(source: moreOperators)
 try opPrecedence.addSourceFile(parsedOperators) 
 
 let parsed2 = try Parser.parse(source: "b ** c ** d")
-let sequenceExpr2 = parsed2.statements.first!.item.as(SequenceExprSyntax.self)!
-dump(sequenceExpr2) // SequenceExprSyntax(b, **, c, **, d)
-let foldedExpr2 = try opPrecedence.fold(sequenceExpr2)
-dump(foldedExpr2) // InfixOperatorExpr(b, **, InfixOperatorExpr(c, **, d))
+dump(parsed2) // contains SequenceExprSyntax(b, **, c, **, d)
+let folded2 = try opPrecedence.foldAll(parsed2)
+dump(folded2) // contains InfixOperatorExpr(b, **, InfixOperatorExpr(c, **, d))
 ```
-
-
 
 ## Error handling
 
-By default, any of the operations that can produce an error, whether folding a sequence or parsing a source file's operators and precedence groups into a table, will throw an instance of <doc:OperatorPrecedenceError>. However, each entry point takes an optional error handler (of type <doc:OperatorPrecedenceErrorHandler>) that will be provided with each error that occurs. For example, we can capture errors like this:
+By default, any of the operations that can produce an error, whether folding a sequence or parsing a source file's operators and precedence groups into a table, will throw an instance of <doc:OperatorPrecedenceError>. However, each entry point takes an optional error handler (of type <doc:OperatorPrecedenceErrorHandler>) that will be called with each error that occurs. For example, we can capture errors like this:
 
 ```swift
 var errors: [OperatorPrecedenceError] = []
-let foldedExpr2e = opPrecedence.fold(sequenceExpr2) { error in 
+let foldedExpr2e = opPrecedence.foldSingle(sequenceExpr2) { error in 
     errors.append(error)
 }
 ```
 
-As indicated by the lack of `try`, the folding operation will continue even in the presence of errors, and produce a structured syntax tree. That structured syntax tree will have had some fallback behavior applied (e.g., bias toward left-associative when operators cannot be compared), but the sequence expression will have been removed.
+As indicated by the lack of `try`, the folding operation will continue even in the presence of errors, and produce a structured syntax tree. That structured syntax tree will have had some fallback behavior applied (e.g., bias toward left-associative when operators cannot be compared), but the sequence expression(s) will have been replaced in the resulting tree.
 

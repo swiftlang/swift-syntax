@@ -3,13 +3,38 @@ import SwiftSyntax
 import SwiftParser
 import SwiftOperatorPrecedence
 
+/// Visitor that looks for ExprSequenceSyntax nodes.
+private class ExprSequenceSearcher: SyntaxAnyVisitor {
+  var foundSequenceExpr = false
+
+  override func visit(
+    _ node: SequenceExprSyntax
+  ) -> SyntaxVisitorContinueKind {
+    foundSequenceExpr = true
+    return .skipChildren
+  }
+
+  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind{
+    return foundSequenceExpr ? .skipChildren : .visitChildren
+  }
+}
+
+extension SyntaxProtocol {
+  /// Determine whether the given syntax contains an ExprSequence anywhere.
+  var containsExprSequence: Bool {
+    let searcher = ExprSequenceSearcher(viewMode: .sourceAccurate)
+    searcher.walk(self)
+    return searcher.foundSequenceExpr
+  }
+}
+
 public class OperatorPrecedenceTests: XCTestCase {
   func testLogicalExprs() throws {
     let opPrecedence = OperatorPrecedence.logicalOperators
     let parsed = try Parser.parse(source: "x && y || w && v || z")
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-    let foldedExpr = try opPrecedence.fold(sequenceExpr)
+    let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
     XCTAssertEqual("\(foldedExpr)", "x && y || w && v || z")
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
   }
@@ -18,10 +43,18 @@ public class OperatorPrecedenceTests: XCTestCase {
     let opPrecedence = OperatorPrecedence.standardOperators
     let parsed = try Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
     let sequenceExpr =
-      parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-    let foldedExpr = try opPrecedence.fold(sequenceExpr)
+        parsed.statements.first!.item.as(SequenceExprSyntax.self)!
+    let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
     XCTAssertEqual("\(foldedExpr)", "(x + y > 17) && x && y || w && v || z")
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
+  }
+
+  func testNestedSwiftExprs() throws {
+    let opPrecedence = OperatorPrecedence.standardOperators
+    let parsed = try Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
+    let foldedAll = try opPrecedence.foldAll(parsed)
+    XCTAssertEqual("\(foldedAll)", "(x + y > 17) && x && y || w && v || z")
+    XCTAssertFalse(foldedAll.containsExprSequence)
   }
 
   func testParsedLogicalExprs() throws {
@@ -52,7 +85,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     let parsed = try Parser.parse(source: "x && y || w && v || z")
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-    let foldedExpr = try opPrecedence.fold(sequenceExpr)
+    let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
     XCTAssertEqual("\(foldedExpr)", "x && y || w && v || z")
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
   }
@@ -131,7 +164,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       let parsed = try Parser.parse(source: "a + b * c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-      _ = opPrecedence.fold(sequenceExpr) { error in
+      _ = opPrecedence.foldSingle(sequenceExpr) { error in
         errors.append(error)
       }
 
@@ -149,7 +182,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       let parsed = try Parser.parse(source: "a / c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-      _ = opPrecedence.fold(sequenceExpr) { error in
+      _ = opPrecedence.foldSingle(sequenceExpr) { error in
         errors.append(error)
       }
 
@@ -167,7 +200,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       let parsed = try Parser.parse(source: "a + b - c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-      _ = opPrecedence.fold(sequenceExpr) { error in
+      _ = opPrecedence.foldSingle(sequenceExpr) { error in
         errors.append(error)
       }
 
@@ -186,7 +219,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       let parsed = try Parser.parse(source: "a ++ b - d")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
-      _ = opPrecedence.fold(sequenceExpr) { error in
+      _ = opPrecedence.foldSingle(sequenceExpr) { error in
         errors.append(error)
       }
 

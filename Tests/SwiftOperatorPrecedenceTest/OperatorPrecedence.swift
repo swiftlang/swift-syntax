@@ -121,6 +121,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       return
     }
 
+    XCTAssertEqual(errors[0].message, "redefinition of infix operator '+'")
     _ = existing
     _ = new
 
@@ -128,6 +129,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       XCTFail("expected a 'group already exists' error")
       return
     }
+    XCTAssertEqual(errors[1].message, "redefinition of precedence group 'A'")
     _ = newGroup
     _ = existingGroup
   }
@@ -174,6 +176,7 @@ public class OperatorPrecedenceTests: XCTestCase {
         return
       }
       XCTAssertEqual(groupName, "B")
+      XCTAssertEqual(errors[0].message, "unknown precedence group 'B'")
       _ = location
     }
 
@@ -192,6 +195,7 @@ public class OperatorPrecedenceTests: XCTestCase {
         return
       }
       XCTAssertEqual(operatorName, "/")
+      XCTAssertEqual(errors[0].message, "unknown infix operator '/'")
       _ = location
     }
 
@@ -212,6 +216,9 @@ public class OperatorPrecedenceTests: XCTestCase {
       }
       XCTAssertEqual(leftGroup, "A")
       XCTAssertEqual(rightGroup, "A")
+      XCTAssertEqual(
+        errors[0].message,
+        "adjacent operators are in non-associative precedence group 'A'")
     }
 
     do {
@@ -231,6 +238,9 @@ public class OperatorPrecedenceTests: XCTestCase {
       }
       XCTAssertEqual(leftGroup, "D")
       XCTAssertEqual(rightGroup, "A")
+      XCTAssertEqual(
+        errors[0].message,
+        "adjacent operators are in unordered precedence groups 'D' and 'A'")
     }
   }
 }

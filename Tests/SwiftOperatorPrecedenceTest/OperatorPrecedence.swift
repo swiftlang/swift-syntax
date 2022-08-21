@@ -2,6 +2,7 @@ import XCTest
 import SwiftSyntax
 import SwiftParser
 import SwiftOperatorPrecedence
+import _SwiftSyntaxTestSupport
 
 /// Visitor that looks for ExprSequenceSyntax nodes.
 private class ExprSequenceSearcher: SyntaxAnyVisitor {
@@ -28,8 +29,64 @@ extension SyntaxProtocol {
   }
 }
 
+/// A syntax rewriter that folds explicitly-parenthesized sequence expressions
+/// into  a structured syntax tree.
+class ExplicitParenFolder : SyntaxRewriter {
+  override func visit(_ node: TupleExprSyntax) -> ExprSyntax {
+    // Identify syntax nodes of the form (x + y), which is a
+    // TupleExprSyntax(SequenceExpr(x, BinaryOperatorExprSyntax, y))./
+    guard node.elementList.count == 1,
+          let firstNode = node.elementList.first,
+          firstNode.label == nil,
+          let sequenceExpr = firstNode.expression.as(SequenceExprSyntax.self),
+          sequenceExpr.elements.count == 3,
+          let leftOperand = sequenceExpr.elements.first,
+          let middleExpr = sequenceExpr.elements.removingFirst().first,
+          let operatorExpr = middleExpr.as(BinaryOperatorExprSyntax.self),
+          let rightOperand =
+            sequenceExpr.elements.removingFirst().removingFirst().first
+    else {
+      return ExprSyntax(node)
+    }
+
+    return ExprSyntax(
+      InfixOperatorExprSyntax(
+        leftOperand: visit(Syntax(leftOperand)).as(ExprSyntax.self)!,
+        operatorOperand: ExprSyntax(operatorExpr),
+        rightOperand: visit(Syntax(rightOperand)).as(ExprSyntax.self)!)
+      )
+  }
+}
+
+extension OperatorPrecedence {
+  /// Assert that parsing and folding the given "unfolded" source code
+  /// produces the same syntax tree as the fully-parenthesized version of
+  /// the same source.
+  ///
+  /// The `expectedSource` should be a fully-parenthesized expression, e.g.,
+  /// `(a + (b * c))` that expresses how the initial code should have been
+  /// folded.
+  func assertExpectedFold(
+    _ source: String,
+    _ fullyParenthesizedSource: String
+  ) throws {
+    // Parse and fold the source we're testing.
+    let parsed = try Parser.parse(source: source)
+    let foldedSyntax = try foldAll(parsed)
+    XCTAssertFalse(foldedSyntax.containsExprSequence)
+
+    // Parse and "fold" the parenthesized version.
+    let parenthesizedParsed = try Parser.parse(source: fullyParenthesizedSource)
+    let parenthesizedSyntax = ExplicitParenFolder().visit(parenthesizedParsed)
+    XCTAssertFalse(parenthesizedSyntax.containsExprSequence)
+
+    // Make sure the two have the same structure.
+    XCTAssertSameStructure(foldedSyntax, parenthesizedSyntax)
+  }
+}
+
 public class OperatorPrecedenceTests: XCTestCase {
-  func testLogicalExprs() throws {
+  func testLogicalExprsSingle() throws {
     let opPrecedence = OperatorPrecedence.logicalOperators
     let parsed = try Parser.parse(source: "x && y || w && v || z")
     let sequenceExpr =
@@ -37,6 +94,12 @@ public class OperatorPrecedenceTests: XCTestCase {
     let foldedExpr = try opPrecedence.foldSingle(sequenceExpr)
     XCTAssertEqual("\(foldedExpr)", "x && y || w && v || z")
     XCTAssertNil(foldedExpr.as(SequenceExprSyntax.self))
+  }
+
+  func testLogicalExprs() throws {
+    let opPrecedence = OperatorPrecedence.logicalOperators
+    try opPrecedence.assertExpectedFold("x && y || w", "((x && y) || w)")
+    try opPrecedence.assertExpectedFold("x || y && w", "(x || (y && w))")
   }
 
   func testSwiftExprs() throws {

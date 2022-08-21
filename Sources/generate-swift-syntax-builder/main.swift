@@ -20,6 +20,7 @@ let sourceTemplates = [
   (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
   (buildableNodesFile, "BuildableNodes.swift"),
   (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
+  (formatFile, "Format.swift"),
   (tokensFile, "Tokens.swift"),
   (tokenSyntaxFile, "TokenSyntax.swift"),
 ]

@@ -45,6 +45,7 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
+    .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
@@ -101,9 +102,17 @@ let package = Package(
       name: "_SwiftSyntaxTestSupport",
       dependencies: ["SwiftSyntax"]
     ),
+    .target(
+      name: "SwiftParser",
+      dependencies: ["SwiftSyntax"]
+    ),
     .executableTarget(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
+    ),
+    .executableTarget(
+      name: "swift-parser-test",
+      dependencies: ["SwiftSyntax", "SwiftParser", .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .executableTarget(
         name: "generate-swift-syntax-builder",
@@ -144,8 +153,23 @@ let package = Package(
     ),
     .testTarget(
       name: "PerformanceTest",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxParser"],
+      dependencies: ["SwiftSyntax", "SwiftSyntaxParser", "SwiftParser"],
       exclude: ["Inputs"]
+    ),
+    .testTarget(
+      name: "SwiftParserTest",
+      dependencies: ["SwiftParser", "_SwiftSyntaxTestSupport"]
     ),
   ]
 )
+
+if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
+  // Building standalone.
+  package.dependencies += [
+    .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMinor(from: "1.0.1")),
+  ]
+} else {
+  package.dependencies += [
+    .package(path: "../swift-argument-parser")
+  ]
+}

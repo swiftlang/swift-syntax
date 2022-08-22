@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-public struct Diagnostic {
+public struct Diagnostic: CustomDebugStringConvertible {
   /// The message that should be displayed to the user
   public let diagMessage: DiagnosticMessage
 
@@ -38,6 +38,16 @@ public struct Diagnostic {
   /// The location at which the diagnostic should be displayed.
   public func location(converter: SourceLocationConverter) -> SourceLocation {
     return node.startLocation(converter: converter)
+  }
+
+  public var debugDescription: String {
+    if let root = node.root.as(SourceFileSyntax.self) {
+      let locationConverter = SourceLocationConverter(file: "", tree: root)
+      let location = location(converter: locationConverter)
+      return "\(location): \(message)"
+    } else {
+      return "<unknown>: \(message)"
+    }
   }
 }
 

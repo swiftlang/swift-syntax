@@ -32,8 +32,9 @@ public class FixItApplier: SyntaxRewriter {
 
 /// Asserts that the diagnostics `diag` inside `tree` occurs at `line` and
 /// `column`.
-/// If `message` is not `nil`, assert that the diagnostic has the given message.
 /// If `id` is not `nil`, assert that the diagnostic has the given message.
+/// If `message` is not `nil`, assert that the diagnostic has the given message.
+/// If `highlight` is not `nil`, assert that the highlighted range has this content.
 func XCTAssertDiagnostic<T: SyntaxProtocol>(
   _ diag: Diagnostic,
   in tree: T,
@@ -41,6 +42,7 @@ func XCTAssertDiagnostic<T: SyntaxProtocol>(
   column: Int,
   id: MessageID? = nil,
   message: String? = nil,
+  highlight: String? = nil,
   testFile: StaticString = #filePath,
   testLine: UInt = #line
 ) {
@@ -53,6 +55,9 @@ func XCTAssertDiagnostic<T: SyntaxProtocol>(
   }
   if let message = message {
     XCTAssertEqual(diag.message, message, file: testFile, line: testLine)
+  }
+  if let highlight = highlight {
+    AssertStringsEqualWithDiff(diag.highlights.map(\.description).joined(), highlight, file: testFile, line: testLine)
   }
 }
 
@@ -67,6 +72,7 @@ func XCTAssertSingleDiagnostic<T: SyntaxProtocol>(
   column: Int,
   id: MessageID? = nil,
   message: String? = nil,
+  highlight: String? = nil,
   expectedFixedSource: String? = nil,
   testFile: StaticString = #filePath,
   testLine: UInt = #line
@@ -76,7 +82,7 @@ func XCTAssertSingleDiagnostic<T: SyntaxProtocol>(
     XCTFail("Received \(diags.count) diagnostics but expected excatly one: \(diags)", file: testFile, line: testLine)
     return
   }
-  XCTAssertDiagnostic(diags.first!, in: tree, line: line, column: column, id: id, message: message, testFile: testFile, testLine: testLine)
+  XCTAssertDiagnostic(diags.first!, in: tree, line: line, column: column, id: id, message: message, highlight: highlight, testFile: testFile, testLine: testLine)
   if let expectedFixedSource = expectedFixedSource {
     let fixedSource = FixItApplier.applyFixes(in: diags, to: tree).description
     AssertStringsEqualWithDiff(fixedSource, expectedFixedSource, file: testFile, line: testLine)

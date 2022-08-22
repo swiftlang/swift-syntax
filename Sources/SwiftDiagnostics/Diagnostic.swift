@@ -19,13 +19,17 @@ public struct Diagnostic: CustomDebugStringConvertible {
   /// The node at whose start location the message should be displayed.
   public let node: Syntax
 
+  /// Nodes that should be highlighted in the source code.
+  public let highlights: [Syntax]
+
   /// Fix-Its that can be applied to resolve this diagnostic.
   /// Each Fix-It offers a different way to resolve the diagnostic. Usually, there's only one.
   public let fixIts: [FixIt]
 
-  public init(node: Syntax, message: DiagnosticMessage, fixIts: [FixIt] = []) {
+  public init(node: Syntax, message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
     self.diagMessage = message
     self.node = node
+    self.highlights = highlights
     self.fixIts = fixIts
   }
 

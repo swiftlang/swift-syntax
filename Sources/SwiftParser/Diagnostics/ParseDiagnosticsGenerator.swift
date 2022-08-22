@@ -62,13 +62,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, fixIts: [FixIt] = []) {
-    diagnostics.append(Diagnostic(node: Syntax(node), message: message, fixIts: fixIts))
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
+    diagnostics.append(Diagnostic(node: Syntax(node), message: message, highlights: highlights, fixIts: fixIts))
   }
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, fixIts: [FixIt] = []) {
-    addDiagnostic(node, message as DiagnosticMessage, fixIts: fixIts)
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
+    addDiagnostic(node, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts)
   }
 
   /// If a diagnostic is generated that covers multiple syntax nodes, mark them as handles so they don't produce the generic diagnostics anymore.
@@ -119,7 +119,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     // This is mostly a proof-of-concept implementation to produce more complex diagnostics.
     if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
        unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
-      addDiagnostic(node, .cStyleForLoop)
+      // FIXME: This is aweful. We should have a way to either get all children between two cursors in a syntax node or highlight a range from one node to another.
+      addDiagnostic(node, .cStyleForLoop, highlights: ([
+        Syntax(node.pattern),
+        Syntax(node.unexpectedBetweenPatternAndTypeAnnotation),
+        Syntax(node.typeAnnotation),
+        Syntax(node.unexpectedBetweenTypeAnnotationAndInKeyword),
+        Syntax(node.inKeyword),
+        Syntax(node.unexpectedBetweenInKeywordAndSequenceExpr),
+        Syntax(node.sequenceExpr),
+        Syntax(node.unexpectedBetweenSequenceExprAndWhereClause),
+        Syntax(node.whereClause),
+        Syntax(node.unexpectedBetweenWhereClauseAndBody),
+        Syntax(unexpectedCondition)
+      ] as [Syntax?]).compactMap({ $0 }))
       markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
     }
     return .visitChildren

@@ -149,12 +149,3 @@ let package = Package(
     ),
   ]
 )
-
-#if swift(>=5.6)
-// If `SWIFTCI_USE_LOCAL_DEPS` is set, we are in a CI enviornment that might disallow
-// internet access, so we can't load swift-docc-plugin. Simply don't load it in these
-// environments because we don't build docc in CI at the moment.
-if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
-    package.dependencies.append(.package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"))
-}
-#endif

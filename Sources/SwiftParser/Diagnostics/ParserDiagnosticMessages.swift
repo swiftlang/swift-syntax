@@ -55,11 +55,23 @@ public extension ParserError {
   }
 }
 
-// MARK: - Diagnostics (please sort alphabetically)
+// MARK: - Static diagnostics
 
-public struct CStyleForLoopError: ParserError {
-  public var message = "C-style for statement has been removed in Swift 3"
+/// Please order the cases in this enum alphabetically by case name.
+public enum StaticParserError: String, DiagnosticMessage {
+  case cStyleForLoop = "C-style for statement has been removed in Swift 3"
+  case throwsInReturnPosition = "'throws' may only occur before '->'"
+
+  public var message: String { self.rawValue }
+
+  public var diagnosticID: MessageID {
+    MessageID("\(type(of: self)).\(self)")
+  }
+
+  public var severity: DiagnosticSeverity { .error }
 }
+
+// MARK: - Diagnostics (please sort alphabetically)
 
 public struct MissingTokenError: ParserError {
   public let missingToken: TokenSyntax
@@ -82,10 +94,6 @@ public struct MissingTokenError: ParserError {
     }
     return "Expected '\(missingToken.text)' in \(parentTypeName)"
   }
-}
-
-public struct ThrowsInReturnPositionError: ParserError {
-  public let message = "'throws' may only occur before '->'"
 }
 
 public struct UnexpectedNodesError: ParserError {

@@ -96,13 +96,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
     // This is mostly a proof-of-concept implementation to produce more complex diagnostics.
-    if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace {
-      // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
-      if unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
-        addDiagnostic(node, .cStyleForLoop)
-        markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
-      }
+    if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
+       unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
+      addDiagnostic(node, .cStyleForLoop)
+      markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
     }
     return .visitChildren
   }
@@ -111,12 +110,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let output = node.output, let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType {
-      if let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
+    if let output = node.output,
+       let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType,
+       let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
         addDiagnostic(throwsInReturnPosition, .throwsInReturnPosition)
         markNodesAsHandled(unexpectedBeforeReturnType.id, throwsInReturnPosition.id)
         return .visitChildren
-      }
     }
     return .visitChildren
   }

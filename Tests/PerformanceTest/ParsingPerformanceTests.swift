@@ -1,6 +1,7 @@
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxParser
+import SwiftParser
 
 public class ParsingPerformanceTests: XCTestCase {
 
@@ -15,6 +16,17 @@ public class ParsingPerformanceTests: XCTestCase {
     measure {
       do {
         _ = try SyntaxParser.parse(inputFile)
+      } catch {
+        XCTFail(error.localizedDescription)
+      }
+    }
+  }
+
+  func testNativeParsingPerformance() throws {
+    measure {
+      do {
+        let source = try String(contentsOf: inputFile)
+        _ = try SwiftParser.Parser.parse(source: source)
       } catch {
         XCTFail(error.localizedDescription)
       }

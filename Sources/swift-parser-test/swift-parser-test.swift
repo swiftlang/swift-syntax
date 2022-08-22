@@ -15,6 +15,9 @@ import SwiftSyntax
 import SwiftParser
 import Foundation
 import ArgumentParser
+#if os(Windows)
+import WinSDK
+#endif
 
 enum CommonError: Swift.Error {
   case readingSourceFileFailed(URL)
@@ -229,7 +232,11 @@ class Reduce: ParsableCommand {
 
       try process.run()
       if sema.wait(timeout: DispatchTime.now() + .seconds(1)) == .timedOut {
+#if os(Windows)
+        _ = TerminateProcess(process.processHandle, 0)
+#else
         kill(pid_t(process.processIdentifier), SIGKILL)
+#endif
         return .timeout
       }
       switch process.terminationStatus {

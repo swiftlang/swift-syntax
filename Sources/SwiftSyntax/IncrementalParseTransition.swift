@@ -249,12 +249,13 @@ public struct IncrementalParseLookup {
   /// - Returns: A `SyntaxNode` node from the previous parse invocation,
   ///            representing the contents of this region, if it is still valid
   ///            to re-use. `nil` otherwise.
-  public mutating func lookUp(_ newOffset: Int, kind: CSyntaxKind) -> SyntaxNode? {
+  @_spi(RawSyntax)
+  public mutating func lookUp(_ newOffset: Int, kind: SyntaxKind) -> SyntaxNode? {
     guard let prevOffset = translateToPreEditOffset(newOffset) else {
       return nil
     }
     let prevPosition = AbsolutePosition(utf8Offset: prevOffset)
-    let node = cursorLookup(prevPosition: prevPosition, kind: .fromRawValue(kind))
+    let node = cursorLookup(prevPosition: prevPosition, kind: kind)
     if let delegate = reusedDelegate, let node = node {
       delegate.parserReusedNode(
         range: ByteSourceRange(offset: newOffset, length: node.byteSize),

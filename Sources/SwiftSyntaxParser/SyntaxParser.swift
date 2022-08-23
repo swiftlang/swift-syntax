@@ -16,7 +16,7 @@
 
 @_implementationOnly import _InternalSwiftSyntaxParser
 import Foundation
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// A list of possible errors that could be encountered while parsing a
 /// Syntax tree.
@@ -50,7 +50,6 @@ public enum SyntaxParser {
   /// Incompatibility can occur if the loaded `lib_InternalSwiftSyntaxParser.dylib/.so`
   /// is from a toolchain that is not compatible with this version of SwiftSyntax.
   fileprivate static var nodeHashVerifyResult: Bool = verifyNodeDeclarationHash()
-  fileprivate static var cnodeLayoutHashVerifyResult: Bool = verifyCNodeLayoutHash()
 
   /// Parses the string into a full-fidelity Syntax tree.
   ///
@@ -77,7 +76,7 @@ public enum SyntaxParser {
     enableBareSlashRegexLiteral: Bool? = nil,
     diagnosticHandler: ((Diagnostic) -> Void)? = nil
   ) throws -> SourceFileSyntax {
-    guard nodeHashVerifyResult && cnodeLayoutHashVerifyResult else {
+    guard nodeHashVerifyResult else {
       throw ParserError.parserCompatibilityCheckFailed
     }
     // Get a native UTF8 string for efficient indexing with UTF8 byte offsets.
@@ -153,8 +152,7 @@ public enum SyntaxParser {
     }
 
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
-      return _SyntaxParserInterop.getRetainedOpaqueRawSyntax(
-        cnode: cnode, sourceBuffer: sourceBuffer, arena: arena)
+      RawSyntax.getOpaqueFromCNode(cnode, in: sourceBuffer, arena: arena)
     }
     swiftparse_parser_set_node_handler(c_parser, nodeHandler);
 
@@ -163,12 +161,14 @@ public enum SyntaxParser {
       let nodeLookup = {
             (offset: Int, kind: CSyntaxKind) -> CParseLookupResult in
         guard let foundNode =
-            parseLookup.lookUp(offset, kind: kind) else {
+            parseLookup.lookUp(offset, kind: SyntaxKind(serializationCode: kind)) else {
           return CParseLookupResult(length: 0, node: nil)
         }
         let lengthToSkip = foundNode.byteSize
-        let opaqueNode = _SyntaxParserInterop.getRetainedOpaqueRawSyntax(node: foundNode)
-        return CParseLookupResult(length: lengthToSkip, node: opaqueNode)
+        let opaqueNode = foundNode.withUnsafeRawSyntax({ $0.toOpaque() })
+        return CParseLookupResult(
+          length: lengthToSkip,
+          node: UnsafeMutableRawPointer(mutating: opaqueNode))
       }
       swiftparse_parser_set_node_lookup(c_parser, nodeLookup);
     }
@@ -206,7 +206,7 @@ public enum SyntaxParser {
     }
 
     let c_top = swiftparse_parse_string(c_parser, sourceBuffer.baseAddress, sourceBuffer.count)
-    let base = _SyntaxParserInterop.nodeFromRetainedOpaqueRawSyntax(c_top!)
+    let base = Syntax(raw: RawSyntax.fromOpaque(c_top!))
     guard let file = base.as(SourceFileSyntax.self) else {
       throw ParserError.invalidSyntaxData
     }
@@ -286,6 +286,3 @@ extension Diagnostic {
   }
 }
 
-fileprivate func verifyCNodeLayoutHash() -> Bool {
-  return cNodeLayoutHash() == SwiftSyntax.cNodeLayoutHash()
-}

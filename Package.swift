@@ -94,7 +94,8 @@ let package = Package(
       name: "SwiftSyntaxParser",
       dependencies: ["SwiftSyntax"],
       exclude: [
-        "NodeDeclarationHash.swift.gyb"
+        "NodeDeclarationHash.swift.gyb",
+        "Serialization.swift.gyb",
       ],
       linkerSettings: swiftSyntaxParserLinkerSettings
     ),

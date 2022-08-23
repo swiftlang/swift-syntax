@@ -1,7 +1,6 @@
 {
   "RawSyntax": [
     "RawSyntax.swift",
-    "RawSyntax+CSwiftSyntax.swift",
     "RawSyntaxLayoutView.swift",
     "RawSyntaxNodeProtocol.swift",
     "RawSyntaxNodes.swift",
@@ -53,9 +52,7 @@
     "IncrementalParseTransition.swift"
   ],
   "Internal": [
-    "_SyntaxParserInterop.swift",
     "SyntaxArena.swift",
-    "CNodes.swift",
     "AtomicCounter.swift",
     "SyntaxVerifier.swift",
     "BumpPtrAllocator.swift",

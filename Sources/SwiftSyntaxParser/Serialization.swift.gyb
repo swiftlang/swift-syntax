@@ -1,0 +1,67 @@
+%{
+  # -*- mode: Swift -*-
+  from gyb_syntax_support import *
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From Serialization.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------- Serialization.swift --------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+@_spi(RawSyntax) import SwiftSyntax
+
+extension SyntaxKind {
+  init(serializationCode: CSyntaxKind) {
+    switch serializationCode {
+    case 0: self = .token
+    case 1: self = .unknown
+% for node in NON_BASE_SYNTAX_NODES:
+    case ${SYNTAX_NODE_SERIALIZATION_CODES[node.syntax_kind]}: self = .${node.swift_syntax_kind}
+% end
+    default:
+      fatalError("unknown SyntaxKind serializationCode \(serializationCode)")
+    }
+  }
+}
+
+extension RawTokenKind {
+  init(serializationCode: CTokenKind) {
+    switch serializationCode {
+    case 0: self = .eof
+% for token in SYNTAX_TOKENS:
+    case ${token.serialization_code}: self = .${token.swift_kind()}
+% end
+    default:
+      fatalError("unknown RawTokenKind serializationCode \(serializationCode)")
+    }
+  }
+}
+
+extension RawTriviaPiece {
+  init(serializationCode: CTriviaKind, text: SyntaxText) {
+    switch serializationCode {
+% for trivia in TRIVIAS:
+%   if trivia.is_collection():
+%     division = ""
+%     if not trivia.characters_len() == 1:
+%       division = " / %d" % (trivia.characters_len())
+%     end
+    case ${trivia.serialization_code}: self = .${trivia.lower_name}s(text.count${division})
+%   else:
+    case ${trivia.serialization_code}: self = .${trivia.lower_name}(text)
+%   end
+% end
+    default:
+      fatalError("unknown RawTriviaPiece serializationCode \(serializationCode)")
+    }
+  }
+}

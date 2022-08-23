@@ -262,11 +262,11 @@ extension RawSyntax {
 }
 
 extension RawSyntax {
-  func toOpaque() -> UnsafeRawPointer {
+  public func toOpaque() -> UnsafeRawPointer {
     UnsafeRawPointer(pointer)
   }
 
-  static func fromOpaque(_ pointer: UnsafeRawPointer) -> RawSyntax {
+  public static func fromOpaque(_ pointer: UnsafeRawPointer) -> RawSyntax {
     Self(pointer: pointer.assumingMemoryBound(to: RawSyntaxData.self))
   }
 }
@@ -377,24 +377,6 @@ extension RawSyntax {
 
 // MARK: - Factories.
 
-private func makeRawTriviaPieces(leadingTrivia: Trivia, trailingTrivia: Trivia, arena: SyntaxArena) -> (pieces: RawTriviaPieceBuffer, byteLength: Int) {
-  let totalTriviaCount = leadingTrivia.count + trailingTrivia.count
-
-  if totalTriviaCount != 0 {
-    var byteLength = 0
-    let buffer = arena.allocateRawTriviaPieceBuffer(count: totalTriviaCount)
-    var ptr = buffer.baseAddress!
-    for piece in leadingTrivia + trailingTrivia {
-      byteLength += piece.sourceLength.utf8Length
-      ptr.initialize(to: .make(piece, arena: arena))
-      ptr = ptr.advanced(by: 1)
-    }
-    return (pieces: .init(buffer), byteLength: byteLength)
-  } else {
-    return (pieces: .init(start: nil, count: 0), byteLength: 0)
-  }
-}
-
 extension RawSyntax {
   /// "Designated" factory method to create a parsed token node.
   ///
@@ -409,6 +391,8 @@ extension RawSyntax {
     textRange: Range<SyntaxText.Index>,
     arena: SyntaxArena
   ) -> RawSyntax {
+    assert(arena.contains(text: wholeText),
+           "token text must be managed by the arena")
     let payload = RawSyntaxData.ParsedToken(
       tokenKind: kind, wholeText: wholeText, textRange: textRange)
     return RawSyntax(arena: arena, payload: .parsedToken(payload))
@@ -435,12 +419,50 @@ extension RawSyntax {
     byteLength: UInt32,
     arena: SyntaxArena
   ) -> RawSyntax {
+    assert(arena.contains(text: text) || kind.defaultText?.baseAddress == text.baseAddress,
+           "token text must be managed by the arena, or known default text for the token")
+    assert(triviaPieces.allSatisfy({$0.storedText.map({arena.contains(text: $0)}) ?? true}),
+           "trivia text must be managed by the arena")
     let payload = RawSyntaxData.MaterializedToken(
       tokenKind: kind, tokenText: text,
       triviaPieces: triviaPieces,
       numLeadingTrivia: numLeadingTrivia,
       byteLength: byteLength)
     return RawSyntax(arena: arena, payload: .materializedToken(payload))
+  }
+
+  /// Factory method to create a materialized token node.
+  ///
+  /// - Parameters:
+  ///   - kind: Token kind.
+  ///   - text: Token text.
+  ///   - leadingTriviaPieceCount: Number of leading trivia pieces.
+  ///   - trailingTriviaPieceCount: Number of trailing trivia pieces.
+  ///   - arena: SyntaxArea to the result node data resides.
+  ///   - initializingLeadingTriviaWith: A closure that initializes leading trivia pieces.
+  ///   - initializingTrailingTriviaWith: A closure that initializes trailing trivia pieces.
+  public static func makeMaterializedToken(
+    kind: RawTokenKind,
+    text: SyntaxText,
+    leadingTriviaPieceCount: Int,
+    trailingTriviaPieceCount: Int,
+    arena: SyntaxArena,
+    initializingLeadingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void,
+    initializingTrailingTriviaWith : (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
+  ) -> RawSyntax {
+    let totalTriviaCount = leadingTriviaPieceCount + trailingTriviaPieceCount
+    let triviaBuffer = arena.allocateRawTriviaPieceBuffer(count: totalTriviaCount)
+    initializingLeadingTriviaWith(
+      UnsafeMutableBufferPointer(rebasing: triviaBuffer[..<leadingTriviaPieceCount]))
+    initializingTrailingTriviaWith(
+      UnsafeMutableBufferPointer(rebasing: triviaBuffer[leadingTriviaPieceCount...]))
+
+    let byteLength = text.count + triviaBuffer.reduce(0, { $0 + $1.byteLength })
+    return .materializedToken(
+      kind: kind, text: text, triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
+      numLeadingTrivia: numericCast(leadingTriviaPieceCount),
+      byteLength: numericCast(byteLength),
+      arena: arena)
   }
 
   /// Factory method to create a materialized token node.
@@ -470,18 +492,25 @@ extension RawSyntax {
       text = SyntaxText()
     }
 
-    var byteLength = text.count
-
-    let triviaPieces = makeRawTriviaPieces(
-      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, arena: arena)
-
-    byteLength += triviaPieces.byteLength
-
-    return .materializedToken(
-      kind: rawKind, text: text, triviaPieces: triviaPieces.pieces,
-      numLeadingTrivia: numericCast(leadingTrivia.count),
-      byteLength: numericCast(byteLength),
-      arena: arena)
+    return .makeMaterializedToken(
+      kind: rawKind, text: text,
+      leadingTriviaPieceCount: leadingTrivia.count,
+      trailingTriviaPieceCount: trailingTrivia.count,
+      arena: arena,
+      initializingLeadingTriviaWith: { buffer in
+        guard var ptr = buffer.baseAddress else { return }
+        for piece in leadingTrivia {
+          ptr.initialize(to: .make(piece, arena: arena))
+          ptr += 1
+        }
+      },
+      initializingTrailingTriviaWith: { buffer in
+        guard var ptr = buffer.baseAddress else { return }
+        for piece in trailingTrivia {
+          ptr.initialize(to: .make(piece, arena: arena))
+          ptr += 1
+        }
+      })
   }
 
   static func makeMissingToken(
@@ -531,7 +560,7 @@ extension RawSyntax {
   ///   - kind: Syntax kind.
   ///   - count: Number of children.
   ///   - initializer: A closure that initializes elements.
-  static func makeLayout(
+  public static func makeLayout(
     kind: SyntaxKind,
     uninitializedCount count: Int,
     arena: SyntaxArena,

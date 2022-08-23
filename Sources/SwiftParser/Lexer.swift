@@ -215,14 +215,14 @@ extension Lexer.Cursor {
     case UInt8(ascii: "/"):
       if self.input.baseAddress! - 1 != bufferBegin.input.baseAddress
           && self.input.baseAddress!.advanced(by: -2).pointee == UInt8(ascii: "*") {
-        return false; // End of a slash-star comment, so whitespace.
+        return false // End of a slash-star comment, so whitespace.
       } else {
         return true
       }
     case 0xA0:
       if self.input.baseAddress! - 1 != bufferBegin.input.baseAddress
           && self.input.baseAddress!.advanced(by: -2).pointee == 0xC2 {
-        return false; // End of a slash-star comment, so whitespace.
+        return false // End of a Non-breaking whitespace (U+00A0).
       } else {
         return true
       }
@@ -246,7 +246,7 @@ extension Lexer.Cursor {
       //        if (tokEnd == codeCompletionPtr) {         // code-completion
       //          return true
       //        }
-      return false;                            // whitespace / last char in file
+      return false                            // whitespace / last char in file
 
     case UInt8(ascii: "."):
       // Prefer the '^' in "x^.y" to be a postfix op, not binary, but the '^' in
@@ -262,7 +262,7 @@ extension Lexer.Cursor {
       }
     case 0xC2:
       if self.input.count > 1, self.peek(at: 1) == 0xA0 {
-        return false; // Non-breaking whitespace (U+00A0)
+        return false // Non-breaking whitespace (U+00A0)
       } else {
         return true
       }

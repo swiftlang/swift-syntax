@@ -1,0 +1,37 @@
+name: SwiftParser Bug
+description: A bug in the new Swift parser
+labels: [bug, SwiftParser]
+body:
+ - type: markdown
+   attributes:
+     value: Thanks for taking the time to fill out this bug report! If you could take the time to reduce the issue as described in [FilingBugReports.md](https://github.com/apple/swift-syntax/blob/main/Sources/SwiftParser/SwiftParser.docc/FilingBugReports.md), we would really appreciate that.
+ - type: dropdown
+   id: issue-type
+   attributes:
+     label: Issue Kind
+     description: What kind of issue is this? See [FilingBugReports.md](https://github.com/apple/swift-syntax/blob/main/Sources/SwiftParser/SwiftParser.docc/FilingBugReports.md) for more details.
+     options:
+       - Round-Trip Failure
+       - Parser Crash
+       - Parse of Valid Source Failed
+       - Parse of Valid Source Produced Invalid Syntax Tree
+       - Bad Diagnostic Produced
+       - Other
+       - I Don’t Know
+ - type: textarea
+   id: source
+   attributes:
+     label: Source Code
+     description: The source code that, when fed into the parser, produces the bug.
+     value: |
+       ```swift
+       ```
+ - type: textarea
+   id: description
+   attributes:
+     label: Description
+     description: |
+       Any additional information you can provide for this issue, like
+        - What did you expect to happen?
+        - Has this issue started occurring recently?
+        - If it’s a crash, the stack trace.

@@ -74,7 +74,9 @@ public enum SyntaxKind {
   case unresolvedTernaryExpr
   case ternaryExpr
   case memberAccessExpr
+  case unresolvedIsExpr
   case isExpr
+  case unresolvedAsExpr
   case asExpr
   case typeExpr
   case closureCaptureItem

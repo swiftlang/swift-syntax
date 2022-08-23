@@ -476,12 +476,28 @@ public extension ExpressibleAsMemberAccessExpr {
     return createMemberAccessExpr()
   }
 }
+public protocol ExpressibleAsUnresolvedIsExpr: ExpressibleAsExprBuildable {
+  func createUnresolvedIsExpr() -> UnresolvedIsExpr
+}
+public extension ExpressibleAsUnresolvedIsExpr {
+  func createExprBuildable() -> ExprBuildable {
+    return createUnresolvedIsExpr()
+  }
+}
 public protocol ExpressibleAsIsExpr: ExpressibleAsExprBuildable {
   func createIsExpr() -> IsExpr
 }
 public extension ExpressibleAsIsExpr {
   func createExprBuildable() -> ExprBuildable {
     return createIsExpr()
+  }
+}
+public protocol ExpressibleAsUnresolvedAsExpr: ExpressibleAsExprBuildable {
+  func createUnresolvedAsExpr() -> UnresolvedAsExpr
+}
+public extension ExpressibleAsUnresolvedAsExpr {
+  func createExprBuildable() -> ExprBuildable {
+    return createUnresolvedAsExpr()
   }
 }
 public protocol ExpressibleAsAsExpr: ExpressibleAsExprBuildable {

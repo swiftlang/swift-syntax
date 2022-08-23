@@ -422,10 +422,24 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `UnresolvedIsExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnresolvedIsExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `IsExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IsExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
+  /// Visit a `UnresolvedAsExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnresolvedAsExprSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
   }
 
@@ -2512,8 +2526,28 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnresolvedIsExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = UnresolvedIsExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIsExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = IsExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnresolvedAsExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = UnresolvedAsExprSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4717,8 +4751,12 @@ open class SyntaxRewriter {
       return visitImplTernaryExprSyntax
     case .memberAccessExpr:
       return visitImplMemberAccessExprSyntax
+    case .unresolvedIsExpr:
+      return visitImplUnresolvedIsExprSyntax
     case .isExpr:
       return visitImplIsExprSyntax
+    case .unresolvedAsExpr:
+      return visitImplUnresolvedAsExprSyntax
     case .asExpr:
       return visitImplAsExprSyntax
     case .typeExpr:
@@ -5254,8 +5292,12 @@ open class SyntaxRewriter {
       return visitImplTernaryExprSyntax(data)
     case .memberAccessExpr:
       return visitImplMemberAccessExprSyntax(data)
+    case .unresolvedIsExpr:
+      return visitImplUnresolvedIsExprSyntax(data)
     case .isExpr:
       return visitImplIsExprSyntax(data)
+    case .unresolvedAsExpr:
+      return visitImplUnresolvedAsExprSyntax(data)
     case .asExpr:
       return visitImplAsExprSyntax(data)
     case .typeExpr:

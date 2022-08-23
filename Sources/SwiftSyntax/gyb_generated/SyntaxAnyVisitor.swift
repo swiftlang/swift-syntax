@@ -460,11 +460,25 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: MemberAccessExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: UnresolvedIsExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: UnresolvedIsExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
   override open func visitPost(_ node: IsExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: UnresolvedAsExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: UnresolvedAsExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {

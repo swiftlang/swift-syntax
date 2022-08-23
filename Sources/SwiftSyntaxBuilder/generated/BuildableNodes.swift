@@ -2168,23 +2168,78 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
     return self
   }
 }
-public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
+public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIsTok: UnexpectedNodes?
   let isTok: TokenSyntax
+  /// Creates a `UnresolvedIsExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeIsTok: 
+  ///   - isTok: 
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIsTok: ExpressibleAsUnexpectedNodes? = nil, isTok: TokenSyntax = TokenSyntax.`is`) {
+    self.leadingTrivia = leadingTrivia
+    self.unexpectedBeforeIsTok = unexpectedBeforeIsTok?.createUnexpectedNodes()
+    self.isTok = isTok
+    assert(isTok.text == #"is"#)
+  }
+  /// Builds a `UnresolvedIsExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `UnresolvedIsExprSyntax`.
+  func buildUnresolvedIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedIsExprSyntax {
+    let result = UnresolvedIsExprSyntax(unexpectedBeforeIsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), isTok: isTok)
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  }
+  /// Conformance to `ExprBuildable`.
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildUnresolvedIsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+    return ExprSyntax(result)
+  }
+  /// Conformance to `ExpressibleAsUnresolvedIsExpr`.
+  public func createUnresolvedIsExpr() -> UnresolvedIsExpr {
+    return self
+  }
+  /// Conformance to `ExpressibleAsExprBuildable`.
+  /// `UnresolvedIsExpr` may conform to `ExpressibleAsExprBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createExprBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createExprBuildable() -> ExprBuildable {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ExprBuildable` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
+public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+  let unexpectedBeforeExpression: UnexpectedNodes?
+  let expression: ExprBuildable
+  let unexpectedBetweenExpressionAndIsTok: UnexpectedNodes?
+  let isTok: TokenSyntax
   let unexpectedBetweenIsTokAndTypeName: UnexpectedNodes?
   let typeName: TypeBuildable
   /// Creates a `IsExpr` using the provided parameters.
   /// - Parameters:
-  ///   - unexpectedBeforeIsTok: 
+  ///   - unexpectedBeforeExpression: 
+  ///   - expression: 
+  ///   - unexpectedBetweenExpressionAndIsTok: 
   ///   - isTok: 
   ///   - unexpectedBetweenIsTokAndTypeName: 
   ///   - typeName: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIsTok: ExpressibleAsUnexpectedNodes? = nil, isTok: TokenSyntax = TokenSyntax.`is`, unexpectedBetweenIsTokAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndIsTok: ExpressibleAsUnexpectedNodes? = nil, isTok: TokenSyntax = TokenSyntax.`is`, unexpectedBetweenIsTokAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
-    self.unexpectedBeforeIsTok = unexpectedBeforeIsTok?.createUnexpectedNodes()
+    self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
+    self.expression = expression.createExprBuildable()
+    self.unexpectedBetweenExpressionAndIsTok = unexpectedBetweenExpressionAndIsTok?.createUnexpectedNodes()
     self.isTok = isTok
     assert(isTok.text == #"is"#)
     self.unexpectedBetweenIsTokAndTypeName = unexpectedBetweenIsTokAndTypeName?.createUnexpectedNodes()
@@ -2195,7 +2250,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IsExprSyntax`.
   func buildIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsExprSyntax {
-    let result = IsExprSyntax(unexpectedBeforeIsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), isTok: isTok, unexpectedBetweenIsTokAndTypeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeName: typeName.buildType(format: format, leadingTrivia: nil))
+    let result = IsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndIsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), isTok: isTok, unexpectedBetweenIsTokAndTypeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeName: typeName.buildType(format: format, leadingTrivia: nil))
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }
@@ -2223,7 +2278,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
     return self
   }
 }
-public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
+public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
@@ -2231,19 +2286,81 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   let asTok: TokenSyntax
   let unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
   let questionOrExclamationMark: TokenSyntax?
-  let unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodes?
-  let typeName: TypeBuildable
-  /// Creates a `AsExpr` using the provided parameters.
+  /// Creates a `UnresolvedAsExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAsTok: 
   ///   - asTok: 
   ///   - unexpectedBetweenAsTokAndQuestionOrExclamationMark: 
   ///   - questionOrExclamationMark: 
-  ///   - unexpectedBetweenQuestionOrExclamationMarkAndTypeName: 
-  ///   - typeName: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsTok: ExpressibleAsUnexpectedNodes? = nil, asTok: TokenSyntax = TokenSyntax.`as`, unexpectedBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: TokenSyntax? = nil, unexpectedBetweenQuestionOrExclamationMarkAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsTok: ExpressibleAsUnexpectedNodes? = nil, asTok: TokenSyntax = TokenSyntax.`as`, unexpectedBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: TokenSyntax? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAsTok = unexpectedBeforeAsTok?.createUnexpectedNodes()
+    self.asTok = asTok
+    assert(asTok.text == #"as"#)
+    self.unexpectedBetweenAsTokAndQuestionOrExclamationMark = unexpectedBetweenAsTokAndQuestionOrExclamationMark?.createUnexpectedNodes()
+    self.questionOrExclamationMark = questionOrExclamationMark
+    assert(questionOrExclamationMark == nil || questionOrExclamationMark!.text == #"?"# || questionOrExclamationMark!.text == #"!"#)
+  }
+  /// Builds a `UnresolvedAsExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `UnresolvedAsExprSyntax`.
+  func buildUnresolvedAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedAsExprSyntax {
+    let result = UnresolvedAsExprSyntax(unexpectedBeforeAsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionOrExclamationMark: questionOrExclamationMark)
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  }
+  /// Conformance to `ExprBuildable`.
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildUnresolvedAsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+    return ExprSyntax(result)
+  }
+  /// Conformance to `ExpressibleAsUnresolvedAsExpr`.
+  public func createUnresolvedAsExpr() -> UnresolvedAsExpr {
+    return self
+  }
+  /// Conformance to `ExpressibleAsExprBuildable`.
+  /// `UnresolvedAsExpr` may conform to `ExpressibleAsExprBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createExprBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createExprBuildable() -> ExprBuildable {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ExprBuildable` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
+public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+  let unexpectedBeforeExpression: UnexpectedNodes?
+  let expression: ExprBuildable
+  let unexpectedBetweenExpressionAndAsTok: UnexpectedNodes?
+  let asTok: TokenSyntax
+  let unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
+  let questionOrExclamationMark: TokenSyntax?
+  let unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodes?
+  let typeName: TypeBuildable
+  /// Creates a `AsExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeExpression: 
+  ///   - expression: 
+  ///   - unexpectedBetweenExpressionAndAsTok: 
+  ///   - asTok: 
+  ///   - unexpectedBetweenAsTokAndQuestionOrExclamationMark: 
+  ///   - questionOrExclamationMark: 
+  ///   - unexpectedBetweenQuestionOrExclamationMarkAndTypeName: 
+  ///   - typeName: 
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndAsTok: ExpressibleAsUnexpectedNodes? = nil, asTok: TokenSyntax = TokenSyntax.`as`, unexpectedBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: TokenSyntax? = nil, unexpectedBetweenQuestionOrExclamationMarkAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
+    self.leadingTrivia = leadingTrivia
+    self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
+    self.expression = expression.createExprBuildable()
+    self.unexpectedBetweenExpressionAndAsTok = unexpectedBetweenExpressionAndAsTok?.createUnexpectedNodes()
     self.asTok = asTok
     assert(asTok.text == #"as"#)
     self.unexpectedBetweenAsTokAndQuestionOrExclamationMark = unexpectedBetweenAsTokAndQuestionOrExclamationMark?.createUnexpectedNodes()
@@ -2257,7 +2374,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AsExprSyntax`.
   func buildAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsExprSyntax {
-    let result = AsExprSyntax(unexpectedBeforeAsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeName: typeName.buildType(format: format, leadingTrivia: nil))
+    let result = AsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndAsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeName: typeName.buildType(format: format, leadingTrivia: nil))
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
   }

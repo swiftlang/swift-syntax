@@ -76,7 +76,9 @@ extension SyntaxKind {
     case 270: self = .unresolvedTernaryExpr
     case 50: self = .ternaryExpr
     case 51: self = .memberAccessExpr
+    case 271: self = .unresolvedIsExpr
     case 53: self = .isExpr
+    case 272: self = .unresolvedAsExpr
     case 54: self = .asExpr
     case 55: self = .typeExpr
     case 100: self = .closureCaptureItem

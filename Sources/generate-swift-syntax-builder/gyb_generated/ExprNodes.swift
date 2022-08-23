@@ -560,9 +560,21 @@ let EXPR_NODES: [Node] = [
                isOptional: true)
        ]),
 
+  Node(name: "UnresolvedIsExpr",
+       kind: "Expr",
+       children: [
+         Child(name: "IsTok",
+               kind: "IsToken",
+               tokenChoices: [
+                 "Is"
+               ])
+       ]),
+
   Node(name: "IsExpr",
        kind: "Expr",
        children: [
+         Child(name: "Expression",
+               kind: "Expr"),
          Child(name: "IsTok",
                kind: "IsToken",
                tokenChoices: [
@@ -572,9 +584,28 @@ let EXPR_NODES: [Node] = [
                kind: "Type")
        ]),
 
+  Node(name: "UnresolvedAsExpr",
+       kind: "Expr",
+       children: [
+         Child(name: "AsTok",
+               kind: "AsToken",
+               tokenChoices: [
+                 "As"
+               ]),
+         Child(name: "QuestionOrExclamationMark",
+               kind: "Token",
+               isOptional: true,
+               tokenChoices: [
+                 "PostfixQuestionMark",
+                 "ExclamationMark"
+               ])
+       ]),
+
   Node(name: "AsExpr",
        kind: "Expr",
        children: [
+         Child(name: "Expression",
+               kind: "Expr"),
          Child(name: "AsTok",
                kind: "AsToken",
                tokenChoices: [

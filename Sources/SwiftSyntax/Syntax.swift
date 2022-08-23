@@ -146,16 +146,6 @@ public extension SyntaxProtocol {
     return SyntaxChildrenIndex(self.data.absoluteRaw.info)
   }
 
-  /// Whether or not this node is marked as `present`.
-  var isPresent: Bool {
-    return raw.presence == .present
-  }
-
-  /// Whether or not this node is marked as `missing`.
-  var isMissing: Bool {
-    return raw.presence == .missing
-  }
-
   /// Whether or not this node is a token one.
   var isToken: Bool {
     return raw.isToken
@@ -553,7 +543,7 @@ public extension SyntaxProtocol {
       target.write(" [\(range.start)...\(range.end)]")
     }
 
-    if isMissing {
+    if let tokenView = raw.tokenView, tokenView.presence == .missing {
       target.write(" MISSING")
     }
 

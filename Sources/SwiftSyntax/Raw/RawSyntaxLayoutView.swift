@@ -37,6 +37,16 @@ struct RawSyntaxLayoutView {
     }
   }
 
+  var layoutData: RawSyntaxData.Layout {
+    switch raw.rawData.payload {
+    case .parsedToken(_),
+        .materializedToken(_):
+      preconditionFailure("RawSyntax must be a layout")
+    case .layout(let dat):
+      return dat
+    }
+  }
+
   /// Creates a new node of the same kind but with children replaced by `elements`.
   func replacingLayout<C: Collection>(
     with elements: C,
@@ -140,13 +150,7 @@ struct RawSyntaxLayoutView {
 
   /// Child nodes.
   var children: RawSyntaxBuffer {
-    switch raw.rawData.payload {
-    case .parsedToken(_),
-         .materializedToken(_):
-      preconditionFailure("RawSyntax must be a layout")
-    case .layout(let dat):
-      return dat.layout
-    }
+    layoutData.layout
   }
 
   /// Returns the child at the provided cursor in the layout.

@@ -78,7 +78,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.isMissing {
+    if node.presence == .missing {
       addDiagnostic(node, MissingTokenDiagnostic(missingToken: node))
     }
     return .skipChildren

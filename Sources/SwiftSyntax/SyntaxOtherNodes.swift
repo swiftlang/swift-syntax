@@ -98,7 +98,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public var presence: SourcePresence {
-    return raw.presence
+    return tokenView.presence
   }
 
   /// The text of the token as written in the source code.

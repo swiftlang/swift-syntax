@@ -23,8 +23,33 @@ public class VisitorTests: XCTestCase {
       }
     }
 
-    XCTAssertFalse(MissingDeclChecker.check(node, viewMode: .sourceAccurate))
+    XCTAssertTrue(MissingDeclChecker.check(node, viewMode: .sourceAccurate))
     XCTAssertTrue(MissingDeclChecker.check(node, viewMode: .fixedUp))
+  }
+
+  public func testVisitMissingToken() throws {
+    let node = ReturnStmtSyntax(
+      returnKeyword: .returnKeyword(presence: .missing),
+      expression: nil
+    )
+
+    class MissingTokenChecker: SyntaxVisitor {
+      var didSeeToken = false
+
+      override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
+        didSeeToken = true
+        return .visitChildren
+      }
+
+      static func check<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> Bool {
+        let visitor = MissingTokenChecker(viewMode: viewMode)
+        visitor.walk(tree)
+        return visitor.didSeeToken
+      }
+    }
+
+    XCTAssertFalse(MissingTokenChecker.check(node, viewMode: .sourceAccurate))
+    XCTAssertTrue(MissingTokenChecker.check(node, viewMode: .fixedUp))
   }
 
   public func testVisitUnexpected() throws {

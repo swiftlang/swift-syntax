@@ -139,7 +139,7 @@ final class DeclarationTests: XCTestCase {
       """
     }
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       "_ = foo/* */?.description"
     }
     

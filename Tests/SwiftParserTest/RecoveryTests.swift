@@ -19,8 +19,8 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testBogusKeypathBaseRecovery() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
-      "func nestThoseIfs() {\\n    if false != true {\\n       print \"\\(i)\"\\n"
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
+      #"func nestThoseIfs() {\n    if false != true {\n       print "\(i)\"\n"#
     }
   }
 
@@ -37,7 +37,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testMissingSubscriptReturnClause() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       """
       struct Foo {
         subscript(x: String) {}
@@ -55,7 +55,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testClassWithLeadingNumber() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       """
       class 23class {
         // expected-error@-1 {{class name can only start with a letter or underscore, not a number}}
@@ -82,7 +82,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testMissingArrowInArrowExpr() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       """
       [(Int) -> throws Int]()
       let _ = [Int throws Int]()
@@ -130,7 +130,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testStringBogusClosingDelimiters() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       #"\\("#
     }
 
@@ -140,13 +140,13 @@ public class RecoveryTests: XCTestCase {
       """##
     }
 
-    try AssertParse({ $0.parseStringLiteral() }) {
+    try AssertParse({ $0.parseStringLiteral() }, allowErrors: true) {
       #"""
       "
       """#
     }
 
-    try AssertParse({ $0.parseStringLiteral() }) {
+    try AssertParse({ $0.parseStringLiteral() }, allowErrors: true) {
       #"""
       "'
       """#
@@ -154,7 +154,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testMissingArgumentToAttribute() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       """
       @_dynamicReplacement(
       func test_dynamic_replacement_for2() {
@@ -193,7 +193,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testExpressionMember() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       """
       struct S {
         / ###line 25 "line-directive.swift"
@@ -213,7 +213,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testExtraSyntaxInDirective() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
+    try AssertParse({ $0.parseDeclaration() }, allowErrors: true) {
       """
       #if os(iOS)
         func foo() {}
@@ -343,7 +343,7 @@ public class RecoveryTests: XCTestCase {
   }
 
   func testTextRecovery() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
       """
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       """

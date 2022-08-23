@@ -164,11 +164,11 @@ final class ExpressionTests: XCTestCase {
       """
     }
 
-    try AssertParse({ $0.parseExpression() }) {
+    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
       "[,"
     }
 
-    try AssertParse({ $0.parseExpression() }) {
+    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
       """
       ([1:)
       """
@@ -197,7 +197,7 @@ final class ExpressionTests: XCTestCase {
       """#
     }
 
-    try AssertParse({ $0.parseExpression() }) {
+    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
       #"" >> \( abc } ) << ""#
     }
 
@@ -213,7 +213,7 @@ final class ExpressionTests: XCTestCase {
       """##
     }
 
-    try AssertParse({ $0.parseExpression() }) {
+    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
       #""\","#
     }
 
@@ -249,19 +249,19 @@ final class ExpressionTests: XCTestCase {
         """
     }
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
+    try AssertParse({ $0.parseExpression() }) {
       ##"""
       #"""#
       """##
     }
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
+    try AssertParse({ $0.parseExpression() }) {
       ##"""
       #"""""#
       """##
     }
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
+    try AssertParse({ $0.parseExpression() }) {
       ##"""
       #"""
       multiline raw
@@ -269,7 +269,7 @@ final class ExpressionTests: XCTestCase {
       """##
     }
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
+    try AssertParse({ $0.parseExpression() }) {
       #"""
       "\(x)"
       """#
@@ -277,7 +277,7 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testRangeSubscript() throws {
-    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
+    try AssertParse({ $0.parseExpression() }) {
       """
       text[...]
       """

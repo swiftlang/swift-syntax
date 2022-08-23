@@ -51,7 +51,7 @@ func AssertEqualTokens(_ actual: [Lexer.Lexeme], _ expected: [Lexer.Lexeme], fil
 
 func AssertParse<Node: RawSyntaxNodeProtocol>(
   _ parseSyntax: (inout Parser) -> Node,
-  allowErrors: Bool = true,
+  allowErrors: Bool = false,
   file: StaticString = #file,
   line: UInt = #line,
   _ source: () -> String

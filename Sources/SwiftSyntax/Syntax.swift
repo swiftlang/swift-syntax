@@ -770,3 +770,12 @@ extension SyntaxNode: CustomStringConvertible, TextOutputStreamable {
       raw.write(to: &target)
   }
 }
+
+/// Expose `recursiveDescription` on raw nodes for debugging purposes.
+extension RawSyntaxNodeProtocol {
+  /// Print this raw syntax node including all of its children.
+  /// Intended for debugging purposes only.
+  var recursiveDescription: String {
+    return Syntax(raw: raw).recursiveDescription
+  }
+}

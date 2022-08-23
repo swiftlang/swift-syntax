@@ -18,10 +18,12 @@
 /// same wording. Eg. it’s possible that the message contains more context when
 /// available.
 public struct MessageID: Hashable {
-  private let value: String
+  private let domain: String
+  private let id: String
 
-  public init(_ value: String) {
-    self.value = value
+  public init(domain: String, id: String) {
+    self.domain = domain
+    self.id = id
   }
 }
 

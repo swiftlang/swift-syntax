@@ -13,6 +13,8 @@
 import SwiftDiagnostics
 import SwiftSyntax
 
+let diagnosticDomain: String = "SwiftParser"
+
 extension Syntax {
   // FIXME: These should be defined in gyb_syntax_support.
   var nodeTypeNameForDiagnostics: String? {
@@ -43,7 +45,7 @@ public protocol ParserError: DiagnosticMessage {
 
 public extension ParserError {
   static var diagnosticID: MessageID {
-    return MessageID("\(self)")
+    return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
   var diagnosticID: MessageID {
@@ -65,7 +67,7 @@ public enum StaticParserError: String, DiagnosticMessage {
   public var message: String { self.rawValue }
 
   public var diagnosticID: MessageID {
-    MessageID("\(type(of: self)).\(self)")
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
   }
 
   public var severity: DiagnosticSeverity { .error }

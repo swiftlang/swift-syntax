@@ -9,11 +9,11 @@ public class DiagnosticInfrastructureTests: XCTestCase {
     }
 
     let diag = TestDiagnostic()
-    XCTAssertEqual(diag.diagnosticID, MessageID("TestDiagnostic"))
+    XCTAssertEqual(diag.diagnosticID, MessageID(domain: "SwiftParser", id: "TestDiagnostic"))
     XCTAssertEqual(diag.message, "My test diagnostic")
     XCTAssertEqual(diag.severity, .error)
 
-    XCTAssertEqual(StaticParserError.throwsInReturnPosition.diagnosticID, MessageID("StaticParserError.throwsInReturnPosition"))
+    XCTAssertEqual(StaticParserError.throwsInReturnPosition.diagnosticID, MessageID(domain: "SwiftParser", id: "StaticParserError.throwsInReturnPosition"))
     XCTAssertEqual(StaticParserError.throwsInReturnPosition.severity, .error)
   }
 }

@@ -865,7 +865,7 @@ extension Lexer.Cursor {
       let start = self
 
       switch self.advance() {
-      // 'continue' - the character is a part of the triivia.
+      // 'continue' - the character is a part of the trivia.
       // 'break' - the character should a part of token text.
       case nil:
         break

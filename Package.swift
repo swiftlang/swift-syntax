@@ -105,7 +105,10 @@ let package = Package(
     ),
     .target(
       name: "SwiftParser",
-      dependencies: ["SwiftSyntax"]
+      dependencies: ["SwiftSyntax"],
+      exclude: [
+        "README.md"
+      ]
     ),
     .executableTarget(
       name: "lit-test-helper",

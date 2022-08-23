@@ -298,22 +298,6 @@ struct SyntaxData {
     return SyntaxData(AbsoluteRawSyntax(raw: raw!, info: info), parent: parent)
   }
 
-  /// Returns the child data at the provided cursor in this data's layout.
-  /// - Note: This has O(n) performance, prefer using a proper Sequence type
-  ///         if applicable, instead of this.
-  /// - Note: This function traps if the cursor is out of the bounds of the
-  ///         data's layout.
-  ///
-  /// - Parameter cursor: The cursor to create and cache.
-  /// - Parameter parent: The parent to associate the child with. This is
-  ///             normally the Syntax node that this `SyntaxData` belongs to.
-  /// - Returns: The child's data at the provided cursor.
-  func child<CursorType: RawRepresentable>(
-    at cursor: CursorType, parent: Syntax) -> SyntaxData?
-    where CursorType.RawValue == Int {
-    return child(at: cursor.rawValue, parent: parent)
-  }
-
   /// Creates a copy of `self` and recursively creates `SyntaxData` nodes up to
   /// the root.
   /// - parameter newRaw: The new RawSyntax that will back the new `Data`
@@ -346,22 +330,6 @@ struct SyntaxData {
   func replacingChild(_ child: RawSyntax?, at index: Int) -> SyntaxData {
     let newRaw = raw.layoutView!.replacingChild(at: index, with: child, arena: .default)
     return replacingSelf(newRaw)
-  }
-
-  /// Creates a copy of `self` with the child at the provided cursor replaced
-  /// with a new SyntaxData containing the raw syntax provided.
-  ///
-  /// - Parameters:
-  ///   - child: The raw syntax for the new child to replace.
-  ///   - cursor: A cursor that points to the index of the child you wish to
-  ///             replace
-  /// - Returns: The new root node created by this operation, and the new child
-  ///            syntax data.
-  /// - SeeAlso: replacingSelf(_:)
-  func replacingChild<CursorType: RawRepresentable>(_ child: RawSyntax?,
-    at cursor: CursorType) -> SyntaxData
-    where CursorType.RawValue == Int {
-    return replacingChild(child, at: cursor.rawValue)
   }
 
   func withLeadingTrivia(_ leadingTrivia: Trivia) -> SyntaxData {

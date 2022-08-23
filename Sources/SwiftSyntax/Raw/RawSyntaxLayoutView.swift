@@ -153,14 +153,6 @@ struct RawSyntaxLayoutView {
     layoutData.layout
   }
 
-  /// Returns the child at the provided cursor in the layout.
-  /// - Parameter index: The index of the child you're accessing.
-  /// - Returns: The child at the provided index.
-  subscript<CursorType: RawRepresentable>(_ index: CursorType) -> RawSyntax?
-    where CursorType.RawValue == Int {
-    return children[index.rawValue]
-  }
-
   /// The number of children, `present` or `missing`, in this node.
   var numberOfChildren: Int {
     return children.count

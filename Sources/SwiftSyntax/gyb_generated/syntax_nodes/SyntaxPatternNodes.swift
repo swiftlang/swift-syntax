@@ -16,7 +16,6 @@
 // MARK: - UnknownPatternSyntax
 
 public struct UnknownPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `UnknownPatternSyntax` if possible. Returns
@@ -59,7 +58,6 @@ extension UnknownPatternSyntax: CustomReflectable {
 // MARK: - MissingPatternSyntax
 
 public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `MissingPatternSyntax` if possible. Returns
@@ -102,17 +100,6 @@ extension MissingPatternSyntax: CustomReflectable {
 // MARK: - EnumCasePatternSyntax
 
 public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeType
-    case type
-    case unexpectedBetweenTypeAndPeriod
-    case period
-    case unexpectedBetweenPeriodAndCaseName
-    case caseName
-    case unexpectedBetweenCaseNameAndAssociatedTuple
-    case associatedTuple
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `EnumCasePatternSyntax` if possible. Returns
@@ -162,8 +149,7 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeType,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -178,14 +164,13 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeType(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeType)
+    let newData = data.replacingChild(raw, at: 0)
     return EnumCasePatternSyntax(newData)
   }
 
   public var type: TypeSyntax? {
     get {
-      let childData = data.child(at: Cursor.type,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeSyntax(childData!)
     }
@@ -200,14 +185,13 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withType(
     _ newChild: TypeSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.type)
+    let newData = data.replacingChild(raw, at: 1)
     return EnumCasePatternSyntax(newData)
   }
 
   public var unexpectedBetweenTypeAndPeriod: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenTypeAndPeriod,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -222,14 +206,13 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenTypeAndPeriod(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypeAndPeriod)
+    let newData = data.replacingChild(raw, at: 2)
     return EnumCasePatternSyntax(newData)
   }
 
   public var period: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.period,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -243,14 +226,13 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withPeriod(
     _ newChild: TokenSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.period, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.period)
+    let newData = data.replacingChild(raw, at: 3)
     return EnumCasePatternSyntax(newData)
   }
 
   public var unexpectedBetweenPeriodAndCaseName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenPeriodAndCaseName,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -265,14 +247,13 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPeriodAndCaseName(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPeriodAndCaseName)
+    let newData = data.replacingChild(raw, at: 4)
     return EnumCasePatternSyntax(newData)
   }
 
   public var caseName: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.caseName,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -286,14 +267,13 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withCaseName(
     _ newChild: TokenSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.caseName)
+    let newData = data.replacingChild(raw, at: 5)
     return EnumCasePatternSyntax(newData)
   }
 
   public var unexpectedBetweenCaseNameAndAssociatedTuple: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenCaseNameAndAssociatedTuple,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -308,14 +288,13 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenCaseNameAndAssociatedTuple(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCaseNameAndAssociatedTuple)
+    let newData = data.replacingChild(raw, at: 6)
     return EnumCasePatternSyntax(newData)
   }
 
   public var associatedTuple: TuplePatternSyntax? {
     get {
-      let childData = data.child(at: Cursor.associatedTuple,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return TuplePatternSyntax(childData!)
     }
@@ -330,7 +309,7 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withAssociatedTuple(
     _ newChild: TuplePatternSyntax?) -> EnumCasePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.associatedTuple)
+    let newData = data.replacingChild(raw, at: 7)
     return EnumCasePatternSyntax(newData)
   }
 }
@@ -353,13 +332,6 @@ extension EnumCasePatternSyntax: CustomReflectable {
 // MARK: - IsTypePatternSyntax
 
 public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeIsKeyword
-    case isKeyword
-    case unexpectedBetweenIsKeywordAndType
-    case type
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `IsTypePatternSyntax` if possible. Returns
@@ -401,8 +373,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeIsKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeIsKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -417,14 +388,13 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeIsKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> IsTypePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeIsKeyword)
+    let newData = data.replacingChild(raw, at: 0)
     return IsTypePatternSyntax(newData)
   }
 
   public var isKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.isKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -438,14 +408,13 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withIsKeyword(
     _ newChild: TokenSyntax?) -> IsTypePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.isKeyword)
+    let newData = data.replacingChild(raw, at: 1)
     return IsTypePatternSyntax(newData)
   }
 
   public var unexpectedBetweenIsKeywordAndType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIsKeywordAndType,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -460,14 +429,13 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIsKeywordAndType(
     _ newChild: UnexpectedNodesSyntax?) -> IsTypePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIsKeywordAndType)
+    let newData = data.replacingChild(raw, at: 2)
     return IsTypePatternSyntax(newData)
   }
 
   public var type: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.type,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TypeSyntax(childData!)
     }
     set(value) {
@@ -481,7 +449,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withType(
     _ newChild: TypeSyntax?) -> IsTypePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.type)
+    let newData = data.replacingChild(raw, at: 3)
     return IsTypePatternSyntax(newData)
   }
 }
@@ -500,13 +468,6 @@ extension IsTypePatternSyntax: CustomReflectable {
 // MARK: - OptionalPatternSyntax
 
 public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeSubPattern
-    case subPattern
-    case unexpectedBetweenSubPatternAndQuestionMark
-    case questionMark
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `OptionalPatternSyntax` if possible. Returns
@@ -548,8 +509,7 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeSubPattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeSubPattern,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -564,14 +524,13 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeSubPattern(
     _ newChild: UnexpectedNodesSyntax?) -> OptionalPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeSubPattern)
+    let newData = data.replacingChild(raw, at: 0)
     return OptionalPatternSyntax(newData)
   }
 
   public var subPattern: PatternSyntax {
     get {
-      let childData = data.child(at: Cursor.subPattern,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return PatternSyntax(childData!)
     }
     set(value) {
@@ -585,14 +544,13 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withSubPattern(
     _ newChild: PatternSyntax?) -> OptionalPatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.subPattern)
+    let newData = data.replacingChild(raw, at: 1)
     return OptionalPatternSyntax(newData)
   }
 
   public var unexpectedBetweenSubPatternAndQuestionMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenSubPatternAndQuestionMark,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -607,14 +565,13 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSubPatternAndQuestionMark(
     _ newChild: UnexpectedNodesSyntax?) -> OptionalPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSubPatternAndQuestionMark)
+    let newData = data.replacingChild(raw, at: 2)
     return OptionalPatternSyntax(newData)
   }
 
   public var questionMark: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.questionMark,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -628,7 +585,7 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withQuestionMark(
     _ newChild: TokenSyntax?) -> OptionalPatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.postfixQuestionMark, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.questionMark)
+    let newData = data.replacingChild(raw, at: 3)
     return OptionalPatternSyntax(newData)
   }
 }
@@ -647,11 +604,6 @@ extension OptionalPatternSyntax: CustomReflectable {
 // MARK: - IdentifierPatternSyntax
 
 public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeIdentifier
-    case identifier
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `IdentifierPatternSyntax` if possible. Returns
@@ -689,8 +641,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -705,14 +656,13 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> IdentifierPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeIdentifier)
+    let newData = data.replacingChild(raw, at: 0)
     return IdentifierPatternSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -726,7 +676,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> IdentifierPatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.selfKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 1)
     return IdentifierPatternSyntax(newData)
   }
 }
@@ -743,15 +693,6 @@ extension IdentifierPatternSyntax: CustomReflectable {
 // MARK: - AsTypePatternSyntax
 
 public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforePattern
-    case pattern
-    case unexpectedBetweenPatternAndAsKeyword
-    case asKeyword
-    case unexpectedBetweenAsKeywordAndType
-    case type
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AsTypePatternSyntax` if possible. Returns
@@ -797,8 +738,7 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforePattern,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -813,14 +753,13 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePattern(
     _ newChild: UnexpectedNodesSyntax?) -> AsTypePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePattern)
+    let newData = data.replacingChild(raw, at: 0)
     return AsTypePatternSyntax(newData)
   }
 
   public var pattern: PatternSyntax {
     get {
-      let childData = data.child(at: Cursor.pattern,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return PatternSyntax(childData!)
     }
     set(value) {
@@ -834,14 +773,13 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withPattern(
     _ newChild: PatternSyntax?) -> AsTypePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.pattern)
+    let newData = data.replacingChild(raw, at: 1)
     return AsTypePatternSyntax(newData)
   }
 
   public var unexpectedBetweenPatternAndAsKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenPatternAndAsKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -856,14 +794,13 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPatternAndAsKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> AsTypePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPatternAndAsKeyword)
+    let newData = data.replacingChild(raw, at: 2)
     return AsTypePatternSyntax(newData)
   }
 
   public var asKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.asKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -877,14 +814,13 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withAsKeyword(
     _ newChild: TokenSyntax?) -> AsTypePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.asKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.asKeyword)
+    let newData = data.replacingChild(raw, at: 3)
     return AsTypePatternSyntax(newData)
   }
 
   public var unexpectedBetweenAsKeywordAndType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAsKeywordAndType,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -899,14 +835,13 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAsKeywordAndType(
     _ newChild: UnexpectedNodesSyntax?) -> AsTypePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAsKeywordAndType)
+    let newData = data.replacingChild(raw, at: 4)
     return AsTypePatternSyntax(newData)
   }
 
   public var type: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.type,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TypeSyntax(childData!)
     }
     set(value) {
@@ -920,7 +855,7 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withType(
     _ newChild: TypeSyntax?) -> AsTypePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.type)
+    let newData = data.replacingChild(raw, at: 5)
     return AsTypePatternSyntax(newData)
   }
 }
@@ -941,15 +876,6 @@ extension AsTypePatternSyntax: CustomReflectable {
 // MARK: - TuplePatternSyntax
 
 public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeLeftParen
-    case leftParen
-    case unexpectedBetweenLeftParenAndElements
-    case elements
-    case unexpectedBetweenElementsAndRightParen
-    case rightParen
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `TuplePatternSyntax` if possible. Returns
@@ -995,8 +921,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeLeftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1011,14 +936,13 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeLeftParen(
     _ newChild: UnexpectedNodesSyntax?) -> TuplePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLeftParen)
+    let newData = data.replacingChild(raw, at: 0)
     return TuplePatternSyntax(newData)
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1032,14 +956,13 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> TuplePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    let newData = data.replacingChild(raw, at: 1)
     return TuplePatternSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndElements,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1054,14 +977,13 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndElements(
     _ newChild: UnexpectedNodesSyntax?) -> TuplePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndElements)
+    let newData = data.replacingChild(raw, at: 2)
     return TuplePatternSyntax(newData)
   }
 
   public var elements: TuplePatternElementListSyntax {
     get {
-      let childData = data.child(at: Cursor.elements,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TuplePatternElementListSyntax(childData!)
     }
     set(value) {
@@ -1077,14 +999,13 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: TuplePatternElementSyntax) -> TuplePatternSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.elements] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.elements)
+    let newData = data.replacingChild(collection, at: 3)
     return TuplePatternSyntax(newData)
   }
 
@@ -1094,14 +1015,13 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withElements(
     _ newChild: TuplePatternElementListSyntax?) -> TuplePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.tuplePatternElementList, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.elements)
+    let newData = data.replacingChild(raw, at: 3)
     return TuplePatternSyntax(newData)
   }
 
   public var unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenElementsAndRightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1116,14 +1036,13 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenElementsAndRightParen(
     _ newChild: UnexpectedNodesSyntax?) -> TuplePatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenElementsAndRightParen)
+    let newData = data.replacingChild(raw, at: 4)
     return TuplePatternSyntax(newData)
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1137,7 +1056,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withRightParen(
     _ newChild: TokenSyntax?) -> TuplePatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    let newData = data.replacingChild(raw, at: 5)
     return TuplePatternSyntax(newData)
   }
 }
@@ -1158,13 +1077,6 @@ extension TuplePatternSyntax: CustomReflectable {
 // MARK: - WildcardPatternSyntax
 
 public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeWildcard
-    case wildcard
-    case unexpectedBetweenWildcardAndTypeAnnotation
-    case typeAnnotation
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `WildcardPatternSyntax` if possible. Returns
@@ -1206,8 +1118,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeWildcard: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeWildcard,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1222,14 +1133,13 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeWildcard(
     _ newChild: UnexpectedNodesSyntax?) -> WildcardPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeWildcard)
+    let newData = data.replacingChild(raw, at: 0)
     return WildcardPatternSyntax(newData)
   }
 
   public var wildcard: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.wildcard,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1243,14 +1153,13 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withWildcard(
     _ newChild: TokenSyntax?) -> WildcardPatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.wildcardKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.wildcard)
+    let newData = data.replacingChild(raw, at: 1)
     return WildcardPatternSyntax(newData)
   }
 
   public var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenWildcardAndTypeAnnotation,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1265,14 +1174,13 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenWildcardAndTypeAnnotation(
     _ newChild: UnexpectedNodesSyntax?) -> WildcardPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenWildcardAndTypeAnnotation)
+    let newData = data.replacingChild(raw, at: 2)
     return WildcardPatternSyntax(newData)
   }
 
   public var typeAnnotation: TypeAnnotationSyntax? {
     get {
-      let childData = data.child(at: Cursor.typeAnnotation,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeAnnotationSyntax(childData!)
     }
@@ -1287,7 +1195,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withTypeAnnotation(
     _ newChild: TypeAnnotationSyntax?) -> WildcardPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.typeAnnotation)
+    let newData = data.replacingChild(raw, at: 3)
     return WildcardPatternSyntax(newData)
   }
 }
@@ -1306,11 +1214,6 @@ extension WildcardPatternSyntax: CustomReflectable {
 // MARK: - ExpressionPatternSyntax
 
 public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeExpression
-    case expression
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ExpressionPatternSyntax` if possible. Returns
@@ -1348,8 +1251,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeExpression,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1364,14 +1266,13 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeExpression(
     _ newChild: UnexpectedNodesSyntax?) -> ExpressionPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeExpression)
+    let newData = data.replacingChild(raw, at: 0)
     return ExpressionPatternSyntax(newData)
   }
 
   public var expression: ExprSyntax {
     get {
-      let childData = data.child(at: Cursor.expression,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return ExprSyntax(childData!)
     }
     set(value) {
@@ -1385,7 +1286,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withExpression(
     _ newChild: ExprSyntax?) -> ExpressionPatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.expression)
+    let newData = data.replacingChild(raw, at: 1)
     return ExpressionPatternSyntax(newData)
   }
 }
@@ -1402,13 +1303,6 @@ extension ExpressionPatternSyntax: CustomReflectable {
 // MARK: - ValueBindingPatternSyntax
 
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeLetOrVarKeyword
-    case letOrVarKeyword
-    case unexpectedBetweenLetOrVarKeywordAndValuePattern
-    case valuePattern
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ValueBindingPatternSyntax` if possible. Returns
@@ -1450,8 +1344,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeLetOrVarKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1466,14 +1359,13 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeLetOrVarKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> ValueBindingPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeLetOrVarKeyword)
+    let newData = data.replacingChild(raw, at: 0)
     return ValueBindingPatternSyntax(newData)
   }
 
   public var letOrVarKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.letOrVarKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1487,14 +1379,13 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withLetOrVarKeyword(
     _ newChild: TokenSyntax?) -> ValueBindingPatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.letOrVarKeyword)
+    let newData = data.replacingChild(raw, at: 1)
     return ValueBindingPatternSyntax(newData)
   }
 
   public var unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenLetOrVarKeywordAndValuePattern,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1509,14 +1400,13 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLetOrVarKeywordAndValuePattern(
     _ newChild: UnexpectedNodesSyntax?) -> ValueBindingPatternSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLetOrVarKeywordAndValuePattern)
+    let newData = data.replacingChild(raw, at: 2)
     return ValueBindingPatternSyntax(newData)
   }
 
   public var valuePattern: PatternSyntax {
     get {
-      let childData = data.child(at: Cursor.valuePattern,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return PatternSyntax(childData!)
     }
     set(value) {
@@ -1530,7 +1420,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public func withValuePattern(
     _ newChild: PatternSyntax?) -> ValueBindingPatternSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingPattern, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.valuePattern)
+    let newData = data.replacingChild(raw, at: 3)
     return ValueBindingPatternSyntax(newData)
   }
 }

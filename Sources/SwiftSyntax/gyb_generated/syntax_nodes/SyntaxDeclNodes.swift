@@ -16,7 +16,6 @@
 // MARK: - UnknownDeclSyntax
 
 public struct UnknownDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `UnknownDeclSyntax` if possible. Returns
@@ -59,13 +58,6 @@ extension UnknownDeclSyntax: CustomReflectable {
 // MARK: - MissingDeclSyntax
 
 public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `MissingDeclSyntax` if possible. Returns
@@ -107,8 +99,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -123,14 +114,13 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return MissingDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -147,14 +137,13 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> MissingDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return MissingDeclSyntax(newData)
   }
 
@@ -164,14 +153,13 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> MissingDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return MissingDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -186,14 +174,13 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> MissingDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return MissingDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -210,14 +197,13 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> MissingDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return MissingDeclSyntax(newData)
   }
 
@@ -227,7 +213,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> MissingDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return MissingDeclSyntax(newData)
   }
 }
@@ -246,23 +232,6 @@ extension MissingDeclSyntax: CustomReflectable {
 // MARK: - TypealiasDeclSyntax
 
 public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndTypealiasKeyword
-    case typealiasKeyword
-    case unexpectedBetweenTypealiasKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndGenericParameterClause
-    case genericParameterClause
-    case unexpectedBetweenGenericParameterClauseAndInitializer
-    case initializer
-    case unexpectedBetweenInitializerAndGenericWhereClause
-    case genericWhereClause
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `TypealiasDeclSyntax` if possible. Returns
@@ -324,8 +293,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -340,14 +308,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return TypealiasDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -364,14 +331,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> TypealiasDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -381,14 +347,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return TypealiasDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -403,14 +368,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return TypealiasDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -427,14 +391,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> TypealiasDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return TypealiasDeclSyntax(newData)
   }
 
@@ -444,14 +407,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return TypealiasDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndTypealiasKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -466,14 +428,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndTypealiasKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndTypealiasKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return TypealiasDeclSyntax(newData)
   }
 
   public var typealiasKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.typealiasKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -487,14 +448,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withTypealiasKeyword(
     _ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.typealiasKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.typealiasKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return TypealiasDeclSyntax(newData)
   }
 
   public var unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenTypealiasKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -509,14 +469,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenTypealiasKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenTypealiasKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return TypealiasDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -530,14 +489,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return TypealiasDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -552,14 +510,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
     _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause)
+    let newData = data.replacingChild(raw, at: 8)
     return TypealiasDeclSyntax(newData)
   }
 
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -574,14 +531,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(
     _ newChild: GenericParameterClauseSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    let newData = data.replacingChild(raw, at: 9)
     return TypealiasDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterClauseAndInitializer,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -596,14 +552,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInitializer(
     _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterClauseAndInitializer)
+    let newData = data.replacingChild(raw, at: 10)
     return TypealiasDeclSyntax(newData)
   }
 
   public var initializer: TypeInitializerClauseSyntax {
     get {
-      let childData = data.child(at: Cursor.initializer,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       return TypeInitializerClauseSyntax(childData!)
     }
     set(value) {
@@ -617,14 +572,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInitializer(
     _ newChild: TypeInitializerClauseSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.typeInitializerClause, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.initializer)
+    let newData = data.replacingChild(raw, at: 11)
     return TypealiasDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInitializerAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -639,14 +593,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInitializerAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInitializerAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return TypealiasDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -661,7 +614,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return TypealiasDeclSyntax(newData)
   }
 }
@@ -690,23 +643,6 @@ extension TypealiasDeclSyntax: CustomReflectable {
 // MARK: - AssociatedtypeDeclSyntax
 
 public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndAssociatedtypeKeyword
-    case associatedtypeKeyword
-    case unexpectedBetweenAssociatedtypeKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndInheritanceClause
-    case inheritanceClause
-    case unexpectedBetweenInheritanceClauseAndInitializer
-    case initializer
-    case unexpectedBetweenInitializerAndGenericWhereClause
-    case genericWhereClause
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AssociatedtypeDeclSyntax` if possible. Returns
@@ -768,8 +704,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -784,14 +719,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -808,14 +742,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AssociatedtypeDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -825,14 +758,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -847,14 +779,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -871,14 +802,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> AssociatedtypeDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return AssociatedtypeDeclSyntax(newData)
   }
 
@@ -888,14 +818,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndAssociatedtypeKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -910,14 +839,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndAssociatedtypeKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndAssociatedtypeKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var associatedtypeKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.associatedtypeKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -931,14 +859,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAssociatedtypeKeyword(
     _ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.associatedtypeKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.associatedtypeKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAssociatedtypeKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -953,14 +880,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAssociatedtypeKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAssociatedtypeKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -974,14 +900,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndInheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -996,14 +921,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndInheritanceClause(
     _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndInheritanceClause)
+    let newData = data.replacingChild(raw, at: 8)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.inheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInheritanceClauseSyntax(childData!)
     }
@@ -1018,14 +942,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(
     _ newChild: TypeInheritanceClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.inheritanceClause)
+    let newData = data.replacingChild(raw, at: 9)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInheritanceClauseAndInitializer,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1040,14 +963,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndInitializer(
     _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritanceClauseAndInitializer)
+    let newData = data.replacingChild(raw, at: 10)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var initializer: TypeInitializerClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.initializer,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInitializerClauseSyntax(childData!)
     }
@@ -1062,14 +984,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInitializer(
     _ newChild: TypeInitializerClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.initializer)
+    let newData = data.replacingChild(raw, at: 11)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInitializerAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1084,14 +1005,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInitializerAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInitializerAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return AssociatedtypeDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -1106,7 +1026,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return AssociatedtypeDeclSyntax(newData)
   }
 }
@@ -1135,13 +1055,6 @@ extension AssociatedtypeDeclSyntax: CustomReflectable {
 // MARK: - IfConfigDeclSyntax
 
 public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeClauses
-    case clauses
-    case unexpectedBetweenClausesAndPoundEndif
-    case poundEndif
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `IfConfigDeclSyntax` if possible. Returns
@@ -1183,8 +1096,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeClauses: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeClauses,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1199,14 +1111,13 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeClauses(
     _ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeClauses)
+    let newData = data.replacingChild(raw, at: 0)
     return IfConfigDeclSyntax(newData)
   }
 
   public var clauses: IfConfigClauseListSyntax {
     get {
-      let childData = data.child(at: Cursor.clauses,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return IfConfigClauseListSyntax(childData!)
     }
     set(value) {
@@ -1222,14 +1133,13 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `clauses` collection.
   public func addClause(_ element: IfConfigClauseSyntax) -> IfConfigDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.clauses] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.clauses)
+    let newData = data.replacingChild(collection, at: 1)
     return IfConfigDeclSyntax(newData)
   }
 
@@ -1239,14 +1149,13 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withClauses(
     _ newChild: IfConfigClauseListSyntax?) -> IfConfigDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.ifConfigClauseList, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.clauses)
+    let newData = data.replacingChild(raw, at: 1)
     return IfConfigDeclSyntax(newData)
   }
 
   public var unexpectedBetweenClausesAndPoundEndif: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenClausesAndPoundEndif,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1261,14 +1170,13 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenClausesAndPoundEndif(
     _ newChild: UnexpectedNodesSyntax?) -> IfConfigDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenClausesAndPoundEndif)
+    let newData = data.replacingChild(raw, at: 2)
     return IfConfigDeclSyntax(newData)
   }
 
   public var poundEndif: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.poundEndif,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1282,7 +1190,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundEndif(
     _ newChild: TokenSyntax?) -> IfConfigDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundEndifKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.poundEndif)
+    let newData = data.replacingChild(raw, at: 3)
     return IfConfigDeclSyntax(newData)
   }
 }
@@ -1301,17 +1209,6 @@ extension IfConfigDeclSyntax: CustomReflectable {
 // MARK: - PoundErrorDeclSyntax
 
 public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforePoundError
-    case poundError
-    case unexpectedBetweenPoundErrorAndLeftParen
-    case leftParen
-    case unexpectedBetweenLeftParenAndMessage
-    case message
-    case unexpectedBetweenMessageAndRightParen
-    case rightParen
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PoundErrorDeclSyntax` if possible. Returns
@@ -1361,8 +1258,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforePoundError: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforePoundError,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1377,14 +1273,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePoundError(
     _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePoundError)
+    let newData = data.replacingChild(raw, at: 0)
     return PoundErrorDeclSyntax(newData)
   }
 
   public var poundError: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.poundError,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1398,14 +1293,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundError(
     _ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundErrorKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.poundError)
+    let newData = data.replacingChild(raw, at: 1)
     return PoundErrorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenPoundErrorAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenPoundErrorAndLeftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1420,14 +1314,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPoundErrorAndLeftParen(
     _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPoundErrorAndLeftParen)
+    let newData = data.replacingChild(raw, at: 2)
     return PoundErrorDeclSyntax(newData)
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1441,14 +1334,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    let newData = data.replacingChild(raw, at: 3)
     return PoundErrorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndMessage,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1463,14 +1355,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndMessage(
     _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndMessage)
+    let newData = data.replacingChild(raw, at: 4)
     return PoundErrorDeclSyntax(newData)
   }
 
   public var message: StringLiteralExprSyntax {
     get {
-      let childData = data.child(at: Cursor.message,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return StringLiteralExprSyntax(childData!)
     }
     set(value) {
@@ -1484,14 +1375,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMessage(
     _ newChild: StringLiteralExprSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.message)
+    let newData = data.replacingChild(raw, at: 5)
     return PoundErrorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenMessageAndRightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1506,14 +1396,13 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenMessageAndRightParen(
     _ newChild: UnexpectedNodesSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenMessageAndRightParen)
+    let newData = data.replacingChild(raw, at: 6)
     return PoundErrorDeclSyntax(newData)
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1527,7 +1416,7 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightParen(
     _ newChild: TokenSyntax?) -> PoundErrorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    let newData = data.replacingChild(raw, at: 7)
     return PoundErrorDeclSyntax(newData)
   }
 }
@@ -1550,17 +1439,6 @@ extension PoundErrorDeclSyntax: CustomReflectable {
 // MARK: - PoundWarningDeclSyntax
 
 public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforePoundWarning
-    case poundWarning
-    case unexpectedBetweenPoundWarningAndLeftParen
-    case leftParen
-    case unexpectedBetweenLeftParenAndMessage
-    case message
-    case unexpectedBetweenMessageAndRightParen
-    case rightParen
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PoundWarningDeclSyntax` if possible. Returns
@@ -1610,8 +1488,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforePoundWarning: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforePoundWarning,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1626,14 +1503,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePoundWarning(
     _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePoundWarning)
+    let newData = data.replacingChild(raw, at: 0)
     return PoundWarningDeclSyntax(newData)
   }
 
   public var poundWarning: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.poundWarning,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1647,14 +1523,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundWarning(
     _ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundWarningKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.poundWarning)
+    let newData = data.replacingChild(raw, at: 1)
     return PoundWarningDeclSyntax(newData)
   }
 
   public var unexpectedBetweenPoundWarningAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenPoundWarningAndLeftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1669,14 +1544,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPoundWarningAndLeftParen(
     _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPoundWarningAndLeftParen)
+    let newData = data.replacingChild(raw, at: 2)
     return PoundWarningDeclSyntax(newData)
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1690,14 +1564,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    let newData = data.replacingChild(raw, at: 3)
     return PoundWarningDeclSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndMessage: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndMessage,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1712,14 +1585,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndMessage(
     _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndMessage)
+    let newData = data.replacingChild(raw, at: 4)
     return PoundWarningDeclSyntax(newData)
   }
 
   public var message: StringLiteralExprSyntax {
     get {
-      let childData = data.child(at: Cursor.message,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return StringLiteralExprSyntax(childData!)
     }
     set(value) {
@@ -1733,14 +1605,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMessage(
     _ newChild: StringLiteralExprSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.stringLiteralExpr, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.message)
+    let newData = data.replacingChild(raw, at: 5)
     return PoundWarningDeclSyntax(newData)
   }
 
   public var unexpectedBetweenMessageAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenMessageAndRightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1755,14 +1626,13 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenMessageAndRightParen(
     _ newChild: UnexpectedNodesSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenMessageAndRightParen)
+    let newData = data.replacingChild(raw, at: 6)
     return PoundWarningDeclSyntax(newData)
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1776,7 +1646,7 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightParen(
     _ newChild: TokenSyntax?) -> PoundWarningDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    let newData = data.replacingChild(raw, at: 7)
     return PoundWarningDeclSyntax(newData)
   }
 }
@@ -1799,17 +1669,6 @@ extension PoundWarningDeclSyntax: CustomReflectable {
 // MARK: - PoundSourceLocationSyntax
 
 public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforePoundSourceLocation
-    case poundSourceLocation
-    case unexpectedBetweenPoundSourceLocationAndLeftParen
-    case leftParen
-    case unexpectedBetweenLeftParenAndArgs
-    case args
-    case unexpectedBetweenArgsAndRightParen
-    case rightParen
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PoundSourceLocationSyntax` if possible. Returns
@@ -1859,8 +1718,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforePoundSourceLocation: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforePoundSourceLocation,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1875,14 +1733,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforePoundSourceLocation(
     _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforePoundSourceLocation)
+    let newData = data.replacingChild(raw, at: 0)
     return PoundSourceLocationSyntax(newData)
   }
 
   public var poundSourceLocation: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.poundSourceLocation,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1896,14 +1753,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPoundSourceLocation(
     _ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.poundSourceLocationKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.poundSourceLocation)
+    let newData = data.replacingChild(raw, at: 1)
     return PoundSourceLocationSyntax(newData)
   }
 
   public var unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenPoundSourceLocationAndLeftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1918,14 +1774,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPoundSourceLocationAndLeftParen(
     _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPoundSourceLocationAndLeftParen)
+    let newData = data.replacingChild(raw, at: 2)
     return PoundSourceLocationSyntax(newData)
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -1939,14 +1794,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftParen(
     _ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    let newData = data.replacingChild(raw, at: 3)
     return PoundSourceLocationSyntax(newData)
   }
 
   public var unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenLeftParenAndArgs,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -1961,14 +1815,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftParenAndArgs(
     _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftParenAndArgs)
+    let newData = data.replacingChild(raw, at: 4)
     return PoundSourceLocationSyntax(newData)
   }
 
   public var args: PoundSourceLocationArgsSyntax? {
     get {
-      let childData = data.child(at: Cursor.args,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       if childData == nil { return nil }
       return PoundSourceLocationArgsSyntax(childData!)
     }
@@ -1983,14 +1836,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withArgs(
     _ newChild: PoundSourceLocationArgsSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.args)
+    let newData = data.replacingChild(raw, at: 5)
     return PoundSourceLocationSyntax(newData)
   }
 
   public var unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenArgsAndRightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2005,14 +1857,13 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenArgsAndRightParen(
     _ newChild: UnexpectedNodesSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenArgsAndRightParen)
+    let newData = data.replacingChild(raw, at: 6)
     return PoundSourceLocationSyntax(newData)
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightParen,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -2026,7 +1877,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightParen(
     _ newChild: TokenSyntax?) -> PoundSourceLocationSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    let newData = data.replacingChild(raw, at: 7)
     return PoundSourceLocationSyntax(newData)
   }
 }
@@ -2049,25 +1900,6 @@ extension PoundSourceLocationSyntax: CustomReflectable {
 // MARK: - ClassDeclSyntax
 
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndClassKeyword
-    case classKeyword
-    case unexpectedBetweenClassKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndGenericParameterClause
-    case genericParameterClause
-    case unexpectedBetweenGenericParameterClauseAndInheritanceClause
-    case inheritanceClause
-    case unexpectedBetweenInheritanceClauseAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndMembers
-    case members
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ClassDeclSyntax` if possible. Returns
@@ -2133,8 +1965,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2149,14 +1980,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return ClassDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -2173,14 +2003,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ClassDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return ClassDeclSyntax(newData)
   }
 
@@ -2190,14 +2019,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return ClassDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2212,14 +2040,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return ClassDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -2236,14 +2063,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ClassDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return ClassDeclSyntax(newData)
   }
 
@@ -2253,14 +2079,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return ClassDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndClassKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2275,14 +2100,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndClassKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndClassKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return ClassDeclSyntax(newData)
   }
 
   public var classKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.classKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -2296,14 +2120,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withClassKeyword(
     _ newChild: TokenSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.classKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.classKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return ClassDeclSyntax(newData)
   }
 
   public var unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenClassKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2318,14 +2141,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenClassKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenClassKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return ClassDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -2339,14 +2161,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return ClassDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2361,14 +2182,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause)
+    let newData = data.replacingChild(raw, at: 8)
     return ClassDeclSyntax(newData)
   }
 
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -2383,14 +2203,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(
     _ newChild: GenericParameterClauseSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    let newData = data.replacingChild(raw, at: 9)
     return ClassDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2405,14 +2224,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterClauseAndInheritanceClause)
+    let newData = data.replacingChild(raw, at: 10)
     return ClassDeclSyntax(newData)
   }
 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.inheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInheritanceClauseSyntax(childData!)
     }
@@ -2427,14 +2245,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(
     _ newChild: TypeInheritanceClauseSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.inheritanceClause)
+    let newData = data.replacingChild(raw, at: 11)
     return ClassDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2449,14 +2266,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return ClassDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -2471,14 +2287,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return ClassDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2493,14 +2308,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(
     _ newChild: UnexpectedNodesSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers)
+    let newData = data.replacingChild(raw, at: 14)
     return ClassDeclSyntax(newData)
   }
 
   public var members: MemberDeclBlockSyntax {
     get {
-      let childData = data.child(at: Cursor.members,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       return MemberDeclBlockSyntax(childData!)
     }
     set(value) {
@@ -2514,7 +2328,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(
     _ newChild: MemberDeclBlockSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.members)
+    let newData = data.replacingChild(raw, at: 15)
     return ClassDeclSyntax(newData)
   }
 }
@@ -2545,25 +2359,6 @@ extension ClassDeclSyntax: CustomReflectable {
 // MARK: - ActorDeclSyntax
 
 public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndActorKeyword
-    case actorKeyword
-    case unexpectedBetweenActorKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndGenericParameterClause
-    case genericParameterClause
-    case unexpectedBetweenGenericParameterClauseAndInheritanceClause
-    case inheritanceClause
-    case unexpectedBetweenInheritanceClauseAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndMembers
-    case members
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ActorDeclSyntax` if possible. Returns
@@ -2629,8 +2424,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2645,14 +2439,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return ActorDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -2669,14 +2462,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ActorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return ActorDeclSyntax(newData)
   }
 
@@ -2686,14 +2478,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return ActorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2708,14 +2499,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return ActorDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -2732,14 +2522,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ActorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return ActorDeclSyntax(newData)
   }
 
@@ -2749,14 +2538,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return ActorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndActorKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2771,14 +2559,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndActorKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndActorKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return ActorDeclSyntax(newData)
   }
 
   public var actorKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.actorKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -2792,14 +2579,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withActorKeyword(
     _ newChild: TokenSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.contextualKeyword(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.actorKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return ActorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenActorKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2814,14 +2600,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenActorKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenActorKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return ActorDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -2835,14 +2620,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return ActorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2857,14 +2641,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause)
+    let newData = data.replacingChild(raw, at: 8)
     return ActorDeclSyntax(newData)
   }
 
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -2879,14 +2662,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(
     _ newChild: GenericParameterClauseSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    let newData = data.replacingChild(raw, at: 9)
     return ActorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2901,14 +2683,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterClauseAndInheritanceClause)
+    let newData = data.replacingChild(raw, at: 10)
     return ActorDeclSyntax(newData)
   }
 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.inheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInheritanceClauseSyntax(childData!)
     }
@@ -2923,14 +2704,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(
     _ newChild: TypeInheritanceClauseSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.inheritanceClause)
+    let newData = data.replacingChild(raw, at: 11)
     return ActorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2945,14 +2725,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return ActorDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -2967,14 +2746,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return ActorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -2989,14 +2767,13 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(
     _ newChild: UnexpectedNodesSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers)
+    let newData = data.replacingChild(raw, at: 14)
     return ActorDeclSyntax(newData)
   }
 
   public var members: MemberDeclBlockSyntax {
     get {
-      let childData = data.child(at: Cursor.members,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       return MemberDeclBlockSyntax(childData!)
     }
     set(value) {
@@ -3010,7 +2787,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(
     _ newChild: MemberDeclBlockSyntax?) -> ActorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.members)
+    let newData = data.replacingChild(raw, at: 15)
     return ActorDeclSyntax(newData)
   }
 }
@@ -3041,25 +2818,6 @@ extension ActorDeclSyntax: CustomReflectable {
 // MARK: - StructDeclSyntax
 
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndStructKeyword
-    case structKeyword
-    case unexpectedBetweenStructKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndGenericParameterClause
-    case genericParameterClause
-    case unexpectedBetweenGenericParameterClauseAndInheritanceClause
-    case inheritanceClause
-    case unexpectedBetweenInheritanceClauseAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndMembers
-    case members
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `StructDeclSyntax` if possible. Returns
@@ -3125,8 +2883,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3141,14 +2898,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return StructDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -3165,14 +2921,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> StructDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return StructDeclSyntax(newData)
   }
 
@@ -3182,14 +2937,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return StructDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3204,14 +2958,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return StructDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -3228,14 +2981,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> StructDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return StructDeclSyntax(newData)
   }
 
@@ -3245,14 +2997,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return StructDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndStructKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3267,14 +3018,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndStructKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndStructKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return StructDeclSyntax(newData)
   }
 
   public var structKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.structKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -3288,14 +3038,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withStructKeyword(
     _ newChild: TokenSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.structKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.structKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return StructDeclSyntax(newData)
   }
 
   public var unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenStructKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3310,14 +3059,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenStructKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenStructKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return StructDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -3331,14 +3079,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return StructDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3353,14 +3100,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause)
+    let newData = data.replacingChild(raw, at: 8)
     return StructDeclSyntax(newData)
   }
 
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -3375,14 +3121,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(
     _ newChild: GenericParameterClauseSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    let newData = data.replacingChild(raw, at: 9)
     return StructDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3397,14 +3142,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndInheritanceClause(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterClauseAndInheritanceClause)
+    let newData = data.replacingChild(raw, at: 10)
     return StructDeclSyntax(newData)
   }
 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.inheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInheritanceClauseSyntax(childData!)
     }
@@ -3419,14 +3163,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(
     _ newChild: TypeInheritanceClauseSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.inheritanceClause)
+    let newData = data.replacingChild(raw, at: 11)
     return StructDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3441,14 +3184,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return StructDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -3463,14 +3205,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return StructDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3485,14 +3226,13 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(
     _ newChild: UnexpectedNodesSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers)
+    let newData = data.replacingChild(raw, at: 14)
     return StructDeclSyntax(newData)
   }
 
   public var members: MemberDeclBlockSyntax {
     get {
-      let childData = data.child(at: Cursor.members,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       return MemberDeclBlockSyntax(childData!)
     }
     set(value) {
@@ -3506,7 +3246,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(
     _ newChild: MemberDeclBlockSyntax?) -> StructDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.members)
+    let newData = data.replacingChild(raw, at: 15)
     return StructDeclSyntax(newData)
   }
 }
@@ -3537,25 +3277,6 @@ extension StructDeclSyntax: CustomReflectable {
 // MARK: - ProtocolDeclSyntax
 
 public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndProtocolKeyword
-    case protocolKeyword
-    case unexpectedBetweenProtocolKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause
-    case primaryAssociatedTypeClause
-    case unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause
-    case inheritanceClause
-    case unexpectedBetweenInheritanceClauseAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndMembers
-    case members
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ProtocolDeclSyntax` if possible. Returns
@@ -3621,8 +3342,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3637,14 +3357,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return ProtocolDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -3661,14 +3380,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -3678,14 +3396,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return ProtocolDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3700,14 +3417,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return ProtocolDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -3724,14 +3440,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return ProtocolDeclSyntax(newData)
   }
 
@@ -3741,14 +3456,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return ProtocolDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndProtocolKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3763,14 +3477,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndProtocolKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndProtocolKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return ProtocolDeclSyntax(newData)
   }
 
   public var protocolKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.protocolKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -3784,14 +3497,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withProtocolKeyword(
     _ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.protocolKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.protocolKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return ProtocolDeclSyntax(newData)
   }
 
   public var unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenProtocolKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3806,14 +3518,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenProtocolKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenProtocolKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return ProtocolDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -3827,14 +3538,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return ProtocolDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3849,14 +3559,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause)
+    let newData = data.replacingChild(raw, at: 8)
     return ProtocolDeclSyntax(newData)
   }
 
   public var primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.primaryAssociatedTypeClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return PrimaryAssociatedTypeClauseSyntax(childData!)
     }
@@ -3871,14 +3580,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPrimaryAssociatedTypeClause(
     _ newChild: PrimaryAssociatedTypeClauseSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.primaryAssociatedTypeClause)
+    let newData = data.replacingChild(raw, at: 9)
     return ProtocolDeclSyntax(newData)
   }
 
   public var unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3893,14 +3601,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause)
+    let newData = data.replacingChild(raw, at: 10)
     return ProtocolDeclSyntax(newData)
   }
 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.inheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInheritanceClauseSyntax(childData!)
     }
@@ -3915,14 +3622,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(
     _ newChild: TypeInheritanceClauseSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.inheritanceClause)
+    let newData = data.replacingChild(raw, at: 11)
     return ProtocolDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3937,14 +3643,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return ProtocolDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -3959,14 +3664,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return ProtocolDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -3981,14 +3685,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(
     _ newChild: UnexpectedNodesSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers)
+    let newData = data.replacingChild(raw, at: 14)
     return ProtocolDeclSyntax(newData)
   }
 
   public var members: MemberDeclBlockSyntax {
     get {
-      let childData = data.child(at: Cursor.members,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       return MemberDeclBlockSyntax(childData!)
     }
     set(value) {
@@ -4002,7 +3705,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(
     _ newChild: MemberDeclBlockSyntax?) -> ProtocolDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.members)
+    let newData = data.replacingChild(raw, at: 15)
     return ProtocolDeclSyntax(newData)
   }
 }
@@ -4033,23 +3736,6 @@ extension ProtocolDeclSyntax: CustomReflectable {
 // MARK: - ExtensionDeclSyntax
 
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndExtensionKeyword
-    case extensionKeyword
-    case unexpectedBetweenExtensionKeywordAndExtendedType
-    case extendedType
-    case unexpectedBetweenExtendedTypeAndInheritanceClause
-    case inheritanceClause
-    case unexpectedBetweenInheritanceClauseAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndMembers
-    case members
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ExtensionDeclSyntax` if possible. Returns
@@ -4111,8 +3797,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4127,14 +3812,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return ExtensionDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -4151,14 +3835,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4168,14 +3851,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return ExtensionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4190,14 +3872,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return ExtensionDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -4214,14 +3895,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return ExtensionDeclSyntax(newData)
   }
 
@@ -4231,14 +3911,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return ExtensionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndExtensionKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4253,14 +3932,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndExtensionKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndExtensionKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return ExtensionDeclSyntax(newData)
   }
 
   public var extensionKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.extensionKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -4274,14 +3952,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withExtensionKeyword(
     _ newChild: TokenSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.extensionKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.extensionKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return ExtensionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenExtensionKeywordAndExtendedType,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4296,14 +3973,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenExtensionKeywordAndExtendedType(
     _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenExtensionKeywordAndExtendedType)
+    let newData = data.replacingChild(raw, at: 6)
     return ExtensionDeclSyntax(newData)
   }
 
   public var extendedType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.extendedType,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TypeSyntax(childData!)
     }
     set(value) {
@@ -4317,14 +3993,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withExtendedType(
     _ newChild: TypeSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.extendedType)
+    let newData = data.replacingChild(raw, at: 7)
     return ExtensionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenExtendedTypeAndInheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4339,14 +4014,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenExtendedTypeAndInheritanceClause(
     _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenExtendedTypeAndInheritanceClause)
+    let newData = data.replacingChild(raw, at: 8)
     return ExtensionDeclSyntax(newData)
   }
 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.inheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInheritanceClauseSyntax(childData!)
     }
@@ -4361,14 +4035,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(
     _ newChild: TypeInheritanceClauseSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.inheritanceClause)
+    let newData = data.replacingChild(raw, at: 9)
     return ExtensionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4383,14 +4056,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 10)
     return ExtensionDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -4405,14 +4077,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 11)
     return ExtensionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4427,14 +4098,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(
     _ newChild: UnexpectedNodesSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers)
+    let newData = data.replacingChild(raw, at: 12)
     return ExtensionDeclSyntax(newData)
   }
 
   public var members: MemberDeclBlockSyntax {
     get {
-      let childData = data.child(at: Cursor.members,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       return MemberDeclBlockSyntax(childData!)
     }
     set(value) {
@@ -4448,7 +4118,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(
     _ newChild: MemberDeclBlockSyntax?) -> ExtensionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.members)
+    let newData = data.replacingChild(raw, at: 13)
     return ExtensionDeclSyntax(newData)
   }
 }
@@ -4477,25 +4147,6 @@ extension ExtensionDeclSyntax: CustomReflectable {
 // MARK: - FunctionDeclSyntax
 
 public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndFuncKeyword
-    case funcKeyword
-    case unexpectedBetweenFuncKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndGenericParameterClause
-    case genericParameterClause
-    case unexpectedBetweenGenericParameterClauseAndSignature
-    case signature
-    case unexpectedBetweenSignatureAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndBody
-    case body
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `FunctionDeclSyntax` if possible. Returns
@@ -4561,8 +4212,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4577,14 +4227,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return FunctionDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -4601,14 +4250,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return FunctionDeclSyntax(newData)
   }
 
@@ -4618,14 +4266,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return FunctionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4640,14 +4287,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return FunctionDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -4664,14 +4310,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return FunctionDeclSyntax(newData)
   }
 
@@ -4681,14 +4326,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return FunctionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndFuncKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4703,14 +4347,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndFuncKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndFuncKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return FunctionDeclSyntax(newData)
   }
 
   public var funcKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.funcKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -4724,14 +4367,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withFuncKeyword(
     _ newChild: TokenSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.funcKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.funcKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return FunctionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenFuncKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4746,14 +4388,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenFuncKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenFuncKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return FunctionDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -4767,14 +4408,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return FunctionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4789,14 +4429,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameterClause(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndGenericParameterClause)
+    let newData = data.replacingChild(raw, at: 8)
     return FunctionDeclSyntax(newData)
   }
 
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -4811,14 +4450,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(
     _ newChild: GenericParameterClauseSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    let newData = data.replacingChild(raw, at: 9)
     return FunctionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterClauseAndSignature,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4833,14 +4471,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndSignature(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterClauseAndSignature)
+    let newData = data.replacingChild(raw, at: 10)
     return FunctionDeclSyntax(newData)
   }
 
   public var signature: FunctionSignatureSyntax {
     get {
-      let childData = data.child(at: Cursor.signature,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       return FunctionSignatureSyntax(childData!)
     }
     set(value) {
@@ -4854,14 +4491,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withSignature(
     _ newChild: FunctionSignatureSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.signature)
+    let newData = data.replacingChild(raw, at: 11)
     return FunctionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenSignatureAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4876,14 +4512,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSignatureAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSignatureAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return FunctionDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -4898,14 +4533,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return FunctionDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndBody,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4920,14 +4554,13 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndBody(
     _ newChild: UnexpectedNodesSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndBody)
+    let newData = data.replacingChild(raw, at: 14)
     return FunctionDeclSyntax(newData)
   }
 
   public var body: CodeBlockSyntax? {
     get {
-      let childData = data.child(at: Cursor.body,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       if childData == nil { return nil }
       return CodeBlockSyntax(childData!)
     }
@@ -4942,7 +4575,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(
     _ newChild: CodeBlockSyntax?) -> FunctionDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.body)
+    let newData = data.replacingChild(raw, at: 15)
     return FunctionDeclSyntax(newData)
   }
 }
@@ -4973,25 +4606,6 @@ extension FunctionDeclSyntax: CustomReflectable {
 // MARK: - InitializerDeclSyntax
 
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndInitKeyword
-    case initKeyword
-    case unexpectedBetweenInitKeywordAndOptionalMark
-    case optionalMark
-    case unexpectedBetweenOptionalMarkAndGenericParameterClause
-    case genericParameterClause
-    case unexpectedBetweenGenericParameterClauseAndSignature
-    case signature
-    case unexpectedBetweenSignatureAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndBody
-    case body
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `InitializerDeclSyntax` if possible. Returns
@@ -5057,8 +4671,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5073,14 +4686,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return InitializerDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -5097,14 +4709,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5114,14 +4725,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return InitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5136,14 +4746,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return InitializerDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -5160,14 +4769,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return InitializerDeclSyntax(newData)
   }
 
@@ -5177,14 +4785,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return InitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndInitKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5199,14 +4806,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndInitKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndInitKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return InitializerDeclSyntax(newData)
   }
 
   public var initKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.initKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -5220,14 +4826,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInitKeyword(
     _ newChild: TokenSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.initKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.initKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return InitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInitKeywordAndOptionalMark,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5242,14 +4847,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInitKeywordAndOptionalMark(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInitKeywordAndOptionalMark)
+    let newData = data.replacingChild(raw, at: 6)
     return InitializerDeclSyntax(newData)
   }
 
   public var optionalMark: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.optionalMark,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -5264,14 +4868,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withOptionalMark(
     _ newChild: TokenSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.optionalMark)
+    let newData = data.replacingChild(raw, at: 7)
     return InitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenOptionalMarkAndGenericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5286,14 +4889,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenOptionalMarkAndGenericParameterClause(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenOptionalMarkAndGenericParameterClause)
+    let newData = data.replacingChild(raw, at: 8)
     return InitializerDeclSyntax(newData)
   }
 
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -5308,14 +4910,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(
     _ newChild: GenericParameterClauseSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    let newData = data.replacingChild(raw, at: 9)
     return InitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterClauseAndSignature,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5330,14 +4931,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndSignature(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterClauseAndSignature)
+    let newData = data.replacingChild(raw, at: 10)
     return InitializerDeclSyntax(newData)
   }
 
   public var signature: FunctionSignatureSyntax {
     get {
-      let childData = data.child(at: Cursor.signature,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       return FunctionSignatureSyntax(childData!)
     }
     set(value) {
@@ -5351,14 +4951,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withSignature(
     _ newChild: FunctionSignatureSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.functionSignature, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.signature)
+    let newData = data.replacingChild(raw, at: 11)
     return InitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenSignatureAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5373,14 +4972,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSignatureAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSignatureAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return InitializerDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -5395,14 +4993,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return InitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndBody,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5417,14 +5014,13 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndBody(
     _ newChild: UnexpectedNodesSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndBody)
+    let newData = data.replacingChild(raw, at: 14)
     return InitializerDeclSyntax(newData)
   }
 
   public var body: CodeBlockSyntax? {
     get {
-      let childData = data.child(at: Cursor.body,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       if childData == nil { return nil }
       return CodeBlockSyntax(childData!)
     }
@@ -5439,7 +5035,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(
     _ newChild: CodeBlockSyntax?) -> InitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.body)
+    let newData = data.replacingChild(raw, at: 15)
     return InitializerDeclSyntax(newData)
   }
 }
@@ -5470,17 +5066,6 @@ extension InitializerDeclSyntax: CustomReflectable {
 // MARK: - DeinitializerDeclSyntax
 
 public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndDeinitKeyword
-    case deinitKeyword
-    case unexpectedBetweenDeinitKeywordAndBody
-    case body
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DeinitializerDeclSyntax` if possible. Returns
@@ -5530,8 +5115,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5546,14 +5130,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return DeinitializerDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -5570,14 +5153,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -5587,14 +5169,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return DeinitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5609,14 +5190,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return DeinitializerDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -5633,14 +5213,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return DeinitializerDeclSyntax(newData)
   }
 
@@ -5650,14 +5229,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return DeinitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndDeinitKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5672,14 +5250,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndDeinitKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndDeinitKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return DeinitializerDeclSyntax(newData)
   }
 
   public var deinitKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.deinitKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -5693,14 +5270,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withDeinitKeyword(
     _ newChild: TokenSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.deinitKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.deinitKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return DeinitializerDeclSyntax(newData)
   }
 
   public var unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenDeinitKeywordAndBody,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5715,14 +5291,13 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenDeinitKeywordAndBody(
     _ newChild: UnexpectedNodesSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenDeinitKeywordAndBody)
+    let newData = data.replacingChild(raw, at: 6)
     return DeinitializerDeclSyntax(newData)
   }
 
   public var body: CodeBlockSyntax? {
     get {
-      let childData = data.child(at: Cursor.body,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return CodeBlockSyntax(childData!)
     }
@@ -5737,7 +5312,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(
     _ newChild: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.body)
+    let newData = data.replacingChild(raw, at: 7)
     return DeinitializerDeclSyntax(newData)
   }
 }
@@ -5760,25 +5335,6 @@ extension DeinitializerDeclSyntax: CustomReflectable {
 // MARK: - SubscriptDeclSyntax
 
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndSubscriptKeyword
-    case subscriptKeyword
-    case unexpectedBetweenSubscriptKeywordAndGenericParameterClause
-    case genericParameterClause
-    case unexpectedBetweenGenericParameterClauseAndIndices
-    case indices
-    case unexpectedBetweenIndicesAndResult
-    case result
-    case unexpectedBetweenResultAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndAccessor
-    case accessor
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `SubscriptDeclSyntax` if possible. Returns
@@ -5844,8 +5400,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5860,14 +5415,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return SubscriptDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -5884,14 +5438,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -5901,14 +5454,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return SubscriptDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5923,14 +5475,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return SubscriptDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -5947,14 +5498,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return SubscriptDeclSyntax(newData)
   }
 
@@ -5964,14 +5514,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return SubscriptDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndSubscriptKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -5986,14 +5535,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndSubscriptKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndSubscriptKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return SubscriptDeclSyntax(newData)
   }
 
   public var subscriptKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.subscriptKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -6007,14 +5555,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withSubscriptKeyword(
     _ newChild: TokenSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.subscriptKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.subscriptKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return SubscriptDeclSyntax(newData)
   }
 
   public var unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenSubscriptKeywordAndGenericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6029,14 +5576,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenSubscriptKeywordAndGenericParameterClause(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenSubscriptKeywordAndGenericParameterClause)
+    let newData = data.replacingChild(raw, at: 6)
     return SubscriptDeclSyntax(newData)
   }
 
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameterClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -6051,14 +5597,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameterClause(
     _ newChild: GenericParameterClauseSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameterClause)
+    let newData = data.replacingChild(raw, at: 7)
     return SubscriptDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParameterClauseAndIndices,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6073,14 +5618,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParameterClauseAndIndices(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParameterClauseAndIndices)
+    let newData = data.replacingChild(raw, at: 8)
     return SubscriptDeclSyntax(newData)
   }
 
   public var indices: ParameterClauseSyntax {
     get {
-      let childData = data.child(at: Cursor.indices,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       return ParameterClauseSyntax(childData!)
     }
     set(value) {
@@ -6094,14 +5638,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIndices(
     _ newChild: ParameterClauseSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.parameterClause, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.indices)
+    let newData = data.replacingChild(raw, at: 9)
     return SubscriptDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIndicesAndResult,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6116,14 +5659,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIndicesAndResult(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIndicesAndResult)
+    let newData = data.replacingChild(raw, at: 10)
     return SubscriptDeclSyntax(newData)
   }
 
   public var result: ReturnClauseSyntax {
     get {
-      let childData = data.child(at: Cursor.result,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       return ReturnClauseSyntax(childData!)
     }
     set(value) {
@@ -6137,14 +5679,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withResult(
     _ newChild: ReturnClauseSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.returnClause, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.result)
+    let newData = data.replacingChild(raw, at: 11)
     return SubscriptDeclSyntax(newData)
   }
 
   public var unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenResultAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6159,14 +5700,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenResultAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenResultAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return SubscriptDeclSyntax(newData)
   }
 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -6181,14 +5721,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return SubscriptDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndAccessor,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6203,14 +5742,13 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndAccessor(
     _ newChild: UnexpectedNodesSyntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndAccessor)
+    let newData = data.replacingChild(raw, at: 14)
     return SubscriptDeclSyntax(newData)
   }
 
   public var accessor: Syntax? {
     get {
-      let childData = data.child(at: Cursor.accessor,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       if childData == nil { return nil }
       return Syntax(childData!)
     }
@@ -6225,7 +5763,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAccessor(
     _ newChild: Syntax?) -> SubscriptDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.accessor)
+    let newData = data.replacingChild(raw, at: 15)
     return SubscriptDeclSyntax(newData)
   }
 }
@@ -6256,19 +5794,6 @@ extension SubscriptDeclSyntax: CustomReflectable {
 // MARK: - ImportDeclSyntax
 
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndImportTok
-    case importTok
-    case unexpectedBetweenImportTokAndImportKind
-    case importKind
-    case unexpectedBetweenImportKindAndPath
-    case path
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ImportDeclSyntax` if possible. Returns
@@ -6322,8 +5847,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6338,14 +5862,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return ImportDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -6362,14 +5885,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> ImportDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return ImportDeclSyntax(newData)
   }
 
@@ -6379,14 +5901,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return ImportDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6401,14 +5922,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return ImportDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -6425,14 +5945,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return ImportDeclSyntax(newData)
   }
 
@@ -6442,14 +5961,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return ImportDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndImportTok,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6464,14 +5982,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndImportTok(
     _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndImportTok)
+    let newData = data.replacingChild(raw, at: 4)
     return ImportDeclSyntax(newData)
   }
 
   public var importTok: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.importTok,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -6485,14 +6002,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withImportTok(
     _ newChild: TokenSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.importKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.importTok)
+    let newData = data.replacingChild(raw, at: 5)
     return ImportDeclSyntax(newData)
   }
 
   public var unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenImportTokAndImportKind,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6507,14 +6023,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenImportTokAndImportKind(
     _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenImportTokAndImportKind)
+    let newData = data.replacingChild(raw, at: 6)
     return ImportDeclSyntax(newData)
   }
 
   public var importKind: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.importKind,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -6529,14 +6044,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withImportKind(
     _ newChild: TokenSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.importKind)
+    let newData = data.replacingChild(raw, at: 7)
     return ImportDeclSyntax(newData)
   }
 
   public var unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenImportKindAndPath,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6551,14 +6065,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenImportKindAndPath(
     _ newChild: UnexpectedNodesSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenImportKindAndPath)
+    let newData = data.replacingChild(raw, at: 8)
     return ImportDeclSyntax(newData)
   }
 
   public var path: AccessPathSyntax {
     get {
-      let childData = data.child(at: Cursor.path,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       return AccessPathSyntax(childData!)
     }
     set(value) {
@@ -6574,14 +6087,13 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `path` collection.
   public func addPathComponent(_ element: AccessPathComponentSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.path] {
+    if let col = raw.layoutView!.children[9] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.path)
+    let newData = data.replacingChild(collection, at: 9)
     return ImportDeclSyntax(newData)
   }
 
@@ -6591,7 +6103,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPath(
     _ newChild: AccessPathSyntax?) -> ImportDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.accessPath, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.path)
+    let newData = data.replacingChild(raw, at: 9)
     return ImportDeclSyntax(newData)
   }
 }
@@ -6616,23 +6128,6 @@ extension ImportDeclSyntax: CustomReflectable {
 // MARK: - AccessorDeclSyntax
 
 public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifier
-    case modifier
-    case unexpectedBetweenModifierAndAccessorKind
-    case accessorKind
-    case unexpectedBetweenAccessorKindAndParameter
-    case parameter
-    case unexpectedBetweenParameterAndAsyncKeyword
-    case asyncKeyword
-    case unexpectedBetweenAsyncKeywordAndThrowsKeyword
-    case throwsKeyword
-    case unexpectedBetweenThrowsKeywordAndBody
-    case body
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AccessorDeclSyntax` if possible. Returns
@@ -6694,8 +6189,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6710,14 +6204,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return AccessorDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -6734,14 +6227,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AccessorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return AccessorDeclSyntax(newData)
   }
 
@@ -6751,14 +6243,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return AccessorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6773,14 +6264,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifier(
     _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifier)
+    let newData = data.replacingChild(raw, at: 2)
     return AccessorDeclSyntax(newData)
   }
 
   public var modifier: DeclModifierSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return DeclModifierSyntax(childData!)
     }
@@ -6795,14 +6285,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifier(
     _ newChild: DeclModifierSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifier)
+    let newData = data.replacingChild(raw, at: 3)
     return AccessorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifierAndAccessorKind,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6817,14 +6306,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifierAndAccessorKind(
     _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifierAndAccessorKind)
+    let newData = data.replacingChild(raw, at: 4)
     return AccessorDeclSyntax(newData)
   }
 
   public var accessorKind: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.accessorKind,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -6838,14 +6326,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAccessorKind(
     _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.accessorKind)
+    let newData = data.replacingChild(raw, at: 5)
     return AccessorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAccessorKindAndParameter,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6860,14 +6347,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAccessorKindAndParameter(
     _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAccessorKindAndParameter)
+    let newData = data.replacingChild(raw, at: 6)
     return AccessorDeclSyntax(newData)
   }
 
   public var parameter: AccessorParameterSyntax? {
     get {
-      let childData = data.child(at: Cursor.parameter,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
       return AccessorParameterSyntax(childData!)
     }
@@ -6882,14 +6368,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withParameter(
     _ newChild: AccessorParameterSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.parameter)
+    let newData = data.replacingChild(raw, at: 7)
     return AccessorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenParameterAndAsyncKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6904,14 +6389,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenParameterAndAsyncKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenParameterAndAsyncKeyword)
+    let newData = data.replacingChild(raw, at: 8)
     return AccessorDeclSyntax(newData)
   }
 
   public var asyncKeyword: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.asyncKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -6926,14 +6410,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAsyncKeyword(
     _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.asyncKeyword)
+    let newData = data.replacingChild(raw, at: 9)
     return AccessorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAsyncKeywordAndThrowsKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6948,14 +6431,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAsyncKeywordAndThrowsKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAsyncKeywordAndThrowsKeyword)
+    let newData = data.replacingChild(raw, at: 10)
     return AccessorDeclSyntax(newData)
   }
 
   public var throwsKeyword: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.throwsKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -6970,14 +6452,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withThrowsKeyword(
     _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.throwsKeyword)
+    let newData = data.replacingChild(raw, at: 11)
     return AccessorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenThrowsKeywordAndBody,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -6992,14 +6473,13 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenThrowsKeywordAndBody(
     _ newChild: UnexpectedNodesSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenThrowsKeywordAndBody)
+    let newData = data.replacingChild(raw, at: 12)
     return AccessorDeclSyntax(newData)
   }
 
   public var body: CodeBlockSyntax? {
     get {
-      let childData = data.child(at: Cursor.body,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return CodeBlockSyntax(childData!)
     }
@@ -7014,7 +6494,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBody(
     _ newChild: CodeBlockSyntax?) -> AccessorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.body)
+    let newData = data.replacingChild(raw, at: 13)
     return AccessorDeclSyntax(newData)
   }
 }
@@ -7043,17 +6523,6 @@ extension AccessorDeclSyntax: CustomReflectable {
 // MARK: - VariableDeclSyntax
 
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndLetOrVarKeyword
-    case letOrVarKeyword
-    case unexpectedBetweenLetOrVarKeywordAndBindings
-    case bindings
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `VariableDeclSyntax` if possible. Returns
@@ -7103,8 +6572,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7119,14 +6587,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return VariableDeclSyntax(newData)
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -7143,14 +6610,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> VariableDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return VariableDeclSyntax(newData)
   }
 
@@ -7160,14 +6626,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return VariableDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7182,14 +6647,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return VariableDeclSyntax(newData)
   }
 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -7206,14 +6670,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return VariableDeclSyntax(newData)
   }
 
@@ -7223,14 +6686,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return VariableDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndLetOrVarKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7245,14 +6707,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndLetOrVarKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndLetOrVarKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return VariableDeclSyntax(newData)
   }
 
   public var letOrVarKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.letOrVarKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -7266,14 +6727,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLetOrVarKeyword(
     _ newChild: TokenSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.letKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.letOrVarKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return VariableDeclSyntax(newData)
   }
 
   public var unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenLetOrVarKeywordAndBindings,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7288,14 +6748,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLetOrVarKeywordAndBindings(
     _ newChild: UnexpectedNodesSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLetOrVarKeywordAndBindings)
+    let newData = data.replacingChild(raw, at: 6)
     return VariableDeclSyntax(newData)
   }
 
   public var bindings: PatternBindingListSyntax {
     get {
-      let childData = data.child(at: Cursor.bindings,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return PatternBindingListSyntax(childData!)
     }
     set(value) {
@@ -7311,14 +6770,13 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `bindings` collection.
   public func addBinding(_ element: PatternBindingSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.bindings] {
+    if let col = raw.layoutView!.children[7] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.bindings)
+    let newData = data.replacingChild(collection, at: 7)
     return VariableDeclSyntax(newData)
   }
 
@@ -7328,7 +6786,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withBindings(
     _ newChild: PatternBindingListSyntax?) -> VariableDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.patternBindingList, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.bindings)
+    let newData = data.replacingChild(raw, at: 7)
     return VariableDeclSyntax(newData)
   }
 }
@@ -7356,17 +6814,6 @@ extension VariableDeclSyntax: CustomReflectable {
 /// enum.
 /// 
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndCaseKeyword
-    case caseKeyword
-    case unexpectedBetweenCaseKeywordAndElements
-    case elements
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `EnumCaseDeclSyntax` if possible. Returns
@@ -7416,8 +6863,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7432,7 +6878,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -7441,8 +6887,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -7459,14 +6904,13 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -7476,14 +6920,13 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return EnumCaseDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7498,7 +6941,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -7507,8 +6950,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -7525,14 +6967,13 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -7542,14 +6983,13 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return EnumCaseDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndCaseKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7564,15 +7004,14 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndCaseKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndCaseKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return EnumCaseDeclSyntax(newData)
   }
 
   /// The `case` keyword for this case.
   public var caseKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.caseKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -7586,14 +7025,13 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withCaseKeyword(
     _ newChild: TokenSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.caseKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.caseKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return EnumCaseDeclSyntax(newData)
   }
 
   public var unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenCaseKeywordAndElements,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7608,15 +7046,14 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenCaseKeywordAndElements(
     _ newChild: UnexpectedNodesSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenCaseKeywordAndElements)
+    let newData = data.replacingChild(raw, at: 6)
     return EnumCaseDeclSyntax(newData)
   }
 
   /// The elements this case declares.
   public var elements: EnumCaseElementListSyntax {
     get {
-      let childData = data.child(at: Cursor.elements,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return EnumCaseElementListSyntax(childData!)
     }
     set(value) {
@@ -7632,14 +7069,13 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: EnumCaseElementSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.elements] {
+    if let col = raw.layoutView!.children[7] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.elements)
+    let newData = data.replacingChild(collection, at: 7)
     return EnumCaseDeclSyntax(newData)
   }
 
@@ -7649,7 +7085,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withElements(
     _ newChild: EnumCaseElementListSyntax?) -> EnumCaseDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.enumCaseElementList, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.elements)
+    let newData = data.replacingChild(raw, at: 7)
     return EnumCaseDeclSyntax(newData)
   }
 }
@@ -7673,25 +7109,6 @@ extension EnumCaseDeclSyntax: CustomReflectable {
 
 /// A Swift `enum` declaration.
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndEnumKeyword
-    case enumKeyword
-    case unexpectedBetweenEnumKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndGenericParameters
-    case genericParameters
-    case unexpectedBetweenGenericParametersAndInheritanceClause
-    case inheritanceClause
-    case unexpectedBetweenInheritanceClauseAndGenericWhereClause
-    case genericWhereClause
-    case unexpectedBetweenGenericWhereClauseAndMembers
-    case members
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `EnumDeclSyntax` if possible. Returns
@@ -7757,8 +7174,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7773,7 +7189,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return EnumDeclSyntax(newData)
   }
 
@@ -7782,8 +7198,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -7800,14 +7215,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> EnumDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return EnumDeclSyntax(newData)
   }
 
@@ -7817,14 +7231,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return EnumDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7839,7 +7252,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return EnumDeclSyntax(newData)
   }
 
@@ -7848,8 +7261,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -7866,14 +7278,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> EnumDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return EnumDeclSyntax(newData)
   }
 
@@ -7883,14 +7294,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return EnumDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndEnumKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7905,7 +7315,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndEnumKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndEnumKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return EnumDeclSyntax(newData)
   }
 
@@ -7914,8 +7324,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var enumKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.enumKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -7929,14 +7338,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withEnumKeyword(
     _ newChild: TokenSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.enumKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.enumKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return EnumDeclSyntax(newData)
   }
 
   public var unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenEnumKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7951,7 +7359,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenEnumKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenEnumKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return EnumDeclSyntax(newData)
   }
 
@@ -7960,8 +7368,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -7975,14 +7382,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return EnumDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndGenericParameters,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -7997,7 +7403,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndGenericParameters(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndGenericParameters)
+    let newData = data.replacingChild(raw, at: 8)
     return EnumDeclSyntax(newData)
   }
 
@@ -8006,8 +7412,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var genericParameters: GenericParameterClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericParameters,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericParameterClauseSyntax(childData!)
     }
@@ -8022,14 +7427,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericParameters(
     _ newChild: GenericParameterClauseSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericParameters)
+    let newData = data.replacingChild(raw, at: 9)
     return EnumDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericParametersAndInheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8044,7 +7448,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericParametersAndInheritanceClause(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericParametersAndInheritanceClause)
+    let newData = data.replacingChild(raw, at: 10)
     return EnumDeclSyntax(newData)
   }
 
@@ -8054,8 +7458,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.inheritanceClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       if childData == nil { return nil }
       return TypeInheritanceClauseSyntax(childData!)
     }
@@ -8070,14 +7473,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withInheritanceClause(
     _ newChild: TypeInheritanceClauseSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.inheritanceClause)
+    let newData = data.replacingChild(raw, at: 11)
     return EnumDeclSyntax(newData)
   }
 
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8092,7 +7494,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenInheritanceClauseAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenInheritanceClauseAndGenericWhereClause)
+    let newData = data.replacingChild(raw, at: 12)
     return EnumDeclSyntax(newData)
   }
 
@@ -8102,8 +7504,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericWhereClause,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       if childData == nil { return nil }
       return GenericWhereClauseSyntax(childData!)
     }
@@ -8118,14 +7519,13 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGenericWhereClause(
     _ newChild: GenericWhereClauseSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericWhereClause)
+    let newData = data.replacingChild(raw, at: 13)
     return EnumDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 14, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8140,7 +7540,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGenericWhereClauseAndMembers(
     _ newChild: UnexpectedNodesSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGenericWhereClauseAndMembers)
+    let newData = data.replacingChild(raw, at: 14)
     return EnumDeclSyntax(newData)
   }
 
@@ -8149,8 +7549,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var members: MemberDeclBlockSyntax {
     get {
-      let childData = data.child(at: Cursor.members,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 15, parent: Syntax(self))
       return MemberDeclBlockSyntax(childData!)
     }
     set(value) {
@@ -8164,7 +7563,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withMembers(
     _ newChild: MemberDeclBlockSyntax?) -> EnumDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.memberDeclBlock, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.members)
+    let newData = data.replacingChild(raw, at: 15)
     return EnumDeclSyntax(newData)
   }
 }
@@ -8196,19 +7595,6 @@ extension EnumDeclSyntax: CustomReflectable {
 
 /// A Swift `operator` declaration.
 public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndOperatorKeyword
-    case operatorKeyword
-    case unexpectedBetweenOperatorKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes
-    case operatorPrecedenceAndTypes
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `OperatorDeclSyntax` if possible. Returns
@@ -8262,8 +7648,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8278,7 +7663,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return OperatorDeclSyntax(newData)
   }
 
@@ -8287,8 +7672,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -8305,14 +7689,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> OperatorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return OperatorDeclSyntax(newData)
   }
 
@@ -8322,14 +7705,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return OperatorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8344,7 +7726,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return OperatorDeclSyntax(newData)
   }
 
@@ -8354,8 +7736,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -8372,14 +7753,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> OperatorDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return OperatorDeclSyntax(newData)
   }
 
@@ -8389,14 +7769,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return OperatorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndOperatorKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8411,14 +7790,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndOperatorKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndOperatorKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return OperatorDeclSyntax(newData)
   }
 
   public var operatorKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.operatorKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -8432,14 +7810,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withOperatorKeyword(
     _ newChild: TokenSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.operatorKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.operatorKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return OperatorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenOperatorKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8454,14 +7831,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenOperatorKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenOperatorKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return OperatorDeclSyntax(newData)
   }
 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -8475,14 +7851,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unspacedBinaryOperator(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return OperatorDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8497,7 +7872,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes(
     _ newChild: UnexpectedNodesSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes)
+    let newData = data.replacingChild(raw, at: 8)
     return OperatorDeclSyntax(newData)
   }
 
@@ -8506,8 +7881,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? {
     get {
-      let childData = data.child(at: Cursor.operatorPrecedenceAndTypes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
       return OperatorPrecedenceAndTypesSyntax(childData!)
     }
@@ -8522,7 +7896,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withOperatorPrecedenceAndTypes(
     _ newChild: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.operatorPrecedenceAndTypes)
+    let newData = data.replacingChild(raw, at: 9)
     return OperatorDeclSyntax(newData)
   }
 }
@@ -8548,23 +7922,6 @@ extension OperatorDeclSyntax: CustomReflectable {
 
 /// A Swift `precedencegroup` declaration.
 public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  enum Cursor: Int {
-    case unexpectedBeforeAttributes
-    case attributes
-    case unexpectedBetweenAttributesAndModifiers
-    case modifiers
-    case unexpectedBetweenModifiersAndPrecedencegroupKeyword
-    case precedencegroupKeyword
-    case unexpectedBetweenPrecedencegroupKeywordAndIdentifier
-    case identifier
-    case unexpectedBetweenIdentifierAndLeftBrace
-    case leftBrace
-    case unexpectedBetweenLeftBraceAndGroupAttributes
-    case groupAttributes
-    case unexpectedBetweenGroupAttributesAndRightBrace
-    case rightBrace
-  }
-
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PrecedenceGroupDeclSyntax` if possible. Returns
@@ -8626,8 +7983,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBeforeAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8642,7 +7998,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBeforeAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBeforeAttributes)
+    let newData = data.replacingChild(raw, at: 0)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -8651,8 +8007,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 1, parent: Syntax(self))
       if childData == nil { return nil }
       return AttributeListSyntax(childData!)
     }
@@ -8669,14 +8024,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.attributes] {
+    if let col = raw.layoutView!.children[1] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
+    let newData = data.replacingChild(collection, at: 1)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -8686,14 +8040,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withAttributes(
     _ newChild: AttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    let newData = data.replacingChild(raw, at: 1)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenAttributesAndModifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 2, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8708,7 +8061,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAttributesAndModifiers(
     _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenAttributesAndModifiers)
+    let newData = data.replacingChild(raw, at: 2)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -8718,8 +8071,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var modifiers: ModifierListSyntax? {
     get {
-      let childData = data.child(at: Cursor.modifiers,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
       return ModifierListSyntax(childData!)
     }
@@ -8736,14 +8088,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `modifiers` collection.
   public func addModifier(_ element: DeclModifierSyntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.modifiers] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.modifiers)
+    let newData = data.replacingChild(collection, at: 3)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -8753,14 +8104,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withModifiers(
     _ newChild: ModifierListSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.modifiers)
+    let newData = data.replacingChild(raw, at: 3)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenModifiersAndPrecedencegroupKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8775,14 +8125,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenModifiersAndPrecedencegroupKeyword(
     _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenModifiersAndPrecedencegroupKeyword)
+    let newData = data.replacingChild(raw, at: 4)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var precedencegroupKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.precedencegroupKeyword,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -8796,14 +8145,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withPrecedencegroupKeyword(
     _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.precedencegroupKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.precedencegroupKeyword)
+    let newData = data.replacingChild(raw, at: 5)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenPrecedencegroupKeywordAndIdentifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8818,7 +8166,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenPrecedencegroupKeywordAndIdentifier(
     _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenPrecedencegroupKeywordAndIdentifier)
+    let newData = data.replacingChild(raw, at: 6)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -8827,8 +8175,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var identifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.identifier,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -8842,14 +8189,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withIdentifier(
     _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.identifier)
+    let newData = data.replacingChild(raw, at: 7)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenIdentifierAndLeftBrace,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 8, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8864,14 +8210,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIdentifierAndLeftBrace(
     _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenIdentifierAndLeftBrace)
+    let newData = data.replacingChild(raw, at: 8)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var leftBrace: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftBrace,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 9, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -8885,14 +8230,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withLeftBrace(
     _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftBrace, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.leftBrace)
+    let newData = data.replacingChild(raw, at: 9)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenLeftBraceAndGroupAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 10, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8907,7 +8251,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenLeftBraceAndGroupAttributes(
     _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenLeftBraceAndGroupAttributes)
+    let newData = data.replacingChild(raw, at: 10)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -8916,8 +8260,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// 
   public var groupAttributes: PrecedenceGroupAttributeListSyntax {
     get {
-      let childData = data.child(at: Cursor.groupAttributes,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 11, parent: Syntax(self))
       return PrecedenceGroupAttributeListSyntax(childData!)
     }
     set(value) {
@@ -8933,14 +8276,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///            appended to its `groupAttributes` collection.
   public func addGroupAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.groupAttributes] {
+    if let col = raw.layoutView!.children[11] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.groupAttributes)
+    let newData = data.replacingChild(collection, at: 11)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
@@ -8950,14 +8292,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withGroupAttributes(
     _ newChild: PrecedenceGroupAttributeListSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.precedenceGroupAttributeList, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.groupAttributes)
+    let newData = data.replacingChild(raw, at: 11)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: Cursor.unexpectedBetweenGroupAttributesAndRightBrace,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 12, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -8972,14 +8313,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenGroupAttributesAndRightBrace(
     _ newChild: UnexpectedNodesSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.unexpectedBetweenGroupAttributesAndRightBrace)
+    let newData = data.replacingChild(raw, at: 12)
     return PrecedenceGroupDeclSyntax(newData)
   }
 
   public var rightBrace: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightBrace,
-                                 parent: Syntax(self))
+      let childData = data.child(at: 13, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -8993,7 +8333,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public func withRightBrace(
     _ newChild: TokenSyntax?) -> PrecedenceGroupDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightBrace, arena: .default)
-    let newData = data.replacingChild(raw, at: Cursor.rightBrace)
+    let newData = data.replacingChild(raw, at: 13)
     return PrecedenceGroupDeclSyntax(newData)
   }
 }

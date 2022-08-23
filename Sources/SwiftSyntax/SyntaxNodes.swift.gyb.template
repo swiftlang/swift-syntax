@@ -47,18 +47,6 @@ nodes whose base kind are that specified kind.
 /// ${line}
 %     end
 public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
-%     # ======
-%     # Cursor
-%     # ======
-%
-%     if node.children:
-  enum Cursor: Int {
-%       for child in node.children:
-    case ${child.swift_name}
-%       end
-  }
-%     end
-
 %     # ==============
 %     # Initialization
 %     # ==============
@@ -111,7 +99,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
   }
-%     for child in node.children:
+%     for (idx, child) in enumerate(node.children):
 %       child_node = NODE_MAP.get(child.syntax_kind)
 %
 %       # ===================
@@ -128,8 +116,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       end
   public var ${child.swift_name}: ${ret_type} {
     get {
-      let childData = data.child(at: Cursor.${child.swift_name},
-                                 parent: Syntax(self))
+      let childData = data.child(at: ${idx}, parent: Syntax(self))
 %       if child.is_optional:
       if childData == nil { return nil }
 %       end
@@ -160,14 +147,13 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   ///            appended to its `${child.swift_name}` collection.
   public func add${child_elt}(_ element: ${child_elt_type}) -> ${node.name} {
     var collection: RawSyntax
-    if let col = raw.layoutView![Cursor.${child.swift_name}] {
+    if let col = raw.layoutView!.children[${idx}] {
       collection = col.layoutView!.appending(element.raw, arena: .default)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.${child_node.swift_syntax_kind},
         from: [element.raw], arena: .default)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.${child.swift_name})
+    let newData = data.replacingChild(collection, at: ${idx})
     return ${node.name}(newData)
   }
 %       end
@@ -185,7 +171,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       else:
     let raw = newChild?.raw ?? ${make_missing_swift_child(child)}
 %       end
-    let newData = data.replacingChild(raw, at: Cursor.${child.swift_name})
+    let newData = data.replacingChild(raw, at: ${idx})
     return ${node.name}(newData)
   }
 %     end

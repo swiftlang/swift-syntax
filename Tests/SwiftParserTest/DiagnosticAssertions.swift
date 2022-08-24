@@ -4,6 +4,32 @@ import SwiftParser
 import XCTest
 import _SwiftSyntaxTestSupport
 
+public class FixItApplier: SyntaxRewriter {
+  var changes: [FixIt.Change]
+
+  init(diagnostics: [Diagnostic]) {
+    self.changes = diagnostics.flatMap({ $0.fixIts }).flatMap({ $0.changes })
+  }
+
+  public override func visitAny(_ node: Syntax) -> Syntax? {
+    for change in changes {
+      switch change {
+      case .replace(oldNode: let oldNode, newNode: let newNode) where oldNode.id == node.id:
+        return newNode
+      default:
+        break
+      }
+    }
+    return nil
+  }
+
+  /// Applies all Fix-Its in `diagnostics` to `tree` and returns the fixed syntax tree.
+  public static func applyFixes<T: SyntaxProtocol>(in diagnostics: [Diagnostic], to tree: T) -> Syntax {
+    let applier = FixItApplier(diagnostics: diagnostics)
+    return applier.visit(Syntax(tree))
+  }
+}
+
 /// Asserts that the diagnostics `diag` inside `tree` occurs at `line` and
 /// `column`.
 /// If `message` is not `nil`, assert that the diagnostic has the given message.
@@ -34,12 +60,14 @@ func XCTAssertDiagnostic<T: SyntaxProtocol>(
 /// at `line` and `column`.
 /// If `message` is not `nil`, assert that the diagnostic has the given message.
 /// If `id` is not `nil`, assert that the diagnostic has the given message.
+/// If `expectedFixedSource` is not `nil`, assert that the source code that it is source code that result from applying all Fix-Its.
 func XCTAssertSingleDiagnostic<T: SyntaxProtocol>(
   in tree: T,
   line: Int,
   column: Int,
   id: MessageID? = nil,
   message: String? = nil,
+  expectedFixedSource: String? = nil,
   testFile: StaticString = #filePath,
   testLine: UInt = #line
 ) {
@@ -49,4 +77,8 @@ func XCTAssertSingleDiagnostic<T: SyntaxProtocol>(
     return
   }
   XCTAssertDiagnostic(diags.first!, in: tree, line: line, column: column, id: id, message: message, testFile: testFile, testLine: testLine)
+  if let expectedFixedSource = expectedFixedSource {
+    let fixedSource = FixItApplier.applyFixes(in: diags, to: tree).description
+    AssertStringsEqualWithDiff(fixedSource, expectedFixedSource, file: testFile, line: testLine)
+  }
 }

@@ -65,6 +65,11 @@ public class DiagnosticTests: XCTestCase {
       Syntax(raw: $0.parseFunctionSignature().raw).as(FunctionSignatureSyntax.self)!
     }
 
-    XCTAssertSingleDiagnostic(in: signature, line: 1, column: 7, message: "'throws' may only occur before '->'")
+    XCTAssertSingleDiagnostic(
+      in: signature,
+      line: 1, column: 7,
+      message: "'throws' may only occur before '->'",
+      expectedFixedSource: "() throws -> Int"
+    )
   }
 }

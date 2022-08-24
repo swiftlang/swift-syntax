@@ -57,6 +57,20 @@ public extension ParserError {
   }
 }
 
+public protocol ParserFixIt: FixItMessage {
+  var fixItID: MessageID { get }
+}
+
+public extension ParserFixIt {
+  static var fixItID: MessageID {
+    return MessageID(domain: diagnosticDomain, id: "\(self)")
+  }
+
+  var fixItID: MessageID {
+    return Self.fixItID
+  }
+}
+
 // MARK: - Static diagnostics
 
 /// Please order the cases in this enum alphabetically by case name.
@@ -71,6 +85,16 @@ public enum StaticParserError: String, DiagnosticMessage {
   }
 
   public var severity: DiagnosticSeverity { .error }
+}
+
+public enum StaticParserFixIt: String, FixItMessage {
+  case moveThrowBeforeArrow = "Move 'throws' in before of '->'"
+
+  public var message: String { self.rawValue }
+
+  public var fixItID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
+  }
 }
 
 // MARK: - Diagnostics (please sort alphabetically)

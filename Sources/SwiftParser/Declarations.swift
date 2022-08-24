@@ -1155,21 +1155,25 @@ extension Parser {
       arena: self.arena)
   }
 
+  /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
   @_spi(RawSyntax)
-  public mutating func parseFunctionReturnClause() -> RawReturnClauseSyntax {
+  public mutating func parseFunctionReturnClause() -> (returnClause: RawReturnClauseSyntax, misplacedThrowsKeyword: RawTokenSyntax?) {
     let arrow = self.eat(.arrow)
+    var misplacedThrowsKeyword: RawTokenSyntax? = nil
     let unexpectedBeforeReturnType: RawUnexpectedNodesSyntax?
-    if let unexpectedToken = self.consume(ifAny: .tryKeyword, .throwKeyword, .throwsKeyword) {
-      unexpectedBeforeReturnType = RawUnexpectedNodesSyntax(elements: [RawSyntax(unexpectedToken)], arena: self.arena)
+    if let throwsKeyword = self.consume(ifAny: .rethrowsKeyword, .throwsKeyword) {
+      misplacedThrowsKeyword = throwsKeyword
+      unexpectedBeforeReturnType = RawUnexpectedNodesSyntax(elements: [RawSyntax(throwsKeyword)], arena: self.arena)
     } else {
       unexpectedBeforeReturnType = nil
     }
     let result = self.parseType()
-    return RawReturnClauseSyntax(
+    let returnClause = RawReturnClauseSyntax(
       arrow: arrow,
       unexpectedBeforeReturnType,
       returnType: result,
       arena: self.arena)
+    return (returnClause, misplacedThrowsKeyword)
   }
 }
 
@@ -1227,7 +1231,7 @@ extension Parser {
       async = nil
     }
 
-    let throwsKeyword: RawTokenSyntax?
+    var throwsKeyword: RawTokenSyntax?
     if self.at(.throwsKeyword) || self.at(.rethrowsKeyword) {
       throwsKeyword = self.consumeAnyToken()
     } else {
@@ -1236,7 +1240,11 @@ extension Parser {
 
     let output: RawReturnClauseSyntax?
     if self.at(.arrow) {
-      output = self.parseFunctionReturnClause()
+      let result = self.parseFunctionReturnClause()
+      output = result.returnClause
+      if let misplacedThrowsKeyword = result.misplacedThrowsKeyword, throwsKeyword == nil {
+        throwsKeyword = RawTokenSyntax(missing: misplacedThrowsKeyword.tokenKind, arena: self.arena)
+      }
     } else {
       output = nil
     }
@@ -1275,7 +1283,7 @@ extension Parser {
 
     let result: RawReturnClauseSyntax
     if self.at(.arrow) {
-      result = self.parseFunctionReturnClause()
+      result = self.parseFunctionReturnClause().returnClause
     } else {
       result = RawReturnClauseSyntax(
         arrow: RawTokenSyntax(missing: .arrow, arena: self.arena),

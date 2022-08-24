@@ -23,6 +23,25 @@ extension UnexpectedNodesSyntax {
   }
 }
 
+fileprivate extension FixIt.Change {
+  /// Replaced a present node with a missing node
+  static func makeMissing(node: TokenSyntax) -> FixIt.Change {
+    assert(node.presence == .present)
+    return .replace(
+      oldNode: Syntax(node),
+      newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
+    )
+  }
+
+  static func makePresent(node: TokenSyntax, leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> FixIt.Change {
+    assert(node.presence == .missing)
+    return .replace(
+      oldNode: Syntax(node),
+      newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, presence: .present))
+    )
+  }
+}
+
 public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   private var diagnostics: [Diagnostic] = []
 
@@ -43,13 +62,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage) {
-    diagnostics.append(Diagnostic(node: Syntax(node), message: message))
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, fixIts: [FixIt] = []) {
+    diagnostics.append(Diagnostic(node: Syntax(node), message: message, fixIts: fixIts))
   }
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError) {
-    addDiagnostic(node, message as DiagnosticMessage)
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, fixIts: [FixIt] = []) {
+    addDiagnostic(node, message as DiagnosticMessage, fixIts: fixIts)
   }
 
   /// If a diagnostic is generated that covers multiple syntax nodes, mark them as handles so they don't produce the generic diagnostics anymore.
@@ -111,11 +130,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let output = node.output,
+       let missingThrowsKeyword = node.throwsOrRethrowsKeyword,
+       missingThrowsKeyword.presence == .missing,
        let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType,
        let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
-        addDiagnostic(throwsInReturnPosition, .throwsInReturnPosition)
-        markNodesAsHandled(unexpectedBeforeReturnType.id, throwsInReturnPosition.id)
-        return .visitChildren
+      addDiagnostic(throwsInReturnPosition, .throwsInReturnPosition, fixIts: [
+        FixIt(message: StaticParserFixIt.moveThrowBeforeArrow, changes: [
+          .makeMissing(node: throwsInReturnPosition),
+          .makePresent(node: missingThrowsKeyword, trailingTrivia: .space),
+        ])
+      ])
+      markNodesAsHandled(unexpectedBeforeReturnType.id, missingThrowsKeyword.id, throwsInReturnPosition.id)
+      return .visitChildren
     }
     return .visitChildren
   }

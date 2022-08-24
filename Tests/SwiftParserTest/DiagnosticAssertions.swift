@@ -13,7 +13,7 @@ func XCTAssertDiagnostic<T: SyntaxProtocol>(
   in tree: T,
   line: Int,
   column: Int,
-  id: DiagnosticMessageID? = nil,
+  id: MessageID? = nil,
   message: String? = nil,
   testFile: StaticString = #filePath,
   testLine: UInt = #line
@@ -38,7 +38,7 @@ func XCTAssertSingleDiagnostic<T: SyntaxProtocol>(
   in tree: T,
   line: Int,
   column: Int,
-  id: DiagnosticMessageID? = nil,
+  id: MessageID? = nil,
   message: String? = nil,
   testFile: StaticString = #filePath,
   testLine: UInt = #line

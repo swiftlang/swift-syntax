@@ -36,30 +36,28 @@ extension Syntax {
   }
 }
 
-
-/// A diagnostic how's ID is determined by the diagnostic's type.
-public protocol TypedDiagnosticMessage: DiagnosticMessage {
-  var diagnosticID: DiagnosticMessageID { get }
+/// A diagnostic whose ID is determined by the diagnostic's type.
+public protocol DiagnosticMessageType: DiagnosticMessage {
+  var diagnosticID: MessageID { get }
 }
 
-public extension TypedDiagnosticMessage {
-  static var diagnosticID: DiagnosticMessageID {
-    return DiagnosticMessageID("\(self)")
+public extension DiagnosticMessageType {
+  static var diagnosticID: MessageID {
+    return MessageID("\(self)")
   }
 
-  var diagnosticID: DiagnosticMessageID {
+  var diagnosticID: MessageID {
     return Self.diagnosticID
   }
 }
 
-
 // MARK: - Diagnostics (please sort alphabetically)
 
-public struct CStyleForLoopDiagnostic: TypedDiagnosticMessage {
+public struct CStyleForLoopDiagnostic: DiagnosticMessageType {
   public var message = "C-style for statement has been removed in Swift 3"
 }
 
-public struct MissingTokenDiagnostic: TypedDiagnosticMessage {
+public struct MissingTokenDiagnostic: DiagnosticMessageType {
   public let missingToken: TokenSyntax
 
   public var message: String {
@@ -82,11 +80,11 @@ public struct MissingTokenDiagnostic: TypedDiagnosticMessage {
   }
 }
 
-public struct ThrowsInReturnPositionDiagnostic: TypedDiagnosticMessage {
+public struct ThrowsInReturnPositionDiagnostic: DiagnosticMessageType {
   public let message = "'throws' may only occur before '->'"
 }
 
-public struct UnexpectedNodesDiagnostic: TypedDiagnosticMessage {
+public struct UnexpectedNodesDiagnostic: DiagnosticMessageType {
   public let unexpectedNodes: UnexpectedNodesSyntax
 
   public var message: String {

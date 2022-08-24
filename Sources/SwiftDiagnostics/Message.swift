@@ -1,4 +1,4 @@
-//===--- DiagnosticMessage.swift ------------------------------------------===//
+//===--- Message.swift ----------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -17,7 +17,7 @@
 /// Two diagnostics with the same ID don’t need to necessarily have the exact
 /// same wording. Eg. it’s possible that the message contains more context when
 /// available.
-public struct DiagnosticMessageID: Hashable {
+public struct MessageID: Hashable {
   private let value: String
 
   public init(_ value: String) {
@@ -31,6 +31,6 @@ public protocol DiagnosticMessage {
   /// The diagnostic message that should be displayed in the client.
   var message: String { get }
 
-  /// See ``DiagnosticMessageID``.
-  var diagnosticID: DiagnosticMessageID { get }
+  /// See ``MessageID``.
+  var diagnosticID: MessageID { get }
 }

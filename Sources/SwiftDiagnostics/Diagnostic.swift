@@ -30,8 +30,8 @@ public struct Diagnostic {
   }
 
   /// An ID that identifies the diagnostic's message.
-  /// See ``DiagnosticMessageID``.
-  public var diagnosticID: DiagnosticMessageID {
+  /// See ``MessageID``.
+  public var diagnosticID: MessageID {
     return diagMessage.diagnosticID
   }
 

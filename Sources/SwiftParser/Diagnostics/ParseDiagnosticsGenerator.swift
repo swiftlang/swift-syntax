@@ -71,7 +71,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    addDiagnostic(node, UnexpectedNodesDiagnostic(unexpectedNodes: node))
+    addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node))
     return .skipChildren
   }
 
@@ -80,7 +80,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.presence == .missing {
-      addDiagnostic(node, MissingTokenDiagnostic(missingToken: node))
+      addDiagnostic(node, MissingTokenError(missingToken: node))
     }
     return .skipChildren
   }
@@ -95,7 +95,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace {
       // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
       if unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
-        addDiagnostic(node, CStyleForLoopDiagnostic())
+        addDiagnostic(node, CStyleForLoopError())
         markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
       }
     }
@@ -108,7 +108,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if let output = node.output, let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType {
       if let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
-        addDiagnostic(throwsInReturnPosition, ThrowsInReturnPositionDiagnostic())
+        addDiagnostic(throwsInReturnPosition, ThrowsInReturnPositionError())
         markNodesAsHandled(unexpectedBeforeReturnType.id, throwsInReturnPosition.id)
         return .visitChildren
       }

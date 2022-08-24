@@ -10,7 +10,7 @@ public class DiagnosticTests: XCTestCase {
     """
     let signature = withParser(source: source) { Syntax(raw: $0.parseFunctionSignature().raw) }
 
-    XCTAssertSingleDiagnostic(in: signature, line: 1, column: 15, id: MissingTokenDiagnostic.diagnosticID, message: "Expected ':' in function parameter")
+    XCTAssertSingleDiagnostic(in: signature, line: 1, column: 15, id: MissingTokenError.diagnosticID, message: "Expected ':' in function parameter")
   }
 
   public func testUnexpectedDiags() throws {

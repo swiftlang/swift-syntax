@@ -10,7 +10,7 @@ public class DiagnosticTests: XCTestCase {
     """
     let signature = withParser(source: source) { Syntax(raw: $0.parseFunctionSignature().raw) }
 
-    XCTAssertSingleDiagnostic(in: signature, line: 1, column: 15, id: MissingTokenDiagnostic.diagnosticID, message: "Expected ':' in function parameter")
+    XCTAssertSingleDiagnostic(in: signature, line: 1, column: 15, id: MissingTokenError.diagnosticID, message: "Expected ':' in function parameter")
   }
 
   public func testUnexpectedDiags() throws {
@@ -31,7 +31,12 @@ public class DiagnosticTests: XCTestCase {
       Syntax(raw: $0.parseForEachStatement().raw).as(ForInStmtSyntax.self)!
     }
 
-    XCTAssertSingleDiagnostic(in: loop, line: 1, column: 1, message: "C-style for statement has been removed in Swift 3")
+    XCTAssertSingleDiagnostic(
+      in: loop,
+      line: 1, column: 1,
+      message: "C-style for statement has been removed in Swift 3",
+      highlight: "let x = 0; x < 10; x += 1, y += 1 "
+    )
   }
 
   public func testMissingClosingParen() throws {
@@ -65,6 +70,11 @@ public class DiagnosticTests: XCTestCase {
       Syntax(raw: $0.parseFunctionSignature().raw).as(FunctionSignatureSyntax.self)!
     }
 
-    XCTAssertSingleDiagnostic(in: signature, line: 1, column: 7, message: "'throws' may only occur before '->'")
+    XCTAssertSingleDiagnostic(
+      in: signature,
+      line: 1, column: 7,
+      message: "'throws' may only occur before '->'",
+      expectedFixedSource: "() throws -> Int"
+    )
   }
 }

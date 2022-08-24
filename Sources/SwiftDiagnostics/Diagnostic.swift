@@ -12,16 +12,25 @@
 
 import SwiftSyntax
 
-public struct Diagnostic {
+public struct Diagnostic: CustomDebugStringConvertible {
   /// The message that should be displayed to the user
   public let diagMessage: DiagnosticMessage
 
   /// The node at whose start location the message should be displayed.
   public let node: Syntax
 
-  init(node: Syntax, message: DiagnosticMessage) {
+  /// Nodes that should be highlighted in the source code.
+  public let highlights: [Syntax]
+
+  /// Fix-Its that can be applied to resolve this diagnostic.
+  /// Each Fix-It offers a different way to resolve the diagnostic. Usually, there's only one.
+  public let fixIts: [FixIt]
+
+  public init(node: Syntax, message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
     self.diagMessage = message
     self.node = node
+    self.highlights = highlights
+    self.fixIts = fixIts
   }
 
   /// The message that should be displayed to the user.
@@ -30,14 +39,24 @@ public struct Diagnostic {
   }
 
   /// An ID that identifies the diagnostic's message.
-  /// See ``DiagnosticMessageID``.
-  public var diagnosticID: DiagnosticMessageID {
+  /// See ``MessageID``.
+  public var diagnosticID: MessageID {
     return diagMessage.diagnosticID
   }
 
   /// The location at which the diagnostic should be displayed.
   public func location(converter: SourceLocationConverter) -> SourceLocation {
     return node.startLocation(converter: converter)
+  }
+
+  public var debugDescription: String {
+    if let root = node.root.as(SourceFileSyntax.self) {
+      let locationConverter = SourceLocationConverter(file: "", tree: root)
+      let location = location(converter: locationConverter)
+      return "\(location): \(message)"
+    } else {
+      return "<unknown>: \(message)"
+    }
   }
 }
 

@@ -10,7 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftSyntax
+
+let diagnosticDomain: String = "SwiftParser"
 
 extension Syntax {
   // FIXME: These should be defined in gyb_syntax_support.
@@ -35,13 +38,68 @@ extension Syntax {
   }
 }
 
-// MARK: - Diagnostics (please sort alphabetically)
-
-public struct CStyleForLoopDiagnostic: TypedDiagnosticMessage {
-  public var message = "C-style for statement has been removed in Swift 3"
+/// A error diagnostic whose ID is determined by the diagnostic's type.
+public protocol ParserError: DiagnosticMessage {
+  var diagnosticID: MessageID { get }
 }
 
-public struct MissingTokenDiagnostic: TypedDiagnosticMessage {
+public extension ParserError {
+  static var diagnosticID: MessageID {
+    return MessageID(domain: diagnosticDomain, id: "\(self)")
+  }
+
+  var diagnosticID: MessageID {
+    return Self.diagnosticID
+  }
+
+  var severity: DiagnosticSeverity {
+    return .error
+  }
+}
+
+public protocol ParserFixIt: FixItMessage {
+  var fixItID: MessageID { get }
+}
+
+public extension ParserFixIt {
+  static var fixItID: MessageID {
+    return MessageID(domain: diagnosticDomain, id: "\(self)")
+  }
+
+  var fixItID: MessageID {
+    return Self.fixItID
+  }
+}
+
+// MARK: - Static diagnostics
+
+/// Please order the cases in this enum alphabetically by case name.
+public enum StaticParserError: String, DiagnosticMessage {
+  case cStyleForLoop = "C-style for statement has been removed in Swift 3"
+  case throwsInReturnPosition = "'throws' may only occur before '->'"
+
+  public var message: String { self.rawValue }
+
+  public var diagnosticID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
+  }
+
+  public var severity: DiagnosticSeverity { .error }
+}
+
+public enum StaticParserFixIt: String, FixItMessage {
+  case moveThrowBeforeArrow = "Move 'throws' in before of '->'"
+
+  public var message: String { self.rawValue }
+
+  public var fixItID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
+  }
+}
+
+// MARK: - Diagnostics (please sort alphabetically)
+
+public struct MissingTokenError: ParserError {
   public let missingToken: TokenSyntax
 
   public var message: String {
@@ -64,11 +122,7 @@ public struct MissingTokenDiagnostic: TypedDiagnosticMessage {
   }
 }
 
-public struct ThrowsInReturnPositionDiagnostic: TypedDiagnosticMessage {
-  public let message = "'throws' may only occur before '->'"
-}
-
-public struct UnexpectedNodesDiagnostic: TypedDiagnosticMessage {
+public struct UnexpectedNodesError: ParserError {
   public let unexpectedNodes: UnexpectedNodesSyntax
 
   public var message: String {

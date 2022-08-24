@@ -1,4 +1,4 @@
-//===--- DiagnosticMessage.swift ------------------------------------------===//
+//===--- Message.swift ----------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -17,12 +17,20 @@
 /// Two diagnostics with the same ID don’t need to necessarily have the exact
 /// same wording. Eg. it’s possible that the message contains more context when
 /// available.
-public struct DiagnosticMessageID: Hashable {
-  private let value: String
+public struct MessageID: Hashable {
+  private let domain: String
+  private let id: String
 
-  public init(_ value: String) {
-    self.value = value
+  public init(domain: String, id: String) {
+    self.domain = domain
+    self.id = id
   }
+}
+
+public enum DiagnosticSeverity {
+  case error
+  case warning
+  case note
 }
 
 /// Types conforming to this protocol represent diagnostic messages that can be
@@ -31,21 +39,8 @@ public protocol DiagnosticMessage {
   /// The diagnostic message that should be displayed in the client.
   var message: String { get }
 
-  /// See ``DiagnosticMessageID``.
-  var diagnosticID: DiagnosticMessageID { get }
-}
+  /// See ``MessageID``.
+  var diagnosticID: MessageID { get }
 
-/// A diagnostic how's ID is determined by the diagnostic's type.
-public protocol TypedDiagnosticMessage: DiagnosticMessage {
-  var diagnosticID: DiagnosticMessageID { get }
-}
-
-public extension TypedDiagnosticMessage {
-  static var diagnosticID: DiagnosticMessageID {
-    return DiagnosticMessageID("\(self)")
-  }
-
-  var diagnosticID: DiagnosticMessageID {
-    return Self.diagnosticID
-  }
+  var severity: DiagnosticSeverity { get }
 }

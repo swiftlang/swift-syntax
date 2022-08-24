@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 
+import SwiftDiagnostics
 import SwiftSyntax
 import SwiftParser
 import Foundation
@@ -131,14 +132,11 @@ class PrintDiags: ParsableCommand {
       enableBareSlashRegexLiteral: enableBareSlashRegex
     )
     let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-    let locationConverter = SourceLocationConverter(file: sourceFile, tree: tree)
     if diags.isEmpty {
       print("No diagnostics produced")
     }
     for diag in diags {
-      let location = diag.location(converter: locationConverter)
-      let message = diag.message
-      print("\(location): \(message)")
+      print("\(diag.debugDescription)")
     }
   }
 }

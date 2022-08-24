@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftSyntax
 
 extension UnexpectedNodesSyntax {
@@ -19,6 +20,25 @@ extension UnexpectedNodesSyntax {
 
   func tokens(withKind kind: TokenKind) -> [TokenSyntax] {
     return self.tokens(satisfying: { $0.tokenKind == kind })
+  }
+}
+
+fileprivate extension FixIt.Change {
+  /// Replaced a present node with a missing node
+  static func makeMissing(node: TokenSyntax) -> FixIt.Change {
+    assert(node.presence == .present)
+    return .replace(
+      oldNode: Syntax(node),
+      newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: [], trailingTrivia: [], presence: .missing))
+    )
+  }
+
+  static func makePresent(node: TokenSyntax, leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> FixIt.Change {
+    assert(node.presence == .missing)
+    return .replace(
+      oldNode: Syntax(node),
+      newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, presence: .present))
+    )
   }
 }
 
@@ -42,8 +62,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage) {
-    diagnostics.append(Diagnostic(node: Syntax(node), message: message))
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
+    diagnostics.append(Diagnostic(node: Syntax(node), message: message, highlights: highlights, fixIts: fixIts))
+  }
+
+  /// Produce a diagnostic.
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
+    addDiagnostic(node, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts)
   }
 
   /// If a diagnostic is generated that covers multiple syntax nodes, mark them as handles so they don't produce the generic diagnostics anymore.
@@ -70,7 +95,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    addDiagnostic(node, UnexpectedNodesDiagnostic(unexpectedNodes: node))
+    addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node))
     return .skipChildren
   }
 
@@ -79,7 +104,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.presence == .missing {
-      addDiagnostic(node, MissingTokenDiagnostic(missingToken: node))
+      addDiagnostic(node, MissingTokenError(missingToken: node))
     }
     return .skipChildren
   }
@@ -90,13 +115,25 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+    // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
     // This is mostly a proof-of-concept implementation to produce more complex diagnostics.
-    if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace {
-      // Detect C-style for loops based on two semicolons which could not be parsed between the 'for' keyword and the '{'
-      if unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
-        addDiagnostic(node, CStyleForLoopDiagnostic())
-        markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
-      }
+    if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
+       unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
+      // FIXME: This is aweful. We should have a way to either get all children between two cursors in a syntax node or highlight a range from one node to another.
+      addDiagnostic(node, .cStyleForLoop, highlights: ([
+        Syntax(node.pattern),
+        Syntax(node.unexpectedBetweenPatternAndTypeAnnotation),
+        Syntax(node.typeAnnotation),
+        Syntax(node.unexpectedBetweenTypeAnnotationAndInKeyword),
+        Syntax(node.inKeyword),
+        Syntax(node.unexpectedBetweenInKeywordAndSequenceExpr),
+        Syntax(node.sequenceExpr),
+        Syntax(node.unexpectedBetweenSequenceExprAndWhereClause),
+        Syntax(node.whereClause),
+        Syntax(node.unexpectedBetweenWhereClauseAndBody),
+        Syntax(unexpectedCondition)
+      ] as [Syntax?]).compactMap({ $0 }))
+      markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
     }
     return .visitChildren
   }
@@ -105,12 +142,19 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let output = node.output, let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType {
-      if let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
-        addDiagnostic(throwsInReturnPosition, ThrowsInReturnPositionDiagnostic())
-        markNodesAsHandled(unexpectedBeforeReturnType.id, throwsInReturnPosition.id)
-        return .visitChildren
-      }
+    if let output = node.output,
+       let missingThrowsKeyword = node.throwsOrRethrowsKeyword,
+       missingThrowsKeyword.presence == .missing,
+       let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType,
+       let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
+      addDiagnostic(throwsInReturnPosition, .throwsInReturnPosition, fixIts: [
+        FixIt(message: StaticParserFixIt.moveThrowBeforeArrow, changes: [
+          .makeMissing(node: throwsInReturnPosition),
+          .makePresent(node: missingThrowsKeyword, trailingTrivia: .space),
+        ])
+      ])
+      markNodesAsHandled(unexpectedBeforeReturnType.id, missingThrowsKeyword.id, throwsInReturnPosition.id)
+      return .visitChildren
     }
     return .visitChildren
   }

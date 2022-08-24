@@ -169,5 +169,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     return .visitChildren
   }
+
+  public override func visit(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.colonMark.presence == .missing {
+      addDiagnostic(node.colonMark, .missingColonInTernaryExprDiagnostic)
+      markNodesAsHandled(node.colonMark.id)
+    }
+    return .visitChildren
+  }
 }
 

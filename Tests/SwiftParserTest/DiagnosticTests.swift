@@ -93,4 +93,16 @@ public class DiagnosticTests: XCTestCase {
 
     XCTAssertSingleDiagnostic(in: classDecl, line: 2, column: 25, message: "Expected argument list in function declaration")
   }
+
+  func testMissingColonInTernary() throws {
+    let source = """
+      foo ? 1
+      """
+
+    let node = withParser(source: source) {
+      Syntax(raw: $0.parseExpression().raw)
+    }
+
+    XCTAssertSingleDiagnostic(in: node, line: 1, column: 8, message: "Expected ':' after '? ...' in ternary expression")
+  }
 }

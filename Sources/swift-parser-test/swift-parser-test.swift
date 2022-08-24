@@ -231,7 +231,7 @@ class Reduce: ParsableCommand {
       }
 
       try process.run()
-      if sema.wait(timeout: DispatchTime.now() + .seconds(1)) == .timedOut {
+      if sema.wait(timeout: DispatchTime.now() + .seconds(2)) == .timedOut {
 #if os(Windows)
         _ = TerminateProcess(process.processHandle, 0)
 #else

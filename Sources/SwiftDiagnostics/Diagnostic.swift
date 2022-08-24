@@ -19,7 +19,7 @@ public struct Diagnostic {
   /// The node at whose start location the message should be displayed.
   public let node: Syntax
 
-  init(node: Syntax, message: DiagnosticMessage) {
+  public init(node: Syntax, message: DiagnosticMessage) {
     self.diagMessage = message
     self.node = node
   }

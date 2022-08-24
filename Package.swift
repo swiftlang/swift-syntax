@@ -59,6 +59,10 @@ let package = Package(
       ]
     ),
     .target(
+      name: "SwiftDiagnostics",
+      dependencies: ["SwiftSyntax"]
+    ),
+    .target(
       name: "SwiftSyntax",
       dependencies: ["_CSwiftSyntax"],
       exclude: [
@@ -105,7 +109,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftParser",
-      dependencies: ["SwiftSyntax"],
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax"],
       exclude: [
         "README.md"
       ]
@@ -116,7 +120,7 @@ let package = Package(
     ),
     .executableTarget(
       name: "swift-parser-test",
-      dependencies: ["SwiftSyntax", "SwiftParser", .product(name: "ArgumentParser", package: "swift-argument-parser")]
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftParser", .product(name: "ArgumentParser", package: "swift-argument-parser")]
     ),
     .executableTarget(
         name: "generate-swift-syntax-builder",
@@ -162,7 +166,7 @@ let package = Package(
     ),
     .testTarget(
       name: "SwiftParserTest",
-      dependencies: ["SwiftParser", "_SwiftSyntaxTestSupport"]
+      dependencies: ["SwiftDiagnostics", "SwiftParser", "_SwiftSyntaxTestSupport"]
     ),
   ]
 )

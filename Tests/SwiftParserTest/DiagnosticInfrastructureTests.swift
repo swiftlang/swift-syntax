@@ -1,4 +1,5 @@
 import XCTest
+import SwiftDiagnostics
 import SwiftParser
 
 public class DiagnosticInfrastructureTests: XCTestCase {

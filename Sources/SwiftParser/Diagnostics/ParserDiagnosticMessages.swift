@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftSyntax
 
 extension Syntax {
@@ -34,6 +35,23 @@ extension Syntax {
     }
   }
 }
+
+
+/// A diagnostic how's ID is determined by the diagnostic's type.
+public protocol TypedDiagnosticMessage: DiagnosticMessage {
+  var diagnosticID: DiagnosticMessageID { get }
+}
+
+public extension TypedDiagnosticMessage {
+  static var diagnosticID: DiagnosticMessageID {
+    return DiagnosticMessageID("\(self)")
+  }
+
+  var diagnosticID: DiagnosticMessageID {
+    return Self.diagnosticID
+  }
+}
+
 
 // MARK: - Diagnostics (please sort alphabetically)
 

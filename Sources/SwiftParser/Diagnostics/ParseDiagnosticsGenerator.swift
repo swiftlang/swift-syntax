@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftSyntax
 
 extension UnexpectedNodesSyntax {

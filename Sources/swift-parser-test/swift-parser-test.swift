@@ -231,7 +231,7 @@ class Reduce: ParsableCommand {
       }
 
       try process.run()
-      if sema.wait(timeout: DispatchTime.now() + .seconds(1)) == .timedOut {
+      if sema.wait(timeout: DispatchTime.now() + .seconds(2)) == .timedOut {
 #if os(Windows)
         _ = TerminateProcess(process.processHandle, 0)
 #else
@@ -265,6 +265,10 @@ class Reduce: ParsableCommand {
     var reduced = source
     var chunkSize = source.count / 4
     while chunkSize > 0 {
+      if chunkSize < reduced.count / 20 {
+        // The chunk sizes are really tiny compared to the source file. Looks like we aren't making any progress reducing. Abort.
+        break
+      }
       if verbose {
         printerr("Current source size \(reduced.count), reducing with chunk size \(chunkSize)")
       }

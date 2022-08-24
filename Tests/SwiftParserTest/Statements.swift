@@ -10,7 +10,7 @@ final class StatementTests: XCTestCase {
       """
     }
 
-    try AssertParse({ $0.parseIfStatement() }) {
+    try AssertParse({ $0.parseIfStatement() }, allowErrors: true) {
       """
       if case* ! = x {
         bar()

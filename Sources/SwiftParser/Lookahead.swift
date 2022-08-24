@@ -149,11 +149,9 @@ extension Parser.Lookahead {
       self.consumeIdentifier()
       if self.consume(if: .leftParen) != nil {
         while !self.at(.eof), !self.at(.rightParen), !self.at(.poundEndifKeyword) {
-          if self.consume(if: .rightParen) != nil {
-            break
-          }
           self.skipSingle()
         }
+        self.consume(if: .rightParen)
       }
     } while self.at(.atSign)
     return true

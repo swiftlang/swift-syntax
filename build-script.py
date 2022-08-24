@@ -546,22 +546,6 @@ def check_generated_files_match(self_generated_dir: str,
     check_call(command)
 
 
-def verify_c_syntax_nodes_match() -> None:
-    print("** Validating that the C data types match **")
-
-    swift_syntax_c_definitions = os.path.join(
-        SOURCES_DIR, "_CSwiftSyntax", "include", "c-syntax-nodes.h")
-    swiftc_c_definitions = os.path.join(
-        SWIFT_DIR, "include", "swift-c", "SyntaxParser",
-        "SwiftSyntaxCDataTypes.h")
-
-    check_call([
-        "diff",
-        swift_syntax_c_definitions,
-        swiftc_c_definitions,
-    ])
-
-
 def run_tests(
     toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
     release: bool, filecheck_exec: Optional[str], skip_lit_tests: bool, verbose: bool
@@ -748,8 +732,6 @@ def verify_source_code_command(args: argparse.Namespace) -> None:
             release=args.release,
             verbose=args.verbose,
         )
-
-        verify_c_syntax_nodes_match()
     except subprocess.CalledProcessError:
         printerr(
             "FAIL: Gyb-generated files committed to repository do " +

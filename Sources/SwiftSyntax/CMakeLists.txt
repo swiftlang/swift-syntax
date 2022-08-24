@@ -8,7 +8,6 @@
 
 add_library(SwiftSyntax STATIC
   AbsolutePosition.swift
-  AtomicCounter.swift
   BumpPtrAllocator.swift
   IncrementalParseTransition.swift
   SourceLength.swift
@@ -55,9 +54,6 @@ add_library(SwiftSyntax STATIC
   gyb_generated/syntax_nodes/SyntaxStmtNodes.swift
   gyb_generated/syntax_nodes/SyntaxTypeNodes.swift
 )
-
-target_link_libraries(SwiftSyntax PRIVATE
-  _CSwiftSyntax)
 
 set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftSyntax)
 

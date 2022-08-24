@@ -1243,10 +1243,33 @@ public enum SyntaxFactory {
     ], arena: .default))
     return MemberAccessExprSyntax(data)
   }
-  @available(*, deprecated, message: "Use initializer on IsExprSyntax")
-  public static func makeIsExpr(_ unexpectedBeforeIsTok: UnexpectedNodesSyntax? = nil, isTok: TokenSyntax, _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil, typeName: TypeSyntax) -> IsExprSyntax {
+  @available(*, deprecated, message: "Use initializer on UnresolvedIsExprSyntax")
+  public static func makeUnresolvedIsExpr(_ unexpectedBeforeIsTok: UnexpectedNodesSyntax? = nil, isTok: TokenSyntax) -> UnresolvedIsExprSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeIsTok?.raw,
+      isTok.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unresolvedIsExpr,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return UnresolvedIsExprSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on UnresolvedIsExprSyntax")
+  public static func makeBlankUnresolvedIsExpr(presence: SourcePresence = .present) -> UnresolvedIsExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unresolvedIsExpr,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default),
+    ], arena: .default))
+    return UnresolvedIsExprSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on IsExprSyntax")
+  public static func makeIsExpr(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndIsTok: UnexpectedNodesSyntax? = nil, isTok: TokenSyntax, _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil, typeName: TypeSyntax) -> IsExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndIsTok?.raw,
       isTok.raw,
       unexpectedBetweenIsTokAndTypeName?.raw,
       typeName.raw,
@@ -1262,16 +1285,45 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .isExpr,
       from: [
       nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default),
+      nil,
       RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default),
       nil,
       RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default),
     ], arena: .default))
     return IsExprSyntax(data)
   }
-  @available(*, deprecated, message: "Use initializer on AsExprSyntax")
-  public static func makeAsExpr(_ unexpectedBeforeAsTok: UnexpectedNodesSyntax? = nil, asTok: TokenSyntax, _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? = nil, typeName: TypeSyntax) -> AsExprSyntax {
+  @available(*, deprecated, message: "Use initializer on UnresolvedAsExprSyntax")
+  public static func makeUnresolvedAsExpr(_ unexpectedBeforeAsTok: UnexpectedNodesSyntax? = nil, asTok: TokenSyntax, _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?) -> UnresolvedAsExprSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAsTok?.raw,
+      asTok.raw,
+      unexpectedBetweenAsTokAndQuestionOrExclamationMark?.raw,
+      questionOrExclamationMark?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unresolvedAsExpr,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return UnresolvedAsExprSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on UnresolvedAsExprSyntax")
+  public static func makeBlankUnresolvedAsExpr(presence: SourcePresence = .present) -> UnresolvedAsExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .unresolvedAsExpr,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.asKeyword, arena: .default),
+      nil,
+      nil,
+    ], arena: .default))
+    return UnresolvedAsExprSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on AsExprSyntax")
+  public static func makeAsExpr(_ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? = nil, asTok: TokenSyntax, _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? = nil, typeName: TypeSyntax) -> AsExprSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndAsTok?.raw,
       asTok.raw,
       unexpectedBetweenAsTokAndQuestionOrExclamationMark?.raw,
       questionOrExclamationMark?.raw,
@@ -1288,6 +1340,8 @@ public enum SyntaxFactory {
   public static func makeBlankAsExpr(presence: SourcePresence = .present) -> AsExprSyntax {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .asExpr,
       from: [
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default),
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.asKeyword, arena: .default),
       nil,

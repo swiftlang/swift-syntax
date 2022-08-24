@@ -73,7 +73,9 @@ public enum SyntaxEnum {
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case ternaryExpr(TernaryExprSyntax)
   case memberAccessExpr(MemberAccessExprSyntax)
+  case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case isExpr(IsExprSyntax)
+  case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case asExpr(AsExprSyntax)
   case typeExpr(TypeExprSyntax)
   case closureCaptureItem(ClosureCaptureItemSyntax)
@@ -401,8 +403,12 @@ public extension Syntax {
       return .ternaryExpr(TernaryExprSyntax(self)!)
     case .memberAccessExpr:
       return .memberAccessExpr(MemberAccessExprSyntax(self)!)
+    case .unresolvedIsExpr:
+      return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
     case .isExpr:
       return .isExpr(IsExprSyntax(self)!)
+    case .unresolvedAsExpr:
+      return .unresolvedAsExpr(UnresolvedAsExprSyntax(self)!)
     case .asExpr:
       return .asExpr(AsExprSyntax(self)!)
     case .typeExpr:

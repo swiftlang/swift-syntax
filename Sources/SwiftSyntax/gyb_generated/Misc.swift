@@ -361,10 +361,22 @@ extension SyntaxNode {
     return MemberAccessExprSyntax(asSyntaxData)
   }
 
+  public var isUnresolvedIsExpr: Bool { return raw.kind == .unresolvedIsExpr }
+  public var asUnresolvedIsExpr: UnresolvedIsExprSyntax? {
+    guard isUnresolvedIsExpr else { return nil }
+    return UnresolvedIsExprSyntax(asSyntaxData)
+  }
+
   public var isIsExpr: Bool { return raw.kind == .isExpr }
   public var asIsExpr: IsExprSyntax? {
     guard isIsExpr else { return nil }
     return IsExprSyntax(asSyntaxData)
+  }
+
+  public var isUnresolvedAsExpr: Bool { return raw.kind == .unresolvedAsExpr }
+  public var asUnresolvedAsExpr: UnresolvedAsExprSyntax? {
+    guard isUnresolvedAsExpr else { return nil }
+    return UnresolvedAsExprSyntax(asSyntaxData)
   }
 
   public var isAsExpr: Bool { return raw.kind == .asExpr }
@@ -1717,7 +1729,11 @@ extension Syntax {
       return node
     case .memberAccessExpr(let node):
       return node
+    case .unresolvedIsExpr(let node):
+      return node
     case .isExpr(let node):
+      return node
+    case .unresolvedAsExpr(let node):
       return node
     case .asExpr(let node):
       return node

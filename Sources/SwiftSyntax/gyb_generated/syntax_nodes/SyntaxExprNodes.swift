@@ -4187,39 +4187,35 @@ extension MemberAccessExprSyntax: CustomReflectable {
   }
 }
 
-// MARK: - IsExprSyntax
+// MARK: - UnresolvedIsExprSyntax
 
-public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `IsExprSyntax` if possible. Returns
+  /// Converts the given `Syntax` node to a `UnresolvedIsExprSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .isExpr else { return nil }
+    guard syntax.raw.kind == .unresolvedIsExpr else { return nil }
     self._syntaxNode = syntax
   }
 
-  /// Creates a `IsExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a `UnresolvedIsExprSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .isExpr)
+    assert(data.raw.kind == .unresolvedIsExpr)
     self._syntaxNode = Syntax(data)
   }
 
   public init(
     _ unexpectedBeforeIsTok: UnexpectedNodesSyntax? = nil,
-    isTok: TokenSyntax,
-    _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil,
-    typeName: TypeSyntax
+    isTok: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeIsTok?.raw,
       isTok.raw,
-      unexpectedBetweenIsTokAndTypeName?.raw,
-      typeName.raw,
     ]
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.isExpr,
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unresolvedIsExpr,
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
@@ -4244,10 +4240,10 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `unexpectedBeforeIsTok` to replace the node's
   ///                   current `unexpectedBeforeIsTok`, if present.
   public func withUnexpectedBeforeIsTok(
-    _ newChild: UnexpectedNodesSyntax?) -> IsExprSyntax {
+    _ newChild: UnexpectedNodesSyntax?) -> UnresolvedIsExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 0)
-    return IsExprSyntax(newData)
+    return UnresolvedIsExprSyntax(newData)
   }
 
   public var isTok: TokenSyntax {
@@ -4264,15 +4260,153 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `isTok` to replace the node's
   ///                   current `isTok`, if present.
   public func withIsTok(
-    _ newChild: TokenSyntax?) -> IsExprSyntax {
+    _ newChild: TokenSyntax?) -> UnresolvedIsExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
+    return UnresolvedIsExprSyntax(newData)
+  }
+}
+
+extension UnresolvedIsExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeIsTok": unexpectedBeforeIsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "isTok": Syntax(isTok).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
+// MARK: - IsExprSyntax
+
+public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `IsExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .isExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IsExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .isExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+    expression: ExprSyntax,
+    _ unexpectedBetweenExpressionAndIsTok: UnexpectedNodesSyntax? = nil,
+    isTok: TokenSyntax,
+    _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil,
+    typeName: TypeSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndIsTok?.raw,
+      isTok.raw,
+      unexpectedBetweenIsTokAndTypeName?.raw,
+      typeName.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.isExpr,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeExpression` replaced.
+  /// - param newChild: The new `unexpectedBeforeExpression` to replace the node's
+  ///                   current `unexpectedBeforeExpression`, if present.
+  public func withUnexpectedBeforeExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> IsExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return IsExprSyntax(newData)
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(
+    _ newChild: ExprSyntax?) -> IsExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return IsExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenExpressionAndIsTok: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenExpressionAndIsTok(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndIsTok` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionAndIsTok` to replace the node's
+  ///                   current `unexpectedBetweenExpressionAndIsTok`, if present.
+  public func withUnexpectedBetweenExpressionAndIsTok(
+    _ newChild: UnexpectedNodesSyntax?) -> IsExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return IsExprSyntax(newData)
+  }
+
+  public var isTok: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIsTok(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `isTok` replaced.
+  /// - param newChild: The new `isTok` to replace the node's
+  ///                   current `isTok`, if present.
+  public func withIsTok(
+    _ newChild: TokenSyntax?) -> IsExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.isKeyword, arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
     return IsExprSyntax(newData)
   }
 
   public var unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4287,13 +4421,13 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenIsTokAndTypeName(
     _ newChild: UnexpectedNodesSyntax?) -> IsExprSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 4)
     return IsExprSyntax(newData)
   }
 
   public var typeName: TypeSyntax {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       return TypeSyntax(childData!)
     }
     set(value) {
@@ -4307,7 +4441,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withTypeName(
     _ newChild: TypeSyntax?) -> IsExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 5)
     return IsExprSyntax(newData)
   }
 }
@@ -4315,10 +4449,149 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 extension IsExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforeIsTok": unexpectedBeforeIsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenExpressionAndIsTok": unexpectedBetweenExpressionAndIsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "isTok": Syntax(isTok).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenIsTokAndTypeName": unexpectedBetweenIsTokAndTypeName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "typeName": Syntax(typeName).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
+// MARK: - UnresolvedAsExprSyntax
+
+public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnresolvedAsExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unresolvedAsExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnresolvedAsExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .unresolvedAsExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeAsTok: UnexpectedNodesSyntax? = nil,
+    asTok: TokenSyntax,
+    _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
+    questionOrExclamationMark: TokenSyntax?
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeAsTok?.raw,
+      asTok.raw,
+      unexpectedBetweenAsTokAndQuestionOrExclamationMark?.raw,
+      questionOrExclamationMark?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unresolvedAsExpr,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var unexpectedBeforeAsTok: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeAsTok(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeAsTok` replaced.
+  /// - param newChild: The new `unexpectedBeforeAsTok` to replace the node's
+  ///                   current `unexpectedBeforeAsTok`, if present.
+  public func withUnexpectedBeforeAsTok(
+    _ newChild: UnexpectedNodesSyntax?) -> UnresolvedAsExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return UnresolvedAsExprSyntax(newData)
+  }
+
+  public var asTok: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAsTok(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `asTok` replaced.
+  /// - param newChild: The new `asTok` to replace the node's
+  ///                   current `asTok`, if present.
+  public func withAsTok(
+    _ newChild: TokenSyntax?) -> UnresolvedAsExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.asKeyword, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return UnresolvedAsExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenAsTokAndQuestionOrExclamationMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenAsTokAndQuestionOrExclamationMark` replaced.
+  /// - param newChild: The new `unexpectedBetweenAsTokAndQuestionOrExclamationMark` to replace the node's
+  ///                   current `unexpectedBetweenAsTokAndQuestionOrExclamationMark`, if present.
+  public func withUnexpectedBetweenAsTokAndQuestionOrExclamationMark(
+    _ newChild: UnexpectedNodesSyntax?) -> UnresolvedAsExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return UnresolvedAsExprSyntax(newData)
+  }
+
+  public var questionOrExclamationMark: TokenSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionOrExclamationMark(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `questionOrExclamationMark` replaced.
+  /// - param newChild: The new `questionOrExclamationMark` to replace the node's
+  ///                   current `questionOrExclamationMark`, if present.
+  public func withQuestionOrExclamationMark(
+    _ newChild: TokenSyntax?) -> UnresolvedAsExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 3)
+    return UnresolvedAsExprSyntax(newData)
+  }
+}
+
+extension UnresolvedAsExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeAsTok": unexpectedBeforeAsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "asTok": Syntax(asTok).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenAsTokAndQuestionOrExclamationMark": unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "questionOrExclamationMark": questionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4344,7 +4617,9 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 
   public init(
-    _ unexpectedBeforeAsTok: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
+    expression: ExprSyntax,
+    _ unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? = nil,
     asTok: TokenSyntax,
     _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
     questionOrExclamationMark: TokenSyntax?,
@@ -4352,7 +4627,9 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     typeName: TypeSyntax
   ) {
     let layout: [RawSyntax?] = [
-      unexpectedBeforeAsTok?.raw,
+      unexpectedBeforeExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndAsTok?.raw,
       asTok.raw,
       unexpectedBetweenAsTokAndQuestionOrExclamationMark?.raw,
       questionOrExclamationMark?.raw,
@@ -4369,30 +4646,71 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var unexpectedBeforeAsTok: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBeforeAsTok(value)
+      self = withUnexpectedBeforeExpression(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBeforeAsTok` replaced.
-  /// - param newChild: The new `unexpectedBeforeAsTok` to replace the node's
-  ///                   current `unexpectedBeforeAsTok`, if present.
-  public func withUnexpectedBeforeAsTok(
+  /// Returns a copy of the receiver with its `unexpectedBeforeExpression` replaced.
+  /// - param newChild: The new `unexpectedBeforeExpression` to replace the node's
+  ///                   current `unexpectedBeforeExpression`, if present.
+  public func withUnexpectedBeforeExpression(
     _ newChild: UnexpectedNodesSyntax?) -> AsExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 0)
     return AsExprSyntax(newData)
   }
 
-  public var asTok: TokenSyntax {
+  public var expression: ExprSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(
+    _ newChild: ExprSyntax?) -> AsExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return AsExprSyntax(newData)
+  }
+
+  public var unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenExpressionAndAsTok(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndAsTok` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionAndAsTok` to replace the node's
+  ///                   current `unexpectedBetweenExpressionAndAsTok`, if present.
+  public func withUnexpectedBetweenExpressionAndAsTok(
+    _ newChild: UnexpectedNodesSyntax?) -> AsExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return AsExprSyntax(newData)
+  }
+
+  public var asTok: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -4406,13 +4724,13 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withAsTok(
     _ newChild: TokenSyntax?) -> AsExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.asKeyword, arena: .default)
-    let newData = data.replacingChild(raw, at: 1)
+    let newData = data.replacingChild(raw, at: 3)
     return AsExprSyntax(newData)
   }
 
   public var unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 2, parent: Syntax(self))
+      let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4427,13 +4745,13 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenAsTokAndQuestionOrExclamationMark(
     _ newChild: UnexpectedNodesSyntax?) -> AsExprSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 2)
+    let newData = data.replacingChild(raw, at: 4)
     return AsExprSyntax(newData)
   }
 
   public var questionOrExclamationMark: TokenSyntax? {
     get {
-      let childData = data.child(at: 3, parent: Syntax(self))
+      let childData = data.child(at: 5, parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
@@ -4448,13 +4766,13 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withQuestionOrExclamationMark(
     _ newChild: TokenSyntax?) -> AsExprSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 3)
+    let newData = data.replacingChild(raw, at: 5)
     return AsExprSyntax(newData)
   }
 
   public var unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? {
     get {
-      let childData = data.child(at: 4, parent: Syntax(self))
+      let childData = data.child(at: 6, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
@@ -4469,13 +4787,13 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withUnexpectedBetweenQuestionOrExclamationMarkAndTypeName(
     _ newChild: UnexpectedNodesSyntax?) -> AsExprSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 4)
+    let newData = data.replacingChild(raw, at: 6)
     return AsExprSyntax(newData)
   }
 
   public var typeName: TypeSyntax {
     get {
-      let childData = data.child(at: 5, parent: Syntax(self))
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TypeSyntax(childData!)
     }
     set(value) {
@@ -4489,7 +4807,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func withTypeName(
     _ newChild: TypeSyntax?) -> AsExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+    let newData = data.replacingChild(raw, at: 7)
     return AsExprSyntax(newData)
   }
 }
@@ -4497,7 +4815,9 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 extension AsExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unexpectedBeforeAsTok": unexpectedBeforeAsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBeforeExpression": unexpectedBeforeExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenExpressionAndAsTok": unexpectedBetweenExpressionAndAsTok.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "asTok": Syntax(asTok).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenAsTokAndQuestionOrExclamationMark": unexpectedBetweenAsTokAndQuestionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "questionOrExclamationMark": questionOrExclamationMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

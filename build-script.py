@@ -191,16 +191,13 @@ def generate_single_gyb_file(
 # `sources_dir/gyb_generated`.
 def generate_gyb_files_helper(
     sources_dir: str,
-    destination_dir: Optional[str],
+    destination_dir: str,
     gyb_exec: str,
     add_source_locations: bool,
     verbose: bool,
 ) -> None:
     temp_files_dir = tempfile.gettempdir()
     make_dir_if_needed(temp_files_dir)
-
-    if destination_dir is None:
-        destination_dir = os.path.join(sources_dir, "gyb_generated")
     make_dir_if_needed(destination_dir)
 
     # Clear any *.swift files that are relics from the previous run.
@@ -284,35 +281,48 @@ def generate_syntax_node_template_gyb_files(
             verbose=verbose,
         )
 
-# Gyb-files that should be generated before running code generation using SwiftSyntaxBuilder.
+
+# If `temp_directories` is True, creates a dictionary that maps every source dir in
+# `source_dirs` to a unique temporary directory.
+# If `temp_directories` is False, it maps each source dir to the corresponding
+# gyb_generated directory.
+def gyb_dir_mapping(temp_directories: bool, source_dirs: List[str]) -> Dict[str, str]:
+    mapping = {}
+    for source_dir in source_dirs:
+        if temp_directories:
+            mapping[source_dir] = tempfile.mkdtemp()
+        else:
+            mapping[source_dir] = os.path.join(source_dir, "gyb_generated")
+    return mapping
+
+
+# Gyb-files that should be generated before running generate-swift-syntax-builder.
 # Maps directories containing .gyb files to the directories the generated files should
 # live in.
 def first_stage_gyb_dir_mapping(
-    generateswiftsyntaxbuilder_destination: Optional[str] = None,
-) -> Dict[str, Optional[str]]:
-    return {
-        GENERATESWIFTSYNTAXBUILDER_DIR: generateswiftsyntaxbuilder_destination,
-    }
+    temp_directories: bool
+) -> Dict[str, str]:
+    return gyb_dir_mapping(temp_directories=temp_directories, source_dirs=[
+        GENERATESWIFTSYNTAXBUILDER_DIR
+    ])
 
-# Gyb-files that should be generated after running code generation using SwiftSyntaxBuilder.
+
+# Gyb-files that should be generated after running generate-swift-syntax-builder.
 # Maps directories containing .gyb files to the directories the generated files should
 # live in.
 def second_stage_gyb_dir_mapping(
-    swiftsyntax_destination: Optional[str] = None,
-    swiftsyntax_raw_destination: Optional[str] = None,
-    swiftsyntaxbuilder_destination: Optional[str] = None,
-    swiftsyntaxparser_destination: Optional[str] = None,
-) -> Dict[str, Optional[str]]:
-    return {
-        SWIFTSYNTAX_DIR: swiftsyntax_destination,
-        os.path.join(SWIFTSYNTAX_DIR, "Raw"): swiftsyntax_raw_destination,
-        SWIFTSYNTAXBUILDER_DIR: swiftsyntaxbuilder_destination,
-        SWIFTSYNTAXPARSER_DIR: swiftsyntaxparser_destination,
-    }
+    temp_directories: bool
+) -> Dict[str, str]:
+    return gyb_dir_mapping(temp_directories=temp_directories, source_dirs=[
+        SWIFTSYNTAX_DIR,
+        os.path.join(SWIFTSYNTAX_DIR, "Raw"),
+        SWIFTSYNTAXBUILDER_DIR,
+        SWIFTSYNTAXPARSER_DIR,
+    ])
 
 
 def generate_gyb_files(
-    gyb_exec: str, gyb_dir_mapping: Dict[str, Optional[str]],
+    gyb_exec: str, gyb_dir_mapping: Dict[str, str],
     add_source_locations: bool, verbose: bool,
 ) -> None:
     print("** Generating gyb Files **")
@@ -463,13 +473,10 @@ class Builder(object):
 
 def verify_gyb_generated_files(gyb_exec: str, verbose: bool) -> None:
     first_stage_gyb_dirs = first_stage_gyb_dir_mapping(
-        generateswiftsyntaxbuilder_destination=tempfile.mkdtemp(),
+        temp_directories=True
     )
     second_stage_gyb_dirs = second_stage_gyb_dir_mapping(
-        swiftsyntax_destination=tempfile.mkdtemp(),
-        swiftsyntax_raw_destination=tempfile.mkdtemp(),
-        swiftsyntaxbuilder_destination=tempfile.mkdtemp(),
-        swiftsyntaxparser_destination=tempfile.mkdtemp(),
+        temp_directories=True
     )
     gyb_dirs = first_stage_gyb_dirs
     gyb_dirs.update(second_stage_gyb_dirs)
@@ -697,7 +704,7 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
     try:
         generate_gyb_files(
             args.gyb_exec,
-            gyb_dir_mapping=first_stage_gyb_dir_mapping(),
+            gyb_dir_mapping=first_stage_gyb_dir_mapping(temp_directories=False),
             add_source_locations=args.add_source_locations,
             verbose=args.verbose,
         )
@@ -722,7 +729,7 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
     try:
         generate_gyb_files(
             args.gyb_exec,
-            gyb_dir_mapping=second_stage_gyb_dir_mapping(),
+            gyb_dir_mapping=second_stage_gyb_dir_mapping(temp_directories=False),
             add_source_locations=args.add_source_locations,
             verbose=args.verbose,
         )

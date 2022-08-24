@@ -349,4 +349,40 @@ public class RecoveryTests: XCTestCase {
       """
     }
   }
+
+  public func testNoParamsForFunction() throws {
+    let source = """
+    class MyClass {
+      func withoutParameters
+
+      func withParameters() {}
+    }
+    """
+
+    let classDecl = withParser(source: source) {
+      Syntax(raw: $0.parseDeclaration().raw)
+    }
+    try XCTAssertHasSubstructure(
+      classDecl,
+      FunctionDeclSyntax(
+        attributes: nil,
+        modifiers: nil,
+        funcKeyword: .funcKeyword(),
+        identifier: .identifier("withoutParameters"),
+        genericParameterClause: nil,
+        signature: FunctionSignatureSyntax(
+          input: ParameterClauseSyntax(
+            leftParen: .leftParenToken(presence: .missing),
+            parameterList: FunctionParameterListSyntax([]),
+            rightParen: .rightParenToken(presence: .missing)
+          ),
+          asyncOrReasyncKeyword: nil,
+          throwsOrRethrowsKeyword: nil,
+          output: nil
+        ),
+        genericWhereClause: nil,
+        body: nil
+      )
+    )
+  }
 }

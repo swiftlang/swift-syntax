@@ -77,4 +77,20 @@ public class DiagnosticTests: XCTestCase {
       expectedFixedSource: "() throws -> Int"
     )
   }
+
+  public func testNoParamsForFunction() throws {
+    let source = """
+    class MyClass {
+      func withoutParameters
+
+      func withParameters() {}
+    }
+    """
+
+    let classDecl = withParser(source: source) {
+      Syntax(raw: $0.parseDeclaration().raw).as(ClassDeclSyntax.self)!
+    }
+
+    XCTAssertSingleDiagnostic(in: classDecl, line: 2, column: 25, message: "Expected argument list in function declaration")
+  }
 }

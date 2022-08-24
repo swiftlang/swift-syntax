@@ -76,6 +76,7 @@ public extension ParserFixIt {
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticParserError: String, DiagnosticMessage {
   case cStyleForLoop = "C-style for statement has been removed in Swift 3"
+  case missingFunctionParameterClause = "Expected argument list in function declaration"
   case throwsInReturnPosition = "'throws' may only occur before '->'"
 
   public var message: String { self.rawValue }

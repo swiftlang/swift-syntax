@@ -106,4 +106,84 @@ let formatFile = SourceFile {
       }
     }
   }
+
+  ExtensionDecl(extendedType: "Format") {
+    for node in SYNTAX_NODES {
+      let type = node.type
+      let signature = FunctionSignature(
+        input: ParameterClause {
+          FunctionParameter(
+            firstName: .identifier("syntax"),
+            colon: .colon,
+            type: type.syntaxBaseName
+          )
+        },
+        output: type.syntaxBaseName
+      )
+      if node.isBuildable {
+        FunctionDecl(
+          modifiers: [TokenSyntax.public],
+          identifier: .identifier("_format"),
+          signature: signature
+        ) {
+          node.children
+            .filter(\.requiresLeadingNewline)
+            .reduce("syntax") { base, child in
+              FunctionCallExpr(MemberAccessExpr(base: base, name: "with\(child.name)")) {
+                let childExpr = MemberAccessExpr(base: "syntax", name: child.swiftName)
+                TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: childExpr, name: "withLeadingTrivia")) {
+                  TupleExprElement(expression: SequenceExpr {
+                    "indentedNewline"
+                    BinaryOperatorExpr("+")
+                    TupleExpr {
+                      SequenceExpr {
+                        MemberAccessExpr(base: childExpr, name: "leadingTrivia")
+                        BinaryOperatorExpr("??")
+                        ArrayExpr()
+                      }
+                    }
+                  })
+                })
+              }
+            }
+        }
+      } else if node.isSyntaxCollection {
+        FunctionDecl(
+          modifiers: [TokenSyntax.public],
+          identifier: .identifier("_format"),
+          signature: signature
+        ) {
+          if node.elementsSeparatedByNewline {
+            FunctionCallExpr(type.syntaxBaseName) {
+              TupleExprElement(expression: FunctionCallExpr(
+                MemberAccessExpr(base: "syntax", name: "map"),
+                trailingClosure: ClosureExpr {
+                  FunctionCallExpr(MemberAccessExpr(base: "$0", name: "withLeadingTrivia")) {
+                    TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
+                      base: TupleExpr {
+                        SequenceExpr {
+                          "indentedNewline"
+                          BinaryOperatorExpr("+")
+                          TupleExpr {
+                            SequenceExpr {
+                              MemberAccessExpr(base: "$0", name: "leadingTrivia")
+                              BinaryOperatorExpr("??")
+                              ArrayExpr()
+                            }
+                          }
+                        }
+                      },
+                      name: "addingSpacingAfterNewlinesIfNeeded"
+                    )))
+                  }
+                }
+              ))
+            }
+          } else {
+            "syntax"
+          }
+        }
+      }
+    }
+  }
 }

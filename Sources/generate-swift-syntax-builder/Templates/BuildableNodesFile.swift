@@ -243,7 +243,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
     )
   ) {
     VariableDecl(
-      .let,
+      .var,
       name: "result",
       initializer: FunctionCallExpr(type.syntaxBaseName) {
         for child in children {
@@ -254,12 +254,36 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
         }
       }
     )
+    IfStmt(
+      conditions: ExprList {
+        PrefixOperatorExpr(
+          operatorToken: .prefixOperator("!"),
+          postfixExpression: MemberAccessExpr(base: "leadingTrivia", name: "isEmpty")
+        )
+      }
+    ) {
+      SequenceExpr {
+        "result"
+        AssignmentExpr()
+        FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
+          TupleExprElement(expression: "leadingTrivia")
+        }
+      }
+    }
+    SequenceExpr {
+      "result"
+      AssignmentExpr()
+      FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
+        TupleExprElement(
+          label: "syntax",
+          expression: "result"
+        )
+      }
+    }
     VariableDecl(
       .let,
       name: "combinedLeadingTrivia",
       initializer: SequenceExpr {
-        "leadingTrivia"
-        BinaryOperatorExpr("+")
         TupleExpr {
           SequenceExpr {
             "additionalLeadingTrivia"

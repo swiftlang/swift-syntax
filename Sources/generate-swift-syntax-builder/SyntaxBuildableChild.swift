@@ -36,25 +36,7 @@ extension Child {
   /// represents this child node.
   func generateExprBuildSyntaxNode(varName: String, formatName: String) -> ExpressibleAsExprBuildable {
     if type.isToken {
-      if requiresLeadingNewline {
-        return FunctionCallExpr(MemberAccessExpr(base: varName, name: "withLeadingTrivia")) {
-          SequenceExpr {
-            MemberAccessExpr(name: "newline")
-            BinaryOperatorExpr("+")
-            MemberAccessExpr(base: formatName, name: "_indentTrivia")
-            BinaryOperatorExpr("+")
-            TupleExpr {
-              SequenceExpr {
-                MemberAccessExpr(base: varName, name: "leadingTrivia")
-                BinaryOperatorExpr("??")
-                ArrayExpr {}
-              }
-            }
-          }
-        }
-      } else {
-        return varName
-      }
+      return varName
     } else {
       var format: ExpressibleAsExprBuildable = formatName
       if isIndented {

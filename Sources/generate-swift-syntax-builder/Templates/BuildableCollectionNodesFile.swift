@@ -182,7 +182,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
     )
   ) {
     VariableDecl(
-      .let,
+      .var,
       name: "result",
       initializer: FunctionCallExpr("\(type.syntaxBaseName)") {
         if elementType.isToken {
@@ -194,13 +194,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
                 TupleExprElement(label: "format", expression: "format")
                 TupleExprElement(
                   label: "leadingTrivia",
-                  expression: node.elementsSeparatedByNewline
-                    ? SequenceExpr {
-                        MemberAccessExpr(base: "Trivia", name: "newline")
-                        BinaryOperatorExpr("+")
-                        MemberAccessExpr(base: "format", name: "_indentTrivia")
-                      }
-                    : NilLiteralExpr()
+                  expression: NilLiteralExpr()
                 )
               }
             })
@@ -208,34 +202,17 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
         }
       }
     )
-    IfStmt(
-      conditions: OptionalBindingCondition(
-        letOrVarKeyword: .let,
-        pattern: "leadingTrivia",
-        initializer: "leadingTrivia"
-      )
-    ) {
-      ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
-        TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
-          base: TupleExpr {
-            SequenceExpr {
-              "leadingTrivia"
-              BinaryOperatorExpr("+")
-              TupleExpr {
-                SequenceExpr {
-                  MemberAccessExpr(base: "result", name: "leadingTrivia")
-                  BinaryOperatorExpr("??")
-                  ArrayExpr {}
-                }
-              }
-            }
-          },
-          name: "addingSpacingAfterNewlinesIfNeeded"
-        )))
-      })
-    } elseBody: {
-      ReturnStmt(expression: "result")
+    SequenceExpr {
+      "result"
+      AssignmentExpr()
+      FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
+        TupleExprElement(
+          label: "syntax",
+          expression: "result"
+        )
+      }
     }
+    ReturnStmt(expression: "result")
   }
 }
 

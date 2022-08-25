@@ -34,3 +34,767 @@ extension Format {
     .newline + _indentTrivia
   }
 }
+extension Format {
+  public func _format(syntax: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
+    syntax
+  }
+  public func _format(syntax: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
+    CodeBlockItemListSyntax(syntax.map {
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+    })
+  }
+  public func _format(syntax: CodeBlockSyntax) -> CodeBlockSyntax {
+    syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+  }
+  public func _format(syntax: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
+    syntax
+  }
+  public func _format(syntax: InOutExprSyntax) -> InOutExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundColumnExprSyntax) -> PoundColumnExprSyntax {
+    syntax
+  }
+  public func _format(syntax: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: ArrayElementListSyntax) -> ArrayElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: DictionaryElementListSyntax) -> DictionaryElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: StringLiteralSegmentsSyntax) -> StringLiteralSegmentsSyntax {
+    syntax
+  }
+  public func _format(syntax: TryExprSyntax) -> TryExprSyntax {
+    syntax
+  }
+  public func _format(syntax: AwaitExprSyntax) -> AwaitExprSyntax {
+    syntax
+  }
+  public func _format(syntax: MoveExprSyntax) -> MoveExprSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclNameArgumentSyntax) -> DeclNameArgumentSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclNameArgumentListSyntax) -> DeclNameArgumentListSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclNameArgumentsSyntax) -> DeclNameArgumentsSyntax {
+    syntax
+  }
+  public func _format(syntax: IdentifierExprSyntax) -> IdentifierExprSyntax {
+    syntax
+  }
+  public func _format(syntax: SuperRefExprSyntax) -> SuperRefExprSyntax {
+    syntax
+  }
+  public func _format(syntax: NilLiteralExprSyntax) -> NilLiteralExprSyntax {
+    syntax
+  }
+  public func _format(syntax: DiscardAssignmentExprSyntax) -> DiscardAssignmentExprSyntax {
+    syntax
+  }
+  public func _format(syntax: AssignmentExprSyntax) -> AssignmentExprSyntax {
+    syntax
+  }
+  public func _format(syntax: SequenceExprSyntax) -> SequenceExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ExprListSyntax) -> ExprListSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundLineExprSyntax) -> PoundLineExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundFileExprSyntax) -> PoundFileExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundFileIDExprSyntax) -> PoundFileIDExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundFilePathExprSyntax) -> PoundFilePathExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundFunctionExprSyntax) -> PoundFunctionExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundDsohandleExprSyntax) -> PoundDsohandleExprSyntax {
+    syntax
+  }
+  public func _format(syntax: SymbolicReferenceExprSyntax) -> SymbolicReferenceExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PrefixOperatorExprSyntax) -> PrefixOperatorExprSyntax {
+    syntax
+  }
+  public func _format(syntax: BinaryOperatorExprSyntax) -> BinaryOperatorExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ArrowExprSyntax) -> ArrowExprSyntax {
+    syntax
+  }
+  public func _format(syntax: InfixOperatorExprSyntax) -> InfixOperatorExprSyntax {
+    syntax
+  }
+  public func _format(syntax: FloatLiteralExprSyntax) -> FloatLiteralExprSyntax {
+    syntax
+  }
+  public func _format(syntax: TupleExprSyntax) -> TupleExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ArrayExprSyntax) -> ArrayExprSyntax {
+    syntax
+  }
+  public func _format(syntax: DictionaryExprSyntax) -> DictionaryExprSyntax {
+    syntax
+  }
+  public func _format(syntax: TupleExprElementSyntax) -> TupleExprElementSyntax {
+    syntax
+  }
+  public func _format(syntax: ArrayElementSyntax) -> ArrayElementSyntax {
+    syntax
+  }
+  public func _format(syntax: DictionaryElementSyntax) -> DictionaryElementSyntax {
+    syntax
+  }
+  public func _format(syntax: IntegerLiteralExprSyntax) -> IntegerLiteralExprSyntax {
+    syntax
+  }
+  public func _format(syntax: BooleanLiteralExprSyntax) -> BooleanLiteralExprSyntax {
+    syntax
+  }
+  public func _format(syntax: UnresolvedTernaryExprSyntax) -> UnresolvedTernaryExprSyntax {
+    syntax
+  }
+  public func _format(syntax: TernaryExprSyntax) -> TernaryExprSyntax {
+    syntax
+  }
+  public func _format(syntax: MemberAccessExprSyntax) -> MemberAccessExprSyntax {
+    syntax
+  }
+  public func _format(syntax: UnresolvedIsExprSyntax) -> UnresolvedIsExprSyntax {
+    syntax
+  }
+  public func _format(syntax: IsExprSyntax) -> IsExprSyntax {
+    syntax
+  }
+  public func _format(syntax: UnresolvedAsExprSyntax) -> UnresolvedAsExprSyntax {
+    syntax
+  }
+  public func _format(syntax: AsExprSyntax) -> AsExprSyntax {
+    syntax
+  }
+  public func _format(syntax: TypeExprSyntax) -> TypeExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureCaptureItemSyntax) -> ClosureCaptureItemSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureCaptureItemListSyntax) -> ClosureCaptureItemListSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureCaptureSignatureSyntax) -> ClosureCaptureSignatureSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureParamSyntax) -> ClosureParamSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureParamListSyntax) -> ClosureParamListSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureExprSyntax) -> ClosureExprSyntax {
+    syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+  }
+  public func _format(syntax: UnresolvedPatternExprSyntax) -> UnresolvedPatternExprSyntax {
+    syntax
+  }
+  public func _format(syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementSyntax {
+    syntax
+  }
+  public func _format(syntax: MultipleTrailingClosureElementListSyntax) -> MultipleTrailingClosureElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionCallExprSyntax) -> FunctionCallExprSyntax {
+    syntax
+  }
+  public func _format(syntax: SubscriptExprSyntax) -> SubscriptExprSyntax {
+    syntax
+  }
+  public func _format(syntax: OptionalChainingExprSyntax) -> OptionalChainingExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ForcedValueExprSyntax) -> ForcedValueExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PostfixUnaryExprSyntax) -> PostfixUnaryExprSyntax {
+    syntax
+  }
+  public func _format(syntax: SpecializeExprSyntax) -> SpecializeExprSyntax {
+    syntax
+  }
+  public func _format(syntax: StringSegmentSyntax) -> StringSegmentSyntax {
+    syntax
+  }
+  public func _format(syntax: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
+    syntax
+  }
+  public func _format(syntax: StringLiteralExprSyntax) -> StringLiteralExprSyntax {
+    syntax
+  }
+  public func _format(syntax: RegexLiteralExprSyntax) -> RegexLiteralExprSyntax {
+    syntax
+  }
+  public func _format(syntax: KeyPathExprSyntax) -> KeyPathExprSyntax {
+    syntax
+  }
+  public func _format(syntax: KeyPathBaseExprSyntax) -> KeyPathBaseExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjcNamePieceSyntax) -> ObjcNamePieceSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjcNameSyntax) -> ObjcNameSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjcKeyPathExprSyntax) -> ObjcKeyPathExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjcSelectorExprSyntax) -> ObjcSelectorExprSyntax {
+    syntax
+  }
+  public func _format(syntax: PostfixIfConfigExprSyntax) -> PostfixIfConfigExprSyntax {
+    syntax
+  }
+  public func _format(syntax: EditorPlaceholderExprSyntax) -> EditorPlaceholderExprSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjectLiteralExprSyntax) -> ObjectLiteralExprSyntax {
+    syntax
+  }
+  public func _format(syntax: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: TypealiasDeclSyntax) -> TypealiasDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: AssociatedtypeDeclSyntax) -> AssociatedtypeDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionParameterListSyntax) -> FunctionParameterListSyntax {
+    syntax
+  }
+  public func _format(syntax: ParameterClauseSyntax) -> ParameterClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: ReturnClauseSyntax) -> ReturnClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionSignatureSyntax) -> FunctionSignatureSyntax {
+    syntax
+  }
+  public func _format(syntax: IfConfigClauseSyntax) -> IfConfigClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: IfConfigClauseListSyntax) -> IfConfigClauseListSyntax {
+    syntax
+  }
+  public func _format(syntax: IfConfigDeclSyntax) -> IfConfigDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundErrorDeclSyntax) -> PoundErrorDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundWarningDeclSyntax) -> PoundWarningDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundSourceLocationSyntax) -> PoundSourceLocationSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundSourceLocationArgsSyntax) -> PoundSourceLocationArgsSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclModifierDetailSyntax) -> DeclModifierDetailSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclModifierSyntax) -> DeclModifierSyntax {
+    syntax
+  }
+  public func _format(syntax: InheritedTypeSyntax) -> InheritedTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: InheritedTypeListSyntax) -> InheritedTypeListSyntax {
+    syntax
+  }
+  public func _format(syntax: TypeInheritanceClauseSyntax) -> TypeInheritanceClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: ClassDeclSyntax) -> ClassDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: ActorDeclSyntax) -> ActorDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: StructDeclSyntax) -> StructDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: ProtocolDeclSyntax) -> ProtocolDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: ExtensionDeclSyntax) -> ExtensionDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+    syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+  }
+  public func _format(syntax: MemberDeclListSyntax) -> MemberDeclListSyntax {
+    MemberDeclListSyntax(syntax.map {
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+    })
+  }
+  public func _format(syntax: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
+    syntax
+  }
+  public func _format(syntax: SourceFileSyntax) -> SourceFileSyntax {
+    syntax
+  }
+  public func _format(syntax: InitializerClauseSyntax) -> InitializerClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionParameterSyntax) -> FunctionParameterSyntax {
+    syntax
+  }
+  public func _format(syntax: ModifierListSyntax) -> ModifierListSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionDeclSyntax) -> FunctionDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: InitializerDeclSyntax) -> InitializerDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: DeinitializerDeclSyntax) -> DeinitializerDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: SubscriptDeclSyntax) -> SubscriptDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessLevelModifierSyntax) -> AccessLevelModifierSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessPathComponentSyntax) -> AccessPathComponentSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessPathSyntax) -> AccessPathSyntax {
+    syntax
+  }
+  public func _format(syntax: ImportDeclSyntax) -> ImportDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessorParameterSyntax) -> AccessorParameterSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessorDeclSyntax) -> AccessorDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessorListSyntax) -> AccessorListSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessorBlockSyntax) -> AccessorBlockSyntax {
+    syntax
+  }
+  public func _format(syntax: PatternBindingSyntax) -> PatternBindingSyntax {
+    syntax
+  }
+  public func _format(syntax: PatternBindingListSyntax) -> PatternBindingListSyntax {
+    syntax
+  }
+  public func _format(syntax: VariableDeclSyntax) -> VariableDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
+    syntax
+  }
+  public func _format(syntax: EnumCaseElementListSyntax) -> EnumCaseElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: EnumCaseDeclSyntax) -> EnumCaseDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: EnumDeclSyntax) -> EnumDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: OperatorDeclSyntax) -> OperatorDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: IdentifierListSyntax) -> IdentifierListSyntax {
+    syntax
+  }
+  public func _format(syntax: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupDeclSyntax) -> PrecedenceGroupDeclSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupAttributeListSyntax) -> PrecedenceGroupAttributeListSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupRelationSyntax) -> PrecedenceGroupRelationSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupNameListSyntax) -> PrecedenceGroupNameListSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameElementSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupAssignmentSyntax) -> PrecedenceGroupAssignmentSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupAssociativitySyntax) -> PrecedenceGroupAssociativitySyntax {
+    syntax
+  }
+  public func _format(syntax: TokenListSyntax) -> TokenListSyntax {
+    syntax
+  }
+  public func _format(syntax: NonEmptyTokenListSyntax) -> NonEmptyTokenListSyntax {
+    syntax
+  }
+  public func _format(syntax: CustomAttributeSyntax) -> CustomAttributeSyntax {
+    syntax
+  }
+  public func _format(syntax: AttributeSyntax) -> AttributeSyntax {
+    syntax
+  }
+  public func _format(syntax: AttributeListSyntax) -> AttributeListSyntax {
+    syntax
+  }
+  public func _format(syntax: SpecializeAttributeSpecListSyntax) -> SpecializeAttributeSpecListSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilityEntrySyntax) -> AvailabilityEntrySyntax {
+    syntax
+  }
+  public func _format(syntax: LabeledSpecializeEntrySyntax) -> LabeledSpecializeEntrySyntax {
+    syntax
+  }
+  public func _format(syntax: TargetFunctionEntrySyntax) -> TargetFunctionEntrySyntax {
+    syntax
+  }
+  public func _format(syntax: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclNameSyntax) -> DeclNameSyntax {
+    syntax
+  }
+  public func _format(syntax: ImplementsAttributeArgumentsSyntax) -> ImplementsAttributeArgumentsSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjCSelectorPieceSyntax) -> ObjCSelectorPieceSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjCSelectorSyntax) -> ObjCSelectorSyntax {
+    syntax
+  }
+  public func _format(syntax: DifferentiableAttributeArgumentsSyntax) -> DifferentiableAttributeArgumentsSyntax {
+    syntax
+  }
+  public func _format(syntax: DifferentiabilityParamsClauseSyntax) -> DifferentiabilityParamsClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: DifferentiabilityParamsSyntax) -> DifferentiabilityParamsSyntax {
+    syntax
+  }
+  public func _format(syntax: DifferentiabilityParamListSyntax) -> DifferentiabilityParamListSyntax {
+    syntax
+  }
+  public func _format(syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamSyntax {
+    syntax
+  }
+  public func _format(syntax: DerivativeRegistrationAttributeArgumentsSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    syntax
+  }
+  public func _format(syntax: QualifiedDeclNameSyntax) -> QualifiedDeclNameSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionDeclNameSyntax) -> FunctionDeclNameSyntax {
+    syntax
+  }
+  public func _format(syntax: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
+    syntax
+  }
+  public func _format(syntax: BackDeployVersionListSyntax) -> BackDeployVersionListSyntax {
+    syntax
+  }
+  public func _format(syntax: BackDeployVersionArgumentSyntax) -> BackDeployVersionArgumentSyntax {
+    syntax
+  }
+  public func _format(syntax: LabeledStmtSyntax) -> LabeledStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: ContinueStmtSyntax) -> ContinueStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: WhileStmtSyntax) -> WhileStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: DeferStmtSyntax) -> DeferStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: ExpressionStmtSyntax) -> ExpressionStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
+    SwitchCaseListSyntax(syntax.map {
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+    })
+  }
+  public func _format(syntax: RepeatWhileStmtSyntax) -> RepeatWhileStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: GuardStmtSyntax) -> GuardStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: WhereClauseSyntax) -> WhereClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: ForInStmtSyntax) -> ForInStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: SwitchStmtSyntax) -> SwitchStmtSyntax {
+    syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+  }
+  public func _format(syntax: CatchClauseListSyntax) -> CatchClauseListSyntax {
+    syntax
+  }
+  public func _format(syntax: DoStmtSyntax) -> DoStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: ReturnStmtSyntax) -> ReturnStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: YieldStmtSyntax) -> YieldStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: YieldListSyntax) -> YieldListSyntax {
+    syntax
+  }
+  public func _format(syntax: FallthroughStmtSyntax) -> FallthroughStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: BreakStmtSyntax) -> BreakStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: CaseItemListSyntax) -> CaseItemListSyntax {
+    syntax
+  }
+  public func _format(syntax: CatchItemListSyntax) -> CatchItemListSyntax {
+    syntax
+  }
+  public func _format(syntax: ConditionElementSyntax) -> ConditionElementSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilityConditionSyntax) -> AvailabilityConditionSyntax {
+    syntax
+  }
+  public func _format(syntax: MatchingPatternConditionSyntax) -> MatchingPatternConditionSyntax {
+    syntax
+  }
+  public func _format(syntax: OptionalBindingConditionSyntax) -> OptionalBindingConditionSyntax {
+    syntax
+  }
+  public func _format(syntax: UnavailabilityConditionSyntax) -> UnavailabilityConditionSyntax {
+    syntax
+  }
+  public func _format(syntax: ConditionElementListSyntax) -> ConditionElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclarationStmtSyntax) -> DeclarationStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: ThrowStmtSyntax) -> ThrowStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: IfStmtSyntax) -> IfStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: ElseIfContinuationSyntax) -> ElseIfContinuationSyntax {
+    syntax
+  }
+  public func _format(syntax: ElseBlockSyntax) -> ElseBlockSyntax {
+    syntax
+  }
+  public func _format(syntax: SwitchCaseSyntax) -> SwitchCaseSyntax {
+    syntax
+  }
+  public func _format(syntax: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
+    syntax
+  }
+  public func _format(syntax: CaseItemSyntax) -> CaseItemSyntax {
+    syntax
+  }
+  public func _format(syntax: CatchItemSyntax) -> CatchItemSyntax {
+    syntax
+  }
+  public func _format(syntax: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
+    syntax
+  }
+  public func _format(syntax: CatchClauseSyntax) -> CatchClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundAssertStmtSyntax) -> PoundAssertStmtSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericWhereClauseSyntax) -> GenericWhereClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericRequirementListSyntax) -> GenericRequirementListSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericRequirementSyntax) -> GenericRequirementSyntax {
+    syntax
+  }
+  public func _format(syntax: SameTypeRequirementSyntax) -> SameTypeRequirementSyntax {
+    syntax
+  }
+  public func _format(syntax: LayoutRequirementSyntax) -> LayoutRequirementSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericParameterListSyntax) -> GenericParameterListSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericParameterSyntax) -> GenericParameterSyntax {
+    syntax
+  }
+  public func _format(syntax: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeListSyntax {
+    syntax
+  }
+  public func _format(syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericParameterClauseSyntax) -> GenericParameterClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: ConformanceRequirementSyntax) -> ConformanceRequirementSyntax {
+    syntax
+  }
+  public func _format(syntax: PrimaryAssociatedTypeClauseSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: SimpleTypeIdentifierSyntax) -> SimpleTypeIdentifierSyntax {
+    syntax
+  }
+  public func _format(syntax: MemberTypeIdentifierSyntax) -> MemberTypeIdentifierSyntax {
+    syntax
+  }
+  public func _format(syntax: ClassRestrictionTypeSyntax) -> ClassRestrictionTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: ArrayTypeSyntax) -> ArrayTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: DictionaryTypeSyntax) -> DictionaryTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: MetatypeTypeSyntax) -> MetatypeTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: OptionalTypeSyntax) -> OptionalTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: ConstrainedSugarTypeSyntax) -> ConstrainedSugarTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: ImplicitlyUnwrappedOptionalTypeSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: CompositionTypeElementSyntax) -> CompositionTypeElementSyntax {
+    syntax
+  }
+  public func _format(syntax: CompositionTypeElementListSyntax) -> CompositionTypeElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: CompositionTypeSyntax) -> CompositionTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
+    syntax
+  }
+  public func _format(syntax: TupleTypeElementListSyntax) -> TupleTypeElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: TupleTypeSyntax) -> TupleTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionTypeSyntax) -> FunctionTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: AttributedTypeSyntax) -> AttributedTypeSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericArgumentListSyntax) -> GenericArgumentListSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericArgumentSyntax) -> GenericArgumentSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericArgumentClauseSyntax) -> GenericArgumentClauseSyntax {
+    syntax
+  }
+  public func _format(syntax: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
+    syntax
+  }
+  public func _format(syntax: EnumCasePatternSyntax) -> EnumCasePatternSyntax {
+    syntax
+  }
+  public func _format(syntax: IsTypePatternSyntax) -> IsTypePatternSyntax {
+    syntax
+  }
+  public func _format(syntax: OptionalPatternSyntax) -> OptionalPatternSyntax {
+    syntax
+  }
+  public func _format(syntax: IdentifierPatternSyntax) -> IdentifierPatternSyntax {
+    syntax
+  }
+  public func _format(syntax: AsTypePatternSyntax) -> AsTypePatternSyntax {
+    syntax
+  }
+  public func _format(syntax: TuplePatternSyntax) -> TuplePatternSyntax {
+    syntax
+  }
+  public func _format(syntax: WildcardPatternSyntax) -> WildcardPatternSyntax {
+    syntax
+  }
+  public func _format(syntax: TuplePatternElementSyntax) -> TuplePatternElementSyntax {
+    syntax
+  }
+  public func _format(syntax: ExpressionPatternSyntax) -> ExpressionPatternSyntax {
+    syntax
+  }
+  public func _format(syntax: TuplePatternElementListSyntax) -> TuplePatternElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: ValueBindingPatternSyntax) -> ValueBindingPatternSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilitySpecListSyntax) -> AvailabilitySpecListSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilityArgumentSyntax) -> AvailabilityArgumentSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilityVersionRestrictionSyntax) -> AvailabilityVersionRestrictionSyntax {
+    syntax
+  }
+  public func _format(syntax: VersionTupleSyntax) -> VersionTupleSyntax {
+    syntax
+  }
+}

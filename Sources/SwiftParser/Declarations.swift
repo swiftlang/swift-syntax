@@ -1061,7 +1061,9 @@ extension Parser {
   public mutating func parseParameterClause(isClosure: Bool = false) -> RawParameterClauseSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawFunctionParameterSyntax]()
-    do {
+    // If we are missing the left parenthesis and the next token doesn't appear to be an argument label, don't parse any parameters.
+    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel || currentToken.isKeyword)
+    if !shouldSkipParameterParsing {
       var keepGoing = true
       while !self.at(.eof) && !self.at(.rightParen) && keepGoing {
         // Attributes.

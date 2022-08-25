@@ -158,5 +158,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     return .visitChildren
   }
+
+  override public func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.leftParen.presence == .missing && node.parameterList.isEmpty && node.rightParen.presence == .missing {
+      addDiagnostic(node, .missingFunctionParameterClause)
+      markNodesAsHandled(node.leftParen.id, node.parameterList.id, node.rightParen.id)
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if node.colonMark.presence == .missing {
+      addDiagnostic(node.colonMark, .missingColonInTernaryExprDiagnostic)
+      markNodesAsHandled(node.colonMark.id)
+    }
+    return .visitChildren
+  }
 }
 

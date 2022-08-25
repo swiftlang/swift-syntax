@@ -277,12 +277,18 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
         }
       }
     )
-    ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
-      TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
-        base: "combinedLeadingTrivia",
-        name: "addingSpacingAfterNewlinesIfNeeded"
-      )))
-    })
+    IfStmt(
+      conditions: ExprList([MemberAccessExpr(base: "combinedLeadingTrivia", name: "isEmpty")])
+    ) {
+      ReturnStmt(expression: "result")
+    } elseBody: {
+      ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
+        TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
+          base: "combinedLeadingTrivia",
+          name: "addingSpacingAfterNewlinesIfNeeded"
+        )))
+      })
+    }
   }
 }
 

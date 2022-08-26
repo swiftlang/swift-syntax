@@ -194,6 +194,24 @@ final class ExpressionTests: XCTestCase {
       return "Fixit: \(range.debugDescription) Text: \"\(text)\""
       """#
     }
+
+    try AssertParse({ $0.parseExpression() }) {
+      #"""
+      "text \(array.map({ "\($0)" }).joined(separator: ",")) text"
+      """#
+    }
+
+    try AssertParse({ $0.parseExpression() }) {
+      #"""
+      """
+      \(gen(xx) { (x) in
+          return """
+          case
+      """
+      })
+      """
+      """#
+    }
   }
 
   func testStringLiterals() throws {

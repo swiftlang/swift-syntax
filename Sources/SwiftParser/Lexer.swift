@@ -1029,7 +1029,7 @@ extension Lexer.Cursor {
       }
       if !self.isAtEndOfFile, self.peek() == UInt8(ascii: "\\") &&
            TmpPtr.delimiterMatches(customDelimiterLength) &&
-            TmpPtr.advance() == UInt8(ascii: "(") {
+            TmpPtr.peek() == UInt8(ascii: "(") {
         // Consume tokens until we hit the corresponding ')'.
         self = Self.skipToEndOfInterpolatedExpression(TmpPtr, IsMultilineString)
         if self.advance(if: { $0 == Unicode.Scalar(")") }) {

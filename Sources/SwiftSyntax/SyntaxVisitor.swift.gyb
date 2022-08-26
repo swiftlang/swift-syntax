@@ -145,47 +145,47 @@ open class SyntaxVisitor {
 public protocol SyntaxTransformVisitor {
   associatedtype ResultType = Void
   
-  func visit(_ token: TokenSyntax) -> ResultType?
-  func visit(_ node: UnknownSyntax) -> ResultType?
+  func visit(_ token: TokenSyntax) -> [ResultType]
+  func visit(_ node: UnknownSyntax) -> [ResultType]
   
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   /// Visiting `${node.name}` specifically.
   ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  func visit(_ node: ${node.name}) -> ResultType?
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ${node.name}) -> [ResultType]
 %   end
 % end
 }
 
 extension SyntaxTransformVisitor {
-  public func visit(_ token: TokenSyntax) -> ResultType? { nil }
-  public func visit(_ node: UnknownSyntax) -> ResultType? { nil }
+  public func visit(_ token: TokenSyntax) -> [ResultType] { [] }
+  public func visit(_ node: UnknownSyntax) -> [ResultType] { [] }
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   /// Visiting `${node.name}` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ${node.name}) -> ResultType? {
+  public func visit(_ node: ${node.name}) -> [ResultType] {
 %   if node.is_base():
       // Avoid calling into visitChildren if possible.
       if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node).first
+        return visitChildren(node)
       }
-      return nil
+      return []
 %   else:
       // Avoid calling into visitChildren if possible.
       if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node).first
+        return visitChildren(node)
       }
-      return nil
+      return []
 %   end
   }
 %   end
 % end
 
-  public func visit(_ data: SyntaxData) -> ResultType? {
+  public func visit(_ data: SyntaxData) -> [ResultType] {
     switch data.raw.kind {
     case .token:
       let node = TokenSyntax(data)
@@ -207,7 +207,7 @@ extension SyntaxTransformVisitor {
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)
-        return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).compactMap { childRaw in
+    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).flatMap { childRaw in
       let childData = SyntaxData(childRaw, parent: syntaxNode)
       return visit(childData)
     }

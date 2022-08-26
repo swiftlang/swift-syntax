@@ -278,6 +278,48 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
+  func testSingleQuoteStringLiteral() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse(
+      #"""
+      'red'
+      """#
+    )
+  }
+
+  func testStringBogusClosingDelimiters() {
+    AssertParse(
+      #"\\(#^DIAG^#"#,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ')' to end expression")
+      ]
+    )
+
+    AssertParse(
+      ##"""
+      #"\\("#
+      """##
+    )
+
+    AssertParse(
+      #"""
+      "#^DIAG^#
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Expected '"' in expression"#)
+      ]
+    )
+
+    AssertParse(
+      #"""
+      "'#^DIAG^#
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Expected '"' in expression"#)
+      ]
+    )
+  }
+
   func testRangeSubscript() {
     AssertParse(
       """
@@ -292,6 +334,48 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression")
       ]
+    )
+  }
+
+  func testBogusKeypathBaseRecovery() {
+    AssertParse(
+      #"""
+      func nestThoseIfs() {\n    if false != true {\n       print "\(i)\"\n#^DIAG^#
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Expected '"' in expression"#),
+        DiagnosticSpec(message: "Expected '}'"),
+        DiagnosticSpec(message: "Expected '}'"),
+      ]
+    )
+  }
+
+  func testMissingArrowInArrowExpr() {
+    AssertParse(
+      "[(Int) -> #^DIAG^#throws Int]()",
+      diagnostics: [
+        // FIXME: We should suggest to move 'throws' in front of '->'
+        DiagnosticSpec(message: "Unexpected text 'throws Int' found in expression")
+      ]
+    )
+
+    AssertParse(
+      "let _ = [Int throws #^DIAG^#Int]()",
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '->' in expression")
+      ]
+    )
+  }
+
+  func testBogusThrowingTernary() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse(
+      """
+      do {
+        true ? () : throw opaque_error()
+      } catch _ {
+      }
+      """
     )
   }
 }

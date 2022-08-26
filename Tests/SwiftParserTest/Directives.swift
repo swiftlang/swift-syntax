@@ -79,4 +79,22 @@ final class DirectiveTests: XCTestCase {
       ]
     )
   }
+
+  func testExtraSyntaxInDirective() {
+    // FIXME: This test case should produce a diagnostics
+    
+    AssertParse(
+      """
+      #if os(iOS)
+        func foo() {}
+      } // expected-error{{unexpected '}' in conditional compilation block}}
+      #else
+        func bar() {}
+        func baz() {}
+      } // expected-error{{unexpected '}' in conditional compilation block}}
+      #endif
+      """
+    )
+  }
+
 }

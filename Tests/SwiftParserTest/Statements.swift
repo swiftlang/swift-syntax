@@ -117,4 +117,79 @@ final class StatementTests: XCTestCase {
       ]
     )
   }
+
+  func testTopLevelCaseRecovery() {
+    // FIXME: These test cases should produce diagnostics
+    AssertParse(
+      "/*#-editable-code Swift Platground editable area*/default/*#-end-editable-code*/"
+    )
+
+    AssertParse("case:")
+
+    AssertParse(
+      #"""
+      case: { ("Hello World") }
+      """#
+    )
+  }
+
+  func testMissingIfClauseIntroducer() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse("if _ = 42 {}")
+  }
+
+  func testAttributesOnStatements() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse(
+      """
+      func test1() {
+        @s return
+      }
+      func test2() {
+        @unknown return
+      }
+      """
+    )
+  }
+
+  func testBogusSwitchStatement() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse(
+      """
+      switch x {
+        print()
+      #if true
+        print()
+      #endif
+        case .A, .B:
+          break
+      }
+      """
+    )
+
+    AssertParse(
+      """
+      switch x {
+      print()
+      #if ENABLE_C
+      case .NOT_EXIST:
+        break
+      case .C:
+        break
+      #endif
+      case .A, .B:
+        break
+      }
+      """
+    )
+  }
+
+  // FIXME: This test case should produce a diagnostic
+  func testBogusLineLabel() {
+    AssertParse(
+      """
+      LABEL:
+      """
+    )
+  }
 }

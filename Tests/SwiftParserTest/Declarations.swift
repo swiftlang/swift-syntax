@@ -417,6 +417,105 @@ final class DeclarationTests: XCTestCase {
       fixedSource: "() throws -> Int"
     )
   }
+
+  func testExtraneousRightBraceRecovery() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse("class ABC { let def = ghi(jkl: mno) } }")
+  }
+
+  func testMissingSubscriptReturnClause() {
+    AssertParse(
+      """
+      struct Foo {
+        subscript(x: String) #^DIAG^#{}
+      }
+      """,
+      diagnostics: [
+        // FIXME: This diagnostic should be more contextual
+        DiagnosticSpec(message: "Expected '->'")
+      ]
+    )
+  }
+
+  func testClassWithLeadingNumber() {
+    AssertParse(
+      """
+      class #^DIAG^#23class {
+        // expected-error@-1 {{class name can only start with a letter or underscore, not a number}}
+        // expected-error@-2 {{'c' is not a valid digit in integer literal}}
+        func 24method() {}
+        // expected-error@-1 {{function name can only start with a letter or underscore, not a number}}
+        // expected-error@-2 {{'m' is not a valid digit in integer literal}}
+      }
+      """,
+      // FIXME: These are simply bad diagnostics. We should be complaining that identifiers cannot start with digits.
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '' in declaration"),
+        DiagnosticSpec(message: "Expected '{'"),
+        DiagnosticSpec(message: "Expected '}'"),
+      ]
+    )
+  }
+
+  func testAccessors() {
+    AssertParse(
+      """
+      var bad1 : Int {
+        _read async { 0 }
+      }
+      """
+    )
+
+    AssertParse(
+      """
+      var bad2 : Int {
+        get reasync { 0 }
+      }
+      """
+    )
+  }
+
+  func testExpressionMember() {
+    AssertParse(
+      """
+      struct S {
+        #^DIAG^#/ ###line 25 "line-directive.swift"
+      }
+      """,
+      diagnostics: [
+        // FIXME: The diagnostic should not contain a newline.
+        DiagnosticSpec(
+          message: """
+            Unexpected text '
+              / ###line 25 "line-directive.swift"'
+            """
+        )
+      ]
+    )
+  }
+
+  func testBogusProtocolRequirements() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse(
+      """
+      protocol P {
+        var prop : Int { get bogus rethrows set }
+      }
+      """
+    )
+  }
+
+  func testTextRecovery() {
+    AssertParse(
+      """
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do #^DIAG_1^#eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.#^DIAG_2^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '{'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}'"),
+      ]
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

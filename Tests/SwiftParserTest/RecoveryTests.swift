@@ -4,72 +4,84 @@ import XCTest
 import _SwiftSyntaxTestSupport
 
 public class RecoveryTests: XCTestCase {
-  func testTopLevelCaseRecovery() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testTopLevelCaseRecovery() {
+    AssertParse(
       "/*#-editable-code Swift Platground editable area*/default/*#-end-editable-code*/"
-    }
+    )
 
-    try AssertParse({ $0.parseSourceFile() }) {
-      "case:"
-    }
+    AssertParse("case:")
 
-    try AssertParse({ $0.parseSourceFile() }) {
-      #"case: { ("Hello World") }"#
-    }
+    AssertParse(
+      #"""
+      case: { ("Hello World") }
+      """#
+    )
   }
 
-  func testBogusKeypathBaseRecovery() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
-      #"func nestThoseIfs() {\n    if false != true {\n       print "\(i)\"\n"#
-    }
+  func testBogusKeypathBaseRecovery() {
+    AssertParse(
+      #"""
+      func nestThoseIfs() {\n    if false != true {\n       print "\(i)\"\n#^DIAG^#
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Expected '"' in expression"#),
+        DiagnosticSpec(message: "Expected '}'"),
+        DiagnosticSpec(message: "Expected '}'"),
+      ]
+    )
   }
 
-  func testExtraneousRightBraceRecovery() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
-      "class ABC { let def = ghi(jkl: mno) } }"
-    }
+  func testExtraneousRightBraceRecovery() {
+    AssertParse("class ABC { let def = ghi(jkl: mno) } }")
   }
 
-  func testMissingIfClauseIntroducer() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
-      "if _ = 42 {}"
-    }
+  func testMissingIfClauseIntroducer() {
+    AssertParse("if _ = 42 {}")
   }
 
-  func testMissingSubscriptReturnClause() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
+  func testMissingSubscriptReturnClause() {
+    AssertParse(
       """
       struct Foo {
-        subscript(x: String) {}
+        subscript(x: String) #^DIAG^#{}
       }
-      """
-    }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '->'")
+      ]
+    )
   }
 
-  func testSingleQuoteStringLiteral() throws {
-    try AssertParse({ $0.parseExpression() }) {
+  func testSingleQuoteStringLiteral() {
+    AssertParse(
       #"""
       'red'
       """#
-    }
+    )
   }
 
-  func testClassWithLeadingNumber() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
+  func testClassWithLeadingNumber() {
+    AssertParse(
       """
-      class 23class {
+      class #^DIAG^#23class {
         // expected-error@-1 {{class name can only start with a letter or underscore, not a number}}
         // expected-error@-2 {{'c' is not a valid digit in integer literal}}
         func 24method() {}
         // expected-error@-1 {{function name can only start with a letter or underscore, not a number}}
         // expected-error@-2 {{'m' is not a valid digit in integer literal}}
       }
-      """
-    }
+      """,
+      // FIXME: These are simply bad diagnostics. We should be complaining that identifiers cannot start with digits.
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '' in declaration"),
+        DiagnosticSpec(message: "Expected '{'"),
+        DiagnosticSpec(message: "Expected '}'"),
+      ]
+    )
   }
 
-  func testAttributesOnStatements() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testAttributesOnStatements() {
+    AssertParse(
       """
       func test1() {
         @s return
@@ -78,20 +90,28 @@ public class RecoveryTests: XCTestCase {
         @unknown return
       }
       """
-    }
+    )
   }
 
-  func testMissingArrowInArrowExpr() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
-      """
-      [(Int) -> throws Int]()
-      let _ = [Int throws Int]()
-      """
-    }
+  func testMissingArrowInArrowExpr() {
+    AssertParse(
+      "[(Int) -> #^DIAG^#throws Int]()",
+      diagnostics: [
+        // FIXME: We should suggest to move 'throws' in front of '->'
+        DiagnosticSpec(message: "Unexpected text 'throws Int' found in expression")
+      ]
+    )
+
+    AssertParse(
+      "let _ = [Int throws #^DIAG^#Int]()",
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '->' in expression")
+      ]
+    )
   }
 
-  func testBogusSwitchStatement() throws {
-    try AssertParse({ $0.parseStatement() }) {
+  func testBogusSwitchStatement() {
+    AssertParse(
       """
       switch x {
         print()
@@ -102,9 +122,9 @@ public class RecoveryTests: XCTestCase {
           break
       }
       """
-    }
+    )
     
-    try AssertParse({ $0.parseStatement() }) {
+    AssertParse(
       """
       switch x {
       print()
@@ -118,102 +138,126 @@ public class RecoveryTests: XCTestCase {
         break
       }
       """
-    }
+    )
   }
 
-  func testBogusLineLabel() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testBogusLineLabel() {
+    AssertParse(
       """
       LABEL:
       """
-    }
+    )
   }
 
-  func testStringBogusClosingDelimiters() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
-      #"\\("#
-    }
+  func testStringBogusClosingDelimiters() {
+    AssertParse(
+      #"\\(#^DIAG^#"#,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ')' to end expression")
+      ]
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       ##"""
       #"\\("#
       """##
-    }
+    )
 
-    try AssertParse({ $0.parseStringLiteral() }, allowErrors: true) {
+    AssertParse(
       #"""
-      "
-      """#
-    }
+      "#^DIAG^#
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Expected '"' in expression"#)
+      ]
+    )
 
-    try AssertParse({ $0.parseStringLiteral() }, allowErrors: true) {
+    AssertParse(
       #"""
-      "'
-      """#
-    }
+      "'#^DIAG^#
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Expected '"' in expression"#)
+      ]
+    )
   }
 
-  func testMissingArgumentToAttribute() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
+  func testMissingArgumentToAttribute() {
+    AssertParse(
       """
-      @_dynamicReplacement(
-      func test_dynamic_replacement_for2() {
+      @_dynamicReplacement(#^DIAG_1^#
+      func #^DIAG_2^#test_dynamic_replacement_for2() {
       }
-      """
-    }
+      """,
+      diagnostics: [
+        // FIXME: We should be complaining about the missing ')' for the attribute
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected 'for'"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')'"),
+      ]
+    )
   }
 
-  func testBogusThrowingTernary() throws {
-    try AssertParse({ $0.parseStatement() }) {
+  func testBogusThrowingTernary() {
+    AssertParse(
       """
       do {
         true ? () : throw opaque_error()
       } catch _ {
       }
       """
-    }
+    )
   }
 
-  func testAccessors() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
+  func testAccessors() {
+    AssertParse(
       """
       var bad1 : Int {
         _read async { 0 }
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseDeclaration() }) {
+    AssertParse(
       """
       var bad2 : Int {
         get reasync { 0 }
       }
       """
-    }
+    )
   }
 
-  func testExpressionMember() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
+  func testExpressionMember() {
+    AssertParse(
       """
       struct S {
-        / ###line 25 "line-directive.swift"
+        #^DIAG^#/ ###line 25 "line-directive.swift"
       }
-      """
-    }
+      """,
+      diagnostics: [
+        // FIXME: The diagnostic should not contain a newline.
+        DiagnosticSpec(
+          message: """
+            Unexpected text '
+              / ###line 25 "line-directive.swift"'
+            """
+        )
+      ]
+    )
   }
 
-  func testBogusProtocolRequirements() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
+  func testBogusProtocolRequirements() {
+    AssertParse(
       """
       protocol P {
         var prop : Int { get bogus rethrows set }
       }
       """
-    }
+    )
   }
 
-  func testExtraSyntaxInDirective() throws {
-    try AssertParse({ $0.parseDeclaration() }, allowErrors: true) {
+  func testExtraSyntaxInDirective() {
+    AssertParse(
       """
       #if os(iOS)
         func foo() {}
@@ -224,7 +268,7 @@ public class RecoveryTests: XCTestCase {
       } // expected-error{{unexpected '}' in conditional compilation block}}
       #endif
       """
-    }
+    )
   }
 
   func testRecoverOneExtraLabel() throws {
@@ -263,7 +307,7 @@ public class RecoveryTests: XCTestCase {
     )
   }
 
-  func testDontRecoverFromDeclKeyword() throws {
+  func testDontRecoverFromDeclKeyword() {
     var source = """
     (first second third struct: Int)
     """
@@ -330,7 +374,7 @@ public class RecoveryTests: XCTestCase {
     }
   }
 
-  func testDontRecoverIfNewlineIsBeforeColon() throws {
+  func testDontRecoverIfNewlineIsBeforeColon() {
     var source = """
     (first second third
     : Int)
@@ -344,12 +388,16 @@ public class RecoveryTests: XCTestCase {
     XCTAssertEqual(currentToken.tokenKind, .colon)
   }
 
-  func testTextRecovery() throws {
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
+  func testTextRecovery() {
+    AssertParse(
       """
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      """
-    }
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do #^DIAG_1^#eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.#^DIAG_2^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '{'"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}'"),
+      ]
+    )
   }
 
   public func testNoParamsForFunction() throws {

@@ -3,53 +3,51 @@
 import XCTest
 
 final class StatementTests: XCTestCase {
-  func testIf() throws {
-    try AssertParse({ $0.parseIfStatement() }) {
-      """
-      if let x { }
-      """
-    }
+  func testIf() {
+    AssertParse("if let x { }")
 
-    try AssertParse({ $0.parseIfStatement() }, allowErrors: true) {
+    AssertParse(
       """
-      if case* ! = x {
+      if case#^DIAG^#* ! = x {
         bar()
       }
-      """
-    }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '='"),
+        DiagnosticSpec(message: "Unexpected text '* ! = x '"),
+      ]
+    )
   }
 
-  func testNestedIfs() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
-      let nest = 22
-      var example = "func nestThoseIfs() {\n"
-      for index in (0...nest) {
-          let indent = String(repeating: "    ", count: index + 1)
-          example += indent + "if false != true {\n"
-          example += indent + "   print \"\\(i)\"\n"
-      }
-
-      for index in (0...nest).reversed() {
-          let indent = String(repeating: "    ", count: index + 1)
-          example += indent + "}\n"
-      }
-      example += "}"
-      return example
+  func testNestedIfs() {
+    let nest = 22
+    var source = "func nestThoseIfs() {\n"
+    for index in (0...nest) {
+        let indent = String(repeating: "    ", count: index + 1)
+        source += indent + "if false != true {\n"
+        source += indent + "   print \"\\(i)\"\n"
     }
+
+    for index in (0...nest).reversed() {
+        let indent = String(repeating: "    ", count: index + 1)
+        source += indent + "}\n"
+    }
+    source += "}"
+    AssertParse(source)
   }
 
-  func testDo() throws {
-    try AssertParse({ $0.parseDoStatement() }) {
+  func testDo() {
+    AssertParse(
        """
        do {
 
        }
        """
-    }
+    )
   }
 
-  func testDoCatch() throws {
-    try AssertParse({ $0.parseDoStatement() }) {
+  func testDoCatch() {
+    AssertParse(
        """
        do {
 
@@ -57,45 +55,41 @@ final class StatementTests: XCTestCase {
 
        }
        """
-    }
+    )
   }
 
-  func testReturn() throws {
-    try AssertParse({ $0.parseReturnStatement() }) {
-      "return"
-    }
+  func testReturn() {
+    AssertParse("return")
 
-    try AssertParse({ $0.parseReturnStatement() }) {
+    AssertParse(
        #"""
        return "assert(\(assertChoices.joined(separator: " || ")))"
        """#
-    }
+    )
 
-    try AssertParse({ $0.parseReturnStatement() }) {
-      "return true ? nil : nil"
-    }
+    AssertParse("return true ? nil : nil")
   }
 
-  func testSwitch() throws {
-    try AssertParse({ $0.parseStatement() }) {
+  func testSwitch() {
+    AssertParse(
       """
       switch x {
       case .A, .B:
         break
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseStatement() }) {
+    AssertParse(
       """
       switch 0 {
       @$dollar case _:
         break
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseStatement() }) {
+    AssertParse(
       """
       switch x {
       case .A:
@@ -109,6 +103,6 @@ final class StatementTests: XCTestCase {
       #endif
       }
       """
-    }
+    )
   }
 }

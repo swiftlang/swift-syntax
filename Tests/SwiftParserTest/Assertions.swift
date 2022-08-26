@@ -1,6 +1,8 @@
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
 @_spi(Testing) @_spi(RawSyntax)  import SwiftParser
+import SwiftDiagnostics
+import _SwiftSyntaxTestSupport
 
 // MARK: Lexing Assertions
 
@@ -49,33 +51,147 @@ func AssertEqualTokens(_ actual: [Lexer.Lexeme], _ expected: [Lexer.Lexeme], fil
 
 // MARK: Parsing Assertions
 
+/// An abstract data structure to describe how a diagnostic produced by the parser should look like.
+struct DiagnosticSpec {
+  /// The name of a maker (of the form `#^DIAG^#`) in the source code that marks the location where the diagnostis should be produced.
+  let locationMarker: String
+  /// If not `nil`, assert that the diagnostic has the given ID.
+  let id: MessageID?
+  /// If not `nil`, assert that the diagnostic has the given message.
+  let message: String?
+  /// If not `nil`, assert that the highlighted range has this content.
+  let highlight: String?
+  /// If not `nil`, assert that the diagnostic contains fix-its with these messages.
+  /// Use the `fixedSource` parameter on `AssertParse` to check that applying the Fix-It yields the expected result.
+  let fixIts: [String]?
+
+  init(locationMarker: String = "DIAG", id: MessageID? = nil, message: String?, highlight: String? = nil, fixIts: [String]? = nil) {
+    self.locationMarker = locationMarker
+    self.id = id
+    self.message = message
+    self.highlight = highlight
+    self.fixIts = fixIts
+  }
+}
+
+class FixItApplier: SyntaxRewriter {
+  var changes: [FixIt.Change]
+
+  init(diagnostics: [Diagnostic]) {
+    self.changes = diagnostics.flatMap({ $0.fixIts }).flatMap({ $0.changes })
+  }
+
+  public override func visitAny(_ node: Syntax) -> Syntax? {
+    for change in changes {
+      switch change {
+      case .replace(oldNode: let oldNode, newNode: let newNode) where oldNode.id == node.id:
+        return newNode
+      default:
+        break
+      }
+    }
+    return nil
+  }
+
+  /// Applies all Fix-Its in `diagnostics` to `tree` and returns the fixed syntax tree.
+  public static func applyFixes<T: SyntaxProtocol>(in diagnostics: [Diagnostic], to tree: T) -> Syntax {
+    let applier = FixItApplier(diagnostics: diagnostics)
+    return applier.visit(Syntax(tree))
+  }
+}
+
+/// Assert that the diagnostic `diag` produced in `tree` matches `spec`,
+/// using `markerLocations` to translate markers to actual source locations.
+func AssertDiagnostic<T: SyntaxProtocol>(
+  _ diag: Diagnostic,
+  in tree: T,
+  markerLocations: [String: Int],
+  expected spec: DiagnosticSpec,
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  if let markerLoc = markerLocations[spec.locationMarker] {
+    let locationConverter = SourceLocationConverter(file: "/test.swift", source: tree.description)
+    let actualLocation = diag.location(converter: locationConverter)
+    let expectedLocation = locationConverter.location(for: AbsolutePosition(utf8Offset: markerLoc))
+    if let actualLine = actualLocation.line,
+       let actualColumn = actualLocation.column,
+       let expectedLine = expectedLocation.line,
+       let expectedColumn = expectedLocation.column {
+      XCTAssertEqual(
+        actualLine, expectedLine,
+        "Expected diagnostic on line \(expectedLine) but got \(actualLine)",
+        file: file, line: line
+      )
+      XCTAssertEqual(
+        actualColumn, expectedColumn,
+        "Expected diagnostic on column \(expectedColumn) but got \(actualColumn)",
+        file: file, line: line
+      )
+    } else {
+      XCTFail("Failed to resolve diagnostic location to line/column", file: file, line: line)
+    }
+  } else {
+    XCTFail("Did not find marker #^\(spec.locationMarker)^# in the source code", file: file, line: line)
+  }
+  if let id = spec.id {
+    XCTAssertEqual(diag.diagnosticID, id, file: file, line: line)
+  }
+  if let message = spec.message {
+    XCTAssertEqual(diag.message, message, file: file, line: line)
+  }
+  if let highlight = spec.highlight {
+    AssertStringsEqualWithDiff(diag.highlights.map(\.description).joined(), highlight, file: file, line: line)
+  }
+  if let fixIts = spec.fixIts {
+    XCTAssertEqual(
+      fixIts, diag.fixIts.map(\.message.message),
+      "Fix-Its for diagnostic did not match expected Fix-Its",
+      file: file, line: line
+    )
+  }
+}
+
+/// Parse `markedSource` and perform the following assertions:
+///  - The parsed syntax tree should be printable back to the original source code (round-tripping)
+///  - Parsing produced the given `diagnostics` (`diagnostics = []` asserts that the parse was successful)
+///  - If `fixedSource` is not `nil`, assert that applying all fixes from the diagnostics produces `fixedSource`
+/// The source file can be marked with markers of the form `#^DIAG^#` to mark source locations that can be referred to by `diagnostics`.
+/// These markers are removed before parsing the source file.
+/// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `#^DIAG^#`.
+/// `parseSyntax` can be used to adjust the production that should be used as the entry point to parse the source code.
 func AssertParse<Node: RawSyntaxNodeProtocol>(
-  _ parseSyntax: (inout Parser) -> Node,
-  allowErrors: Bool = false,
+  _ markedSource: String,
+  _ parseSyntax: (inout Parser) -> Node = { $0.parseSourceFile() },
+  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+  fixedSource expectedFixedSource: String? = nil,
   file: StaticString = #file,
-  line: UInt = #line,
-  _ source: () -> String
-) throws {
+  line: UInt = #line
+) {
   // Verify the parser can round-trip the source
-  let src = source()
-  var source = src
-  source.withUTF8 { buf in
+  let (markerLocations, source) = extractMarkers(markedSource)
+  var src = source
+  src.withUTF8 { buf in
     var parser = Parser(buf)
     withExtendedLifetime(parser) {
-      let parse = Syntax(raw: parseSyntax(&parser).raw)
-      AssertStringsEqualWithDiff("\(parse)", src, additionalInfo: """
+      let tree = Syntax(raw: parseSyntax(&parser).raw)
+      AssertStringsEqualWithDiff("\(tree)", source, additionalInfo: """
+      Source failed to round-trip.
+
       Actual syntax tree:
-      \(parse.recursiveDescription)
+      \(tree.recursiveDescription)
       """, file: file, line: line)
-      if !allowErrors {
-        let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: Syntax(raw: parse.raw))
-        XCTAssertEqual(
-          diagnostics.count, 0,
-          """
-          Received the following diagnostics while parsing the source code:
-          \(diagnostics)
-          """,
-          file: file, line: line)
+      let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
+      XCTAssertEqual(diags.count, expectedDiagnostics.count, """
+      Expected \(expectedDiagnostics.count) diagnostics but received \(diags.count):
+      \(diags.map(\.debugDescription).joined(separator: "\n"))
+      """, file: file, line: line)
+      for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
+        AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: file, line: line)
+      }
+      if let expectedFixedSource = expectedFixedSource {
+        let fixedSource = FixItApplier.applyFixes(in: diags, to: tree).description
+        AssertStringsEqualWithDiff(fixedSource, expectedFixedSource, file: file, line: line)
       }
     }
   }

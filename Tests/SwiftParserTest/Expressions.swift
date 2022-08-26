@@ -3,49 +3,37 @@
 import XCTest
 
 final class ExpressionTests: XCTestCase {
-  func testTernary() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
-      "let a ="
-    }
+  func testTernary() {
+    AssertParse("let a =")
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
-       """
-       a ? b : c ? d : e
-       """
-    }
-    try AssertParse({ $0.parseExpression() }) {
-       """
-       a ? b :
-       """
-    }
+    AssertParse("a ? b : c ? d : e")
+    AssertParse("a ? b :")
   }
 
-  func testSequence() throws {
-    try AssertParse({ $0.parseExpression() }, allowErrors: false) {
-       """
-       A as? B + C -> D is E as! F ? G = 42 : H
-       """
-    }
+  func testSequence() {
+    AssertParse(
+       "A as? B + C -> D is E as! F ? G = 42 : H"
+    )
   }
 
-  func testClosureLiterals() throws {
-    try AssertParse({ $0.parseClosureExpression() }) {
+  func testClosureLiterals() {
+    AssertParse(
       #"""
       { @MainActor (a: Int) async -> Int in print("hi") }
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseClosureExpression() }) {
+    AssertParse(
       """
       { [weak self, weak weakB = b] foo in
         return 0
       }
       """
-    }
+    )
   }
 
-  func testTrailingClosures() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testTrailingClosures() {
+    AssertParse(
       """
       var button =  View.Button[5, 4, 3
       ] {
@@ -53,61 +41,49 @@ final class ExpressionTests: XCTestCase {
         Text("ABC")
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
-      """
-      compactMap { (parserDiag) in }
-      """
-    }
+    AssertParse("compactMap { (parserDiag) in }")
   }
 
-  func testSequenceExpressions() throws {
-    try AssertParse({ $0.parseSequenceExpressionElement(.basic) }) {
-     """
-     await a()
-     """
-    }
+  func testSequenceExpressions() {
+    AssertParse("await a()")
   }
 
-  func testNestedTypeSpecialization() throws {
-    try AssertParse({ $0.parseExpression() }) {
-      """
-      Swift.Array<Array<Foo>>()
-      """
-    }
+  func testNestedTypeSpecialization() {
+    AssertParse("Swift.Array<Array<Foo>>()")
   }
 
-  func testObjectLiterals() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testObjectLiterals() {
+    AssertParse(
       """
       #colorLiteral()
       #colorLiteral(red: 1.0)
       #colorLiteral(red: 1.0, green: 1.0)
       #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
       """
-    }
+    )
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
       """
       #imageLiteral()
       #imageLiteral(resourceName: "foo.png")
       #imageLiteral(resourceName: "foo/bar/baz/qux.png")
       #imageLiteral(resourceName: "foo/bar/baz/quux.png")
       """
-    }
+    )
   }
 
-  func testKeypathExpression() throws {
-    try AssertParse({ $0.parseExpression() }) {
+  func testKeypathExpression() {
+    AssertParse(
       #"""
       children.filter(\.type.defaultInitialization.isEmpty)
       """#
-    }
+    )
   }
 
-  func testBasicLiterals() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testBasicLiterals() {
+    AssertParse(
       """
       #file
       (#line)
@@ -120,88 +96,72 @@ final class ExpressionTests: XCTestCase {
       __FUNCTION__
       __DSO_HANDLE__
       """
-    }
+    )
   }
 
-  func testRegexLiteral() throws {
-    try AssertParse({ $0.parseExpression() }) {
-       #"""
-       /(?<identifier>[[:alpha:]]\w*) = (?<hex>[0-9A-F]+)/
-       """#
-    }
+  func testRegexLiteral() {
+    AssertParse(
+      #"""
+      /(?<identifier>[[:alpha:]]\w*) = (?<hex>[0-9A-F]+)/
+      """#
+    )
   }
 
-  func testInitializerExpression() throws {
-    try AssertParse({ $0.parseExpression() }) {
-      """
-      Lexer.Cursor(input: input, previous: 0)
-      """
-    }
+  func testInitializerExpression() {
+    AssertParse("Lexer.Cursor(input: input, previous: 0)")
   }
 
-  func testCollectionLiterals() throws {
-    try AssertParse({ $0.parseExpression() }) {
-      "[Dictionary<String, Int>: Int]()"
-    }
+  func testCollectionLiterals() {
+    AssertParse("[Dictionary<String, Int>: Int]()")
+    AssertParse("[(Int, Double) -> Bool]()")
+    AssertParse("[(Int, Double) -> Bool]()")
+    AssertParse("_ = [@convention(block) ()  -> Int]().count")
+    AssertParse("A<@convention(c) () -> Int32>.c()")
+    AssertParse("A<(@autoclosure @escaping () -> Int, Int) -> Void>.c()")
+    AssertParse("_ = [String: (@escaping (A<B>) -> Int) -> Void]().keys")
 
-    try AssertParse({ $0.parseExpression() }) {
-      "[(Int, Double) -> Bool]()"
-    }
-
-    try AssertParse({ $0.parseExpression() }) {
-      "[(Int, Double) throws -> Bool]()"
-    }
-
-    try AssertParse({ $0.parseExpression() }) {
-      "_ = [@convention(block) ()  -> Int]().count"
-    }
-
-    try AssertParse({ $0.parseExpression() }) {
-      "A<@convention(c) () -> Int32>.c()"
-    }
-
-    try AssertParse({ $0.parseExpression() }) {
-      "A<(@autoclosure @escaping () -> Int, Int) -> Void>.c()"
-    }
-
-    try AssertParse({ $0.parseExpression() }) {
-      "_ = [String: (@escaping (A<B>) -> Int) -> Void]().keys"
-    }
-
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       """
       [
         condition ? firstOption : secondOption,
         bar(),
       ]
       """
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
-      "[,"
-    }
+    AssertParse(
+      "[,#^DIAG^#",
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ']' to end expression")
+      ]
+    )
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
+    AssertParse(
       """
-      ([1:)
-      """
-    }
+      ([1:#^DIAG^#)
+      """,
+      diagnostics: [
+        // FIXME: Why is this diagnostic produced?
+        DiagnosticSpec(message: "Expected ':'"),
+        DiagnosticSpec(message: "Expected ']' to end expression"),
+      ]
+    )
   }
 
-  func testInterpolatedStringLiterals() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testInterpolatedStringLiterals() {
+    AssertParse(
       #"""
       return "Fixit: \(range.debugDescription) Text: \"\(text)\""
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       #"""
       "text \(array.map({ "\($0)" }).joined(separator: ",")) text"
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       #"""
       """
       \(gen(xx) { (x) in
@@ -211,28 +171,33 @@ final class ExpressionTests: XCTestCase {
       })
       """
       """#
-    }
+    )
   }
 
-  func testStringLiterals() throws {
-    try AssertParse({ $0.parseExpression() }) {
+  func testStringLiterals() {
+    AssertParse(
       #"""
       ""
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       #"""
       """
       """
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
-      #"" >> \( abc } ) << ""#
-    }
+    AssertParse(
+      #"""
+      " >> \( abc #^DIAG^#} ) << "
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text '} '")
+      ]
+    )
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
       ##"""
 
 
@@ -242,21 +207,27 @@ final class ExpressionTests: XCTestCase {
 
 
       """##
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }, allowErrors: true) {
-      #""\","#
-    }
+    AssertParse(
+      #"""
+      "\",#^DIAG^#
+      """#,
+      diagnostics: [
+        // FIXME: Should be Expected '"' in string literal
+        DiagnosticSpec(message: #"Expected '"' in expression"#)
+      ]
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       #"""
       "(?i)\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)" +
       "(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*" +
       "\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))"
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       #"""
       """
           Custom(custom: \(interval),\
@@ -265,53 +236,53 @@ final class ExpressionTests: XCTestCase {
           Plain: \(units))"
       """
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       #"""
       "Founded: \(Date.appleFounding, format: 📆)"
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseExpression()}) {
+    AssertParse(
         """
 
         ""
         """
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       ##"""
       #"""#
       """##
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       ##"""
       #"""""#
       """##
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       ##"""
       #"""
       multiline raw
       """#
       """##
-    }
+    )
 
-    try AssertParse({ $0.parseExpression() }) {
+    AssertParse(
       #"""
       "\(x)"
       """#
-    }
+    )
   }
 
-  func testRangeSubscript() throws {
-    try AssertParse({ $0.parseExpression() }) {
+  func testRangeSubscript() {
+    AssertParse(
       """
       text[...]
       """
-    }
+    )
   }
 }

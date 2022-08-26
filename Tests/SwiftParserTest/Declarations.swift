@@ -3,71 +3,41 @@
 import XCTest
 
 final class DeclarationTests: XCTestCase {
-  func testImports() throws {
-    try AssertParse({ $0.parseImportDeclaration(.empty) }) {
-      "import Foundation"
-    }
+  func testImports() {
+    AssertParse("import Foundation")
 
-    try AssertParse({ $0.parseDeclaration() }) {
-      "@_spi(Private) import SwiftUI"
-    }
+    AssertParse("@_spi(Private) import SwiftUI")
 
-    try AssertParse({ $0.parseDeclaration() }) {
-      "@_exported import class Foundation.Thread"
-    }
+    AssertParse("@_exported import class Foundation.Thread")
 
-    try AssertParse({ $0.parseDeclaration() }) {
-      """
-      @_private(sourceFile: "YetAnotherFile.swift") import Foundation
-      """
-    }
+    AssertParse(#"@_private(sourceFile: "YetAnotherFile.swift") import Foundation"#)
   }
-  func testStructParsing() throws {
-    try AssertParse({ $0.parseStructDeclaration(.empty) }) {
-      """
-      struct Foo {
-      }
-      """
-    }
+  func testStructParsing() {
+    AssertParse("struct Foo {}")
   }
 
-  func testFuncParsing() throws {
-    try AssertParse({ $0.parseFuncDeclaration(.empty) }) {
-      """
-      func foo() {
-      }
-      """
-    }
+  func testFuncParsing() {
+    AssertParse("func foo() {}")
 
-    try AssertParse({ $0.parseFuncDeclaration(.empty) }) {
-      """
-      func foo() -> Slice<MinimalMutableCollection<T>> {
-      }
-      """
-    }
+    AssertParse("func foo() -> Slice<MinimalMutableCollection<T>> {}")
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
       """
       func onEscapingAutoclosure(_ fn: @Sendable @autoclosure @escaping () -> Int) { }
       func onEscapingAutoclosure2(_ fn: @escaping @autoclosure @Sendable () -> Int) { }
-      func bar(_ : String) async throws -> [[String]: Array<String>] {}
+      func bar(_ : String) async -> [[String]: Array<String>] {}
       func tupleMembersFunc() -> (Type.Inner, Type2.Inner2) {}
       func myFun<S: T & U>(var1: S) {
         // do stuff
       }
       """
-    }
+    )
   }
 
-  func testClassParsing() throws {
-    try AssertParse({ $0.parseClassDeclaration(.empty) }) {
-      """
-      class Foo {
-      }
-      """
-    }
+  func testClassParsing() {
+    AssertParse("class Foo {}")
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
        """
        @dynamicMemberLookup @available(swift 4.0)
        public class MyClass {
@@ -75,25 +45,21 @@ final class DeclarationTests: XCTestCase {
          let B: Double
        }
        """
-    }
+    )
 
-    try AssertParse({ $0.parseGenericParameters() }) {
-      "<@NSApplicationMain T: AnyObject>"
-    }
+    AssertParse(
+      "<@NSApplicationMain T: AnyObject>",
+      { $0.parseGenericParameters() }
+    )
   }
 
-  func testActorParsing() throws {
-    try AssertParse({ $0.parseActorDeclaration(.empty) }) {
-      """
-      actor Foo {
-      }
-      """
-    }
+  func testActorParsing() {
+    AssertParse("actor Foo {}")
 
-    try AssertParse({ $0.parseActorDeclaration(.empty) }) {
+    AssertParse(
       """
       actor Foo {
-        nonisolated init?() throws {
+        nonisolated init?() {
           for (x, y, z) in self.triples {
             assert(isSafe)
           }
@@ -103,24 +69,15 @@ final class DeclarationTests: XCTestCase {
         }
       }
       """
-    }
+    )
   }
 
-  func testProtocolParsing() throws {
-    try AssertParse({ $0.parseProtocolDeclaration(.empty) }) {
-      """
-      protocol Foo {
-      }
-      """
-    }
+  func testProtocolParsing() {
+    AssertParse("protocol Foo {}")
 
-    try AssertParse({ $0.parseProtocolDeclaration(.empty) }) {
-      """
-      protocol P { init() }
-      """
-    }
+    AssertParse("protocol P { init() }")
 
-    try AssertParse({ $0.parseProtocolDeclaration(.empty) }) {
+    AssertParse(
       """
       protocol P {
         associatedtype Foo: Bar where X.Y == Z.W.W.Self
@@ -129,40 +86,37 @@ final class DeclarationTests: XCTestCase {
         subscript<R>(index: Int) -> R
       }
       """
-    }
+    )
   }
 
-  func testVariableDeclarations() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
-      """
-      private unowned(unsafe) var foo: Int
-      """
-    }
+  func testVariableDeclarations() {
+    AssertParse("private unowned(unsafe) var foo: Int")
 
-    try AssertParse({ $0.parseSourceFile() }, allowErrors: true) {
-      "_ = foo/* */?.description"
-    }
-    
-    try AssertParse({ $0.parseLetOrVarDeclaration(.empty) }) {
-      "var a = Array<Int>?(from: decoder)"
-    }
-    
-    try AssertParse({ $0.parseSourceFile() }) {
-      "@Wrapper var café = 42"
-    }
+    AssertParse("_ = foo?.description")
 
-    try AssertParse({ $0.parseLetOrVarDeclaration(.empty) }) {
+    AssertParse(
+      "_ = foo/* */?.description#^DIAG^#",
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression")
+      ]
+    )
+    
+    AssertParse("var a = Array<Int>?(from: decoder)")
+    
+    AssertParse("@Wrapper var café = 42")
+
+    AssertParse(
       """
       var x: T {
-        get async throws {
+        get async {
           foo()
           bar()
         }
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseLetOrVarDeclaration(.empty) }) {
+    AssertParse(
       """
       var foo: Int {
         _read {
@@ -174,40 +128,28 @@ final class DeclarationTests: XCTestCase {
         }
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
       """
       async let a = fetch("1.jpg")
       async let b: Image = fetch("2.jpg")
       async let secondPhotoToFetch = fetch("3.jpg")
       async let theVeryLastPhotoWeWant = fetch("4.jpg")
       """
-    }
+    )
   }
 
-  func testTypealias() throws {
-    try AssertParse({ $0.parseTypealiasDeclaration(.empty) }) {
-      """
-      typealias Foo = Int
-      """
-    }
+  func testTypealias() {
+    AssertParse("typealias Foo = Int")
 
-    try AssertParse({ $0.parseTypealiasDeclaration(.empty) }) {
-      """
-      typealias MyAlias = (_ a: Int, _ b: Double, _ c: Bool, _ d: String) -> Bool
-      """
-    }
+    AssertParse("typealias MyAlias = (_ a: Int, _ b: Double, _ c: Bool, _ d: String) -> Bool")
 
-    try AssertParse({ $0.parseSourceFile() }) {
-      """
-      typealias A = @attr1 @attr2(hello) (Int) -> Void
-      """
-    }
+    AssertParse("typealias A = @attr1 @attr2(hello) (Int) -> Void")
   }
 
-  func testPrecedenceGroup() throws {
-    try AssertParse({ $0.parsePrecedenceGroupDeclaration(.empty) }) {
+  func testPrecedenceGroup() {
+    AssertParse(
       """
       precedencegroup FooGroup {
         higherThan: Group1, Group2
@@ -216,28 +158,24 @@ final class DeclarationTests: XCTestCase {
         assignment: false
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parsePrecedenceGroupDeclaration(.empty) }) {
+    AssertParse(
       """
       precedencegroup FunnyPrecedence {
        associativity: left
        higherThan: MultiplicationPrecedence
       }
       """
-    }
+    )
   }
 
-  func testOperators() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
-      """
-      infix operator *-* : FunnyPrecedence
-      """
-    }
+  func testOperators() {
+    AssertParse("infix operator *-* : FunnyPrecedence")
   }
 
-  func testObjCAttribute() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testObjCAttribute() {
+    AssertParse(
       """
       @objc(
         thisMethodHasAVeryLongName:
@@ -246,11 +184,11 @@ final class DeclarationTests: XCTestCase {
       )
       func f() {}
       """
-    }
+    )
   }
 
-  func testDifferentiableAttribute() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testDifferentiableAttribute() {
+    AssertParse(
       """
       @differentiable(wrt: x where T: D)
       func foo<T>(_ x: T) -> T {}
@@ -264,23 +202,19 @@ final class DeclarationTests: XCTestCase {
       @differentiable(wrt: (x, y))
       func foo<T>(_ x: T) -> T {}
       """
-    }
+    )
   }
 
-  func testParsePoundError() throws {
-    try AssertParse({ $0.parsePoundDiagnosticDeclaration() }) {
-      #"#error("Unsupported platform")"#
-    }
+  func testParsePoundError() {
+    AssertParse(#"#error("Unsupported platform")"#)
   }
 
-  func testParsePoundWarning() throws {
-    try AssertParse({ $0.parsePoundDiagnosticDeclaration() }) {
-      #"#warning("Unsupported platform")"#
-    }
+  func testParsePoundWarning() {
+    AssertParse(#"#warning("Unsupported platform")"#)
   }
 
-  func testParseSpecializeAttribute() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testParseSpecializeAttribute() {
+    AssertParse(
       #"""
       @_specialize(where T == Int, U == Float)
       mutating func exchangeSecond<U>(_ u: U, _ t: T) -> (U, T) {
@@ -337,9 +271,9 @@ final class DeclarationTests: XCTestCase {
         __consuming func __specialize__copyContents(initializing: Swift.UnsafeMutableBufferPointer<Element>)  -> (Iterator, Int) { Builtin.unreachable() }
       }
       """#
-    }
+    )
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
       """
       @_specialize(where T: _Trivial(32), T: _Trivial(64), T: _Trivial, T: _RefCountedObject)
       @_specialize(where T: _Trivial, T: _Trivial(64))
@@ -350,20 +284,20 @@ final class DeclarationTests: XCTestCase {
         return 55555
       }
       """
-    }
+    )
   }
 
-  func testParseDynamicReplacement() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
+  func testParseDynamicReplacement() {
+    AssertParse(
       """
       @_dynamicReplacement(for: dynamic_replaceable())
       func replacement() {
         dynamic_replaceable()
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseDeclaration() }) {
+    AssertParse(
       """
       @_dynamicReplacement(for: subscript(_:))
       subscript(x y: Int) -> Int {
@@ -375,29 +309,29 @@ final class DeclarationTests: XCTestCase {
         }
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseDeclaration() }) {
+    AssertParse(
       """
       @_dynamicReplacement(for: dynamic_replaceable_var)
       var r : Int {
         return 0
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseDeclaration() }) {
+    AssertParse(
       """
       @_dynamicReplacement(for: init(x:))
       init(y: Int) {
         self.init(x: y + 1)
       }
       """
-    }
+    )
   }
 
-  func testEnumParsing() throws {
-    try AssertParse({ $0.parseEnumDeclaration(.empty) }) {
+  func testEnumParsing() {
+    AssertParse(
       """
       enum Content {
         case keyPath(KeyPath<FocusedValues, Value?>)
@@ -405,17 +339,17 @@ final class DeclarationTests: XCTestCase {
         case value(Value?)
       }
       """
-    }
+    )
   }
 
-  func testStandaloneModifier() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+  func testStandaloneModifier() {
+    AssertParse(
       """
       struct a {
         public
       }
       """
-    }
+    )
   }
 }
 

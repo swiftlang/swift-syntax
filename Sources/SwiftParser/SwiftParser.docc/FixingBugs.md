@@ -57,7 +57,7 @@ Fixing the first case where the parser does not recover according to the user’
 
 To add a new, more contextual diagnostic, perform the following steps.
 
-1. Add a test case to `DiagnosticTests.swift` like the following:
+1. Add a test case in `SwiftParserTest` that looks like the following
     
     ```swift
     AssertParse(

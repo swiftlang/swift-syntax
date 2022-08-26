@@ -285,4 +285,13 @@ final class ExpressionTests: XCTestCase {
       """
     )
   }
+
+  func testMissingColonInTernary() {
+    AssertParse(
+      "foo ? 1#^DIAG^#",
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression")
+      ]
+    )
+  }
 }

@@ -351,6 +351,72 @@ final class DeclarationTests: XCTestCase {
       """
     )
   }
+
+  func testMissingColonInFunctionSignature() {
+    AssertParse(
+      "(first second #^DIAG^#Int)",
+      { $0.parseFunctionSignature() },
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ':' in function parameter")
+      ]
+    )
+  }
+
+  func testExtraArgumentLabelsInFunctionSignature() {
+    AssertParse(
+      "(first second #^DIAG^#third fourth: Int)",
+      { $0.parseFunctionSignature() },
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text 'third fourth' found in function parameter")
+      ]
+    )
+  }
+
+  func testMissingClosingParenInFunctionSignature() {
+    AssertParse(
+      "(first second: Int#^DIAG^#",
+      { $0.parseFunctionSignature() },
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ')' to end parameter clause")
+      ]
+    )
+  }
+
+  func testMissingOpeningParenInFunctionSignature() {
+    AssertParse(
+      "#^DIAG^#first second: Int)",
+      { $0.parseFunctionSignature() },
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '(' to start parameter clause")
+      ]
+    )
+  }
+
+  func testNoParamsForFunction() {
+    AssertParse(
+      """
+      class MyClass {
+        func withoutParameters#^DIAG^#
+
+        func withParameters() {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected argument list in function declaration")
+      ]
+    )
+  }
+
+  func testThrowsInWrongLocation() {
+    AssertParse(
+      "() -> #^DIAG^#throws Int",
+      { $0.parseFunctionSignature() },
+      diagnostics: [
+        DiagnosticSpec(message: "'throws' may only occur before '->'", fixIts: ["Move 'throws' before '->'"])
+      ],
+      fixedSource: "() throws -> Int"
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

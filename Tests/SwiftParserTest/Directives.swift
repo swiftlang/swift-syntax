@@ -70,4 +70,13 @@ final class DirectiveTests: XCTestCase {
        """
     )
   }
+
+  public func testUnterminatedPoundIf() {
+    AssertParse(
+      "#if test#^DIAG^#",
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '#endif' in declaration")
+      ]
+    )
+  }
 }

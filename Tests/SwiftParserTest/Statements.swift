@@ -105,4 +105,16 @@ final class StatementTests: XCTestCase {
       """
     )
   }
+
+  func testCStyleForLoop() {
+    AssertParse(
+      """
+      #^DIAG^#for let x = 0; x < 10; x += 1, y += 1 {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "C-style for statement has been removed in Swift 3", highlight: "let x = 0; x < 10; x += 1, y += 1 ")
+      ]
+    )
+  }
 }

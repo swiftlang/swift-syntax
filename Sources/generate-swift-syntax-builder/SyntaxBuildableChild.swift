@@ -41,7 +41,7 @@ extension Child {
           SequenceExpr {
             MemberAccessExpr(name: "newline")
             BinaryOperatorExpr("+")
-            FunctionCallExpr(MemberAccessExpr(base: formatName, name: "_makeIndent"))
+            MemberAccessExpr(base: formatName, name: "_indentTrivia")
             BinaryOperatorExpr("+")
             TupleExpr {
               SequenceExpr {
@@ -58,7 +58,7 @@ extension Child {
     } else {
       var format: ExpressibleAsExprBuildable = formatName
       if isIndented {
-        format = FunctionCallExpr(MemberAccessExpr(base: format, name: "_indented"))
+        format = MemberAccessExpr(base: format, name: "_indented")
       }
       let expr = type.optionalChained(expr: varName)
       return FunctionCallExpr(MemberAccessExpr(base: expr, name: "build\(type.baseName)")) {

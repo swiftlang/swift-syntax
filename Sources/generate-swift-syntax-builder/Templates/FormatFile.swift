@@ -58,13 +58,10 @@ let formatFile = SourceFile {
   }
 
   ExtensionDecl(extendedType: "Format") {
-    FunctionDecl(
+    VariableDecl(
       modifiers: [TokenSyntax.public],
-      identifier: .identifier("_indented"),
-      signature: FunctionSignature(
-        input: ParameterClause(),
-        output: "Format"
-      )
+      name: "_indented",
+      type: "Self"
     ) {
       VariableDecl(.var, name: "copy", initializer: "self")
       SequenceExpr {
@@ -75,32 +72,38 @@ let formatFile = SourceFile {
       ReturnStmt(expression: "copy")
     }
 
-    FunctionDecl(
+    VariableDecl(
       modifiers: [TokenSyntax.public],
-      identifier: .identifier("_makeIndent"),
-      signature: FunctionSignature(
-        input: ParameterClause(),
-        output: "Trivia"
-      )
+      name: "_indentTrivia",
+      type: "Trivia"
     ) {
-      // TODO: Use sugared TernaryExpr once https://github.com/apple/swift-syntax/pull/610 is merged
-      ReturnStmt(expression: TernaryExpr(
-        conditionExpression: SequenceExpr {
+      TernaryExpr(
+        if: SequenceExpr {
           "indents"
           BinaryOperatorExpr("==")
           IntegerLiteralExpr(0)
         },
-        questionMark: .infixQuestionMark.withLeadingTrivia(.space).withTrailingTrivia(.space),
-        firstChoice: MemberAccessExpr(name: "zero"),
-        colonMark: .colon.withLeadingTrivia(.space).withTrailingTrivia(.space),
-        secondChoice: FunctionCallExpr(MemberAccessExpr(base: "Trivia", name: "spaces")) {
+        then: MemberAccessExpr(name: "zero"),
+        else: FunctionCallExpr(MemberAccessExpr(name: "spaces")) {
           TupleExprElement(expression: SequenceExpr {
             "indents"
             BinaryOperatorExpr("*")
             "indentWidth"
           })
         }
-      ))
+      )
+    }
+
+    VariableDecl(
+      modifiers: [TokenSyntax.private],
+      name: "indentedNewline",
+      type: "Trivia"
+    ) {
+      SequenceExpr {
+        MemberAccessExpr(name: "newline")
+        BinaryOperatorExpr("+")
+        "_indentTrivia"
+      }
     }
   }
 }

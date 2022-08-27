@@ -36,7 +36,7 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   }
   public func buildCodeBlockItemList(format: Format, leadingTrivia: Trivia? = nil) -> CodeBlockItemListSyntax {
     let result = CodeBlockItemListSyntax(elements.map {
-      $0.buildCodeBlockItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
+      $0.buildCodeBlockItem(format: format, leadingTrivia: Trivia.newline + format._indentTrivia)
     })
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
@@ -771,7 +771,7 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   }
   public func buildMemberDeclList(format: Format, leadingTrivia: Trivia? = nil) -> MemberDeclListSyntax {
     let result = MemberDeclListSyntax(elements.map {
-      $0.buildMemberDeclListItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
+      $0.buildMemberDeclListItem(format: format, leadingTrivia: Trivia.newline + format._indentTrivia)
     })
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
@@ -1549,7 +1549,7 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   }
   public func buildSwitchCaseList(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseListSyntax {
     let result = SwitchCaseListSyntax(elements.map {
-      $0.buildSyntax(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
+      $0.buildSyntax(format: format, leadingTrivia: Trivia.newline + format._indentTrivia)
     })
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())

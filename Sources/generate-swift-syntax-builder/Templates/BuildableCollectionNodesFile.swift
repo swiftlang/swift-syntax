@@ -198,7 +198,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
                     ? SequenceExpr {
                         MemberAccessExpr(base: "Trivia", name: "newline")
                         BinaryOperatorExpr("+")
-                        FunctionCallExpr(MemberAccessExpr(base: "format", name: "_makeIndent"))
+                        MemberAccessExpr(base: "format", name: "_indentTrivia")
                       }
                     : NilLiteralExpr()
                 )

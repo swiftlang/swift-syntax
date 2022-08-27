@@ -22,12 +22,15 @@ public struct Format {
   }
 }
 extension Format {
-  public func _indented() -> Format {
+  public var _indented: Self {
     var copy = self
     copy.indents += 1
     return copy
   }
-  public func _makeIndent() -> Trivia {
-    return indents == 0 ? .zero : Trivia.spaces(indents * indentWidth)
+  public var _indentTrivia: Trivia {
+    indents == 0 ? .zero : .spaces(indents * indentWidth)
+  }
+  private var indentedNewline: Trivia {
+    .newline + _indentTrivia
   }
 }

@@ -53,7 +53,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     super.init(viewMode: .all)
   }
 
-  public static func diagnostics(for tree: SyntaxProtocol) -> [Diagnostic] {
+  public static func diagnostics<SyntaxType: SyntaxProtocol>(
+    for tree: SyntaxType
+  ) -> [Diagnostic] {
     let diagProducer = ParseDiagnosticsGenerator()
     diagProducer.walk(tree)
     return diagProducer.diagnostics

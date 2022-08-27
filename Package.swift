@@ -55,17 +55,22 @@ let package = Package(
     .target(
       name: "_CSwiftSyntax",
       exclude: [
+        "CMakeLists.txt",
         "README.md"
       ]
     ),
     .target(
       name: "SwiftDiagnostics",
-      dependencies: ["SwiftSyntax"]
+      dependencies: ["SwiftSyntax"],
+      exclude: [
+        "CMakeLists.txt"
+      ]
     ),
     .target(
       name: "SwiftSyntax",
       dependencies: ["_CSwiftSyntax"],
       exclude: [
+        "CMakeLists.txt",
         "Misc.swift.gyb",
         "Raw/RawSyntaxNodes.swift.gyb",
         "Raw/RawSyntaxValidation.swift.gyb",
@@ -111,6 +116,7 @@ let package = Package(
       name: "SwiftParser",
       dependencies: ["SwiftDiagnostics", "SwiftSyntax"],
       exclude: [
+        "CMakeLists.txt",
         "README.md"
       ]
     ),

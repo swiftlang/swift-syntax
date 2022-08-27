@@ -177,12 +177,12 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
     modifiers: [TokenSyntax.public],
     identifier: .identifier("build\(type.baseName)"),
     signature: FunctionSignature(
-      input: createFormatLeadingTriviaParameters(withDefaultTrivia: true),
+      input: createFormatParameters(),
       output: type.syntax
     )
   ) {
     VariableDecl(
-      .var,
+      .let,
       name: "result",
       initializer: FunctionCallExpr("\(type.syntaxBaseName)") {
         if elementType.isToken {
@@ -192,27 +192,18 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
             expression: FunctionCallExpr(MemberAccessExpr(base: "elements", name: "map"), trailingClosure: ClosureExpr {
               FunctionCallExpr(MemberAccessExpr(base: "$0", name: "build\(elementType.baseName)")) {
                 TupleExprElement(label: "format", expression: "format")
-                TupleExprElement(
-                  label: "leadingTrivia",
-                  expression: NilLiteralExpr()
-                )
               }
             })
           )
         }
       }
     )
-    SequenceExpr {
-      "result"
-      AssignmentExpr()
-      FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
-        TupleExprElement(
-          label: "syntax",
-          expression: "result"
-        )
-      }
-    }
-    ReturnStmt(expression: "result")
+    ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
+      TupleExprElement(
+        label: "syntax",
+        expression: "result"
+      )
+    })
   }
 }
 
@@ -223,14 +214,13 @@ private func createBuildSyntaxFunction(node: Node) -> FunctionDecl {
     modifiers: [TokenSyntax.public],
     identifier: .identifier("buildSyntax"),
     signature: FunctionSignature(
-      input: createFormatLeadingTriviaParameters(withDefaultTrivia: true),
+      input: createFormatParameters(),
       output: "Syntax"
     )
   ) {
     ReturnStmt(expression: FunctionCallExpr("Syntax") {
       TupleExprElement(expression: FunctionCallExpr("build\(type.baseName)") {
         TupleExprElement(label: "format", expression: "format")
-        TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
       })
     })
   }

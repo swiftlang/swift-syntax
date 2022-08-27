@@ -126,26 +126,51 @@ let formatFile = SourceFile {
           identifier: .identifier("_format"),
           signature: signature
         ) {
-          node.children
-            .filter(\.requiresLeadingNewline)
-            .reduce("syntax") { base, child in
-              FunctionCallExpr(MemberAccessExpr(base: base, name: "with\(child.name)")) {
-                let childExpr = MemberAccessExpr(base: "syntax", name: child.swiftName)
-                TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: childExpr, name: "withLeadingTrivia")) {
-                  TupleExprElement(expression: SequenceExpr {
-                    "indentedNewline"
-                    BinaryOperatorExpr("+")
-                    TupleExpr {
-                      SequenceExpr {
-                        MemberAccessExpr(base: childExpr, name: "leadingTrivia")
-                        BinaryOperatorExpr("??")
-                        ArrayExpr()
+          VariableDecl(
+            .var,
+            name: "result",
+            initializer: node.children
+              .filter(\.requiresLeadingNewline)
+              .reduce("syntax") { base, child in
+                FunctionCallExpr(MemberAccessExpr(base: base, name: "with\(child.name)")) {
+                  let childExpr = MemberAccessExpr(base: "syntax", name: child.swiftName)
+                  TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: childExpr, name: "withLeadingTrivia")) {
+                    TupleExprElement(expression: SequenceExpr {
+                      "indentedNewline"
+                      BinaryOperatorExpr("+")
+                      TupleExpr {
+                        SequenceExpr {
+                          MemberAccessExpr(base: childExpr, name: "leadingTrivia")
+                          BinaryOperatorExpr("??")
+                          ArrayExpr()
+                        }
                       }
-                    }
+                    })
                   })
-                })
+                }
+            }
+          )
+          VariableDecl(
+            .let,
+            name: "leadingTrivia",
+            initializer: SequenceExpr {
+              MemberAccessExpr(base: "result", name: "leadingTrivia")
+              BinaryOperatorExpr("??")
+              ArrayExpr()
+            }
+          )
+          IfStmt(conditions: ExprList {
+            PrefixOperatorExpr("!", MemberAccessExpr(base: "leadingTrivia", name: "isEmpty"))
+          }) {
+            SequenceExpr {
+              "result"
+              AssignmentExpr()
+              FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
+                TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: "leadingTrivia", name: "addingSpacingAfterNewlinesIfNeeded")))
               }
             }
+          }
+          ReturnStmt(expression: "result")
         }
       } else if node.isSyntaxCollection {
         FunctionDecl(

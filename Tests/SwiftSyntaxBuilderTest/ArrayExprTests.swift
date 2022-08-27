@@ -4,18 +4,16 @@ import SwiftSyntaxBuilder
 
 final class ArrayExprTests: XCTestCase {
   func testArrayExpr() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-    
     let testCases: [UInt: (ExpressibleAsArrayExpr, String)] = [
-      #line: (ArrayElementList(), "␣[]"),
-      #line: (ArrayElementList([ArrayElement(expression: IdentifierExpr("SomeIdenfier"))]), "␣[SomeIdenfier]"),
-      #line: (ArrayElement(expression: IdentifierExpr("SomeIdenfier")), "␣[SomeIdenfier]"),
+      #line: (ArrayElementList(), "[]"),
+      #line: (ArrayElementList([ArrayElement(expression: IdentifierExpr("SomeIdenfier"))]), "[SomeIdenfier]"),
+      #line: (ArrayElement(expression: IdentifierExpr("SomeIdenfier")), "[SomeIdenfier]"),
     ]
     
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let arrowExpr = builder.createArrayExpr()
-      let syntax = arrowExpr.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+      let syntax = arrowExpr.buildSyntax(format: Format())
       
       var text = ""
       syntax.write(to: &text)

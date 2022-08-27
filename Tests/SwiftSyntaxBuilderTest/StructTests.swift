@@ -5,8 +5,8 @@ import SwiftSyntaxBuilder
 final class StructTests: XCTestCase {
   func testEmptyStruct() {
     let leadingTrivia = Trivia.unexpectedText("␣")
-    let buildable = StructDecl(identifier: "TestStruct") {}
-    let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let buildable = StructDecl(leadingTrivia: leadingTrivia, identifier: "TestStruct") {}
+    let syntax = buildable.buildSyntax(format: Format())
 
     var text = ""
     syntax.write(to: &text)
@@ -18,7 +18,6 @@ final class StructTests: XCTestCase {
   }
 
   func testNestedStruct() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
     let nestedStruct = StructDecl(
       leadingTrivia: [
         .docLineComment("/// A nested struct"),
@@ -68,13 +67,13 @@ final class StructTests: XCTestCase {
       carriateReturnsStruct
       carriageReturnFormFeedsStruct
     }
-    let syntax = testStruct.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let syntax = testStruct.buildSyntax(format: Format())
 
     var text = ""
     syntax.write(to: &text)
 
     XCTAssertEqual(text, """
-    ␣public struct TestStruct {
+    public struct TestStruct {
         /// A nested struct
         /// with multi line comment
         struct NestedStruct < A, B: C, D > where A: X, A.P == D {

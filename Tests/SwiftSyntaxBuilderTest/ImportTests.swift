@@ -7,9 +7,12 @@ final class ImportTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let identifier = TokenSyntax.identifier("SwiftSyntax")
 
-    let importDecl = ImportDecl(path: AccessPath([AccessPathComponent(name: identifier)]))
+    let importDecl = ImportDecl(
+      leadingTrivia: leadingTrivia,
+      path: AccessPath([AccessPathComponent(name: identifier)])
+    )
 
-    let syntax = importDecl.buildDecl(format: Format(), leadingTrivia: leadingTrivia)
+    let syntax = importDecl.buildDecl(format: Format())
 
     var text = ""
     syntax.write(to: &text)

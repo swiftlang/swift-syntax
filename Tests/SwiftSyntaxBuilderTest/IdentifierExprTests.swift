@@ -4,18 +4,16 @@ import SwiftSyntaxBuilder
 
 final class IdentifierExprTests: XCTestCase {
   func testStringLiteral() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-
     let testCases: [UInt: (ExpressibleAsIdentifierExpr, String)] = [
-      #line: (IdentifierExpr(identifier: .identifier("Test")), "␣Test"),
-      #line: (IdentifierExpr("Test"), "␣Test"),
-      #line: ("Test", "␣Test")
+      #line: (IdentifierExpr(identifier: .identifier("Test")), "Test"),
+      #line: (IdentifierExpr("Test"), "Test"),
+      #line: ("Test", "Test")
     ]
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let identifierExpr = builder.createIdentifierExpr()
-      let syntax = identifierExpr.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+      let syntax = identifierExpr.buildSyntax(format: Format())
 
       var text = ""
       syntax.write(to: &text)

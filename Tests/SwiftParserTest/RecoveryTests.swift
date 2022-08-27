@@ -267,10 +267,11 @@ public class RecoveryTests: XCTestCase {
     var source = """
     (first second third struct: Int)
     """
-    let (_, currentToken) = source.withUTF8 { buffer in
-      var parser = Parser(buffer)
-      return (parser.parseFunctionSignature(), parser.currentToken)
-    }
+    let (_, currentToken): (RawFunctionSignatureSyntax, Lexer.Lexeme) =
+      source.withUTF8 { buffer in
+        var parser = Parser(buffer)
+        return (parser.parseFunctionSignature(), parser.currentToken)
+      }
 
     // The 'struct' keyword should be taken as an indicator that a new decl
     // starts here, so `parseFunctionSignature` shouldn't eat it.
@@ -334,10 +335,11 @@ public class RecoveryTests: XCTestCase {
     (first second third
     : Int)
     """
-    let (_, currentToken) = source.withUTF8 { buffer in
-      var parser = Parser(buffer)
-      return (parser.parseFunctionSignature(), parser.currentToken)
-    }
+    let (_, currentToken): (RawFunctionSignatureSyntax, Lexer.Lexeme) =
+      source.withUTF8 { buffer in
+        var parser = Parser(buffer)
+        return (parser.parseFunctionSignature(), parser.currentToken)
+      }
 
     XCTAssertEqual(currentToken.tokenKind, .colon)
   }

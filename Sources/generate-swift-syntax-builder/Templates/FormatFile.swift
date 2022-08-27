@@ -109,106 +109,119 @@ let formatFile = SourceFile {
 
   ExtensionDecl(extendedType: "Format") {
     for node in SYNTAX_NODES {
-      let type = node.type
-      let signature = FunctionSignature(
-        input: ParameterClause {
-          FunctionParameter(
-            firstName: .identifier("syntax"),
-            colon: .colon,
-            type: type.syntaxBaseName
-          )
-        },
-        output: type.syntaxBaseName
-      )
       if node.isBuildable {
-        FunctionDecl(
-          modifiers: [TokenSyntax.public],
-          identifier: .identifier("_format"),
-          signature: signature
-        ) {
-          VariableDecl(
-            .var,
-            name: "result",
-            initializer: node.children
-              .filter(\.requiresLeadingNewline)
-              .reduce("syntax") { base, child in
-                FunctionCallExpr(MemberAccessExpr(base: base, name: "with\(child.name)")) {
-                  let childExpr = MemberAccessExpr(base: "syntax", name: child.swiftName)
-                  TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: childExpr, name: "withLeadingTrivia")) {
-                    TupleExprElement(expression: SequenceExpr {
-                      "indentedNewline"
-                      BinaryOperatorExpr("+")
-                      TupleExpr {
-                        SequenceExpr {
-                          MemberAccessExpr(base: childExpr, name: "leadingTrivia")
-                          BinaryOperatorExpr("??")
-                          ArrayExpr()
-                        }
-                      }
-                    })
-                  })
-                }
-            }
-          )
-          VariableDecl(
-            .let,
-            name: "leadingTrivia",
-            initializer: SequenceExpr {
-              MemberAccessExpr(base: "result", name: "leadingTrivia")
-              BinaryOperatorExpr("??")
-              ArrayExpr()
-            }
-          )
-          IfStmt(conditions: ExprList {
-            PrefixOperatorExpr("!", MemberAccessExpr(base: "leadingTrivia", name: "isEmpty"))
-          }) {
-            SequenceExpr {
-              "result"
-              AssignmentExpr()
-              FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
-                TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: "leadingTrivia", name: "addingSpacingAfterNewlinesIfNeeded")))
-              }
-            }
-          }
-          ReturnStmt(expression: "result")
-        }
+        createBuildableNodeFormatFunction(node: node)
       } else if node.isSyntaxCollection {
-        FunctionDecl(
-          modifiers: [TokenSyntax.public],
-          identifier: .identifier("_format"),
-          signature: signature
-        ) {
-          if node.elementsSeparatedByNewline {
-            FunctionCallExpr(type.syntaxBaseName) {
-              TupleExprElement(expression: FunctionCallExpr(
-                MemberAccessExpr(base: "syntax", name: "map"),
-                trailingClosure: ClosureExpr {
-                  FunctionCallExpr(MemberAccessExpr(base: "$0", name: "withLeadingTrivia")) {
-                    TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
-                      base: TupleExpr {
-                        SequenceExpr {
-                          "indentedNewline"
-                          BinaryOperatorExpr("+")
-                          TupleExpr {
-                            SequenceExpr {
-                              MemberAccessExpr(base: "$0", name: "leadingTrivia")
-                              BinaryOperatorExpr("??")
-                              ArrayExpr()
-                            }
-                          }
-                        }
-                      },
-                      name: "addingSpacingAfterNewlinesIfNeeded"
-                    )))
+        createBuildableCollectionNodeFormatFunction(node: node)
+      }
+    }
+  }
+}
+
+private func createFormatFunctionSignature(type: SyntaxBuildableType) -> FunctionSignature {
+  FunctionSignature(
+    input: ParameterClause {
+      FunctionParameter(
+        firstName: .identifier("syntax"),
+        colon: .colon,
+        type: type.syntaxBaseName
+      )
+    },
+    output: type.syntaxBaseName
+  )
+}
+
+/// Generate the _format implementation for a buildable node.
+private func createBuildableNodeFormatFunction(node: Node) -> FunctionDecl {
+  FunctionDecl(
+    modifiers: [TokenSyntax.public],
+    identifier: .identifier("_format"),
+    signature: createFormatFunctionSignature(type: node.type)
+  ) {
+    VariableDecl(
+      .var,
+      name: "result",
+      initializer: node.children
+        .filter(\.requiresLeadingNewline)
+        .reduce("syntax") { base, child in
+          FunctionCallExpr(MemberAccessExpr(base: base, name: "with\(child.name)")) {
+            let childExpr = MemberAccessExpr(base: "syntax", name: child.swiftName)
+            TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: childExpr, name: "withLeadingTrivia")) {
+              TupleExprElement(expression: SequenceExpr {
+                "indentedNewline"
+                BinaryOperatorExpr("+")
+                TupleExpr {
+                  SequenceExpr {
+                    MemberAccessExpr(base: childExpr, name: "leadingTrivia")
+                    BinaryOperatorExpr("??")
+                    ArrayExpr()
                   }
                 }
-              ))
-            }
-          } else {
-            "syntax"
+              })
+            })
           }
+      }
+    )
+    VariableDecl(
+      .let,
+      name: "leadingTrivia",
+      initializer: SequenceExpr {
+        MemberAccessExpr(base: "result", name: "leadingTrivia")
+        BinaryOperatorExpr("??")
+        ArrayExpr()
+      }
+    )
+    IfStmt(conditions: ExprList {
+      PrefixOperatorExpr("!", MemberAccessExpr(base: "leadingTrivia", name: "isEmpty"))
+    }) {
+      SequenceExpr {
+        "result"
+        AssignmentExpr()
+        FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
+          TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: "leadingTrivia", name: "addingSpacingAfterNewlinesIfNeeded")))
         }
       }
+    }
+    ReturnStmt(expression: "result")
+  }
+}
+
+/// Generate the _format implementation for a collection node.
+/// The implementation updates the leading trivia of the elements with their indentation.
+private func createBuildableCollectionNodeFormatFunction(node: Node) -> FunctionDecl {
+  FunctionDecl(
+    modifiers: [TokenSyntax.public],
+    identifier: .identifier("_format"),
+    signature: createFormatFunctionSignature(type: node.type)
+  ) {
+    if node.elementsSeparatedByNewline {
+      FunctionCallExpr(node.type.syntaxBaseName) {
+        TupleExprElement(expression: FunctionCallExpr(
+          MemberAccessExpr(base: "syntax", name: "map"),
+          trailingClosure: ClosureExpr {
+            FunctionCallExpr(MemberAccessExpr(base: "$0", name: "withLeadingTrivia")) {
+              TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
+                base: TupleExpr {
+                  SequenceExpr {
+                    "indentedNewline"
+                    BinaryOperatorExpr("+")
+                    TupleExpr {
+                      SequenceExpr {
+                        MemberAccessExpr(base: "$0", name: "leadingTrivia")
+                        BinaryOperatorExpr("??")
+                        ArrayExpr()
+                      }
+                    }
+                  }
+                },
+                name: "addingSpacingAfterNewlinesIfNeeded"
+              )))
+            }
+          }
+        ))
+      }
+    } else {
+      "syntax"
     }
   }
 }

@@ -1,0 +1,3 @@
+module _CSwiftSyntax {
+  header "atomic-counter.h"
+}

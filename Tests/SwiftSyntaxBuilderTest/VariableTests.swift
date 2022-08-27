@@ -105,4 +105,31 @@ final class VariableTests: XCTestCase {
       }
       """)
   }
+
+  func testAttributedVariables() {
+    let attributedVar = VariableDecl(
+      attributes: CustomAttribute(attributeName: "Test", argumentList: nil),
+      .var,
+      name: "x",
+      type: "Int"
+    )
+
+    XCTAssertEqual(attributedVar.buildSyntax(format: Format()).description, """
+      @Test var x: Int
+      """)
+
+    let attributedProperty = VariableDecl(
+      attributes: CustomAttribute(attributeName: "Test", argumentList: nil),
+      name: "y",
+      type: "String"
+    ) {
+      StringLiteralExpr("Hello world!")
+    }
+
+    XCTAssertEqual(attributedProperty.buildSyntax(format: Format()).description, """
+      @Test var y: String {
+          "Hello world!"
+      }
+      """)
+  }
 }

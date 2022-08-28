@@ -11,6 +11,12 @@
 //===----------------------------------------------------------------------===//
 import SwiftSyntax
 
+extension ExprSyntax {
+  // Is this an unresolved explicit cast?
+  fileprivate var isUnresolvedExplicitCast: Bool {
+    self.is(UnresolvedIsExprSyntax.self) || self.is(UnresolvedAsExprSyntax.self)
+  }
+}
 extension OperatorPrecedence {
   private struct PrecedenceBound {
     let groupName: PrecedenceGroupName?
@@ -69,6 +75,11 @@ extension OperatorPrecedence {
       return "AssignmentPrecedence"
     }
 
+    // Cast operators have fixed precedence.
+    if expr.isUnresolvedExplicitCast {
+      return "CastingPrecedence"
+    }
+
     // FIXME: Handle all of the language-defined precedence relationships.
     return nil
   }
@@ -114,6 +125,34 @@ extension OperatorPrecedence {
           operatorOperand: ExprSyntax(assignExpr),
           rightOperand: rhs)
       )
+    }
+
+    // An "is" type check.
+    if let isExpr = op.as(UnresolvedIsExprSyntax.self) {
+      // FIXME: Do we actually have a guarantee that the right-hand side is a
+      // type expression here?
+      return ExprSyntax(
+        IsExprSyntax(
+          expression: lhs,
+          isExpr.unexpectedBeforeIsTok,
+          isTok: isExpr.isTok,
+          typeName: rhs.as(TypeExprSyntax.self)!.type)
+        )
+    }
+
+    // An "as" cast.
+    if let asExpr = op.as(UnresolvedAsExprSyntax.self) {
+      // FIXME: Do we actually have a guarantee that the right-hand side is a
+      // type expression here?
+      return ExprSyntax(
+        AsExprSyntax(
+          expression: lhs,
+          asExpr.unexpectedBeforeAsTok,
+          asTok: asExpr.asTok,
+          asExpr.unexpectedBetweenAsTokAndQuestionOrExclamationMark,
+          questionOrExclamationMark: asExpr.questionOrExclamationMark,
+          typeName: rhs.as(TypeExprSyntax.self)!.type)
+        )
     }
 
     // FIXME: Fallback that we should never need
@@ -203,18 +242,22 @@ extension OperatorPrecedence {
     rest = rest.dropFirst()
 
     while !rest.isEmpty {
-      #if compiler(>=10.0) && false
       // If the operator is a cast operator, the RHS can't extend past the type
       // that's part of the cast production.
-      if (isa<ExplicitCastExpr>(op1.op)) {
-        LHS = makeBinOp(Ctx, op1.op, LHS, RHS, op1.precedence, S.empty());
-        op1 = getNextOperator();
-        if (!op1) return LHS;
-        RHS = S[1];
-        S = S.slice(2);
-        continue;
+      if op1.isUnresolvedExplicitCast {
+        lhs = Self.makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
+        guard let (newOp1, newOp1Precedence) = try getNextOperator() else {
+          return lhs
+        }
+
+        op1 = newOp1
+        op1Precedence = newOp1Precedence
+
+        rest = rest.dropFirst()
+        rhs = rest.first!
+        rest = rest.dropFirst()
+        continue
       }
-      #endif
 
       // Pull out the next binary operator.
       let op2 = rest.first!

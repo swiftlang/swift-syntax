@@ -124,6 +124,12 @@ public class OperatorPrecedenceTests: XCTestCase {
     try opPrecedence.assertExpectedFold("a = b = c", "(a = (b = c))")
   }
 
+  func testCastExprs() throws {
+    let opPrecedence = OperatorPrecedence.standardOperators
+    try opPrecedence.assertExpectedFold("a is (b)", "(a is (b))")
+    try opPrecedence.assertExpectedFold("a as c == nil", "((a as c) == nil)")
+  }
+
   func testParsedLogicalExprs() throws {
     let logicalOperatorSources =
     """

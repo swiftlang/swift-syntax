@@ -59,18 +59,51 @@ extension OperatorPrecedence {
       )
     }
 
+    // The ternary operator has a fixed precedence group name.
+    if let ternaryExpr = expr.as(UnresolvedTernaryExprSyntax.self) {
+      return "TernaryPrecedence"
+    }
+
     // FIXME: Handle all of the language-defined precedence relationships.
     return nil
   }
 
   /// Form a binary operation expression for, e.g., a + b.
-  private func makeBinaryOperationExpr(
+  @_spi(Testing)
+  public static func makeBinaryOperationExpr(
     lhs: ExprSyntax, op: ExprSyntax, rhs: ExprSyntax
   ) -> ExprSyntax {
-    ExprSyntax(
-      InfixOperatorExprSyntax(
-        leftOperand: lhs, operatorOperand: op, rightOperand: rhs)
+    // The form of the binary operation depends on the operator itself,
+    // which will be one of the unresolved infix operators.
+
+    // An operator such as '+'.
+    if let binaryOperatorExpr = op.as(BinaryOperatorExprSyntax.self) {
+      return ExprSyntax(
+        InfixOperatorExprSyntax(
+          leftOperand: lhs,
+          binaryOperatorExpr.unexpectedBeforeOperatorToken,
+          operatorOperand: op,
+          rightOperand: rhs)
       )
+    }
+
+    // A ternary operator x ? y : z.
+    if let ternaryExpr = op.as(UnresolvedTernaryExprSyntax.self) {
+      return ExprSyntax(
+        TernaryExprSyntax(
+          conditionExpression: lhs,
+          ternaryExpr.unexpectedBeforeQuestionMark,
+          questionMark: ternaryExpr.questionMark,
+          ternaryExpr.unexpectedBetweenQuestionMarkAndFirstChoice,
+          firstChoice: ternaryExpr.firstChoice,
+          ternaryExpr.unexpectedBetweenFirstChoiceAndColonMark,
+          colonMark: ternaryExpr.colonMark,
+          secondChoice: rhs)
+      )
+    }
+
+    // FIXME: Fallback that we should never need
+    fatalError("Unknown binary operator")
   }
 
   /// Determine the associativity between two precedence groups.
@@ -195,7 +228,7 @@ extension OperatorPrecedence {
       case .left:
         // Apply left-associativity immediately by folding the first two
         // operands.
-        lhs = makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
+        lhs = Self.makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
         op1 = op2
         op1Precedence = op2Precedence
         rest = rest.dropFirst()
@@ -226,7 +259,7 @@ extension OperatorPrecedence {
           errorHandler: errorHandler
         )
 
-        lhs = makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
+        lhs = Self.makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
 
         // If we've drained the entire sequence, we're done.
         if rest.isEmpty {
@@ -254,13 +287,13 @@ extension OperatorPrecedence {
         }
 
         // Recover by folding arbitrarily at this operator, then continuing.
-        lhs = makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
+        lhs = Self.makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
         return try fold(lhs, rest: &rest, bound: bound, errorHandler: errorHandler)
       }
     }
 
     // Fold LHS and RHS together and declare completion.
-    return makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
+    return Self.makeBinaryOperationExpr(lhs: lhs, op: op1, rhs: rhs)
   }
 
   /// "Fold" a sequence expression into a structured syntax tree.

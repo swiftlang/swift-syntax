@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 import SwiftParser
-import SwiftOperatorPrecedence
+@_spi(Testing) import SwiftOperatorPrecedence
 import _SwiftSyntaxTestSupport
 
 /// Visitor that looks for ExprSequenceSyntax nodes.
@@ -33,8 +33,8 @@ extension SyntaxProtocol {
 /// into  a structured syntax tree.
 class ExplicitParenFolder : SyntaxRewriter {
   override func visit(_ node: TupleExprSyntax) -> ExprSyntax {
-    // Identify syntax nodes of the form (x + y), which is a
-    // TupleExprSyntax(SequenceExpr(x, BinaryOperatorExprSyntax, y))./
+    // Identify syntax nodes of the form (x (op) y), which is a
+    // TupleExprSyntax(SequenceExpr(x, (op), y)).
     guard node.elementList.count == 1,
           let firstNode = node.elementList.first,
           firstNode.label == nil,
@@ -42,19 +42,17 @@ class ExplicitParenFolder : SyntaxRewriter {
           sequenceExpr.elements.count == 3,
           let leftOperand = sequenceExpr.elements.first,
           let middleExpr = sequenceExpr.elements.removingFirst().first,
-          let operatorExpr = middleExpr.as(BinaryOperatorExprSyntax.self),
           let rightOperand =
             sequenceExpr.elements.removingFirst().removingFirst().first
     else {
       return ExprSyntax(node)
     }
 
-    return ExprSyntax(
-      InfixOperatorExprSyntax(
-        leftOperand: visit(Syntax(leftOperand)).as(ExprSyntax.self)!,
-        operatorOperand: ExprSyntax(operatorExpr),
-        rightOperand: visit(Syntax(rightOperand)).as(ExprSyntax.self)!)
-      )
+    return OperatorPrecedence.makeBinaryOperationExpr(
+      lhs: visit(Syntax(leftOperand)).as(ExprSyntax.self)!,
+      op: visit(Syntax(middleExpr)).as(ExprSyntax.self)!,
+      rhs: visit(Syntax(rightOperand)).as(ExprSyntax.self)!
+    )
   }
 }
 
@@ -305,5 +303,12 @@ public class OperatorPrecedenceTests: XCTestCase {
         errors[0].message,
         "adjacent operators are in unordered precedence groups 'D' and 'A'")
     }
+  }
+
+  func testTernaryExpr() throws {
+    let opPrecedence = OperatorPrecedence.standardOperators
+    try opPrecedence.assertExpectedFold(
+      "b + c ? y : z ? z2 : z3",
+      "((b + c) ? y : (z ? z2 : z3))")
   }
 }

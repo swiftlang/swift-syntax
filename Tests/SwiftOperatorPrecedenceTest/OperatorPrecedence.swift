@@ -130,6 +130,14 @@ public class OperatorPrecedenceTests: XCTestCase {
     try opPrecedence.assertExpectedFold("a as c == nil", "((a as c) == nil)")
   }
 
+  func testArrowExpr() throws {
+    let opPrecedence = OperatorPrecedence.standardOperators
+    try opPrecedence.assertExpectedFold(
+      "a = b -> c -> d",
+      "(a = (b -> (c -> d)))"
+    )
+  }
+
   func testParsedLogicalExprs() throws {
     let logicalOperatorSources =
     """

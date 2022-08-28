@@ -80,7 +80,11 @@ extension OperatorPrecedence {
       return "CastingPrecedence"
     }
 
-    // FIXME: Handle all of the language-defined precedence relationships.
+    // The arrow operator has fixed precedence.
+    if expr.is(ArrowExprSyntax.self) {
+      return "FunctionArrowPrecedence"
+    }
+
     return nil
   }
 
@@ -153,6 +157,16 @@ extension OperatorPrecedence {
           questionOrExclamationMark: asExpr.questionOrExclamationMark,
           typeName: rhs.as(TypeExprSyntax.self)!.type)
         )
+    }
+
+    // An arrow expression (->).
+    if let arrowExpr = op.as(ArrowExprSyntax.self) {
+      return ExprSyntax(
+        InfixOperatorExprSyntax(
+          leftOperand: lhs,
+          operatorOperand: ExprSyntax(arrowExpr),
+          rightOperand: rhs)
+      )
     }
 
     // FIXME: Fallback that we should never need

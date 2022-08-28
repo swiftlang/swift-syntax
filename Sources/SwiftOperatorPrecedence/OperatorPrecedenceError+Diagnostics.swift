@@ -10,10 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 
 extension OperatorPrecedenceError : DiagnosticMessage {
+  public var severity: DiagnosticSeverity {
+    .error
+  }
+
   public var message: String {
     switch self {
     case .groupAlreadyExists(let existing, _):
@@ -57,8 +62,8 @@ extension OperatorPrecedenceError : DiagnosticMessage {
     }
   }
 
-  public var diagnosticID: DiagnosticMessageID {
-      DiagnosticMessageID("SwiftOperatorPrecedence/\(diagnosticCaseID)")
+  public var diagnosticID: MessageID {
+    MessageID(domain: "SwiftOperatorPrecedence", id: diagnosticCaseID)
   }
 }
 

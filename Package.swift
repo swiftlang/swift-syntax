@@ -122,7 +122,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftOperatorPrecedence",
-      dependencies: ["SwiftSyntax", "SwiftParser"]
+      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"]
     ),
     .executableTarget(
       name: "lit-test-helper",

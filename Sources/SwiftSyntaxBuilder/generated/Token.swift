@@ -15,6 +15,71 @@
 
 import SwiftSyntax
 
+/// Represents `TokenSyntax` in `SwiftSyntaxBuilder`.
+/// At the moment, this just wraps `TokenSyntax`, but we can make it store just the information necessary to build a `TokenSyntax` in the future.
+public struct Token: SyntaxBuildable, ExpressibleAsBinaryOperatorExpr, ExpressibleAsDeclModifier, ExpressibleAsIdentifierExpr, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList {
+  let tokenSyntax: TokenSyntax
+  
+  var text: String {
+    tokenSyntax.text
+  }
+  
+  public init (tokenSyntax: TokenSyntax) {
+    self.tokenSyntax = tokenSyntax
+  }
+  
+  public func withLeadingTrivia(_ trivia: Trivia) -> Token {
+    Token(tokenSyntax: tokenSyntax.withLeadingTrivia(trivia))
+  }
+  
+  public func withTrailingTrivia(_ trivia: Trivia) -> Token {
+    Token(tokenSyntax: tokenSyntax.withTrailingTrivia(trivia))
+  }
+  
+  public func buildToken() -> TokenSyntax {
+    tokenSyntax
+  }
+  
+  public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
+    Syntax(tokenSyntax)
+  }
+  
+  /// Conformance to ExpressibleAsTokenList
+  public func createTokenList() -> TokenList {
+    return TokenList([self])
+  }
+  
+  /// Conformance to ExpressibleAsNonEmptyTokenList
+  public func createNonEmptyTokenList() -> NonEmptyTokenList {
+    return NonEmptyTokenList([self])
+  }
+  
+  /// Conformance to ExpressibleAsBinaryOperatorExpr
+  public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
+    return BinaryOperatorExpr(operatorToken: self)
+  }
+  
+  /// Conformance to ExpressibleAsDeclModifier
+  public func createDeclModifier() -> DeclModifier {
+    return DeclModifier(name: self)
+  }
+  
+  /// Conformance to ExpressibleAsIdentifierExpr
+  public func createIdentifierExpr() -> IdentifierExpr {
+    return IdentifierExpr(identifier: self)
+  }
+  
+  /// `Token` conforms to `SyntaxBuildable` via different paths, so we need to pick one default conversion path.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return createIdentifierExpr()
+  }
+  
+  /// `Token` conforms to `ExprBuildable` via different paths, so we need to pick one default conversion path.
+  public func createExprBuildable() -> ExprBuildable {
+    return createIdentifierExpr()
+  }
+}
+
 /// Namespace for commonly used tokens with default trivia.
 public extension Token {
   

@@ -19,12 +19,12 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       buildInnerCodeBlockItemList()
     }
     
-    let codeBlock = CodeBlock {
+    let codeBlock = CodeBlock(leadingTrivia: leadingTrivia) {
       FunctionCallExpr("outsideBuilder")
       buildOuterCodeBlockItemList()
     }
 
-    let test = codeBlock.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let test = codeBlock.buildSyntax(format: Format())
 
     var result = ""
     test.write(to: &result)
@@ -54,6 +54,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     }
     
     let codeBlock = CodeBlock(
+      leadingTrivia: leadingTrivia,
       statements: CodeBlockItemList(
         combining: [
           CodeBlockItemList([FunctionCallExpr("outsideBuilder")]),
@@ -62,7 +63,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       )
     )
     
-    let test = codeBlock.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let test = codeBlock.buildSyntax(format: Format())
     
     var result = ""
     test.write(to: &result)

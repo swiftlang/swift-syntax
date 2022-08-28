@@ -14,10 +14,11 @@ final class StringLiteralTests: XCTestCase {
       let (value, expected) = testCase
       let string = TokenSyntax.stringSegment(value)
       let segment = StringSegment(content: string)
-      let builder = StringLiteralExpr(openQuote: .stringQuote,
+      let builder = StringLiteralExpr(leadingTrivia: leadingTrivia,
+                                      openQuote: .stringQuote,
                                       segments: StringLiteralSegments([segment]),
                                       closeQuote: .stringQuote)
-      let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+      let syntax = builder.buildSyntax(format: Format())
 
       var text = ""
       syntax.write(to: &text)
@@ -27,24 +28,23 @@ final class StringLiteralTests: XCTestCase {
   }
 
   func testStringLiteralConvenienceInitializers() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (ExpressibleAsStringLiteralExpr, String)] = [
-      #line: (StringLiteralExpr(""), #"␣"""#),
-      #line: (StringLiteralExpr("asdf"), #"␣"asdf""#),
-      #line: ("", #"␣"""#),
-      #line: ("asdf", #"␣"asdf""#),
-      #line: (StringLiteralExpr(raw: "abc"), "␣#\"abc\"#"),
-      #line: (StringLiteralExpr(raw: #""quoted""#), ##"␣#""quoted""#"##),
-      #line: (StringLiteralExpr(raw: ##"#"rawquoted"#"##), ###"␣##"#"rawquoted"#"##"###),
-      #line: (StringLiteralExpr(raw: ####"###"unbalanced"####), #####"␣####"###"unbalanced"####"#####),
-      #line: (StringLiteralExpr(raw: ###"some "# string ##""###), ####"␣###"some "# string ##""###"####),
-      #line: (StringLiteralExpr(raw: ###"\##(abc) \(def)"###), ####"␣###"\##(abc) \(def)"###"####),
+      #line: (StringLiteralExpr(""), #""""#),
+      #line: (StringLiteralExpr("asdf"), #""asdf""#),
+      #line: ("", #""""#),
+      #line: ("asdf", #""asdf""#),
+      #line: (StringLiteralExpr(raw: "abc"), "#\"abc\"#"),
+      #line: (StringLiteralExpr(raw: #""quoted""#), ##"#""quoted""#"##),
+      #line: (StringLiteralExpr(raw: ##"#"rawquoted"#"##), ###"##"#"rawquoted"#"##"###),
+      #line: (StringLiteralExpr(raw: ####"###"unbalanced"####), #####"####"###"unbalanced"####"#####),
+      #line: (StringLiteralExpr(raw: ###"some "# string ##""###), ####"###"some "# string ##""###"####),
+      #line: (StringLiteralExpr(raw: ###"\##(abc) \(def)"###), ####"###"\##(abc) \(def)"###"####),
     ]
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let stringLiteralExpr = builder.createStringLiteralExpr()
-      let syntax = stringLiteralExpr.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+      let syntax = stringLiteralExpr.buildSyntax(format: Format())
 
       var text = ""
       syntax.write(to: &text)

@@ -6,25 +6,25 @@ final class VariableTests: XCTestCase {
   func testVariableDecl() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let buildable = VariableDecl(letOrVarKeyword: .let) {
+    let buildable = VariableDecl(leadingTrivia: leadingTrivia, letOrVarKeyword: .let) {
       PatternBinding(pattern: "a", typeAnnotation: ArrayType(elementType: "Int"))
     }
 
-    let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, "␣let a: [Int]")
   }
 
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let buildable = VariableDecl(letOrVarKeyword: .var) {
+    let buildable = VariableDecl(leadingTrivia: leadingTrivia, letOrVarKeyword: .var) {
       PatternBinding(
         pattern: "d",
         typeAnnotation: DictionaryType(keyType: "String", valueType: "Int"),
         initializer: DictionaryExpr())
     }
 
-    let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, "␣var d: [String: Int] = [:]")
   }
 
@@ -82,8 +82,8 @@ final class VariableTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (keyword, name, type, initializer, expected) = testCase
-      let builder = VariableDecl(keyword, name: name, type: type, initializer: initializer)
-      let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+      let builder = VariableDecl(leadingTrivia: leadingTrivia, keyword, name: name, type: type, initializer: initializer)
+      let syntax = builder.buildSyntax(format: Format())
 
       XCTAssertEqual(syntax.description, expected, line: line)
     }

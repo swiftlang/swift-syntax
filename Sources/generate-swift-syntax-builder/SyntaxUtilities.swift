@@ -62,20 +62,13 @@ func createTypeInheritanceClause(conformances: [String]) -> TypeInheritanceClaus
   }
 }
 
-/// Create a parameter clause of the form `format: .comma, leadingTrivia: Trivia = nil`
-/// where the presence of ` = nil` is controlled by `withDefaultTrivia`.
-func createFormatLeadingTriviaParameters(withDefaultTrivia: Bool = false) -> ParameterClause {
+/// Create a parameter clause of the form `format: Format`.
+func createFormatParameters() -> ParameterClause {
   ParameterClause {
     FunctionParameter(
       firstName: .identifier("format"),
       colon: .colon,
       type: "Format"
-    )
-    FunctionParameter(
-      firstName: .identifier("leadingTrivia"),
-      colon: .colon,
-      type: OptionalType(wrappedType: "Trivia"),
-      defaultArgument: withDefaultTrivia ? InitializerClause(value: NilLiteralExpr()) : nil
     )
   }
 }

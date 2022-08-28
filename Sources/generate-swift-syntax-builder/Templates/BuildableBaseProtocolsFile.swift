@@ -42,11 +42,10 @@ let buildableBaseProtocolsFile = SourceFile {
         leadingTrivia: [
           "/// Builds list of `\(type.syntaxBaseName)`s.",
           "/// - Parameter format: The `Format` to use.",
-          "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)List"),
         signature: FunctionSignature(
-          input: createFormatLeadingTriviaParameters(),
+          input: createFormatParameters(),
           output: ArrayType(elementType: type.syntaxBaseName)
         ),
         body: nil
@@ -62,11 +61,10 @@ let buildableBaseProtocolsFile = SourceFile {
         leadingTrivia: [
           "/// Builds list of `\(type.syntaxBaseName)`s.",
           "/// - Parameter format: The `Format` to use.",
-          "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)"),
         signature: FunctionSignature(
-          input: createFormatLeadingTriviaParameters(),
+          input: createFormatParameters(),
           output: type.syntaxBaseName
         ),
         body: nil
@@ -92,20 +90,18 @@ let buildableBaseProtocolsFile = SourceFile {
         leadingTrivia: [
           "/// Builds list of `\(type.syntaxBaseName)`s.",
           "/// - Parameter format: The `Format` to use.",
-          "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
           "///",
           "/// Satisfies conformance to `\(type.listBuildable)`",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)List"),
         signature: FunctionSignature(
-          input: createFormatLeadingTriviaParameters(withDefaultTrivia: true),
+          input: createFormatParameters(),
           output: ArrayType(elementType: type.syntaxBaseName)
         )
       ) {
         ReturnStmt(expression: ArrayExpr {
           ArrayElement(expression: FunctionCallExpr("build\(type.baseName)") {
             TupleExprElement(label: "format", expression: "format")
-            TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
           })
         })
       }
@@ -115,21 +111,19 @@ let buildableBaseProtocolsFile = SourceFile {
           leadingTrivia: [
           "/// Builds a `\(type.syntaxBaseName)`.",
           "/// - Parameter format: The `Format` to use.",
-          "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
           "/// - Returns: A new `Syntax` with the built `\(type.syntaxBaseName)`.",
           "///",
           "/// Satisfies conformance to `SyntaxBuildable`.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
           identifier: .identifier("buildSyntax"),
           signature: FunctionSignature(
-            input: createFormatLeadingTriviaParameters(withDefaultTrivia: true),
+            input: createFormatParameters(),
             output: "Syntax"
           )
         ) {
           ReturnStmt(expression: FunctionCallExpr("Syntax") {
             TupleExprElement(expression: FunctionCallExpr("build\(type.baseName)") {
               TupleExprElement(label: "format", expression: "format")
-              TupleExprElement(label: "leadingTrivia", expression: "leadingTrivia")
             })
           })
         }

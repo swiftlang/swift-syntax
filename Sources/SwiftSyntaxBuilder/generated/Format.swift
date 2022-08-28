@@ -22,12 +22,1819 @@ public struct Format {
   }
 }
 extension Format {
-  public func _indented() -> Format {
+  public var _indented: Self {
     var copy = self
     copy.indents += 1
     return copy
   }
-  public func _makeIndent() -> Trivia {
-    return indents == 0 ? .zero : Trivia.spaces(indents * indentWidth)
+  public var _indentTrivia: Trivia {
+    indents == 0 ? .zero : .spaces(indents * indentWidth)
+  }
+  private var indentedNewline: Trivia {
+    .newline + _indentTrivia
+  }
+}
+extension Format {
+  public func _format(syntax: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
+    CodeBlockItemListSyntax(syntax.map {
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+    })
+  }
+  public func _format(syntax: CodeBlockSyntax) -> CodeBlockSyntax {
+    var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
+    syntax
+  }
+  public func _format(syntax: InOutExprSyntax) -> InOutExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundColumnExprSyntax) -> PoundColumnExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: ArrayElementListSyntax) -> ArrayElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: DictionaryElementListSyntax) -> DictionaryElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: StringLiteralSegmentsSyntax) -> StringLiteralSegmentsSyntax {
+    syntax
+  }
+  public func _format(syntax: TryExprSyntax) -> TryExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AwaitExprSyntax) -> AwaitExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MoveExprSyntax) -> MoveExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DeclNameArgumentSyntax) -> DeclNameArgumentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DeclNameArgumentListSyntax) -> DeclNameArgumentListSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclNameArgumentsSyntax) -> DeclNameArgumentsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IdentifierExprSyntax) -> IdentifierExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SuperRefExprSyntax) -> SuperRefExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: NilLiteralExprSyntax) -> NilLiteralExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DiscardAssignmentExprSyntax) -> DiscardAssignmentExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AssignmentExprSyntax) -> AssignmentExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SequenceExprSyntax) -> SequenceExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ExprListSyntax) -> ExprListSyntax {
+    syntax
+  }
+  public func _format(syntax: PoundLineExprSyntax) -> PoundLineExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundFileExprSyntax) -> PoundFileExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundFileIDExprSyntax) -> PoundFileIDExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundFilePathExprSyntax) -> PoundFilePathExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundFunctionExprSyntax) -> PoundFunctionExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundDsohandleExprSyntax) -> PoundDsohandleExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SymbolicReferenceExprSyntax) -> SymbolicReferenceExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrefixOperatorExprSyntax) -> PrefixOperatorExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: BinaryOperatorExprSyntax) -> BinaryOperatorExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ArrowExprSyntax) -> ArrowExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: InfixOperatorExprSyntax) -> InfixOperatorExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: FloatLiteralExprSyntax) -> FloatLiteralExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TupleExprSyntax) -> TupleExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ArrayExprSyntax) -> ArrayExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DictionaryExprSyntax) -> DictionaryExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TupleExprElementSyntax) -> TupleExprElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ArrayElementSyntax) -> ArrayElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DictionaryElementSyntax) -> DictionaryElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IntegerLiteralExprSyntax) -> IntegerLiteralExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: BooleanLiteralExprSyntax) -> BooleanLiteralExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: UnresolvedTernaryExprSyntax) -> UnresolvedTernaryExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TernaryExprSyntax) -> TernaryExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MemberAccessExprSyntax) -> MemberAccessExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: UnresolvedIsExprSyntax) -> UnresolvedIsExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IsExprSyntax) -> IsExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: UnresolvedAsExprSyntax) -> UnresolvedAsExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AsExprSyntax) -> AsExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TypeExprSyntax) -> TypeExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ClosureCaptureItemSyntax) -> ClosureCaptureItemSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ClosureCaptureItemListSyntax) -> ClosureCaptureItemListSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureCaptureSignatureSyntax) -> ClosureCaptureSignatureSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ClosureParamSyntax) -> ClosureParamSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ClosureParamListSyntax) -> ClosureParamListSyntax {
+    syntax
+  }
+  public func _format(syntax: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ClosureExprSyntax) -> ClosureExprSyntax {
+    var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: UnresolvedPatternExprSyntax) -> UnresolvedPatternExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MultipleTrailingClosureElementListSyntax) -> MultipleTrailingClosureElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionCallExprSyntax) -> FunctionCallExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SubscriptExprSyntax) -> SubscriptExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: OptionalChainingExprSyntax) -> OptionalChainingExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ForcedValueExprSyntax) -> ForcedValueExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PostfixUnaryExprSyntax) -> PostfixUnaryExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SpecializeExprSyntax) -> SpecializeExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: StringSegmentSyntax) -> StringSegmentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: StringLiteralExprSyntax) -> StringLiteralExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: RegexLiteralExprSyntax) -> RegexLiteralExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: KeyPathExprSyntax) -> KeyPathExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: KeyPathBaseExprSyntax) -> KeyPathBaseExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ObjcNamePieceSyntax) -> ObjcNamePieceSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ObjcNameSyntax) -> ObjcNameSyntax {
+    syntax
+  }
+  public func _format(syntax: ObjcKeyPathExprSyntax) -> ObjcKeyPathExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ObjcSelectorExprSyntax) -> ObjcSelectorExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PostfixIfConfigExprSyntax) -> PostfixIfConfigExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: EditorPlaceholderExprSyntax) -> EditorPlaceholderExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ObjectLiteralExprSyntax) -> ObjectLiteralExprSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TypealiasDeclSyntax) -> TypealiasDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AssociatedtypeDeclSyntax) -> AssociatedtypeDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: FunctionParameterListSyntax) -> FunctionParameterListSyntax {
+    syntax
+  }
+  public func _format(syntax: ParameterClauseSyntax) -> ParameterClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ReturnClauseSyntax) -> ReturnClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: FunctionSignatureSyntax) -> FunctionSignatureSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IfConfigClauseSyntax) -> IfConfigClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IfConfigClauseListSyntax) -> IfConfigClauseListSyntax {
+    syntax
+  }
+  public func _format(syntax: IfConfigDeclSyntax) -> IfConfigDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundErrorDeclSyntax) -> PoundErrorDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundWarningDeclSyntax) -> PoundWarningDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundSourceLocationSyntax) -> PoundSourceLocationSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundSourceLocationArgsSyntax) -> PoundSourceLocationArgsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DeclModifierDetailSyntax) -> DeclModifierDetailSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DeclModifierSyntax) -> DeclModifierSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: InheritedTypeSyntax) -> InheritedTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: InheritedTypeListSyntax) -> InheritedTypeListSyntax {
+    syntax
+  }
+  public func _format(syntax: TypeInheritanceClauseSyntax) -> TypeInheritanceClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ClassDeclSyntax) -> ClassDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ActorDeclSyntax) -> ActorDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: StructDeclSyntax) -> StructDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ProtocolDeclSyntax) -> ProtocolDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ExtensionDeclSyntax) -> ExtensionDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+    var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MemberDeclListSyntax) -> MemberDeclListSyntax {
+    MemberDeclListSyntax(syntax.map {
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+    })
+  }
+  public func _format(syntax: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SourceFileSyntax) -> SourceFileSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: InitializerClauseSyntax) -> InitializerClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: FunctionParameterSyntax) -> FunctionParameterSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ModifierListSyntax) -> ModifierListSyntax {
+    syntax
+  }
+  public func _format(syntax: FunctionDeclSyntax) -> FunctionDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: InitializerDeclSyntax) -> InitializerDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DeinitializerDeclSyntax) -> DeinitializerDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SubscriptDeclSyntax) -> SubscriptDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AccessLevelModifierSyntax) -> AccessLevelModifierSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AccessPathComponentSyntax) -> AccessPathComponentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AccessPathSyntax) -> AccessPathSyntax {
+    syntax
+  }
+  public func _format(syntax: ImportDeclSyntax) -> ImportDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AccessorParameterSyntax) -> AccessorParameterSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AccessorDeclSyntax) -> AccessorDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AccessorListSyntax) -> AccessorListSyntax {
+    syntax
+  }
+  public func _format(syntax: AccessorBlockSyntax) -> AccessorBlockSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PatternBindingSyntax) -> PatternBindingSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PatternBindingListSyntax) -> PatternBindingListSyntax {
+    syntax
+  }
+  public func _format(syntax: VariableDeclSyntax) -> VariableDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: EnumCaseElementListSyntax) -> EnumCaseElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: EnumCaseDeclSyntax) -> EnumCaseDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: EnumDeclSyntax) -> EnumDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: OperatorDeclSyntax) -> OperatorDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IdentifierListSyntax) -> IdentifierListSyntax {
+    syntax
+  }
+  public func _format(syntax: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrecedenceGroupDeclSyntax) -> PrecedenceGroupDeclSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrecedenceGroupAttributeListSyntax) -> PrecedenceGroupAttributeListSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupRelationSyntax) -> PrecedenceGroupRelationSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrecedenceGroupNameListSyntax) -> PrecedenceGroupNameListSyntax {
+    syntax
+  }
+  public func _format(syntax: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrecedenceGroupAssignmentSyntax) -> PrecedenceGroupAssignmentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrecedenceGroupAssociativitySyntax) -> PrecedenceGroupAssociativitySyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TokenListSyntax) -> TokenListSyntax {
+    syntax
+  }
+  public func _format(syntax: NonEmptyTokenListSyntax) -> NonEmptyTokenListSyntax {
+    syntax
+  }
+  public func _format(syntax: CustomAttributeSyntax) -> CustomAttributeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AttributeSyntax) -> AttributeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AttributeListSyntax) -> AttributeListSyntax {
+    syntax
+  }
+  public func _format(syntax: SpecializeAttributeSpecListSyntax) -> SpecializeAttributeSpecListSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilityEntrySyntax) -> AvailabilityEntrySyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: LabeledSpecializeEntrySyntax) -> LabeledSpecializeEntrySyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TargetFunctionEntrySyntax) -> TargetFunctionEntrySyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DeclNameSyntax) -> DeclNameSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ImplementsAttributeArgumentsSyntax) -> ImplementsAttributeArgumentsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ObjCSelectorPieceSyntax) -> ObjCSelectorPieceSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ObjCSelectorSyntax) -> ObjCSelectorSyntax {
+    syntax
+  }
+  public func _format(syntax: DifferentiableAttributeArgumentsSyntax) -> DifferentiableAttributeArgumentsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DifferentiabilityParamsClauseSyntax) -> DifferentiabilityParamsClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DifferentiabilityParamsSyntax) -> DifferentiabilityParamsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DifferentiabilityParamListSyntax) -> DifferentiabilityParamListSyntax {
+    syntax
+  }
+  public func _format(syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DerivativeRegistrationAttributeArgumentsSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: QualifiedDeclNameSyntax) -> QualifiedDeclNameSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: FunctionDeclNameSyntax) -> FunctionDeclNameSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: BackDeployVersionListSyntax) -> BackDeployVersionListSyntax {
+    syntax
+  }
+  public func _format(syntax: BackDeployVersionArgumentSyntax) -> BackDeployVersionArgumentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: LabeledStmtSyntax) -> LabeledStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ContinueStmtSyntax) -> ContinueStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: WhileStmtSyntax) -> WhileStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DeferStmtSyntax) -> DeferStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ExpressionStmtSyntax) -> ExpressionStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
+    SwitchCaseListSyntax(syntax.map {
+      $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
+    })
+  }
+  public func _format(syntax: RepeatWhileStmtSyntax) -> RepeatWhileStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: GuardStmtSyntax) -> GuardStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: WhereClauseSyntax) -> WhereClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ForInStmtSyntax) -> ForInStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SwitchStmtSyntax) -> SwitchStmtSyntax {
+    var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CatchClauseListSyntax) -> CatchClauseListSyntax {
+    syntax
+  }
+  public func _format(syntax: DoStmtSyntax) -> DoStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ReturnStmtSyntax) -> ReturnStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: YieldStmtSyntax) -> YieldStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: YieldListSyntax) -> YieldListSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: FallthroughStmtSyntax) -> FallthroughStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: BreakStmtSyntax) -> BreakStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CaseItemListSyntax) -> CaseItemListSyntax {
+    syntax
+  }
+  public func _format(syntax: CatchItemListSyntax) -> CatchItemListSyntax {
+    syntax
+  }
+  public func _format(syntax: ConditionElementSyntax) -> ConditionElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AvailabilityConditionSyntax) -> AvailabilityConditionSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MatchingPatternConditionSyntax) -> MatchingPatternConditionSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: OptionalBindingConditionSyntax) -> OptionalBindingConditionSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: UnavailabilityConditionSyntax) -> UnavailabilityConditionSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ConditionElementListSyntax) -> ConditionElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: DeclarationStmtSyntax) -> DeclarationStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ThrowStmtSyntax) -> ThrowStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IfStmtSyntax) -> IfStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ElseIfContinuationSyntax) -> ElseIfContinuationSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ElseBlockSyntax) -> ElseBlockSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SwitchCaseSyntax) -> SwitchCaseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CaseItemSyntax) -> CaseItemSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CatchItemSyntax) -> CatchItemSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CatchClauseSyntax) -> CatchClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PoundAssertStmtSyntax) -> PoundAssertStmtSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: GenericWhereClauseSyntax) -> GenericWhereClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: GenericRequirementListSyntax) -> GenericRequirementListSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericRequirementSyntax) -> GenericRequirementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SameTypeRequirementSyntax) -> SameTypeRequirementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: LayoutRequirementSyntax) -> LayoutRequirementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: GenericParameterListSyntax) -> GenericParameterListSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericParameterSyntax) -> GenericParameterSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeListSyntax {
+    syntax
+  }
+  public func _format(syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: GenericParameterClauseSyntax) -> GenericParameterClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ConformanceRequirementSyntax) -> ConformanceRequirementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: PrimaryAssociatedTypeClauseSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: SimpleTypeIdentifierSyntax) -> SimpleTypeIdentifierSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MemberTypeIdentifierSyntax) -> MemberTypeIdentifierSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ClassRestrictionTypeSyntax) -> ClassRestrictionTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ArrayTypeSyntax) -> ArrayTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: DictionaryTypeSyntax) -> DictionaryTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: MetatypeTypeSyntax) -> MetatypeTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: OptionalTypeSyntax) -> OptionalTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ConstrainedSugarTypeSyntax) -> ConstrainedSugarTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ImplicitlyUnwrappedOptionalTypeSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CompositionTypeElementSyntax) -> CompositionTypeElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: CompositionTypeElementListSyntax) -> CompositionTypeElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: CompositionTypeSyntax) -> CompositionTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TupleTypeElementListSyntax) -> TupleTypeElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: TupleTypeSyntax) -> TupleTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: FunctionTypeSyntax) -> FunctionTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AttributedTypeSyntax) -> AttributedTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: GenericArgumentListSyntax) -> GenericArgumentListSyntax {
+    syntax
+  }
+  public func _format(syntax: GenericArgumentSyntax) -> GenericArgumentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: GenericArgumentClauseSyntax) -> GenericArgumentClauseSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: EnumCasePatternSyntax) -> EnumCasePatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IsTypePatternSyntax) -> IsTypePatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: OptionalPatternSyntax) -> OptionalPatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: IdentifierPatternSyntax) -> IdentifierPatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AsTypePatternSyntax) -> AsTypePatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TuplePatternSyntax) -> TuplePatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: WildcardPatternSyntax) -> WildcardPatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TuplePatternElementSyntax) -> TuplePatternElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: ExpressionPatternSyntax) -> ExpressionPatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: TuplePatternElementListSyntax) -> TuplePatternElementListSyntax {
+    syntax
+  }
+  public func _format(syntax: ValueBindingPatternSyntax) -> ValueBindingPatternSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AvailabilitySpecListSyntax) -> AvailabilitySpecListSyntax {
+    syntax
+  }
+  public func _format(syntax: AvailabilityArgumentSyntax) -> AvailabilityArgumentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: AvailabilityVersionRestrictionSyntax) -> AvailabilityVersionRestrictionSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  public func _format(syntax: VersionTupleSyntax) -> VersionTupleSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
   }
 }

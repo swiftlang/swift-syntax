@@ -36,34 +36,15 @@ extension Child {
   /// represents this child node.
   func generateExprBuildSyntaxNode(varName: String, formatName: String) -> ExpressibleAsExprBuildable {
     if type.isToken {
-      if requiresLeadingNewline {
-        return FunctionCallExpr(MemberAccessExpr(base: varName, name: "withLeadingTrivia")) {
-          SequenceExpr {
-            MemberAccessExpr(name: "newline")
-            BinaryOperatorExpr("+")
-            FunctionCallExpr(MemberAccessExpr(base: formatName, name: "_makeIndent"))
-            BinaryOperatorExpr("+")
-            TupleExpr {
-              SequenceExpr {
-                MemberAccessExpr(base: varName, name: "leadingTrivia")
-                BinaryOperatorExpr("??")
-                ArrayExpr {}
-              }
-            }
-          }
-        }
-      } else {
-        return varName
-      }
+      return varName
     } else {
       var format: ExpressibleAsExprBuildable = formatName
       if isIndented {
-        format = FunctionCallExpr(MemberAccessExpr(base: format, name: "_indented"))
+        format = MemberAccessExpr(base: format, name: "_indented")
       }
       let expr = type.optionalChained(expr: varName)
       return FunctionCallExpr(MemberAccessExpr(base: expr, name: "build\(type.baseName)")) {
         TupleExprElement(label: "format", expression: format)
-        TupleExprElement(label: "leadingTrivia", expression: NilLiteralExpr())
       }
     }
   }

@@ -238,12 +238,12 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
     ].map { .docLineComment($0) + .newline }.reduce([], +),
     identifier: .identifier("build\(type.baseName)"),
     signature: FunctionSignature(
-      input: createFormatAdditionalLeadingTriviaParams(),
+      input: createFormatParameters(),
       output: type.syntax
     )
   ) {
     VariableDecl(
-      .let,
+      .var,
       name: "result",
       initializer: FunctionCallExpr(type.syntaxBaseName) {
         for child in children {
@@ -254,41 +254,38 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
         }
       }
     )
-    VariableDecl(
-      .let,
-      name: "combinedLeadingTrivia",
-      initializer: SequenceExpr {
-        "leadingTrivia"
-        BinaryOperatorExpr("+")
-        TupleExpr {
-          SequenceExpr {
-            "additionalLeadingTrivia"
-            BinaryOperatorExpr("??")
-            ArrayExpr()
-          }
-        }
-        BinaryOperatorExpr("+")
-        TupleExpr {
-          SequenceExpr {
-            MemberAccessExpr(base: "result", name: "leadingTrivia")
-            BinaryOperatorExpr("??")
-            ArrayExpr()
-          }
+    IfStmt(
+      conditions: ExprList {
+        PrefixOperatorExpr(
+          operatorToken: .prefixOperator("!"),
+          postfixExpression: MemberAccessExpr(base: "leadingTrivia", name: "isEmpty")
+        )
+      }
+    ) {
+      SequenceExpr {
+        "result"
+        AssignmentExpr()
+        FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
+          TupleExprElement(expression: SequenceExpr {
+            "leadingTrivia"
+            BinaryOperatorExpr("+")
+            TupleExpr {
+              SequenceExpr {
+                MemberAccessExpr(base: "result", name: "leadingTrivia")
+                BinaryOperatorExpr("??")
+                ArrayExpr()
+              }
+            }
+          })
         }
       }
-    )
-    IfStmt(
-      conditions: ExprList([MemberAccessExpr(base: "combinedLeadingTrivia", name: "isEmpty")])
-    ) {
-      ReturnStmt(expression: "result")
-    } elseBody: {
-      ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
-        TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(
-          base: "combinedLeadingTrivia",
-          name: "addingSpacingAfterNewlinesIfNeeded"
-        )))
-      })
     }
+    ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
+      TupleExprElement(
+        label: "syntax",
+        expression: "result"
+      )
+    })
   }
 }
 
@@ -301,7 +298,7 @@ private func createBuildBaseTypeFunction(node: Node) -> FunctionDecl {
     modifiers: [TokenSyntax.public],
     identifier: .identifier("build\(baseType.baseName)"),
     signature: FunctionSignature(
-      input: createFormatAdditionalLeadingTriviaParams(),
+      input: createFormatParameters(),
       output: baseType.syntax
     )
   ) {
@@ -310,29 +307,11 @@ private func createBuildBaseTypeFunction(node: Node) -> FunctionDecl {
       name: "result",
       initializer: FunctionCallExpr("build\(type.baseName)") {
         TupleExprElement(label: "format", expression: "format")
-        TupleExprElement(label: "leadingTrivia", expression: "additionalLeadingTrivia")
       }
     )
     ReturnStmt(expression: FunctionCallExpr(baseType.syntaxBaseName) {
       TupleExprElement(expression: "result")
     })
-  }
-}
-
-private func createFormatAdditionalLeadingTriviaParams() -> ParameterClause {
-  ParameterClause {
-    FunctionParameter(
-      firstName: .identifier("format"),
-      colon: .colon,
-      type: "Format"
-    )
-    FunctionParameter(
-      firstName: .identifier("leadingTrivia").withTrailingTrivia(.space),
-      secondName: .identifier("additionalLeadingTrivia"),
-      colon: .colon,
-      type: OptionalType(wrappedType: "Trivia"),
-      defaultArgument: NilLiteralExpr()
-    )
   }
 }
 

@@ -33,60 +33,6 @@ public func XCTAssertNextIsNil<Iterator: IteratorProtocol>(_ iterator: inout Ite
   XCTAssertNil(iterator.next())
 }
 
-/// Verifies that the tree parsed from `actual` has the same structure as
-/// `expected` when parsed with `parse`, ie. it has the same structure and
-/// optionally the same trivia (if `includeTrivia` is set).
-public func XCTAssertSameStructure(
-  _ actual: String,
-  parse: (String) throws -> Syntax,
-  _ expected: Syntax,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-) throws {
-  let actualTree = try parse(actual)
-  XCTAssertSameStructure(actualTree, expected, includeTrivia: includeTrivia, file: file, line: line)
-}
-
-/// Verifies that two trees are equivalent, ie. they have the same structure
-/// and optionally the same trivia if `includeTrivia` is set.
-public func XCTAssertSameStructure<ActualTree, ExpectedTree>(
-  _ actual: ActualTree,
-  _ expected: ExpectedTree,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-)
-  where ActualTree: SyntaxProtocol, ExpectedTree: SyntaxProtocol
-{
-  let diff = actual.findFirstDifference(baseline: expected, includeTrivia: includeTrivia)
-  XCTAssertNil(diff, diff!.debugDescription, file: file, line: line)
-}
-
-/// See `SubtreeMatcher.assertSameStructure`.
-public func XCTAssertHasSubstructure<ExpectedTree: SyntaxProtocol>(
-  _ markedText: String,
-  parse: (String) throws -> Syntax,
-  afterMarker: String? = nil,
-  _ expected: ExpectedTree,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-) throws {
-  let subtreeMatcher = try SubtreeMatcher(markedText, parse: parse)
-  try subtreeMatcher.assertSameStructure(afterMarker: afterMarker, Syntax(expected), file: file, line: line)
-}
-
-/// See `SubtreeMatcher.assertSameStructure`.
-public func XCTAssertHasSubstructure<ActualTree, ExpectedTree>(
-  _ actualTree: ActualTree,
-  _ expected: ExpectedTree,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-) throws
-  where ActualTree: SyntaxProtocol, ExpectedTree: SyntaxProtocol
-{
-  let subtreeMatcher = SubtreeMatcher(Syntax(actualTree))
-  try subtreeMatcher.assertSameStructure(Syntax(expected), file: file, line: line)
-}
-
 /// Allows matching a subtrees of the given `markedText` against
 /// `baseline`/`expected` trees, where a combination of markers and the type
 /// of the `expected` tree is used to first find the subtree to match. Note
@@ -141,8 +87,8 @@ public struct SubtreeMatcher {
     self.actualTree = try parse(text)
   }
 
-  public init(_ actualTree: Syntax) {
-    self.markers = ["DEFAULT": 0]
+  public init(_ actualTree: Syntax, markers: [String: Int]) {
+    self.markers = markers.isEmpty ? ["DEFAULT": 0] : markers
     self.actualTree = actualTree
   }
 
@@ -162,8 +108,8 @@ public struct SubtreeMatcher {
     return subtree.findFirstDifference(baseline: baseline, includeTrivia: includeTrivia)
   }
 
-  /// Same as `XCTAssertSameStructure`, but uses the subtree found from parsing
-  /// the text passed into `init(markedText:)` as the `actual` tree.
+  /// Verifies that the the subtree found from parsing the text passed into
+  /// `init(markedText:)` has the same structure as `expected`.
   public func assertSameStructure(afterMarker: String? = nil, _ expected: Syntax, includeTrivia: Bool = false,
                                   file: StaticString = #filePath, line: UInt = #line) throws {
     let diff = try findFirstDifference(afterMarker: afterMarker, baseline: expected, includeTrivia: includeTrivia)

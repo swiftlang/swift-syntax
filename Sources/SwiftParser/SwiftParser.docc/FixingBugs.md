@@ -27,20 +27,14 @@ Diagnostics are produced when the parsed syntax tree contains missing or unexpec
 
 1. Add a test case in `SwiftParserTest` that looks like the following
     ```swift
-    let source = """
-    <#your code that produces an invalid syntax tree#> 
-    """
-
-    let tree = withParser(source: source) {
-      Syntax(raw: $0.parseSourceFile().raw)
-    }
-    XCTAssertHasSubstructure(
-      tree,
-      <#create a syntax node that you expect the tree to have#>
+    AssertParse(
+      """
+      <#your code that produces an invalid syntax tree#> 
+      """,
+      substructure: <#create a syntax node that you expect the tree to have#>
     )
     ```
-2. Optional: Reduce the test case even further by deleting more source code and calling into a specific production of the parser instead of `Parser.parseSourceFile`
-3. Run the test case and navigate the debugger to the place that produced the invalid syntax node. 
+2. Run the test case and navigate the debugger to the place that produced the invalid syntax node. 
 
 ## Unhelpful Diagnostic Produced
 

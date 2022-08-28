@@ -160,9 +160,11 @@ func AssertDiagnostic<T: SyntaxProtocol>(
 /// These markers are removed before parsing the source file.
 /// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `#^DIAG^#`.
 /// `parseSyntax` can be used to adjust the production that should be used as the entry point to parse the source code.
+/// If `substructure` is not `nil`, asserts that the parsed syntax tree contains this substructure.
 func AssertParse<Node: RawSyntaxNodeProtocol>(
   _ markedSource: String,
   _ parseSyntax: (inout Parser) -> Node = { $0.parseSourceFile() },
+  substructure expectedSubstructure: Syntax? = nil,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   fixedSource expectedFixedSource: String? = nil,
   file: StaticString = #file,
@@ -175,12 +177,26 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
     var parser = Parser(buf)
     withExtendedLifetime(parser) {
       let tree = Syntax(raw: parseSyntax(&parser).raw)
+
+      // Round-trip
       AssertStringsEqualWithDiff("\(tree)", source, additionalInfo: """
       Source failed to round-trip.
 
       Actual syntax tree:
       \(tree.recursiveDescription)
       """, file: file, line: line)
+
+      // Substructure
+      if let expectedSubstructure = expectedSubstructure {
+        let subtreeMatcher = SubtreeMatcher(Syntax(tree), markers: [:])
+        do {
+          try subtreeMatcher.assertSameStructure(Syntax(expectedSubstructure), file: file, line: line)
+        } catch {
+          XCTFail("Matching for a subtree failed with error: \(error)", file: file, line: line)
+        }
+      }
+
+      // Diagnostics
       let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
       XCTAssertEqual(diags.count, expectedDiagnostics.count, """
       Expected \(expectedDiagnostics.count) diagnostics but received \(diags.count):
@@ -189,6 +205,8 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
       for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
         AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: file, line: line)
       }
+
+      // Applying Fix-Its
       if let expectedFixedSource = expectedFixedSource {
         let fixedSource = FixItApplier.applyFixes(in: diags, to: tree).description
         AssertStringsEqualWithDiff(fixedSource, expectedFixedSource, file: file, line: line)

@@ -60,8 +60,13 @@ extension OperatorPrecedence {
     }
 
     // The ternary operator has a fixed precedence group name.
-    if let ternaryExpr = expr.as(UnresolvedTernaryExprSyntax.self) {
+    if expr.is(UnresolvedTernaryExprSyntax.self) {
       return "TernaryPrecedence"
+    }
+
+    // An assignment operator has fixed precedence.
+    if expr.is(AssignmentExprSyntax.self) {
+      return "AssignmentPrecedence"
     }
 
     // FIXME: Handle all of the language-defined precedence relationships.
@@ -81,8 +86,7 @@ extension OperatorPrecedence {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
-          binaryOperatorExpr.unexpectedBeforeOperatorToken,
-          operatorOperand: op,
+          operatorOperand: ExprSyntax(binaryOperatorExpr),
           rightOperand: rhs)
       )
     }
@@ -99,6 +103,16 @@ extension OperatorPrecedence {
           ternaryExpr.unexpectedBetweenFirstChoiceAndColonMark,
           colonMark: ternaryExpr.colonMark,
           secondChoice: rhs)
+      )
+    }
+
+    // An assignment operator x = y.
+    if let assignExpr = op.as(AssignmentExprSyntax.self) {
+      return ExprSyntax(
+        InfixOperatorExprSyntax(
+          leftOperand: lhs,
+          operatorOperand: ExprSyntax(assignExpr),
+          rightOperand: rhs)
       )
     }
 

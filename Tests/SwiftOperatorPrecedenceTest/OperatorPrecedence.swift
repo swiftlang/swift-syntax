@@ -118,6 +118,12 @@ public class OperatorPrecedenceTests: XCTestCase {
     XCTAssertFalse(foldedAll.containsExprSequence)
   }
 
+  func testAssignExprs() throws {
+    let opPrecedence = OperatorPrecedence.standardOperators
+    try opPrecedence.assertExpectedFold("a = b + c", "(a = (b + c))")
+    try opPrecedence.assertExpectedFold("a = b = c", "(a = (b = c))")
+  }
+
   func testParsedLogicalExprs() throws {
     let logicalOperatorSources =
     """

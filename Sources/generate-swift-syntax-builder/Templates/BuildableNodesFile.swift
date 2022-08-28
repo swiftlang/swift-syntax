@@ -31,7 +31,7 @@ let buildableNodesFile = SourceFile {
       leadingTrivia: node.documentation.isEmpty
         ? []
         : .docLineComment("/// \(node.documentation)") + .newline,
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: type.buildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: conformances)
     ) {
@@ -81,7 +81,7 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
     ] + node.children.map { child in
       "///   - \(child.swiftName): \(child.documentation)"
     }).map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
         FunctionParameter(
@@ -162,7 +162,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       // Allow initializing identifiers and other tokens without default text with a String
       shouldCreateInitializer = true
       let paramType = child.type.optionalWrapped(type: "String")
-      let tokenExpr = MemberAccessExpr(base: "TokenSyntax", name: token.swiftKind.withFirstCharacterLowercased.backticked)
+      let tokenExpr = MemberAccessExpr(base: "Token", name: token.swiftKind.withFirstCharacterLowercased.backticked)
       if child.type.isOptional {
         produceExpr = FunctionCallExpr(MemberAccessExpr(base: child.swiftName, name: "map"), trailingClosure: ClosureExpr {
           FunctionCallExpr(tokenExpr) {
@@ -201,7 +201,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
       "///  - Initializing syntax collections using result builders",
       "///  - Initializing tokens without default text using strings",
     ].map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
         FunctionParameter(
@@ -298,7 +298,7 @@ private func createBuildBaseTypeFunction(node: Node) -> FunctionDecl {
   let baseType = node.baseType
   return FunctionDecl(
     leadingTrivia: .docLineComment("/// Conformance to `\(baseType.buildableBaseName)`.") + .newline,
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     identifier: .identifier("build\(baseType.baseName)"),
     signature: FunctionSignature(
       input: createFormatAdditionalLeadingTriviaParams(),
@@ -341,7 +341,7 @@ private func createWithTrailingCommaFunction(node: Node) -> FunctionDecl {
   let children = node.children
   return FunctionDecl(
     leadingTrivia: .docLineComment("/// Conformance to `HasTrailingComma`.") + .newline,
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     identifier: .identifier("withTrailingComma"),
     signature: FunctionSignature(
       input: ParameterClause {

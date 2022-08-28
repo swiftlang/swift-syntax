@@ -52,7 +52,7 @@ let SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES: [String: [String]] = [
   "StmtBuildable": [
     "CodeBlockItem",
   ],
-  "TokenSyntax": [
+  "Token": [
     "BinaryOperatorExpr",
     "DeclModifier",
     "IdentifierExpr",

@@ -18,7 +18,7 @@ extension VariableDecl {
     leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
-    _ letOrVarKeyword: TokenSyntax,
+    _ letOrVarKeyword: Token,
     name: ExpressibleAsIdentifierPattern,
     type: ExpressibleAsTypeAnnotation? = nil,
     initializer: ExpressibleAsInitializerClause? = nil
@@ -50,7 +50,7 @@ extension VariableDecl {
       leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
-      letOrVarKeyword: .varKeyword(leadingTrivia: attributes != nil ? .space : .zero)
+      letOrVarKeyword: .var.withLeadingTrivia(attributes != nil ? .space : .zero)
     ) {
       PatternBinding(
         pattern: name,

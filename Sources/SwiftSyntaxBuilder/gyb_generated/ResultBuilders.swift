@@ -1630,11 +1630,11 @@ public struct IdentifierListBuilder {
 
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TokenSyntax
+  public typealias Expression = Token
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TokenSyntax]
+  public typealias Component = [Token]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1855,11 +1855,11 @@ public struct TokenListBuilder {
 
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TokenSyntax
+  public typealias Expression = Token
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TokenSyntax]
+  public typealias Component = [Token]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1930,11 +1930,11 @@ public struct NonEmptyTokenListBuilder {
 
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TokenSyntax
+  public typealias Expression = Token
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TokenSyntax]
+  public typealias Component = [Token]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.

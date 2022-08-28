@@ -5,7 +5,7 @@ import SwiftSyntaxBuilder
 final class ImportTests: XCTestCase {
   func testImport() {
     let leadingTrivia = Trivia.unexpectedText("␣")
-    let identifier = TokenSyntax.identifier("SwiftSyntax")
+    let identifier = Token.identifier("SwiftSyntax")
 
     let importDecl = ImportDecl(path: AccessPath([AccessPathComponent(name: identifier)]))
 

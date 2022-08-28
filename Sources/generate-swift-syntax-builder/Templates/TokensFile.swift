@@ -22,68 +22,103 @@ let tokensFile = SourceFile {
 
   ExtensionDecl(
     leadingTrivia: .newline + .docLineComment("/// Namespace for commonly used tokens with default trivia.") + .newline,
-    modifiers: [TokenSyntax.public],
-    extendedType: "TokenSyntax"
+    modifiers: [Token.public],
+    extendedType: "Token"
   ) {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {
         VariableDecl(
           leadingTrivia: token.text.map { .newline + .docLineComment("/// The `\($0)` keyword") + .newline } ?? [],
-          modifiers: [TokenSyntax.static],
+          modifiers: [Token.static],
           letOrVarKeyword: .var
         ) {
           // We need to use `CodeBlock` here to ensure there is braces around.
 
           let accessor = CodeBlock {
-            FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: token.swiftKind))
+            FunctionCallExpr("Token") {
+              TupleExprElement(label: "tokenSyntax", expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: token.swiftKind)))
+            }
           }
 
-          createTokenSyntaxPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
+          createTokenPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
         }
       } else if let text = token.text {
         VariableDecl(
           leadingTrivia: .newline + .docLineComment("/// The `\(text)` token") + .newline,
-          modifiers: [TokenSyntax.static],
+          modifiers: [Token.static],
           letOrVarKeyword: .var
         ) {
           // We need to use `CodeBlock` here to ensure there is braces around.
           let accessor = CodeBlock {
-            FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "\(token.swiftKind)Token"))
+            FunctionCallExpr("Token") {
+              TupleExprElement(label: "tokenSyntax", expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "\(token.swiftKind)Token")))
+            }
           }
 
-          createTokenSyntaxPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
+          createTokenPatternBinding(token.name.withFirstCharacterLowercased.backticked, accessor: accessor)
+        }
+      } else {
+        let signature = FunctionSignature(
+          input: ParameterClause {
+            FunctionParameter(
+              attributes: nil,
+              firstName: .wildcard,
+              secondName: .identifier("text"),
+              colon: .colon,
+              type: "String"
+            )
+          },
+          output: "Token"
+        )
+
+        FunctionDecl(
+          modifiers: [Token.static],
+          identifier: .identifier(token.name.withFirstCharacterLowercased.backticked),
+          signature: signature
+        ) {
+          FunctionCallExpr("Token") {
+            TupleExprElement(
+              label: "tokenSyntax",
+              expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: token.swiftKind)) {
+                TupleExprElement(expression: "text")
+              })
+          }
         }
       }
-      // TokenSyntax with custom text already has a static constructor function defined in SwiftSyntax.
     }
     VariableDecl(
       leadingTrivia: .newline + .docLineComment("/// The `eof` token") + .newline,
-      modifiers: [TokenSyntax.static],
+      modifiers: [Token.static],
       letOrVarKeyword: .var
     ) {
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "eof")) {
+        FunctionCallExpr("Token") {
+          TupleExprElement(label: "tokenSyntax", expression: FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "eof")))
         }
       }
 
-      createTokenSyntaxPatternBinding("eof", accessor: body)
+      createTokenPatternBinding("eof", accessor: body)
     }
     VariableDecl(
       leadingTrivia: .newline + .docLineComment("/// The `open` contextual token") + .newline,
-      modifiers: [TokenSyntax.static],
+      modifiers: [Token.static],
       letOrVarKeyword: .var
     ) {
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
-        FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "contextualKeyword")) {
+        let tokenSyntax = FunctionCallExpr(MemberAccessExpr(base: "TokenSyntax", name: "contextualKeyword")) {
           TupleExprElement(expression: StringLiteralExpr("open"))
         }
-
-        createWithTrailingTriviaCall()
+        let tokenSyntaxWithTrailingTrivia = FunctionCallExpr(MemberAccessExpr(base: tokenSyntax, name: "withTrailingTrivia")) {
+          TupleExprElement(expression: createSpacingCall())
+        }
+        FunctionCallExpr("Token") {
+          TupleExprElement(label: "tokenSyntax", expression: tokenSyntaxWithTrailingTrivia)
+        }
       }
 
-      createTokenSyntaxPatternBinding("open", accessor: body)
+      createTokenPatternBinding("open", accessor: body)
     }
   }
 }

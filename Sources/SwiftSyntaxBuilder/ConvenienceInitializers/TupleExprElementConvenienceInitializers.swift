@@ -17,6 +17,6 @@ public extension TupleExprElement {
   /// The presence of the colon will be inferred based on the presence of the label.
   init(label: String? = nil, expression: ExpressibleAsExprBuildable) {
     self.init(
-      label: label.map { TokenSyntax.identifier($0) }, colon: label == nil ? nil : .colon, expression: expression)
+      label: label.map { Token.identifier($0) }, colon: label == nil ? nil : Token.colon, expression: expression)
   }
 }

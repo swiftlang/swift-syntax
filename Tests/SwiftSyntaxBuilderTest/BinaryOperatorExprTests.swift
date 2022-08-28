@@ -7,7 +7,7 @@ final class BinaryOperatorExprTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (ExpressibleAsBinaryOperatorExpr, String)] = [
       #line: (BinaryOperatorExpr("=="), "␣ == "),
-      #line: (TokenSyntax.unspacedBinaryOperator("=="), "␣=="),
+      #line: (Token.unspacedBinaryOperator("=="), "␣=="),
       #line: ("==", "␣ == "),
     ]
     

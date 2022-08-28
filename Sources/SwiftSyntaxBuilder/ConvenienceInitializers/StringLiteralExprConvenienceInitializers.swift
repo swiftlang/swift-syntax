@@ -26,13 +26,13 @@ private let rawStringPotentialEscapesPattern = try! NSRegularExpression(
 extension StringLiteralExpr {
   /// Creates a string literal, optionally specifying quotes and delimiters.
   public init(
-    openDelimiter: TokenSyntax? = nil,
-    openQuote: TokenSyntax = .stringQuote,
+    openDelimiter: Token? = nil,
+    openQuote: Token = .stringQuote,
     _ value: String,
-    closeQuote: TokenSyntax = .stringQuote,
-    closeDelimiter: TokenSyntax? = nil
+    closeQuote: Token = .stringQuote,
+    closeDelimiter: Token? = nil
   ) {
-    let content = TokenSyntax.stringSegment(value)
+    let content = Token.stringSegment(value)
     let segment = StringSegment(content: content)
     let segments = StringLiteralSegments([segment])
 
@@ -57,7 +57,7 @@ extension StringLiteralExpr {
       .max() ?? 0
 
     // Use a delimiter that is exactly one longer
-    let delimiter = TokenSyntax.rawStringDelimiter(String(repeating: "#", count: 1 + maxPoundCount))
+    let delimiter = Token.rawStringDelimiter(String(repeating: "#", count: 1 + maxPoundCount))
 
     self.init(
       openDelimiter: delimiter,

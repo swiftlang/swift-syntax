@@ -34,7 +34,7 @@ let buildableBaseProtocolsFile = SourceFile {
     let listConformances: [String] = isSyntax ? [] : [syntaxType.listBuildableBaseName]
 
     ProtocolDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: type.listBuildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: listConformances)
     ) {
@@ -54,7 +54,7 @@ let buildableBaseProtocolsFile = SourceFile {
     }
 
     ProtocolDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: type.buildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: buildableConformances)
     ) {
@@ -74,7 +74,7 @@ let buildableBaseProtocolsFile = SourceFile {
     }
 
     ExtensionDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       extendedType: type.buildableBaseName
     ) {
       FunctionDecl(

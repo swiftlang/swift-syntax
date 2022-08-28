@@ -33,7 +33,7 @@ struct SyntaxBuildableType: Hashable {
   }
 
   /// The token if this is a token.
-  var token: Token? {
+  var token: TokenSpec? {
     tokenKind.flatMap { SYNTAX_TOKEN_MAP[$0] }
   }
 
@@ -46,9 +46,9 @@ struct SyntaxBuildableType: Hashable {
       return NilLiteralExpr()
     } else if isToken {
       if let token = token, token.text != nil {
-        return MemberAccessExpr(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name).backticked)
+        return MemberAccessExpr(base: "Token", name: lowercaseFirstWord(name: token.name).backticked)
       } else if tokenKind == "EOFToken" {
-        return MemberAccessExpr(base: "TokenSyntax", name: "eof")
+        return MemberAccessExpr(base: "Token", name: "eof")
       }
     }
     return nil
@@ -97,10 +97,7 @@ struct SyntaxBuildableType: Hashable {
   /// The type from `buildable()` without any question marks attached.
   /// This is used for the `create*` methods defined in the `ExpressibleAs*` protocols.
   var buildableBaseName: String {
-    if isToken {
-      // Tokens don't have a dedicated buildable type.
-      return "TokenSyntax"
-    } else if SYNTAX_BASE_KINDS.contains(syntaxKind) {
+    if SYNTAX_BASE_KINDS.contains(syntaxKind) {
       return "\(syntaxKind)Buildable"
     } else {
       return syntaxKind

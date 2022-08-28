@@ -16,566 +16,607 @@
 import SwiftSyntax
 
 /// Namespace for commonly used tokens with default trivia.
-public extension TokenSyntax {
+public extension Token {
   
   /// The `associatedtype` keyword
-  static var `associatedtype`: TokenSyntax {
-    TokenSyntax.associatedtypeKeyword()
+  static var `associatedtype`: Token {
+    Token(tokenSyntax: TokenSyntax.associatedtypeKeyword())
   }
   
   /// The `class` keyword
-  static var `class`: TokenSyntax {
-    TokenSyntax.classKeyword()
+  static var `class`: Token {
+    Token(tokenSyntax: TokenSyntax.classKeyword())
   }
   
   /// The `deinit` keyword
-  static var `deinit`: TokenSyntax {
-    TokenSyntax.deinitKeyword()
+  static var `deinit`: Token {
+    Token(tokenSyntax: TokenSyntax.deinitKeyword())
   }
   
   /// The `enum` keyword
-  static var `enum`: TokenSyntax {
-    TokenSyntax.enumKeyword()
+  static var `enum`: Token {
+    Token(tokenSyntax: TokenSyntax.enumKeyword())
   }
   
   /// The `extension` keyword
-  static var `extension`: TokenSyntax {
-    TokenSyntax.extensionKeyword()
+  static var `extension`: Token {
+    Token(tokenSyntax: TokenSyntax.extensionKeyword())
   }
   
   /// The `func` keyword
-  static var `func`: TokenSyntax {
-    TokenSyntax.funcKeyword()
+  static var `func`: Token {
+    Token(tokenSyntax: TokenSyntax.funcKeyword())
   }
   
   /// The `import` keyword
-  static var `import`: TokenSyntax {
-    TokenSyntax.importKeyword()
+  static var `import`: Token {
+    Token(tokenSyntax: TokenSyntax.importKeyword())
   }
   
   /// The `init` keyword
-  static var `init`: TokenSyntax {
-    TokenSyntax.initKeyword()
+  static var `init`: Token {
+    Token(tokenSyntax: TokenSyntax.initKeyword())
   }
   
   /// The `inout` keyword
-  static var `inout`: TokenSyntax {
-    TokenSyntax.inoutKeyword()
+  static var `inout`: Token {
+    Token(tokenSyntax: TokenSyntax.inoutKeyword())
   }
   
   /// The `let` keyword
-  static var `let`: TokenSyntax {
-    TokenSyntax.letKeyword()
+  static var `let`: Token {
+    Token(tokenSyntax: TokenSyntax.letKeyword())
   }
   
   /// The `operator` keyword
-  static var `operator`: TokenSyntax {
-    TokenSyntax.operatorKeyword()
+  static var `operator`: Token {
+    Token(tokenSyntax: TokenSyntax.operatorKeyword())
   }
   
   /// The `precedencegroup` keyword
-  static var `precedencegroup`: TokenSyntax {
-    TokenSyntax.precedencegroupKeyword()
+  static var `precedencegroup`: Token {
+    Token(tokenSyntax: TokenSyntax.precedencegroupKeyword())
   }
   
   /// The `protocol` keyword
-  static var `protocol`: TokenSyntax {
-    TokenSyntax.protocolKeyword()
+  static var `protocol`: Token {
+    Token(tokenSyntax: TokenSyntax.protocolKeyword())
   }
   
   /// The `struct` keyword
-  static var `struct`: TokenSyntax {
-    TokenSyntax.structKeyword()
+  static var `struct`: Token {
+    Token(tokenSyntax: TokenSyntax.structKeyword())
   }
   
   /// The `subscript` keyword
-  static var `subscript`: TokenSyntax {
-    TokenSyntax.subscriptKeyword()
+  static var `subscript`: Token {
+    Token(tokenSyntax: TokenSyntax.subscriptKeyword())
   }
   
   /// The `typealias` keyword
-  static var `typealias`: TokenSyntax {
-    TokenSyntax.typealiasKeyword()
+  static var `typealias`: Token {
+    Token(tokenSyntax: TokenSyntax.typealiasKeyword())
   }
   
   /// The `var` keyword
-  static var `var`: TokenSyntax {
-    TokenSyntax.varKeyword()
+  static var `var`: Token {
+    Token(tokenSyntax: TokenSyntax.varKeyword())
   }
   
   /// The `fileprivate` keyword
-  static var `fileprivate`: TokenSyntax {
-    TokenSyntax.fileprivateKeyword()
+  static var `fileprivate`: Token {
+    Token(tokenSyntax: TokenSyntax.fileprivateKeyword())
   }
   
   /// The `internal` keyword
-  static var `internal`: TokenSyntax {
-    TokenSyntax.internalKeyword()
+  static var `internal`: Token {
+    Token(tokenSyntax: TokenSyntax.internalKeyword())
   }
   
   /// The `private` keyword
-  static var `private`: TokenSyntax {
-    TokenSyntax.privateKeyword()
+  static var `private`: Token {
+    Token(tokenSyntax: TokenSyntax.privateKeyword())
   }
   
   /// The `public` keyword
-  static var `public`: TokenSyntax {
-    TokenSyntax.publicKeyword()
+  static var `public`: Token {
+    Token(tokenSyntax: TokenSyntax.publicKeyword())
   }
   
   /// The `static` keyword
-  static var `static`: TokenSyntax {
-    TokenSyntax.staticKeyword()
+  static var `static`: Token {
+    Token(tokenSyntax: TokenSyntax.staticKeyword())
   }
   
   /// The `defer` keyword
-  static var `defer`: TokenSyntax {
-    TokenSyntax.deferKeyword()
+  static var `defer`: Token {
+    Token(tokenSyntax: TokenSyntax.deferKeyword())
   }
   
   /// The `if` keyword
-  static var `if`: TokenSyntax {
-    TokenSyntax.ifKeyword()
+  static var `if`: Token {
+    Token(tokenSyntax: TokenSyntax.ifKeyword())
   }
   
   /// The `guard` keyword
-  static var `guard`: TokenSyntax {
-    TokenSyntax.guardKeyword()
+  static var `guard`: Token {
+    Token(tokenSyntax: TokenSyntax.guardKeyword())
   }
   
   /// The `do` keyword
-  static var `do`: TokenSyntax {
-    TokenSyntax.doKeyword()
+  static var `do`: Token {
+    Token(tokenSyntax: TokenSyntax.doKeyword())
   }
   
   /// The `repeat` keyword
-  static var `repeat`: TokenSyntax {
-    TokenSyntax.repeatKeyword()
+  static var `repeat`: Token {
+    Token(tokenSyntax: TokenSyntax.repeatKeyword())
   }
   
   /// The `else` keyword
-  static var `else`: TokenSyntax {
-    TokenSyntax.elseKeyword()
+  static var `else`: Token {
+    Token(tokenSyntax: TokenSyntax.elseKeyword())
   }
   
   /// The `for` keyword
-  static var `for`: TokenSyntax {
-    TokenSyntax.forKeyword()
+  static var `for`: Token {
+    Token(tokenSyntax: TokenSyntax.forKeyword())
   }
   
   /// The `in` keyword
-  static var `in`: TokenSyntax {
-    TokenSyntax.inKeyword()
+  static var `in`: Token {
+    Token(tokenSyntax: TokenSyntax.inKeyword())
   }
   
   /// The `while` keyword
-  static var `while`: TokenSyntax {
-    TokenSyntax.whileKeyword()
+  static var `while`: Token {
+    Token(tokenSyntax: TokenSyntax.whileKeyword())
   }
   
   /// The `return` keyword
-  static var `return`: TokenSyntax {
-    TokenSyntax.returnKeyword()
+  static var `return`: Token {
+    Token(tokenSyntax: TokenSyntax.returnKeyword())
   }
   
   /// The `break` keyword
-  static var `break`: TokenSyntax {
-    TokenSyntax.breakKeyword()
+  static var `break`: Token {
+    Token(tokenSyntax: TokenSyntax.breakKeyword())
   }
   
   /// The `continue` keyword
-  static var `continue`: TokenSyntax {
-    TokenSyntax.continueKeyword()
+  static var `continue`: Token {
+    Token(tokenSyntax: TokenSyntax.continueKeyword())
   }
   
   /// The `fallthrough` keyword
-  static var `fallthrough`: TokenSyntax {
-    TokenSyntax.fallthroughKeyword()
+  static var `fallthrough`: Token {
+    Token(tokenSyntax: TokenSyntax.fallthroughKeyword())
   }
   
   /// The `switch` keyword
-  static var `switch`: TokenSyntax {
-    TokenSyntax.switchKeyword()
+  static var `switch`: Token {
+    Token(tokenSyntax: TokenSyntax.switchKeyword())
   }
   
   /// The `case` keyword
-  static var `case`: TokenSyntax {
-    TokenSyntax.caseKeyword()
+  static var `case`: Token {
+    Token(tokenSyntax: TokenSyntax.caseKeyword())
   }
   
   /// The `default` keyword
-  static var `default`: TokenSyntax {
-    TokenSyntax.defaultKeyword()
+  static var `default`: Token {
+    Token(tokenSyntax: TokenSyntax.defaultKeyword())
   }
   
   /// The `where` keyword
-  static var `where`: TokenSyntax {
-    TokenSyntax.whereKeyword()
+  static var `where`: Token {
+    Token(tokenSyntax: TokenSyntax.whereKeyword())
   }
   
   /// The `catch` keyword
-  static var `catch`: TokenSyntax {
-    TokenSyntax.catchKeyword()
+  static var `catch`: Token {
+    Token(tokenSyntax: TokenSyntax.catchKeyword())
   }
   
   /// The `throw` keyword
-  static var `throw`: TokenSyntax {
-    TokenSyntax.throwKeyword()
+  static var `throw`: Token {
+    Token(tokenSyntax: TokenSyntax.throwKeyword())
   }
   
   /// The `as` keyword
-  static var `as`: TokenSyntax {
-    TokenSyntax.asKeyword()
+  static var `as`: Token {
+    Token(tokenSyntax: TokenSyntax.asKeyword())
   }
   
   /// The `Any` keyword
-  static var `any`: TokenSyntax {
-    TokenSyntax.anyKeyword()
+  static var `any`: Token {
+    Token(tokenSyntax: TokenSyntax.anyKeyword())
   }
   
   /// The `false` keyword
-  static var `false`: TokenSyntax {
-    TokenSyntax.falseKeyword()
+  static var `false`: Token {
+    Token(tokenSyntax: TokenSyntax.falseKeyword())
   }
   
   /// The `is` keyword
-  static var `is`: TokenSyntax {
-    TokenSyntax.isKeyword()
+  static var `is`: Token {
+    Token(tokenSyntax: TokenSyntax.isKeyword())
   }
   
   /// The `nil` keyword
-  static var `nil`: TokenSyntax {
-    TokenSyntax.nilKeyword()
+  static var `nil`: Token {
+    Token(tokenSyntax: TokenSyntax.nilKeyword())
   }
   
   /// The `rethrows` keyword
-  static var `rethrows`: TokenSyntax {
-    TokenSyntax.rethrowsKeyword()
+  static var `rethrows`: Token {
+    Token(tokenSyntax: TokenSyntax.rethrowsKeyword())
   }
   
   /// The `super` keyword
-  static var `super`: TokenSyntax {
-    TokenSyntax.superKeyword()
+  static var `super`: Token {
+    Token(tokenSyntax: TokenSyntax.superKeyword())
   }
   
   /// The `self` keyword
-  static var `self`: TokenSyntax {
-    TokenSyntax.selfKeyword()
+  static var `self`: Token {
+    Token(tokenSyntax: TokenSyntax.selfKeyword())
   }
   
   /// The `Self` keyword
-  static var `capitalSelf`: TokenSyntax {
-    TokenSyntax.capitalSelfKeyword()
+  static var `capitalSelf`: Token {
+    Token(tokenSyntax: TokenSyntax.capitalSelfKeyword())
   }
   
   /// The `true` keyword
-  static var `true`: TokenSyntax {
-    TokenSyntax.trueKeyword()
+  static var `true`: Token {
+    Token(tokenSyntax: TokenSyntax.trueKeyword())
   }
   
   /// The `try` keyword
-  static var `try`: TokenSyntax {
-    TokenSyntax.tryKeyword()
+  static var `try`: Token {
+    Token(tokenSyntax: TokenSyntax.tryKeyword())
   }
   
   /// The `throws` keyword
-  static var `throws`: TokenSyntax {
-    TokenSyntax.throwsKeyword()
+  static var `throws`: Token {
+    Token(tokenSyntax: TokenSyntax.throwsKeyword())
   }
   
   /// The `__FILE__` keyword
-  static var `__FILE__`: TokenSyntax {
-    TokenSyntax.__file__Keyword()
+  static var `__FILE__`: Token {
+    Token(tokenSyntax: TokenSyntax.__file__Keyword())
   }
   
   /// The `__LINE__` keyword
-  static var `__LINE__`: TokenSyntax {
-    TokenSyntax.__line__Keyword()
+  static var `__LINE__`: Token {
+    Token(tokenSyntax: TokenSyntax.__line__Keyword())
   }
   
   /// The `__COLUMN__` keyword
-  static var `__COLUMN__`: TokenSyntax {
-    TokenSyntax.__column__Keyword()
+  static var `__COLUMN__`: Token {
+    Token(tokenSyntax: TokenSyntax.__column__Keyword())
   }
   
   /// The `__FUNCTION__` keyword
-  static var `__FUNCTION__`: TokenSyntax {
-    TokenSyntax.__function__Keyword()
+  static var `__FUNCTION__`: Token {
+    Token(tokenSyntax: TokenSyntax.__function__Keyword())
   }
   
   /// The `__DSO_HANDLE__` keyword
-  static var `__DSO_HANDLE__`: TokenSyntax {
-    TokenSyntax.__dso_handle__Keyword()
+  static var `__DSO_HANDLE__`: Token {
+    Token(tokenSyntax: TokenSyntax.__dso_handle__Keyword())
   }
   
   /// The `_` keyword
-  static var `wildcard`: TokenSyntax {
-    TokenSyntax.wildcardKeyword()
+  static var `wildcard`: Token {
+    Token(tokenSyntax: TokenSyntax.wildcardKeyword())
   }
   
   /// The `(` token
-  static var `leftParen`: TokenSyntax {
-    TokenSyntax.leftParenToken()
+  static var `leftParen`: Token {
+    Token(tokenSyntax: TokenSyntax.leftParenToken())
   }
   
   /// The `)` token
-  static var `rightParen`: TokenSyntax {
-    TokenSyntax.rightParenToken()
+  static var `rightParen`: Token {
+    Token(tokenSyntax: TokenSyntax.rightParenToken())
   }
   
   /// The `{` token
-  static var `leftBrace`: TokenSyntax {
-    TokenSyntax.leftBraceToken()
+  static var `leftBrace`: Token {
+    Token(tokenSyntax: TokenSyntax.leftBraceToken())
   }
   
   /// The `}` token
-  static var `rightBrace`: TokenSyntax {
-    TokenSyntax.rightBraceToken()
+  static var `rightBrace`: Token {
+    Token(tokenSyntax: TokenSyntax.rightBraceToken())
   }
   
   /// The `[` token
-  static var `leftSquareBracket`: TokenSyntax {
-    TokenSyntax.leftSquareBracketToken()
+  static var `leftSquareBracket`: Token {
+    Token(tokenSyntax: TokenSyntax.leftSquareBracketToken())
   }
   
   /// The `]` token
-  static var `rightSquareBracket`: TokenSyntax {
-    TokenSyntax.rightSquareBracketToken()
+  static var `rightSquareBracket`: Token {
+    Token(tokenSyntax: TokenSyntax.rightSquareBracketToken())
   }
   
   /// The `<` token
-  static var `leftAngle`: TokenSyntax {
-    TokenSyntax.leftAngleToken()
+  static var `leftAngle`: Token {
+    Token(tokenSyntax: TokenSyntax.leftAngleToken())
   }
   
   /// The `>` token
-  static var `rightAngle`: TokenSyntax {
-    TokenSyntax.rightAngleToken()
+  static var `rightAngle`: Token {
+    Token(tokenSyntax: TokenSyntax.rightAngleToken())
   }
   
   /// The `.` token
-  static var `period`: TokenSyntax {
-    TokenSyntax.periodToken()
+  static var `period`: Token {
+    Token(tokenSyntax: TokenSyntax.periodToken())
   }
   
   /// The `.` token
-  static var `prefixPeriod`: TokenSyntax {
-    TokenSyntax.prefixPeriodToken()
+  static var `prefixPeriod`: Token {
+    Token(tokenSyntax: TokenSyntax.prefixPeriodToken())
   }
   
   /// The `,` token
-  static var `comma`: TokenSyntax {
-    TokenSyntax.commaToken()
+  static var `comma`: Token {
+    Token(tokenSyntax: TokenSyntax.commaToken())
   }
   
   /// The `...` token
-  static var `ellipsis`: TokenSyntax {
-    TokenSyntax.ellipsisToken()
+  static var `ellipsis`: Token {
+    Token(tokenSyntax: TokenSyntax.ellipsisToken())
   }
   
   /// The `:` token
-  static var `colon`: TokenSyntax {
-    TokenSyntax.colonToken()
+  static var `colon`: Token {
+    Token(tokenSyntax: TokenSyntax.colonToken())
   }
   
   /// The `;` token
-  static var `semicolon`: TokenSyntax {
-    TokenSyntax.semicolonToken()
+  static var `semicolon`: Token {
+    Token(tokenSyntax: TokenSyntax.semicolonToken())
   }
   
   /// The `=` token
-  static var `equal`: TokenSyntax {
-    TokenSyntax.equalToken()
+  static var `equal`: Token {
+    Token(tokenSyntax: TokenSyntax.equalToken())
   }
   
   /// The `@` token
-  static var `atSign`: TokenSyntax {
-    TokenSyntax.atSignToken()
+  static var `atSign`: Token {
+    Token(tokenSyntax: TokenSyntax.atSignToken())
   }
   
   /// The `#` token
-  static var `pound`: TokenSyntax {
-    TokenSyntax.poundToken()
+  static var `pound`: Token {
+    Token(tokenSyntax: TokenSyntax.poundToken())
   }
   
   /// The `&` token
-  static var `prefixAmpersand`: TokenSyntax {
-    TokenSyntax.prefixAmpersandToken()
+  static var `prefixAmpersand`: Token {
+    Token(tokenSyntax: TokenSyntax.prefixAmpersandToken())
   }
   
   /// The `->` token
-  static var `arrow`: TokenSyntax {
-    TokenSyntax.arrowToken()
+  static var `arrow`: Token {
+    Token(tokenSyntax: TokenSyntax.arrowToken())
   }
   
   /// The ``` token
-  static var `backtick`: TokenSyntax {
-    TokenSyntax.backtickToken()
+  static var `backtick`: Token {
+    Token(tokenSyntax: TokenSyntax.backtickToken())
   }
   
   /// The `\` token
-  static var `backslash`: TokenSyntax {
-    TokenSyntax.backslashToken()
+  static var `backslash`: Token {
+    Token(tokenSyntax: TokenSyntax.backslashToken())
   }
   
   /// The `!` token
-  static var `exclamationMark`: TokenSyntax {
-    TokenSyntax.exclamationMarkToken()
+  static var `exclamationMark`: Token {
+    Token(tokenSyntax: TokenSyntax.exclamationMarkToken())
   }
   
   /// The `?` token
-  static var `postfixQuestionMark`: TokenSyntax {
-    TokenSyntax.postfixQuestionMarkToken()
+  static var `postfixQuestionMark`: Token {
+    Token(tokenSyntax: TokenSyntax.postfixQuestionMarkToken())
   }
   
   /// The `?` token
-  static var `infixQuestionMark`: TokenSyntax {
-    TokenSyntax.infixQuestionMarkToken()
+  static var `infixQuestionMark`: Token {
+    Token(tokenSyntax: TokenSyntax.infixQuestionMarkToken())
   }
   
   /// The `"` token
-  static var `stringQuote`: TokenSyntax {
-    TokenSyntax.stringQuoteToken()
+  static var `stringQuote`: Token {
+    Token(tokenSyntax: TokenSyntax.stringQuoteToken())
   }
   
   /// The `'` token
-  static var `singleQuote`: TokenSyntax {
-    TokenSyntax.singleQuoteToken()
+  static var `singleQuote`: Token {
+    Token(tokenSyntax: TokenSyntax.singleQuoteToken())
   }
   
   /// The `"""` token
-  static var `multilineStringQuote`: TokenSyntax {
-    TokenSyntax.multilineStringQuoteToken()
+  static var `multilineStringQuote`: Token {
+    Token(tokenSyntax: TokenSyntax.multilineStringQuoteToken())
   }
   
   /// The `#keyPath` keyword
-  static var `poundKeyPath`: TokenSyntax {
-    TokenSyntax.poundKeyPathKeyword()
+  static var `poundKeyPath`: Token {
+    Token(tokenSyntax: TokenSyntax.poundKeyPathKeyword())
   }
   
   /// The `#line` keyword
-  static var `poundLine`: TokenSyntax {
-    TokenSyntax.poundLineKeyword()
+  static var `poundLine`: Token {
+    Token(tokenSyntax: TokenSyntax.poundLineKeyword())
   }
   
   /// The `#selector` keyword
-  static var `poundSelector`: TokenSyntax {
-    TokenSyntax.poundSelectorKeyword()
+  static var `poundSelector`: Token {
+    Token(tokenSyntax: TokenSyntax.poundSelectorKeyword())
   }
   
   /// The `#file` keyword
-  static var `poundFile`: TokenSyntax {
-    TokenSyntax.poundFileKeyword()
+  static var `poundFile`: Token {
+    Token(tokenSyntax: TokenSyntax.poundFileKeyword())
   }
   
   /// The `#fileID` keyword
-  static var `poundFileID`: TokenSyntax {
-    TokenSyntax.poundFileIDKeyword()
+  static var `poundFileID`: Token {
+    Token(tokenSyntax: TokenSyntax.poundFileIDKeyword())
   }
   
   /// The `#filePath` keyword
-  static var `poundFilePath`: TokenSyntax {
-    TokenSyntax.poundFilePathKeyword()
+  static var `poundFilePath`: Token {
+    Token(tokenSyntax: TokenSyntax.poundFilePathKeyword())
   }
   
   /// The `#column` keyword
-  static var `poundColumn`: TokenSyntax {
-    TokenSyntax.poundColumnKeyword()
+  static var `poundColumn`: Token {
+    Token(tokenSyntax: TokenSyntax.poundColumnKeyword())
   }
   
   /// The `#function` keyword
-  static var `poundFunction`: TokenSyntax {
-    TokenSyntax.poundFunctionKeyword()
+  static var `poundFunction`: Token {
+    Token(tokenSyntax: TokenSyntax.poundFunctionKeyword())
   }
   
   /// The `#dsohandle` keyword
-  static var `poundDsohandle`: TokenSyntax {
-    TokenSyntax.poundDsohandleKeyword()
+  static var `poundDsohandle`: Token {
+    Token(tokenSyntax: TokenSyntax.poundDsohandleKeyword())
   }
   
   /// The `#assert` keyword
-  static var `poundAssert`: TokenSyntax {
-    TokenSyntax.poundAssertKeyword()
+  static var `poundAssert`: Token {
+    Token(tokenSyntax: TokenSyntax.poundAssertKeyword())
   }
   
   /// The `#sourceLocation` keyword
-  static var `poundSourceLocation`: TokenSyntax {
-    TokenSyntax.poundSourceLocationKeyword()
+  static var `poundSourceLocation`: Token {
+    Token(tokenSyntax: TokenSyntax.poundSourceLocationKeyword())
   }
   
   /// The `#warning` keyword
-  static var `poundWarning`: TokenSyntax {
-    TokenSyntax.poundWarningKeyword()
+  static var `poundWarning`: Token {
+    Token(tokenSyntax: TokenSyntax.poundWarningKeyword())
   }
   
   /// The `#error` keyword
-  static var `poundError`: TokenSyntax {
-    TokenSyntax.poundErrorKeyword()
+  static var `poundError`: Token {
+    Token(tokenSyntax: TokenSyntax.poundErrorKeyword())
   }
   
   /// The `#if` keyword
-  static var `poundIf`: TokenSyntax {
-    TokenSyntax.poundIfKeyword()
+  static var `poundIf`: Token {
+    Token(tokenSyntax: TokenSyntax.poundIfKeyword())
   }
   
   /// The `#else` keyword
-  static var `poundElse`: TokenSyntax {
-    TokenSyntax.poundElseKeyword()
+  static var `poundElse`: Token {
+    Token(tokenSyntax: TokenSyntax.poundElseKeyword())
   }
   
   /// The `#elseif` keyword
-  static var `poundElseif`: TokenSyntax {
-    TokenSyntax.poundElseifKeyword()
+  static var `poundElseif`: Token {
+    Token(tokenSyntax: TokenSyntax.poundElseifKeyword())
   }
   
   /// The `#endif` keyword
-  static var `poundEndif`: TokenSyntax {
-    TokenSyntax.poundEndifKeyword()
+  static var `poundEndif`: Token {
+    Token(tokenSyntax: TokenSyntax.poundEndifKeyword())
   }
   
   /// The `#available` keyword
-  static var `poundAvailable`: TokenSyntax {
-    TokenSyntax.poundAvailableKeyword()
+  static var `poundAvailable`: Token {
+    Token(tokenSyntax: TokenSyntax.poundAvailableKeyword())
   }
   
   /// The `#unavailable` keyword
-  static var `poundUnavailable`: TokenSyntax {
-    TokenSyntax.poundUnavailableKeyword()
+  static var `poundUnavailable`: Token {
+    Token(tokenSyntax: TokenSyntax.poundUnavailableKeyword())
   }
   
   /// The `#fileLiteral` keyword
-  static var `poundFileLiteral`: TokenSyntax {
-    TokenSyntax.poundFileLiteralKeyword()
+  static var `poundFileLiteral`: Token {
+    Token(tokenSyntax: TokenSyntax.poundFileLiteralKeyword())
   }
   
   /// The `#imageLiteral` keyword
-  static var `poundImageLiteral`: TokenSyntax {
-    TokenSyntax.poundImageLiteralKeyword()
+  static var `poundImageLiteral`: Token {
+    Token(tokenSyntax: TokenSyntax.poundImageLiteralKeyword())
   }
   
   /// The `#colorLiteral` keyword
-  static var `poundColorLiteral`: TokenSyntax {
-    TokenSyntax.poundColorLiteralKeyword()
+  static var `poundColorLiteral`: Token {
+    Token(tokenSyntax: TokenSyntax.poundColorLiteralKeyword())
+  }
+  static func `integerLiteral`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.integerLiteral(text))
+  }
+  static func `floatingLiteral`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.floatingLiteral(text))
+  }
+  static func `stringLiteral`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.stringLiteral(text))
+  }
+  static func `regexLiteral`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.regexLiteral(text))
+  }
+  static func `unknown`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.unknown(text))
+  }
+  static func `identifier`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.identifier(text))
+  }
+  static func `unspacedBinaryOperator`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.unspacedBinaryOperator(text))
+  }
+  static func `spacedBinaryOperator`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.spacedBinaryOperator(text))
+  }
+  static func `postfixOperator`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.postfixOperator(text))
+  }
+  static func `prefixOperator`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.prefixOperator(text))
+  }
+  static func `dollarIdentifier`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.dollarIdentifier(text))
+  }
+  static func `contextualKeyword`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.contextualKeyword(text))
+  }
+  static func `rawStringDelimiter`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.rawStringDelimiter(text))
+  }
+  static func `stringSegment`(_ text: String) -> Token {
+    Token(tokenSyntax: TokenSyntax.stringSegment(text))
   }
   
   /// The `)` token
-  static var `stringInterpolationAnchor`: TokenSyntax {
-    TokenSyntax.stringInterpolationAnchorToken()
+  static var `stringInterpolationAnchor`: Token {
+    Token(tokenSyntax: TokenSyntax.stringInterpolationAnchorToken())
   }
   
   /// The `yield` token
-  static var `yield`: TokenSyntax {
-    TokenSyntax.yieldToken()
+  static var `yield`: Token {
+    Token(tokenSyntax: TokenSyntax.yieldToken())
   }
   
   /// The `eof` token
-  static var eof: TokenSyntax {
-    TokenSyntax.eof()
+  static var eof: Token {
+    Token(tokenSyntax: TokenSyntax.eof())
   }
   
   /// The `open` contextual token
-  static var open: TokenSyntax {
-    TokenSyntax.contextualKeyword("open")
-    .withTrailingTrivia(.space)
+  static var open: Token {
+    Token(tokenSyntax: TokenSyntax.contextualKeyword("open").withTrailingTrivia(.space))
   }
 }

@@ -28,7 +28,7 @@ final class StructTests: XCTestCase {
       ],
       structKeyword: .struct,
       identifier: "NestedStruct",
-      genericParameterClause: GenericParameterClause(rightAngleBracket: .rightAngle.withoutTrailingTrivia()) {
+      genericParameterClause: GenericParameterClause(rightAngleBracket: .rightAngle.withTrailingTrivia([])) {
         GenericParameter(name: "A")
         GenericParameter(name: "B", colon: .colon, inheritedType: "C")
         GenericParameter(name: "D")
@@ -61,7 +61,7 @@ final class StructTests: XCTestCase {
           identifier: "CarriageReturnFormFeedsStruct"
         )
     let testStruct = StructDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: "TestStruct"
     ) {
       nestedStruct

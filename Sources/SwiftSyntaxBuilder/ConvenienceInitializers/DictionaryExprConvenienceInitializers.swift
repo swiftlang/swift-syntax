@@ -16,14 +16,14 @@ extension DictionaryExpr {
   /// A convenience initializer that allows passing in members using a result builder
   /// instead of having to wrap them in a `DictionaryElementList`.
   public init(
-    leftSquare: TokenSyntax = .`leftSquareBracket`,
-    rightSquare: TokenSyntax = .`rightSquareBracket`,
+    leftSquare: Token = .`leftSquareBracket`,
+    rightSquare: Token = .`rightSquareBracket`,
     @DictionaryElementListBuilder contentBuilder: () -> ExpressibleAsDictionaryElementList = { [] }
   ) {
     let elementList = contentBuilder().createDictionaryElementList()
     self.init(
       leftSquare: leftSquare,
-      content: elementList.elements.isEmpty ? TokenSyntax.colonToken(trailingTrivia: []) : elementList,
+      content: elementList.elements.isEmpty ? Token.colon.withTrailingTrivia([]) : elementList,
       rightSquare: rightSquare
     )
   }

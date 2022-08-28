@@ -20,9 +20,9 @@ extension TernaryExpr {
   ) {
     self.init(
       conditionExpression: condition,
-      questionMark: .infixQuestionMarkToken(leadingTrivia: .space, trailingTrivia: .space),
+      questionMark: .infixQuestionMark.withLeadingTrivia(.space).withTrailingTrivia(.space),
       firstChoice: firstChoice,
-      colonMark: .colonToken(leadingTrivia: .space),
+      colonMark: .colon.withLeadingTrivia(.space),
       secondChoice: secondChoice
     )
   }

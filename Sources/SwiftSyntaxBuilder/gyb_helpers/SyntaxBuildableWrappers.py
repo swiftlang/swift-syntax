@@ -224,13 +224,9 @@ class SyntaxBuildableType:
     These names look as follows:
      - For nodes: The node name, e.g. `IdentifierExpr` (these are implemented as structs)
      - For base kinds: `<BaseKind>Buildable`, e.g. `ExprBuildable` (these are implemented as protocols)
-     - For token: `TokenSyntax` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
     If the type is optional, this terminates with a '?'.
     """
-    if self.is_token():
-      # Tokens don't have a dedicated buildable type.
-      return 'TokenSyntax' + self._optional_question_mark()
-    elif self.syntax_kind in SYNTAX_BASE_KINDS:
+    if self.syntax_kind in SYNTAX_BASE_KINDS:
       return self.syntax_kind + 'Buildable' + self._optional_question_mark()
     else:
       return self.syntax_kind + self._optional_question_mark()

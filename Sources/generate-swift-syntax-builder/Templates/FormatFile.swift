@@ -20,16 +20,16 @@ let formatFile = SourceFile {
     path: "SwiftSyntax"
   )
 
-  StructDecl(modifiers: [TokenSyntax.public], identifier: "Format") {
+  StructDecl(modifiers: [Token.public], identifier: "Format") {
     VariableDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       .let,
       name: "indentWidth",
       type: "Int"
     )
 
     VariableDecl(
-      modifiers: [TokenSyntax.private],
+      modifiers: [Token.private],
       .var,
       name: "indents",
       type: "Int",
@@ -37,7 +37,7 @@ let formatFile = SourceFile {
     )
 
     InitializerDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       signature: FunctionSignature(
         input: ParameterClause {
           FunctionParameter(
@@ -59,7 +59,7 @@ let formatFile = SourceFile {
 
   ExtensionDecl(extendedType: "Format") {
     FunctionDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: .identifier("_indented"),
       signature: FunctionSignature(
         input: ParameterClause(),
@@ -76,7 +76,7 @@ let formatFile = SourceFile {
     }
 
     FunctionDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: .identifier("_makeIndent"),
       signature: FunctionSignature(
         input: ParameterClause(),
@@ -90,7 +90,7 @@ let formatFile = SourceFile {
           BinaryOperatorExpr("==")
           IntegerLiteralExpr(0)
         },
-        questionMark: .infixQuestionMark.withLeadingTrivia(.space).withTrailingTrivia(.space),
+        questionMark: SwiftSyntaxBuilder.Token.infixQuestionMark.withLeadingTrivia(.space).withTrailingTrivia(.space),
         firstChoice: MemberAccessExpr(name: "zero"),
         colonMark: .colon.withLeadingTrivia(.space).withTrailingTrivia(.space),
         secondChoice: FunctionCallExpr(MemberAccessExpr(base: "Trivia", name: "spaces")) {

@@ -36,8 +36,9 @@ extension Child {
   /// represents this child node.
   func generateExprBuildSyntaxNode(varName: String, formatName: String) -> ExpressibleAsExprBuildable {
     if type.isToken {
+      let token = FunctionCallExpr(MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken"))
       if requiresLeadingNewline {
-        return FunctionCallExpr(MemberAccessExpr(base: varName, name: "withLeadingTrivia")) {
+        return FunctionCallExpr(MemberAccessExpr(base: token, name: "withLeadingTrivia")) {
           SequenceExpr {
             MemberAccessExpr(name: "newline")
             BinaryOperatorExpr("+")
@@ -45,7 +46,7 @@ extension Child {
             BinaryOperatorExpr("+")
             TupleExpr {
               SequenceExpr {
-                MemberAccessExpr(base: varName, name: "leadingTrivia")
+                MemberAccessExpr(base: token, name: "leadingTrivia")
                 BinaryOperatorExpr("??")
                 ArrayExpr {}
               }
@@ -53,7 +54,7 @@ extension Child {
           }
         }
       } else {
-        return varName
+        return token
       }
     } else {
       var format: ExpressibleAsExprBuildable = formatName

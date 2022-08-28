@@ -146,7 +146,7 @@ let package = Package(
           "PatternNodes.swift.gyb",
           "StmtNodes.swift.gyb",
           "SyntaxBaseKinds.swift.gyb",
-          "Tokens.swift.gyb",
+          "TokenSpec.swift.gyb",
           "Traits.swift.gyb",
           "Trivia.swift.gyb",
           "TypeNodes.swift.gyb"

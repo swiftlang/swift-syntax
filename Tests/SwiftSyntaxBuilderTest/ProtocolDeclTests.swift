@@ -11,7 +11,7 @@ final class ProtocolDeclTests: XCTestCase {
     }
     let functionSignature = FunctionSignature(input: input, output: returnType)
 
-    let buildable = ProtocolDecl(modifiers: [TokenSyntax.public], identifier: "DeclListBuildable") {
+    let buildable = ProtocolDecl(modifiers: [Token.public], identifier: "DeclListBuildable") {
       FunctionDecl(identifier: .identifier("buildDeclList"), signature: functionSignature, body: nil)
     }
 

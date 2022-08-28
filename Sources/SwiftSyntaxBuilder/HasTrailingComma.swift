@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 protocol HasTrailingComma {
-  var trailingComma: TokenSyntax? { get }
+  var trailingComma: Token? { get }
 
   /// Returns this node overriding presence of the trailing comma
   func withTrailingComma(_ withComma: Bool) -> Self

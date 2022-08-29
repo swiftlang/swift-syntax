@@ -37,6 +37,8 @@ let tokenFile = SourceFile {
     inheritanceClause: createTypeInheritanceClause(conformances: conformances)
   ) {
     VariableDecl(.let, name: "tokenSyntax", type: "TokenSyntax")
+    VariableDecl(.let, name: "leadingTrivia", type: OptionalType(wrappedType: "Trivia"))
+    VariableDecl(.let, name: "trailingTrivia", type: OptionalType(wrappedType: "Trivia"))
 
     VariableDecl(
       leadingTrivia: .newline,
@@ -59,13 +61,27 @@ let tokenFile = SourceFile {
             colon: .colon,
             type: "TokenSyntax"
           )
+          FunctionParameter(
+            firstName: .identifier("leadingTrivia"),
+            colon: .colon,
+            type: OptionalType(wrappedType: "Trivia"),
+            defaultArgument: InitializerClause(value: NilLiteralExpr())
+          )
+          FunctionParameter(
+            firstName: .identifier("trailingTrivia"),
+            colon: .colon,
+            type: OptionalType(wrappedType: "Trivia"),
+            defaultArgument: InitializerClause(value: NilLiteralExpr())
+          )
         }
       )
     ) {
-      SequenceExpr {
-        MemberAccessExpr(base: "self", name: "tokenSyntax")
-        AssignmentExpr()
-        "tokenSyntax"
+      for member in ["tokenSyntax", "leadingTrivia", "trailingTrivia"] {
+        SequenceExpr {
+          MemberAccessExpr(base: "self", name: member)
+          AssignmentExpr()
+          member
+        }
       }
     }
 
@@ -78,7 +94,7 @@ let tokenFile = SourceFile {
           input: ParameterClause {
             FunctionParameter(
               firstName: .wildcard,
-              secondName: .identifier("trivia"),
+              secondName: .identifier("\(lowercaseFirstWord(name: leadingTrailing))Trivia"),
               colon: .colon,
               type: "Trivia"
             )
@@ -87,12 +103,12 @@ let tokenFile = SourceFile {
         )
       ) {
         FunctionCallExpr("Token") {
-          TupleExprElement(
-            label: "tokenSyntax",
-            expression: FunctionCallExpr(MemberAccessExpr(base: "tokenSyntax", name: "with\(leadingTrailing)Trivia")) {
-              TupleExprElement(expression: "trivia")
-            }
-          )
+          for arg in ["tokenSyntax", "leadingTrivia", "trailingTrivia"] {
+            TupleExprElement(
+              label: arg,
+              expression: arg
+            )
+          }
         }
       }
     }
@@ -102,11 +118,32 @@ let tokenFile = SourceFile {
       modifiers: [Token.public],
       identifier: .identifier("buildToken"),
       signature: FunctionSignature(
-        input: ParameterClause(),
+        input: ParameterClause {
+          FunctionParameter(
+            firstName: .identifier("format"),
+            colon: .colon,
+            type: "Format"
+          )
+        },
         output: "TokenSyntax"
       )
     ) {
-      "tokenSyntax"
+      VariableDecl(.var, name: "result", initializer: FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
+        TupleExprElement(label: "syntax", expression: IdentifierExpr("tokenSyntax"))
+      })
+      for leadingTrailing in ["Leading", "Trailing"] {
+        let varName = "\(lowercaseFirstWord(name: leadingTrailing))Trivia"
+        IfStmt(conditions: OptionalBindingCondition(letOrVarKeyword: .let, pattern: IdentifierPattern(varName), initializer: InitializerClause(value: varName))) {
+          SequenceExpr {
+            "result"
+            AssignmentExpr()
+            FunctionCallExpr(MemberAccessExpr(base: "result", name: "with\(leadingTrailing)Trivia")) {
+              TupleExprElement(expression: varName)
+            }
+          }
+        }
+      }
+      ReturnStmt(expression: "result")
     }
 
     FunctionDecl(
@@ -125,7 +162,9 @@ let tokenFile = SourceFile {
       )
     ) {
       FunctionCallExpr("Syntax") {
-        TupleExprElement(expression: "tokenSyntax")
+        TupleExprElement(expression: FunctionCallExpr(MemberAccessExpr(base: IdentifierExpr(identifier: .`self`), name: "buildToken")) {
+          TupleExprElement(label: "format", expression: "format")
+        })
       }
     }
 

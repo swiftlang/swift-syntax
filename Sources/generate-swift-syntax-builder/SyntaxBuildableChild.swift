@@ -36,7 +36,9 @@ extension Child {
   /// represents this child node.
   func generateExprBuildSyntaxNode(varName: String, formatName: String) -> ExpressibleAsExprBuildable {
     if type.isToken {
-      return FunctionCallExpr(MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken"))
+      return FunctionCallExpr(MemberAccessExpr(base: type.optionalChained(expr: varName), name: "buildToken")) {
+        TupleExprElement(label: "format", expression: "format")
+      }
     } else {
       var format: ExpressibleAsExprBuildable = formatName
       if isIndented {

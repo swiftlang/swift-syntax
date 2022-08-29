@@ -32,53 +32,53 @@ extension TokenSyntax {
 %   trailing_trivia = '.space' if token.requires_trailing_space else '[]'
 %   if token.is_keyword:
   public static func ${token.swift_kind()}(
-    leadingTrivia: Trivia? = nil,
-    trailingTrivia: Trivia? = nil,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
       .${token.swift_kind()},
-      leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: ${leading_trivia}),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: ${trailing_trivia}),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
       presence: presence
     )
   }
 %   elif token.text:
   public static func ${token.swift_kind()}Token(
-    leadingTrivia: Trivia? = nil,
-    trailingTrivia: Trivia? = nil,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
       .${token.swift_kind()},
-      leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: ${leading_trivia}),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: ${trailing_trivia}),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
       presence: presence
     )
   }
 %   else:
   public static func ${token.swift_kind()}(
     _ text: String,
-    leadingTrivia: Trivia? = nil,
-    trailingTrivia: Trivia? = nil,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
       .${token.swift_kind()}(text),
-      leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: ${leading_trivia}),
-      trailingTrivia: trailingTrivia ?? defaultTrivia(presence: presence, trivia: ${trailing_trivia}),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
       presence: presence
     )
   }
 %   end
 % end
   public static func eof(
-    leadingTrivia: Trivia? = nil,
+    leadingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
       .eof,
-      leadingTrivia: leadingTrivia ?? defaultTrivia(presence: presence, trivia: ${leading_trivia}),
+      leadingTrivia: leadingTrivia,
       trailingTrivia: [],
       presence: presence
     )

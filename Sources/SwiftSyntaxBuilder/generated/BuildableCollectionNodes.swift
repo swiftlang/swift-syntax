@@ -975,7 +975,7 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   }
   public func buildIdentifierList(format: Format) -> IdentifierListSyntax {
     let result = IdentifierListSyntax(elements.map {
-      $0.buildToken()
+      $0.buildToken(format: format)
     })
     return format._format(syntax: result)
   }
@@ -1111,7 +1111,7 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   }
   public func buildTokenList(format: Format) -> TokenListSyntax {
     let result = TokenListSyntax(elements.map {
-      $0.buildToken()
+      $0.buildToken(format: format)
     })
     return format._format(syntax: result)
   }
@@ -1155,7 +1155,7 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   }
   public func buildNonEmptyTokenList(format: Format) -> NonEmptyTokenListSyntax {
     let result = NonEmptyTokenListSyntax(elements.map {
-      $0.buildToken()
+      $0.buildToken(format: format)
     })
     return format._format(syntax: result)
   }

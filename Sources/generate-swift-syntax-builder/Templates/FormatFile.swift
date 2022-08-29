@@ -115,6 +115,7 @@ let formatFile = SourceFile {
         createBuildableCollectionNodeFormatFunction(node: node)
       }
     }
+    createTokenFormatFunction()
   }
 }
 
@@ -224,4 +225,39 @@ private func createBuildableCollectionNodeFormatFunction(node: Node) -> Function
       "syntax"
     }
   }
+}
+
+private func createTokenFormatFunction() -> FunctionDecl {
+  let tokenType = SyntaxBuildableType(syntaxKind: "Token")
+  return FunctionDecl(
+    modifiers: [Token.public],
+    identifier: .identifier("_format"),
+    signature: createFormatFunctionSignature(type: tokenType)
+  ) {
+    SwitchStmt(expression: MemberAccessExpr(base: "syntax", name: "tokenKind")) {
+      for token in SYNTAX_TOKENS {
+        SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: token.swiftKind))))) {
+          createWithLeadingWithTrailingTriviaCall(token: token)
+        }
+      }
+      SwitchCase(label: SwitchCaseLabel(caseItems: CaseItem(pattern: ExpressionPattern(expression: MemberAccessExpr(name: "eof"))))) {
+        ReturnStmt(expression: "syntax")
+      }
+    }
+  }
+}
+
+private func createWithLeadingWithTrailingTriviaCall(token: TokenSpec) -> CodeBlockItem {
+  var res: ExprBuildable = IdentifierExpr("syntax")
+  if token.requiresLeadingSpace {
+    res = FunctionCallExpr(MemberAccessExpr(base: res, name: "withLeadingTrivia")) {
+      TupleExprElement(expression: MemberAccessExpr(name: "space"))
+    }
+  }
+  if token.requiresTrailingSpace {
+    res = FunctionCallExpr(MemberAccessExpr(base: res, name: "withTrailingTrivia")) {
+      TupleExprElement(expression: MemberAccessExpr(name: "space"))
+    }
+  }
+  return CodeBlockItem(item: ReturnStmt(expression: res))
 }

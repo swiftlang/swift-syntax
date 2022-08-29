@@ -65,7 +65,7 @@ let tokenFile = SourceFile {
       SequenceExpr {
         MemberAccessExpr(base: "self", name: "tokenSyntax")
         AssignmentExpr()
-        IdentifierExpr("tokenSyntax")
+        "tokenSyntax"
       }
     }
 
@@ -90,7 +90,7 @@ let tokenFile = SourceFile {
           TupleExprElement(
             label: "tokenSyntax",
             expression: FunctionCallExpr(MemberAccessExpr(base: "tokenSyntax", name: "with\(leadingTrailing)Trivia")) {
-              TupleExprElement(expression: IdentifierExpr("trivia"))
+              TupleExprElement(expression: "trivia")
             }
           )
         }
@@ -106,7 +106,7 @@ let tokenFile = SourceFile {
         output: "TokenSyntax"
       )
     ) {
-      IdentifierExpr("tokenSyntax")
+      "tokenSyntax"
     }
 
     FunctionDecl(
@@ -125,7 +125,7 @@ let tokenFile = SourceFile {
       )
     ) {
       FunctionCallExpr("Syntax") {
-        TupleExprElement(expression: IdentifierExpr("tokenSyntax"))
+        TupleExprElement(expression: "tokenSyntax")
       }
     }
 

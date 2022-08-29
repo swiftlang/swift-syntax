@@ -14,39 +14,51 @@
 
 let COMMON_NODES: [Node] = [
   Node(name: "Decl",
+       nameForDiagnostics: "declaration",
        kind: "Syntax"),
 
   Node(name: "Expr",
+       nameForDiagnostics: "expression",
        kind: "Syntax"),
 
   Node(name: "Stmt",
+       nameForDiagnostics: "statement",
        kind: "Syntax"),
 
   Node(name: "Type",
+       nameForDiagnostics: "type",
        kind: "Syntax"),
 
   Node(name: "Pattern",
+       nameForDiagnostics: "pattern",
        kind: "Syntax"),
 
   Node(name: "UnknownDecl",
+       nameForDiagnostics: "declaration",
        kind: "Decl"),
 
   Node(name: "UnknownExpr",
+       nameForDiagnostics: "expression",
        kind: "Expr"),
 
   Node(name: "UnknownStmt",
+       nameForDiagnostics: "statement",
        kind: "Stmt"),
 
   Node(name: "UnknownType",
+       nameForDiagnostics: "type",
        kind: "Type"),
 
   Node(name: "UnknownPattern",
+       nameForDiagnostics: "pattern",
        kind: "Pattern"),
 
   Node(name: "Missing",
+       nameForDiagnostics: "None",
        kind: "Syntax"),
 
   Node(name: "MissingDecl",
+       nameForDiagnostics: "declaration",
        kind: "Decl",
        children: [
          Child(name: "Attributes",
@@ -60,18 +72,23 @@ let COMMON_NODES: [Node] = [
        ]),
 
   Node(name: "MissingExpr",
+       nameForDiagnostics: "expression",
        kind: "Expr"),
 
   Node(name: "MissingStmt",
+       nameForDiagnostics: "statement",
        kind: "Stmt"),
 
   Node(name: "MissingType",
+       nameForDiagnostics: "type",
        kind: "Type"),
 
   Node(name: "MissingPattern",
+       nameForDiagnostics: "pattern",
        kind: "Pattern"),
 
   Node(name: "CodeBlockItem",
+       nameForDiagnostics: "None",
        description: "A CodeBlockItem is any Syntax node that appears on its own line insidea CodeBlock.",
        kind: "Syntax",
        children: [
@@ -104,11 +121,13 @@ let COMMON_NODES: [Node] = [
        omitWhenEmpty: true),
 
   Node(name: "CodeBlockItemList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "CodeBlockItem",
        elementsSeparatedByNewline: true),
 
   Node(name: "CodeBlock",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "Braced",
@@ -133,6 +152,7 @@ let COMMON_NODES: [Node] = [
        ]),
 
   Node(name: "UnexpectedNodes",
+       nameForDiagnostics: "None",
        description: "A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.",
        kind: "SyntaxCollection",
        element: "Syntax"),

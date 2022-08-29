@@ -11,10 +11,9 @@ final class AttributeTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // FIXME: We should be complaining about the missing ')' for the attribute
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected 'for'"),
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')'"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected 'for' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute"),
       ]
     )
   }

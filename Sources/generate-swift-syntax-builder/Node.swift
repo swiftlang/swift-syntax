@@ -18,6 +18,7 @@ class Node {
   let syntaxKind: String
   let swiftSyntaxKind: String
   let name: String
+  let nameForDiagnostics: String
   let description: String?
   let baseKind: String
   let traits: [String]
@@ -70,6 +71,7 @@ class Node {
   }
 
   init(name: String,
+       nameForDiagnostics: String?,
        description: String? = nil,
        kind: String,
        traits: [String] = [],

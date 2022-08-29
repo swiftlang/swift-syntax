@@ -5,8 +5,11 @@ def make_swift_node(node):
   Given a Python `Node` from `gyb_syntax_support`, return the source code for matching node definition in Swift.
   """
   spaces = 9
-  parameters = ['name: "%s"' % node.syntax_kind]
-  
+  parameters = [
+    'name: "%s"' % node.syntax_kind,
+    'nameForDiagnostics: "%s"' % node.name_for_diagnostics or 'nil'
+  ]
+
   if node.description:
     parameters += ['description: "%s"' % flat_documentation(node.description)]
 

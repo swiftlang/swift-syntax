@@ -14,6 +14,7 @@
 
 let PATTERN_NODES: [Node] = [
   Node(name: "TypeAnnotation",
+       nameForDiagnostics: "type annotation",
        kind: "Syntax",
        children: [
          Child(name: "Colon",
@@ -26,6 +27,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "EnumCasePattern",
+       nameForDiagnostics: "enum case pattern",
        kind: "Pattern",
        children: [
          Child(name: "Type",
@@ -47,6 +49,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "IsTypePattern",
+       nameForDiagnostics: "'is' pattern",
        kind: "Pattern",
        children: [
          Child(name: "IsKeyword",
@@ -59,6 +62,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "OptionalPattern",
+       nameForDiagnostics: "optional pattern",
        kind: "Pattern",
        children: [
          Child(name: "SubPattern",
@@ -71,6 +75,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "IdentifierPattern",
+       nameForDiagnostics: "pattern",
        kind: "Pattern",
        children: [
          Child(name: "Identifier",
@@ -82,6 +87,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "AsTypePattern",
+       nameForDiagnostics: "'as' pattern",
        kind: "Pattern",
        children: [
          Child(name: "Pattern",
@@ -96,6 +102,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "TuplePattern",
+       nameForDiagnostics: "tuple pattern",
        kind: "Pattern",
        traits: [
          "Parenthesized"
@@ -117,6 +124,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "WildcardPattern",
+       nameForDiagnostics: "wildcard pattern",
        kind: "Pattern",
        children: [
          Child(name: "Wildcard",
@@ -130,6 +138,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "TuplePatternElement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -158,6 +167,7 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "ExpressionPattern",
+       nameForDiagnostics: "pattern",
        kind: "Pattern",
        children: [
          Child(name: "Expression",
@@ -165,10 +175,12 @@ let PATTERN_NODES: [Node] = [
        ]),
 
   Node(name: "TuplePatternElementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "TuplePatternElement"),
 
   Node(name: "ValueBindingPattern",
+       nameForDiagnostics: "value binding pattern",
        kind: "Pattern",
        children: [
          Child(name: "LetOrVarKeyword",

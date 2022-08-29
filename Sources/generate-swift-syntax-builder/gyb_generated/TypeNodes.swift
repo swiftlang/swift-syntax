@@ -14,6 +14,7 @@
 
 let TYPE_NODES: [Node] = [
   Node(name: "SimpleTypeIdentifier",
+       nameForDiagnostics: "type",
        kind: "Type",
        children: [
          Child(name: "Name",
@@ -30,6 +31,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "MemberTypeIdentifier",
+       nameForDiagnostics: "member type",
        kind: "Type",
        children: [
          Child(name: "BaseType",
@@ -54,6 +56,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "ClassRestrictionType",
+       nameForDiagnostics: "None",
        kind: "Type",
        children: [
          Child(name: "ClassKeyword",
@@ -64,6 +67,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "ArrayType",
+       nameForDiagnostics: "array type",
        kind: "Type",
        children: [
          Child(name: "LeftSquareBracket",
@@ -81,6 +85,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "DictionaryType",
+       nameForDiagnostics: "dictionary type",
        kind: "Type",
        children: [
          Child(name: "LeftSquareBracket",
@@ -105,6 +110,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "MetatypeType",
+       nameForDiagnostics: "metatype",
        kind: "Type",
        children: [
          Child(name: "BaseType",
@@ -126,6 +132,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "OptionalType",
+       nameForDiagnostics: "optional type",
        kind: "Type",
        children: [
          Child(name: "WrappedType",
@@ -138,6 +145,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "ConstrainedSugarType",
+       nameForDiagnostics: "type",
        kind: "Type",
        children: [
          Child(name: "SomeOrAnySpecifier",
@@ -155,6 +163,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "ImplicitlyUnwrappedOptionalType",
+       nameForDiagnostics: "implicitly unwrapped optional type",
        kind: "Type",
        children: [
          Child(name: "WrappedType",
@@ -167,6 +176,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "CompositionTypeElement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Type",
@@ -180,10 +190,12 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "CompositionTypeElementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "CompositionTypeElement"),
   
   Node(name: "CompositionType",
+       nameForDiagnostics: "type composition",
        kind: "Type",
        children: [
          Child(name: "Elements",
@@ -192,6 +204,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "TupleTypeElement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -243,10 +256,12 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "TupleTypeElementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "TupleTypeElement"),
   
   Node(name: "TupleType",
+       nameForDiagnostics: "tuple type",
        kind: "Type",
        traits: [
          "Parenthesized"
@@ -268,6 +283,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "FunctionType",
+       nameForDiagnostics: "function type",
        kind: "Type",
        traits: [
          "Parenthesized"
@@ -310,6 +326,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "AttributedType",
+       nameForDiagnostics: "type",
        kind: "Type",
        children: [
          Child(name: "Specifier",
@@ -329,10 +346,12 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "GenericArgumentList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "GenericArgument"),
   
   Node(name: "GenericArgument",
+       nameForDiagnostics: "generic argument",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -349,6 +368,7 @@ let TYPE_NODES: [Node] = [
        ]),
   
   Node(name: "GenericArgumentClause",
+       nameForDiagnostics: "generic argument clause",
        kind: "Syntax",
        children: [
          Child(name: "LeftAngleBracket",

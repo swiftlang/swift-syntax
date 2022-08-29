@@ -14,6 +14,7 @@
 
 let EXPR_NODES: [Node] = [
   Node(name: "InOutExpr",
+       nameForDiagnostics: "inout expression",
        kind: "Expr",
        children: [
          Child(name: "Ampersand",
@@ -26,6 +27,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PoundColumnExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "PoundColumn",
@@ -36,24 +38,29 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "TupleExprElementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "TupleExprElement"),
 
   Node(name: "ArrayElementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "ArrayElement"),
 
   Node(name: "DictionaryElementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "DictionaryElement"),
 
   Node(name: "StringLiteralSegments",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "Syntax",
        elementName: "Segment",
        elementChoices: ["StringSegment", "ExpressionSegment"]),
 
   Node(name: "TryExpr",
+       nameForDiagnostics: "'try' expression",
        kind: "Expr",
        children: [
          Child(name: "TryKeyword",
@@ -73,6 +80,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "AwaitExpr",
+       nameForDiagnostics: "'await' expression",
        kind: "Expr",
        children: [
          Child(name: "AwaitKeyword",
@@ -88,6 +96,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "MoveExpr",
+       nameForDiagnostics: "'_move' expression",
        kind: "Expr",
        children: [
          Child(name: "MoveKeyword",
@@ -103,6 +112,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "DeclNameArgument",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Name",
@@ -115,10 +125,12 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "DeclNameArgumentList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "DeclNameArgument"),
 
   Node(name: "DeclNameArguments",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "Parenthesized"
@@ -140,6 +152,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "IdentifierExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Identifier",
@@ -157,6 +170,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "SuperRefExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "SuperKeyword",
@@ -167,6 +181,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "NilLiteralExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "NilKeyword",
@@ -177,6 +192,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "DiscardAssignmentExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Wildcard",
@@ -187,6 +203,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "AssignmentExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "AssignToken",
@@ -197,6 +214,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "SequenceExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Elements",
@@ -205,12 +223,14 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ExprList",
+       nameForDiagnostics: "None",
        description: "A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.",
        kind: "SyntaxCollection",
        element: "Expr",
        elementName: "Expression"),
 
   Node(name: "PoundLineExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "PoundLine",
@@ -221,6 +241,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PoundFileExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "PoundFile",
@@ -231,6 +252,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PoundFileIDExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "PoundFileID",
@@ -241,6 +263,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PoundFilePathExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "PoundFilePath",
@@ -251,6 +274,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PoundFunctionExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "PoundFunction",
@@ -261,6 +285,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PoundDsohandleExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "PoundDsohandle",
@@ -271,6 +296,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "SymbolicReferenceExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Identifier",
@@ -284,6 +310,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PrefixOperatorExpr",
+       nameForDiagnostics: "prefix operator expression",
        kind: "Expr",
        children: [
          Child(name: "OperatorToken",
@@ -297,6 +324,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "BinaryOperatorExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "OperatorToken",
@@ -304,6 +332,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ArrowExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "AsyncKeyword",
@@ -329,6 +358,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "InfixOperatorExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "LeftOperand",
@@ -340,6 +370,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "FloatLiteralExpr",
+       nameForDiagnostics: "floating literal",
        kind: "Expr",
        children: [
          Child(name: "FloatingDigits",
@@ -350,6 +381,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "TupleExpr",
+       nameForDiagnostics: "tuple",
        kind: "Expr",
        traits: [
          "Parenthesized"
@@ -371,6 +403,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ArrayExpr",
+       nameForDiagnostics: "array",
        kind: "Expr",
        children: [
          Child(name: "LeftSquare",
@@ -389,6 +422,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "DictionaryExpr",
+       nameForDiagnostics: "dictionary",
        kind: "Expr",
        children: [
          Child(name: "LeftSquare",
@@ -415,6 +449,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "TupleExprElement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -444,6 +479,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ArrayElement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -460,6 +496,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "DictionaryElement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -483,6 +520,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "IntegerLiteralExpr",
+       nameForDiagnostics: "integer literal",
        kind: "Expr",
        children: [
          Child(name: "Digits",
@@ -493,6 +531,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "BooleanLiteralExpr",
+       nameForDiagnostics: "bool literal",
        kind: "Expr",
        children: [
          Child(name: "BooleanLiteral",
@@ -504,6 +543,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "UnresolvedTernaryExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "QuestionMark",
@@ -521,6 +561,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "TernaryExpr",
+       nameForDiagnostics: "ternay expression",
        kind: "Expr",
        children: [
          Child(name: "ConditionExpression",
@@ -542,6 +583,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "MemberAccessExpr",
+       nameForDiagnostics: "member access",
        kind: "Expr",
        children: [
          Child(name: "Base",
@@ -561,6 +603,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "UnresolvedIsExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "IsTok",
@@ -571,6 +614,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "IsExpr",
+       nameForDiagnostics: "'is' expression",
        kind: "Expr",
        children: [
          Child(name: "Expression",
@@ -585,6 +629,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "UnresolvedAsExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "AsTok",
@@ -602,6 +647,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "AsExpr",
+       nameForDiagnostics: "'as' expression",
        kind: "Expr",
        children: [
          Child(name: "Expression",
@@ -623,6 +669,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "TypeExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Type",
@@ -630,6 +677,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ClosureCaptureItem",
+       nameForDiagnostics: "closure capture item",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -662,10 +710,12 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ClosureCaptureItemList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "ClosureCaptureItem"),
 
   Node(name: "ClosureCaptureSignature",
+       nameForDiagnostics: "closure capture signature",
        kind: "Syntax",
        children: [
          Child(name: "LeftSquare",
@@ -685,6 +735,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ClosureParam",
+       nameForDiagnostics: "closure parameter",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -705,10 +756,12 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ClosureParamList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "ClosureParam"),
 
   Node(name: "ClosureSignature",
+       nameForDiagnostics: "closure signature",
        kind: "Syntax",
        children: [
          Child(name: "Attributes",
@@ -753,6 +806,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ClosureExpr",
+       nameForDiagnostics: "closure",
        kind: "Expr",
        traits: [
          "Braced",
@@ -780,6 +834,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "UnresolvedPatternExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Pattern",
@@ -787,6 +842,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "MultipleTrailingClosureElement",
+       nameForDiagnostics: "trailing closure",
        kind: "Syntax",
        children: [
          Child(name: "Label",
@@ -805,10 +861,12 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "MultipleTrailingClosureElementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "MultipleTrailingClosureElement"),
 
   Node(name: "FunctionCallExpr",
+       nameForDiagnostics: "function call",
        kind: "Expr",
        children: [
          Child(name: "CalledExpression",
@@ -838,6 +896,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "SubscriptExpr",
+       nameForDiagnostics: "subscript",
        kind: "Expr",
        children: [
          Child(name: "CalledExpression",
@@ -865,6 +924,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "OptionalChainingExpr",
+       nameForDiagnostics: "optional chaining",
        kind: "Expr",
        children: [
          Child(name: "Expression",
@@ -877,6 +937,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ForcedValueExpr",
+       nameForDiagnostics: "force unwrap",
        kind: "Expr",
        children: [
          Child(name: "Expression",
@@ -889,6 +950,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PostfixUnaryExpr",
+       nameForDiagnostics: "postfix expression",
        kind: "Expr",
        children: [
          Child(name: "Expression",
@@ -901,6 +963,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "SpecializeExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Expression",
@@ -910,6 +973,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "StringSegment",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Content",
@@ -920,6 +984,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ExpressionSegment",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "Parenthesized"
@@ -954,6 +1019,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "StringLiteralExpr",
+       nameForDiagnostics: "string literal",
        kind: "Expr",
        children: [
          Child(name: "OpenDelimiter",
@@ -986,6 +1052,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "RegexLiteralExpr",
+       nameForDiagnostics: "regex literal",
        kind: "Expr",
        children: [
          Child(name: "Regex",
@@ -996,6 +1063,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "KeyPathExpr",
+       nameForDiagnostics: "key path",
        kind: "Expr",
        children: [
          Child(name: "Backslash",
@@ -1019,6 +1087,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "KeyPathBaseExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Period",
@@ -1029,6 +1098,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ObjcNamePiece",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Name",
@@ -1045,10 +1115,12 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ObjcName",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "ObjcNamePiece"),
 
   Node(name: "ObjcKeyPathExpr",
+       nameForDiagnostics: "'#keyPath' expression",
        kind: "Expr",
        traits: [
          "Parenthesized"
@@ -1075,6 +1147,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ObjcSelectorExpr",
+       nameForDiagnostics: "'#selector' expression",
        kind: "Expr",
        traits: [
          "Parenthesized"
@@ -1116,6 +1189,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "PostfixIfConfigExpr",
+       nameForDiagnostics: "None",
        kind: "Expr",
        children: [
          Child(name: "Base",
@@ -1126,6 +1200,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "EditorPlaceholderExpr",
+       nameForDiagnostics: "editor placeholder",
        kind: "Expr",
        children: [
          Child(name: "Identifier",
@@ -1136,6 +1211,7 @@ let EXPR_NODES: [Node] = [
        ]),
 
   Node(name: "ObjectLiteralExpr",
+       nameForDiagnostics: "object literal",
        kind: "Expr",
        traits: [
          "Parenthesized"

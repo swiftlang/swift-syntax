@@ -14,6 +14,7 @@
 
 let DECL_NODES: [Node] = [
   Node(name: "TypeInitializerClause",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Equal",
@@ -26,6 +27,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "TypealiasDecl",
+       nameForDiagnostics: "typealias declaration",
        kind: "Decl",
        traits: [
          "IdentifiedDecl"
@@ -60,6 +62,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "AssociatedtypeDecl",
+       nameForDiagnostics: "associatedtype declaration",
        kind: "Decl",
        traits: [
          "IdentifiedDecl"
@@ -95,10 +98,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "FunctionParameterList",
+       nameForDiagnostics: "function parameter list",
        kind: "SyntaxCollection",
        element: "FunctionParameter"),
 
   Node(name: "ParameterClause",
+       nameForDiagnostics: "parameter clause",
        kind: "Syntax",
        traits: [
          "Parenthesized"
@@ -120,6 +125,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "ReturnClause",
+       nameForDiagnostics: "return clause",
        kind: "Syntax",
        children: [
          Child(name: "Arrow",
@@ -132,6 +138,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "FunctionSignature",
+       nameForDiagnostics: "function signature",
        kind: "Syntax",
        children: [
          Child(name: "Input",
@@ -159,6 +166,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "IfConfigClause",
+       nameForDiagnostics: "conditional compilation clause",
        kind: "Syntax",
        children: [
          Child(name: "PoundKeyword",
@@ -188,10 +196,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "IfConfigClauseList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "IfConfigClause"),
 
   Node(name: "IfConfigDecl",
+       nameForDiagnostics: "conditional compilation block",
        kind: "Decl",
        children: [
          Child(name: "Clauses",
@@ -206,6 +216,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PoundErrorDecl",
+       nameForDiagnostics: "'#error' directive",
        kind: "Decl",
        traits: [
          "Parenthesized"
@@ -231,6 +242,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PoundWarningDecl",
+       nameForDiagnostics: "'#warning' directive",
        kind: "Decl",
        traits: [
          "Parenthesized"
@@ -256,6 +268,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PoundSourceLocation",
+       nameForDiagnostics: "'#sourceLocation' directive",
        kind: "Decl",
        traits: [
          "Parenthesized"
@@ -282,6 +295,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PoundSourceLocationArgs",
+       nameForDiagnostics: "'#sourceLocation' arguments",
        kind: "Syntax",
        children: [
          Child(name: "FileArgLabel",
@@ -328,6 +342,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "DeclModifierDetail",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "Parenthesized"
@@ -351,6 +366,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "DeclModifier",
+       nameForDiagnostics: "modifier",
        kind: "Syntax",
        children: [
          Child(name: "Name",
@@ -394,6 +410,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "InheritedType",
+       nameForDiagnostics: "type",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -410,10 +427,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "InheritedTypeList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "InheritedType"),
 
   Node(name: "TypeInheritanceClause",
+       nameForDiagnostics: "inheritance clause",
        kind: "Syntax",
        children: [
          Child(name: "Colon",
@@ -427,6 +446,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "ClassDecl",
+       nameForDiagnostics: "class",
        kind: "Decl",
        traits: [
          "DeclGroup",
@@ -465,6 +485,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "ActorDecl",
+       nameForDiagnostics: "actor",
        kind: "Decl",
        traits: [
          "DeclGroup",
@@ -506,6 +527,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "StructDecl",
+       nameForDiagnostics: "struct",
        kind: "Decl",
        traits: [
          "DeclGroup",
@@ -544,6 +566,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "ProtocolDecl",
+       nameForDiagnostics: "protocol",
        kind: "Decl",
        traits: [
          "DeclGroup",
@@ -582,6 +605,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "ExtensionDecl",
+       nameForDiagnostics: "extension",
        kind: "Decl",
        traits: [
          "DeclGroup"
@@ -613,6 +637,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "MemberDeclBlock",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "Braced"
@@ -636,11 +661,13 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "MemberDeclList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "MemberDeclListItem",
        elementsSeparatedByNewline: true),
 
   Node(name: "MemberDeclListItem",
+       nameForDiagnostics: "member",
        description: "A member declaration of a type consisting of a declaration and anoptional semicolon;",
        kind: "Syntax",
        children: [
@@ -658,6 +685,7 @@ let DECL_NODES: [Node] = [
        omitWhenEmpty: true),
 
   Node(name: "SourceFile",
+       nameForDiagnostics: "source file",
        kind: "Syntax",
        traits: [
          "WithStatements"
@@ -671,6 +699,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "InitializerClause",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Equal",
@@ -683,6 +712,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "FunctionParameter",
+       nameForDiagnostics: "function parameter",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -733,12 +763,14 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "ModifierList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "DeclModifier",
        elementName: "Modifier",
        omitWhenEmpty: true),
 
   Node(name: "FunctionDecl",
+       nameForDiagnostics: "function",
        kind: "Decl",
        traits: [
          "IdentifiedDecl"
@@ -780,6 +812,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "InitializerDecl",
+       nameForDiagnostics: "initializer",
        kind: "Decl",
        children: [
          Child(name: "Attributes",
@@ -817,6 +850,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "DeinitializerDecl",
+       nameForDiagnostics: "deinitializer",
        kind: "Decl",
        children: [
          Child(name: "Attributes",
@@ -838,6 +872,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "SubscriptDecl",
+       nameForDiagnostics: "subscript",
        kind: "Decl",
        children: [
          Child(name: "Attributes",
@@ -875,6 +910,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "AccessLevelModifier",
+       nameForDiagnostics: "access level modifier",
        kind: "Syntax",
        children: [
          Child(name: "Name",
@@ -888,6 +924,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "AccessPathComponent",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Name",
@@ -904,10 +941,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "AccessPath",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "AccessPathComponent"),
 
   Node(name: "ImportDecl",
+       nameForDiagnostics: "import",
        kind: "Decl",
        children: [
          Child(name: "Attributes",
@@ -942,6 +981,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "AccessorParameter",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "Parenthesized"
@@ -965,6 +1005,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "AccessorDecl",
+       nameForDiagnostics: "accessor",
        kind: "Decl",
        children: [
          Child(name: "Attributes",
@@ -1015,10 +1056,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "AccessorList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "AccessorDecl"),
 
   Node(name: "AccessorBlock",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "Braced"
@@ -1040,6 +1083,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PatternBinding",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -1071,10 +1115,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PatternBindingList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "PatternBinding"),
 
   Node(name: "VariableDecl",
+       nameForDiagnostics: "variable",
        kind: "Decl",
        children: [
          Child(name: "Attributes",
@@ -1097,6 +1143,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "EnumCaseElement",
+       nameForDiagnostics: "None",
        description: "An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.",
        kind: "Syntax",
        traits: [
@@ -1127,11 +1174,13 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "EnumCaseElementList",
+       nameForDiagnostics: "None",
        description: "A collection of 0 or more `EnumCaseElement`s.",
        kind: "SyntaxCollection",
        element: "EnumCaseElement"),
 
   Node(name: "EnumCaseDecl",
+       nameForDiagnostics: "enum case",
        description: "A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.",
        kind: "Decl",
        children: [
@@ -1158,6 +1207,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "EnumDecl",
+       nameForDiagnostics: "enum",
        description: "A Swift `enum` declaration.",
        kind: "Decl",
        traits: [
@@ -1204,6 +1254,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "OperatorDecl",
+       nameForDiagnostics: "operator",
        description: "A Swift `operator` declaration.",
        kind: "Decl",
        traits: [
@@ -1241,10 +1292,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "IdentifierList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "IdentifierToken"),
 
   Node(name: "OperatorPrecedenceAndTypes",
+       nameForDiagnostics: "None",
        description: "A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.",
        kind: "Syntax",
        children: [
@@ -1260,6 +1313,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PrecedenceGroupDecl",
+       nameForDiagnostics: "precedencegroup",
        description: "A Swift `precedencegroup` declaration.",
        kind: "Decl",
        traits: [
@@ -1304,12 +1358,14 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PrecedenceGroupAttributeList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "Syntax",
        elementName: "PrecedenceGroupAttribute",
        elementChoices: ["PrecedenceGroupRelation", "PrecedenceGroupAssignment", "PrecedenceGroupAssociativity"]),
 
   Node(name: "PrecedenceGroupRelation",
+       nameForDiagnostics: "'relation' property of precedencegroup",
        description: "Specify the new precedence group's relation to existing precedencegroups.",
        kind: "Syntax",
        children: [
@@ -1336,10 +1392,12 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PrecedenceGroupNameList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "PrecedenceGroupNameElement"),
 
   Node(name: "PrecedenceGroupNameElement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Name",
@@ -1356,6 +1414,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PrecedenceGroupAssignment",
+       nameForDiagnostics: "'assignment' property of precedencegroup",
        description: "Specifies the precedence of an operator when used in an operationthat includes optional chaining.",
        kind: "Syntax",
        children: [
@@ -1382,6 +1441,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "PrecedenceGroupAssociativity",
+       nameForDiagnostics: "'associativity' property of precedencegroup",
        description: "Specifies how a sequence of operators with the same precedence levelare grouped together in the absence of grouping parentheses.",
        kind: "Syntax",
        children: [

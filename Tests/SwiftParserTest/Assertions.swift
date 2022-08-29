@@ -138,7 +138,7 @@ func AssertDiagnostic<T: SyntaxProtocol>(
     XCTAssertEqual(diag.diagnosticID, id, file: file, line: line)
   }
   if let message = spec.message {
-    XCTAssertEqual(diag.message, message, file: file, line: line)
+    AssertStringsEqualWithDiff(diag.message, message, file: file, line: line)
   }
   if let highlight = spec.highlight {
     AssertStringsEqualWithDiff(diag.highlights.map(\.description).joined(), highlight, file: file, line: line)

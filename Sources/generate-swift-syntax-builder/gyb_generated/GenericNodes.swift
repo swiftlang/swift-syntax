@@ -14,6 +14,7 @@
 
 let GENERIC_NODES: [Node] = [
   Node(name: "GenericWhereClause",
+       nameForDiagnostics: "'where' clause",
        kind: "Syntax",
        children: [
          Child(name: "WhereKeyword",
@@ -27,11 +28,13 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "GenericRequirementList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "GenericRequirement",
        elementName: "GenericRequirement"),
 
   Node(name: "GenericRequirement",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -56,6 +59,7 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "SameTypeRequirement",
+       nameForDiagnostics: "same type requirement",
        kind: "Syntax",
        children: [
          Child(name: "LeftTypeIdentifier",
@@ -73,6 +77,7 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "LayoutRequirement",
+       nameForDiagnostics: "layout requirement",
        kind: "Syntax",
        children: [
          Child(name: "TypeIdentifier",
@@ -120,10 +125,12 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "GenericParameterList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "GenericParameter"),
 
   Node(name: "GenericParameter",
+       nameForDiagnostics: "generic parameter",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -156,10 +163,12 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "PrimaryAssociatedTypeList",
+       nameForDiagnostics: "None",
        kind: "SyntaxCollection",
        element: "PrimaryAssociatedType"),
 
   Node(name: "PrimaryAssociatedType",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -179,6 +188,7 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "GenericParameterClause",
+       nameForDiagnostics: "generic parameter clause",
        kind: "Syntax",
        children: [
          Child(name: "LeftAngleBracket",
@@ -197,6 +207,7 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "ConformanceRequirement",
+       nameForDiagnostics: "conformance requirement",
        kind: "Syntax",
        children: [
          Child(name: "LeftTypeIdentifier",
@@ -211,6 +222,7 @@ let GENERIC_NODES: [Node] = [
        ]),
 
   Node(name: "PrimaryAssociatedTypeClause",
+       nameForDiagnostics: "primary associated type clause",
        kind: "Syntax",
        children: [
          Child(name: "LeftAngleBracket",

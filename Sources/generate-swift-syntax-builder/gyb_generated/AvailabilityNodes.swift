@@ -14,10 +14,12 @@
 
 let AVAILABILITY_NODES: [Node] = [
   Node(name: "AvailabilitySpecList",
+       nameForDiagnostics: "'@availability' arguments",
        kind: "SyntaxCollection",
        element: "AvailabilityArgument"),
 
   Node(name: "AvailabilityArgument",
+       nameForDiagnostics: "'@available' argument",
        description: "A single argument to an `@available` argument like `*`, `iOS 10.1`,or `message: \"This has been deprecated\"`.",
        kind: "Syntax",
        children: [
@@ -53,6 +55,7 @@ let AVAILABILITY_NODES: [Node] = [
        ]),
 
   Node(name: "AvailabilityLabeledArgument",
+       nameForDiagnostics: "'@available' argument",
        description: "A argument to an `@available` attribute that consists of a label anda value, e.g. `message: \"This has been deprecated\"`.",
        kind: "Syntax",
        children: [
@@ -83,6 +86,7 @@ let AVAILABILITY_NODES: [Node] = [
        ]),
 
   Node(name: "AvailabilityVersionRestriction",
+       nameForDiagnostics: "'@available' argument",
        description: "An argument to `@available` that restricts the availability on acertain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
        kind: "Syntax",
        children: [
@@ -99,6 +103,7 @@ let AVAILABILITY_NODES: [Node] = [
        ]),
 
   Node(name: "VersionTuple",
+       nameForDiagnostics: "version tuple",
        description: "A version number of the form major.minor.patch in which the minorand patch part may be omitted.",
        kind: "Syntax",
        children: [

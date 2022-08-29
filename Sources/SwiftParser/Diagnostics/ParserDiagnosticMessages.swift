@@ -90,7 +90,7 @@ public enum StaticParserError: String, DiagnosticMessage {
 }
 
 public enum StaticParserFixIt: String, FixItMessage {
-  case moveThrowBeforeArrow = "Move 'throws' in before of '->'"
+  case moveThrowBeforeArrow = "Move 'throws' before '->'"
 
   public var message: String { self.rawValue }
 

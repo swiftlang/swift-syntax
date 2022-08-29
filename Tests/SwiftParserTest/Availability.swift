@@ -4,7 +4,7 @@ import XCTest
 
 final class AvailabilityTests: XCTestCase {
   func testAvailableMember() throws {
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
       """
       @available(OSX 10.0, introduced: 10.12)
       // expected-error@-1 {{'introduced' can't be combined with shorthand specification 'OSX 10.0'}}
@@ -14,18 +14,19 @@ final class AvailabilityTests: XCTestCase {
       @available(iOS 6.0, OSX 10.8, *)
       func availableOnMultiplePlatforms() {}
       """
-    }
+    )
 
-    try AssertParse({ $0.parseClassDeclaration(.empty) }) {
+    AssertParse(
       """
       class IncrementalParseTransition {
         @available(*, deprecated, message: "Use the initializer taking 'ConcurrentEdits' instead")
         public convenience init() {}
       }
-      """
-    }
+      """,
+      { $0.parseClassDeclaration(.empty) }
+    )
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
        """
        extension String {
          @available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *)
@@ -35,9 +36,9 @@ final class AvailabilityTests: XCTestCase {
          public func fiddle() { }
        }
        """
-    }
+    )
 
-    try AssertParse({ $0.parseSourceFile() }) {
+    AssertParse(
       """
       @available(
         iOSApplicationExtension,
@@ -47,6 +48,6 @@ final class AvailabilityTests: XCTestCase {
           "Use something else because this is definitely deprecated.")
       func f2() {}
       """
-    }
+    )
   }
 }

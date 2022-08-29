@@ -3,53 +3,51 @@
 import XCTest
 
 final class StatementTests: XCTestCase {
-  func testIf() throws {
-    try AssertParse({ $0.parseIfStatement() }) {
-      """
-      if let x { }
-      """
-    }
+  func testIf() {
+    AssertParse("if let x { }")
 
-    try AssertParse({ $0.parseIfStatement() }, allowErrors: true) {
+    AssertParse(
       """
-      if case* ! = x {
+      if case#^DIAG^#* ! = x {
         bar()
       }
-      """
-    }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected '='"),
+        DiagnosticSpec(message: "Unexpected text '* ! = x '"),
+      ]
+    )
   }
 
-  func testNestedIfs() throws {
-    try AssertParse({ $0.parseDeclaration() }) {
-      let nest = 22
-      var example = "func nestThoseIfs() {\n"
-      for index in (0...nest) {
-          let indent = String(repeating: "    ", count: index + 1)
-          example += indent + "if false != true {\n"
-          example += indent + "   print \"\\(i)\"\n"
-      }
-
-      for index in (0...nest).reversed() {
-          let indent = String(repeating: "    ", count: index + 1)
-          example += indent + "}\n"
-      }
-      example += "}"
-      return example
+  func testNestedIfs() {
+    let nest = 22
+    var source = "func nestThoseIfs() {\n"
+    for index in (0...nest) {
+        let indent = String(repeating: "    ", count: index + 1)
+        source += indent + "if false != true {\n"
+        source += indent + "   print \"\\(i)\"\n"
     }
+
+    for index in (0...nest).reversed() {
+        let indent = String(repeating: "    ", count: index + 1)
+        source += indent + "}\n"
+    }
+    source += "}"
+    AssertParse(source)
   }
 
-  func testDo() throws {
-    try AssertParse({ $0.parseDoStatement() }) {
+  func testDo() {
+    AssertParse(
        """
        do {
 
        }
        """
-    }
+    )
   }
 
-  func testDoCatch() throws {
-    try AssertParse({ $0.parseDoStatement() }) {
+  func testDoCatch() {
+    AssertParse(
        """
        do {
 
@@ -57,45 +55,41 @@ final class StatementTests: XCTestCase {
 
        }
        """
-    }
+    )
   }
 
-  func testReturn() throws {
-    try AssertParse({ $0.parseReturnStatement() }) {
-      "return"
-    }
+  func testReturn() {
+    AssertParse("return")
 
-    try AssertParse({ $0.parseReturnStatement() }) {
+    AssertParse(
        #"""
        return "assert(\(assertChoices.joined(separator: " || ")))"
        """#
-    }
+    )
 
-    try AssertParse({ $0.parseReturnStatement() }) {
-      "return true ? nil : nil"
-    }
+    AssertParse("return true ? nil : nil")
   }
 
-  func testSwitch() throws {
-    try AssertParse({ $0.parseStatement() }) {
+  func testSwitch() {
+    AssertParse(
       """
       switch x {
       case .A, .B:
         break
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseStatement() }) {
+    AssertParse(
       """
       switch 0 {
       @$dollar case _:
         break
       }
       """
-    }
+    )
 
-    try AssertParse({ $0.parseStatement() }) {
+    AssertParse(
       """
       switch x {
       case .A:
@@ -109,6 +103,93 @@ final class StatementTests: XCTestCase {
       #endif
       }
       """
-    }
+    )
+  }
+
+  func testCStyleForLoop() {
+    AssertParse(
+      """
+      #^DIAG^#for let x = 0; x < 10; x += 1, y += 1 {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "C-style for statement has been removed in Swift 3", highlight: "let x = 0; x < 10; x += 1, y += 1 ")
+      ]
+    )
+  }
+
+  func testTopLevelCaseRecovery() {
+    // FIXME: These test cases should produce diagnostics
+    AssertParse(
+      "/*#-editable-code Swift Platground editable area*/default/*#-end-editable-code*/"
+    )
+
+    AssertParse("case:")
+
+    AssertParse(
+      #"""
+      case: { ("Hello World") }
+      """#
+    )
+  }
+
+  func testMissingIfClauseIntroducer() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse("if _ = 42 {}")
+  }
+
+  func testAttributesOnStatements() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse(
+      """
+      func test1() {
+        @s return
+      }
+      func test2() {
+        @unknown return
+      }
+      """
+    )
+  }
+
+  func testBogusSwitchStatement() {
+    // FIXME: This test case should produce a diagnostics
+    AssertParse(
+      """
+      switch x {
+        print()
+      #if true
+        print()
+      #endif
+        case .A, .B:
+          break
+      }
+      """
+    )
+
+    AssertParse(
+      """
+      switch x {
+      print()
+      #if ENABLE_C
+      case .NOT_EXIST:
+        break
+      case .C:
+        break
+      #endif
+      case .A, .B:
+        break
+      }
+      """
+    )
+  }
+
+  // FIXME: This test case should produce a diagnostic
+  func testBogusLineLabel() {
+    AssertParse(
+      """
+      LABEL:
+      """
+    )
   }
 }

@@ -4,6 +4,9 @@ import SwiftParser
 
 public class ParserTests: XCTestCase {
   func testSelfParse() throws {
+    // Allow skipping the self parse test in local development environments
+    // because it takes very long compared to all the other tests.
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
     let currentDir = URL(fileURLWithPath: #file)
       .deletingLastPathComponent()
       .deletingLastPathComponent()

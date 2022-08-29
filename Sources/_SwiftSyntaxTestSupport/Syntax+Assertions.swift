@@ -33,60 +33,6 @@ public func XCTAssertNextIsNil<Iterator: IteratorProtocol>(_ iterator: inout Ite
   XCTAssertNil(iterator.next())
 }
 
-/// Verifies that the tree parsed from `actual` has the same structure as
-/// `expected` when parsed with `parse`, ie. it has the same structure and
-/// optionally the same trivia (if `includeTrivia` is set).
-public func XCTAssertSameStructure(
-  _ actual: String,
-  parse: (String) throws -> Syntax,
-  _ expected: Syntax,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-) throws {
-  let actualTree = try parse(actual)
-  XCTAssertSameStructure(actualTree, expected, includeTrivia: includeTrivia, file: file, line: line)
-}
-
-/// Verifies that two trees are equivalent, ie. they have the same structure
-/// and optionally the same trivia if `includeTrivia` is set.
-public func XCTAssertSameStructure<ActualTree, ExpectedTree>(
-  _ actual: ActualTree,
-  _ expected: ExpectedTree,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-)
-  where ActualTree: SyntaxProtocol, ExpectedTree: SyntaxProtocol
-{
-  let diff = actual.findFirstDifference(baseline: expected, includeTrivia: includeTrivia)
-  XCTAssertNil(diff, diff!.debugDescription, file: file, line: line)
-}
-
-/// See `SubtreeMatcher.assertSameStructure`.
-public func XCTAssertHasSubstructure<ExpectedTree: SyntaxProtocol>(
-  _ markedText: String,
-  parse: (String) throws -> Syntax,
-  afterMarker: String? = nil,
-  _ expected: ExpectedTree,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-) throws {
-  let subtreeMatcher = try SubtreeMatcher(markedText, parse: parse)
-  try subtreeMatcher.assertSameStructure(afterMarker: afterMarker, Syntax(expected), file: file, line: line)
-}
-
-/// See `SubtreeMatcher.assertSameStructure`.
-public func XCTAssertHasSubstructure<ActualTree, ExpectedTree>(
-  _ actualTree: ActualTree,
-  _ expected: ExpectedTree,
-  includeTrivia: Bool = false,
-  file: StaticString = #filePath, line: UInt = #line
-) throws
-  where ActualTree: SyntaxProtocol, ExpectedTree: SyntaxProtocol
-{
-  let subtreeMatcher = SubtreeMatcher(Syntax(actualTree))
-  try subtreeMatcher.assertSameStructure(Syntax(expected), file: file, line: line)
-}
-
 /// Allows matching a subtrees of the given `markedText` against
 /// `baseline`/`expected` trees, where a combination of markers and the type
 /// of the `expected` tree is used to first find the subtree to match. Note
@@ -135,24 +81,14 @@ public struct SubtreeMatcher {
   private var actualTree: Syntax
 
   public init(_ markedText: String, parse: (String) throws -> Syntax) throws {
-    var text = ""
-    var markers = [String: Int]()
-    var lastIndex = markedText.startIndex
-    for marker in findMarkedRanges(text: markedText) {
-      text += markedText[lastIndex ..< marker.range.lowerBound]
-      lastIndex = marker.range.upperBound
-
-      assert(markers[String(marker.name)] == nil, "Marker names must be unique")
-      markers[String(marker.name)] = text.utf8.count
-    }
-    text += markedText[lastIndex ..< markedText.endIndex]
+    let (markers, text) = extractMarkers(markedText)
 
     self.markers = markers.isEmpty ? ["DEFAULT": 0] : markers
     self.actualTree = try parse(text)
   }
 
-  public init(_ actualTree: Syntax) {
-    self.markers = ["DEFAULT": 0]
+  public init(_ actualTree: Syntax, markers: [String: Int]) {
+    self.markers = markers.isEmpty ? ["DEFAULT": 0] : markers
     self.actualTree = actualTree
   }
 
@@ -172,8 +108,8 @@ public struct SubtreeMatcher {
     return subtree.findFirstDifference(baseline: baseline, includeTrivia: includeTrivia)
   }
 
-  /// Same as `XCTAssertSameStructure`, but uses the subtree found from parsing
-  /// the text passed into `init(markedText:)` as the `actual` tree.
+  /// Verifies that the the subtree found from parsing the text passed into
+  /// `init(markedText:)` has the same structure as `expected`.
   public func assertSameStructure(afterMarker: String? = nil, _ expected: Syntax, includeTrivia: Bool = false,
                                   file: StaticString = #filePath, line: UInt = #line) throws {
     let diff = try findFirstDifference(afterMarker: afterMarker, baseline: expected, includeTrivia: includeTrivia)
@@ -193,43 +129,6 @@ public enum SubtreeError: Error, CustomStringConvertible {
       return "Could not find subtree after UTF8 offset \(afterUTF8Offset) with type \(type) in:\n\(tree.debugDescription(includeChildren: true))"
     }
   }
-}
-
-/// Finds all marked ranges in the given text, see `Marker`.
-fileprivate func findMarkedRanges(text: String) -> [Marker] {
-  var markers = [Marker]()
-  while let marker = nextMarkedRange(text: text, from: markers.last?.range.upperBound ?? text.startIndex) {
-    markers.append(marker)
-  }
-  return markers
-}
-
-fileprivate func nextMarkedRange(text: String, from: String.Index) -> Marker? {
-  guard let start = text.range(of: "#^", range: from ..< text.endIndex),
-        let end = text.range(of: "^#", range: start.upperBound ..< text.endIndex) else {
-    return nil
-  }
-
-  let markerRange = start.lowerBound ..< end.upperBound
-  let name = text[start.upperBound ..< end.lowerBound]
-
-  // Expand to the whole line if the line only contains the marker
-  let lineRange = text.lineRange(for: start)
-  if text[lineRange].trimmingCharacters(in: .whitespacesAndNewlines) == text[markerRange] {
-    return Marker(name: name, range: lineRange)
-  }
-  return Marker(name: name, range: markerRange)
-}
-
-fileprivate struct Marker {
-  /// The name of the marker without the `#^` and `^#` markup.
-  let name: Substring
-  /// The range of the marker.
-  ///
-  /// If the marker contains all the the non-whitepace characters on the line,
-  /// this is the range of the entire line. Otherwise it's the range of the
-  /// marker itself, including the `#^` and `^#` markup.
-  let range: Range<String.Index>
 }
 
 fileprivate class SyntaxTypeFinder: SyntaxAnyVisitor {

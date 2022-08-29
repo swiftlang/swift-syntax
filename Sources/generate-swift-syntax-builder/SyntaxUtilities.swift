@@ -47,9 +47,9 @@ func createWithTrailingTriviaCall() -> FunctionCallExpr {
   }
 }
 
-func createTokenSyntaxPatternBinding(_ pattern: ExpressibleAsPatternBuildable, accessor: ExpressibleAsSyntaxBuildable) -> PatternBinding {
+func createTokenPatternBinding(_ pattern: ExpressibleAsPatternBuildable, accessor: ExpressibleAsSyntaxBuildable) -> PatternBinding {
   PatternBinding(pattern: pattern,
-                 typeAnnotation: "TokenSyntax",
+                 typeAnnotation: "Token",
                  initializer: nil,
                  accessor: accessor)
 }
@@ -79,7 +79,7 @@ func createExpressibleAsCreateFunction(type: SyntaxBuildableType, additionalDocC
     leadingTrivia: ([
       "/// Conformance to `\(type.expressibleAsBaseName)`.",
     ] + additionalDocComments).map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     identifier: .identifier("create\(type.buildableBaseName)"),
     signature: FunctionSignature(
       input: ParameterClause(),

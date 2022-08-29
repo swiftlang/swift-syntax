@@ -27,7 +27,7 @@ public extension IfStmt {
       leadingTrivia: leadingTrivia,
       conditions: conditions,
       body: body(),
-      elseKeyword: generatedElseBody == nil ? nil : TokenSyntax.elseKeyword(leadingTrivia: .space, trailingTrivia: []),
+      elseKeyword: generatedElseBody == nil ? nil : Token.else.withLeadingTrivia(.space).withTrailingTrivia([]),
       elseBody: generatedElseBody.map { CodeBlock(statements: $0) }
     )
   }

@@ -25,7 +25,7 @@ class Child {
   let nodeChoices: [Child]
   let classification: SyntaxClassification?
   /// A restricted set of token kinds that will be accepted for this child.
-  let tokenChoices: [Token]
+  let tokenChoices: [TokenSpec]
   let tokenCanContainArbitraryText: Bool
 
   var swiftName: String {
@@ -54,13 +54,13 @@ class Child {
     return tokenKind != nil
   }
 
-  var token: Token? {
+  var token: TokenSpec? {
     guard let tokenKind = tokenKind else { return nil }
     return SYNTAX_TOKEN_MAP[tokenKind]
   }
 
   /// Returns the first choice from the `tokenChoices` if there are any, otherwise returns `nil`.
-  var mainToken: Token? {
+  var mainToken: TokenSpec? {
     return tokenChoices.first
   }
 

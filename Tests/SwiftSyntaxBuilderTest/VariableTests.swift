@@ -34,7 +34,7 @@ final class VariableTests: XCTestCase {
         for i in 1...3 {
           ArrayElement(
             expression: IntegerLiteralExpr(i),
-            trailingComma: .comma.withoutTrailingTrivia().withTrailingTrivia(.newline))
+            trailingComma: .comma.withTrailingTrivia(.newline))
         }
       })
     ])
@@ -73,7 +73,7 @@ final class VariableTests: XCTestCase {
   func testConvenienceInitializer() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let testCases: [UInt: (TokenSyntax, String, String?, ExpressibleAsExprBuildable?, String)] = [
+    let testCases: [UInt: (Token, String, String?, ExpressibleAsExprBuildable?, String)] = [
       #line: (.let, "foo", "Int", nil, "␣let foo: Int"),
       #line: (.var, "bar", "Baz", nil, "␣var bar: Baz"),
       #line: (.var, "typed", "String", StringLiteralExpr("abc"), #"␣var typed: String = "abc""#),

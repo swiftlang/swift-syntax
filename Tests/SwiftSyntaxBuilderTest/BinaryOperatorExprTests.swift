@@ -6,7 +6,7 @@ final class BinaryOperatorExprTests: XCTestCase {
   func testBinaryOperatorExprConvenienceInitializers() {
     let testCases: [UInt: (ExpressibleAsBinaryOperatorExpr, String)] = [
       #line: (BinaryOperatorExpr("=="), " == "),
-      #line: (TokenSyntax.unspacedBinaryOperator("=="), "=="),
+      #line: (Token.unspacedBinaryOperator("=="), "=="),
       #line: ("==", " == "),
     ]
     

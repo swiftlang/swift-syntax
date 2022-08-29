@@ -19,7 +19,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Represents the specification for a Token in the TokenSyntax file.
-class Token {
+class TokenSpec {
   let name: String
   let kind: String
   let serializationCode: Int
@@ -54,31 +54,31 @@ class Token {
 }
 
 /// Represents a keyword token.
-class Keyword: Token {
+class KeywordSpec: TokenSpec {
   init(name: String, serializationCode: Int, text: String, classification: String = "Keyword") {
     super.init(name: name, kind: "kw_\(text)", serializationCode: serializationCode, unprefixedKind: text, text: text, classification: classification, isKeyword: true)
   }
 }
 
-class SwiftKeyword: Keyword { }
+class SwiftKeywordSpec: KeywordSpec { }
 
-class DeclKeyword: SwiftKeyword { }
+class DeclKeywordSpec: SwiftKeywordSpec { }
 
-class StmtKeyword: SwiftKeyword { }
+class StmtKeywordSpec: SwiftKeywordSpec { }
 
-class ExprKeyword: SwiftKeyword { }
+class ExprKeywordSpec: SwiftKeywordSpec { }
 
-class PatternKeyword: SwiftKeyword { }
+class PatternKeywordSpec: SwiftKeywordSpec { }
 
-class SilKeyword: Keyword { }
+class SilKeywordSpec: KeywordSpec { }
 
-class PoundKeyword: Token {
+class PoundKeywordSpec: TokenSpec {
   init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "Keyword") {
     super.init(name: name, kind: "pound_\(kind)", serializationCode: serializationCode, unprefixedKind: kind, text: text, classification: classification, isKeyword: true)
   }
 }
 
-class PoundObjectLiteral: PoundKeyword {
+class PoundObjectLiteralSpec: PoundKeywordSpec {
   let description: String
   let `protocol`: String
 
@@ -89,27 +89,27 @@ class PoundObjectLiteral: PoundKeyword {
   }
 }
 
-class PoundConfig: PoundKeyword { }
+class PoundConfigSpec: PoundKeywordSpec { }
 
-class PoundDirectiveKeyword: PoundKeyword {
+class PoundDirectiveKeywordSpec: PoundKeywordSpec {
   override init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "PoundDirectiveKeyword") {
     super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
   }
 }
 
-class PoundConditionalDirectiveKeyword: PoundDirectiveKeyword {
+class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
   override init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "PoundDirectiveKeyword") {
     super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
   }
 }
 
-class Punctuator: Token { }
+class PunctuatorSpec: TokenSpec { }
 
-class Literal: Token { }
+class LiteralSpec: TokenSpec { }
 
-class Misc: Token { }
+class MiscSpec: TokenSpec { }
 
-let SYNTAX_TOKENS: [Token] = [
+let SYNTAX_TOKENS: [TokenSpec] = [
 % for token in SYNTAX_TOKENS:
 %   class_name = type(token).__name__
 %   parameters = ["name: \"%s\"" % token.name]
@@ -128,7 +128,7 @@ let SYNTAX_TOKENS: [Token] = [
 %     print("Unknown token `%s`", (token.name), file=sys.stderr)
 %     sys.exit(1)
 %   end
-  ${class_name}(${", ".join(parameters)}),
+  ${class_name}Spec(${", ".join(parameters)}),
 % end
 ]
 

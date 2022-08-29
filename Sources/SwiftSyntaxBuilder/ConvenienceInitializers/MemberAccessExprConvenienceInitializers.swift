@@ -16,7 +16,7 @@ extension MemberAccessExpr {
   /// Creates a `MemberAccessExpr` using the provided parameters.
   public init(
     base: ExpressibleAsExprBuildable? = nil,
-    dot: TokenSyntax = .period,
+    dot: Token = .period,
     name: String,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {

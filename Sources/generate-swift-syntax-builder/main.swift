@@ -21,8 +21,7 @@ let sourceTemplates = [
   (buildableNodesFile, "BuildableNodes.swift"),
   (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
   (formatFile, "Format.swift"),
-  (tokensFile, "Tokens.swift"),
-  (tokenSyntaxFile, "TokenSyntax.swift"),
+  (tokenFile, "Token.swift"),
 ]
 
 guard CommandLine.arguments.count > 1 else {

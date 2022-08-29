@@ -12,11 +12,19 @@
 
 import SwiftSyntax
 
-public extension TupleExprElement {
-  /// A convenience initializer that allows passing in label as an optional string.
-  /// The presence of the colon will be inferred based on the presence of the label.
-  init(label: String? = nil, expression: ExpressibleAsExprBuildable) {
+extension TernaryExpr {
+  public init(
+    if condition: ExpressibleAsExprBuildable,
+    then firstChoice: ExpressibleAsExprBuildable,
+    else secondChoice: ExpressibleAsExprBuildable
+  ) {
     self.init(
-      label: label.map { TokenSyntax.identifier($0) }, colon: label == nil ? nil : .colon, expression: expression)
+      conditionExpression: condition,
+      questionMark: .infixQuestionMark.withLeadingTrivia(.space).withTrailingTrivia(.space),
+      firstChoice: firstChoice,
+      colonMark: .colon.withLeadingTrivia(.space),
+      secondChoice: secondChoice
+    )
   }
 }
+

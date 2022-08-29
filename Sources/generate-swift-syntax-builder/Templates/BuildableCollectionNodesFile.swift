@@ -30,7 +30,7 @@ let buildableCollectionNodesFile = SourceFile {
       leadingTrivia: node.documentation.isEmpty
         ? []
         : .docLineComment("/// \(node.documentation)") + .newline,
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: type.buildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: conformances)
     ) {
@@ -64,7 +64,7 @@ let buildableCollectionNodesFile = SourceFile {
         }
       ) {
         FunctionDecl(
-          modifiers: [TokenSyntax.public],
+          modifiers: [Token.public],
           identifier: .identifier("create\(type.buildableBaseName)"),
           signature: FunctionSignature(
             input: ParameterClause(),
@@ -90,7 +90,7 @@ private func createArrayInitializer(node: Node) -> InitializerDecl {
       "/// - Parameters:",
       "///   - elements: A list of `\(elementType.expressibleAsBaseName)`",
     ].map { .docLineComment($0) + .newline }.reduce([], +),
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
         FunctionParameter(
@@ -121,7 +121,7 @@ private func createCombiningInitializer(node: Node) -> InitializerDecl {
   let type = node.type
   return InitializerDecl(
     leadingTrivia: .docLineComment("/// Creates a new `\(type.buildableBaseName)` by flattening the elements in `lists`") + .newline,
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
         FunctionParameter(
@@ -150,7 +150,7 @@ private func createCombiningInitializer(node: Node) -> InitializerDecl {
 private func createArrayLiteralInitializer(node: Node) -> InitializerDecl {
   let elementType = node.collectionElementType
   return InitializerDecl(
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
         FunctionParameter(
@@ -174,7 +174,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
   let type = node.type
   let elementType = node.collectionElementType
   return FunctionDecl(
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     identifier: .identifier("build\(type.baseName)"),
     signature: FunctionSignature(
       input: createFormatParameters(),
@@ -186,7 +186,11 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
       name: "result",
       initializer: FunctionCallExpr("\(type.syntaxBaseName)") {
         if elementType.isToken {
-          TupleExprElement(expression: "elements")
+          TupleExprElement(
+            expression: FunctionCallExpr(MemberAccessExpr(base: "elements", name: "map"), trailingClosure: ClosureExpr {
+              FunctionCallExpr(MemberAccessExpr(base: Token.dollarIdentifier("$0"), name: "buildToken"))
+            })
+          )
         } else {
           TupleExprElement(
             expression: FunctionCallExpr(MemberAccessExpr(base: "elements", name: "map"), trailingClosure: ClosureExpr {
@@ -211,7 +215,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
 private func createBuildSyntaxFunction(node: Node) -> FunctionDecl {
   let type = node.type
   return FunctionDecl(
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     identifier: .identifier("buildSyntax"),
     signature: FunctionSignature(
       input: createFormatParameters(),

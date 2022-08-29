@@ -20,16 +20,16 @@ let formatFile = SourceFile {
     path: "SwiftSyntax"
   )
 
-  StructDecl(modifiers: [TokenSyntax.public], identifier: "Format") {
+  StructDecl(modifiers: [Token.public], identifier: "Format") {
     VariableDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       .let,
       name: "indentWidth",
       type: "Int"
     )
 
     VariableDecl(
-      modifiers: [TokenSyntax.private],
+      modifiers: [Token.private],
       .var,
       name: "indents",
       type: "Int",
@@ -37,7 +37,7 @@ let formatFile = SourceFile {
     )
 
     InitializerDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       signature: FunctionSignature(
         input: ParameterClause {
           FunctionParameter(
@@ -59,7 +59,7 @@ let formatFile = SourceFile {
 
   ExtensionDecl(extendedType: "Format") {
     VariableDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       name: "_indented",
       type: "Self"
     ) {
@@ -73,7 +73,7 @@ let formatFile = SourceFile {
     }
 
     VariableDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       name: "_indentTrivia",
       type: "Trivia"
     ) {
@@ -95,7 +95,7 @@ let formatFile = SourceFile {
     }
 
     VariableDecl(
-      modifiers: [TokenSyntax.private],
+      modifiers: [Token.private],
       name: "indentedNewline",
       type: "Trivia"
     ) {
@@ -134,7 +134,7 @@ private func createFormatFunctionSignature(type: SyntaxBuildableType) -> Functio
 /// Generate the _format implementation for a buildable node.
 private func createBuildableNodeFormatFunction(node: Node) -> FunctionDecl {
   FunctionDecl(
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     identifier: .identifier("_format"),
     signature: createFormatFunctionSignature(type: node.type)
   ) {
@@ -190,7 +190,7 @@ private func createBuildableNodeFormatFunction(node: Node) -> FunctionDecl {
 /// The implementation updates the leading trivia of the elements with their indentation.
 private func createBuildableCollectionNodeFormatFunction(node: Node) -> FunctionDecl {
   FunctionDecl(
-    modifiers: [TokenSyntax.public],
+    modifiers: [Token.public],
     identifier: .identifier("_format"),
     signature: createFormatFunctionSignature(type: node.type)
   ) {

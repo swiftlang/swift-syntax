@@ -38,7 +38,7 @@ let expressibleAsProtocolsFile = SourceFile {
     let declaredConformances = conformances.filter { !impliedConformances.contains($0) }
 
     ProtocolDecl(
-      modifiers: [TokenSyntax.public],
+      modifiers: [Token.public],
       identifier: type.expressibleAsBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: declaredConformances.map(\.expressibleAsBaseName))
     ) {
@@ -54,7 +54,7 @@ let expressibleAsProtocolsFile = SourceFile {
 
     if !conformances.isEmpty {
       ExtensionDecl(
-        modifiers: [TokenSyntax.public],
+        modifiers: [Token.public],
         extendedType: type.expressibleAsBaseName
       ) {
         for conformance in type.elementInCollections {

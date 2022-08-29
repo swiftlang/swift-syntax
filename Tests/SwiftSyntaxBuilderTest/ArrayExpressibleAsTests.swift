@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 
 final class ArrayExpressibleAsTests: XCTestCase {
   func testSimpleModifierList() {
-    let modifiers: ExpressibleAsModifierList = [TokenSyntax.public, TokenSyntax.static]
+    let modifiers: ExpressibleAsModifierList = [Token.public, Token.static]
 
     var result = ""
     modifiers.createModifierList().buildSyntax(format: Format()).write(to: &result)
@@ -12,7 +12,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
   }
 
   func testHeterogeneousList() {
-    let modifiers: ExpressibleAsModifierList = [TokenSyntax.open, DeclModifier(name: TokenSyntax.internal)]
+    let modifiers: ExpressibleAsModifierList = [Token.open, DeclModifier(name: Token.internal)]
 
     var result = ""
     modifiers.createModifierList().buildSyntax(format: Format()).write(to: &result)
@@ -20,7 +20,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
   }
 
   func testExplicitlyTypeErasedList() {
-    let modifiers: [DeclModifier] = [DeclModifier(name: TokenSyntax.private)]
+    let modifiers: [DeclModifier] = [DeclModifier(name: Token.private)]
     let expressible: ExpressibleAsModifierList = modifiers as [ExpressibleAsDeclModifier]
 
     var result = ""

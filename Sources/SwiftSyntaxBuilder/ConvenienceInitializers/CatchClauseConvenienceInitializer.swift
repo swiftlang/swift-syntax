@@ -12,19 +12,18 @@
 
 import SwiftSyntax
 
-extension TernaryExpr {
+extension CatchClause {
+  /// A convenience initializer that calculates spacing around the `catch` keyword.
   public init(
-    if condition: ExpressibleAsExprBuildable,
-    then firstChoice: ExpressibleAsExprBuildable,
-    else secondChoice: ExpressibleAsExprBuildable
+    leadingTrivia: Trivia = [],
+    _ catchItems: CatchItemList,
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList
   ) {
     self.init(
-      conditionExpression: condition,
-      questionMark: .infixQuestionMarkToken(leadingTrivia: .space, trailingTrivia: .space),
-      firstChoice: firstChoice,
-      colonMark: .colonToken(leadingTrivia: .space),
-      secondChoice: secondChoice
+      leadingTrivia: leadingTrivia,
+      catchKeyword: .catch.withTrailingTrivia(catchItems.elements.isEmpty ? [] : .space),
+      catchItems: catchItems,
+      body: bodyBuilder()
     )
   }
 }
-

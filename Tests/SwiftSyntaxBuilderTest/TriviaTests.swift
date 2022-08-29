@@ -6,7 +6,7 @@ final class TriviaTests: XCTestCase {
   func testLeadingTrivia() {
     let decl = VariableDecl(
       leadingTrivia: .docLineComment("/// A doc comment") + .newline,
-      modifiers: [TokenSyntax.static.withLeadingTrivia(.blockComment("/* An inline comment */") + .space)],
+      modifiers: [Token.static.withLeadingTrivia(.blockComment("/* An inline comment */") + .space)],
       letOrVarKeyword: .var
     ) {
       PatternBinding(

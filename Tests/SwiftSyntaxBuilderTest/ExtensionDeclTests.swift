@@ -11,7 +11,7 @@ final class ExtensionDeclTests: XCTestCase {
       }
 
       return VariableDecl(
-        modifiers: [TokenSyntax.public],
+        modifiers: [Token.public],
         letOrVarKeyword: .var
       ) {
         PatternBinding(pattern: "`\(keyword)`",

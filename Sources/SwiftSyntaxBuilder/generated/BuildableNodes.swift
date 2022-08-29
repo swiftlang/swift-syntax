@@ -22,7 +22,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   let unexpectedBeforeItem: UnexpectedNodes?
   let item: SyntaxBuildable
   let unexpectedBetweenItemAndSemicolon: UnexpectedNodes?
-  let semicolon: TokenSyntax?
+  let semicolon: Token?
   let unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodes?
   let errorTokens: SyntaxBuildable?
   /// Creates a `CodeBlockItem` using the provided parameters.
@@ -33,7 +33,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   ///   - semicolon: If present, the trailing semicolon at the end of the item.
   ///   - unexpectedBetweenSemicolonAndErrorTokens: 
   ///   - errorTokens: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeItem: ExpressibleAsUnexpectedNodes? = nil, item: ExpressibleAsSyntaxBuildable, unexpectedBetweenItemAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: TokenSyntax? = nil, unexpectedBetweenSemicolonAndErrorTokens: ExpressibleAsUnexpectedNodes? = nil, errorTokens: ExpressibleAsSyntaxBuildable? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeItem: ExpressibleAsUnexpectedNodes? = nil, item: ExpressibleAsSyntaxBuildable, unexpectedBetweenItemAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: Token? = nil, unexpectedBetweenSemicolonAndErrorTokens: ExpressibleAsUnexpectedNodes? = nil, errorTokens: ExpressibleAsSyntaxBuildable? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeItem = unexpectedBeforeItem?.createUnexpectedNodes()
     self.item = item.createSyntaxBuildable()
@@ -48,7 +48,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CodeBlockItemSyntax`.
   func buildCodeBlockItem(format: Format) -> CodeBlockItemSyntax {
-    var result = CodeBlockItemSyntax(unexpectedBeforeItem?.buildUnexpectedNodes(format: format), item: item.buildSyntax(format: format), unexpectedBetweenItemAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon, unexpectedBetweenSemicolonAndErrorTokens?.buildUnexpectedNodes(format: format), errorTokens: errorTokens?.buildSyntax(format: format))
+    var result = CodeBlockItemSyntax(unexpectedBeforeItem?.buildUnexpectedNodes(format: format), item: item.buildSyntax(format: format), unexpectedBetweenItemAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon?.buildToken(), unexpectedBetweenSemicolonAndErrorTokens?.buildUnexpectedNodes(format: format), errorTokens: errorTokens?.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -76,11 +76,11 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: TokenSyntax
+  let leftBrace: Token
   let unexpectedBetweenLeftBraceAndStatements: UnexpectedNodes?
   let statements: CodeBlockItemList
   let unexpectedBetweenStatementsAndRightBrace: UnexpectedNodes?
-  let rightBrace: TokenSyntax
+  let rightBrace: Token
   /// Creates a `CodeBlock` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -89,7 +89,7 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   ///   - statements: 
   ///   - unexpectedBetweenStatementsAndRightBrace: 
   ///   - rightBrace: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndStatements: ExpressibleAsUnexpectedNodes? = nil, statements: ExpressibleAsCodeBlockItemList, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndStatements: ExpressibleAsUnexpectedNodes? = nil, statements: ExpressibleAsCodeBlockItemList, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
@@ -103,7 +103,7 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace: unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements: unexpectedBetweenLeftBraceAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace: unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace)
@@ -113,7 +113,7 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CodeBlockSyntax`.
   func buildCodeBlock(format: Format) -> CodeBlockSyntax {
-    var result = CodeBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace, unexpectedBetweenLeftBraceAndStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format._indented), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace)
+    var result = CodeBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format._indented), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -141,7 +141,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAmpersand: UnexpectedNodes?
-  let ampersand: TokenSyntax
+  let ampersand: Token
   let unexpectedBetweenAmpersandAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   /// Creates a `InOutExpr` using the provided parameters.
@@ -150,7 +150,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   ///   - ampersand: 
   ///   - unexpectedBetweenAmpersandAndExpression: 
   ///   - expression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAmpersand: ExpressibleAsUnexpectedNodes? = nil, ampersand: TokenSyntax = TokenSyntax.`prefixAmpersand`, unexpectedBetweenAmpersandAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAmpersand: ExpressibleAsUnexpectedNodes? = nil, ampersand: Token = Token.`prefixAmpersand`, unexpectedBetweenAmpersandAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAmpersand = unexpectedBeforeAmpersand?.createUnexpectedNodes()
     self.ampersand = ampersand
@@ -163,7 +163,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InOutExprSyntax`.
   func buildInOutExpr(format: Format) -> InOutExprSyntax {
-    var result = InOutExprSyntax(unexpectedBeforeAmpersand?.buildUnexpectedNodes(format: format), ampersand: ampersand, unexpectedBetweenAmpersandAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    var result = InOutExprSyntax(unexpectedBeforeAmpersand?.buildUnexpectedNodes(format: format), ampersand: ampersand.buildToken(), unexpectedBetweenAmpersandAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -198,12 +198,12 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundColumn: UnexpectedNodes?
-  let poundColumn: TokenSyntax
+  let poundColumn: Token
   /// Creates a `PoundColumnExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundColumn: 
   ///   - poundColumn: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundColumn: ExpressibleAsUnexpectedNodes? = nil, poundColumn: TokenSyntax = TokenSyntax.`poundColumn`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundColumn: ExpressibleAsUnexpectedNodes? = nil, poundColumn: Token = Token.`poundColumn`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundColumn = unexpectedBeforePoundColumn?.createUnexpectedNodes()
     self.poundColumn = poundColumn
@@ -214,7 +214,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundColumnExprSyntax`.
   func buildPoundColumnExpr(format: Format) -> PoundColumnExprSyntax {
-    var result = PoundColumnExprSyntax(unexpectedBeforePoundColumn?.buildUnexpectedNodes(format: format), poundColumn: poundColumn)
+    var result = PoundColumnExprSyntax(unexpectedBeforePoundColumn?.buildUnexpectedNodes(format: format), poundColumn: poundColumn.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -249,9 +249,9 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeTryKeyword: UnexpectedNodes?
-  let tryKeyword: TokenSyntax
+  let tryKeyword: Token
   let unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: UnexpectedNodes?
-  let questionOrExclamationMark: TokenSyntax?
+  let questionOrExclamationMark: Token?
   let unexpectedBetweenQuestionOrExclamationMarkAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   /// Creates a `TryExpr` using the provided parameters.
@@ -262,7 +262,7 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   ///   - questionOrExclamationMark: 
   ///   - unexpectedBetweenQuestionOrExclamationMarkAndExpression: 
   ///   - expression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: TokenSyntax = TokenSyntax.`try`, unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: TokenSyntax? = nil, unexpectedBetweenQuestionOrExclamationMarkAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: Token = Token.`try`, unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: Token? = nil, unexpectedBetweenQuestionOrExclamationMarkAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeTryKeyword = unexpectedBeforeTryKeyword?.createUnexpectedNodes()
     self.tryKeyword = tryKeyword
@@ -278,7 +278,7 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TryExprSyntax`.
   func buildTryExpr(format: Format) -> TryExprSyntax {
-    var result = TryExprSyntax(unexpectedBeforeTryKeyword?.buildUnexpectedNodes(format: format), tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    var result = TryExprSyntax(unexpectedBeforeTryKeyword?.buildUnexpectedNodes(format: format), tryKeyword: tryKeyword.buildToken(), unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark?.buildToken(), unexpectedBetweenQuestionOrExclamationMarkAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -313,7 +313,7 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAwaitKeyword: UnexpectedNodes?
-  let awaitKeyword: TokenSyntax
+  let awaitKeyword: Token
   let unexpectedBetweenAwaitKeywordAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   /// Creates a `AwaitExpr` using the provided parameters.
@@ -322,7 +322,7 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   ///   - awaitKeyword: 
   ///   - unexpectedBetweenAwaitKeywordAndExpression: 
   ///   - expression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: TokenSyntax, unexpectedBetweenAwaitKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: Token, unexpectedBetweenAwaitKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAwaitKeyword = unexpectedBeforeAwaitKeyword?.createUnexpectedNodes()
     self.awaitKeyword = awaitKeyword
@@ -334,14 +334,14 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: String, unexpectedBetweenAwaitKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAwaitKeyword: unexpectedBeforeAwaitKeyword, awaitKeyword: TokenSyntax.`contextualKeyword`(awaitKeyword), unexpectedBetweenAwaitKeywordAndExpression: unexpectedBetweenAwaitKeywordAndExpression, expression: expression)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAwaitKeyword: unexpectedBeforeAwaitKeyword, awaitKeyword: Token.`contextualKeyword`(awaitKeyword), unexpectedBetweenAwaitKeywordAndExpression: unexpectedBetweenAwaitKeywordAndExpression, expression: expression)
   }
   /// Builds a `AwaitExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AwaitExprSyntax`.
   func buildAwaitExpr(format: Format) -> AwaitExprSyntax {
-    var result = AwaitExprSyntax(unexpectedBeforeAwaitKeyword?.buildUnexpectedNodes(format: format), awaitKeyword: awaitKeyword, unexpectedBetweenAwaitKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    var result = AwaitExprSyntax(unexpectedBeforeAwaitKeyword?.buildUnexpectedNodes(format: format), awaitKeyword: awaitKeyword.buildToken(), unexpectedBetweenAwaitKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -376,7 +376,7 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeMoveKeyword: UnexpectedNodes?
-  let moveKeyword: TokenSyntax
+  let moveKeyword: Token
   let unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   /// Creates a `MoveExpr` using the provided parameters.
@@ -385,7 +385,7 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   ///   - moveKeyword: 
   ///   - unexpectedBetweenMoveKeywordAndExpression: 
   ///   - expression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeMoveKeyword: ExpressibleAsUnexpectedNodes? = nil, moveKeyword: TokenSyntax, unexpectedBetweenMoveKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeMoveKeyword: ExpressibleAsUnexpectedNodes? = nil, moveKeyword: Token, unexpectedBetweenMoveKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeMoveKeyword = unexpectedBeforeMoveKeyword?.createUnexpectedNodes()
     self.moveKeyword = moveKeyword
@@ -397,14 +397,14 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeMoveKeyword: ExpressibleAsUnexpectedNodes? = nil, moveKeyword: String, unexpectedBetweenMoveKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMoveKeyword: unexpectedBeforeMoveKeyword, moveKeyword: TokenSyntax.`contextualKeyword`(moveKeyword), unexpectedBetweenMoveKeywordAndExpression: unexpectedBetweenMoveKeywordAndExpression, expression: expression)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMoveKeyword: unexpectedBeforeMoveKeyword, moveKeyword: Token.`contextualKeyword`(moveKeyword), unexpectedBetweenMoveKeywordAndExpression: unexpectedBetweenMoveKeywordAndExpression, expression: expression)
   }
   /// Builds a `MoveExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MoveExprSyntax`.
   func buildMoveExpr(format: Format) -> MoveExprSyntax {
-    var result = MoveExprSyntax(unexpectedBeforeMoveKeyword?.buildUnexpectedNodes(format: format), moveKeyword: moveKeyword, unexpectedBetweenMoveKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    var result = MoveExprSyntax(unexpectedBeforeMoveKeyword?.buildUnexpectedNodes(format: format), moveKeyword: moveKeyword.buildToken(), unexpectedBetweenMoveKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -439,16 +439,16 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   /// Creates a `DeclNameArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
   ///   - name: 
   ///   - unexpectedBetweenNameAndColon: 
   ///   - colon: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -461,7 +461,7 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameArgumentSyntax`.
   func buildDeclNameArgument(format: Format) -> DeclNameArgumentSyntax {
-    var result = DeclNameArgumentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon)
+    var result = DeclNameArgumentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -489,11 +489,11 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
   let arguments: DeclNameArgumentList
   let unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `DeclNameArguments` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -502,7 +502,7 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   ///   - arguments: 
   ///   - unexpectedBetweenArgumentsAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsDeclNameArgumentList, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsDeclNameArgumentList, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -518,7 +518,7 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameArgumentsSyntax`.
   func buildDeclNameArguments(format: Format) -> DeclNameArgumentsSyntax {
-    var result = DeclNameArgumentsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildDeclNameArgumentList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = DeclNameArgumentsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildDeclNameArgumentList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -546,7 +546,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodes?
   let declNameArguments: DeclNameArguments?
   /// Creates a `IdentifierExpr` using the provided parameters.
@@ -555,7 +555,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   ///   - identifier: 
   ///   - unexpectedBetweenIdentifierAndDeclNameArguments: 
   ///   - declNameArguments: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIdentifier = unexpectedBeforeIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
@@ -567,7 +567,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IdentifierExprSyntax`.
   func buildIdentifierExpr(format: Format) -> IdentifierExprSyntax {
-    var result = IdentifierExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    var result = IdentifierExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -602,12 +602,12 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeSuperKeyword: UnexpectedNodes?
-  let superKeyword: TokenSyntax
+  let superKeyword: Token
   /// Creates a `SuperRefExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSuperKeyword: 
   ///   - superKeyword: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSuperKeyword: ExpressibleAsUnexpectedNodes? = nil, superKeyword: TokenSyntax = TokenSyntax.`super`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSuperKeyword: ExpressibleAsUnexpectedNodes? = nil, superKeyword: Token = Token.`super`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSuperKeyword = unexpectedBeforeSuperKeyword?.createUnexpectedNodes()
     self.superKeyword = superKeyword
@@ -618,7 +618,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SuperRefExprSyntax`.
   func buildSuperRefExpr(format: Format) -> SuperRefExprSyntax {
-    var result = SuperRefExprSyntax(unexpectedBeforeSuperKeyword?.buildUnexpectedNodes(format: format), superKeyword: superKeyword)
+    var result = SuperRefExprSyntax(unexpectedBeforeSuperKeyword?.buildUnexpectedNodes(format: format), superKeyword: superKeyword.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -653,12 +653,12 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeNilKeyword: UnexpectedNodes?
-  let nilKeyword: TokenSyntax
+  let nilKeyword: Token
   /// Creates a `NilLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeNilKeyword: 
   ///   - nilKeyword: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeNilKeyword: ExpressibleAsUnexpectedNodes? = nil, nilKeyword: TokenSyntax = TokenSyntax.`nil`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeNilKeyword: ExpressibleAsUnexpectedNodes? = nil, nilKeyword: Token = Token.`nil`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeNilKeyword = unexpectedBeforeNilKeyword?.createUnexpectedNodes()
     self.nilKeyword = nilKeyword
@@ -669,7 +669,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `NilLiteralExprSyntax`.
   func buildNilLiteralExpr(format: Format) -> NilLiteralExprSyntax {
-    var result = NilLiteralExprSyntax(unexpectedBeforeNilKeyword?.buildUnexpectedNodes(format: format), nilKeyword: nilKeyword)
+    var result = NilLiteralExprSyntax(unexpectedBeforeNilKeyword?.buildUnexpectedNodes(format: format), nilKeyword: nilKeyword.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -704,12 +704,12 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeWildcard: UnexpectedNodes?
-  let wildcard: TokenSyntax
+  let wildcard: Token
   /// Creates a `DiscardAssignmentExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWildcard: 
   ///   - wildcard: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWildcard: ExpressibleAsUnexpectedNodes? = nil, wildcard: TokenSyntax = TokenSyntax.`wildcard`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWildcard: ExpressibleAsUnexpectedNodes? = nil, wildcard: Token = Token.`wildcard`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWildcard = unexpectedBeforeWildcard?.createUnexpectedNodes()
     self.wildcard = wildcard
@@ -720,7 +720,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DiscardAssignmentExprSyntax`.
   func buildDiscardAssignmentExpr(format: Format) -> DiscardAssignmentExprSyntax {
-    var result = DiscardAssignmentExprSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format), wildcard: wildcard)
+    var result = DiscardAssignmentExprSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format), wildcard: wildcard.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -755,12 +755,12 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAssignToken: UnexpectedNodes?
-  let assignToken: TokenSyntax
+  let assignToken: Token
   /// Creates a `AssignmentExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAssignToken: 
   ///   - assignToken: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssignToken: ExpressibleAsUnexpectedNodes? = nil, assignToken: TokenSyntax = TokenSyntax.`equal`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssignToken: ExpressibleAsUnexpectedNodes? = nil, assignToken: Token = Token.`equal`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAssignToken = unexpectedBeforeAssignToken?.createUnexpectedNodes()
     self.assignToken = assignToken
@@ -771,7 +771,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AssignmentExprSyntax`.
   func buildAssignmentExpr(format: Format) -> AssignmentExprSyntax {
-    var result = AssignmentExprSyntax(unexpectedBeforeAssignToken?.buildUnexpectedNodes(format: format), assignToken: assignToken)
+    var result = AssignmentExprSyntax(unexpectedBeforeAssignToken?.buildUnexpectedNodes(format: format), assignToken: assignToken.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -864,12 +864,12 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundLine: UnexpectedNodes?
-  let poundLine: TokenSyntax
+  let poundLine: Token
   /// Creates a `PoundLineExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundLine: 
   ///   - poundLine: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundLine: ExpressibleAsUnexpectedNodes? = nil, poundLine: TokenSyntax = TokenSyntax.`poundLine`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundLine: ExpressibleAsUnexpectedNodes? = nil, poundLine: Token = Token.`poundLine`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundLine = unexpectedBeforePoundLine?.createUnexpectedNodes()
     self.poundLine = poundLine
@@ -880,7 +880,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundLineExprSyntax`.
   func buildPoundLineExpr(format: Format) -> PoundLineExprSyntax {
-    var result = PoundLineExprSyntax(unexpectedBeforePoundLine?.buildUnexpectedNodes(format: format), poundLine: poundLine)
+    var result = PoundLineExprSyntax(unexpectedBeforePoundLine?.buildUnexpectedNodes(format: format), poundLine: poundLine.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -915,12 +915,12 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundFile: UnexpectedNodes?
-  let poundFile: TokenSyntax
+  let poundFile: Token
   /// Creates a `PoundFileExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFile: 
   ///   - poundFile: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFile: ExpressibleAsUnexpectedNodes? = nil, poundFile: TokenSyntax = TokenSyntax.`poundFile`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFile: ExpressibleAsUnexpectedNodes? = nil, poundFile: Token = Token.`poundFile`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFile = unexpectedBeforePoundFile?.createUnexpectedNodes()
     self.poundFile = poundFile
@@ -931,7 +931,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFileExprSyntax`.
   func buildPoundFileExpr(format: Format) -> PoundFileExprSyntax {
-    var result = PoundFileExprSyntax(unexpectedBeforePoundFile?.buildUnexpectedNodes(format: format), poundFile: poundFile)
+    var result = PoundFileExprSyntax(unexpectedBeforePoundFile?.buildUnexpectedNodes(format: format), poundFile: poundFile.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -966,12 +966,12 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundFileID: UnexpectedNodes?
-  let poundFileID: TokenSyntax
+  let poundFileID: Token
   /// Creates a `PoundFileIDExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFileID: 
   ///   - poundFileID: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFileID: ExpressibleAsUnexpectedNodes? = nil, poundFileID: TokenSyntax = TokenSyntax.`poundFileID`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFileID: ExpressibleAsUnexpectedNodes? = nil, poundFileID: Token = Token.`poundFileID`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFileID = unexpectedBeforePoundFileID?.createUnexpectedNodes()
     self.poundFileID = poundFileID
@@ -982,7 +982,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFileIDExprSyntax`.
   func buildPoundFileIDExpr(format: Format) -> PoundFileIDExprSyntax {
-    var result = PoundFileIDExprSyntax(unexpectedBeforePoundFileID?.buildUnexpectedNodes(format: format), poundFileID: poundFileID)
+    var result = PoundFileIDExprSyntax(unexpectedBeforePoundFileID?.buildUnexpectedNodes(format: format), poundFileID: poundFileID.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1017,12 +1017,12 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundFilePath: UnexpectedNodes?
-  let poundFilePath: TokenSyntax
+  let poundFilePath: Token
   /// Creates a `PoundFilePathExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFilePath: 
   ///   - poundFilePath: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFilePath: ExpressibleAsUnexpectedNodes? = nil, poundFilePath: TokenSyntax = TokenSyntax.`poundFilePath`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFilePath: ExpressibleAsUnexpectedNodes? = nil, poundFilePath: Token = Token.`poundFilePath`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFilePath = unexpectedBeforePoundFilePath?.createUnexpectedNodes()
     self.poundFilePath = poundFilePath
@@ -1033,7 +1033,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFilePathExprSyntax`.
   func buildPoundFilePathExpr(format: Format) -> PoundFilePathExprSyntax {
-    var result = PoundFilePathExprSyntax(unexpectedBeforePoundFilePath?.buildUnexpectedNodes(format: format), poundFilePath: poundFilePath)
+    var result = PoundFilePathExprSyntax(unexpectedBeforePoundFilePath?.buildUnexpectedNodes(format: format), poundFilePath: poundFilePath.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1068,12 +1068,12 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundFunction: UnexpectedNodes?
-  let poundFunction: TokenSyntax
+  let poundFunction: Token
   /// Creates a `PoundFunctionExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFunction: 
   ///   - poundFunction: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFunction: ExpressibleAsUnexpectedNodes? = nil, poundFunction: TokenSyntax = TokenSyntax.`poundFunction`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundFunction: ExpressibleAsUnexpectedNodes? = nil, poundFunction: Token = Token.`poundFunction`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundFunction = unexpectedBeforePoundFunction?.createUnexpectedNodes()
     self.poundFunction = poundFunction
@@ -1084,7 +1084,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFunctionExprSyntax`.
   func buildPoundFunctionExpr(format: Format) -> PoundFunctionExprSyntax {
-    var result = PoundFunctionExprSyntax(unexpectedBeforePoundFunction?.buildUnexpectedNodes(format: format), poundFunction: poundFunction)
+    var result = PoundFunctionExprSyntax(unexpectedBeforePoundFunction?.buildUnexpectedNodes(format: format), poundFunction: poundFunction.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1119,12 +1119,12 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundDsohandle: UnexpectedNodes?
-  let poundDsohandle: TokenSyntax
+  let poundDsohandle: Token
   /// Creates a `PoundDsohandleExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundDsohandle: 
   ///   - poundDsohandle: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundDsohandle: ExpressibleAsUnexpectedNodes? = nil, poundDsohandle: TokenSyntax = TokenSyntax.`poundDsohandle`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundDsohandle: ExpressibleAsUnexpectedNodes? = nil, poundDsohandle: Token = Token.`poundDsohandle`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundDsohandle = unexpectedBeforePoundDsohandle?.createUnexpectedNodes()
     self.poundDsohandle = poundDsohandle
@@ -1135,7 +1135,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundDsohandleExprSyntax`.
   func buildPoundDsohandleExpr(format: Format) -> PoundDsohandleExprSyntax {
-    var result = PoundDsohandleExprSyntax(unexpectedBeforePoundDsohandle?.buildUnexpectedNodes(format: format), poundDsohandle: poundDsohandle)
+    var result = PoundDsohandleExprSyntax(unexpectedBeforePoundDsohandle?.buildUnexpectedNodes(format: format), poundDsohandle: poundDsohandle.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1170,7 +1170,7 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodes?
   let genericArgumentClause: GenericArgumentClause?
   /// Creates a `SymbolicReferenceExpr` using the provided parameters.
@@ -1179,7 +1179,7 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   ///   - identifier: 
   ///   - unexpectedBetweenIdentifierAndGenericArgumentClause: 
   ///   - genericArgumentClause: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIdentifier = unexpectedBeforeIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
@@ -1190,14 +1190,14 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericArgumentClause: unexpectedBetweenIdentifierAndGenericArgumentClause, genericArgumentClause: genericArgumentClause)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericArgumentClause: unexpectedBetweenIdentifierAndGenericArgumentClause, genericArgumentClause: genericArgumentClause)
   }
   /// Builds a `SymbolicReferenceExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SymbolicReferenceExprSyntax`.
   func buildSymbolicReferenceExpr(format: Format) -> SymbolicReferenceExprSyntax {
-    var result = SymbolicReferenceExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
+    var result = SymbolicReferenceExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1232,7 +1232,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeOperatorToken: UnexpectedNodes?
-  let operatorToken: TokenSyntax?
+  let operatorToken: Token?
   let unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodes?
   let postfixExpression: ExprBuildable
   /// Creates a `PrefixOperatorExpr` using the provided parameters.
@@ -1241,7 +1241,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   ///   - operatorToken: 
   ///   - unexpectedBetweenOperatorTokenAndPostfixExpression: 
   ///   - postfixExpression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: TokenSyntax? = nil, unexpectedBetweenOperatorTokenAndPostfixExpression: ExpressibleAsUnexpectedNodes? = nil, postfixExpression: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: Token? = nil, unexpectedBetweenOperatorTokenAndPostfixExpression: ExpressibleAsUnexpectedNodes? = nil, postfixExpression: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeOperatorToken = unexpectedBeforeOperatorToken?.createUnexpectedNodes()
     self.operatorToken = operatorToken
@@ -1253,7 +1253,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: String?, unexpectedBetweenOperatorTokenAndPostfixExpression: ExpressibleAsUnexpectedNodes? = nil, postfixExpression: ExpressibleAsExprBuildable) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOperatorToken: unexpectedBeforeOperatorToken, operatorToken: operatorToken.map {
-      TokenSyntax.`prefixOperator`($0)
+      Token.`prefixOperator`($0)
     }, unexpectedBetweenOperatorTokenAndPostfixExpression: unexpectedBetweenOperatorTokenAndPostfixExpression, postfixExpression: postfixExpression)
   }
   /// Builds a `PrefixOperatorExprSyntax`.
@@ -1261,7 +1261,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrefixOperatorExprSyntax`.
   func buildPrefixOperatorExpr(format: Format) -> PrefixOperatorExprSyntax {
-    var result = PrefixOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken, unexpectedBetweenOperatorTokenAndPostfixExpression?.buildUnexpectedNodes(format: format), postfixExpression: postfixExpression.buildExpr(format: format))
+    var result = PrefixOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken?.buildToken(), unexpectedBetweenOperatorTokenAndPostfixExpression?.buildUnexpectedNodes(format: format), postfixExpression: postfixExpression.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1296,12 +1296,12 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeOperatorToken: UnexpectedNodes?
-  let operatorToken: TokenSyntax
+  let operatorToken: Token
   /// Creates a `BinaryOperatorExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeOperatorToken: 
   ///   - operatorToken: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeOperatorToken = unexpectedBeforeOperatorToken?.createUnexpectedNodes()
     self.operatorToken = operatorToken
@@ -1311,7 +1311,7 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BinaryOperatorExprSyntax`.
   func buildBinaryOperatorExpr(format: Format) -> BinaryOperatorExprSyntax {
-    var result = BinaryOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken)
+    var result = BinaryOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1346,11 +1346,11 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: TokenSyntax?
+  let asyncKeyword: Token?
   let unexpectedBetweenAsyncKeywordAndThrowsToken: UnexpectedNodes?
-  let throwsToken: TokenSyntax?
+  let throwsToken: Token?
   let unexpectedBetweenThrowsTokenAndArrowToken: UnexpectedNodes?
-  let arrowToken: TokenSyntax
+  let arrowToken: Token
   /// Creates a `ArrowExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAsyncKeyword: 
@@ -1359,7 +1359,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   ///   - throwsToken: 
   ///   - unexpectedBetweenThrowsTokenAndArrowToken: 
   ///   - arrowToken: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: TokenSyntax? = nil, unexpectedBetweenAsyncKeywordAndThrowsToken: ExpressibleAsUnexpectedNodes? = nil, throwsToken: TokenSyntax? = nil, unexpectedBetweenThrowsTokenAndArrowToken: ExpressibleAsUnexpectedNodes? = nil, arrowToken: TokenSyntax = TokenSyntax.`arrow`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: Token? = nil, unexpectedBetweenAsyncKeywordAndThrowsToken: ExpressibleAsUnexpectedNodes? = nil, throwsToken: Token? = nil, unexpectedBetweenThrowsTokenAndArrowToken: ExpressibleAsUnexpectedNodes? = nil, arrowToken: Token = Token.`arrow`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAsyncKeyword = unexpectedBeforeAsyncKeyword?.createUnexpectedNodes()
     self.asyncKeyword = asyncKeyword
@@ -1374,9 +1374,9 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsToken: ExpressibleAsUnexpectedNodes? = nil, throwsToken: TokenSyntax? = nil, unexpectedBetweenThrowsTokenAndArrowToken: ExpressibleAsUnexpectedNodes? = nil, arrowToken: TokenSyntax = TokenSyntax.`arrow`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsToken: ExpressibleAsUnexpectedNodes? = nil, throwsToken: Token? = nil, unexpectedBetweenThrowsTokenAndArrowToken: ExpressibleAsUnexpectedNodes? = nil, arrowToken: Token = Token.`arrow`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAsyncKeyword: unexpectedBeforeAsyncKeyword, asyncKeyword: asyncKeyword.map {
-      TokenSyntax.`contextualKeyword`($0)
+      Token.`contextualKeyword`($0)
     }, unexpectedBetweenAsyncKeywordAndThrowsToken: unexpectedBetweenAsyncKeywordAndThrowsToken, throwsToken: throwsToken, unexpectedBetweenThrowsTokenAndArrowToken: unexpectedBetweenThrowsTokenAndArrowToken, arrowToken: arrowToken)
   }
   /// Builds a `ArrowExprSyntax`.
@@ -1384,7 +1384,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrowExprSyntax`.
   func buildArrowExpr(format: Format) -> ArrowExprSyntax {
-    var result = ArrowExprSyntax(unexpectedBeforeAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsToken?.buildUnexpectedNodes(format: format), throwsToken: throwsToken, unexpectedBetweenThrowsTokenAndArrowToken?.buildUnexpectedNodes(format: format), arrowToken: arrowToken)
+    var result = ArrowExprSyntax(unexpectedBeforeAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsToken?.buildUnexpectedNodes(format: format), throwsToken: throwsToken?.buildToken(), unexpectedBetweenThrowsTokenAndArrowToken?.buildUnexpectedNodes(format: format), arrowToken: arrowToken.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1481,12 +1481,12 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeFloatingDigits: UnexpectedNodes?
-  let floatingDigits: TokenSyntax
+  let floatingDigits: Token
   /// Creates a `FloatLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeFloatingDigits: 
   ///   - floatingDigits: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeFloatingDigits: ExpressibleAsUnexpectedNodes? = nil, floatingDigits: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeFloatingDigits: ExpressibleAsUnexpectedNodes? = nil, floatingDigits: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeFloatingDigits = unexpectedBeforeFloatingDigits?.createUnexpectedNodes()
     self.floatingDigits = floatingDigits
@@ -1495,14 +1495,14 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeFloatingDigits: ExpressibleAsUnexpectedNodes? = nil, floatingDigits: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeFloatingDigits: unexpectedBeforeFloatingDigits, floatingDigits: TokenSyntax.`floatingLiteral`(floatingDigits))
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeFloatingDigits: unexpectedBeforeFloatingDigits, floatingDigits: Token.`floatingLiteral`(floatingDigits))
   }
   /// Builds a `FloatLiteralExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FloatLiteralExprSyntax`.
   func buildFloatLiteralExpr(format: Format) -> FloatLiteralExprSyntax {
-    var result = FloatLiteralExprSyntax(unexpectedBeforeFloatingDigits?.buildUnexpectedNodes(format: format), floatingDigits: floatingDigits)
+    var result = FloatLiteralExprSyntax(unexpectedBeforeFloatingDigits?.buildUnexpectedNodes(format: format), floatingDigits: floatingDigits.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1537,11 +1537,11 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndElementList: UnexpectedNodes?
   let elementList: TupleExprElementList
   let unexpectedBetweenElementListAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `TupleExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -1550,7 +1550,7 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   ///   - elementList: 
   ///   - unexpectedBetweenElementListAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, elementList: ExpressibleAsTupleExprElementList, unexpectedBetweenElementListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, elementList: ExpressibleAsTupleExprElementList, unexpectedBetweenElementListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -1564,7 +1564,7 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`, @TupleExprElementListBuilder elementListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder elementListBuilder: () -> ExpressibleAsTupleExprElementList =  {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList: unexpectedBetweenLeftParenAndElementList, elementList: elementListBuilder(), unexpectedBetweenElementListAndRightParen: unexpectedBetweenElementListAndRightParen, rightParen: rightParen)
@@ -1574,7 +1574,7 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleExprSyntax`.
   func buildTupleExpr(format: Format) -> TupleExprSyntax {
-    var result = TupleExprSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: elementList.buildTupleExprElementList(format: format), unexpectedBetweenElementListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = TupleExprSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: elementList.buildTupleExprElementList(format: format), unexpectedBetweenElementListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1609,11 +1609,11 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftSquare: UnexpectedNodes?
-  let leftSquare: TokenSyntax
+  let leftSquare: Token
   let unexpectedBetweenLeftSquareAndElements: UnexpectedNodes?
   let elements: ArrayElementList
   let unexpectedBetweenElementsAndRightSquare: UnexpectedNodes?
-  let rightSquare: TokenSyntax
+  let rightSquare: Token
   /// Creates a `ArrayExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquare: 
@@ -1622,7 +1622,7 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   ///   - elements: 
   ///   - unexpectedBetweenElementsAndRightSquare: 
   ///   - rightSquare: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftSquareAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsArrayElementList, unexpectedBetweenElementsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsArrayElementList, unexpectedBetweenElementsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquare = unexpectedBeforeLeftSquare?.createUnexpectedNodes()
     self.leftSquare = leftSquare
@@ -1636,7 +1636,7 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftSquareAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`, @ArrayElementListBuilder elementsBuilder: () -> ExpressibleAsArrayElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`, @ArrayElementListBuilder elementsBuilder: () -> ExpressibleAsArrayElementList =  {
     ArrayElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare: unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndElements: unexpectedBetweenLeftSquareAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightSquare: unexpectedBetweenElementsAndRightSquare, rightSquare: rightSquare)
@@ -1646,7 +1646,7 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayExprSyntax`.
   func buildArrayExpr(format: Format) -> ArrayExprSyntax {
-    var result = ArrayExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare, unexpectedBetweenLeftSquareAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildArrayElementList(format: format), unexpectedBetweenElementsAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare)
+    var result = ArrayExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildArrayElementList(format: format), unexpectedBetweenElementsAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1681,11 +1681,11 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftSquare: UnexpectedNodes?
-  let leftSquare: TokenSyntax
+  let leftSquare: Token
   let unexpectedBetweenLeftSquareAndContent: UnexpectedNodes?
   let content: SyntaxBuildable
   let unexpectedBetweenContentAndRightSquare: UnexpectedNodes?
-  let rightSquare: TokenSyntax
+  let rightSquare: Token
   /// Creates a `DictionaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquare: 
@@ -1694,7 +1694,7 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   ///   - content: 
   ///   - unexpectedBetweenContentAndRightSquare: 
   ///   - rightSquare: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftSquareAndContent: ExpressibleAsUnexpectedNodes? = nil, content: ExpressibleAsSyntaxBuildable, unexpectedBetweenContentAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndContent: ExpressibleAsUnexpectedNodes? = nil, content: ExpressibleAsSyntaxBuildable, unexpectedBetweenContentAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquare = unexpectedBeforeLeftSquare?.createUnexpectedNodes()
     self.leftSquare = leftSquare
@@ -1710,7 +1710,7 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryExprSyntax`.
   func buildDictionaryExpr(format: Format) -> DictionaryExprSyntax {
-    var result = DictionaryExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare, unexpectedBetweenLeftSquareAndContent?.buildUnexpectedNodes(format: format), content: content.buildSyntax(format: format), unexpectedBetweenContentAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare)
+    var result = DictionaryExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndContent?.buildUnexpectedNodes(format: format), content: content.buildSyntax(format: format), unexpectedBetweenContentAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1745,13 +1745,13 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: TokenSyntax?
+  let label: Token?
   let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax?
+  let colon: Token?
   let unexpectedBetweenColonAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `TupleExprElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -1762,7 +1762,7 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   ///   - expression: 
   ///   - unexpectedBetweenExpressionAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax? = nil, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil, unexpectedBetweenColonAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token? = nil, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabel = unexpectedBeforeLabel?.createUnexpectedNodes()
     self.label = label
@@ -1780,7 +1780,7 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleExprElementSyntax`.
   func buildTupleExprElement(format: Format) -> TupleExprElementSyntax {
-    var result = TupleExprElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label, unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = TupleExprElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label?.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1814,14 +1814,14 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   let unexpectedBeforeExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `ArrayElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
   ///   - expression: 
   ///   - unexpectedBetweenExpressionAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
@@ -1834,7 +1834,7 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayElementSyntax`.
   func buildArrayElement(format: Format) -> ArrayElementSyntax {
-    var result = ArrayElementSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = ArrayElementSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1868,11 +1868,11 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   let unexpectedBeforeKeyExpression: UnexpectedNodes?
   let keyExpression: ExprBuildable
   let unexpectedBetweenKeyExpressionAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndValueExpression: UnexpectedNodes?
   let valueExpression: ExprBuildable
   let unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `DictionaryElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeKeyExpression: 
@@ -1883,7 +1883,7 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   ///   - valueExpression: 
   ///   - unexpectedBetweenValueExpressionAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeKeyExpression: ExpressibleAsUnexpectedNodes? = nil, keyExpression: ExpressibleAsExprBuildable, unexpectedBetweenKeyExpressionAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValueExpression: ExpressibleAsUnexpectedNodes? = nil, valueExpression: ExpressibleAsExprBuildable, unexpectedBetweenValueExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeKeyExpression: ExpressibleAsUnexpectedNodes? = nil, keyExpression: ExpressibleAsExprBuildable, unexpectedBetweenKeyExpressionAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValueExpression: ExpressibleAsUnexpectedNodes? = nil, valueExpression: ExpressibleAsExprBuildable, unexpectedBetweenValueExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeKeyExpression = unexpectedBeforeKeyExpression?.createUnexpectedNodes()
     self.keyExpression = keyExpression.createExprBuildable()
@@ -1901,7 +1901,7 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryElementSyntax`.
   func buildDictionaryElement(format: Format) -> DictionaryElementSyntax {
-    var result = DictionaryElementSyntax(unexpectedBeforeKeyExpression?.buildUnexpectedNodes(format: format), keyExpression: keyExpression.buildExpr(format: format), unexpectedBetweenKeyExpressionAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndValueExpression?.buildUnexpectedNodes(format: format), valueExpression: valueExpression.buildExpr(format: format), unexpectedBetweenValueExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = DictionaryElementSyntax(unexpectedBeforeKeyExpression?.buildUnexpectedNodes(format: format), keyExpression: keyExpression.buildExpr(format: format), unexpectedBetweenKeyExpressionAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValueExpression?.buildUnexpectedNodes(format: format), valueExpression: valueExpression.buildExpr(format: format), unexpectedBetweenValueExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1933,12 +1933,12 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeDigits: UnexpectedNodes?
-  let digits: TokenSyntax
+  let digits: Token
   /// Creates a `IntegerLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDigits: 
   ///   - digits: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDigits: ExpressibleAsUnexpectedNodes? = nil, digits: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDigits: ExpressibleAsUnexpectedNodes? = nil, digits: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDigits = unexpectedBeforeDigits?.createUnexpectedNodes()
     self.digits = digits
@@ -1947,14 +1947,14 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeDigits: ExpressibleAsUnexpectedNodes? = nil, digits: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDigits: unexpectedBeforeDigits, digits: TokenSyntax.`integerLiteral`(digits))
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDigits: unexpectedBeforeDigits, digits: Token.`integerLiteral`(digits))
   }
   /// Builds a `IntegerLiteralExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IntegerLiteralExprSyntax`.
   func buildIntegerLiteralExpr(format: Format) -> IntegerLiteralExprSyntax {
-    var result = IntegerLiteralExprSyntax(unexpectedBeforeDigits?.buildUnexpectedNodes(format: format), digits: digits)
+    var result = IntegerLiteralExprSyntax(unexpectedBeforeDigits?.buildUnexpectedNodes(format: format), digits: digits.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -1989,12 +1989,12 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeBooleanLiteral: UnexpectedNodes?
-  let booleanLiteral: TokenSyntax
+  let booleanLiteral: Token
   /// Creates a `BooleanLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBooleanLiteral: 
   ///   - booleanLiteral: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBooleanLiteral: ExpressibleAsUnexpectedNodes? = nil, booleanLiteral: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBooleanLiteral: ExpressibleAsUnexpectedNodes? = nil, booleanLiteral: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBooleanLiteral = unexpectedBeforeBooleanLiteral?.createUnexpectedNodes()
     self.booleanLiteral = booleanLiteral
@@ -2005,7 +2005,7 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BooleanLiteralExprSyntax`.
   func buildBooleanLiteralExpr(format: Format) -> BooleanLiteralExprSyntax {
-    var result = BooleanLiteralExprSyntax(unexpectedBeforeBooleanLiteral?.buildUnexpectedNodes(format: format), booleanLiteral: booleanLiteral)
+    var result = BooleanLiteralExprSyntax(unexpectedBeforeBooleanLiteral?.buildUnexpectedNodes(format: format), booleanLiteral: booleanLiteral.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2040,11 +2040,11 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeQuestionMark: UnexpectedNodes?
-  let questionMark: TokenSyntax
+  let questionMark: Token
   let unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodes?
   let firstChoice: ExprBuildable
   let unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodes?
-  let colonMark: TokenSyntax
+  let colonMark: Token
   /// Creates a `UnresolvedTernaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeQuestionMark: 
@@ -2053,7 +2053,7 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
   ///   - firstChoice: 
   ///   - unexpectedBetweenFirstChoiceAndColonMark: 
   ///   - colonMark: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: TokenSyntax = TokenSyntax.`infixQuestionMark`, unexpectedBetweenQuestionMarkAndFirstChoice: ExpressibleAsUnexpectedNodes? = nil, firstChoice: ExpressibleAsExprBuildable, unexpectedBetweenFirstChoiceAndColonMark: ExpressibleAsUnexpectedNodes? = nil, colonMark: TokenSyntax = TokenSyntax.`colon`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: Token = Token.`infixQuestionMark`, unexpectedBetweenQuestionMarkAndFirstChoice: ExpressibleAsUnexpectedNodes? = nil, firstChoice: ExpressibleAsExprBuildable, unexpectedBetweenFirstChoiceAndColonMark: ExpressibleAsUnexpectedNodes? = nil, colonMark: Token = Token.`colon`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeQuestionMark = unexpectedBeforeQuestionMark?.createUnexpectedNodes()
     self.questionMark = questionMark
@@ -2069,7 +2069,7 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedTernaryExprSyntax`.
   func buildUnresolvedTernaryExpr(format: Format) -> UnresolvedTernaryExprSyntax {
-    var result = UnresolvedTernaryExprSyntax(unexpectedBeforeQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark, unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format), firstChoice: firstChoice.buildExpr(format: format), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format), colonMark: colonMark)
+    var result = UnresolvedTernaryExprSyntax(unexpectedBeforeQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken(), unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format), firstChoice: firstChoice.buildExpr(format: format), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format), colonMark: colonMark.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2106,11 +2106,11 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   let unexpectedBeforeConditionExpression: UnexpectedNodes?
   let conditionExpression: ExprBuildable
   let unexpectedBetweenConditionExpressionAndQuestionMark: UnexpectedNodes?
-  let questionMark: TokenSyntax
+  let questionMark: Token
   let unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodes?
   let firstChoice: ExprBuildable
   let unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodes?
-  let colonMark: TokenSyntax
+  let colonMark: Token
   let unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodes?
   let secondChoice: ExprBuildable
   /// Creates a `TernaryExpr` using the provided parameters.
@@ -2125,7 +2125,7 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   ///   - colonMark: 
   ///   - unexpectedBetweenColonMarkAndSecondChoice: 
   ///   - secondChoice: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeConditionExpression: ExpressibleAsUnexpectedNodes? = nil, conditionExpression: ExpressibleAsExprBuildable, unexpectedBetweenConditionExpressionAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: TokenSyntax = TokenSyntax.`infixQuestionMark`, unexpectedBetweenQuestionMarkAndFirstChoice: ExpressibleAsUnexpectedNodes? = nil, firstChoice: ExpressibleAsExprBuildable, unexpectedBetweenFirstChoiceAndColonMark: ExpressibleAsUnexpectedNodes? = nil, colonMark: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonMarkAndSecondChoice: ExpressibleAsUnexpectedNodes? = nil, secondChoice: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeConditionExpression: ExpressibleAsUnexpectedNodes? = nil, conditionExpression: ExpressibleAsExprBuildable, unexpectedBetweenConditionExpressionAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: Token = Token.`infixQuestionMark`, unexpectedBetweenQuestionMarkAndFirstChoice: ExpressibleAsUnexpectedNodes? = nil, firstChoice: ExpressibleAsExprBuildable, unexpectedBetweenFirstChoiceAndColonMark: ExpressibleAsUnexpectedNodes? = nil, colonMark: Token = Token.`colon`, unexpectedBetweenColonMarkAndSecondChoice: ExpressibleAsUnexpectedNodes? = nil, secondChoice: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeConditionExpression = unexpectedBeforeConditionExpression?.createUnexpectedNodes()
     self.conditionExpression = conditionExpression.createExprBuildable()
@@ -2145,7 +2145,7 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TernaryExprSyntax`.
   func buildTernaryExpr(format: Format) -> TernaryExprSyntax {
-    var result = TernaryExprSyntax(unexpectedBeforeConditionExpression?.buildUnexpectedNodes(format: format), conditionExpression: conditionExpression.buildExpr(format: format), unexpectedBetweenConditionExpressionAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark, unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format), firstChoice: firstChoice.buildExpr(format: format), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format), colonMark: colonMark, unexpectedBetweenColonMarkAndSecondChoice?.buildUnexpectedNodes(format: format), secondChoice: secondChoice.buildExpr(format: format))
+    var result = TernaryExprSyntax(unexpectedBeforeConditionExpression?.buildUnexpectedNodes(format: format), conditionExpression: conditionExpression.buildExpr(format: format), unexpectedBetweenConditionExpressionAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken(), unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format), firstChoice: firstChoice.buildExpr(format: format), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format), colonMark: colonMark.buildToken(), unexpectedBetweenColonMarkAndSecondChoice?.buildUnexpectedNodes(format: format), secondChoice: secondChoice.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2182,9 +2182,9 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   let unexpectedBeforeBase: UnexpectedNodes?
   let base: ExprBuildable?
   let unexpectedBetweenBaseAndDot: UnexpectedNodes?
-  let dot: TokenSyntax
+  let dot: Token
   let unexpectedBetweenDotAndName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodes?
   let declNameArguments: DeclNameArguments?
   /// Creates a `MemberAccessExpr` using the provided parameters.
@@ -2197,7 +2197,7 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   ///   - name: 
   ///   - unexpectedBetweenNameAndDeclNameArguments: 
   ///   - declNameArguments: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBase: ExpressibleAsUnexpectedNodes? = nil, base: ExpressibleAsExprBuildable? = nil, unexpectedBetweenBaseAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: TokenSyntax, unexpectedBetweenDotAndName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBase: ExpressibleAsUnexpectedNodes? = nil, base: ExpressibleAsExprBuildable? = nil, unexpectedBetweenBaseAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: Token, unexpectedBetweenDotAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBase = unexpectedBeforeBase?.createUnexpectedNodes()
     self.base = base?.createExprBuildable()
@@ -2214,7 +2214,7 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberAccessExprSyntax`.
   func buildMemberAccessExpr(format: Format) -> MemberAccessExprSyntax {
-    var result = MemberAccessExprSyntax(unexpectedBeforeBase?.buildUnexpectedNodes(format: format), base: base?.buildExpr(format: format), unexpectedBetweenBaseAndDot?.buildUnexpectedNodes(format: format), dot: dot, unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    var result = MemberAccessExprSyntax(unexpectedBeforeBase?.buildUnexpectedNodes(format: format), base: base?.buildExpr(format: format), unexpectedBetweenBaseAndDot?.buildUnexpectedNodes(format: format), dot: dot.buildToken(), unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2249,12 +2249,12 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIsTok: UnexpectedNodes?
-  let isTok: TokenSyntax
+  let isTok: Token
   /// Creates a `UnresolvedIsExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIsTok: 
   ///   - isTok: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIsTok: ExpressibleAsUnexpectedNodes? = nil, isTok: TokenSyntax = TokenSyntax.`is`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIsTok: ExpressibleAsUnexpectedNodes? = nil, isTok: Token = Token.`is`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIsTok = unexpectedBeforeIsTok?.createUnexpectedNodes()
     self.isTok = isTok
@@ -2265,7 +2265,7 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedIsExprSyntax`.
   func buildUnresolvedIsExpr(format: Format) -> UnresolvedIsExprSyntax {
-    var result = UnresolvedIsExprSyntax(unexpectedBeforeIsTok?.buildUnexpectedNodes(format: format), isTok: isTok)
+    var result = UnresolvedIsExprSyntax(unexpectedBeforeIsTok?.buildUnexpectedNodes(format: format), isTok: isTok.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2302,7 +2302,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   let unexpectedBeforeExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndIsTok: UnexpectedNodes?
-  let isTok: TokenSyntax
+  let isTok: Token
   let unexpectedBetweenIsTokAndTypeName: UnexpectedNodes?
   let typeName: TypeBuildable
   /// Creates a `IsExpr` using the provided parameters.
@@ -2313,7 +2313,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   ///   - isTok: 
   ///   - unexpectedBetweenIsTokAndTypeName: 
   ///   - typeName: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndIsTok: ExpressibleAsUnexpectedNodes? = nil, isTok: TokenSyntax = TokenSyntax.`is`, unexpectedBetweenIsTokAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndIsTok: ExpressibleAsUnexpectedNodes? = nil, isTok: Token = Token.`is`, unexpectedBetweenIsTokAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
@@ -2328,7 +2328,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IsExprSyntax`.
   func buildIsExpr(format: Format) -> IsExprSyntax {
-    var result = IsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndIsTok?.buildUnexpectedNodes(format: format), isTok: isTok, unexpectedBetweenIsTokAndTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format))
+    var result = IsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndIsTok?.buildUnexpectedNodes(format: format), isTok: isTok.buildToken(), unexpectedBetweenIsTokAndTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2363,16 +2363,16 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAsTok: UnexpectedNodes?
-  let asTok: TokenSyntax
+  let asTok: Token
   let unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
-  let questionOrExclamationMark: TokenSyntax?
+  let questionOrExclamationMark: Token?
   /// Creates a `UnresolvedAsExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAsTok: 
   ///   - asTok: 
   ///   - unexpectedBetweenAsTokAndQuestionOrExclamationMark: 
   ///   - questionOrExclamationMark: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsTok: ExpressibleAsUnexpectedNodes? = nil, asTok: TokenSyntax = TokenSyntax.`as`, unexpectedBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAsTok: ExpressibleAsUnexpectedNodes? = nil, asTok: Token = Token.`as`, unexpectedBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAsTok = unexpectedBeforeAsTok?.createUnexpectedNodes()
     self.asTok = asTok
@@ -2386,7 +2386,7 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedAsExprSyntax`.
   func buildUnresolvedAsExpr(format: Format) -> UnresolvedAsExprSyntax {
-    var result = UnresolvedAsExprSyntax(unexpectedBeforeAsTok?.buildUnexpectedNodes(format: format), asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark)
+    var result = UnresolvedAsExprSyntax(unexpectedBeforeAsTok?.buildUnexpectedNodes(format: format), asTok: asTok.buildToken(), unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2423,9 +2423,9 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   let unexpectedBeforeExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndAsTok: UnexpectedNodes?
-  let asTok: TokenSyntax
+  let asTok: Token
   let unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
-  let questionOrExclamationMark: TokenSyntax?
+  let questionOrExclamationMark: Token?
   let unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodes?
   let typeName: TypeBuildable
   /// Creates a `AsExpr` using the provided parameters.
@@ -2438,7 +2438,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   ///   - questionOrExclamationMark: 
   ///   - unexpectedBetweenQuestionOrExclamationMarkAndTypeName: 
   ///   - typeName: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndAsTok: ExpressibleAsUnexpectedNodes? = nil, asTok: TokenSyntax = TokenSyntax.`as`, unexpectedBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: TokenSyntax? = nil, unexpectedBetweenQuestionOrExclamationMarkAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndAsTok: ExpressibleAsUnexpectedNodes? = nil, asTok: Token = Token.`as`, unexpectedBetweenAsTokAndQuestionOrExclamationMark: ExpressibleAsUnexpectedNodes? = nil, questionOrExclamationMark: Token? = nil, unexpectedBetweenQuestionOrExclamationMarkAndTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
@@ -2456,7 +2456,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AsExprSyntax`.
   func buildAsExpr(format: Format) -> AsExprSyntax {
-    var result = AsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndAsTok?.buildUnexpectedNodes(format: format), asTok: asTok, unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark, unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format))
+    var result = AsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndAsTok?.buildUnexpectedNodes(format: format), asTok: asTok.buildToken(), unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark?.buildToken(), unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2543,13 +2543,13 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   let unexpectedBeforeSpecifier: UnexpectedNodes?
   let specifier: TokenList?
   let unexpectedBetweenSpecifierAndName: UnexpectedNodes?
-  let name: TokenSyntax?
+  let name: Token?
   let unexpectedBetweenNameAndAssignToken: UnexpectedNodes?
-  let assignToken: TokenSyntax?
+  let assignToken: Token?
   let unexpectedBetweenAssignTokenAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `ClosureCaptureItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSpecifier: 
@@ -2562,7 +2562,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   ///   - expression: 
   ///   - unexpectedBetweenExpressionAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSpecifier: ExpressibleAsUnexpectedNodes? = nil, specifier: ExpressibleAsTokenList? = nil, unexpectedBetweenSpecifierAndName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax? = nil, unexpectedBetweenNameAndAssignToken: ExpressibleAsUnexpectedNodes? = nil, assignToken: TokenSyntax? = nil, unexpectedBetweenAssignTokenAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSpecifier: ExpressibleAsUnexpectedNodes? = nil, specifier: ExpressibleAsTokenList? = nil, unexpectedBetweenSpecifierAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token? = nil, unexpectedBetweenNameAndAssignToken: ExpressibleAsUnexpectedNodes? = nil, assignToken: Token? = nil, unexpectedBetweenAssignTokenAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSpecifier = unexpectedBeforeSpecifier?.createUnexpectedNodes()
     self.specifier = specifier?.createTokenList()
@@ -2580,9 +2580,9 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSpecifier: ExpressibleAsUnexpectedNodes? = nil, specifier: ExpressibleAsTokenList? = nil, unexpectedBetweenSpecifierAndName: ExpressibleAsUnexpectedNodes? = nil, name: String?, unexpectedBetweenNameAndAssignToken: ExpressibleAsUnexpectedNodes? = nil, assignToken: TokenSyntax? = nil, unexpectedBetweenAssignTokenAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSpecifier: ExpressibleAsUnexpectedNodes? = nil, specifier: ExpressibleAsTokenList? = nil, unexpectedBetweenSpecifierAndName: ExpressibleAsUnexpectedNodes? = nil, name: String?, unexpectedBetweenNameAndAssignToken: ExpressibleAsUnexpectedNodes? = nil, assignToken: Token? = nil, unexpectedBetweenAssignTokenAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSpecifier: unexpectedBeforeSpecifier, specifier: specifier, unexpectedBetweenSpecifierAndName: unexpectedBetweenSpecifierAndName, name: name.map {
-      TokenSyntax.`identifier`($0)
+      Token.`identifier`($0)
     }, unexpectedBetweenNameAndAssignToken: unexpectedBetweenNameAndAssignToken, assignToken: assignToken, unexpectedBetweenAssignTokenAndExpression: unexpectedBetweenAssignTokenAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `ClosureCaptureItemSyntax`.
@@ -2590,7 +2590,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureCaptureItemSyntax`.
   func buildClosureCaptureItem(format: Format) -> ClosureCaptureItemSyntax {
-    var result = ClosureCaptureItemSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format), specifier: specifier?.buildTokenList(format: format), unexpectedBetweenSpecifierAndName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndAssignToken?.buildUnexpectedNodes(format: format), assignToken: assignToken, unexpectedBetweenAssignTokenAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = ClosureCaptureItemSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format), specifier: specifier?.buildTokenList(format: format), unexpectedBetweenSpecifierAndName?.buildUnexpectedNodes(format: format), name: name?.buildToken(), unexpectedBetweenNameAndAssignToken?.buildUnexpectedNodes(format: format), assignToken: assignToken?.buildToken(), unexpectedBetweenAssignTokenAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2622,11 +2622,11 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftSquare: UnexpectedNodes?
-  let leftSquare: TokenSyntax
+  let leftSquare: Token
   let unexpectedBetweenLeftSquareAndItems: UnexpectedNodes?
   let items: ClosureCaptureItemList?
   let unexpectedBetweenItemsAndRightSquare: UnexpectedNodes?
-  let rightSquare: TokenSyntax
+  let rightSquare: Token
   /// Creates a `ClosureCaptureSignature` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquare: 
@@ -2635,7 +2635,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   ///   - items: 
   ///   - unexpectedBetweenItemsAndRightSquare: 
   ///   - rightSquare: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftSquareAndItems: ExpressibleAsUnexpectedNodes? = nil, items: ExpressibleAsClosureCaptureItemList? = nil, unexpectedBetweenItemsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndItems: ExpressibleAsUnexpectedNodes? = nil, items: ExpressibleAsClosureCaptureItemList? = nil, unexpectedBetweenItemsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquare = unexpectedBeforeLeftSquare?.createUnexpectedNodes()
     self.leftSquare = leftSquare
@@ -2649,7 +2649,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftSquareAndItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenItemsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`, @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquare: ExpressibleAsUnexpectedNodes? = nil, leftSquare: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareAndItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenItemsAndRightSquare: ExpressibleAsUnexpectedNodes? = nil, rightSquare: Token = Token.`rightSquareBracket`, @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? =  {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftSquare: unexpectedBeforeLeftSquare, leftSquare: leftSquare, unexpectedBetweenLeftSquareAndItems: unexpectedBetweenLeftSquareAndItems, items: itemsBuilder(), unexpectedBetweenItemsAndRightSquare: unexpectedBetweenItemsAndRightSquare, rightSquare: rightSquare)
@@ -2659,7 +2659,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureCaptureSignatureSyntax`.
   func buildClosureCaptureSignature(format: Format) -> ClosureCaptureSignatureSyntax {
-    var result = ClosureCaptureSignatureSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare, unexpectedBetweenLeftSquareAndItems?.buildUnexpectedNodes(format: format), items: items?.buildClosureCaptureItemList(format: format), unexpectedBetweenItemsAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare)
+    var result = ClosureCaptureSignatureSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndItems?.buildUnexpectedNodes(format: format), items: items?.buildClosureCaptureItemList(format: format), unexpectedBetweenItemsAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2687,16 +2687,16 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `ClosureParam` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
   ///   - name: 
   ///   - unexpectedBetweenNameAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -2709,7 +2709,7 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureParamSyntax`.
   func buildClosureParam(format: Format) -> ClosureParamSyntax {
-    var result = ClosureParamSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = ClosureParamSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2747,13 +2747,13 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   let unexpectedBetweenCaptureAndInput: UnexpectedNodes?
   let input: SyntaxBuildable?
   let unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: TokenSyntax?
+  let asyncKeyword: Token?
   let unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodes?
-  let throwsTok: TokenSyntax?
+  let throwsTok: Token?
   let unexpectedBetweenThrowsTokAndOutput: UnexpectedNodes?
   let output: ReturnClause?
   let unexpectedBetweenOutputAndInTok: UnexpectedNodes?
-  let inTok: TokenSyntax
+  let inTok: Token
   /// Creates a `ClosureSignature` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -2770,7 +2770,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   ///   - output: 
   ///   - unexpectedBetweenOutputAndInTok: 
   ///   - inTok: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndCapture: ExpressibleAsUnexpectedNodes? = nil, capture: ExpressibleAsClosureCaptureSignature? = nil, unexpectedBetweenCaptureAndInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenInputAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: TokenSyntax? = nil, unexpectedBetweenAsyncKeywordAndThrowsTok: ExpressibleAsUnexpectedNodes? = nil, throwsTok: TokenSyntax? = nil, unexpectedBetweenThrowsTokAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil, unexpectedBetweenOutputAndInTok: ExpressibleAsUnexpectedNodes? = nil, inTok: TokenSyntax = TokenSyntax.`in`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndCapture: ExpressibleAsUnexpectedNodes? = nil, capture: ExpressibleAsClosureCaptureSignature? = nil, unexpectedBetweenCaptureAndInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenInputAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: Token? = nil, unexpectedBetweenAsyncKeywordAndThrowsTok: ExpressibleAsUnexpectedNodes? = nil, throwsTok: Token? = nil, unexpectedBetweenThrowsTokAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil, unexpectedBetweenOutputAndInTok: ExpressibleAsUnexpectedNodes? = nil, inTok: Token = Token.`in`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -2793,9 +2793,9 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndCapture: ExpressibleAsUnexpectedNodes? = nil, capture: ExpressibleAsClosureCaptureSignature? = nil, unexpectedBetweenCaptureAndInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenInputAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsTok: ExpressibleAsUnexpectedNodes? = nil, throwsTok: TokenSyntax? = nil, unexpectedBetweenThrowsTokAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil, unexpectedBetweenOutputAndInTok: ExpressibleAsUnexpectedNodes? = nil, inTok: TokenSyntax = TokenSyntax.`in`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndCapture: ExpressibleAsUnexpectedNodes? = nil, capture: ExpressibleAsClosureCaptureSignature? = nil, unexpectedBetweenCaptureAndInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenInputAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsTok: ExpressibleAsUnexpectedNodes? = nil, throwsTok: Token? = nil, unexpectedBetweenThrowsTokAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil, unexpectedBetweenOutputAndInTok: ExpressibleAsUnexpectedNodes? = nil, inTok: Token = Token.`in`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndCapture: unexpectedBetweenAttributesAndCapture, capture: capture, unexpectedBetweenCaptureAndInput: unexpectedBetweenCaptureAndInput, input: input, unexpectedBetweenInputAndAsyncKeyword: unexpectedBetweenInputAndAsyncKeyword, asyncKeyword: asyncKeyword.map {
-      TokenSyntax.`contextualKeyword`($0)
+      Token.`contextualKeyword`($0)
     }, unexpectedBetweenAsyncKeywordAndThrowsTok: unexpectedBetweenAsyncKeywordAndThrowsTok, throwsTok: throwsTok, unexpectedBetweenThrowsTokAndOutput: unexpectedBetweenThrowsTokAndOutput, output: output, unexpectedBetweenOutputAndInTok: unexpectedBetweenOutputAndInTok, inTok: inTok)
   }
   /// Builds a `ClosureSignatureSyntax`.
@@ -2803,7 +2803,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureSignatureSyntax`.
   func buildClosureSignature(format: Format) -> ClosureSignatureSyntax {
-    var result = ClosureSignatureSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndCapture?.buildUnexpectedNodes(format: format), capture: capture?.buildClosureCaptureSignature(format: format), unexpectedBetweenCaptureAndInput?.buildUnexpectedNodes(format: format), input: input?.buildSyntax(format: format), unexpectedBetweenInputAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsTok?.buildUnexpectedNodes(format: format), throwsTok: throwsTok, unexpectedBetweenThrowsTokAndOutput?.buildUnexpectedNodes(format: format), output: output?.buildReturnClause(format: format), unexpectedBetweenOutputAndInTok?.buildUnexpectedNodes(format: format), inTok: inTok)
+    var result = ClosureSignatureSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndCapture?.buildUnexpectedNodes(format: format), capture: capture?.buildClosureCaptureSignature(format: format), unexpectedBetweenCaptureAndInput?.buildUnexpectedNodes(format: format), input: input?.buildSyntax(format: format), unexpectedBetweenInputAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsTok?.buildUnexpectedNodes(format: format), throwsTok: throwsTok?.buildToken(), unexpectedBetweenThrowsTokAndOutput?.buildUnexpectedNodes(format: format), output: output?.buildReturnClause(format: format), unexpectedBetweenOutputAndInTok?.buildUnexpectedNodes(format: format), inTok: inTok.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2831,13 +2831,13 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: TokenSyntax
+  let leftBrace: Token
   let unexpectedBetweenLeftBraceAndSignature: UnexpectedNodes?
   let signature: ClosureSignature?
   let unexpectedBetweenSignatureAndStatements: UnexpectedNodes?
   let statements: CodeBlockItemList
   let unexpectedBetweenStatementsAndRightBrace: UnexpectedNodes?
-  let rightBrace: TokenSyntax
+  let rightBrace: Token
   /// Creates a `ClosureExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -2848,7 +2848,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   ///   - statements: 
   ///   - unexpectedBetweenStatementsAndRightBrace: 
   ///   - rightBrace: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsClosureSignature? = nil, unexpectedBetweenSignatureAndStatements: ExpressibleAsUnexpectedNodes? = nil, statements: ExpressibleAsCodeBlockItemList, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsClosureSignature? = nil, unexpectedBetweenSignatureAndStatements: ExpressibleAsUnexpectedNodes? = nil, statements: ExpressibleAsCodeBlockItemList, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
@@ -2864,7 +2864,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsClosureSignature? = nil, unexpectedBetweenSignatureAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsClosureSignature? = nil, unexpectedBetweenSignatureAndStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace: unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndSignature: unexpectedBetweenLeftBraceAndSignature, signature: signature, unexpectedBetweenSignatureAndStatements: unexpectedBetweenSignatureAndStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndRightBrace: unexpectedBetweenStatementsAndRightBrace, rightBrace: rightBrace)
@@ -2874,7 +2874,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureExprSyntax`.
   func buildClosureExpr(format: Format) -> ClosureExprSyntax {
-    var result = ClosureExprSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace, unexpectedBetweenLeftBraceAndSignature?.buildUnexpectedNodes(format: format), signature: signature?.buildClosureSignature(format: format), unexpectedBetweenSignatureAndStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format._indented), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace)
+    var result = ClosureExprSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndSignature?.buildUnexpectedNodes(format: format), signature: signature?.buildClosureSignature(format: format), unexpectedBetweenSignatureAndStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format._indented), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -2959,9 +2959,9 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: TokenSyntax
+  let label: Token
   let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndClosure: UnexpectedNodes?
   let closure: ClosureExpr
   /// Creates a `MultipleTrailingClosureElement` using the provided parameters.
@@ -2972,7 +2972,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   ///   - colon: 
   ///   - unexpectedBetweenColonAndClosure: 
   ///   - closure: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndClosure: ExpressibleAsUnexpectedNodes? = nil, closure: ExpressibleAsClosureExpr) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndClosure: ExpressibleAsUnexpectedNodes? = nil, closure: ExpressibleAsClosureExpr) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabel = unexpectedBeforeLabel?.createUnexpectedNodes()
     self.label = label
@@ -2987,7 +2987,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MultipleTrailingClosureElementSyntax`.
   func buildMultipleTrailingClosureElement(format: Format) -> MultipleTrailingClosureElementSyntax {
-    var result = MultipleTrailingClosureElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label, unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndClosure?.buildUnexpectedNodes(format: format), closure: closure.buildClosureExpr(format: format))
+    var result = MultipleTrailingClosureElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndClosure?.buildUnexpectedNodes(format: format), closure: closure.buildClosureExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3017,11 +3017,11 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   let unexpectedBeforeCalledExpression: UnexpectedNodes?
   let calledExpression: ExprBuildable
   let unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax?
+  let leftParen: Token?
   let unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes?
   let argumentList: TupleExprElementList
   let unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax?
+  let rightParen: Token?
   let unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes?
   let trailingClosure: ClosureExpr?
   let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes?
@@ -3040,7 +3040,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   ///   - trailingClosure: 
   ///   - unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: 
   ///   - additionalTrailingClosures: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, argumentList: ExpressibleAsTupleExprElementList, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, argumentList: ExpressibleAsTupleExprElementList, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCalledExpression = unexpectedBeforeCalledExpression?.createUnexpectedNodes()
     self.calledExpression = calledExpression.createExprBuildable()
@@ -3060,7 +3060,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression: unexpectedBeforeCalledExpression, calledExpression: calledExpression, unexpectedBetweenCalledExpressionAndLeftParen: unexpectedBetweenCalledExpressionAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList: unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen: unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure: unexpectedBetweenRightParenAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
@@ -3070,7 +3070,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionCallExprSyntax`.
   func buildFunctionCallExpr(format: Format) -> FunctionCallExprSyntax {
-    var result = FunctionCallExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format), calledExpression: calledExpression.buildExpr(format: format), unexpectedBetweenCalledExpressionAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen, unexpectedBetweenRightParenAndTrailingClosure?.buildUnexpectedNodes(format: format), trailingClosure: trailingClosure?.buildClosureExpr(format: format), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format))
+    var result = FunctionCallExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format), calledExpression: calledExpression.buildExpr(format: format), unexpectedBetweenCalledExpressionAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken(), unexpectedBetweenRightParenAndTrailingClosure?.buildUnexpectedNodes(format: format), trailingClosure: trailingClosure?.buildClosureExpr(format: format), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3107,11 +3107,11 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   let unexpectedBeforeCalledExpression: UnexpectedNodes?
   let calledExpression: ExprBuildable
   let unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodes?
-  let leftBracket: TokenSyntax
+  let leftBracket: Token
   let unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodes?
   let argumentList: TupleExprElementList
   let unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodes?
-  let rightBracket: TokenSyntax
+  let rightBracket: Token
   let unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodes?
   let trailingClosure: ClosureExpr?
   let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes?
@@ -3130,7 +3130,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   ///   - trailingClosure: 
   ///   - unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: 
   ///   - additionalTrailingClosures: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, argumentList: ExpressibleAsTupleExprElementList, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`, unexpectedBetweenRightBracketAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, argumentList: ExpressibleAsTupleExprElementList, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`, unexpectedBetweenRightBracketAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCalledExpression = unexpectedBeforeCalledExpression?.createUnexpectedNodes()
     self.calledExpression = calledExpression.createExprBuildable()
@@ -3150,7 +3150,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`, unexpectedBetweenRightBracketAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCalledExpression: ExpressibleAsUnexpectedNodes? = nil, calledExpression: ExpressibleAsExprBuildable, unexpectedBetweenCalledExpressionAndLeftBracket: ExpressibleAsUnexpectedNodes? = nil, leftBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftBracketAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightBracket: ExpressibleAsUnexpectedNodes? = nil, rightBracket: Token = Token.`rightSquareBracket`, unexpectedBetweenRightBracketAndTrailingClosure: ExpressibleAsUnexpectedNodes? = nil, trailingClosure: ExpressibleAsClosureExpr? = nil, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: ExpressibleAsUnexpectedNodes? = nil, additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList =  {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCalledExpression: unexpectedBeforeCalledExpression, calledExpression: calledExpression, unexpectedBetweenCalledExpressionAndLeftBracket: unexpectedBetweenCalledExpressionAndLeftBracket, leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList: unexpectedBetweenLeftBracketAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightBracket: unexpectedBetweenArgumentListAndRightBracket, rightBracket: rightBracket, unexpectedBetweenRightBracketAndTrailingClosure: unexpectedBetweenRightBracketAndTrailingClosure, trailingClosure: trailingClosure, unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, additionalTrailingClosures: additionalTrailingClosures)
@@ -3160,7 +3160,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SubscriptExprSyntax`.
   func buildSubscriptExpr(format: Format) -> SubscriptExprSyntax {
-    var result = SubscriptExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format), calledExpression: calledExpression.buildExpr(format: format), unexpectedBetweenCalledExpressionAndLeftBracket?.buildUnexpectedNodes(format: format), leftBracket: leftBracket, unexpectedBetweenLeftBracketAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightBracket?.buildUnexpectedNodes(format: format), rightBracket: rightBracket, unexpectedBetweenRightBracketAndTrailingClosure?.buildUnexpectedNodes(format: format), trailingClosure: trailingClosure?.buildClosureExpr(format: format), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format))
+    var result = SubscriptExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format), calledExpression: calledExpression.buildExpr(format: format), unexpectedBetweenCalledExpressionAndLeftBracket?.buildUnexpectedNodes(format: format), leftBracket: leftBracket.buildToken(), unexpectedBetweenLeftBracketAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightBracket?.buildUnexpectedNodes(format: format), rightBracket: rightBracket.buildToken(), unexpectedBetweenRightBracketAndTrailingClosure?.buildUnexpectedNodes(format: format), trailingClosure: trailingClosure?.buildClosureExpr(format: format), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3197,14 +3197,14 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   let unexpectedBeforeExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndQuestionMark: UnexpectedNodes?
-  let questionMark: TokenSyntax
+  let questionMark: Token
   /// Creates a `OptionalChainingExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
   ///   - expression: 
   ///   - unexpectedBetweenExpressionAndQuestionMark: 
   ///   - questionMark: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: Token = Token.`postfixQuestionMark`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
@@ -3217,7 +3217,7 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalChainingExprSyntax`.
   func buildOptionalChainingExpr(format: Format) -> OptionalChainingExprSyntax {
-    var result = OptionalChainingExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark)
+    var result = OptionalChainingExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3254,14 +3254,14 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   let unexpectedBeforeExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndExclamationMark: UnexpectedNodes?
-  let exclamationMark: TokenSyntax
+  let exclamationMark: Token
   /// Creates a `ForcedValueExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
   ///   - expression: 
   ///   - unexpectedBetweenExpressionAndExclamationMark: 
   ///   - exclamationMark: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndExclamationMark: ExpressibleAsUnexpectedNodes? = nil, exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndExclamationMark: ExpressibleAsUnexpectedNodes? = nil, exclamationMark: Token = Token.`exclamationMark`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
@@ -3274,7 +3274,7 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ForcedValueExprSyntax`.
   func buildForcedValueExpr(format: Format) -> ForcedValueExprSyntax {
-    var result = ForcedValueExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndExclamationMark?.buildUnexpectedNodes(format: format), exclamationMark: exclamationMark)
+    var result = ForcedValueExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndExclamationMark?.buildUnexpectedNodes(format: format), exclamationMark: exclamationMark.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3311,14 +3311,14 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   let unexpectedBeforeExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodes?
-  let operatorToken: TokenSyntax
+  let operatorToken: Token
   /// Creates a `PostfixUnaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
   ///   - expression: 
   ///   - unexpectedBetweenExpressionAndOperatorToken: 
   ///   - operatorToken: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeExpression = unexpectedBeforeExpression?.createUnexpectedNodes()
     self.expression = expression.createExprBuildable()
@@ -3329,14 +3329,14 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndOperatorToken: ExpressibleAsUnexpectedNodes? = nil, operatorToken: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndOperatorToken: unexpectedBetweenExpressionAndOperatorToken, operatorToken: TokenSyntax.`postfixOperator`(operatorToken))
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeExpression: unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndOperatorToken: unexpectedBetweenExpressionAndOperatorToken, operatorToken: Token.`postfixOperator`(operatorToken))
   }
   /// Builds a `PostfixUnaryExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PostfixUnaryExprSyntax`.
   func buildPostfixUnaryExpr(format: Format) -> PostfixUnaryExprSyntax {
-    var result = PostfixUnaryExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken)
+    var result = PostfixUnaryExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3427,12 +3427,12 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeContent: UnexpectedNodes?
-  let content: TokenSyntax
+  let content: Token
   /// Creates a `StringSegment` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeContent: 
   ///   - content: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeContent: ExpressibleAsUnexpectedNodes? = nil, content: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeContent: ExpressibleAsUnexpectedNodes? = nil, content: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeContent = unexpectedBeforeContent?.createUnexpectedNodes()
     self.content = content
@@ -3441,14 +3441,14 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeContent: ExpressibleAsUnexpectedNodes? = nil, content: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeContent: unexpectedBeforeContent, content: TokenSyntax.`stringSegment`(content))
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeContent: unexpectedBeforeContent, content: Token.`stringSegment`(content))
   }
   /// Builds a `StringSegmentSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StringSegmentSyntax`.
   func buildStringSegment(format: Format) -> StringSegmentSyntax {
-    var result = StringSegmentSyntax(unexpectedBeforeContent?.buildUnexpectedNodes(format: format), content: content)
+    var result = StringSegmentSyntax(unexpectedBeforeContent?.buildUnexpectedNodes(format: format), content: content.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3476,15 +3476,15 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeBackslash: UnexpectedNodes?
-  let backslash: TokenSyntax
+  let backslash: Token
   let unexpectedBetweenBackslashAndDelimiter: UnexpectedNodes?
-  let delimiter: TokenSyntax?
+  let delimiter: Token?
   let unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndExpressions: UnexpectedNodes?
   let expressions: TupleExprElementList
   let unexpectedBetweenExpressionsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `ExpressionSegment` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBackslash: 
@@ -3497,7 +3497,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   ///   - expressions: 
   ///   - unexpectedBetweenExpressionsAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: TokenSyntax = TokenSyntax.`backslash`, unexpectedBetweenBackslashAndDelimiter: ExpressibleAsUnexpectedNodes? = nil, delimiter: TokenSyntax? = nil, unexpectedBetweenDelimiterAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndExpressions: ExpressibleAsUnexpectedNodes? = nil, expressions: ExpressibleAsTupleExprElementList, unexpectedBetweenExpressionsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndDelimiter: ExpressibleAsUnexpectedNodes? = nil, delimiter: Token? = nil, unexpectedBetweenDelimiterAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndExpressions: ExpressibleAsUnexpectedNodes? = nil, expressions: ExpressibleAsTupleExprElementList, unexpectedBetweenExpressionsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`stringInterpolationAnchor`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBackslash = unexpectedBeforeBackslash?.createUnexpectedNodes()
     self.backslash = backslash
@@ -3516,11 +3516,11 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: TokenSyntax = TokenSyntax.`backslash`, unexpectedBetweenBackslashAndDelimiter: ExpressibleAsUnexpectedNodes? = nil, delimiter: String?, unexpectedBetweenDelimiterAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndExpressions: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenExpressionsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`, @TupleExprElementListBuilder expressionsBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndDelimiter: ExpressibleAsUnexpectedNodes? = nil, delimiter: String?, unexpectedBetweenDelimiterAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndExpressions: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenExpressionsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`stringInterpolationAnchor`, @TupleExprElementListBuilder expressionsBuilder: () -> ExpressibleAsTupleExprElementList =  {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBackslash: unexpectedBeforeBackslash, backslash: backslash, unexpectedBetweenBackslashAndDelimiter: unexpectedBetweenBackslashAndDelimiter, delimiter: delimiter.map {
-      TokenSyntax.`rawStringDelimiter`($0)
+      Token.`rawStringDelimiter`($0)
     }, unexpectedBetweenDelimiterAndLeftParen: unexpectedBetweenDelimiterAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions: unexpectedBetweenLeftParenAndExpressions, expressions: expressionsBuilder(), unexpectedBetweenExpressionsAndRightParen: unexpectedBetweenExpressionsAndRightParen, rightParen: rightParen)
   }
   /// Builds a `ExpressionSegmentSyntax`.
@@ -3528,7 +3528,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExpressionSegmentSyntax`.
   func buildExpressionSegment(format: Format) -> ExpressionSegmentSyntax {
-    var result = ExpressionSegmentSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: backslash, unexpectedBetweenBackslashAndDelimiter?.buildUnexpectedNodes(format: format), delimiter: delimiter, unexpectedBetweenDelimiterAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndExpressions?.buildUnexpectedNodes(format: format), expressions: expressions.buildTupleExprElementList(format: format), unexpectedBetweenExpressionsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = ExpressionSegmentSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: backslash.buildToken(), unexpectedBetweenBackslashAndDelimiter?.buildUnexpectedNodes(format: format), delimiter: delimiter?.buildToken(), unexpectedBetweenDelimiterAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndExpressions?.buildUnexpectedNodes(format: format), expressions: expressions.buildTupleExprElementList(format: format), unexpectedBetweenExpressionsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3556,15 +3556,15 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeOpenDelimiter: UnexpectedNodes?
-  let openDelimiter: TokenSyntax?
+  let openDelimiter: Token?
   let unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodes?
-  let openQuote: TokenSyntax
+  let openQuote: Token
   let unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodes?
   let segments: StringLiteralSegments
   let unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodes?
-  let closeQuote: TokenSyntax
+  let closeQuote: Token
   let unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodes?
-  let closeDelimiter: TokenSyntax?
+  let closeDelimiter: Token?
   /// Creates a `StringLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeOpenDelimiter: 
@@ -3577,7 +3577,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   ///   - closeQuote: 
   ///   - unexpectedBetweenCloseQuoteAndCloseDelimiter: 
   ///   - closeDelimiter: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeOpenDelimiter: ExpressibleAsUnexpectedNodes? = nil, openDelimiter: TokenSyntax? = nil, unexpectedBetweenOpenDelimiterAndOpenQuote: ExpressibleAsUnexpectedNodes? = nil, openQuote: TokenSyntax, unexpectedBetweenOpenQuoteAndSegments: ExpressibleAsUnexpectedNodes? = nil, segments: ExpressibleAsStringLiteralSegments, unexpectedBetweenSegmentsAndCloseQuote: ExpressibleAsUnexpectedNodes? = nil, closeQuote: TokenSyntax, unexpectedBetweenCloseQuoteAndCloseDelimiter: ExpressibleAsUnexpectedNodes? = nil, closeDelimiter: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeOpenDelimiter: ExpressibleAsUnexpectedNodes? = nil, openDelimiter: Token? = nil, unexpectedBetweenOpenDelimiterAndOpenQuote: ExpressibleAsUnexpectedNodes? = nil, openQuote: Token, unexpectedBetweenOpenQuoteAndSegments: ExpressibleAsUnexpectedNodes? = nil, segments: ExpressibleAsStringLiteralSegments, unexpectedBetweenSegmentsAndCloseQuote: ExpressibleAsUnexpectedNodes? = nil, closeQuote: Token, unexpectedBetweenCloseQuoteAndCloseDelimiter: ExpressibleAsUnexpectedNodes? = nil, closeDelimiter: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeOpenDelimiter = unexpectedBeforeOpenDelimiter?.createUnexpectedNodes()
     self.openDelimiter = openDelimiter
@@ -3595,11 +3595,11 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeOpenDelimiter: ExpressibleAsUnexpectedNodes? = nil, openDelimiter: String?, unexpectedBetweenOpenDelimiterAndOpenQuote: ExpressibleAsUnexpectedNodes? = nil, openQuote: TokenSyntax, unexpectedBetweenOpenQuoteAndSegments: ExpressibleAsUnexpectedNodes? = nil, segments: ExpressibleAsStringLiteralSegments, unexpectedBetweenSegmentsAndCloseQuote: ExpressibleAsUnexpectedNodes? = nil, closeQuote: TokenSyntax, unexpectedBetweenCloseQuoteAndCloseDelimiter: ExpressibleAsUnexpectedNodes? = nil, closeDelimiter: String?) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeOpenDelimiter: ExpressibleAsUnexpectedNodes? = nil, openDelimiter: String?, unexpectedBetweenOpenDelimiterAndOpenQuote: ExpressibleAsUnexpectedNodes? = nil, openQuote: Token, unexpectedBetweenOpenQuoteAndSegments: ExpressibleAsUnexpectedNodes? = nil, segments: ExpressibleAsStringLiteralSegments, unexpectedBetweenSegmentsAndCloseQuote: ExpressibleAsUnexpectedNodes? = nil, closeQuote: Token, unexpectedBetweenCloseQuoteAndCloseDelimiter: ExpressibleAsUnexpectedNodes? = nil, closeDelimiter: String?) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOpenDelimiter: unexpectedBeforeOpenDelimiter, openDelimiter: openDelimiter.map {
-      TokenSyntax.`rawStringDelimiter`($0)
+      Token.`rawStringDelimiter`($0)
     }, unexpectedBetweenOpenDelimiterAndOpenQuote: unexpectedBetweenOpenDelimiterAndOpenQuote, openQuote: openQuote, unexpectedBetweenOpenQuoteAndSegments: unexpectedBetweenOpenQuoteAndSegments, segments: segments, unexpectedBetweenSegmentsAndCloseQuote: unexpectedBetweenSegmentsAndCloseQuote, closeQuote: closeQuote, unexpectedBetweenCloseQuoteAndCloseDelimiter: unexpectedBetweenCloseQuoteAndCloseDelimiter, closeDelimiter: closeDelimiter.map {
-      TokenSyntax.`rawStringDelimiter`($0)
+      Token.`rawStringDelimiter`($0)
     })
   }
   /// Builds a `StringLiteralExprSyntax`.
@@ -3607,7 +3607,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StringLiteralExprSyntax`.
   func buildStringLiteralExpr(format: Format) -> StringLiteralExprSyntax {
-    var result = StringLiteralExprSyntax(unexpectedBeforeOpenDelimiter?.buildUnexpectedNodes(format: format), openDelimiter: openDelimiter, unexpectedBetweenOpenDelimiterAndOpenQuote?.buildUnexpectedNodes(format: format), openQuote: openQuote, unexpectedBetweenOpenQuoteAndSegments?.buildUnexpectedNodes(format: format), segments: segments.buildStringLiteralSegments(format: format), unexpectedBetweenSegmentsAndCloseQuote?.buildUnexpectedNodes(format: format), closeQuote: closeQuote, unexpectedBetweenCloseQuoteAndCloseDelimiter?.buildUnexpectedNodes(format: format), closeDelimiter: closeDelimiter)
+    var result = StringLiteralExprSyntax(unexpectedBeforeOpenDelimiter?.buildUnexpectedNodes(format: format), openDelimiter: openDelimiter?.buildToken(), unexpectedBetweenOpenDelimiterAndOpenQuote?.buildUnexpectedNodes(format: format), openQuote: openQuote.buildToken(), unexpectedBetweenOpenQuoteAndSegments?.buildUnexpectedNodes(format: format), segments: segments.buildStringLiteralSegments(format: format), unexpectedBetweenSegmentsAndCloseQuote?.buildUnexpectedNodes(format: format), closeQuote: closeQuote.buildToken(), unexpectedBetweenCloseQuoteAndCloseDelimiter?.buildUnexpectedNodes(format: format), closeDelimiter: closeDelimiter?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3642,12 +3642,12 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeRegex: UnexpectedNodes?
-  let regex: TokenSyntax
+  let regex: Token
   /// Creates a `RegexLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeRegex: 
   ///   - regex: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeRegex: ExpressibleAsUnexpectedNodes? = nil, regex: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeRegex: ExpressibleAsUnexpectedNodes? = nil, regex: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeRegex = unexpectedBeforeRegex?.createUnexpectedNodes()
     self.regex = regex
@@ -3656,14 +3656,14 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeRegex: ExpressibleAsUnexpectedNodes? = nil, regex: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeRegex: unexpectedBeforeRegex, regex: TokenSyntax.`regexLiteral`(regex))
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeRegex: unexpectedBeforeRegex, regex: Token.`regexLiteral`(regex))
   }
   /// Builds a `RegexLiteralExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `RegexLiteralExprSyntax`.
   func buildRegexLiteralExpr(format: Format) -> RegexLiteralExprSyntax {
-    var result = RegexLiteralExprSyntax(unexpectedBeforeRegex?.buildUnexpectedNodes(format: format), regex: regex)
+    var result = RegexLiteralExprSyntax(unexpectedBeforeRegex?.buildUnexpectedNodes(format: format), regex: regex.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3698,7 +3698,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeBackslash: UnexpectedNodes?
-  let backslash: TokenSyntax
+  let backslash: Token
   let unexpectedBetweenBackslashAndRootExpr: UnexpectedNodes?
   let rootExpr: ExprBuildable?
   let unexpectedBetweenRootExprAndExpression: UnexpectedNodes?
@@ -3711,7 +3711,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   ///   - rootExpr: 
   ///   - unexpectedBetweenRootExprAndExpression: 
   ///   - expression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: TokenSyntax = TokenSyntax.`backslash`, unexpectedBetweenBackslashAndRootExpr: ExpressibleAsUnexpectedNodes? = nil, rootExpr: ExpressibleAsExprBuildable? = nil, unexpectedBetweenRootExprAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBackslash: ExpressibleAsUnexpectedNodes? = nil, backslash: Token = Token.`backslash`, unexpectedBetweenBackslashAndRootExpr: ExpressibleAsUnexpectedNodes? = nil, rootExpr: ExpressibleAsExprBuildable? = nil, unexpectedBetweenRootExprAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBackslash = unexpectedBeforeBackslash?.createUnexpectedNodes()
     self.backslash = backslash
@@ -3726,7 +3726,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `KeyPathExprSyntax`.
   func buildKeyPathExpr(format: Format) -> KeyPathExprSyntax {
-    var result = KeyPathExprSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: backslash, unexpectedBetweenBackslashAndRootExpr?.buildUnexpectedNodes(format: format), rootExpr: rootExpr?.buildExpr(format: format), unexpectedBetweenRootExprAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    var result = KeyPathExprSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: backslash.buildToken(), unexpectedBetweenBackslashAndRootExpr?.buildUnexpectedNodes(format: format), rootExpr: rootExpr?.buildExpr(format: format), unexpectedBetweenRootExprAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3761,12 +3761,12 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePeriod: UnexpectedNodes?
-  let period: TokenSyntax
+  let period: Token
   /// Creates a `KeyPathBaseExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePeriod: 
   ///   - period: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax = TokenSyntax.`period`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token = Token.`period`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePeriod = unexpectedBeforePeriod?.createUnexpectedNodes()
     self.period = period
@@ -3777,7 +3777,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `KeyPathBaseExprSyntax`.
   func buildKeyPathBaseExpr(format: Format) -> KeyPathBaseExprSyntax {
-    var result = KeyPathBaseExprSyntax(unexpectedBeforePeriod?.buildUnexpectedNodes(format: format), period: period)
+    var result = KeyPathBaseExprSyntax(unexpectedBeforePeriod?.buildUnexpectedNodes(format: format), period: period.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3812,16 +3812,16 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndDot: UnexpectedNodes?
-  let dot: TokenSyntax?
+  let dot: Token?
   /// Creates a `ObjcNamePiece` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
   ///   - name: 
   ///   - unexpectedBetweenNameAndDot: 
   ///   - dot: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -3832,15 +3832,15 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: TokenSyntax.`identifier`(name), unexpectedBetweenNameAndDot: unexpectedBetweenNameAndDot, dot: dot)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndDot: unexpectedBetweenNameAndDot, dot: dot)
   }
   /// Builds a `ObjcNamePieceSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcNamePieceSyntax`.
   func buildObjcNamePiece(format: Format) -> ObjcNamePieceSyntax {
-    var result = ObjcNamePieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndDot?.buildUnexpectedNodes(format: format), dot: dot)
+    var result = ObjcNamePieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndDot?.buildUnexpectedNodes(format: format), dot: dot?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3868,13 +3868,13 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeKeyPath: UnexpectedNodes?
-  let keyPath: TokenSyntax
+  let keyPath: Token
   let unexpectedBetweenKeyPathAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndName: UnexpectedNodes?
   let name: ObjcName
   let unexpectedBetweenNameAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `ObjcKeyPathExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeKeyPath: 
@@ -3885,7 +3885,7 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   ///   - name: 
   ///   - unexpectedBetweenNameAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeKeyPath: ExpressibleAsUnexpectedNodes? = nil, keyPath: TokenSyntax = TokenSyntax.`poundKeyPath`, unexpectedBetweenKeyPathAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsObjcName, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeKeyPath: ExpressibleAsUnexpectedNodes? = nil, keyPath: Token = Token.`poundKeyPath`, unexpectedBetweenKeyPathAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsObjcName, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeKeyPath = unexpectedBeforeKeyPath?.createUnexpectedNodes()
     self.keyPath = keyPath
@@ -3904,7 +3904,7 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcKeyPathExprSyntax`.
   func buildObjcKeyPathExpr(format: Format) -> ObjcKeyPathExprSyntax {
-    var result = ObjcKeyPathExprSyntax(unexpectedBeforeKeyPath?.buildUnexpectedNodes(format: format), keyPath: keyPath, unexpectedBetweenKeyPathAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format), name: name.buildObjcName(format: format), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = ObjcKeyPathExprSyntax(unexpectedBeforeKeyPath?.buildUnexpectedNodes(format: format), keyPath: keyPath.buildToken(), unexpectedBetweenKeyPathAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format), name: name.buildObjcName(format: format), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -3939,17 +3939,17 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundSelector: UnexpectedNodes?
-  let poundSelector: TokenSyntax
+  let poundSelector: Token
   let unexpectedBetweenPoundSelectorAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndKind: UnexpectedNodes?
-  let kind: TokenSyntax?
+  let kind: Token?
   let unexpectedBetweenKindAndColon: UnexpectedNodes?
-  let colon: TokenSyntax?
+  let colon: Token?
   let unexpectedBetweenColonAndName: UnexpectedNodes?
   let name: ExprBuildable
   let unexpectedBetweenNameAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `ObjcSelectorExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundSelector: 
@@ -3964,7 +3964,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   ///   - name: 
   ///   - unexpectedBetweenNameAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundSelector: ExpressibleAsUnexpectedNodes? = nil, poundSelector: TokenSyntax = TokenSyntax.`poundSelector`, unexpectedBetweenPoundSelectorAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndKind: ExpressibleAsUnexpectedNodes? = nil, kind: TokenSyntax? = nil, unexpectedBetweenKindAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil, unexpectedBetweenColonAndName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsExprBuildable, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundSelector: ExpressibleAsUnexpectedNodes? = nil, poundSelector: Token = Token.`poundSelector`, unexpectedBetweenPoundSelectorAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndKind: ExpressibleAsUnexpectedNodes? = nil, kind: Token? = nil, unexpectedBetweenKindAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsExprBuildable, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundSelector = unexpectedBeforePoundSelector?.createUnexpectedNodes()
     self.poundSelector = poundSelector
@@ -3987,9 +3987,9 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundSelector: ExpressibleAsUnexpectedNodes? = nil, poundSelector: TokenSyntax = TokenSyntax.`poundSelector`, unexpectedBetweenPoundSelectorAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndKind: ExpressibleAsUnexpectedNodes? = nil, kind: String?, unexpectedBetweenKindAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil, unexpectedBetweenColonAndName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsExprBuildable, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundSelector: ExpressibleAsUnexpectedNodes? = nil, poundSelector: Token = Token.`poundSelector`, unexpectedBetweenPoundSelectorAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndKind: ExpressibleAsUnexpectedNodes? = nil, kind: String?, unexpectedBetweenKindAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndName: ExpressibleAsUnexpectedNodes? = nil, name: ExpressibleAsExprBuildable, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundSelector: unexpectedBeforePoundSelector, poundSelector: poundSelector, unexpectedBetweenPoundSelectorAndLeftParen: unexpectedBetweenPoundSelectorAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndKind: unexpectedBetweenLeftParenAndKind, kind: kind.map {
-      TokenSyntax.`contextualKeyword`($0)
+      Token.`contextualKeyword`($0)
     }, unexpectedBetweenKindAndColon: unexpectedBetweenKindAndColon, colon: colon, unexpectedBetweenColonAndName: unexpectedBetweenColonAndName, name: name, unexpectedBetweenNameAndRightParen: unexpectedBetweenNameAndRightParen, rightParen: rightParen)
   }
   /// Builds a `ObjcSelectorExprSyntax`.
@@ -3997,7 +3997,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcSelectorExprSyntax`.
   func buildObjcSelectorExpr(format: Format) -> ObjcSelectorExprSyntax {
-    var result = ObjcSelectorExprSyntax(unexpectedBeforePoundSelector?.buildUnexpectedNodes(format: format), poundSelector: poundSelector, unexpectedBetweenPoundSelectorAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndKind?.buildUnexpectedNodes(format: format), kind: kind, unexpectedBetweenKindAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndName?.buildUnexpectedNodes(format: format), name: name.buildExpr(format: format), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = ObjcSelectorExprSyntax(unexpectedBeforePoundSelector?.buildUnexpectedNodes(format: format), poundSelector: poundSelector.buildToken(), unexpectedBetweenPoundSelectorAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndKind?.buildUnexpectedNodes(format: format), kind: kind?.buildToken(), unexpectedBetweenKindAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndName?.buildUnexpectedNodes(format: format), name: name.buildExpr(format: format), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4088,12 +4088,12 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   /// Creates a `EditorPlaceholderExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
   ///   - identifier: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIdentifier = unexpectedBeforeIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
@@ -4102,14 +4102,14 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: TokenSyntax.`identifier`(identifier))
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: Token.`identifier`(identifier))
   }
   /// Builds a `EditorPlaceholderExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EditorPlaceholderExprSyntax`.
   func buildEditorPlaceholderExpr(format: Format) -> EditorPlaceholderExprSyntax {
-    var result = EditorPlaceholderExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier)
+    var result = EditorPlaceholderExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4144,13 +4144,13 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
   let arguments: TupleExprElementList
   let unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `ObjectLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -4161,7 +4161,7 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   ///   - arguments: 
   ///   - unexpectedBetweenArgumentsAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsTupleExprElementList, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsTupleExprElementList, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIdentifier = unexpectedBeforeIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
@@ -4178,7 +4178,7 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`, @TupleExprElementListBuilder argumentsBuilder: () -> ExpressibleAsTupleExprElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TupleExprElementListBuilder argumentsBuilder: () -> ExpressibleAsTupleExprElementList =  {
     TupleExprElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndLeftParen: unexpectedBetweenIdentifierAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArguments: unexpectedBetweenLeftParenAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightParen: unexpectedBetweenArgumentsAndRightParen, rightParen: rightParen)
@@ -4188,7 +4188,7 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjectLiteralExprSyntax`.
   func buildObjectLiteralExpr(format: Format) -> ObjectLiteralExprSyntax {
-    var result = ObjectLiteralExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildTupleExprElementList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = ObjectLiteralExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildTupleExprElementList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4223,7 +4223,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeEqual: UnexpectedNodes?
-  let equal: TokenSyntax
+  let equal: Token
   let unexpectedBetweenEqualAndValue: UnexpectedNodes?
   let value: TypeBuildable
   /// Creates a `TypeInitializerClause` using the provided parameters.
@@ -4232,7 +4232,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   ///   - equal: 
   ///   - unexpectedBetweenEqualAndValue: 
   ///   - value: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeEqual: ExpressibleAsUnexpectedNodes? = nil, equal: TokenSyntax = TokenSyntax.`equal`, unexpectedBetweenEqualAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeEqual: ExpressibleAsUnexpectedNodes? = nil, equal: Token = Token.`equal`, unexpectedBetweenEqualAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeEqual = unexpectedBeforeEqual?.createUnexpectedNodes()
     self.equal = equal
@@ -4245,7 +4245,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeInitializerClauseSyntax`.
   func buildTypeInitializerClause(format: Format) -> TypeInitializerClauseSyntax {
-    var result = TypeInitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format), equal: equal, unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format), value: value.buildType(format: format))
+    var result = TypeInitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format), equal: equal.buildToken(), unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format), value: value.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4277,9 +4277,9 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodes?
-  let typealiasKeyword: TokenSyntax
+  let typealiasKeyword: Token
   let unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
   let genericParameterClause: GenericParameterClause?
   let unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodes?
@@ -4302,7 +4302,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   ///   - initializer: 
   ///   - unexpectedBetweenInitializerAndGenericWhereClause: 
   ///   - genericWhereClause: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: ExpressibleAsUnexpectedNodes? = nil, typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`, unexpectedBetweenTypealiasKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: ExpressibleAsUnexpectedNodes? = nil, typealiasKeyword: Token = Token.`typealias`, unexpectedBetweenTypealiasKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -4323,15 +4323,15 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: ExpressibleAsUnexpectedNodes? = nil, typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`, unexpectedBetweenTypealiasKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndTypealiasKeyword: unexpectedBetweenModifiersAndTypealiasKeyword, typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier: unexpectedBetweenTypealiasKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInitializer: unexpectedBetweenGenericParameterClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause: unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndTypealiasKeyword: ExpressibleAsUnexpectedNodes? = nil, typealiasKeyword: Token = Token.`typealias`, unexpectedBetweenTypealiasKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndTypealiasKeyword: unexpectedBetweenModifiersAndTypealiasKeyword, typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier: unexpectedBetweenTypealiasKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInitializer: unexpectedBetweenGenericParameterClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause: unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause)
   }
   /// Builds a `TypealiasDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypealiasDeclSyntax`.
   func buildTypealiasDecl(format: Format) -> TypealiasDeclSyntax {
-    var result = TypealiasDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndTypealiasKeyword?.buildUnexpectedNodes(format: format), typealiasKeyword: typealiasKeyword, unexpectedBetweenTypealiasKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer.buildTypeInitializerClause(format: format), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format))
+    var result = TypealiasDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndTypealiasKeyword?.buildUnexpectedNodes(format: format), typealiasKeyword: typealiasKeyword.buildToken(), unexpectedBetweenTypealiasKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer.buildTypeInitializerClause(format: format), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4370,9 +4370,9 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodes?
-  let associatedtypeKeyword: TokenSyntax
+  let associatedtypeKeyword: Token
   let unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodes?
   let inheritanceClause: TypeInheritanceClause?
   let unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodes?
@@ -4395,7 +4395,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   ///   - initializer: 
   ///   - unexpectedBetweenInitializerAndGenericWhereClause: 
   ///   - genericWhereClause: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndAssociatedtypeKeyword: ExpressibleAsUnexpectedNodes? = nil, associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause? = nil, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndAssociatedtypeKeyword: ExpressibleAsUnexpectedNodes? = nil, associatedtypeKeyword: Token = Token.`associatedtype`, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause? = nil, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -4416,15 +4416,15 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndAssociatedtypeKeyword: ExpressibleAsUnexpectedNodes? = nil, associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause? = nil, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndAssociatedtypeKeyword: unexpectedBetweenModifiersAndAssociatedtypeKeyword, associatedtypeKeyword: associatedtypeKeyword, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: unexpectedBetweenAssociatedtypeKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndInheritanceClause: unexpectedBetweenIdentifierAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndInitializer: unexpectedBetweenInheritanceClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause: unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndAssociatedtypeKeyword: ExpressibleAsUnexpectedNodes? = nil, associatedtypeKeyword: Token = Token.`associatedtype`, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsTypeInitializerClause? = nil, unexpectedBetweenInitializerAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndAssociatedtypeKeyword: unexpectedBetweenModifiersAndAssociatedtypeKeyword, associatedtypeKeyword: associatedtypeKeyword, unexpectedBetweenAssociatedtypeKeywordAndIdentifier: unexpectedBetweenAssociatedtypeKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndInheritanceClause: unexpectedBetweenIdentifierAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndInitializer: unexpectedBetweenInheritanceClauseAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndGenericWhereClause: unexpectedBetweenInitializerAndGenericWhereClause, genericWhereClause: genericWhereClause)
   }
   /// Builds a `AssociatedtypeDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AssociatedtypeDeclSyntax`.
   func buildAssociatedtypeDecl(format: Format) -> AssociatedtypeDeclSyntax {
-    var result = AssociatedtypeDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndAssociatedtypeKeyword?.buildUnexpectedNodes(format: format), associatedtypeKeyword: associatedtypeKeyword, unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildTypeInitializerClause(format: format), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format))
+    var result = AssociatedtypeDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndAssociatedtypeKeyword?.buildUnexpectedNodes(format: format), associatedtypeKeyword: associatedtypeKeyword.buildToken(), unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildTypeInitializerClause(format: format), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4459,11 +4459,11 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndParameterList: UnexpectedNodes?
   let parameterList: FunctionParameterList
   let unexpectedBetweenParameterListAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `ParameterClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -4472,7 +4472,7 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   ///   - parameterList: 
   ///   - unexpectedBetweenParameterListAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndParameterList: ExpressibleAsUnexpectedNodes? = nil, parameterList: ExpressibleAsFunctionParameterList, unexpectedBetweenParameterListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndParameterList: ExpressibleAsUnexpectedNodes? = nil, parameterList: ExpressibleAsFunctionParameterList, unexpectedBetweenParameterListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -4486,7 +4486,7 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenParameterListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`, @FunctionParameterListBuilder parameterListBuilder: () -> ExpressibleAsFunctionParameterList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenParameterListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @FunctionParameterListBuilder parameterListBuilder: () -> ExpressibleAsFunctionParameterList =  {
     FunctionParameterList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList: unexpectedBetweenLeftParenAndParameterList, parameterList: parameterListBuilder(), unexpectedBetweenParameterListAndRightParen: unexpectedBetweenParameterListAndRightParen, rightParen: rightParen)
@@ -4496,7 +4496,7 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ParameterClauseSyntax`.
   func buildParameterClause(format: Format) -> ParameterClauseSyntax {
-    var result = ParameterClauseSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndParameterList?.buildUnexpectedNodes(format: format), parameterList: parameterList.buildFunctionParameterList(format: format), unexpectedBetweenParameterListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = ParameterClauseSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndParameterList?.buildUnexpectedNodes(format: format), parameterList: parameterList.buildFunctionParameterList(format: format), unexpectedBetweenParameterListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4524,7 +4524,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeArrow: UnexpectedNodes?
-  let arrow: TokenSyntax
+  let arrow: Token
   let unexpectedBetweenArrowAndReturnType: UnexpectedNodes?
   let returnType: TypeBuildable
   /// Creates a `ReturnClause` using the provided parameters.
@@ -4533,7 +4533,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   ///   - arrow: 
   ///   - unexpectedBetweenArrowAndReturnType: 
   ///   - returnType: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeArrow: ExpressibleAsUnexpectedNodes? = nil, arrow: TokenSyntax = TokenSyntax.`arrow`, unexpectedBetweenArrowAndReturnType: ExpressibleAsUnexpectedNodes? = nil, returnType: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeArrow: ExpressibleAsUnexpectedNodes? = nil, arrow: Token = Token.`arrow`, unexpectedBetweenArrowAndReturnType: ExpressibleAsUnexpectedNodes? = nil, returnType: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeArrow = unexpectedBeforeArrow?.createUnexpectedNodes()
     self.arrow = arrow
@@ -4546,7 +4546,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ReturnClauseSyntax`.
   func buildReturnClause(format: Format) -> ReturnClauseSyntax {
-    var result = ReturnClauseSyntax(unexpectedBeforeArrow?.buildUnexpectedNodes(format: format), arrow: arrow, unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format), returnType: returnType.buildType(format: format))
+    var result = ReturnClauseSyntax(unexpectedBeforeArrow?.buildUnexpectedNodes(format: format), arrow: arrow.buildToken(), unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format), returnType: returnType.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4576,9 +4576,9 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   let unexpectedBeforeInput: UnexpectedNodes?
   let input: ParameterClause
   let unexpectedBetweenInputAndAsyncOrReasyncKeyword: UnexpectedNodes?
-  let asyncOrReasyncKeyword: TokenSyntax?
+  let asyncOrReasyncKeyword: Token?
   let unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodes?
-  let throwsOrRethrowsKeyword: TokenSyntax?
+  let throwsOrRethrowsKeyword: Token?
   let unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: UnexpectedNodes?
   let output: ReturnClause?
   /// Creates a `FunctionSignature` using the provided parameters.
@@ -4591,7 +4591,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   ///   - throwsOrRethrowsKeyword: 
   ///   - unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: 
   ///   - output: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsParameterClause, unexpectedBetweenInputAndAsyncOrReasyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncOrReasyncKeyword: TokenSyntax? = nil, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsOrRethrowsKeyword: TokenSyntax? = nil, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsParameterClause, unexpectedBetweenInputAndAsyncOrReasyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncOrReasyncKeyword: Token? = nil, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsOrRethrowsKeyword: Token? = nil, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeInput = unexpectedBeforeInput?.createUnexpectedNodes()
     self.input = input.createParameterClause()
@@ -4607,9 +4607,9 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsParameterClause, unexpectedBetweenInputAndAsyncOrReasyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncOrReasyncKeyword: String?, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsOrRethrowsKeyword: TokenSyntax? = nil, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeInput: ExpressibleAsUnexpectedNodes? = nil, input: ExpressibleAsParameterClause, unexpectedBetweenInputAndAsyncOrReasyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncOrReasyncKeyword: String?, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsOrRethrowsKeyword: Token? = nil, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: ExpressibleAsUnexpectedNodes? = nil, output: ExpressibleAsReturnClause? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeInput: unexpectedBeforeInput, input: input, unexpectedBetweenInputAndAsyncOrReasyncKeyword: unexpectedBetweenInputAndAsyncOrReasyncKeyword, asyncOrReasyncKeyword: asyncOrReasyncKeyword.map {
-      TokenSyntax.`contextualKeyword`($0)
+      Token.`contextualKeyword`($0)
     }, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword, throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: unexpectedBetweenThrowsOrRethrowsKeywordAndOutput, output: output)
   }
   /// Builds a `FunctionSignatureSyntax`.
@@ -4617,7 +4617,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionSignatureSyntax`.
   func buildFunctionSignature(format: Format) -> FunctionSignatureSyntax {
-    var result = FunctionSignatureSyntax(unexpectedBeforeInput?.buildUnexpectedNodes(format: format), input: input.buildParameterClause(format: format), unexpectedBetweenInputAndAsyncOrReasyncKeyword?.buildUnexpectedNodes(format: format), asyncOrReasyncKeyword: asyncOrReasyncKeyword, unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.buildUnexpectedNodes(format: format), output: output?.buildReturnClause(format: format))
+    var result = FunctionSignatureSyntax(unexpectedBeforeInput?.buildUnexpectedNodes(format: format), input: input.buildParameterClause(format: format), unexpectedBetweenInputAndAsyncOrReasyncKeyword?.buildUnexpectedNodes(format: format), asyncOrReasyncKeyword: asyncOrReasyncKeyword?.buildToken(), unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword?.buildToken(), unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.buildUnexpectedNodes(format: format), output: output?.buildReturnClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4645,7 +4645,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundKeyword: UnexpectedNodes?
-  let poundKeyword: TokenSyntax
+  let poundKeyword: Token
   let unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodes?
   let condition: ExprBuildable?
   let unexpectedBetweenConditionAndElements: UnexpectedNodes?
@@ -4658,7 +4658,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   ///   - condition: 
   ///   - unexpectedBetweenConditionAndElements: 
   ///   - elements: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundKeyword: ExpressibleAsUnexpectedNodes? = nil, poundKeyword: TokenSyntax, unexpectedBetweenPoundKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable? = nil, unexpectedBetweenConditionAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsSyntaxBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundKeyword: ExpressibleAsUnexpectedNodes? = nil, poundKeyword: Token, unexpectedBetweenPoundKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable? = nil, unexpectedBetweenConditionAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsSyntaxBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundKeyword = unexpectedBeforePoundKeyword?.createUnexpectedNodes()
     self.poundKeyword = poundKeyword
@@ -4673,7 +4673,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfConfigClauseSyntax`.
   func buildIfConfigClause(format: Format) -> IfConfigClauseSyntax {
-    var result = IfConfigClauseSyntax(unexpectedBeforePoundKeyword?.buildUnexpectedNodes(format: format), poundKeyword: poundKeyword, unexpectedBetweenPoundKeywordAndCondition?.buildUnexpectedNodes(format: format), condition: condition?.buildExpr(format: format), unexpectedBetweenConditionAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildSyntax(format: format))
+    var result = IfConfigClauseSyntax(unexpectedBeforePoundKeyword?.buildUnexpectedNodes(format: format), poundKeyword: poundKeyword.buildToken(), unexpectedBetweenPoundKeywordAndCondition?.buildUnexpectedNodes(format: format), condition: condition?.buildExpr(format: format), unexpectedBetweenConditionAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4703,14 +4703,14 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   let unexpectedBeforeClauses: UnexpectedNodes?
   let clauses: IfConfigClauseList
   let unexpectedBetweenClausesAndPoundEndif: UnexpectedNodes?
-  let poundEndif: TokenSyntax
+  let poundEndif: Token
   /// Creates a `IfConfigDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeClauses: 
   ///   - clauses: 
   ///   - unexpectedBetweenClausesAndPoundEndif: 
   ///   - poundEndif: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeClauses: ExpressibleAsUnexpectedNodes? = nil, clauses: ExpressibleAsIfConfigClauseList, unexpectedBetweenClausesAndPoundEndif: ExpressibleAsUnexpectedNodes? = nil, poundEndif: TokenSyntax = TokenSyntax.`poundEndif`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeClauses: ExpressibleAsUnexpectedNodes? = nil, clauses: ExpressibleAsIfConfigClauseList, unexpectedBetweenClausesAndPoundEndif: ExpressibleAsUnexpectedNodes? = nil, poundEndif: Token = Token.`poundEndif`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeClauses = unexpectedBeforeClauses?.createUnexpectedNodes()
     self.clauses = clauses.createIfConfigClauseList()
@@ -4723,7 +4723,7 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfConfigDeclSyntax`.
   func buildIfConfigDecl(format: Format) -> IfConfigDeclSyntax {
-    var result = IfConfigDeclSyntax(unexpectedBeforeClauses?.buildUnexpectedNodes(format: format), clauses: clauses.buildIfConfigClauseList(format: format), unexpectedBetweenClausesAndPoundEndif?.buildUnexpectedNodes(format: format), poundEndif: poundEndif)
+    var result = IfConfigDeclSyntax(unexpectedBeforeClauses?.buildUnexpectedNodes(format: format), clauses: clauses.buildIfConfigClauseList(format: format), unexpectedBetweenClausesAndPoundEndif?.buildUnexpectedNodes(format: format), poundEndif: poundEndif.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4758,13 +4758,13 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundError: UnexpectedNodes?
-  let poundError: TokenSyntax
+  let poundError: Token
   let unexpectedBetweenPoundErrorAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndMessage: UnexpectedNodes?
   let message: StringLiteralExpr
   let unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `PoundErrorDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundError: 
@@ -4775,7 +4775,7 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   ///   - message: 
   ///   - unexpectedBetweenMessageAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundError: ExpressibleAsUnexpectedNodes? = nil, poundError: TokenSyntax = TokenSyntax.`poundError`, unexpectedBetweenPoundErrorAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: ExpressibleAsStringLiteralExpr, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundError: ExpressibleAsUnexpectedNodes? = nil, poundError: Token = Token.`poundError`, unexpectedBetweenPoundErrorAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: ExpressibleAsStringLiteralExpr, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundError = unexpectedBeforePoundError?.createUnexpectedNodes()
     self.poundError = poundError
@@ -4794,7 +4794,7 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundErrorDeclSyntax`.
   func buildPoundErrorDecl(format: Format) -> PoundErrorDeclSyntax {
-    var result = PoundErrorDeclSyntax(unexpectedBeforePoundError?.buildUnexpectedNodes(format: format), poundError: poundError, unexpectedBetweenPoundErrorAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format), message: message.buildStringLiteralExpr(format: format), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = PoundErrorDeclSyntax(unexpectedBeforePoundError?.buildUnexpectedNodes(format: format), poundError: poundError.buildToken(), unexpectedBetweenPoundErrorAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format), message: message.buildStringLiteralExpr(format: format), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4829,13 +4829,13 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundWarning: UnexpectedNodes?
-  let poundWarning: TokenSyntax
+  let poundWarning: Token
   let unexpectedBetweenPoundWarningAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndMessage: UnexpectedNodes?
   let message: StringLiteralExpr
   let unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `PoundWarningDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundWarning: 
@@ -4846,7 +4846,7 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   ///   - message: 
   ///   - unexpectedBetweenMessageAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundWarning: ExpressibleAsUnexpectedNodes? = nil, poundWarning: TokenSyntax = TokenSyntax.`poundWarning`, unexpectedBetweenPoundWarningAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: ExpressibleAsStringLiteralExpr, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundWarning: ExpressibleAsUnexpectedNodes? = nil, poundWarning: Token = Token.`poundWarning`, unexpectedBetweenPoundWarningAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: ExpressibleAsStringLiteralExpr, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundWarning = unexpectedBeforePoundWarning?.createUnexpectedNodes()
     self.poundWarning = poundWarning
@@ -4865,7 +4865,7 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundWarningDeclSyntax`.
   func buildPoundWarningDecl(format: Format) -> PoundWarningDeclSyntax {
-    var result = PoundWarningDeclSyntax(unexpectedBeforePoundWarning?.buildUnexpectedNodes(format: format), poundWarning: poundWarning, unexpectedBetweenPoundWarningAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format), message: message.buildStringLiteralExpr(format: format), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = PoundWarningDeclSyntax(unexpectedBeforePoundWarning?.buildUnexpectedNodes(format: format), poundWarning: poundWarning.buildToken(), unexpectedBetweenPoundWarningAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format), message: message.buildStringLiteralExpr(format: format), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4900,13 +4900,13 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundSourceLocation: UnexpectedNodes?
-  let poundSourceLocation: TokenSyntax
+  let poundSourceLocation: Token
   let unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndArgs: UnexpectedNodes?
   let args: PoundSourceLocationArgs?
   let unexpectedBetweenArgsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `PoundSourceLocation` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundSourceLocation: 
@@ -4917,7 +4917,7 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   ///   - args: 
   ///   - unexpectedBetweenArgsAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundSourceLocation: ExpressibleAsUnexpectedNodes? = nil, poundSourceLocation: TokenSyntax = TokenSyntax.`poundSourceLocation`, unexpectedBetweenPoundSourceLocationAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndArgs: ExpressibleAsUnexpectedNodes? = nil, args: ExpressibleAsPoundSourceLocationArgs? = nil, unexpectedBetweenArgsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundSourceLocation: ExpressibleAsUnexpectedNodes? = nil, poundSourceLocation: Token = Token.`poundSourceLocation`, unexpectedBetweenPoundSourceLocationAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArgs: ExpressibleAsUnexpectedNodes? = nil, args: ExpressibleAsPoundSourceLocationArgs? = nil, unexpectedBetweenArgsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundSourceLocation = unexpectedBeforePoundSourceLocation?.createUnexpectedNodes()
     self.poundSourceLocation = poundSourceLocation
@@ -4936,7 +4936,7 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundSourceLocationSyntax`.
   func buildPoundSourceLocation(format: Format) -> PoundSourceLocationSyntax {
-    var result = PoundSourceLocationSyntax(unexpectedBeforePoundSourceLocation?.buildUnexpectedNodes(format: format), poundSourceLocation: poundSourceLocation, unexpectedBetweenPoundSourceLocationAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndArgs?.buildUnexpectedNodes(format: format), args: args?.buildPoundSourceLocationArgs(format: format), unexpectedBetweenArgsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = PoundSourceLocationSyntax(unexpectedBeforePoundSourceLocation?.buildUnexpectedNodes(format: format), poundSourceLocation: poundSourceLocation.buildToken(), unexpectedBetweenPoundSourceLocationAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArgs?.buildUnexpectedNodes(format: format), args: args?.buildPoundSourceLocationArgs(format: format), unexpectedBetweenArgsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -4971,19 +4971,19 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeFileArgLabel: UnexpectedNodes?
-  let fileArgLabel: TokenSyntax
+  let fileArgLabel: Token
   let unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodes?
-  let fileArgColon: TokenSyntax
+  let fileArgColon: Token
   let unexpectedBetweenFileArgColonAndFileName: UnexpectedNodes?
-  let fileName: TokenSyntax
+  let fileName: Token
   let unexpectedBetweenFileNameAndComma: UnexpectedNodes?
-  let comma: TokenSyntax
+  let comma: Token
   let unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodes?
-  let lineArgLabel: TokenSyntax
+  let lineArgLabel: Token
   let unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodes?
-  let lineArgColon: TokenSyntax
+  let lineArgColon: Token
   let unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodes?
-  let lineNumber: TokenSyntax
+  let lineNumber: Token
   /// Creates a `PoundSourceLocationArgs` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeFileArgLabel: 
@@ -5000,7 +5000,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   ///   - lineArgColon: 
   ///   - unexpectedBetweenLineArgColonAndLineNumber: 
   ///   - lineNumber: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeFileArgLabel: ExpressibleAsUnexpectedNodes? = nil, fileArgLabel: TokenSyntax, unexpectedBetweenFileArgLabelAndFileArgColon: ExpressibleAsUnexpectedNodes? = nil, fileArgColon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenFileArgColonAndFileName: ExpressibleAsUnexpectedNodes? = nil, fileName: TokenSyntax, unexpectedBetweenFileNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax = TokenSyntax.`comma`, unexpectedBetweenCommaAndLineArgLabel: ExpressibleAsUnexpectedNodes? = nil, lineArgLabel: TokenSyntax, unexpectedBetweenLineArgLabelAndLineArgColon: ExpressibleAsUnexpectedNodes? = nil, lineArgColon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenLineArgColonAndLineNumber: ExpressibleAsUnexpectedNodes? = nil, lineNumber: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeFileArgLabel: ExpressibleAsUnexpectedNodes? = nil, fileArgLabel: Token, unexpectedBetweenFileArgLabelAndFileArgColon: ExpressibleAsUnexpectedNodes? = nil, fileArgColon: Token = Token.`colon`, unexpectedBetweenFileArgColonAndFileName: ExpressibleAsUnexpectedNodes? = nil, fileName: Token, unexpectedBetweenFileNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndLineArgLabel: ExpressibleAsUnexpectedNodes? = nil, lineArgLabel: Token, unexpectedBetweenLineArgLabelAndLineArgColon: ExpressibleAsUnexpectedNodes? = nil, lineArgColon: Token = Token.`colon`, unexpectedBetweenLineArgColonAndLineNumber: ExpressibleAsUnexpectedNodes? = nil, lineNumber: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeFileArgLabel = unexpectedBeforeFileArgLabel?.createUnexpectedNodes()
     self.fileArgLabel = fileArgLabel
@@ -5025,15 +5025,15 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeFileArgLabel: ExpressibleAsUnexpectedNodes? = nil, fileArgLabel: String, unexpectedBetweenFileArgLabelAndFileArgColon: ExpressibleAsUnexpectedNodes? = nil, fileArgColon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenFileArgColonAndFileName: ExpressibleAsUnexpectedNodes? = nil, fileName: String, unexpectedBetweenFileNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax = TokenSyntax.`comma`, unexpectedBetweenCommaAndLineArgLabel: ExpressibleAsUnexpectedNodes? = nil, lineArgLabel: String, unexpectedBetweenLineArgLabelAndLineArgColon: ExpressibleAsUnexpectedNodes? = nil, lineArgColon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenLineArgColonAndLineNumber: ExpressibleAsUnexpectedNodes? = nil, lineNumber: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeFileArgLabel: unexpectedBeforeFileArgLabel, fileArgLabel: TokenSyntax.`identifier`(fileArgLabel), unexpectedBetweenFileArgLabelAndFileArgColon: unexpectedBetweenFileArgLabelAndFileArgColon, fileArgColon: fileArgColon, unexpectedBetweenFileArgColonAndFileName: unexpectedBetweenFileArgColonAndFileName, fileName: TokenSyntax.`stringLiteral`(fileName), unexpectedBetweenFileNameAndComma: unexpectedBetweenFileNameAndComma, comma: comma, unexpectedBetweenCommaAndLineArgLabel: unexpectedBetweenCommaAndLineArgLabel, lineArgLabel: TokenSyntax.`identifier`(lineArgLabel), unexpectedBetweenLineArgLabelAndLineArgColon: unexpectedBetweenLineArgLabelAndLineArgColon, lineArgColon: lineArgColon, unexpectedBetweenLineArgColonAndLineNumber: unexpectedBetweenLineArgColonAndLineNumber, lineNumber: TokenSyntax.`integerLiteral`(lineNumber))
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeFileArgLabel: ExpressibleAsUnexpectedNodes? = nil, fileArgLabel: String, unexpectedBetweenFileArgLabelAndFileArgColon: ExpressibleAsUnexpectedNodes? = nil, fileArgColon: Token = Token.`colon`, unexpectedBetweenFileArgColonAndFileName: ExpressibleAsUnexpectedNodes? = nil, fileName: String, unexpectedBetweenFileNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndLineArgLabel: ExpressibleAsUnexpectedNodes? = nil, lineArgLabel: String, unexpectedBetweenLineArgLabelAndLineArgColon: ExpressibleAsUnexpectedNodes? = nil, lineArgColon: Token = Token.`colon`, unexpectedBetweenLineArgColonAndLineNumber: ExpressibleAsUnexpectedNodes? = nil, lineNumber: String) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeFileArgLabel: unexpectedBeforeFileArgLabel, fileArgLabel: Token.`identifier`(fileArgLabel), unexpectedBetweenFileArgLabelAndFileArgColon: unexpectedBetweenFileArgLabelAndFileArgColon, fileArgColon: fileArgColon, unexpectedBetweenFileArgColonAndFileName: unexpectedBetweenFileArgColonAndFileName, fileName: Token.`stringLiteral`(fileName), unexpectedBetweenFileNameAndComma: unexpectedBetweenFileNameAndComma, comma: comma, unexpectedBetweenCommaAndLineArgLabel: unexpectedBetweenCommaAndLineArgLabel, lineArgLabel: Token.`identifier`(lineArgLabel), unexpectedBetweenLineArgLabelAndLineArgColon: unexpectedBetweenLineArgLabelAndLineArgColon, lineArgColon: lineArgColon, unexpectedBetweenLineArgColonAndLineNumber: unexpectedBetweenLineArgColonAndLineNumber, lineNumber: Token.`integerLiteral`(lineNumber))
   }
   /// Builds a `PoundSourceLocationArgsSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundSourceLocationArgsSyntax`.
   func buildPoundSourceLocationArgs(format: Format) -> PoundSourceLocationArgsSyntax {
-    var result = PoundSourceLocationArgsSyntax(unexpectedBeforeFileArgLabel?.buildUnexpectedNodes(format: format), fileArgLabel: fileArgLabel, unexpectedBetweenFileArgLabelAndFileArgColon?.buildUnexpectedNodes(format: format), fileArgColon: fileArgColon, unexpectedBetweenFileArgColonAndFileName?.buildUnexpectedNodes(format: format), fileName: fileName, unexpectedBetweenFileNameAndComma?.buildUnexpectedNodes(format: format), comma: comma, unexpectedBetweenCommaAndLineArgLabel?.buildUnexpectedNodes(format: format), lineArgLabel: lineArgLabel, unexpectedBetweenLineArgLabelAndLineArgColon?.buildUnexpectedNodes(format: format), lineArgColon: lineArgColon, unexpectedBetweenLineArgColonAndLineNumber?.buildUnexpectedNodes(format: format), lineNumber: lineNumber)
+    var result = PoundSourceLocationArgsSyntax(unexpectedBeforeFileArgLabel?.buildUnexpectedNodes(format: format), fileArgLabel: fileArgLabel.buildToken(), unexpectedBetweenFileArgLabelAndFileArgColon?.buildUnexpectedNodes(format: format), fileArgColon: fileArgColon.buildToken(), unexpectedBetweenFileArgColonAndFileName?.buildUnexpectedNodes(format: format), fileName: fileName.buildToken(), unexpectedBetweenFileNameAndComma?.buildUnexpectedNodes(format: format), comma: comma.buildToken(), unexpectedBetweenCommaAndLineArgLabel?.buildUnexpectedNodes(format: format), lineArgLabel: lineArgLabel.buildToken(), unexpectedBetweenLineArgLabelAndLineArgColon?.buildUnexpectedNodes(format: format), lineArgColon: lineArgColon.buildToken(), unexpectedBetweenLineArgColonAndLineNumber?.buildUnexpectedNodes(format: format), lineNumber: lineNumber.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5061,11 +5061,11 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndDetail: UnexpectedNodes?
-  let detail: TokenSyntax
+  let detail: Token
   let unexpectedBetweenDetailAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `DeclModifierDetail` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -5074,7 +5074,7 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   ///   - detail: 
   ///   - unexpectedBetweenDetailAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndDetail: ExpressibleAsUnexpectedNodes? = nil, detail: TokenSyntax, unexpectedBetweenDetailAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndDetail: ExpressibleAsUnexpectedNodes? = nil, detail: Token, unexpectedBetweenDetailAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -5088,15 +5088,15 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndDetail: ExpressibleAsUnexpectedNodes? = nil, detail: String, unexpectedBetweenDetailAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndDetail: unexpectedBetweenLeftParenAndDetail, detail: TokenSyntax.`identifier`(detail), unexpectedBetweenDetailAndRightParen: unexpectedBetweenDetailAndRightParen, rightParen: rightParen)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndDetail: ExpressibleAsUnexpectedNodes? = nil, detail: String, unexpectedBetweenDetailAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndDetail: unexpectedBetweenLeftParenAndDetail, detail: Token.`identifier`(detail), unexpectedBetweenDetailAndRightParen: unexpectedBetweenDetailAndRightParen, rightParen: rightParen)
   }
   /// Builds a `DeclModifierDetailSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclModifierDetailSyntax`.
   func buildDeclModifierDetail(format: Format) -> DeclModifierDetailSyntax {
-    var result = DeclModifierDetailSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndDetail?.buildUnexpectedNodes(format: format), detail: detail, unexpectedBetweenDetailAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = DeclModifierDetailSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndDetail?.buildUnexpectedNodes(format: format), detail: detail.buildToken(), unexpectedBetweenDetailAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5124,7 +5124,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndDetail: UnexpectedNodes?
   let detail: DeclModifierDetail?
   /// Creates a `DeclModifier` using the provided parameters.
@@ -5133,7 +5133,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   ///   - name: 
   ///   - unexpectedBetweenNameAndDetail: 
   ///   - detail: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndDetail: ExpressibleAsUnexpectedNodes? = nil, detail: ExpressibleAsDeclModifierDetail? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndDetail: ExpressibleAsUnexpectedNodes? = nil, detail: ExpressibleAsDeclModifierDetail? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -5146,7 +5146,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclModifierSyntax`.
   func buildDeclModifier(format: Format) -> DeclModifierSyntax {
-    var result = DeclModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndDetail?.buildUnexpectedNodes(format: format), detail: detail?.buildDeclModifierDetail(format: format))
+    var result = DeclModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndDetail?.buildUnexpectedNodes(format: format), detail: detail?.buildDeclModifierDetail(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5176,14 +5176,14 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   let unexpectedBeforeTypeName: UnexpectedNodes?
   let typeName: TypeBuildable
   let unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `InheritedType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeTypeName: 
   ///   - typeName: 
   ///   - unexpectedBetweenTypeNameAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable, unexpectedBetweenTypeNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeTypeName: ExpressibleAsUnexpectedNodes? = nil, typeName: ExpressibleAsTypeBuildable, unexpectedBetweenTypeNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeTypeName = unexpectedBeforeTypeName?.createUnexpectedNodes()
     self.typeName = typeName.createTypeBuildable()
@@ -5196,7 +5196,7 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InheritedTypeSyntax`.
   func buildInheritedType(format: Format) -> InheritedTypeSyntax {
-    var result = InheritedTypeSyntax(unexpectedBeforeTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format), unexpectedBetweenTypeNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = InheritedTypeSyntax(unexpectedBeforeTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format), unexpectedBetweenTypeNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5228,7 +5228,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodes?
   let inheritedTypeCollection: InheritedTypeList
   /// Creates a `TypeInheritanceClause` using the provided parameters.
@@ -5237,7 +5237,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   ///   - colon: 
   ///   - unexpectedBetweenColonAndInheritedTypeCollection: 
   ///   - inheritedTypeCollection: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndInheritedTypeCollection: ExpressibleAsUnexpectedNodes? = nil, inheritedTypeCollection: ExpressibleAsInheritedTypeList) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndInheritedTypeCollection: ExpressibleAsUnexpectedNodes? = nil, inheritedTypeCollection: ExpressibleAsInheritedTypeList) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
@@ -5248,7 +5248,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndInheritedTypeCollection: ExpressibleAsUnexpectedNodes? = nil, @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> ExpressibleAsInheritedTypeList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndInheritedTypeCollection: ExpressibleAsUnexpectedNodes? = nil, @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> ExpressibleAsInheritedTypeList =  {
     InheritedTypeList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeColon: unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndInheritedTypeCollection: unexpectedBetweenColonAndInheritedTypeCollection, inheritedTypeCollection: inheritedTypeCollectionBuilder())
@@ -5258,7 +5258,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeInheritanceClauseSyntax`.
   func buildTypeInheritanceClause(format: Format) -> TypeInheritanceClauseSyntax {
-    var result = TypeInheritanceClauseSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndInheritedTypeCollection?.buildUnexpectedNodes(format: format), inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format))
+    var result = TypeInheritanceClauseSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndInheritedTypeCollection?.buildUnexpectedNodes(format: format), inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5290,9 +5290,9 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodes?
-  let classKeyword: TokenSyntax
+  let classKeyword: Token
   let unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
   let genericParameterClause: GenericParameterClause?
   let unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
@@ -5319,7 +5319,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: TokenSyntax = TokenSyntax.`class`, unexpectedBetweenClassKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: Token = Token.`class`, unexpectedBetweenClassKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -5342,17 +5342,17 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: TokenSyntax = TokenSyntax.`class`, unexpectedBetweenClassKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: Token = Token.`class`, unexpectedBetweenClassKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
     MemberDeclList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndClassKeyword: unexpectedBetweenModifiersAndClassKeyword, classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier: unexpectedBetweenClassKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndClassKeyword: unexpectedBetweenModifiersAndClassKeyword, classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier: unexpectedBetweenClassKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
   /// Builds a `ClassDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClassDeclSyntax`.
   func buildClassDecl(format: Format) -> ClassDeclSyntax {
-    var result = ClassDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndClassKeyword?.buildUnexpectedNodes(format: format), classKeyword: classKeyword, unexpectedBetweenClassKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    var result = ClassDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndClassKeyword?.buildUnexpectedNodes(format: format), classKeyword: classKeyword.buildToken(), unexpectedBetweenClassKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5391,9 +5391,9 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodes?
-  let actorKeyword: TokenSyntax
+  let actorKeyword: Token
   let unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
   let genericParameterClause: GenericParameterClause?
   let unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
@@ -5420,7 +5420,7 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndActorKeyword: ExpressibleAsUnexpectedNodes? = nil, actorKeyword: TokenSyntax, unexpectedBetweenActorKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndActorKeyword: ExpressibleAsUnexpectedNodes? = nil, actorKeyword: Token, unexpectedBetweenActorKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -5446,14 +5446,14 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndActorKeyword: ExpressibleAsUnexpectedNodes? = nil, actorKeyword: String, unexpectedBetweenActorKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
     MemberDeclList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndActorKeyword: unexpectedBetweenModifiersAndActorKeyword, actorKeyword: TokenSyntax.`contextualKeyword`(actorKeyword), unexpectedBetweenActorKeywordAndIdentifier: unexpectedBetweenActorKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndActorKeyword: unexpectedBetweenModifiersAndActorKeyword, actorKeyword: Token.`contextualKeyword`(actorKeyword), unexpectedBetweenActorKeywordAndIdentifier: unexpectedBetweenActorKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
   /// Builds a `ActorDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ActorDeclSyntax`.
   func buildActorDecl(format: Format) -> ActorDeclSyntax {
-    var result = ActorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndActorKeyword?.buildUnexpectedNodes(format: format), actorKeyword: actorKeyword, unexpectedBetweenActorKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    var result = ActorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndActorKeyword?.buildUnexpectedNodes(format: format), actorKeyword: actorKeyword.buildToken(), unexpectedBetweenActorKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5492,9 +5492,9 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodes?
-  let structKeyword: TokenSyntax
+  let structKeyword: Token
   let unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
   let genericParameterClause: GenericParameterClause?
   let unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
@@ -5521,7 +5521,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndStructKeyword: ExpressibleAsUnexpectedNodes? = nil, structKeyword: TokenSyntax = TokenSyntax.`struct`, unexpectedBetweenStructKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndStructKeyword: ExpressibleAsUnexpectedNodes? = nil, structKeyword: Token = Token.`struct`, unexpectedBetweenStructKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -5544,17 +5544,17 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndStructKeyword: ExpressibleAsUnexpectedNodes? = nil, structKeyword: TokenSyntax = TokenSyntax.`struct`, unexpectedBetweenStructKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndStructKeyword: ExpressibleAsUnexpectedNodes? = nil, structKeyword: Token = Token.`struct`, unexpectedBetweenStructKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
     MemberDeclList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndStructKeyword: unexpectedBetweenModifiersAndStructKeyword, structKeyword: structKeyword, unexpectedBetweenStructKeywordAndIdentifier: unexpectedBetweenStructKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndStructKeyword: unexpectedBetweenModifiersAndStructKeyword, structKeyword: structKeyword, unexpectedBetweenStructKeywordAndIdentifier: unexpectedBetweenStructKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndInheritanceClause: unexpectedBetweenGenericParameterClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
   /// Builds a `StructDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StructDeclSyntax`.
   func buildStructDecl(format: Format) -> StructDeclSyntax {
-    var result = StructDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndStructKeyword?.buildUnexpectedNodes(format: format), structKeyword: structKeyword, unexpectedBetweenStructKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    var result = StructDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndStructKeyword?.buildUnexpectedNodes(format: format), structKeyword: structKeyword.buildToken(), unexpectedBetweenStructKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5593,9 +5593,9 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodes?
-  let protocolKeyword: TokenSyntax
+  let protocolKeyword: Token
   let unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodes?
   let primaryAssociatedTypeClause: PrimaryAssociatedTypeClause?
   let unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodes?
@@ -5622,7 +5622,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndProtocolKeyword: ExpressibleAsUnexpectedNodes? = nil, protocolKeyword: TokenSyntax = TokenSyntax.`protocol`, unexpectedBetweenProtocolKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndProtocolKeyword: ExpressibleAsUnexpectedNodes? = nil, protocolKeyword: Token = Token.`protocol`, unexpectedBetweenProtocolKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -5645,17 +5645,17 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndProtocolKeyword: ExpressibleAsUnexpectedNodes? = nil, protocolKeyword: TokenSyntax = TokenSyntax.`protocol`, unexpectedBetweenProtocolKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndProtocolKeyword: ExpressibleAsUnexpectedNodes? = nil, protocolKeyword: Token = Token.`protocol`, unexpectedBetweenProtocolKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
     MemberDeclList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndProtocolKeyword: unexpectedBetweenModifiersAndProtocolKeyword, protocolKeyword: protocolKeyword, unexpectedBetweenProtocolKeywordAndIdentifier: unexpectedBetweenProtocolKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, primaryAssociatedTypeClause: primaryAssociatedTypeClause, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndProtocolKeyword: unexpectedBetweenModifiersAndProtocolKeyword, protocolKeyword: protocolKeyword, unexpectedBetweenProtocolKeywordAndIdentifier: unexpectedBetweenProtocolKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, primaryAssociatedTypeClause: primaryAssociatedTypeClause, unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
   /// Builds a `ProtocolDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ProtocolDeclSyntax`.
   func buildProtocolDecl(format: Format) -> ProtocolDeclSyntax {
-    var result = ProtocolDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndProtocolKeyword?.buildUnexpectedNodes(format: format), protocolKeyword: protocolKeyword, unexpectedBetweenProtocolKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.buildUnexpectedNodes(format: format), primaryAssociatedTypeClause: primaryAssociatedTypeClause?.buildPrimaryAssociatedTypeClause(format: format), unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    var result = ProtocolDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndProtocolKeyword?.buildUnexpectedNodes(format: format), protocolKeyword: protocolKeyword.buildToken(), unexpectedBetweenProtocolKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.buildUnexpectedNodes(format: format), primaryAssociatedTypeClause: primaryAssociatedTypeClause?.buildPrimaryAssociatedTypeClause(format: format), unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5694,7 +5694,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodes?
-  let extensionKeyword: TokenSyntax
+  let extensionKeyword: Token
   let unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodes?
   let extendedType: TypeBuildable
   let unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodes?
@@ -5719,7 +5719,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndMembers: 
   ///   - members: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndExtensionKeyword: ExpressibleAsUnexpectedNodes? = nil, extensionKeyword: TokenSyntax = TokenSyntax.`extension`, unexpectedBetweenExtensionKeywordAndExtendedType: ExpressibleAsUnexpectedNodes? = nil, extendedType: ExpressibleAsTypeBuildable, unexpectedBetweenExtendedTypeAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndExtensionKeyword: ExpressibleAsUnexpectedNodes? = nil, extensionKeyword: Token = Token.`extension`, unexpectedBetweenExtensionKeywordAndExtendedType: ExpressibleAsUnexpectedNodes? = nil, extendedType: ExpressibleAsTypeBuildable, unexpectedBetweenExtendedTypeAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -5740,7 +5740,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndExtensionKeyword: ExpressibleAsUnexpectedNodes? = nil, extensionKeyword: TokenSyntax = TokenSyntax.`extension`, unexpectedBetweenExtensionKeywordAndExtendedType: ExpressibleAsUnexpectedNodes? = nil, extendedType: ExpressibleAsTypeBuildable, unexpectedBetweenExtendedTypeAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndExtensionKeyword: ExpressibleAsUnexpectedNodes? = nil, extensionKeyword: Token = Token.`extension`, unexpectedBetweenExtensionKeywordAndExtendedType: ExpressibleAsUnexpectedNodes? = nil, extendedType: ExpressibleAsTypeBuildable, unexpectedBetweenExtendedTypeAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndExtensionKeyword: unexpectedBetweenModifiersAndExtensionKeyword, extensionKeyword: extensionKeyword, unexpectedBetweenExtensionKeywordAndExtendedType: unexpectedBetweenExtensionKeywordAndExtendedType, extendedType: extendedType, unexpectedBetweenExtendedTypeAndInheritanceClause: unexpectedBetweenExtendedTypeAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
@@ -5750,7 +5750,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExtensionDeclSyntax`.
   func buildExtensionDecl(format: Format) -> ExtensionDeclSyntax {
-    var result = ExtensionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndExtensionKeyword?.buildUnexpectedNodes(format: format), extensionKeyword: extensionKeyword, unexpectedBetweenExtensionKeywordAndExtendedType?.buildUnexpectedNodes(format: format), extendedType: extendedType.buildType(format: format), unexpectedBetweenExtendedTypeAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    var result = ExtensionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndExtensionKeyword?.buildUnexpectedNodes(format: format), extensionKeyword: extensionKeyword.buildToken(), unexpectedBetweenExtensionKeywordAndExtendedType?.buildUnexpectedNodes(format: format), extendedType: extendedType.buildType(format: format), unexpectedBetweenExtendedTypeAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5785,11 +5785,11 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: TokenSyntax
+  let leftBrace: Token
   let unexpectedBetweenLeftBraceAndMembers: UnexpectedNodes?
   let members: MemberDeclList
   let unexpectedBetweenMembersAndRightBrace: UnexpectedNodes?
-  let rightBrace: TokenSyntax
+  let rightBrace: Token
   /// Creates a `MemberDeclBlock` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -5798,7 +5798,7 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   ///   - members: 
   ///   - unexpectedBetweenMembersAndRightBrace: 
   ///   - rightBrace: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclList, unexpectedBetweenMembersAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclList, unexpectedBetweenMembersAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
@@ -5812,7 +5812,7 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndMembers: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenMembersAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndMembers: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenMembersAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
     MemberDeclList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftBrace: unexpectedBeforeLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndMembers: unexpectedBetweenLeftBraceAndMembers, members: membersBuilder(), unexpectedBetweenMembersAndRightBrace: unexpectedBetweenMembersAndRightBrace, rightBrace: rightBrace)
@@ -5822,7 +5822,7 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberDeclBlockSyntax`.
   func buildMemberDeclBlock(format: Format) -> MemberDeclBlockSyntax {
-    var result = MemberDeclBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace, unexpectedBetweenLeftBraceAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclList(format: format._indented), unexpectedBetweenMembersAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace)
+    var result = MemberDeclBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclList(format: format._indented), unexpectedBetweenMembersAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5853,14 +5853,14 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   let unexpectedBeforeDecl: UnexpectedNodes?
   let decl: DeclBuildable
   let unexpectedBetweenDeclAndSemicolon: UnexpectedNodes?
-  let semicolon: TokenSyntax?
+  let semicolon: Token?
   /// Creates a `MemberDeclListItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDecl: 
   ///   - decl: The declaration of the type member.
   ///   - unexpectedBetweenDeclAndSemicolon: 
   ///   - semicolon: An optional trailing semicolon.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDecl: ExpressibleAsUnexpectedNodes? = nil, decl: ExpressibleAsDeclBuildable, unexpectedBetweenDeclAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDecl: ExpressibleAsUnexpectedNodes? = nil, decl: ExpressibleAsDeclBuildable, unexpectedBetweenDeclAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDecl = unexpectedBeforeDecl?.createUnexpectedNodes()
     self.decl = decl.createDeclBuildable()
@@ -5873,7 +5873,7 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberDeclListItemSyntax`.
   func buildMemberDeclListItem(format: Format) -> MemberDeclListItemSyntax {
-    var result = MemberDeclListItemSyntax(unexpectedBeforeDecl?.buildUnexpectedNodes(format: format), decl: decl.buildDecl(format: format), unexpectedBetweenDeclAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon)
+    var result = MemberDeclListItemSyntax(unexpectedBeforeDecl?.buildUnexpectedNodes(format: format), decl: decl.buildDecl(format: format), unexpectedBetweenDeclAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5903,14 +5903,14 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   let unexpectedBeforeStatements: UnexpectedNodes?
   let statements: CodeBlockItemList
   let unexpectedBetweenStatementsAndEOFToken: UnexpectedNodes?
-  let eofToken: TokenSyntax
+  let eofToken: Token
   /// Creates a `SourceFile` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeStatements: 
   ///   - statements: 
   ///   - unexpectedBetweenStatementsAndEOFToken: 
   ///   - eofToken: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeStatements: ExpressibleAsUnexpectedNodes? = nil, statements: ExpressibleAsCodeBlockItemList, unexpectedBetweenStatementsAndEOFToken: ExpressibleAsUnexpectedNodes? = nil, eofToken: TokenSyntax = TokenSyntax.eof) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeStatements: ExpressibleAsUnexpectedNodes? = nil, statements: ExpressibleAsCodeBlockItemList, unexpectedBetweenStatementsAndEOFToken: ExpressibleAsUnexpectedNodes? = nil, eofToken: Token = Token.eof) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeStatements = unexpectedBeforeStatements?.createUnexpectedNodes()
     self.statements = statements.createCodeBlockItemList()
@@ -5920,7 +5920,7 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndEOFToken: ExpressibleAsUnexpectedNodes? = nil, eofToken: TokenSyntax = TokenSyntax.eof, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeStatements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenStatementsAndEOFToken: ExpressibleAsUnexpectedNodes? = nil, eofToken: Token = Token.eof, @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeStatements: unexpectedBeforeStatements, statements: statementsBuilder(), unexpectedBetweenStatementsAndEOFToken: unexpectedBetweenStatementsAndEOFToken, eofToken: eofToken)
@@ -5930,7 +5930,7 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SourceFileSyntax`.
   func buildSourceFile(format: Format) -> SourceFileSyntax {
-    var result = SourceFileSyntax(unexpectedBeforeStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format), unexpectedBetweenStatementsAndEOFToken?.buildUnexpectedNodes(format: format), eofToken: eofToken)
+    var result = SourceFileSyntax(unexpectedBeforeStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format), unexpectedBetweenStatementsAndEOFToken?.buildUnexpectedNodes(format: format), eofToken: eofToken.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -5958,7 +5958,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeEqual: UnexpectedNodes?
-  let equal: TokenSyntax
+  let equal: Token
   let unexpectedBetweenEqualAndValue: UnexpectedNodes?
   let value: ExprBuildable
   /// Creates a `InitializerClause` using the provided parameters.
@@ -5967,7 +5967,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   ///   - equal: 
   ///   - unexpectedBetweenEqualAndValue: 
   ///   - value: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeEqual: ExpressibleAsUnexpectedNodes? = nil, equal: TokenSyntax = TokenSyntax.`equal`, unexpectedBetweenEqualAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeEqual: ExpressibleAsUnexpectedNodes? = nil, equal: Token = Token.`equal`, unexpectedBetweenEqualAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeEqual = unexpectedBeforeEqual?.createUnexpectedNodes()
     self.equal = equal
@@ -5980,7 +5980,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InitializerClauseSyntax`.
   func buildInitializerClause(format: Format) -> InitializerClauseSyntax {
-    var result = InitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format), equal: equal, unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format), value: value.buildExpr(format: format))
+    var result = InitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format), equal: equal.buildToken(), unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format), value: value.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6010,19 +6010,19 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   let unexpectedBeforeAttributes: UnexpectedNodes?
   let attributes: AttributeList?
   let unexpectedBetweenAttributesAndFirstName: UnexpectedNodes?
-  let firstName: TokenSyntax?
+  let firstName: Token?
   let unexpectedBetweenFirstNameAndSecondName: UnexpectedNodes?
-  let secondName: TokenSyntax?
+  let secondName: Token?
   let unexpectedBetweenSecondNameAndColon: UnexpectedNodes?
-  let colon: TokenSyntax?
+  let colon: Token?
   let unexpectedBetweenColonAndType: UnexpectedNodes?
   let type: TypeBuildable?
   let unexpectedBetweenTypeAndEllipsis: UnexpectedNodes?
-  let ellipsis: TokenSyntax?
+  let ellipsis: Token?
   let unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodes?
   let defaultArgument: InitializerClause?
   let unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `FunctionParameter` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6041,7 +6041,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   ///   - defaultArgument: 
   ///   - unexpectedBetweenDefaultArgumentAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndFirstName: ExpressibleAsUnexpectedNodes? = nil, firstName: TokenSyntax? = nil, unexpectedBetweenFirstNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: TokenSyntax? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: TokenSyntax? = nil, unexpectedBetweenEllipsisAndDefaultArgument: ExpressibleAsUnexpectedNodes? = nil, defaultArgument: ExpressibleAsInitializerClause? = nil, unexpectedBetweenDefaultArgumentAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndFirstName: ExpressibleAsUnexpectedNodes? = nil, firstName: Token? = nil, unexpectedBetweenFirstNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: Token? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndDefaultArgument: ExpressibleAsUnexpectedNodes? = nil, defaultArgument: ExpressibleAsInitializerClause? = nil, unexpectedBetweenDefaultArgumentAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6068,7 +6068,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionParameterSyntax`.
   func buildFunctionParameter(format: Format) -> FunctionParameterSyntax {
-    var result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndFirstName?.buildUnexpectedNodes(format: format), firstName: firstName, unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName, unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis, unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format), defaultArgument: defaultArgument?.buildInitializerClause(format: format), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndFirstName?.buildUnexpectedNodes(format: format), firstName: firstName?.buildToken(), unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(), unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format), defaultArgument: defaultArgument?.buildInitializerClause(format: format), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6104,9 +6104,9 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodes?
-  let funcKeyword: TokenSyntax
+  let funcKeyword: Token
   let unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
   let genericParameterClause: GenericParameterClause?
   let unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes?
@@ -6133,7 +6133,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndFuncKeyword: ExpressibleAsUnexpectedNodes? = nil, funcKeyword: TokenSyntax = TokenSyntax.`func`, unexpectedBetweenFuncKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndFuncKeyword: ExpressibleAsUnexpectedNodes? = nil, funcKeyword: Token = Token.`func`, unexpectedBetweenFuncKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6156,7 +6156,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndFuncKeyword: ExpressibleAsUnexpectedNodes? = nil, funcKeyword: TokenSyntax = TokenSyntax.`func`, unexpectedBetweenFuncKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndFuncKeyword: ExpressibleAsUnexpectedNodes? = nil, funcKeyword: Token = Token.`func`, unexpectedBetweenFuncKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndFuncKeyword: unexpectedBetweenModifiersAndFuncKeyword, funcKeyword: funcKeyword, unexpectedBetweenFuncKeywordAndIdentifier: unexpectedBetweenFuncKeywordAndIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause: unexpectedBetweenIdentifierAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature: unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause: unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody: unexpectedBetweenGenericWhereClauseAndBody, body: bodyBuilder())
@@ -6166,7 +6166,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionDeclSyntax`.
   func buildFunctionDecl(format: Format) -> FunctionDeclSyntax {
-    var result = FunctionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndFuncKeyword?.buildUnexpectedNodes(format: format), funcKeyword: funcKeyword, unexpectedBetweenFuncKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format), signature: signature.buildFunctionSignature(format: format), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    var result = FunctionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndFuncKeyword?.buildUnexpectedNodes(format: format), funcKeyword: funcKeyword.buildToken(), unexpectedBetweenFuncKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format), signature: signature.buildFunctionSignature(format: format), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6205,9 +6205,9 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodes?
-  let initKeyword: TokenSyntax
+  let initKeyword: Token
   let unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodes?
-  let optionalMark: TokenSyntax?
+  let optionalMark: Token?
   let unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodes?
   let genericParameterClause: GenericParameterClause?
   let unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes?
@@ -6234,7 +6234,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndInitKeyword: ExpressibleAsUnexpectedNodes? = nil, initKeyword: TokenSyntax = TokenSyntax.`init`, unexpectedBetweenInitKeywordAndOptionalMark: ExpressibleAsUnexpectedNodes? = nil, optionalMark: TokenSyntax? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndInitKeyword: ExpressibleAsUnexpectedNodes? = nil, initKeyword: Token = Token.`init`, unexpectedBetweenInitKeywordAndOptionalMark: ExpressibleAsUnexpectedNodes? = nil, optionalMark: Token? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6258,7 +6258,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndInitKeyword: ExpressibleAsUnexpectedNodes? = nil, initKeyword: TokenSyntax = TokenSyntax.`init`, unexpectedBetweenInitKeywordAndOptionalMark: ExpressibleAsUnexpectedNodes? = nil, optionalMark: TokenSyntax? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndInitKeyword: ExpressibleAsUnexpectedNodes? = nil, initKeyword: Token = Token.`init`, unexpectedBetweenInitKeywordAndOptionalMark: ExpressibleAsUnexpectedNodes? = nil, optionalMark: Token? = nil, unexpectedBetweenOptionalMarkAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndSignature: ExpressibleAsUnexpectedNodes? = nil, signature: ExpressibleAsFunctionSignature, unexpectedBetweenSignatureAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndInitKeyword: unexpectedBetweenModifiersAndInitKeyword, initKeyword: initKeyword, unexpectedBetweenInitKeywordAndOptionalMark: unexpectedBetweenInitKeywordAndOptionalMark, optionalMark: optionalMark, unexpectedBetweenOptionalMarkAndGenericParameterClause: unexpectedBetweenOptionalMarkAndGenericParameterClause, genericParameterClause: genericParameterClause, unexpectedBetweenGenericParameterClauseAndSignature: unexpectedBetweenGenericParameterClauseAndSignature, signature: signature, unexpectedBetweenSignatureAndGenericWhereClause: unexpectedBetweenSignatureAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndBody: unexpectedBetweenGenericWhereClauseAndBody, body: bodyBuilder())
@@ -6268,7 +6268,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InitializerDeclSyntax`.
   func buildInitializerDecl(format: Format) -> InitializerDeclSyntax {
-    var result = InitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndInitKeyword?.buildUnexpectedNodes(format: format), initKeyword: initKeyword, unexpectedBetweenInitKeywordAndOptionalMark?.buildUnexpectedNodes(format: format), optionalMark: optionalMark, unexpectedBetweenOptionalMarkAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format), signature: signature.buildFunctionSignature(format: format), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    var result = InitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndInitKeyword?.buildUnexpectedNodes(format: format), initKeyword: initKeyword.buildToken(), unexpectedBetweenInitKeywordAndOptionalMark?.buildUnexpectedNodes(format: format), optionalMark: optionalMark?.buildToken(), unexpectedBetweenOptionalMarkAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format), signature: signature.buildFunctionSignature(format: format), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6307,7 +6307,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodes?
-  let deinitKeyword: TokenSyntax
+  let deinitKeyword: Token
   let unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodes?
   let body: CodeBlock?
   /// Creates a `DeinitializerDecl` using the provided parameters.
@@ -6320,7 +6320,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   ///   - deinitKeyword: 
   ///   - unexpectedBetweenDeinitKeywordAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndDeinitKeyword: ExpressibleAsUnexpectedNodes? = nil, deinitKeyword: TokenSyntax = TokenSyntax.`deinit`, unexpectedBetweenDeinitKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndDeinitKeyword: ExpressibleAsUnexpectedNodes? = nil, deinitKeyword: Token = Token.`deinit`, unexpectedBetweenDeinitKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6335,7 +6335,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndDeinitKeyword: ExpressibleAsUnexpectedNodes? = nil, deinitKeyword: TokenSyntax = TokenSyntax.`deinit`, unexpectedBetweenDeinitKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndDeinitKeyword: ExpressibleAsUnexpectedNodes? = nil, deinitKeyword: Token = Token.`deinit`, unexpectedBetweenDeinitKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndDeinitKeyword: unexpectedBetweenModifiersAndDeinitKeyword, deinitKeyword: deinitKeyword, unexpectedBetweenDeinitKeywordAndBody: unexpectedBetweenDeinitKeywordAndBody, body: bodyBuilder())
@@ -6345,7 +6345,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeinitializerDeclSyntax`.
   func buildDeinitializerDecl(format: Format) -> DeinitializerDeclSyntax {
-    var result = DeinitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndDeinitKeyword?.buildUnexpectedNodes(format: format), deinitKeyword: deinitKeyword, unexpectedBetweenDeinitKeywordAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    var result = DeinitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndDeinitKeyword?.buildUnexpectedNodes(format: format), deinitKeyword: deinitKeyword.buildToken(), unexpectedBetweenDeinitKeywordAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6384,7 +6384,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodes?
-  let subscriptKeyword: TokenSyntax
+  let subscriptKeyword: Token
   let unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodes?
   let genericParameterClause: GenericParameterClause?
   let unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodes?
@@ -6413,7 +6413,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   ///   - genericWhereClause: 
   ///   - unexpectedBetweenGenericWhereClauseAndAccessor: 
   ///   - accessor: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndSubscriptKeyword: ExpressibleAsUnexpectedNodes? = nil, subscriptKeyword: TokenSyntax = TokenSyntax.`subscript`, unexpectedBetweenSubscriptKeywordAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndIndices: ExpressibleAsUnexpectedNodes? = nil, indices: ExpressibleAsParameterClause, unexpectedBetweenIndicesAndResult: ExpressibleAsUnexpectedNodes? = nil, result: ExpressibleAsReturnClause, unexpectedBetweenResultAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndAccessor: ExpressibleAsUnexpectedNodes? = nil, accessor: ExpressibleAsSyntaxBuildable? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndSubscriptKeyword: ExpressibleAsUnexpectedNodes? = nil, subscriptKeyword: Token = Token.`subscript`, unexpectedBetweenSubscriptKeywordAndGenericParameterClause: ExpressibleAsUnexpectedNodes? = nil, genericParameterClause: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParameterClauseAndIndices: ExpressibleAsUnexpectedNodes? = nil, indices: ExpressibleAsParameterClause, unexpectedBetweenIndicesAndResult: ExpressibleAsUnexpectedNodes? = nil, result: ExpressibleAsReturnClause, unexpectedBetweenResultAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndAccessor: ExpressibleAsUnexpectedNodes? = nil, accessor: ExpressibleAsSyntaxBuildable? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6438,7 +6438,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SubscriptDeclSyntax`.
   func buildSubscriptDecl(format: Format) -> SubscriptDeclSyntax {
-    var result = SubscriptDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndSubscriptKeyword?.buildUnexpectedNodes(format: format), subscriptKeyword: subscriptKeyword, unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndIndices?.buildUnexpectedNodes(format: format), indices: indices.buildParameterClause(format: format), unexpectedBetweenIndicesAndResult?.buildUnexpectedNodes(format: format), result: result.buildReturnClause(format: format), unexpectedBetweenResultAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndAccessor?.buildUnexpectedNodes(format: format), accessor: accessor?.buildSyntax(format: format))
+    var result = SubscriptDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndSubscriptKeyword?.buildUnexpectedNodes(format: format), subscriptKeyword: subscriptKeyword.buildToken(), unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndIndices?.buildUnexpectedNodes(format: format), indices: indices.buildParameterClause(format: format), unexpectedBetweenIndicesAndResult?.buildUnexpectedNodes(format: format), result: result.buildReturnClause(format: format), unexpectedBetweenResultAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndAccessor?.buildUnexpectedNodes(format: format), accessor: accessor?.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6473,7 +6473,7 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndModifier: UnexpectedNodes?
   let modifier: DeclModifierDetail?
   /// Creates a `AccessLevelModifier` using the provided parameters.
@@ -6482,7 +6482,7 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   ///   - name: 
   ///   - unexpectedBetweenNameAndModifier: 
   ///   - modifier: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifierDetail? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifierDetail? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -6493,14 +6493,14 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifierDetail? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: TokenSyntax.`identifier`(name), unexpectedBetweenNameAndModifier: unexpectedBetweenNameAndModifier, modifier: modifier)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndModifier: unexpectedBetweenNameAndModifier, modifier: modifier)
   }
   /// Builds a `AccessLevelModifierSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessLevelModifierSyntax`.
   func buildAccessLevelModifier(format: Format) -> AccessLevelModifierSyntax {
-    var result = AccessLevelModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndModifier?.buildUnexpectedNodes(format: format), modifier: modifier?.buildDeclModifierDetail(format: format))
+    var result = AccessLevelModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndModifier?.buildUnexpectedNodes(format: format), modifier: modifier?.buildDeclModifierDetail(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6528,16 +6528,16 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndTrailingDot: UnexpectedNodes?
-  let trailingDot: TokenSyntax?
+  let trailingDot: Token?
   /// Creates a `AccessPathComponent` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
   ///   - name: 
   ///   - unexpectedBetweenNameAndTrailingDot: 
   ///   - trailingDot: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndTrailingDot: ExpressibleAsUnexpectedNodes? = nil, trailingDot: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndTrailingDot: ExpressibleAsUnexpectedNodes? = nil, trailingDot: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -6548,15 +6548,15 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingDot: ExpressibleAsUnexpectedNodes? = nil, trailingDot: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: TokenSyntax.`identifier`(name), unexpectedBetweenNameAndTrailingDot: unexpectedBetweenNameAndTrailingDot, trailingDot: trailingDot)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingDot: ExpressibleAsUnexpectedNodes? = nil, trailingDot: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndTrailingDot: unexpectedBetweenNameAndTrailingDot, trailingDot: trailingDot)
   }
   /// Builds a `AccessPathComponentSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessPathComponentSyntax`.
   func buildAccessPathComponent(format: Format) -> AccessPathComponentSyntax {
-    var result = AccessPathComponentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndTrailingDot?.buildUnexpectedNodes(format: format), trailingDot: trailingDot)
+    var result = AccessPathComponentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingDot?.buildUnexpectedNodes(format: format), trailingDot: trailingDot?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6588,9 +6588,9 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndImportTok: UnexpectedNodes?
-  let importTok: TokenSyntax
+  let importTok: Token
   let unexpectedBetweenImportTokAndImportKind: UnexpectedNodes?
-  let importKind: TokenSyntax?
+  let importKind: Token?
   let unexpectedBetweenImportKindAndPath: UnexpectedNodes?
   let path: AccessPath
   /// Creates a `ImportDecl` using the provided parameters.
@@ -6605,7 +6605,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   ///   - importKind: 
   ///   - unexpectedBetweenImportKindAndPath: 
   ///   - path: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndImportTok: ExpressibleAsUnexpectedNodes? = nil, importTok: TokenSyntax = TokenSyntax.`import`, unexpectedBetweenImportTokAndImportKind: ExpressibleAsUnexpectedNodes? = nil, importKind: TokenSyntax? = nil, unexpectedBetweenImportKindAndPath: ExpressibleAsUnexpectedNodes? = nil, path: ExpressibleAsAccessPath) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndImportTok: ExpressibleAsUnexpectedNodes? = nil, importTok: Token = Token.`import`, unexpectedBetweenImportTokAndImportKind: ExpressibleAsUnexpectedNodes? = nil, importKind: Token? = nil, unexpectedBetweenImportKindAndPath: ExpressibleAsUnexpectedNodes? = nil, path: ExpressibleAsAccessPath) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6625,7 +6625,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImportDeclSyntax`.
   func buildImportDecl(format: Format) -> ImportDeclSyntax {
-    var result = ImportDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndImportTok?.buildUnexpectedNodes(format: format), importTok: importTok, unexpectedBetweenImportTokAndImportKind?.buildUnexpectedNodes(format: format), importKind: importKind, unexpectedBetweenImportKindAndPath?.buildUnexpectedNodes(format: format), path: path.buildAccessPath(format: format))
+    var result = ImportDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndImportTok?.buildUnexpectedNodes(format: format), importTok: importTok.buildToken(), unexpectedBetweenImportTokAndImportKind?.buildUnexpectedNodes(format: format), importKind: importKind?.buildToken(), unexpectedBetweenImportKindAndPath?.buildUnexpectedNodes(format: format), path: path.buildAccessPath(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6660,11 +6660,11 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `AccessorParameter` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -6673,7 +6673,7 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   ///   - name: 
   ///   - unexpectedBetweenNameAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -6687,15 +6687,15 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndName: unexpectedBetweenLeftParenAndName, name: TokenSyntax.`identifier`(name), unexpectedBetweenNameAndRightParen: unexpectedBetweenNameAndRightParen, rightParen: rightParen)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndName: unexpectedBetweenLeftParenAndName, name: Token.`identifier`(name), unexpectedBetweenNameAndRightParen: unexpectedBetweenNameAndRightParen, rightParen: rightParen)
   }
   /// Builds a `AccessorParameterSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorParameterSyntax`.
   func buildAccessorParameter(format: Format) -> AccessorParameterSyntax {
-    var result = AccessorParameterSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = AccessorParameterSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6727,13 +6727,13 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   let unexpectedBetweenAttributesAndModifier: UnexpectedNodes?
   let modifier: DeclModifier?
   let unexpectedBetweenModifierAndAccessorKind: UnexpectedNodes?
-  let accessorKind: TokenSyntax
+  let accessorKind: Token
   let unexpectedBetweenAccessorKindAndParameter: UnexpectedNodes?
   let parameter: AccessorParameter?
   let unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: TokenSyntax?
+  let asyncKeyword: Token?
   let unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodes?
-  let throwsKeyword: TokenSyntax?
+  let throwsKeyword: Token?
   let unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodes?
   let body: CodeBlock?
   /// Creates a `AccessorDecl` using the provided parameters.
@@ -6752,7 +6752,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   ///   - throwsKeyword: 
   ///   - unexpectedBetweenThrowsKeywordAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifier? = nil, unexpectedBetweenModifierAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: TokenSyntax, unexpectedBetweenAccessorKindAndParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsAccessorParameter? = nil, unexpectedBetweenParameterAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: TokenSyntax? = nil, unexpectedBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsKeyword: TokenSyntax? = nil, unexpectedBetweenThrowsKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifier? = nil, unexpectedBetweenModifierAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: Token, unexpectedBetweenAccessorKindAndParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsAccessorParameter? = nil, unexpectedBetweenParameterAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: Token? = nil, unexpectedBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsKeyword: Token? = nil, unexpectedBetweenThrowsKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6775,11 +6775,11 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifier? = nil, unexpectedBetweenModifierAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: TokenSyntax, unexpectedBetweenAccessorKindAndParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsAccessorParameter? = nil, unexpectedBetweenParameterAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsKeyword: TokenSyntax? = nil, unexpectedBetweenThrowsKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifier: ExpressibleAsUnexpectedNodes? = nil, modifier: ExpressibleAsDeclModifier? = nil, unexpectedBetweenModifierAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: Token, unexpectedBetweenAccessorKindAndParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsAccessorParameter? = nil, unexpectedBetweenParameterAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: String?, unexpectedBetweenAsyncKeywordAndThrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsKeyword: Token? = nil, unexpectedBetweenThrowsKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? =  {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifier: unexpectedBetweenAttributesAndModifier, modifier: modifier, unexpectedBetweenModifierAndAccessorKind: unexpectedBetweenModifierAndAccessorKind, accessorKind: accessorKind, unexpectedBetweenAccessorKindAndParameter: unexpectedBetweenAccessorKindAndParameter, parameter: parameter, unexpectedBetweenParameterAndAsyncKeyword: unexpectedBetweenParameterAndAsyncKeyword, asyncKeyword: asyncKeyword.map {
-      TokenSyntax.`contextualKeyword`($0)
+      Token.`contextualKeyword`($0)
     }, unexpectedBetweenAsyncKeywordAndThrowsKeyword: unexpectedBetweenAsyncKeywordAndThrowsKeyword, throwsKeyword: throwsKeyword, unexpectedBetweenThrowsKeywordAndBody: unexpectedBetweenThrowsKeywordAndBody, body: bodyBuilder())
   }
   /// Builds a `AccessorDeclSyntax`.
@@ -6787,7 +6787,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorDeclSyntax`.
   func buildAccessorDecl(format: Format) -> AccessorDeclSyntax {
-    var result = AccessorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifier?.buildUnexpectedNodes(format: format), modifier: modifier?.buildDeclModifier(format: format), unexpectedBetweenModifierAndAccessorKind?.buildUnexpectedNodes(format: format), accessorKind: accessorKind, unexpectedBetweenAccessorKindAndParameter?.buildUnexpectedNodes(format: format), parameter: parameter?.buildAccessorParameter(format: format), unexpectedBetweenParameterAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsKeyword?.buildUnexpectedNodes(format: format), throwsKeyword: throwsKeyword, unexpectedBetweenThrowsKeywordAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    var result = AccessorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifier?.buildUnexpectedNodes(format: format), modifier: modifier?.buildDeclModifier(format: format), unexpectedBetweenModifierAndAccessorKind?.buildUnexpectedNodes(format: format), accessorKind: accessorKind.buildToken(), unexpectedBetweenAccessorKindAndParameter?.buildUnexpectedNodes(format: format), parameter: parameter?.buildAccessorParameter(format: format), unexpectedBetweenParameterAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsKeyword?.buildUnexpectedNodes(format: format), throwsKeyword: throwsKeyword?.buildToken(), unexpectedBetweenThrowsKeywordAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6822,11 +6822,11 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: TokenSyntax
+  let leftBrace: Token
   let unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodes?
   let accessors: AccessorList
   let unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodes?
-  let rightBrace: TokenSyntax
+  let rightBrace: Token
   /// Creates a `AccessorBlock` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -6835,7 +6835,7 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   ///   - accessors: 
   ///   - unexpectedBetweenAccessorsAndRightBrace: 
   ///   - rightBrace: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndAccessors: ExpressibleAsUnexpectedNodes? = nil, accessors: ExpressibleAsAccessorList, unexpectedBetweenAccessorsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndAccessors: ExpressibleAsUnexpectedNodes? = nil, accessors: ExpressibleAsAccessorList, unexpectedBetweenAccessorsAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftBrace = unexpectedBeforeLeftBrace?.createUnexpectedNodes()
     self.leftBrace = leftBrace
@@ -6851,7 +6851,7 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorBlockSyntax`.
   func buildAccessorBlock(format: Format) -> AccessorBlockSyntax {
-    var result = AccessorBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace, unexpectedBetweenLeftBraceAndAccessors?.buildUnexpectedNodes(format: format), accessors: accessors.buildAccessorList(format: format), unexpectedBetweenAccessorsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace)
+    var result = AccessorBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndAccessors?.buildUnexpectedNodes(format: format), accessors: accessors.buildAccessorList(format: format), unexpectedBetweenAccessorsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6887,7 +6887,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   let unexpectedBetweenInitializerAndAccessor: UnexpectedNodes?
   let accessor: SyntaxBuildable?
   let unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `PatternBinding` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -6900,7 +6900,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   ///   - accessor: 
   ///   - unexpectedBetweenAccessorAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause? = nil, unexpectedBetweenInitializerAndAccessor: ExpressibleAsUnexpectedNodes? = nil, accessor: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenAccessorAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause? = nil, unexpectedBetweenInitializerAndAccessor: ExpressibleAsUnexpectedNodes? = nil, accessor: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenAccessorAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePattern = unexpectedBeforePattern?.createUnexpectedNodes()
     self.pattern = pattern.createPatternBuildable()
@@ -6919,7 +6919,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PatternBindingSyntax`.
   func buildPatternBinding(format: Format) -> PatternBindingSyntax {
-    var result = PatternBindingSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format), unexpectedBetweenInitializerAndAccessor?.buildUnexpectedNodes(format: format), accessor: accessor?.buildSyntax(format: format), unexpectedBetweenAccessorAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = PatternBindingSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format), unexpectedBetweenInitializerAndAccessor?.buildUnexpectedNodes(format: format), accessor: accessor?.buildSyntax(format: format), unexpectedBetweenAccessorAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -6955,7 +6955,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodes?
-  let letOrVarKeyword: TokenSyntax
+  let letOrVarKeyword: Token
   let unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodes?
   let bindings: PatternBindingList
   /// Creates a `VariableDecl` using the provided parameters.
@@ -6968,7 +6968,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   ///   - letOrVarKeyword: 
   ///   - unexpectedBetweenLetOrVarKeywordAndBindings: 
   ///   - bindings: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: TokenSyntax, unexpectedBetweenLetOrVarKeywordAndBindings: ExpressibleAsUnexpectedNodes? = nil, bindings: ExpressibleAsPatternBindingList) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: Token, unexpectedBetweenLetOrVarKeywordAndBindings: ExpressibleAsUnexpectedNodes? = nil, bindings: ExpressibleAsPatternBindingList) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -6983,7 +6983,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: TokenSyntax, unexpectedBetweenLetOrVarKeywordAndBindings: ExpressibleAsUnexpectedNodes? = nil, @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: Token, unexpectedBetweenLetOrVarKeywordAndBindings: ExpressibleAsUnexpectedNodes? = nil, @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList =  {
     PatternBindingList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndLetOrVarKeyword: unexpectedBetweenModifiersAndLetOrVarKeyword, letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndBindings: unexpectedBetweenLetOrVarKeywordAndBindings, bindings: bindingsBuilder())
@@ -6993,7 +6993,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `VariableDeclSyntax`.
   func buildVariableDecl(format: Format) -> VariableDeclSyntax {
-    var result = VariableDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndBindings?.buildUnexpectedNodes(format: format), bindings: bindings.buildPatternBindingList(format: format))
+    var result = VariableDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndBindings?.buildUnexpectedNodes(format: format), bindings: bindings.buildPatternBindingList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7029,13 +7029,13 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodes?
   let associatedValue: ParameterClause?
   let unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodes?
   let rawValue: InitializerClause?
   let unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `EnumCaseElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -7046,7 +7046,7 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   ///   - rawValue: The raw value of this enum element, if present.
   ///   - unexpectedBetweenRawValueAndTrailingComma: 
   ///   - trailingComma: The trailing comma of this element, if the case hasmultiple elements.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndAssociatedValue: ExpressibleAsUnexpectedNodes? = nil, associatedValue: ExpressibleAsParameterClause? = nil, unexpectedBetweenAssociatedValueAndRawValue: ExpressibleAsUnexpectedNodes? = nil, rawValue: ExpressibleAsInitializerClause? = nil, unexpectedBetweenRawValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndAssociatedValue: ExpressibleAsUnexpectedNodes? = nil, associatedValue: ExpressibleAsParameterClause? = nil, unexpectedBetweenAssociatedValueAndRawValue: ExpressibleAsUnexpectedNodes? = nil, rawValue: ExpressibleAsInitializerClause? = nil, unexpectedBetweenRawValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIdentifier = unexpectedBeforeIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
@@ -7061,15 +7061,15 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndAssociatedValue: ExpressibleAsUnexpectedNodes? = nil, associatedValue: ExpressibleAsParameterClause? = nil, unexpectedBetweenAssociatedValueAndRawValue: ExpressibleAsUnexpectedNodes? = nil, rawValue: ExpressibleAsInitializerClause? = nil, unexpectedBetweenRawValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndAssociatedValue: unexpectedBetweenIdentifierAndAssociatedValue, associatedValue: associatedValue, unexpectedBetweenAssociatedValueAndRawValue: unexpectedBetweenAssociatedValueAndRawValue, rawValue: rawValue, unexpectedBetweenRawValueAndTrailingComma: unexpectedBetweenRawValueAndTrailingComma, trailingComma: trailingComma)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndAssociatedValue: ExpressibleAsUnexpectedNodes? = nil, associatedValue: ExpressibleAsParameterClause? = nil, unexpectedBetweenAssociatedValueAndRawValue: ExpressibleAsUnexpectedNodes? = nil, rawValue: ExpressibleAsInitializerClause? = nil, unexpectedBetweenRawValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndAssociatedValue: unexpectedBetweenIdentifierAndAssociatedValue, associatedValue: associatedValue, unexpectedBetweenAssociatedValueAndRawValue: unexpectedBetweenAssociatedValueAndRawValue, rawValue: rawValue, unexpectedBetweenRawValueAndTrailingComma: unexpectedBetweenRawValueAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `EnumCaseElementSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCaseElementSyntax`.
   func buildEnumCaseElement(format: Format) -> EnumCaseElementSyntax {
-    var result = EnumCaseElementSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndAssociatedValue?.buildUnexpectedNodes(format: format), associatedValue: associatedValue?.buildParameterClause(format: format), unexpectedBetweenAssociatedValueAndRawValue?.buildUnexpectedNodes(format: format), rawValue: rawValue?.buildInitializerClause(format: format), unexpectedBetweenRawValueAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = EnumCaseElementSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndAssociatedValue?.buildUnexpectedNodes(format: format), associatedValue: associatedValue?.buildParameterClause(format: format), unexpectedBetweenAssociatedValueAndRawValue?.buildUnexpectedNodes(format: format), rawValue: rawValue?.buildInitializerClause(format: format), unexpectedBetweenRawValueAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7106,7 +7106,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodes?
-  let caseKeyword: TokenSyntax
+  let caseKeyword: Token
   let unexpectedBetweenCaseKeywordAndElements: UnexpectedNodes?
   let elements: EnumCaseElementList
   /// Creates a `EnumCaseDecl` using the provided parameters.
@@ -7119,7 +7119,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   ///   - caseKeyword: The `case` keyword for this case.
   ///   - unexpectedBetweenCaseKeywordAndElements: 
   ///   - elements: The elements this case declares.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: TokenSyntax = TokenSyntax.`case`, unexpectedBetweenCaseKeywordAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsEnumCaseElementList) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsEnumCaseElementList) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -7134,7 +7134,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: TokenSyntax = TokenSyntax.`case`, unexpectedBetweenCaseKeywordAndElements: ExpressibleAsUnexpectedNodes? = nil, @EnumCaseElementListBuilder elementsBuilder: () -> ExpressibleAsEnumCaseElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndElements: ExpressibleAsUnexpectedNodes? = nil, @EnumCaseElementListBuilder elementsBuilder: () -> ExpressibleAsEnumCaseElementList =  {
     EnumCaseElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndCaseKeyword: unexpectedBetweenModifiersAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndElements: unexpectedBetweenCaseKeywordAndElements, elements: elementsBuilder())
@@ -7144,7 +7144,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCaseDeclSyntax`.
   func buildEnumCaseDecl(format: Format) -> EnumCaseDeclSyntax {
-    var result = EnumCaseDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildEnumCaseElementList(format: format))
+    var result = EnumCaseDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildEnumCaseElementList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7184,9 +7184,9 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodes?
-  let enumKeyword: TokenSyntax
+  let enumKeyword: Token
   let unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodes?
   let genericParameters: GenericParameterClause?
   let unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodes?
@@ -7213,7 +7213,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters ofthis enum.
   ///   - unexpectedBetweenGenericWhereClauseAndMembers: 
   ///   - members: The cases and other members of this enum.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndEnumKeyword: ExpressibleAsUnexpectedNodes? = nil, enumKeyword: TokenSyntax = TokenSyntax.`enum`, unexpectedBetweenEnumKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndEnumKeyword: ExpressibleAsUnexpectedNodes? = nil, enumKeyword: Token = Token.`enum`, unexpectedBetweenEnumKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, members: ExpressibleAsMemberDeclBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -7236,17 +7236,17 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndEnumKeyword: ExpressibleAsUnexpectedNodes? = nil, enumKeyword: TokenSyntax = TokenSyntax.`enum`, unexpectedBetweenEnumKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndEnumKeyword: ExpressibleAsUnexpectedNodes? = nil, enumKeyword: Token = Token.`enum`, unexpectedBetweenEnumKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause? = nil, unexpectedBetweenGenericParametersAndInheritanceClause: ExpressibleAsUnexpectedNodes? = nil, inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil, unexpectedBetweenInheritanceClauseAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndMembers: ExpressibleAsUnexpectedNodes? = nil, @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList =  {
     MemberDeclList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndEnumKeyword: unexpectedBetweenModifiersAndEnumKeyword, enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier: unexpectedBetweenEnumKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameters: unexpectedBetweenIdentifierAndGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndInheritanceClause: unexpectedBetweenGenericParametersAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndEnumKeyword: unexpectedBetweenModifiersAndEnumKeyword, enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier: unexpectedBetweenEnumKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndGenericParameters: unexpectedBetweenIdentifierAndGenericParameters, genericParameters: genericParameters, unexpectedBetweenGenericParametersAndInheritanceClause: unexpectedBetweenGenericParametersAndInheritanceClause, inheritanceClause: inheritanceClause, unexpectedBetweenInheritanceClauseAndGenericWhereClause: unexpectedBetweenInheritanceClauseAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndMembers: unexpectedBetweenGenericWhereClauseAndMembers, members: membersBuilder())
   }
   /// Builds a `EnumDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumDeclSyntax`.
   func buildEnumDecl(format: Format) -> EnumDeclSyntax {
-    var result = EnumDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndEnumKeyword?.buildUnexpectedNodes(format: format), enumKeyword: enumKeyword, unexpectedBetweenEnumKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndGenericParameters?.buildUnexpectedNodes(format: format), genericParameters: genericParameters?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParametersAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    var result = EnumDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndEnumKeyword?.buildUnexpectedNodes(format: format), enumKeyword: enumKeyword.buildToken(), unexpectedBetweenEnumKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameters?.buildUnexpectedNodes(format: format), genericParameters: genericParameters?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParametersAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7286,9 +7286,9 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodes?
-  let operatorKeyword: TokenSyntax
+  let operatorKeyword: Token
   let unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodes?
   let operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
   /// Creates a `OperatorDecl` using the provided parameters.
@@ -7303,7 +7303,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   ///   - identifier: 
   ///   - unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: 
   ///   - operatorPrecedenceAndTypes: Optionally specify a precedence group and designated types.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndOperatorKeyword: ExpressibleAsUnexpectedNodes? = nil, operatorKeyword: TokenSyntax = TokenSyntax.`operator`, unexpectedBetweenOperatorKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: ExpressibleAsUnexpectedNodes? = nil, operatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndOperatorKeyword: ExpressibleAsUnexpectedNodes? = nil, operatorKeyword: Token = Token.`operator`, unexpectedBetweenOperatorKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: ExpressibleAsUnexpectedNodes? = nil, operatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -7322,7 +7322,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorDeclSyntax`.
   func buildOperatorDecl(format: Format) -> OperatorDeclSyntax {
-    var result = OperatorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndOperatorKeyword?.buildUnexpectedNodes(format: format), operatorKeyword: operatorKeyword, unexpectedBetweenOperatorKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.buildUnexpectedNodes(format: format), operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format))
+    var result = OperatorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndOperatorKeyword?.buildUnexpectedNodes(format: format), operatorKeyword: operatorKeyword.buildToken(), unexpectedBetweenOperatorKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.buildUnexpectedNodes(format: format), operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7358,7 +7358,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodes?
   let precedenceGroupAndDesignatedTypes: IdentifierList
   /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
@@ -7367,7 +7367,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   ///   - colon: 
   ///   - unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: 
   ///   - precedenceGroupAndDesignatedTypes: The precedence group and designated types for this operator
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: ExpressibleAsUnexpectedNodes? = nil, precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: ExpressibleAsUnexpectedNodes? = nil, precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
@@ -7380,7 +7380,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
   func buildOperatorPrecedenceAndTypes(format: Format) -> OperatorPrecedenceAndTypesSyntax {
-    var result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildUnexpectedNodes(format: format), precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format))
+    var result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildUnexpectedNodes(format: format), precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7413,15 +7413,15 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
   let modifiers: ModifierList?
   let unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodes?
-  let precedencegroupKeyword: TokenSyntax
+  let precedencegroupKeyword: Token
   let unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   let unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodes?
-  let leftBrace: TokenSyntax
+  let leftBrace: Token
   let unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodes?
   let groupAttributes: PrecedenceGroupAttributeList
   let unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodes?
-  let rightBrace: TokenSyntax
+  let rightBrace: Token
   /// Creates a `PrecedenceGroupDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -7438,7 +7438,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   ///   - groupAttributes: The characteristics of this precedence group.
   ///   - unexpectedBetweenGroupAttributesAndRightBrace: 
   ///   - rightBrace: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndPrecedencegroupKeyword: ExpressibleAsUnexpectedNodes? = nil, precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax, unexpectedBetweenIdentifierAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndGroupAttributes: ExpressibleAsUnexpectedNodes? = nil, groupAttributes: ExpressibleAsPrecedenceGroupAttributeList, unexpectedBetweenGroupAttributesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndPrecedencegroupKeyword: ExpressibleAsUnexpectedNodes? = nil, precedencegroupKeyword: Token = Token.`precedencegroup`, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token, unexpectedBetweenIdentifierAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndGroupAttributes: ExpressibleAsUnexpectedNodes? = nil, groupAttributes: ExpressibleAsPrecedenceGroupAttributeList, unexpectedBetweenGroupAttributesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -7461,15 +7461,15 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndPrecedencegroupKeyword: ExpressibleAsUnexpectedNodes? = nil, precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndGroupAttributes: ExpressibleAsUnexpectedNodes? = nil, groupAttributes: ExpressibleAsPrecedenceGroupAttributeList, unexpectedBetweenGroupAttributesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndPrecedencegroupKeyword: unexpectedBetweenModifiersAndPrecedencegroupKeyword, precedencegroupKeyword: precedencegroupKeyword, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: unexpectedBetweenPrecedencegroupKeywordAndIdentifier, identifier: TokenSyntax.`identifier`(identifier), unexpectedBetweenIdentifierAndLeftBrace: unexpectedBetweenIdentifierAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndGroupAttributes: unexpectedBetweenLeftBraceAndGroupAttributes, groupAttributes: groupAttributes, unexpectedBetweenGroupAttributesAndRightBrace: unexpectedBetweenGroupAttributesAndRightBrace, rightBrace: rightBrace)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndModifiers: ExpressibleAsUnexpectedNodes? = nil, modifiers: ExpressibleAsModifierList? = nil, unexpectedBetweenModifiersAndPrecedencegroupKeyword: ExpressibleAsUnexpectedNodes? = nil, precedencegroupKeyword: Token = Token.`precedencegroup`, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: String, unexpectedBetweenIdentifierAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndGroupAttributes: ExpressibleAsUnexpectedNodes? = nil, groupAttributes: ExpressibleAsPrecedenceGroupAttributeList, unexpectedBetweenGroupAttributesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndModifiers: unexpectedBetweenAttributesAndModifiers, modifiers: modifiers, unexpectedBetweenModifiersAndPrecedencegroupKeyword: unexpectedBetweenModifiersAndPrecedencegroupKeyword, precedencegroupKeyword: precedencegroupKeyword, unexpectedBetweenPrecedencegroupKeywordAndIdentifier: unexpectedBetweenPrecedencegroupKeywordAndIdentifier, identifier: Token.`identifier`(identifier), unexpectedBetweenIdentifierAndLeftBrace: unexpectedBetweenIdentifierAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndGroupAttributes: unexpectedBetweenLeftBraceAndGroupAttributes, groupAttributes: groupAttributes, unexpectedBetweenGroupAttributesAndRightBrace: unexpectedBetweenGroupAttributesAndRightBrace, rightBrace: rightBrace)
   }
   /// Builds a `PrecedenceGroupDeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupDeclSyntax`.
   func buildPrecedenceGroupDecl(format: Format) -> PrecedenceGroupDeclSyntax {
-    var result = PrecedenceGroupDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndPrecedencegroupKeyword?.buildUnexpectedNodes(format: format), precedencegroupKeyword: precedencegroupKeyword, unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier, unexpectedBetweenIdentifierAndLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace, unexpectedBetweenLeftBraceAndGroupAttributes?.buildUnexpectedNodes(format: format), groupAttributes: groupAttributes.buildPrecedenceGroupAttributeList(format: format), unexpectedBetweenGroupAttributesAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace)
+    var result = PrecedenceGroupDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndPrecedencegroupKeyword?.buildUnexpectedNodes(format: format), precedencegroupKeyword: precedencegroupKeyword.buildToken(), unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndGroupAttributes?.buildUnexpectedNodes(format: format), groupAttributes: groupAttributes.buildPrecedenceGroupAttributeList(format: format), unexpectedBetweenGroupAttributesAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7505,9 +7505,9 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodes?
-  let higherThanOrLowerThan: TokenSyntax
+  let higherThanOrLowerThan: Token
   let unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndOtherNames: UnexpectedNodes?
   let otherNames: PrecedenceGroupNameList
   /// Creates a `PrecedenceGroupRelation` using the provided parameters.
@@ -7518,7 +7518,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   ///   - colon: 
   ///   - unexpectedBetweenColonAndOtherNames: 
   ///   - otherNames: The name of other precedence group to which this precedencegroup relates.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeHigherThanOrLowerThan: ExpressibleAsUnexpectedNodes? = nil, higherThanOrLowerThan: TokenSyntax, unexpectedBetweenHigherThanOrLowerThanAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndOtherNames: ExpressibleAsUnexpectedNodes? = nil, otherNames: ExpressibleAsPrecedenceGroupNameList) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeHigherThanOrLowerThan: ExpressibleAsUnexpectedNodes? = nil, higherThanOrLowerThan: Token, unexpectedBetweenHigherThanOrLowerThanAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndOtherNames: ExpressibleAsUnexpectedNodes? = nil, otherNames: ExpressibleAsPrecedenceGroupNameList) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeHigherThanOrLowerThan = unexpectedBeforeHigherThanOrLowerThan?.createUnexpectedNodes()
     self.higherThanOrLowerThan = higherThanOrLowerThan
@@ -7532,15 +7532,15 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeHigherThanOrLowerThan: ExpressibleAsUnexpectedNodes? = nil, higherThanOrLowerThan: String, unexpectedBetweenHigherThanOrLowerThanAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndOtherNames: ExpressibleAsUnexpectedNodes? = nil, otherNames: ExpressibleAsPrecedenceGroupNameList) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeHigherThanOrLowerThan: unexpectedBeforeHigherThanOrLowerThan, higherThanOrLowerThan: TokenSyntax.`identifier`(higherThanOrLowerThan), unexpectedBetweenHigherThanOrLowerThanAndColon: unexpectedBetweenHigherThanOrLowerThanAndColon, colon: colon, unexpectedBetweenColonAndOtherNames: unexpectedBetweenColonAndOtherNames, otherNames: otherNames)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeHigherThanOrLowerThan: ExpressibleAsUnexpectedNodes? = nil, higherThanOrLowerThan: String, unexpectedBetweenHigherThanOrLowerThanAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndOtherNames: ExpressibleAsUnexpectedNodes? = nil, otherNames: ExpressibleAsPrecedenceGroupNameList) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeHigherThanOrLowerThan: unexpectedBeforeHigherThanOrLowerThan, higherThanOrLowerThan: Token.`identifier`(higherThanOrLowerThan), unexpectedBetweenHigherThanOrLowerThanAndColon: unexpectedBetweenHigherThanOrLowerThanAndColon, colon: colon, unexpectedBetweenColonAndOtherNames: unexpectedBetweenColonAndOtherNames, otherNames: otherNames)
   }
   /// Builds a `PrecedenceGroupRelationSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupRelationSyntax`.
   func buildPrecedenceGroupRelation(format: Format) -> PrecedenceGroupRelationSyntax {
-    var result = PrecedenceGroupRelationSyntax(unexpectedBeforeHigherThanOrLowerThan?.buildUnexpectedNodes(format: format), higherThanOrLowerThan: higherThanOrLowerThan, unexpectedBetweenHigherThanOrLowerThanAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndOtherNames?.buildUnexpectedNodes(format: format), otherNames: otherNames.buildPrecedenceGroupNameList(format: format))
+    var result = PrecedenceGroupRelationSyntax(unexpectedBeforeHigherThanOrLowerThan?.buildUnexpectedNodes(format: format), higherThanOrLowerThan: higherThanOrLowerThan.buildToken(), unexpectedBetweenHigherThanOrLowerThanAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndOtherNames?.buildUnexpectedNodes(format: format), otherNames: otherNames.buildPrecedenceGroupNameList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7568,16 +7568,16 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `PrecedenceGroupNameElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
   ///   - name: 
   ///   - unexpectedBetweenNameAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -7588,15 +7588,15 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: TokenSyntax.`identifier`(name), unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `PrecedenceGroupNameElementSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupNameElementSyntax`.
   func buildPrecedenceGroupNameElement(format: Format) -> PrecedenceGroupNameElementSyntax {
-    var result = PrecedenceGroupNameElementSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = PrecedenceGroupNameElementSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7625,11 +7625,11 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAssignmentKeyword: UnexpectedNodes?
-  let assignmentKeyword: TokenSyntax
+  let assignmentKeyword: Token
   let unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndFlag: UnexpectedNodes?
-  let flag: TokenSyntax
+  let flag: Token
   /// Creates a `PrecedenceGroupAssignment` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAssignmentKeyword: 
@@ -7638,7 +7638,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   ///   - colon: 
   ///   - unexpectedBetweenColonAndFlag: 
   ///   - flag: When true, an operator in the corresponding precedence groupuses the same grouping rules during optional chaining as theassignment operators from the standard library. Otherwise,operators in the precedence group follows the same optionalchaining rules as operators that don't perform assignment.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssignmentKeyword: ExpressibleAsUnexpectedNodes? = nil, assignmentKeyword: TokenSyntax, unexpectedBetweenAssignmentKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndFlag: ExpressibleAsUnexpectedNodes? = nil, flag: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssignmentKeyword: ExpressibleAsUnexpectedNodes? = nil, assignmentKeyword: Token, unexpectedBetweenAssignmentKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndFlag: ExpressibleAsUnexpectedNodes? = nil, flag: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAssignmentKeyword = unexpectedBeforeAssignmentKeyword?.createUnexpectedNodes()
     self.assignmentKeyword = assignmentKeyword
@@ -7653,15 +7653,15 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssignmentKeyword: ExpressibleAsUnexpectedNodes? = nil, assignmentKeyword: String, unexpectedBetweenAssignmentKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndFlag: ExpressibleAsUnexpectedNodes? = nil, flag: TokenSyntax) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAssignmentKeyword: unexpectedBeforeAssignmentKeyword, assignmentKeyword: TokenSyntax.`identifier`(assignmentKeyword), unexpectedBetweenAssignmentKeywordAndColon: unexpectedBetweenAssignmentKeywordAndColon, colon: colon, unexpectedBetweenColonAndFlag: unexpectedBetweenColonAndFlag, flag: flag)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssignmentKeyword: ExpressibleAsUnexpectedNodes? = nil, assignmentKeyword: String, unexpectedBetweenAssignmentKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndFlag: ExpressibleAsUnexpectedNodes? = nil, flag: Token) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAssignmentKeyword: unexpectedBeforeAssignmentKeyword, assignmentKeyword: Token.`identifier`(assignmentKeyword), unexpectedBetweenAssignmentKeywordAndColon: unexpectedBetweenAssignmentKeywordAndColon, colon: colon, unexpectedBetweenColonAndFlag: unexpectedBetweenColonAndFlag, flag: flag)
   }
   /// Builds a `PrecedenceGroupAssignmentSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupAssignmentSyntax`.
   func buildPrecedenceGroupAssignment(format: Format) -> PrecedenceGroupAssignmentSyntax {
-    var result = PrecedenceGroupAssignmentSyntax(unexpectedBeforeAssignmentKeyword?.buildUnexpectedNodes(format: format), assignmentKeyword: assignmentKeyword, unexpectedBetweenAssignmentKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndFlag?.buildUnexpectedNodes(format: format), flag: flag)
+    var result = PrecedenceGroupAssignmentSyntax(unexpectedBeforeAssignmentKeyword?.buildUnexpectedNodes(format: format), assignmentKeyword: assignmentKeyword.buildToken(), unexpectedBetweenAssignmentKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndFlag?.buildUnexpectedNodes(format: format), flag: flag.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7690,11 +7690,11 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAssociativityKeyword: UnexpectedNodes?
-  let associativityKeyword: TokenSyntax
+  let associativityKeyword: Token
   let unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndValue: UnexpectedNodes?
-  let value: TokenSyntax
+  let value: Token
   /// Creates a `PrecedenceGroupAssociativity` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAssociativityKeyword: 
@@ -7703,7 +7703,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   ///   - colon: 
   ///   - unexpectedBetweenColonAndValue: 
   ///   - value: Operators that are `left`-associative group left-to-right.Operators that are `right`-associative group right-to-left.Operators that are specified with an associativity of `none`don't associate at all
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssociativityKeyword: ExpressibleAsUnexpectedNodes? = nil, associativityKeyword: TokenSyntax, unexpectedBetweenAssociativityKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssociativityKeyword: ExpressibleAsUnexpectedNodes? = nil, associativityKeyword: Token, unexpectedBetweenAssociativityKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAssociativityKeyword = unexpectedBeforeAssociativityKeyword?.createUnexpectedNodes()
     self.associativityKeyword = associativityKeyword
@@ -7718,15 +7718,15 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssociativityKeyword: ExpressibleAsUnexpectedNodes? = nil, associativityKeyword: String, unexpectedBetweenAssociativityKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAssociativityKeyword: unexpectedBeforeAssociativityKeyword, associativityKeyword: TokenSyntax.`identifier`(associativityKeyword), unexpectedBetweenAssociativityKeywordAndColon: unexpectedBetweenAssociativityKeywordAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: TokenSyntax.`identifier`(value))
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAssociativityKeyword: ExpressibleAsUnexpectedNodes? = nil, associativityKeyword: String, unexpectedBetweenAssociativityKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: String) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAssociativityKeyword: unexpectedBeforeAssociativityKeyword, associativityKeyword: Token.`identifier`(associativityKeyword), unexpectedBetweenAssociativityKeywordAndColon: unexpectedBetweenAssociativityKeywordAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: Token.`identifier`(value))
   }
   /// Builds a `PrecedenceGroupAssociativitySyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupAssociativitySyntax`.
   func buildPrecedenceGroupAssociativity(format: Format) -> PrecedenceGroupAssociativitySyntax {
-    var result = PrecedenceGroupAssociativitySyntax(unexpectedBeforeAssociativityKeyword?.buildUnexpectedNodes(format: format), associativityKeyword: associativityKeyword, unexpectedBetweenAssociativityKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value)
+    var result = PrecedenceGroupAssociativitySyntax(unexpectedBeforeAssociativityKeyword?.buildUnexpectedNodes(format: format), associativityKeyword: associativityKeyword.buildToken(), unexpectedBetweenAssociativityKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7755,15 +7755,15 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAtSignToken: UnexpectedNodes?
-  let atSignToken: TokenSyntax
+  let atSignToken: Token
   let unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodes?
   let attributeName: TypeBuildable
   let unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax?
+  let leftParen: Token?
   let unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes?
   let argumentList: TupleExprElementList?
   let unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax?
+  let rightParen: Token?
   /// Creates a `CustomAttribute` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAtSignToken: 
@@ -7776,7 +7776,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   ///   - argumentList: 
   ///   - unexpectedBetweenArgumentListAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: TokenSyntax = TokenSyntax.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: ExpressibleAsTypeBuildable, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, argumentList: ExpressibleAsTupleExprElementList? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: Token = Token.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: ExpressibleAsTypeBuildable, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, argumentList: ExpressibleAsTupleExprElementList? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAtSignToken = unexpectedBeforeAtSignToken?.createUnexpectedNodes()
     self.atSignToken = atSignToken
@@ -7795,7 +7795,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: TokenSyntax = TokenSyntax.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: ExpressibleAsTypeBuildable, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList? =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: Token = Token.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: ExpressibleAsTypeBuildable, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgumentList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentListAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList? =  {
     nil
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAtSignToken: unexpectedBeforeAtSignToken, atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName: unexpectedBetweenAtSignTokenAndAttributeName, attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen: unexpectedBetweenAttributeNameAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList: unexpectedBetweenLeftParenAndArgumentList, argumentList: argumentListBuilder(), unexpectedBetweenArgumentListAndRightParen: unexpectedBetweenArgumentListAndRightParen, rightParen: rightParen)
@@ -7805,7 +7805,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CustomAttributeSyntax`.
   func buildCustomAttribute(format: Format) -> CustomAttributeSyntax {
-    var result = CustomAttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format), atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format), attributeName: attributeName.buildType(format: format), unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList?.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = CustomAttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format), atSignToken: atSignToken.buildToken(), unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format), attributeName: attributeName.buildType(format: format), unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList?.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7834,15 +7834,15 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeAtSignToken: UnexpectedNodes?
-  let atSignToken: TokenSyntax
+  let atSignToken: Token
   let unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodes?
-  let attributeName: TokenSyntax
+  let attributeName: Token
   let unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax?
+  let leftParen: Token?
   let unexpectedBetweenLeftParenAndArgument: UnexpectedNodes?
   let argument: SyntaxBuildable?
   let unexpectedBetweenArgumentAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax?
+  let rightParen: Token?
   let unexpectedBetweenRightParenAndTokenList: UnexpectedNodes?
   let tokenList: TokenList?
   /// Creates a `Attribute` using the provided parameters.
@@ -7859,7 +7859,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   ///   - rightParen: If the attribute takes arguments, the closing parenthesis.
   ///   - unexpectedBetweenRightParenAndTokenList: 
   ///   - tokenList: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: TokenSyntax = TokenSyntax.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: TokenSyntax, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndArgument: ExpressibleAsUnexpectedNodes? = nil, argument: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenArgumentAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax? = nil, unexpectedBetweenRightParenAndTokenList: ExpressibleAsUnexpectedNodes? = nil, tokenList: ExpressibleAsTokenList? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAtSignToken: ExpressibleAsUnexpectedNodes? = nil, atSignToken: Token = Token.`atSign`, unexpectedBetweenAtSignTokenAndAttributeName: ExpressibleAsUnexpectedNodes? = nil, attributeName: Token, unexpectedBetweenAttributeNameAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndArgument: ExpressibleAsUnexpectedNodes? = nil, argument: ExpressibleAsSyntaxBuildable? = nil, unexpectedBetweenArgumentAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil, unexpectedBetweenRightParenAndTokenList: ExpressibleAsUnexpectedNodes? = nil, tokenList: ExpressibleAsTokenList? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAtSignToken = unexpectedBeforeAtSignToken?.createUnexpectedNodes()
     self.atSignToken = atSignToken
@@ -7882,7 +7882,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AttributeSyntax`.
   func buildAttribute(format: Format) -> AttributeSyntax {
-    var result = AttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format), atSignToken: atSignToken, unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format), attributeName: attributeName, unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndArgument?.buildUnexpectedNodes(format: format), argument: argument?.buildSyntax(format: format), unexpectedBetweenArgumentAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen, unexpectedBetweenRightParenAndTokenList?.buildUnexpectedNodes(format: format), tokenList: tokenList?.buildTokenList(format: format))
+    var result = AttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format), atSignToken: atSignToken.buildToken(), unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format), attributeName: attributeName.buildToken(), unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgument?.buildUnexpectedNodes(format: format), argument: argument?.buildSyntax(format: format), unexpectedBetweenArgumentAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken(), unexpectedBetweenRightParenAndTokenList?.buildUnexpectedNodes(format: format), tokenList: tokenList?.buildTokenList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7911,13 +7911,13 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: TokenSyntax
+  let label: Token
   let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndAvailabilityList: UnexpectedNodes?
   let availabilityList: AvailabilitySpecList
   let unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodes?
-  let semicolon: TokenSyntax
+  let semicolon: Token
   /// Creates a `AvailabilityEntry` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -7928,7 +7928,7 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   ///   - availabilityList: 
   ///   - unexpectedBetweenAvailabilityListAndSemicolon: 
   ///   - semicolon: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndAvailabilityList: ExpressibleAsUnexpectedNodes? = nil, availabilityList: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilityListAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: TokenSyntax = TokenSyntax.`semicolon`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndAvailabilityList: ExpressibleAsUnexpectedNodes? = nil, availabilityList: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilityListAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: Token = Token.`semicolon`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabel = unexpectedBeforeLabel?.createUnexpectedNodes()
     self.label = label
@@ -7944,15 +7944,15 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndAvailabilityList: ExpressibleAsUnexpectedNodes? = nil, availabilityList: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilityListAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: TokenSyntax = TokenSyntax.`semicolon`) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: TokenSyntax.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndAvailabilityList: unexpectedBetweenColonAndAvailabilityList, availabilityList: availabilityList, unexpectedBetweenAvailabilityListAndSemicolon: unexpectedBetweenAvailabilityListAndSemicolon, semicolon: semicolon)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndAvailabilityList: ExpressibleAsUnexpectedNodes? = nil, availabilityList: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilityListAndSemicolon: ExpressibleAsUnexpectedNodes? = nil, semicolon: Token = Token.`semicolon`) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndAvailabilityList: unexpectedBetweenColonAndAvailabilityList, availabilityList: availabilityList, unexpectedBetweenAvailabilityListAndSemicolon: unexpectedBetweenAvailabilityListAndSemicolon, semicolon: semicolon)
   }
   /// Builds a `AvailabilityEntrySyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityEntrySyntax`.
   func buildAvailabilityEntry(format: Format) -> AvailabilityEntrySyntax {
-    var result = AvailabilityEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label, unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndAvailabilityList?.buildUnexpectedNodes(format: format), availabilityList: availabilityList.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilityListAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon)
+    var result = AvailabilityEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndAvailabilityList?.buildUnexpectedNodes(format: format), availabilityList: availabilityList.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilityListAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -7981,13 +7981,13 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: TokenSyntax
+  let label: Token
   let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndValue: UnexpectedNodes?
-  let value: TokenSyntax
+  let value: Token
   let unexpectedBetweenValueAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `LabeledSpecializeEntry` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -7998,7 +7998,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   ///   - value: The value for this argument
   ///   - unexpectedBetweenValueAndTrailingComma: 
   ///   - trailingComma: A trailing comma if this argument is followed by another one
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: TokenSyntax, unexpectedBetweenValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: Token, unexpectedBetweenValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabel = unexpectedBeforeLabel?.createUnexpectedNodes()
     self.label = label
@@ -8014,15 +8014,15 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: TokenSyntax, unexpectedBetweenValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: TokenSyntax.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma: unexpectedBetweenValueAndTrailingComma, trailingComma: trailingComma)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: Token, unexpectedBetweenValueAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma: unexpectedBetweenValueAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `LabeledSpecializeEntrySyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LabeledSpecializeEntrySyntax`.
   func buildLabeledSpecializeEntry(format: Format) -> LabeledSpecializeEntrySyntax {
-    var result = LabeledSpecializeEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label, unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value, unexpectedBetweenValueAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = LabeledSpecializeEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value.buildToken(), unexpectedBetweenValueAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8055,13 +8055,13 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: TokenSyntax
+  let label: Token
   let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndDeclname: UnexpectedNodes?
   let declname: DeclName
   let unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `TargetFunctionEntry` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -8072,7 +8072,7 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   ///   - declname: The value for this argument
   ///   - unexpectedBetweenDeclnameAndTrailingComma: 
   ///   - trailingComma: A trailing comma if this argument is followed by another one
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndDeclname: ExpressibleAsUnexpectedNodes? = nil, declname: ExpressibleAsDeclName, unexpectedBetweenDeclnameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndDeclname: ExpressibleAsUnexpectedNodes? = nil, declname: ExpressibleAsDeclName, unexpectedBetweenDeclnameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabel = unexpectedBeforeLabel?.createUnexpectedNodes()
     self.label = label
@@ -8088,15 +8088,15 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndDeclname: ExpressibleAsUnexpectedNodes? = nil, declname: ExpressibleAsDeclName, unexpectedBetweenDeclnameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: TokenSyntax.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname: unexpectedBetweenColonAndDeclname, declname: declname, unexpectedBetweenDeclnameAndTrailingComma: unexpectedBetweenDeclnameAndTrailingComma, trailingComma: trailingComma)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndDeclname: ExpressibleAsUnexpectedNodes? = nil, declname: ExpressibleAsDeclName, unexpectedBetweenDeclnameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname: unexpectedBetweenColonAndDeclname, declname: declname, unexpectedBetweenDeclnameAndTrailingComma: unexpectedBetweenDeclnameAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `TargetFunctionEntrySyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TargetFunctionEntrySyntax`.
   func buildTargetFunctionEntry(format: Format) -> TargetFunctionEntrySyntax {
-    var result = TargetFunctionEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label, unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndDeclname?.buildUnexpectedNodes(format: format), declname: declname.buildDeclName(format: format), unexpectedBetweenDeclnameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = TargetFunctionEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndDeclname?.buildUnexpectedNodes(format: format), declname: declname.buildDeclName(format: format), unexpectedBetweenDeclnameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8129,9 +8129,9 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeNameTok: UnexpectedNodes?
-  let nameTok: TokenSyntax
+  let nameTok: Token
   let unexpectedBetweenNameTokAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodes?
   let stringOrDeclname: SyntaxBuildable
   /// Creates a `NamedAttributeStringArgument` using the provided parameters.
@@ -8142,7 +8142,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   ///   - colon: The colon separating the label and the value
   ///   - unexpectedBetweenColonAndStringOrDeclname: 
   ///   - stringOrDeclname: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeNameTok: ExpressibleAsUnexpectedNodes? = nil, nameTok: TokenSyntax, unexpectedBetweenNameTokAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndStringOrDeclname: ExpressibleAsUnexpectedNodes? = nil, stringOrDeclname: ExpressibleAsSyntaxBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeNameTok: ExpressibleAsUnexpectedNodes? = nil, nameTok: Token, unexpectedBetweenNameTokAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndStringOrDeclname: ExpressibleAsUnexpectedNodes? = nil, stringOrDeclname: ExpressibleAsSyntaxBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeNameTok = unexpectedBeforeNameTok?.createUnexpectedNodes()
     self.nameTok = nameTok
@@ -8157,7 +8157,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `NamedAttributeStringArgumentSyntax`.
   func buildNamedAttributeStringArgument(format: Format) -> NamedAttributeStringArgumentSyntax {
-    var result = NamedAttributeStringArgumentSyntax(unexpectedBeforeNameTok?.buildUnexpectedNodes(format: format), nameTok: nameTok, unexpectedBetweenNameTokAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndStringOrDeclname?.buildUnexpectedNodes(format: format), stringOrDeclname: stringOrDeclname.buildSyntax(format: format))
+    var result = NamedAttributeStringArgumentSyntax(unexpectedBeforeNameTok?.buildUnexpectedNodes(format: format), nameTok: nameTok.buildToken(), unexpectedBetweenNameTokAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndStringOrDeclname?.buildUnexpectedNodes(format: format), stringOrDeclname: stringOrDeclname.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8237,7 +8237,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   let unexpectedBeforeType: UnexpectedNodes?
   let type: SimpleTypeIdentifier
   let unexpectedBetweenTypeAndComma: UnexpectedNodes?
-  let comma: TokenSyntax
+  let comma: Token
   let unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodes?
   let declBaseName: SyntaxBuildable
   let unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes?
@@ -8252,7 +8252,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   ///   - declBaseName: The base name of the protocol's requirement.
   ///   - unexpectedBetweenDeclBaseNameAndDeclNameArguments: 
   ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsSimpleTypeIdentifier, unexpectedBetweenTypeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax = TokenSyntax.`comma`, unexpectedBetweenCommaAndDeclBaseName: ExpressibleAsUnexpectedNodes? = nil, declBaseName: ExpressibleAsSyntaxBuildable, unexpectedBetweenDeclBaseNameAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsSimpleTypeIdentifier, unexpectedBetweenTypeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndDeclBaseName: ExpressibleAsUnexpectedNodes? = nil, declBaseName: ExpressibleAsSyntaxBuildable, unexpectedBetweenDeclBaseNameAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeType = unexpectedBeforeType?.createUnexpectedNodes()
     self.type = type.createSimpleTypeIdentifier()
@@ -8269,7 +8269,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImplementsAttributeArgumentsSyntax`.
   func buildImplementsAttributeArguments(format: Format) -> ImplementsAttributeArgumentsSyntax {
-    var result = ImplementsAttributeArgumentsSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildSimpleTypeIdentifier(format: format), unexpectedBetweenTypeAndComma?.buildUnexpectedNodes(format: format), comma: comma, unexpectedBetweenCommaAndDeclBaseName?.buildUnexpectedNodes(format: format), declBaseName: declBaseName.buildSyntax(format: format), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    var result = ImplementsAttributeArgumentsSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildSimpleTypeIdentifier(format: format), unexpectedBetweenTypeAndComma?.buildUnexpectedNodes(format: format), comma: comma.buildToken(), unexpectedBetweenCommaAndDeclBaseName?.buildUnexpectedNodes(format: format), declBaseName: declBaseName.buildSyntax(format: format), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8298,16 +8298,16 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax?
+  let name: Token?
   let unexpectedBetweenNameAndColon: UnexpectedNodes?
-  let colon: TokenSyntax?
+  let colon: Token?
   /// Creates a `ObjCSelectorPiece` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
   ///   - name: 
   ///   - unexpectedBetweenNameAndColon: 
   ///   - colon: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax? = nil, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token? = nil, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -8318,9 +8318,9 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String?, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String?, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: name.map {
-      TokenSyntax.`identifier`($0)
+      Token.`identifier`($0)
     }, unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon, colon: colon)
   }
   /// Builds a `ObjCSelectorPieceSyntax`.
@@ -8328,7 +8328,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjCSelectorPieceSyntax`.
   func buildObjCSelectorPiece(format: Format) -> ObjCSelectorPieceSyntax {
-    var result = ObjCSelectorPieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon)
+    var result = ObjCSelectorPieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name?.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8357,13 +8357,13 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeDiffKind: UnexpectedNodes?
-  let diffKind: TokenSyntax?
+  let diffKind: Token?
   let unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodes?
-  let diffKindComma: TokenSyntax?
+  let diffKindComma: Token?
   let unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodes?
   let diffParams: DifferentiabilityParamsClause?
   let unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodes?
-  let diffParamsComma: TokenSyntax?
+  let diffParamsComma: Token?
   let unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodes?
   let whereClause: GenericWhereClause?
   /// Creates a `DifferentiableAttributeArguments` using the provided parameters.
@@ -8378,7 +8378,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   ///   - diffParamsComma: The comma following the differentiability parameters clause,if it exists.
   ///   - unexpectedBetweenDiffParamsCommaAndWhereClause: 
   ///   - whereClause: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDiffKind: ExpressibleAsUnexpectedNodes? = nil, diffKind: TokenSyntax? = nil, unexpectedBetweenDiffKindAndDiffKindComma: ExpressibleAsUnexpectedNodes? = nil, diffKindComma: TokenSyntax? = nil, unexpectedBetweenDiffKindCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil, unexpectedBetweenDiffParamsAndDiffParamsComma: ExpressibleAsUnexpectedNodes? = nil, diffParamsComma: TokenSyntax? = nil, unexpectedBetweenDiffParamsCommaAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsGenericWhereClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDiffKind: ExpressibleAsUnexpectedNodes? = nil, diffKind: Token? = nil, unexpectedBetweenDiffKindAndDiffKindComma: ExpressibleAsUnexpectedNodes? = nil, diffKindComma: Token? = nil, unexpectedBetweenDiffKindCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil, unexpectedBetweenDiffParamsAndDiffParamsComma: ExpressibleAsUnexpectedNodes? = nil, diffParamsComma: Token? = nil, unexpectedBetweenDiffParamsCommaAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsGenericWhereClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDiffKind = unexpectedBeforeDiffKind?.createUnexpectedNodes()
     self.diffKind = diffKind
@@ -8397,9 +8397,9 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDiffKind: ExpressibleAsUnexpectedNodes? = nil, diffKind: String?, unexpectedBetweenDiffKindAndDiffKindComma: ExpressibleAsUnexpectedNodes? = nil, diffKindComma: TokenSyntax? = nil, unexpectedBetweenDiffKindCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil, unexpectedBetweenDiffParamsAndDiffParamsComma: ExpressibleAsUnexpectedNodes? = nil, diffParamsComma: TokenSyntax? = nil, unexpectedBetweenDiffParamsCommaAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsGenericWhereClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDiffKind: ExpressibleAsUnexpectedNodes? = nil, diffKind: String?, unexpectedBetweenDiffKindAndDiffKindComma: ExpressibleAsUnexpectedNodes? = nil, diffKindComma: Token? = nil, unexpectedBetweenDiffKindCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil, unexpectedBetweenDiffParamsAndDiffParamsComma: ExpressibleAsUnexpectedNodes? = nil, diffParamsComma: Token? = nil, unexpectedBetweenDiffParamsCommaAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsGenericWhereClause? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDiffKind: unexpectedBeforeDiffKind, diffKind: diffKind.map {
-      TokenSyntax.`identifier`($0)
+      Token.`identifier`($0)
     }, unexpectedBetweenDiffKindAndDiffKindComma: unexpectedBetweenDiffKindAndDiffKindComma, diffKindComma: diffKindComma, unexpectedBetweenDiffKindCommaAndDiffParams: unexpectedBetweenDiffKindCommaAndDiffParams, diffParams: diffParams, unexpectedBetweenDiffParamsAndDiffParamsComma: unexpectedBetweenDiffParamsAndDiffParamsComma, diffParamsComma: diffParamsComma, unexpectedBetweenDiffParamsCommaAndWhereClause: unexpectedBetweenDiffParamsCommaAndWhereClause, whereClause: whereClause)
   }
   /// Builds a `DifferentiableAttributeArgumentsSyntax`.
@@ -8407,7 +8407,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiableAttributeArgumentsSyntax`.
   func buildDifferentiableAttributeArguments(format: Format) -> DifferentiableAttributeArgumentsSyntax {
-    var result = DifferentiableAttributeArgumentsSyntax(unexpectedBeforeDiffKind?.buildUnexpectedNodes(format: format), diffKind: diffKind, unexpectedBetweenDiffKindAndDiffKindComma?.buildUnexpectedNodes(format: format), diffKindComma: diffKindComma, unexpectedBetweenDiffKindCommaAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format), unexpectedBetweenDiffParamsAndDiffParamsComma?.buildUnexpectedNodes(format: format), diffParamsComma: diffParamsComma, unexpectedBetweenDiffParamsCommaAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildGenericWhereClause(format: format))
+    var result = DifferentiableAttributeArgumentsSyntax(unexpectedBeforeDiffKind?.buildUnexpectedNodes(format: format), diffKind: diffKind?.buildToken(), unexpectedBetweenDiffKindAndDiffKindComma?.buildUnexpectedNodes(format: format), diffKindComma: diffKindComma?.buildToken(), unexpectedBetweenDiffKindCommaAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format), unexpectedBetweenDiffParamsAndDiffParamsComma?.buildUnexpectedNodes(format: format), diffParamsComma: diffParamsComma?.buildToken(), unexpectedBetweenDiffParamsCommaAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildGenericWhereClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8436,9 +8436,9 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeWrtLabel: UnexpectedNodes?
-  let wrtLabel: TokenSyntax
+  let wrtLabel: Token
   let unexpectedBetweenWrtLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndParameters: UnexpectedNodes?
   let parameters: SyntaxBuildable
   /// Creates a `DifferentiabilityParamsClause` using the provided parameters.
@@ -8449,7 +8449,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   ///   - colon: The colon separating "wrt" and the parameter list.
   ///   - unexpectedBetweenColonAndParameters: 
   ///   - parameters: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrtLabel: ExpressibleAsUnexpectedNodes? = nil, wrtLabel: TokenSyntax, unexpectedBetweenWrtLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndParameters: ExpressibleAsUnexpectedNodes? = nil, parameters: ExpressibleAsSyntaxBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrtLabel: ExpressibleAsUnexpectedNodes? = nil, wrtLabel: Token, unexpectedBetweenWrtLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndParameters: ExpressibleAsUnexpectedNodes? = nil, parameters: ExpressibleAsSyntaxBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWrtLabel = unexpectedBeforeWrtLabel?.createUnexpectedNodes()
     self.wrtLabel = wrtLabel
@@ -8463,15 +8463,15 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrtLabel: ExpressibleAsUnexpectedNodes? = nil, wrtLabel: String, unexpectedBetweenWrtLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndParameters: ExpressibleAsUnexpectedNodes? = nil, parameters: ExpressibleAsSyntaxBuildable) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWrtLabel: unexpectedBeforeWrtLabel, wrtLabel: TokenSyntax.`identifier`(wrtLabel), unexpectedBetweenWrtLabelAndColon: unexpectedBetweenWrtLabelAndColon, colon: colon, unexpectedBetweenColonAndParameters: unexpectedBetweenColonAndParameters, parameters: parameters)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrtLabel: ExpressibleAsUnexpectedNodes? = nil, wrtLabel: String, unexpectedBetweenWrtLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndParameters: ExpressibleAsUnexpectedNodes? = nil, parameters: ExpressibleAsSyntaxBuildable) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWrtLabel: unexpectedBeforeWrtLabel, wrtLabel: Token.`identifier`(wrtLabel), unexpectedBetweenWrtLabelAndColon: unexpectedBetweenWrtLabelAndColon, colon: colon, unexpectedBetweenColonAndParameters: unexpectedBetweenColonAndParameters, parameters: parameters)
   }
   /// Builds a `DifferentiabilityParamsClauseSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamsClauseSyntax`.
   func buildDifferentiabilityParamsClause(format: Format) -> DifferentiabilityParamsClauseSyntax {
-    var result = DifferentiabilityParamsClauseSyntax(unexpectedBeforeWrtLabel?.buildUnexpectedNodes(format: format), wrtLabel: wrtLabel, unexpectedBetweenWrtLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndParameters?.buildUnexpectedNodes(format: format), parameters: parameters.buildSyntax(format: format))
+    var result = DifferentiabilityParamsClauseSyntax(unexpectedBeforeWrtLabel?.buildUnexpectedNodes(format: format), wrtLabel: wrtLabel.buildToken(), unexpectedBetweenWrtLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndParameters?.buildUnexpectedNodes(format: format), parameters: parameters.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8500,11 +8500,11 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodes?
   let diffParams: DifferentiabilityParamList
   let unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `DifferentiabilityParams` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -8513,7 +8513,7 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   ///   - diffParams: The parameters for differentiation.
   ///   - unexpectedBetweenDiffParamsAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamList, unexpectedBetweenDiffParamsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamList, unexpectedBetweenDiffParamsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -8529,7 +8529,7 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamsSyntax`.
   func buildDifferentiabilityParams(format: Format) -> DifferentiabilityParamsSyntax {
-    var result = DifferentiabilityParamsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams.buildDifferentiabilityParamList(format: format), unexpectedBetweenDiffParamsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = DifferentiabilityParamsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams.buildDifferentiabilityParamList(format: format), unexpectedBetweenDiffParamsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8560,14 +8560,14 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   let unexpectedBeforeParameter: UnexpectedNodes?
   let parameter: SyntaxBuildable
   let unexpectedBetweenParameterAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `DifferentiabilityParam` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeParameter: 
   ///   - parameter: 
   ///   - unexpectedBetweenParameterAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsSyntaxBuildable, unexpectedBetweenParameterAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeParameter: ExpressibleAsUnexpectedNodes? = nil, parameter: ExpressibleAsSyntaxBuildable, unexpectedBetweenParameterAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeParameter = unexpectedBeforeParameter?.createUnexpectedNodes()
     self.parameter = parameter.createSyntaxBuildable()
@@ -8580,7 +8580,7 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamSyntax`.
   func buildDifferentiabilityParam(format: Format) -> DifferentiabilityParamSyntax {
-    var result = DifferentiabilityParamSyntax(unexpectedBeforeParameter?.buildUnexpectedNodes(format: format), parameter: parameter.buildSyntax(format: format), unexpectedBetweenParameterAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = DifferentiabilityParamSyntax(unexpectedBeforeParameter?.buildUnexpectedNodes(format: format), parameter: parameter.buildSyntax(format: format), unexpectedBetweenParameterAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8613,17 +8613,17 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeOfLabel: UnexpectedNodes?
-  let ofLabel: TokenSyntax
+  let ofLabel: Token
   let unexpectedBetweenOfLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodes?
   let originalDeclName: QualifiedDeclName
   let unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodes?
-  let period: TokenSyntax?
+  let period: Token?
   let unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodes?
-  let accessorKind: TokenSyntax?
+  let accessorKind: Token?
   let unexpectedBetweenAccessorKindAndComma: UnexpectedNodes?
-  let comma: TokenSyntax?
+  let comma: Token?
   let unexpectedBetweenCommaAndDiffParams: UnexpectedNodes?
   let diffParams: DifferentiabilityParamsClause?
   /// Creates a `DerivativeRegistrationAttributeArguments` using the provided parameters.
@@ -8642,7 +8642,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   ///   - comma: 
   ///   - unexpectedBetweenCommaAndDiffParams: 
   ///   - diffParams: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeOfLabel: ExpressibleAsUnexpectedNodes? = nil, ofLabel: TokenSyntax, unexpectedBetweenOfLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndOriginalDeclName: ExpressibleAsUnexpectedNodes? = nil, originalDeclName: ExpressibleAsQualifiedDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax? = nil, unexpectedBetweenPeriodAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: TokenSyntax? = nil, unexpectedBetweenAccessorKindAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax? = nil, unexpectedBetweenCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeOfLabel: ExpressibleAsUnexpectedNodes? = nil, ofLabel: Token, unexpectedBetweenOfLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndOriginalDeclName: ExpressibleAsUnexpectedNodes? = nil, originalDeclName: ExpressibleAsQualifiedDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token? = nil, unexpectedBetweenPeriodAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: Token? = nil, unexpectedBetweenAccessorKindAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeOfLabel = unexpectedBeforeOfLabel?.createUnexpectedNodes()
     self.ofLabel = ofLabel
@@ -8667,9 +8667,9 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeOfLabel: ExpressibleAsUnexpectedNodes? = nil, ofLabel: String, unexpectedBetweenOfLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndOriginalDeclName: ExpressibleAsUnexpectedNodes? = nil, originalDeclName: ExpressibleAsQualifiedDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax? = nil, unexpectedBetweenPeriodAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: String?, unexpectedBetweenAccessorKindAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax? = nil, unexpectedBetweenCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOfLabel: unexpectedBeforeOfLabel, ofLabel: TokenSyntax.`identifier`(ofLabel), unexpectedBetweenOfLabelAndColon: unexpectedBetweenOfLabelAndColon, colon: colon, unexpectedBetweenColonAndOriginalDeclName: unexpectedBetweenColonAndOriginalDeclName, originalDeclName: originalDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: unexpectedBetweenOriginalDeclNameAndPeriod, period: period, unexpectedBetweenPeriodAndAccessorKind: unexpectedBetweenPeriodAndAccessorKind, accessorKind: accessorKind.map {
-      TokenSyntax.`identifier`($0)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeOfLabel: ExpressibleAsUnexpectedNodes? = nil, ofLabel: String, unexpectedBetweenOfLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndOriginalDeclName: ExpressibleAsUnexpectedNodes? = nil, originalDeclName: ExpressibleAsQualifiedDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token? = nil, unexpectedBetweenPeriodAndAccessorKind: ExpressibleAsUnexpectedNodes? = nil, accessorKind: String?, unexpectedBetweenAccessorKindAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndDiffParams: ExpressibleAsUnexpectedNodes? = nil, diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeOfLabel: unexpectedBeforeOfLabel, ofLabel: Token.`identifier`(ofLabel), unexpectedBetweenOfLabelAndColon: unexpectedBetweenOfLabelAndColon, colon: colon, unexpectedBetweenColonAndOriginalDeclName: unexpectedBetweenColonAndOriginalDeclName, originalDeclName: originalDeclName, unexpectedBetweenOriginalDeclNameAndPeriod: unexpectedBetweenOriginalDeclNameAndPeriod, period: period, unexpectedBetweenPeriodAndAccessorKind: unexpectedBetweenPeriodAndAccessorKind, accessorKind: accessorKind.map {
+      Token.`identifier`($0)
     }, unexpectedBetweenAccessorKindAndComma: unexpectedBetweenAccessorKindAndComma, comma: comma, unexpectedBetweenCommaAndDiffParams: unexpectedBetweenCommaAndDiffParams, diffParams: diffParams)
   }
   /// Builds a `DerivativeRegistrationAttributeArgumentsSyntax`.
@@ -8677,7 +8677,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DerivativeRegistrationAttributeArgumentsSyntax`.
   func buildDerivativeRegistrationAttributeArguments(format: Format) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    var result = DerivativeRegistrationAttributeArgumentsSyntax(unexpectedBeforeOfLabel?.buildUnexpectedNodes(format: format), ofLabel: ofLabel, unexpectedBetweenOfLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndOriginalDeclName?.buildUnexpectedNodes(format: format), originalDeclName: originalDeclName.buildQualifiedDeclName(format: format), unexpectedBetweenOriginalDeclNameAndPeriod?.buildUnexpectedNodes(format: format), period: period, unexpectedBetweenPeriodAndAccessorKind?.buildUnexpectedNodes(format: format), accessorKind: accessorKind, unexpectedBetweenAccessorKindAndComma?.buildUnexpectedNodes(format: format), comma: comma, unexpectedBetweenCommaAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format))
+    var result = DerivativeRegistrationAttributeArgumentsSyntax(unexpectedBeforeOfLabel?.buildUnexpectedNodes(format: format), ofLabel: ofLabel.buildToken(), unexpectedBetweenOfLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndOriginalDeclName?.buildUnexpectedNodes(format: format), originalDeclName: originalDeclName.buildQualifiedDeclName(format: format), unexpectedBetweenOriginalDeclNameAndPeriod?.buildUnexpectedNodes(format: format), period: period?.buildToken(), unexpectedBetweenPeriodAndAccessorKind?.buildUnexpectedNodes(format: format), accessorKind: accessorKind?.buildToken(), unexpectedBetweenAccessorKindAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(), unexpectedBetweenCommaAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8708,9 +8708,9 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   let unexpectedBeforeBaseType: UnexpectedNodes?
   let baseType: TypeBuildable?
   let unexpectedBetweenBaseTypeAndDot: UnexpectedNodes?
-  let dot: TokenSyntax?
+  let dot: Token?
   let unexpectedBetweenDotAndName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndArguments: UnexpectedNodes?
   let arguments: DeclNameArguments?
   /// Creates a `QualifiedDeclName` using the provided parameters.
@@ -8723,7 +8723,7 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   ///   - name: The base name of the referenced function.
   ///   - unexpectedBetweenNameAndArguments: 
   ///   - arguments: The argument labels of the referenced function, optionallyspecified.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenBaseTypeAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: TokenSyntax? = nil, unexpectedBetweenDotAndName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsDeclNameArguments? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenBaseTypeAndDot: ExpressibleAsUnexpectedNodes? = nil, dot: Token? = nil, unexpectedBetweenDotAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsDeclNameArguments? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBaseType = unexpectedBeforeBaseType?.createUnexpectedNodes()
     self.baseType = baseType?.createTypeBuildable()
@@ -8740,7 +8740,7 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `QualifiedDeclNameSyntax`.
   func buildQualifiedDeclName(format: Format) -> QualifiedDeclNameSyntax {
-    var result = QualifiedDeclNameSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType?.buildType(format: format), unexpectedBetweenBaseTypeAndDot?.buildUnexpectedNodes(format: format), dot: dot, unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments?.buildDeclNameArguments(format: format))
+    var result = QualifiedDeclNameSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType?.buildType(format: format), unexpectedBetweenBaseTypeAndDot?.buildUnexpectedNodes(format: format), dot: dot?.buildToken(), unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments?.buildDeclNameArguments(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8819,9 +8819,9 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeBeforeLabel: UnexpectedNodes?
-  let beforeLabel: TokenSyntax
+  let beforeLabel: Token
   let unexpectedBetweenBeforeLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndVersionList: UnexpectedNodes?
   let versionList: BackDeployVersionList
   /// Creates a `BackDeployAttributeSpecList` using the provided parameters.
@@ -8832,7 +8832,7 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   ///   - colon: The colon separating "before" and the parameter list.
   ///   - unexpectedBetweenColonAndVersionList: 
   ///   - versionList: The list of OS versions in which the declaration became ABIstable.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, beforeLabel: TokenSyntax, unexpectedBetweenBeforeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndVersionList: ExpressibleAsUnexpectedNodes? = nil, versionList: ExpressibleAsBackDeployVersionList) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, beforeLabel: Token, unexpectedBetweenBeforeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndVersionList: ExpressibleAsUnexpectedNodes? = nil, versionList: ExpressibleAsBackDeployVersionList) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBeforeLabel = unexpectedBeforeBeforeLabel?.createUnexpectedNodes()
     self.beforeLabel = beforeLabel
@@ -8846,15 +8846,15 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, beforeLabel: String, unexpectedBetweenBeforeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndVersionList: ExpressibleAsUnexpectedNodes? = nil, versionList: ExpressibleAsBackDeployVersionList) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBeforeLabel: unexpectedBeforeBeforeLabel, beforeLabel: TokenSyntax.`identifier`(beforeLabel), unexpectedBetweenBeforeLabelAndColon: unexpectedBetweenBeforeLabelAndColon, colon: colon, unexpectedBetweenColonAndVersionList: unexpectedBetweenColonAndVersionList, versionList: versionList)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, beforeLabel: String, unexpectedBetweenBeforeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndVersionList: ExpressibleAsUnexpectedNodes? = nil, versionList: ExpressibleAsBackDeployVersionList) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBeforeLabel: unexpectedBeforeBeforeLabel, beforeLabel: Token.`identifier`(beforeLabel), unexpectedBetweenBeforeLabelAndColon: unexpectedBetweenBeforeLabelAndColon, colon: colon, unexpectedBetweenColonAndVersionList: unexpectedBetweenColonAndVersionList, versionList: versionList)
   }
   /// Builds a `BackDeployAttributeSpecListSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BackDeployAttributeSpecListSyntax`.
   func buildBackDeployAttributeSpecList(format: Format) -> BackDeployAttributeSpecListSyntax {
-    var result = BackDeployAttributeSpecListSyntax(unexpectedBeforeBeforeLabel?.buildUnexpectedNodes(format: format), beforeLabel: beforeLabel, unexpectedBetweenBeforeLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndVersionList?.buildUnexpectedNodes(format: format), versionList: versionList.buildBackDeployVersionList(format: format))
+    var result = BackDeployAttributeSpecListSyntax(unexpectedBeforeBeforeLabel?.buildUnexpectedNodes(format: format), beforeLabel: beforeLabel.buildToken(), unexpectedBetweenBeforeLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndVersionList?.buildUnexpectedNodes(format: format), versionList: versionList.buildBackDeployVersionList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8885,14 +8885,14 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   let unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodes?
   let availabilityVersionRestriction: AvailabilityVersionRestriction
   let unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `BackDeployVersionArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAvailabilityVersionRestriction: 
   ///   - availabilityVersionRestriction: 
   ///   - unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: 
   ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAvailabilityVersionRestriction: ExpressibleAsUnexpectedNodes? = nil, availabilityVersionRestriction: ExpressibleAsAvailabilityVersionRestriction, unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAvailabilityVersionRestriction: ExpressibleAsUnexpectedNodes? = nil, availabilityVersionRestriction: ExpressibleAsAvailabilityVersionRestriction, unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAvailabilityVersionRestriction = unexpectedBeforeAvailabilityVersionRestriction?.createUnexpectedNodes()
     self.availabilityVersionRestriction = availabilityVersionRestriction.createAvailabilityVersionRestriction()
@@ -8905,7 +8905,7 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BackDeployVersionArgumentSyntax`.
   func buildBackDeployVersionArgument(format: Format) -> BackDeployVersionArgumentSyntax {
-    var result = BackDeployVersionArgumentSyntax(unexpectedBeforeAvailabilityVersionRestriction?.buildUnexpectedNodes(format: format), availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format), unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = BackDeployVersionArgumentSyntax(unexpectedBeforeAvailabilityVersionRestriction?.buildUnexpectedNodes(format: format), availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format), unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -8933,9 +8933,9 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabelName: UnexpectedNodes?
-  let labelName: TokenSyntax
+  let labelName: Token
   let unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodes?
-  let labelColon: TokenSyntax
+  let labelColon: Token
   let unexpectedBetweenLabelColonAndStatement: UnexpectedNodes?
   let statement: StmtBuildable
   /// Creates a `LabeledStmt` using the provided parameters.
@@ -8946,7 +8946,7 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   ///   - labelColon: 
   ///   - unexpectedBetweenLabelColonAndStatement: 
   ///   - statement: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: TokenSyntax, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenLabelColonAndStatement: ExpressibleAsUnexpectedNodes? = nil, statement: ExpressibleAsStmtBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: Token, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: Token = Token.`colon`, unexpectedBetweenLabelColonAndStatement: ExpressibleAsUnexpectedNodes? = nil, statement: ExpressibleAsStmtBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabelName = unexpectedBeforeLabelName?.createUnexpectedNodes()
     self.labelName = labelName
@@ -8959,15 +8959,15 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: String, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenLabelColonAndStatement: ExpressibleAsUnexpectedNodes? = nil, statement: ExpressibleAsStmtBuildable) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabelName: unexpectedBeforeLabelName, labelName: TokenSyntax.`identifier`(labelName), unexpectedBetweenLabelNameAndLabelColon: unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndStatement: unexpectedBetweenLabelColonAndStatement, statement: statement)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: String, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: Token = Token.`colon`, unexpectedBetweenLabelColonAndStatement: ExpressibleAsUnexpectedNodes? = nil, statement: ExpressibleAsStmtBuildable) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabelName: unexpectedBeforeLabelName, labelName: Token.`identifier`(labelName), unexpectedBetweenLabelNameAndLabelColon: unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndStatement: unexpectedBetweenLabelColonAndStatement, statement: statement)
   }
   /// Builds a `LabeledStmtSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LabeledStmtSyntax`.
   func buildLabeledStmt(format: Format) -> LabeledStmtSyntax {
-    var result = LabeledStmtSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format), labelName: labelName, unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format), labelColon: labelColon, unexpectedBetweenLabelColonAndStatement?.buildUnexpectedNodes(format: format), statement: statement.buildStmt(format: format))
+    var result = LabeledStmtSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format), labelName: labelName.buildToken(), unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format), labelColon: labelColon.buildToken(), unexpectedBetweenLabelColonAndStatement?.buildUnexpectedNodes(format: format), statement: statement.buildStmt(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9002,16 +9002,16 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeContinueKeyword: UnexpectedNodes?
-  let continueKeyword: TokenSyntax
+  let continueKeyword: Token
   let unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodes?
-  let label: TokenSyntax?
+  let label: Token?
   /// Creates a `ContinueStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeContinueKeyword: 
   ///   - continueKeyword: 
   ///   - unexpectedBetweenContinueKeywordAndLabel: 
   ///   - label: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeContinueKeyword: ExpressibleAsUnexpectedNodes? = nil, continueKeyword: TokenSyntax = TokenSyntax.`continue`, unexpectedBetweenContinueKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeContinueKeyword: ExpressibleAsUnexpectedNodes? = nil, continueKeyword: Token = Token.`continue`, unexpectedBetweenContinueKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeContinueKeyword = unexpectedBeforeContinueKeyword?.createUnexpectedNodes()
     self.continueKeyword = continueKeyword
@@ -9022,9 +9022,9 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeContinueKeyword: ExpressibleAsUnexpectedNodes? = nil, continueKeyword: TokenSyntax = TokenSyntax.`continue`, unexpectedBetweenContinueKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: String?) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeContinueKeyword: ExpressibleAsUnexpectedNodes? = nil, continueKeyword: Token = Token.`continue`, unexpectedBetweenContinueKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: String?) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeContinueKeyword: unexpectedBeforeContinueKeyword, continueKeyword: continueKeyword, unexpectedBetweenContinueKeywordAndLabel: unexpectedBetweenContinueKeywordAndLabel, label: label.map {
-      TokenSyntax.`identifier`($0)
+      Token.`identifier`($0)
     })
   }
   /// Builds a `ContinueStmtSyntax`.
@@ -9032,7 +9032,7 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ContinueStmtSyntax`.
   func buildContinueStmt(format: Format) -> ContinueStmtSyntax {
-    var result = ContinueStmtSyntax(unexpectedBeforeContinueKeyword?.buildUnexpectedNodes(format: format), continueKeyword: continueKeyword, unexpectedBetweenContinueKeywordAndLabel?.buildUnexpectedNodes(format: format), label: label)
+    var result = ContinueStmtSyntax(unexpectedBeforeContinueKeyword?.buildUnexpectedNodes(format: format), continueKeyword: continueKeyword.buildToken(), unexpectedBetweenContinueKeywordAndLabel?.buildUnexpectedNodes(format: format), label: label?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9067,7 +9067,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeWhileKeyword: UnexpectedNodes?
-  let whileKeyword: TokenSyntax
+  let whileKeyword: Token
   let unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodes?
   let conditions: ConditionElementList
   let unexpectedBetweenConditionsAndBody: UnexpectedNodes?
@@ -9080,7 +9080,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   ///   - conditions: 
   ///   - unexpectedBetweenConditionsAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: TokenSyntax = TokenSyntax.`while`, unexpectedBetweenWhileKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWhileKeyword = unexpectedBeforeWhileKeyword?.createUnexpectedNodes()
     self.whileKeyword = whileKeyword
@@ -9093,7 +9093,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: TokenSyntax = TokenSyntax.`while`, unexpectedBetweenWhileKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhileKeyword: unexpectedBeforeWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndConditions: unexpectedBetweenWhileKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody: unexpectedBetweenConditionsAndBody, body: bodyBuilder())
@@ -9103,7 +9103,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WhileStmtSyntax`.
   func buildWhileStmt(format: Format) -> WhileStmtSyntax {
-    var result = WhileStmtSyntax(unexpectedBeforeWhileKeyword?.buildUnexpectedNodes(format: format), whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    var result = WhileStmtSyntax(unexpectedBeforeWhileKeyword?.buildUnexpectedNodes(format: format), whileKeyword: whileKeyword.buildToken(), unexpectedBetweenWhileKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9138,7 +9138,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeDeferKeyword: UnexpectedNodes?
-  let deferKeyword: TokenSyntax
+  let deferKeyword: Token
   let unexpectedBetweenDeferKeywordAndBody: UnexpectedNodes?
   let body: CodeBlock
   /// Creates a `DeferStmt` using the provided parameters.
@@ -9147,7 +9147,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   ///   - deferKeyword: 
   ///   - unexpectedBetweenDeferKeywordAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDeferKeyword: ExpressibleAsUnexpectedNodes? = nil, deferKeyword: TokenSyntax = TokenSyntax.`defer`, unexpectedBetweenDeferKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDeferKeyword: ExpressibleAsUnexpectedNodes? = nil, deferKeyword: Token = Token.`defer`, unexpectedBetweenDeferKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDeferKeyword = unexpectedBeforeDeferKeyword?.createUnexpectedNodes()
     self.deferKeyword = deferKeyword
@@ -9158,7 +9158,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDeferKeyword: ExpressibleAsUnexpectedNodes? = nil, deferKeyword: TokenSyntax = TokenSyntax.`defer`, unexpectedBetweenDeferKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDeferKeyword: ExpressibleAsUnexpectedNodes? = nil, deferKeyword: Token = Token.`defer`, unexpectedBetweenDeferKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDeferKeyword: unexpectedBeforeDeferKeyword, deferKeyword: deferKeyword, unexpectedBetweenDeferKeywordAndBody: unexpectedBetweenDeferKeywordAndBody, body: bodyBuilder())
@@ -9168,7 +9168,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeferStmtSyntax`.
   func buildDeferStmt(format: Format) -> DeferStmtSyntax {
-    var result = DeferStmtSyntax(unexpectedBeforeDeferKeyword?.buildUnexpectedNodes(format: format), deferKeyword: deferKeyword, unexpectedBetweenDeferKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    var result = DeferStmtSyntax(unexpectedBeforeDeferKeyword?.buildUnexpectedNodes(format: format), deferKeyword: deferKeyword.buildToken(), unexpectedBetweenDeferKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9253,11 +9253,11 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeRepeatKeyword: UnexpectedNodes?
-  let repeatKeyword: TokenSyntax
+  let repeatKeyword: Token
   let unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodes?
   let body: CodeBlock
   let unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodes?
-  let whileKeyword: TokenSyntax
+  let whileKeyword: Token
   let unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodes?
   let condition: ExprBuildable
   /// Creates a `RepeatWhileStmt` using the provided parameters.
@@ -9270,7 +9270,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   ///   - whileKeyword: 
   ///   - unexpectedBetweenWhileKeywordAndCondition: 
   ///   - condition: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeRepeatKeyword: ExpressibleAsUnexpectedNodes? = nil, repeatKeyword: TokenSyntax = TokenSyntax.`repeat`, unexpectedBetweenRepeatKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock, unexpectedBetweenBodyAndWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: TokenSyntax = TokenSyntax.`while`, unexpectedBetweenWhileKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeRepeatKeyword: ExpressibleAsUnexpectedNodes? = nil, repeatKeyword: Token = Token.`repeat`, unexpectedBetweenRepeatKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock, unexpectedBetweenBodyAndWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeRepeatKeyword = unexpectedBeforeRepeatKeyword?.createUnexpectedNodes()
     self.repeatKeyword = repeatKeyword
@@ -9286,7 +9286,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeRepeatKeyword: ExpressibleAsUnexpectedNodes? = nil, repeatKeyword: TokenSyntax = TokenSyntax.`repeat`, unexpectedBetweenRepeatKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: TokenSyntax = TokenSyntax.`while`, unexpectedBetweenWhileKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeRepeatKeyword: ExpressibleAsUnexpectedNodes? = nil, repeatKeyword: Token = Token.`repeat`, unexpectedBetweenRepeatKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndWhileKeyword: ExpressibleAsUnexpectedNodes? = nil, whileKeyword: Token = Token.`while`, unexpectedBetweenWhileKeywordAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeRepeatKeyword: unexpectedBeforeRepeatKeyword, repeatKeyword: repeatKeyword, unexpectedBetweenRepeatKeywordAndBody: unexpectedBetweenRepeatKeywordAndBody, body: bodyBuilder(), unexpectedBetweenBodyAndWhileKeyword: unexpectedBetweenBodyAndWhileKeyword, whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndCondition: unexpectedBetweenWhileKeywordAndCondition, condition: condition)
@@ -9296,7 +9296,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `RepeatWhileStmtSyntax`.
   func buildRepeatWhileStmt(format: Format) -> RepeatWhileStmtSyntax {
-    var result = RepeatWhileStmtSyntax(unexpectedBeforeRepeatKeyword?.buildUnexpectedNodes(format: format), repeatKeyword: repeatKeyword, unexpectedBetweenRepeatKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndWhileKeyword?.buildUnexpectedNodes(format: format), whileKeyword: whileKeyword, unexpectedBetweenWhileKeywordAndCondition?.buildUnexpectedNodes(format: format), condition: condition.buildExpr(format: format))
+    var result = RepeatWhileStmtSyntax(unexpectedBeforeRepeatKeyword?.buildUnexpectedNodes(format: format), repeatKeyword: repeatKeyword.buildToken(), unexpectedBetweenRepeatKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndWhileKeyword?.buildUnexpectedNodes(format: format), whileKeyword: whileKeyword.buildToken(), unexpectedBetweenWhileKeywordAndCondition?.buildUnexpectedNodes(format: format), condition: condition.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9331,11 +9331,11 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeGuardKeyword: UnexpectedNodes?
-  let guardKeyword: TokenSyntax
+  let guardKeyword: Token
   let unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodes?
   let conditions: ConditionElementList
   let unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodes?
-  let elseKeyword: TokenSyntax
+  let elseKeyword: Token
   let unexpectedBetweenElseKeywordAndBody: UnexpectedNodes?
   let body: CodeBlock
   /// Creates a `GuardStmt` using the provided parameters.
@@ -9348,7 +9348,7 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   ///   - elseKeyword: 
   ///   - unexpectedBetweenElseKeywordAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeGuardKeyword: ExpressibleAsUnexpectedNodes? = nil, guardKeyword: TokenSyntax = TokenSyntax.`guard`, unexpectedBetweenGuardKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: TokenSyntax = TokenSyntax.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeGuardKeyword: ExpressibleAsUnexpectedNodes? = nil, guardKeyword: Token = Token.`guard`, unexpectedBetweenGuardKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token = Token.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeGuardKeyword = unexpectedBeforeGuardKeyword?.createUnexpectedNodes()
     self.guardKeyword = guardKeyword
@@ -9364,7 +9364,7 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeGuardKeyword: ExpressibleAsUnexpectedNodes? = nil, guardKeyword: TokenSyntax = TokenSyntax.`guard`, unexpectedBetweenGuardKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: TokenSyntax = TokenSyntax.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeGuardKeyword: ExpressibleAsUnexpectedNodes? = nil, guardKeyword: Token = Token.`guard`, unexpectedBetweenGuardKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token = Token.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeGuardKeyword: unexpectedBeforeGuardKeyword, guardKeyword: guardKeyword, unexpectedBetweenGuardKeywordAndConditions: unexpectedBetweenGuardKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndElseKeyword: unexpectedBetweenConditionsAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody: unexpectedBetweenElseKeywordAndBody, body: bodyBuilder())
@@ -9374,7 +9374,7 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GuardStmtSyntax`.
   func buildGuardStmt(format: Format) -> GuardStmtSyntax {
-    var result = GuardStmtSyntax(unexpectedBeforeGuardKeyword?.buildUnexpectedNodes(format: format), guardKeyword: guardKeyword, unexpectedBetweenGuardKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    var result = GuardStmtSyntax(unexpectedBeforeGuardKeyword?.buildUnexpectedNodes(format: format), guardKeyword: guardKeyword.buildToken(), unexpectedBetweenGuardKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword.buildToken(), unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9409,7 +9409,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeWhereKeyword: UnexpectedNodes?
-  let whereKeyword: TokenSyntax
+  let whereKeyword: Token
   let unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodes?
   let guardResult: ExprBuildable
   /// Creates a `WhereClause` using the provided parameters.
@@ -9418,7 +9418,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   ///   - whereKeyword: 
   ///   - unexpectedBetweenWhereKeywordAndGuardResult: 
   ///   - guardResult: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: TokenSyntax = TokenSyntax.`where`, unexpectedBetweenWhereKeywordAndGuardResult: ExpressibleAsUnexpectedNodes? = nil, guardResult: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: Token = Token.`where`, unexpectedBetweenWhereKeywordAndGuardResult: ExpressibleAsUnexpectedNodes? = nil, guardResult: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWhereKeyword = unexpectedBeforeWhereKeyword?.createUnexpectedNodes()
     self.whereKeyword = whereKeyword
@@ -9431,7 +9431,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WhereClauseSyntax`.
   func buildWhereClause(format: Format) -> WhereClauseSyntax {
-    var result = WhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format), whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndGuardResult?.buildUnexpectedNodes(format: format), guardResult: guardResult.buildExpr(format: format))
+    var result = WhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format), whereKeyword: whereKeyword.buildToken(), unexpectedBetweenWhereKeywordAndGuardResult?.buildUnexpectedNodes(format: format), guardResult: guardResult.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9459,19 +9459,19 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeForKeyword: UnexpectedNodes?
-  let forKeyword: TokenSyntax
+  let forKeyword: Token
   let unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodes?
-  let tryKeyword: TokenSyntax?
+  let tryKeyword: Token?
   let unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodes?
-  let awaitKeyword: TokenSyntax?
+  let awaitKeyword: Token?
   let unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodes?
-  let caseKeyword: TokenSyntax?
+  let caseKeyword: Token?
   let unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodes?
   let pattern: PatternBuildable
   let unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
   let typeAnnotation: TypeAnnotation?
   let unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodes?
-  let inKeyword: TokenSyntax
+  let inKeyword: Token
   let unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodes?
   let sequenceExpr: ExprBuildable
   let unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodes?
@@ -9500,7 +9500,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   ///   - whereClause: 
   ///   - unexpectedBetweenWhereClauseAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeForKeyword: ExpressibleAsUnexpectedNodes? = nil, forKeyword: TokenSyntax = TokenSyntax.`for`, unexpectedBetweenForKeywordAndTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: TokenSyntax? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: TokenSyntax? = nil, unexpectedBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: TokenSyntax? = nil, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: ExpressibleAsUnexpectedNodes? = nil, inKeyword: TokenSyntax = TokenSyntax.`in`, unexpectedBetweenInKeywordAndSequenceExpr: ExpressibleAsUnexpectedNodes? = nil, sequenceExpr: ExpressibleAsExprBuildable, unexpectedBetweenSequenceExprAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeForKeyword: ExpressibleAsUnexpectedNodes? = nil, forKeyword: Token = Token.`for`, unexpectedBetweenForKeywordAndTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: Token? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: Token? = nil, unexpectedBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token? = nil, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: ExpressibleAsUnexpectedNodes? = nil, inKeyword: Token = Token.`in`, unexpectedBetweenInKeywordAndSequenceExpr: ExpressibleAsUnexpectedNodes? = nil, sequenceExpr: ExpressibleAsExprBuildable, unexpectedBetweenSequenceExprAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeForKeyword = unexpectedBeforeForKeyword?.createUnexpectedNodes()
     self.forKeyword = forKeyword
@@ -9531,11 +9531,11 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeForKeyword: ExpressibleAsUnexpectedNodes? = nil, forKeyword: TokenSyntax = TokenSyntax.`for`, unexpectedBetweenForKeywordAndTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: TokenSyntax? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: String?, unexpectedBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: TokenSyntax? = nil, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: ExpressibleAsUnexpectedNodes? = nil, inKeyword: TokenSyntax = TokenSyntax.`in`, unexpectedBetweenInKeywordAndSequenceExpr: ExpressibleAsUnexpectedNodes? = nil, sequenceExpr: ExpressibleAsExprBuildable, unexpectedBetweenSequenceExprAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeForKeyword: ExpressibleAsUnexpectedNodes? = nil, forKeyword: Token = Token.`for`, unexpectedBetweenForKeywordAndTryKeyword: ExpressibleAsUnexpectedNodes? = nil, tryKeyword: Token? = nil, unexpectedBetweenTryKeywordAndAwaitKeyword: ExpressibleAsUnexpectedNodes? = nil, awaitKeyword: String?, unexpectedBetweenAwaitKeywordAndCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token? = nil, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInKeyword: ExpressibleAsUnexpectedNodes? = nil, inKeyword: Token = Token.`in`, unexpectedBetweenInKeywordAndSequenceExpr: ExpressibleAsUnexpectedNodes? = nil, sequenceExpr: ExpressibleAsExprBuildable, unexpectedBetweenSequenceExprAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeForKeyword: unexpectedBeforeForKeyword, forKeyword: forKeyword, unexpectedBetweenForKeywordAndTryKeyword: unexpectedBetweenForKeywordAndTryKeyword, tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndAwaitKeyword: unexpectedBetweenTryKeywordAndAwaitKeyword, awaitKeyword: awaitKeyword.map {
-      TokenSyntax.`identifier`($0)
+      Token.`identifier`($0)
     }, unexpectedBetweenAwaitKeywordAndCaseKeyword: unexpectedBetweenAwaitKeywordAndCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern: unexpectedBetweenCaseKeywordAndPattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation: unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInKeyword: unexpectedBetweenTypeAnnotationAndInKeyword, inKeyword: inKeyword, unexpectedBetweenInKeywordAndSequenceExpr: unexpectedBetweenInKeywordAndSequenceExpr, sequenceExpr: sequenceExpr, unexpectedBetweenSequenceExprAndWhereClause: unexpectedBetweenSequenceExprAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndBody: unexpectedBetweenWhereClauseAndBody, body: bodyBuilder())
   }
   /// Builds a `ForInStmtSyntax`.
@@ -9543,7 +9543,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ForInStmtSyntax`.
   func buildForInStmt(format: Format) -> ForInStmtSyntax {
-    var result = ForInStmtSyntax(unexpectedBeforeForKeyword?.buildUnexpectedNodes(format: format), forKeyword: forKeyword, unexpectedBetweenForKeywordAndTryKeyword?.buildUnexpectedNodes(format: format), tryKeyword: tryKeyword, unexpectedBetweenTryKeywordAndAwaitKeyword?.buildUnexpectedNodes(format: format), awaitKeyword: awaitKeyword, unexpectedBetweenAwaitKeywordAndCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInKeyword?.buildUnexpectedNodes(format: format), inKeyword: inKeyword, unexpectedBetweenInKeywordAndSequenceExpr?.buildUnexpectedNodes(format: format), sequenceExpr: sequenceExpr.buildExpr(format: format), unexpectedBetweenSequenceExprAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    var result = ForInStmtSyntax(unexpectedBeforeForKeyword?.buildUnexpectedNodes(format: format), forKeyword: forKeyword.buildToken(), unexpectedBetweenForKeywordAndTryKeyword?.buildUnexpectedNodes(format: format), tryKeyword: tryKeyword?.buildToken(), unexpectedBetweenTryKeywordAndAwaitKeyword?.buildUnexpectedNodes(format: format), awaitKeyword: awaitKeyword?.buildToken(), unexpectedBetweenAwaitKeywordAndCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword?.buildToken(), unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInKeyword?.buildUnexpectedNodes(format: format), inKeyword: inKeyword.buildToken(), unexpectedBetweenInKeywordAndSequenceExpr?.buildUnexpectedNodes(format: format), sequenceExpr: sequenceExpr.buildExpr(format: format), unexpectedBetweenSequenceExprAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9578,15 +9578,15 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeSwitchKeyword: UnexpectedNodes?
-  let switchKeyword: TokenSyntax
+  let switchKeyword: Token
   let unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   let unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodes?
-  let leftBrace: TokenSyntax
+  let leftBrace: Token
   let unexpectedBetweenLeftBraceAndCases: UnexpectedNodes?
   let cases: SwitchCaseList
   let unexpectedBetweenCasesAndRightBrace: UnexpectedNodes?
-  let rightBrace: TokenSyntax
+  let rightBrace: Token
   /// Creates a `SwitchStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSwitchKeyword: 
@@ -9599,7 +9599,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   ///   - cases: 
   ///   - unexpectedBetweenCasesAndRightBrace: 
   ///   - rightBrace: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSwitchKeyword: ExpressibleAsUnexpectedNodes? = nil, switchKeyword: TokenSyntax = TokenSyntax.`switch`, unexpectedBetweenSwitchKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndCases: ExpressibleAsUnexpectedNodes? = nil, cases: ExpressibleAsSwitchCaseList, unexpectedBetweenCasesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSwitchKeyword: ExpressibleAsUnexpectedNodes? = nil, switchKeyword: Token = Token.`switch`, unexpectedBetweenSwitchKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndCases: ExpressibleAsUnexpectedNodes? = nil, cases: ExpressibleAsSwitchCaseList, unexpectedBetweenCasesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSwitchKeyword = unexpectedBeforeSwitchKeyword?.createUnexpectedNodes()
     self.switchKeyword = switchKeyword
@@ -9618,7 +9618,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSwitchKeyword: ExpressibleAsUnexpectedNodes? = nil, switchKeyword: TokenSyntax = TokenSyntax.`switch`, unexpectedBetweenSwitchKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: TokenSyntax = TokenSyntax.`leftBrace`, unexpectedBetweenLeftBraceAndCases: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCasesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: TokenSyntax = TokenSyntax.`rightBrace`, @SwitchCaseListBuilder casesBuilder: () -> ExpressibleAsSwitchCaseList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSwitchKeyword: ExpressibleAsUnexpectedNodes? = nil, switchKeyword: Token = Token.`switch`, unexpectedBetweenSwitchKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndLeftBrace: ExpressibleAsUnexpectedNodes? = nil, leftBrace: Token = Token.`leftBrace`, unexpectedBetweenLeftBraceAndCases: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCasesAndRightBrace: ExpressibleAsUnexpectedNodes? = nil, rightBrace: Token = Token.`rightBrace`, @SwitchCaseListBuilder casesBuilder: () -> ExpressibleAsSwitchCaseList =  {
     SwitchCaseList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSwitchKeyword: unexpectedBeforeSwitchKeyword, switchKeyword: switchKeyword, unexpectedBetweenSwitchKeywordAndExpression: unexpectedBetweenSwitchKeywordAndExpression, expression: expression, unexpectedBetweenExpressionAndLeftBrace: unexpectedBetweenExpressionAndLeftBrace, leftBrace: leftBrace, unexpectedBetweenLeftBraceAndCases: unexpectedBetweenLeftBraceAndCases, cases: casesBuilder(), unexpectedBetweenCasesAndRightBrace: unexpectedBetweenCasesAndRightBrace, rightBrace: rightBrace)
@@ -9628,7 +9628,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchStmtSyntax`.
   func buildSwitchStmt(format: Format) -> SwitchStmtSyntax {
-    var result = SwitchStmtSyntax(unexpectedBeforeSwitchKeyword?.buildUnexpectedNodes(format: format), switchKeyword: switchKeyword, unexpectedBetweenSwitchKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace, unexpectedBetweenLeftBraceAndCases?.buildUnexpectedNodes(format: format), cases: cases.buildSwitchCaseList(format: format), unexpectedBetweenCasesAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace)
+    var result = SwitchStmtSyntax(unexpectedBeforeSwitchKeyword?.buildUnexpectedNodes(format: format), switchKeyword: switchKeyword.buildToken(), unexpectedBetweenSwitchKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndCases?.buildUnexpectedNodes(format: format), cases: cases.buildSwitchCaseList(format: format), unexpectedBetweenCasesAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9663,7 +9663,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeDoKeyword: UnexpectedNodes?
-  let doKeyword: TokenSyntax
+  let doKeyword: Token
   let unexpectedBetweenDoKeywordAndBody: UnexpectedNodes?
   let body: CodeBlock
   let unexpectedBetweenBodyAndCatchClauses: UnexpectedNodes?
@@ -9676,7 +9676,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   ///   - body: 
   ///   - unexpectedBetweenBodyAndCatchClauses: 
   ///   - catchClauses: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDoKeyword: ExpressibleAsUnexpectedNodes? = nil, doKeyword: TokenSyntax = TokenSyntax.`do`, unexpectedBetweenDoKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock, unexpectedBetweenBodyAndCatchClauses: ExpressibleAsUnexpectedNodes? = nil, catchClauses: ExpressibleAsCatchClauseList? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDoKeyword: ExpressibleAsUnexpectedNodes? = nil, doKeyword: Token = Token.`do`, unexpectedBetweenDoKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock, unexpectedBetweenBodyAndCatchClauses: ExpressibleAsUnexpectedNodes? = nil, catchClauses: ExpressibleAsCatchClauseList? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDoKeyword = unexpectedBeforeDoKeyword?.createUnexpectedNodes()
     self.doKeyword = doKeyword
@@ -9689,7 +9689,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDoKeyword: ExpressibleAsUnexpectedNodes? = nil, doKeyword: TokenSyntax = TokenSyntax.`do`, unexpectedBetweenDoKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndCatchClauses: ExpressibleAsUnexpectedNodes? = nil, catchClauses: ExpressibleAsCatchClauseList? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDoKeyword: ExpressibleAsUnexpectedNodes? = nil, doKeyword: Token = Token.`do`, unexpectedBetweenDoKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndCatchClauses: ExpressibleAsUnexpectedNodes? = nil, catchClauses: ExpressibleAsCatchClauseList? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeDoKeyword: unexpectedBeforeDoKeyword, doKeyword: doKeyword, unexpectedBetweenDoKeywordAndBody: unexpectedBetweenDoKeywordAndBody, body: bodyBuilder(), unexpectedBetweenBodyAndCatchClauses: unexpectedBetweenBodyAndCatchClauses, catchClauses: catchClauses)
@@ -9699,7 +9699,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DoStmtSyntax`.
   func buildDoStmt(format: Format) -> DoStmtSyntax {
-    var result = DoStmtSyntax(unexpectedBeforeDoKeyword?.buildUnexpectedNodes(format: format), doKeyword: doKeyword, unexpectedBetweenDoKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndCatchClauses?.buildUnexpectedNodes(format: format), catchClauses: catchClauses?.buildCatchClauseList(format: format))
+    var result = DoStmtSyntax(unexpectedBeforeDoKeyword?.buildUnexpectedNodes(format: format), doKeyword: doKeyword.buildToken(), unexpectedBetweenDoKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndCatchClauses?.buildUnexpectedNodes(format: format), catchClauses: catchClauses?.buildCatchClauseList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9734,7 +9734,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeReturnKeyword: UnexpectedNodes?
-  let returnKeyword: TokenSyntax
+  let returnKeyword: Token
   let unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodes?
   let expression: ExprBuildable?
   /// Creates a `ReturnStmt` using the provided parameters.
@@ -9743,7 +9743,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   ///   - returnKeyword: 
   ///   - unexpectedBetweenReturnKeywordAndExpression: 
   ///   - expression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeReturnKeyword: ExpressibleAsUnexpectedNodes? = nil, returnKeyword: TokenSyntax = TokenSyntax.`return`, unexpectedBetweenReturnKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeReturnKeyword: ExpressibleAsUnexpectedNodes? = nil, returnKeyword: Token = Token.`return`, unexpectedBetweenReturnKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeReturnKeyword = unexpectedBeforeReturnKeyword?.createUnexpectedNodes()
     self.returnKeyword = returnKeyword
@@ -9756,7 +9756,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ReturnStmtSyntax`.
   func buildReturnStmt(format: Format) -> ReturnStmtSyntax {
-    var result = ReturnStmtSyntax(unexpectedBeforeReturnKeyword?.buildUnexpectedNodes(format: format), returnKeyword: returnKeyword, unexpectedBetweenReturnKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression?.buildExpr(format: format))
+    var result = ReturnStmtSyntax(unexpectedBeforeReturnKeyword?.buildUnexpectedNodes(format: format), returnKeyword: returnKeyword.buildToken(), unexpectedBetweenReturnKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression?.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9791,7 +9791,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeYieldKeyword: UnexpectedNodes?
-  let yieldKeyword: TokenSyntax
+  let yieldKeyword: Token
   let unexpectedBetweenYieldKeywordAndYields: UnexpectedNodes?
   let yields: SyntaxBuildable
   /// Creates a `YieldStmt` using the provided parameters.
@@ -9800,7 +9800,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   ///   - yieldKeyword: 
   ///   - unexpectedBetweenYieldKeywordAndYields: 
   ///   - yields: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeYieldKeyword: ExpressibleAsUnexpectedNodes? = nil, yieldKeyword: TokenSyntax = TokenSyntax.`yield`, unexpectedBetweenYieldKeywordAndYields: ExpressibleAsUnexpectedNodes? = nil, yields: ExpressibleAsSyntaxBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeYieldKeyword: ExpressibleAsUnexpectedNodes? = nil, yieldKeyword: Token = Token.`yield`, unexpectedBetweenYieldKeywordAndYields: ExpressibleAsUnexpectedNodes? = nil, yields: ExpressibleAsSyntaxBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeYieldKeyword = unexpectedBeforeYieldKeyword?.createUnexpectedNodes()
     self.yieldKeyword = yieldKeyword
@@ -9813,7 +9813,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `YieldStmtSyntax`.
   func buildYieldStmt(format: Format) -> YieldStmtSyntax {
-    var result = YieldStmtSyntax(unexpectedBeforeYieldKeyword?.buildUnexpectedNodes(format: format), yieldKeyword: yieldKeyword, unexpectedBetweenYieldKeywordAndYields?.buildUnexpectedNodes(format: format), yields: yields.buildSyntax(format: format))
+    var result = YieldStmtSyntax(unexpectedBeforeYieldKeyword?.buildUnexpectedNodes(format: format), yieldKeyword: yieldKeyword.buildToken(), unexpectedBetweenYieldKeywordAndYields?.buildUnexpectedNodes(format: format), yields: yields.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9848,13 +9848,13 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndElementList: UnexpectedNodes?
   let elementList: ExprList
   let unexpectedBetweenElementListAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   let unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `YieldList` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -9865,7 +9865,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   ///   - trailingComma: 
   ///   - unexpectedBetweenTrailingCommaAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, elementList: ExpressibleAsExprList, unexpectedBetweenElementListAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil, unexpectedBetweenTrailingCommaAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, elementList: ExpressibleAsExprList, unexpectedBetweenElementListAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil, unexpectedBetweenTrailingCommaAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -9882,7 +9882,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementListAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil, unexpectedBetweenTrailingCommaAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`, @ExprListBuilder elementListBuilder: () -> ExpressibleAsExprList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElementList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementListAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil, unexpectedBetweenTrailingCommaAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @ExprListBuilder elementListBuilder: () -> ExpressibleAsExprList =  {
     ExprList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElementList: unexpectedBetweenLeftParenAndElementList, elementList: elementListBuilder(), unexpectedBetweenElementListAndTrailingComma: unexpectedBetweenElementListAndTrailingComma, trailingComma: trailingComma, unexpectedBetweenTrailingCommaAndRightParen: unexpectedBetweenTrailingCommaAndRightParen, rightParen: rightParen)
@@ -9892,7 +9892,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `YieldListSyntax`.
   func buildYieldList(format: Format) -> YieldListSyntax {
-    var result = YieldListSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: elementList.buildExprList(format: format), unexpectedBetweenElementListAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma, unexpectedBetweenTrailingCommaAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = YieldListSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: elementList.buildExprList(format: format), unexpectedBetweenElementListAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken(), unexpectedBetweenTrailingCommaAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9920,12 +9920,12 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeFallthroughKeyword: UnexpectedNodes?
-  let fallthroughKeyword: TokenSyntax
+  let fallthroughKeyword: Token
   /// Creates a `FallthroughStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeFallthroughKeyword: 
   ///   - fallthroughKeyword: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeFallthroughKeyword: ExpressibleAsUnexpectedNodes? = nil, fallthroughKeyword: TokenSyntax = TokenSyntax.`fallthrough`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeFallthroughKeyword: ExpressibleAsUnexpectedNodes? = nil, fallthroughKeyword: Token = Token.`fallthrough`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeFallthroughKeyword = unexpectedBeforeFallthroughKeyword?.createUnexpectedNodes()
     self.fallthroughKeyword = fallthroughKeyword
@@ -9936,7 +9936,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FallthroughStmtSyntax`.
   func buildFallthroughStmt(format: Format) -> FallthroughStmtSyntax {
-    var result = FallthroughStmtSyntax(unexpectedBeforeFallthroughKeyword?.buildUnexpectedNodes(format: format), fallthroughKeyword: fallthroughKeyword)
+    var result = FallthroughStmtSyntax(unexpectedBeforeFallthroughKeyword?.buildUnexpectedNodes(format: format), fallthroughKeyword: fallthroughKeyword.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -9971,16 +9971,16 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeBreakKeyword: UnexpectedNodes?
-  let breakKeyword: TokenSyntax
+  let breakKeyword: Token
   let unexpectedBetweenBreakKeywordAndLabel: UnexpectedNodes?
-  let label: TokenSyntax?
+  let label: Token?
   /// Creates a `BreakStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBreakKeyword: 
   ///   - breakKeyword: 
   ///   - unexpectedBetweenBreakKeywordAndLabel: 
   ///   - label: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBreakKeyword: ExpressibleAsUnexpectedNodes? = nil, breakKeyword: TokenSyntax = TokenSyntax.`break`, unexpectedBetweenBreakKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBreakKeyword: ExpressibleAsUnexpectedNodes? = nil, breakKeyword: Token = Token.`break`, unexpectedBetweenBreakKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBreakKeyword = unexpectedBeforeBreakKeyword?.createUnexpectedNodes()
     self.breakKeyword = breakKeyword
@@ -9991,9 +9991,9 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBreakKeyword: ExpressibleAsUnexpectedNodes? = nil, breakKeyword: TokenSyntax = TokenSyntax.`break`, unexpectedBetweenBreakKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: String?) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBreakKeyword: ExpressibleAsUnexpectedNodes? = nil, breakKeyword: Token = Token.`break`, unexpectedBetweenBreakKeywordAndLabel: ExpressibleAsUnexpectedNodes? = nil, label: String?) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBreakKeyword: unexpectedBeforeBreakKeyword, breakKeyword: breakKeyword, unexpectedBetweenBreakKeywordAndLabel: unexpectedBetweenBreakKeywordAndLabel, label: label.map {
-      TokenSyntax.`identifier`($0)
+      Token.`identifier`($0)
     })
   }
   /// Builds a `BreakStmtSyntax`.
@@ -10001,7 +10001,7 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BreakStmtSyntax`.
   func buildBreakStmt(format: Format) -> BreakStmtSyntax {
-    var result = BreakStmtSyntax(unexpectedBeforeBreakKeyword?.buildUnexpectedNodes(format: format), breakKeyword: breakKeyword, unexpectedBetweenBreakKeywordAndLabel?.buildUnexpectedNodes(format: format), label: label)
+    var result = BreakStmtSyntax(unexpectedBeforeBreakKeyword?.buildUnexpectedNodes(format: format), breakKeyword: breakKeyword.buildToken(), unexpectedBetweenBreakKeywordAndLabel?.buildUnexpectedNodes(format: format), label: label?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10038,14 +10038,14 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   let unexpectedBeforeCondition: UnexpectedNodes?
   let condition: SyntaxBuildable
   let unexpectedBetweenConditionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `ConditionElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCondition: 
   ///   - condition: 
   ///   - unexpectedBetweenConditionAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsSyntaxBuildable, unexpectedBetweenConditionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsSyntaxBuildable, unexpectedBetweenConditionAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCondition = unexpectedBeforeCondition?.createUnexpectedNodes()
     self.condition = condition.createSyntaxBuildable()
@@ -10058,7 +10058,7 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConditionElementSyntax`.
   func buildConditionElement(format: Format) -> ConditionElementSyntax {
-    var result = ConditionElementSyntax(unexpectedBeforeCondition?.buildUnexpectedNodes(format: format), condition: condition.buildSyntax(format: format), unexpectedBetweenConditionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = ConditionElementSyntax(unexpectedBeforeCondition?.buildUnexpectedNodes(format: format), condition: condition.buildSyntax(format: format), unexpectedBetweenConditionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10090,13 +10090,13 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundAvailableKeyword: UnexpectedNodes?
-  let poundAvailableKeyword: TokenSyntax
+  let poundAvailableKeyword: Token
   let unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes?
   let availabilitySpec: AvailabilitySpecList
   let unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `AvailabilityCondition` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundAvailableKeyword: 
@@ -10107,7 +10107,7 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   ///   - availabilitySpec: 
   ///   - unexpectedBetweenAvailabilitySpecAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundAvailableKeyword: ExpressibleAsUnexpectedNodes? = nil, poundAvailableKeyword: TokenSyntax = TokenSyntax.`poundAvailable`, unexpectedBetweenPoundAvailableKeywordAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndAvailabilitySpec: ExpressibleAsUnexpectedNodes? = nil, availabilitySpec: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilitySpecAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundAvailableKeyword: ExpressibleAsUnexpectedNodes? = nil, poundAvailableKeyword: Token = Token.`poundAvailable`, unexpectedBetweenPoundAvailableKeywordAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndAvailabilitySpec: ExpressibleAsUnexpectedNodes? = nil, availabilitySpec: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilitySpecAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundAvailableKeyword = unexpectedBeforePoundAvailableKeyword?.createUnexpectedNodes()
     self.poundAvailableKeyword = poundAvailableKeyword
@@ -10126,7 +10126,7 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityConditionSyntax`.
   func buildAvailabilityCondition(format: Format) -> AvailabilityConditionSyntax {
-    var result = AvailabilityConditionSyntax(unexpectedBeforePoundAvailableKeyword?.buildUnexpectedNodes(format: format), poundAvailableKeyword: poundAvailableKeyword, unexpectedBetweenPoundAvailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = AvailabilityConditionSyntax(unexpectedBeforePoundAvailableKeyword?.buildUnexpectedNodes(format: format), poundAvailableKeyword: poundAvailableKeyword.buildToken(), unexpectedBetweenPoundAvailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10154,7 +10154,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeCaseKeyword: UnexpectedNodes?
-  let caseKeyword: TokenSyntax
+  let caseKeyword: Token
   let unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodes?
   let pattern: PatternBuildable
   let unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
@@ -10171,7 +10171,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   ///   - typeAnnotation: 
   ///   - unexpectedBetweenTypeAnnotationAndInitializer: 
   ///   - initializer: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: TokenSyntax = TokenSyntax.`case`, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCaseKeyword = unexpectedBeforeCaseKeyword?.createUnexpectedNodes()
     self.caseKeyword = caseKeyword
@@ -10188,7 +10188,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MatchingPatternConditionSyntax`.
   func buildMatchingPatternCondition(format: Format) -> MatchingPatternConditionSyntax {
-    var result = MatchingPatternConditionSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer.buildInitializerClause(format: format))
+    var result = MatchingPatternConditionSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer.buildInitializerClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10216,7 +10216,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLetOrVarKeyword: UnexpectedNodes?
-  let letOrVarKeyword: TokenSyntax
+  let letOrVarKeyword: Token
   let unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodes?
   let pattern: PatternBuildable
   let unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
@@ -10233,7 +10233,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   ///   - typeAnnotation: 
   ///   - unexpectedBetweenTypeAnnotationAndInitializer: 
   ///   - initializer: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: TokenSyntax, unexpectedBetweenLetOrVarKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: Token, unexpectedBetweenLetOrVarKeywordAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil, unexpectedBetweenTypeAnnotationAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLetOrVarKeyword = unexpectedBeforeLetOrVarKeyword?.createUnexpectedNodes()
     self.letOrVarKeyword = letOrVarKeyword
@@ -10250,7 +10250,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalBindingConditionSyntax`.
   func buildOptionalBindingCondition(format: Format) -> OptionalBindingConditionSyntax {
-    var result = OptionalBindingConditionSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format))
+    var result = OptionalBindingConditionSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10278,13 +10278,13 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundUnavailableKeyword: UnexpectedNodes?
-  let poundUnavailableKeyword: TokenSyntax
+  let poundUnavailableKeyword: Token
   let unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes?
   let availabilitySpec: AvailabilitySpecList
   let unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `UnavailabilityCondition` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundUnavailableKeyword: 
@@ -10295,7 +10295,7 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   ///   - availabilitySpec: 
   ///   - unexpectedBetweenAvailabilitySpecAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundUnavailableKeyword: ExpressibleAsUnexpectedNodes? = nil, poundUnavailableKeyword: TokenSyntax = TokenSyntax.`poundUnavailable`, unexpectedBetweenPoundUnavailableKeywordAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndAvailabilitySpec: ExpressibleAsUnexpectedNodes? = nil, availabilitySpec: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilitySpecAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundUnavailableKeyword: ExpressibleAsUnexpectedNodes? = nil, poundUnavailableKeyword: Token = Token.`poundUnavailable`, unexpectedBetweenPoundUnavailableKeywordAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndAvailabilitySpec: ExpressibleAsUnexpectedNodes? = nil, availabilitySpec: ExpressibleAsAvailabilitySpecList, unexpectedBetweenAvailabilitySpecAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundUnavailableKeyword = unexpectedBeforePoundUnavailableKeyword?.createUnexpectedNodes()
     self.poundUnavailableKeyword = poundUnavailableKeyword
@@ -10314,7 +10314,7 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnavailabilityConditionSyntax`.
   func buildUnavailabilityCondition(format: Format) -> UnavailabilityConditionSyntax {
-    var result = UnavailabilityConditionSyntax(unexpectedBeforePoundUnavailableKeyword?.buildUnexpectedNodes(format: format), poundUnavailableKeyword: poundUnavailableKeyword, unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = UnavailabilityConditionSyntax(unexpectedBeforePoundUnavailableKeyword?.buildUnexpectedNodes(format: format), poundUnavailableKeyword: poundUnavailableKeyword.buildToken(), unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10392,7 +10392,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeThrowKeyword: UnexpectedNodes?
-  let throwKeyword: TokenSyntax
+  let throwKeyword: Token
   let unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodes?
   let expression: ExprBuildable
   /// Creates a `ThrowStmt` using the provided parameters.
@@ -10401,7 +10401,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   ///   - throwKeyword: 
   ///   - unexpectedBetweenThrowKeywordAndExpression: 
   ///   - expression: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeThrowKeyword: ExpressibleAsUnexpectedNodes? = nil, throwKeyword: TokenSyntax = TokenSyntax.`throw`, unexpectedBetweenThrowKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeThrowKeyword: ExpressibleAsUnexpectedNodes? = nil, throwKeyword: Token = Token.`throw`, unexpectedBetweenThrowKeywordAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeThrowKeyword = unexpectedBeforeThrowKeyword?.createUnexpectedNodes()
     self.throwKeyword = throwKeyword
@@ -10414,7 +10414,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ThrowStmtSyntax`.
   func buildThrowStmt(format: Format) -> ThrowStmtSyntax {
-    var result = ThrowStmtSyntax(unexpectedBeforeThrowKeyword?.buildUnexpectedNodes(format: format), throwKeyword: throwKeyword, unexpectedBetweenThrowKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    var result = ThrowStmtSyntax(unexpectedBeforeThrowKeyword?.buildUnexpectedNodes(format: format), throwKeyword: throwKeyword.buildToken(), unexpectedBetweenThrowKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10449,13 +10449,13 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIfKeyword: UnexpectedNodes?
-  let ifKeyword: TokenSyntax
+  let ifKeyword: Token
   let unexpectedBetweenIfKeywordAndConditions: UnexpectedNodes?
   let conditions: ConditionElementList
   let unexpectedBetweenConditionsAndBody: UnexpectedNodes?
   let body: CodeBlock
   let unexpectedBetweenBodyAndElseKeyword: UnexpectedNodes?
-  let elseKeyword: TokenSyntax?
+  let elseKeyword: Token?
   let unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodes?
   let elseBody: SyntaxBuildable?
   /// Creates a `IfStmt` using the provided parameters.
@@ -10470,7 +10470,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   ///   - elseKeyword: 
   ///   - unexpectedBetweenElseKeywordAndElseBody: 
   ///   - elseBody: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIfKeyword: ExpressibleAsUnexpectedNodes? = nil, ifKeyword: TokenSyntax = TokenSyntax.`if`, unexpectedBetweenIfKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock, unexpectedBetweenBodyAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: TokenSyntax? = nil, unexpectedBetweenElseKeywordAndElseBody: ExpressibleAsUnexpectedNodes? = nil, elseBody: ExpressibleAsSyntaxBuildable? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIfKeyword: ExpressibleAsUnexpectedNodes? = nil, ifKeyword: Token = Token.`if`, unexpectedBetweenIfKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock, unexpectedBetweenBodyAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token? = nil, unexpectedBetweenElseKeywordAndElseBody: ExpressibleAsUnexpectedNodes? = nil, elseBody: ExpressibleAsSyntaxBuildable? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIfKeyword = unexpectedBeforeIfKeyword?.createUnexpectedNodes()
     self.ifKeyword = ifKeyword
@@ -10488,7 +10488,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIfKeyword: ExpressibleAsUnexpectedNodes? = nil, ifKeyword: TokenSyntax = TokenSyntax.`if`, unexpectedBetweenIfKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: TokenSyntax? = nil, unexpectedBetweenElseKeywordAndElseBody: ExpressibleAsUnexpectedNodes? = nil, elseBody: ExpressibleAsSyntaxBuildable? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIfKeyword: ExpressibleAsUnexpectedNodes? = nil, ifKeyword: Token = Token.`if`, unexpectedBetweenIfKeywordAndConditions: ExpressibleAsUnexpectedNodes? = nil, conditions: ExpressibleAsConditionElementList, unexpectedBetweenConditionsAndBody: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenBodyAndElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token? = nil, unexpectedBetweenElseKeywordAndElseBody: ExpressibleAsUnexpectedNodes? = nil, elseBody: ExpressibleAsSyntaxBuildable? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeIfKeyword: unexpectedBeforeIfKeyword, ifKeyword: ifKeyword, unexpectedBetweenIfKeywordAndConditions: unexpectedBetweenIfKeywordAndConditions, conditions: conditions, unexpectedBetweenConditionsAndBody: unexpectedBetweenConditionsAndBody, body: bodyBuilder(), unexpectedBetweenBodyAndElseKeyword: unexpectedBetweenBodyAndElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndElseBody: unexpectedBetweenElseKeywordAndElseBody, elseBody: elseBody)
@@ -10498,7 +10498,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfStmtSyntax`.
   func buildIfStmt(format: Format) -> IfStmtSyntax {
-    var result = IfStmtSyntax(unexpectedBeforeIfKeyword?.buildUnexpectedNodes(format: format), ifKeyword: ifKeyword, unexpectedBetweenIfKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndElseBody?.buildUnexpectedNodes(format: format), elseBody: elseBody?.buildSyntax(format: format))
+    var result = IfStmtSyntax(unexpectedBeforeIfKeyword?.buildUnexpectedNodes(format: format), ifKeyword: ifKeyword.buildToken(), unexpectedBetweenIfKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword?.buildToken(), unexpectedBetweenElseKeywordAndElseBody?.buildUnexpectedNodes(format: format), elseBody: elseBody?.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10576,7 +10576,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeElseKeyword: UnexpectedNodes?
-  let elseKeyword: TokenSyntax
+  let elseKeyword: Token
   let unexpectedBetweenElseKeywordAndBody: UnexpectedNodes?
   let body: CodeBlock
   /// Creates a `ElseBlock` using the provided parameters.
@@ -10585,7 +10585,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   ///   - elseKeyword: 
   ///   - unexpectedBetweenElseKeywordAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: TokenSyntax = TokenSyntax.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token = Token.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeElseKeyword = unexpectedBeforeElseKeyword?.createUnexpectedNodes()
     self.elseKeyword = elseKeyword
@@ -10596,7 +10596,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: TokenSyntax = TokenSyntax.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeElseKeyword: ExpressibleAsUnexpectedNodes? = nil, elseKeyword: Token = Token.`else`, unexpectedBetweenElseKeywordAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeElseKeyword: unexpectedBeforeElseKeyword, elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody: unexpectedBetweenElseKeywordAndBody, body: bodyBuilder())
@@ -10606,7 +10606,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ElseBlockSyntax`.
   func buildElseBlock(format: Format) -> ElseBlockSyntax {
-    var result = ElseBlockSyntax(unexpectedBeforeElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword, unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    var result = ElseBlockSyntax(unexpectedBeforeElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword.buildToken(), unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10697,16 +10697,16 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeDefaultKeyword: UnexpectedNodes?
-  let defaultKeyword: TokenSyntax
+  let defaultKeyword: Token
   let unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   /// Creates a `SwitchDefaultLabel` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDefaultKeyword: 
   ///   - defaultKeyword: 
   ///   - unexpectedBetweenDefaultKeywordAndColon: 
   ///   - colon: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeDefaultKeyword: ExpressibleAsUnexpectedNodes? = nil, defaultKeyword: TokenSyntax = TokenSyntax.`default`, unexpectedBetweenDefaultKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeDefaultKeyword: ExpressibleAsUnexpectedNodes? = nil, defaultKeyword: Token = Token.`default`, unexpectedBetweenDefaultKeywordAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeDefaultKeyword = unexpectedBeforeDefaultKeyword?.createUnexpectedNodes()
     self.defaultKeyword = defaultKeyword
@@ -10720,7 +10720,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchDefaultLabelSyntax`.
   func buildSwitchDefaultLabel(format: Format) -> SwitchDefaultLabelSyntax {
-    var result = SwitchDefaultLabelSyntax(unexpectedBeforeDefaultKeyword?.buildUnexpectedNodes(format: format), defaultKeyword: defaultKeyword, unexpectedBetweenDefaultKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon)
+    var result = SwitchDefaultLabelSyntax(unexpectedBeforeDefaultKeyword?.buildUnexpectedNodes(format: format), defaultKeyword: defaultKeyword.buildToken(), unexpectedBetweenDefaultKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10752,7 +10752,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   let unexpectedBetweenPatternAndWhereClause: UnexpectedNodes?
   let whereClause: WhereClause?
   let unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `CaseItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -10761,7 +10761,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   ///   - whereClause: 
   ///   - unexpectedBetweenWhereClauseAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePattern = unexpectedBeforePattern?.createUnexpectedNodes()
     self.pattern = pattern.createPatternBuildable()
@@ -10776,7 +10776,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CaseItemSyntax`.
   func buildCaseItem(format: Format) -> CaseItemSyntax {
-    var result = CaseItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = CaseItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10812,7 +10812,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   let unexpectedBetweenPatternAndWhereClause: UnexpectedNodes?
   let whereClause: WhereClause?
   let unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `CatchItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -10821,7 +10821,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   ///   - whereClause: 
   ///   - unexpectedBetweenWhereClauseAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable? = nil, unexpectedBetweenPatternAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable? = nil, unexpectedBetweenPatternAndWhereClause: ExpressibleAsUnexpectedNodes? = nil, whereClause: ExpressibleAsWhereClause? = nil, unexpectedBetweenWhereClauseAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePattern = unexpectedBeforePattern?.createUnexpectedNodes()
     self.pattern = pattern?.createPatternBuildable()
@@ -10836,7 +10836,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CatchItemSyntax`.
   func buildCatchItem(format: Format) -> CatchItemSyntax {
-    var result = CatchItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern?.buildPattern(format: format), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = CatchItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern?.buildPattern(format: format), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10868,11 +10868,11 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeCaseKeyword: UnexpectedNodes?
-  let caseKeyword: TokenSyntax
+  let caseKeyword: Token
   let unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodes?
   let caseItems: CaseItemList
   let unexpectedBetweenCaseItemsAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   /// Creates a `SwitchCaseLabel` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCaseKeyword: 
@@ -10881,7 +10881,7 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   ///   - caseItems: 
   ///   - unexpectedBetweenCaseItemsAndColon: 
   ///   - colon: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: TokenSyntax = TokenSyntax.`case`, unexpectedBetweenCaseKeywordAndCaseItems: ExpressibleAsUnexpectedNodes? = nil, caseItems: ExpressibleAsCaseItemList, unexpectedBetweenCaseItemsAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndCaseItems: ExpressibleAsUnexpectedNodes? = nil, caseItems: ExpressibleAsCaseItemList, unexpectedBetweenCaseItemsAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCaseKeyword = unexpectedBeforeCaseKeyword?.createUnexpectedNodes()
     self.caseKeyword = caseKeyword
@@ -10895,7 +10895,7 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: TokenSyntax = TokenSyntax.`case`, unexpectedBetweenCaseKeywordAndCaseItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCaseItemsAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCaseKeyword: ExpressibleAsUnexpectedNodes? = nil, caseKeyword: Token = Token.`case`, unexpectedBetweenCaseKeywordAndCaseItems: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenCaseItemsAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList =  {
     CaseItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCaseKeyword: unexpectedBeforeCaseKeyword, caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems: unexpectedBetweenCaseKeywordAndCaseItems, caseItems: caseItemsBuilder(), unexpectedBetweenCaseItemsAndColon: unexpectedBetweenCaseItemsAndColon, colon: colon)
@@ -10905,7 +10905,7 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchCaseLabelSyntax`.
   func buildSwitchCaseLabel(format: Format) -> SwitchCaseLabelSyntax {
-    var result = SwitchCaseLabelSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword, unexpectedBetweenCaseKeywordAndCaseItems?.buildUnexpectedNodes(format: format), caseItems: caseItems.buildCaseItemList(format: format), unexpectedBetweenCaseItemsAndColon?.buildUnexpectedNodes(format: format), colon: colon)
+    var result = SwitchCaseLabelSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndCaseItems?.buildUnexpectedNodes(format: format), caseItems: caseItems.buildCaseItemList(format: format), unexpectedBetweenCaseItemsAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10933,7 +10933,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeCatchKeyword: UnexpectedNodes?
-  let catchKeyword: TokenSyntax
+  let catchKeyword: Token
   let unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodes?
   let catchItems: CatchItemList?
   let unexpectedBetweenCatchItemsAndBody: UnexpectedNodes?
@@ -10946,7 +10946,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   ///   - catchItems: 
   ///   - unexpectedBetweenCatchItemsAndBody: 
   ///   - body: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCatchKeyword: ExpressibleAsUnexpectedNodes? = nil, catchKeyword: TokenSyntax = TokenSyntax.`catch`, unexpectedBetweenCatchKeywordAndCatchItems: ExpressibleAsUnexpectedNodes? = nil, catchItems: ExpressibleAsCatchItemList? = nil, unexpectedBetweenCatchItemsAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCatchKeyword: ExpressibleAsUnexpectedNodes? = nil, catchKeyword: Token = Token.`catch`, unexpectedBetweenCatchKeywordAndCatchItems: ExpressibleAsUnexpectedNodes? = nil, catchItems: ExpressibleAsCatchItemList? = nil, unexpectedBetweenCatchItemsAndBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsCodeBlock) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeCatchKeyword = unexpectedBeforeCatchKeyword?.createUnexpectedNodes()
     self.catchKeyword = catchKeyword
@@ -10959,7 +10959,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeCatchKeyword: ExpressibleAsUnexpectedNodes? = nil, catchKeyword: TokenSyntax = TokenSyntax.`catch`, unexpectedBetweenCatchKeywordAndCatchItems: ExpressibleAsUnexpectedNodes? = nil, catchItems: ExpressibleAsCatchItemList? = nil, unexpectedBetweenCatchItemsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeCatchKeyword: ExpressibleAsUnexpectedNodes? = nil, catchKeyword: Token = Token.`catch`, unexpectedBetweenCatchKeywordAndCatchItems: ExpressibleAsUnexpectedNodes? = nil, catchItems: ExpressibleAsCatchItemList? = nil, unexpectedBetweenCatchItemsAndBody: ExpressibleAsUnexpectedNodes? = nil, @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList =  {
     CodeBlockItemList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeCatchKeyword: unexpectedBeforeCatchKeyword, catchKeyword: catchKeyword, unexpectedBetweenCatchKeywordAndCatchItems: unexpectedBetweenCatchKeywordAndCatchItems, catchItems: catchItems, unexpectedBetweenCatchItemsAndBody: unexpectedBetweenCatchItemsAndBody, body: bodyBuilder())
@@ -10969,7 +10969,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CatchClauseSyntax`.
   func buildCatchClause(format: Format) -> CatchClauseSyntax {
-    var result = CatchClauseSyntax(unexpectedBeforeCatchKeyword?.buildUnexpectedNodes(format: format), catchKeyword: catchKeyword, unexpectedBetweenCatchKeywordAndCatchItems?.buildUnexpectedNodes(format: format), catchItems: catchItems?.buildCatchItemList(format: format), unexpectedBetweenCatchItemsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    var result = CatchClauseSyntax(unexpectedBeforeCatchKeyword?.buildUnexpectedNodes(format: format), catchKeyword: catchKeyword.buildToken(), unexpectedBetweenCatchKeywordAndCatchItems?.buildUnexpectedNodes(format: format), catchItems: catchItems?.buildCatchItemList(format: format), unexpectedBetweenCatchItemsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10997,17 +10997,17 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePoundAssert: UnexpectedNodes?
-  let poundAssert: TokenSyntax
+  let poundAssert: Token
   let unexpectedBetweenPoundAssertAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndCondition: UnexpectedNodes?
   let condition: ExprBuildable
   let unexpectedBetweenConditionAndComma: UnexpectedNodes?
-  let comma: TokenSyntax?
+  let comma: Token?
   let unexpectedBetweenCommaAndMessage: UnexpectedNodes?
-  let message: TokenSyntax?
+  let message: Token?
   let unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `PoundAssertStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundAssert: 
@@ -11022,7 +11022,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   ///   - message: The assertion message.
   ///   - unexpectedBetweenMessageAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundAssert: ExpressibleAsUnexpectedNodes? = nil, poundAssert: TokenSyntax = TokenSyntax.`poundAssert`, unexpectedBetweenPoundAssertAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, unexpectedBetweenConditionAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax? = nil, unexpectedBetweenCommaAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: TokenSyntax? = nil, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundAssert: ExpressibleAsUnexpectedNodes? = nil, poundAssert: Token = Token.`poundAssert`, unexpectedBetweenPoundAssertAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, unexpectedBetweenConditionAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: Token? = nil, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePoundAssert = unexpectedBeforePoundAssert?.createUnexpectedNodes()
     self.poundAssert = poundAssert
@@ -11044,9 +11044,9 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundAssert: ExpressibleAsUnexpectedNodes? = nil, poundAssert: TokenSyntax = TokenSyntax.`poundAssert`, unexpectedBetweenPoundAssertAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, unexpectedBetweenConditionAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax? = nil, unexpectedBetweenCommaAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: String?, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePoundAssert: ExpressibleAsUnexpectedNodes? = nil, poundAssert: Token = Token.`poundAssert`, unexpectedBetweenPoundAssertAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndCondition: ExpressibleAsUnexpectedNodes? = nil, condition: ExpressibleAsExprBuildable, unexpectedBetweenConditionAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndMessage: ExpressibleAsUnexpectedNodes? = nil, message: String?, unexpectedBetweenMessageAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforePoundAssert: unexpectedBeforePoundAssert, poundAssert: poundAssert, unexpectedBetweenPoundAssertAndLeftParen: unexpectedBetweenPoundAssertAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndCondition: unexpectedBetweenLeftParenAndCondition, condition: condition, unexpectedBetweenConditionAndComma: unexpectedBetweenConditionAndComma, comma: comma, unexpectedBetweenCommaAndMessage: unexpectedBetweenCommaAndMessage, message: message.map {
-      TokenSyntax.`stringLiteral`($0)
+      Token.`stringLiteral`($0)
     }, unexpectedBetweenMessageAndRightParen: unexpectedBetweenMessageAndRightParen, rightParen: rightParen)
   }
   /// Builds a `PoundAssertStmtSyntax`.
@@ -11054,7 +11054,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundAssertStmtSyntax`.
   func buildPoundAssertStmt(format: Format) -> PoundAssertStmtSyntax {
-    var result = PoundAssertStmtSyntax(unexpectedBeforePoundAssert?.buildUnexpectedNodes(format: format), poundAssert: poundAssert, unexpectedBetweenPoundAssertAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndCondition?.buildUnexpectedNodes(format: format), condition: condition.buildExpr(format: format), unexpectedBetweenConditionAndComma?.buildUnexpectedNodes(format: format), comma: comma, unexpectedBetweenCommaAndMessage?.buildUnexpectedNodes(format: format), message: message, unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = PoundAssertStmtSyntax(unexpectedBeforePoundAssert?.buildUnexpectedNodes(format: format), poundAssert: poundAssert.buildToken(), unexpectedBetweenPoundAssertAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndCondition?.buildUnexpectedNodes(format: format), condition: condition.buildExpr(format: format), unexpectedBetweenConditionAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(), unexpectedBetweenCommaAndMessage?.buildUnexpectedNodes(format: format), message: message?.buildToken(), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11089,7 +11089,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeWhereKeyword: UnexpectedNodes?
-  let whereKeyword: TokenSyntax
+  let whereKeyword: Token
   let unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodes?
   let requirementList: GenericRequirementList
   /// Creates a `GenericWhereClause` using the provided parameters.
@@ -11098,7 +11098,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   ///   - whereKeyword: 
   ///   - unexpectedBetweenWhereKeywordAndRequirementList: 
   ///   - requirementList: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: TokenSyntax = TokenSyntax.`where`, unexpectedBetweenWhereKeywordAndRequirementList: ExpressibleAsUnexpectedNodes? = nil, requirementList: ExpressibleAsGenericRequirementList) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: Token = Token.`where`, unexpectedBetweenWhereKeywordAndRequirementList: ExpressibleAsUnexpectedNodes? = nil, requirementList: ExpressibleAsGenericRequirementList) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWhereKeyword = unexpectedBeforeWhereKeyword?.createUnexpectedNodes()
     self.whereKeyword = whereKeyword
@@ -11109,7 +11109,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: TokenSyntax = TokenSyntax.`where`, unexpectedBetweenWhereKeywordAndRequirementList: ExpressibleAsUnexpectedNodes? = nil, @GenericRequirementListBuilder requirementListBuilder: () -> ExpressibleAsGenericRequirementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWhereKeyword: ExpressibleAsUnexpectedNodes? = nil, whereKeyword: Token = Token.`where`, unexpectedBetweenWhereKeywordAndRequirementList: ExpressibleAsUnexpectedNodes? = nil, @GenericRequirementListBuilder requirementListBuilder: () -> ExpressibleAsGenericRequirementList =  {
     GenericRequirementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWhereKeyword: unexpectedBeforeWhereKeyword, whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndRequirementList: unexpectedBetweenWhereKeywordAndRequirementList, requirementList: requirementListBuilder())
@@ -11119,7 +11119,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericWhereClauseSyntax`.
   func buildGenericWhereClause(format: Format) -> GenericWhereClauseSyntax {
-    var result = GenericWhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format), whereKeyword: whereKeyword, unexpectedBetweenWhereKeywordAndRequirementList?.buildUnexpectedNodes(format: format), requirementList: requirementList.buildGenericRequirementList(format: format))
+    var result = GenericWhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format), whereKeyword: whereKeyword.buildToken(), unexpectedBetweenWhereKeywordAndRequirementList?.buildUnexpectedNodes(format: format), requirementList: requirementList.buildGenericRequirementList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11149,14 +11149,14 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   let unexpectedBeforeBody: UnexpectedNodes?
   let body: SyntaxBuildable
   let unexpectedBetweenBodyAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `GenericRequirement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBody: 
   ///   - body: 
   ///   - unexpectedBetweenBodyAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsSyntaxBuildable, unexpectedBetweenBodyAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBody: ExpressibleAsUnexpectedNodes? = nil, body: ExpressibleAsSyntaxBuildable, unexpectedBetweenBodyAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBody = unexpectedBeforeBody?.createUnexpectedNodes()
     self.body = body.createSyntaxBuildable()
@@ -11169,7 +11169,7 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericRequirementSyntax`.
   func buildGenericRequirement(format: Format) -> GenericRequirementSyntax {
-    var result = GenericRequirementSyntax(unexpectedBeforeBody?.buildUnexpectedNodes(format: format), body: body.buildSyntax(format: format), unexpectedBetweenBodyAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = GenericRequirementSyntax(unexpectedBeforeBody?.buildUnexpectedNodes(format: format), body: body.buildSyntax(format: format), unexpectedBetweenBodyAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11203,7 +11203,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   let unexpectedBeforeLeftTypeIdentifier: UnexpectedNodes?
   let leftTypeIdentifier: TypeBuildable
   let unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodes?
-  let equalityToken: TokenSyntax
+  let equalityToken: Token
   let unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodes?
   let rightTypeIdentifier: TypeBuildable
   /// Creates a `SameTypeRequirement` using the provided parameters.
@@ -11214,7 +11214,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   ///   - equalityToken: 
   ///   - unexpectedBetweenEqualityTokenAndRightTypeIdentifier: 
   ///   - rightTypeIdentifier: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, leftTypeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenLeftTypeIdentifierAndEqualityToken: ExpressibleAsUnexpectedNodes? = nil, equalityToken: TokenSyntax, unexpectedBetweenEqualityTokenAndRightTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, rightTypeIdentifier: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, leftTypeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenLeftTypeIdentifierAndEqualityToken: ExpressibleAsUnexpectedNodes? = nil, equalityToken: Token, unexpectedBetweenEqualityTokenAndRightTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, rightTypeIdentifier: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftTypeIdentifier = unexpectedBeforeLeftTypeIdentifier?.createUnexpectedNodes()
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
@@ -11228,7 +11228,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SameTypeRequirementSyntax`.
   func buildSameTypeRequirement(format: Format) -> SameTypeRequirementSyntax {
-    var result = SameTypeRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format), unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.buildUnexpectedNodes(format: format), equalityToken: equalityToken, unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.buildUnexpectedNodes(format: format), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format))
+    var result = SameTypeRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format), unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.buildUnexpectedNodes(format: format), equalityToken: equalityToken.buildToken(), unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.buildUnexpectedNodes(format: format), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11258,19 +11258,19 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   let unexpectedBeforeTypeIdentifier: UnexpectedNodes?
   let typeIdentifier: TypeBuildable
   let unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodes?
-  let layoutConstraint: TokenSyntax
+  let layoutConstraint: Token
   let unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax?
+  let leftParen: Token?
   let unexpectedBetweenLeftParenAndSize: UnexpectedNodes?
-  let size: TokenSyntax?
+  let size: Token?
   let unexpectedBetweenSizeAndComma: UnexpectedNodes?
-  let comma: TokenSyntax?
+  let comma: Token?
   let unexpectedBetweenCommaAndAlignment: UnexpectedNodes?
-  let alignment: TokenSyntax?
+  let alignment: Token?
   let unexpectedBetweenAlignmentAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax?
+  let rightParen: Token?
   /// Creates a `LayoutRequirement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeTypeIdentifier: 
@@ -11289,7 +11289,7 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   ///   - alignment: 
   ///   - unexpectedBetweenAlignmentAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, typeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenTypeIdentifierAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndLayoutConstraint: ExpressibleAsUnexpectedNodes? = nil, layoutConstraint: TokenSyntax, unexpectedBetweenLayoutConstraintAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndSize: ExpressibleAsUnexpectedNodes? = nil, size: TokenSyntax? = nil, unexpectedBetweenSizeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax? = nil, unexpectedBetweenCommaAndAlignment: ExpressibleAsUnexpectedNodes? = nil, alignment: TokenSyntax? = nil, unexpectedBetweenAlignmentAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, typeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenTypeIdentifierAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndLayoutConstraint: ExpressibleAsUnexpectedNodes? = nil, layoutConstraint: Token, unexpectedBetweenLayoutConstraintAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndSize: ExpressibleAsUnexpectedNodes? = nil, size: Token? = nil, unexpectedBetweenSizeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndAlignment: ExpressibleAsUnexpectedNodes? = nil, alignment: Token? = nil, unexpectedBetweenAlignmentAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeTypeIdentifier = unexpectedBeforeTypeIdentifier?.createUnexpectedNodes()
     self.typeIdentifier = typeIdentifier.createTypeBuildable()
@@ -11315,11 +11315,11 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, typeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenTypeIdentifierAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndLayoutConstraint: ExpressibleAsUnexpectedNodes? = nil, layoutConstraint: String, unexpectedBetweenLayoutConstraintAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax? = nil, unexpectedBetweenLeftParenAndSize: ExpressibleAsUnexpectedNodes? = nil, size: String?, unexpectedBetweenSizeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: TokenSyntax? = nil, unexpectedBetweenCommaAndAlignment: ExpressibleAsUnexpectedNodes? = nil, alignment: String?, unexpectedBetweenAlignmentAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeTypeIdentifier: unexpectedBeforeTypeIdentifier, typeIdentifier: typeIdentifier, unexpectedBetweenTypeIdentifierAndColon: unexpectedBetweenTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndLayoutConstraint: unexpectedBetweenColonAndLayoutConstraint, layoutConstraint: TokenSyntax.`identifier`(layoutConstraint), unexpectedBetweenLayoutConstraintAndLeftParen: unexpectedBetweenLayoutConstraintAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndSize: unexpectedBetweenLeftParenAndSize, size: size.map {
-      TokenSyntax.`integerLiteral`($0)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, typeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenTypeIdentifierAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndLayoutConstraint: ExpressibleAsUnexpectedNodes? = nil, layoutConstraint: String, unexpectedBetweenLayoutConstraintAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token? = nil, unexpectedBetweenLeftParenAndSize: ExpressibleAsUnexpectedNodes? = nil, size: String?, unexpectedBetweenSizeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndAlignment: ExpressibleAsUnexpectedNodes? = nil, alignment: String?, unexpectedBetweenAlignmentAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeTypeIdentifier: unexpectedBeforeTypeIdentifier, typeIdentifier: typeIdentifier, unexpectedBetweenTypeIdentifierAndColon: unexpectedBetweenTypeIdentifierAndColon, colon: colon, unexpectedBetweenColonAndLayoutConstraint: unexpectedBetweenColonAndLayoutConstraint, layoutConstraint: Token.`identifier`(layoutConstraint), unexpectedBetweenLayoutConstraintAndLeftParen: unexpectedBetweenLayoutConstraintAndLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndSize: unexpectedBetweenLeftParenAndSize, size: size.map {
+      Token.`integerLiteral`($0)
     }, unexpectedBetweenSizeAndComma: unexpectedBetweenSizeAndComma, comma: comma, unexpectedBetweenCommaAndAlignment: unexpectedBetweenCommaAndAlignment, alignment: alignment.map {
-      TokenSyntax.`integerLiteral`($0)
+      Token.`integerLiteral`($0)
     }, unexpectedBetweenAlignmentAndRightParen: unexpectedBetweenAlignmentAndRightParen, rightParen: rightParen)
   }
   /// Builds a `LayoutRequirementSyntax`.
@@ -11327,7 +11327,7 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LayoutRequirementSyntax`.
   func buildLayoutRequirement(format: Format) -> LayoutRequirementSyntax {
-    var result = LayoutRequirementSyntax(unexpectedBeforeTypeIdentifier?.buildUnexpectedNodes(format: format), typeIdentifier: typeIdentifier.buildType(format: format), unexpectedBetweenTypeIdentifierAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndLayoutConstraint?.buildUnexpectedNodes(format: format), layoutConstraint: layoutConstraint, unexpectedBetweenLayoutConstraintAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndSize?.buildUnexpectedNodes(format: format), size: size, unexpectedBetweenSizeAndComma?.buildUnexpectedNodes(format: format), comma: comma, unexpectedBetweenCommaAndAlignment?.buildUnexpectedNodes(format: format), alignment: alignment, unexpectedBetweenAlignmentAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = LayoutRequirementSyntax(unexpectedBeforeTypeIdentifier?.buildUnexpectedNodes(format: format), typeIdentifier: typeIdentifier.buildType(format: format), unexpectedBetweenTypeIdentifierAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndLayoutConstraint?.buildUnexpectedNodes(format: format), layoutConstraint: layoutConstraint.buildToken(), unexpectedBetweenLayoutConstraintAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndSize?.buildUnexpectedNodes(format: format), size: size?.buildToken(), unexpectedBetweenSizeAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(), unexpectedBetweenCommaAndAlignment?.buildUnexpectedNodes(format: format), alignment: alignment?.buildToken(), unexpectedBetweenAlignmentAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11357,13 +11357,13 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   let unexpectedBeforeAttributes: UnexpectedNodes?
   let attributes: AttributeList?
   let unexpectedBetweenAttributesAndName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndColon: UnexpectedNodes?
-  let colon: TokenSyntax?
+  let colon: Token?
   let unexpectedBetweenColonAndInheritedType: UnexpectedNodes?
   let inheritedType: TypeBuildable?
   let unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `GenericParameter` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -11376,7 +11376,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   ///   - inheritedType: 
   ///   - unexpectedBetweenInheritedTypeAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
@@ -11394,15 +11394,15 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName, name: TokenSyntax.`identifier`(name), unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon, colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndInheritedType: ExpressibleAsUnexpectedNodes? = nil, inheritedType: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenInheritedTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName, name: Token.`identifier`(name), unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon, colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `GenericParameterSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterSyntax`.
   func buildGenericParameter(format: Format) -> GenericParameterSyntax {
-    var result = GenericParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndInheritedType?.buildUnexpectedNodes(format: format), inheritedType: inheritedType?.buildType(format: format), unexpectedBetweenInheritedTypeAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = GenericParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndInheritedType?.buildUnexpectedNodes(format: format), inheritedType: inheritedType?.buildType(format: format), unexpectedBetweenInheritedTypeAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11434,16 +11434,16 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `PrimaryAssociatedType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
   ///   - name: 
   ///   - unexpectedBetweenNameAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -11454,15 +11454,15 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: TokenSyntax.`identifier`(name), unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: String, unexpectedBetweenNameAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeName: unexpectedBeforeName, name: Token.`identifier`(name), unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `PrimaryAssociatedTypeSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
   func buildPrimaryAssociatedType(format: Format) -> PrimaryAssociatedTypeSyntax {
-    var result = PrimaryAssociatedTypeSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = PrimaryAssociatedTypeSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11494,11 +11494,11 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
-  let leftAngleBracket: TokenSyntax
+  let leftAngleBracket: Token
   let unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodes?
   let genericParameterList: GenericParameterList
   let unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodes?
-  let rightAngleBracket: TokenSyntax
+  let rightAngleBracket: Token
   /// Creates a `GenericParameterClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftAngleBracket: 
@@ -11507,7 +11507,7 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   ///   - genericParameterList: 
   ///   - unexpectedBetweenGenericParameterListAndRightAngleBracket: 
   ///   - rightAngleBracket: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, genericParameterList: ExpressibleAsGenericParameterList, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, genericParameterList: ExpressibleAsGenericParameterList, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
     self.leftAngleBracket = leftAngleBracket
@@ -11521,7 +11521,7 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList =  {
     GenericParameterList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList: unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndRightAngleBracket: unexpectedBetweenGenericParameterListAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
@@ -11531,7 +11531,7 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterClauseSyntax`.
   func buildGenericParameterClause(format: Format) -> GenericParameterClauseSyntax {
-    var result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format), genericParameterList: genericParameterList.buildGenericParameterList(format: format), unexpectedBetweenGenericParameterListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket)
+    var result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format), genericParameterList: genericParameterList.buildGenericParameterList(format: format), unexpectedBetweenGenericParameterListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11561,7 +11561,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   let unexpectedBeforeLeftTypeIdentifier: UnexpectedNodes?
   let leftTypeIdentifier: TypeBuildable
   let unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodes?
   let rightTypeIdentifier: TypeBuildable
   /// Creates a `ConformanceRequirement` using the provided parameters.
@@ -11572,7 +11572,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   ///   - colon: 
   ///   - unexpectedBetweenColonAndRightTypeIdentifier: 
   ///   - rightTypeIdentifier: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, leftTypeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenLeftTypeIdentifierAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndRightTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, rightTypeIdentifier: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, leftTypeIdentifier: ExpressibleAsTypeBuildable, unexpectedBetweenLeftTypeIdentifierAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndRightTypeIdentifier: ExpressibleAsUnexpectedNodes? = nil, rightTypeIdentifier: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftTypeIdentifier = unexpectedBeforeLeftTypeIdentifier?.createUnexpectedNodes()
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
@@ -11587,7 +11587,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConformanceRequirementSyntax`.
   func buildConformanceRequirement(format: Format) -> ConformanceRequirementSyntax {
-    var result = ConformanceRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format), unexpectedBetweenLeftTypeIdentifierAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndRightTypeIdentifier?.buildUnexpectedNodes(format: format), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format))
+    var result = ConformanceRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format), unexpectedBetweenLeftTypeIdentifierAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndRightTypeIdentifier?.buildUnexpectedNodes(format: format), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11615,11 +11615,11 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
-  let leftAngleBracket: TokenSyntax
+  let leftAngleBracket: Token
   let unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodes?
   let primaryAssociatedTypeList: PrimaryAssociatedTypeList
   let unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodes?
-  let rightAngleBracket: TokenSyntax
+  let rightAngleBracket: Token
   /// Creates a `PrimaryAssociatedTypeClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftAngleBracket: 
@@ -11628,7 +11628,7 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   ///   - primaryAssociatedTypeList: 
   ///   - unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: 
   ///   - rightAngleBracket: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`, unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeList: ExpressibleAsPrimaryAssociatedTypeList, unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: ExpressibleAsUnexpectedNodes? = nil, primaryAssociatedTypeList: ExpressibleAsPrimaryAssociatedTypeList, unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
     self.leftAngleBracket = leftAngleBracket
@@ -11644,7 +11644,7 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrimaryAssociatedTypeClauseSyntax`.
   func buildPrimaryAssociatedTypeClause(format: Format) -> PrimaryAssociatedTypeClauseSyntax {
-    var result = PrimaryAssociatedTypeClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildUnexpectedNodes(format: format), primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format), unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket)
+    var result = PrimaryAssociatedTypeClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildUnexpectedNodes(format: format), primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format), unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11672,7 +11672,7 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodes?
   let genericArgumentClause: GenericArgumentClause?
   /// Creates a `SimpleTypeIdentifier` using the provided parameters.
@@ -11681,7 +11681,7 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   ///   - name: 
   ///   - unexpectedBetweenNameAndGenericArgumentClause: 
   ///   - genericArgumentClause: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeName = unexpectedBeforeName?.createUnexpectedNodes()
     self.name = name
@@ -11693,7 +11693,7 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SimpleTypeIdentifierSyntax`.
   func buildSimpleTypeIdentifier(format: Format) -> SimpleTypeIdentifierSyntax {
-    var result = SimpleTypeIdentifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
+    var result = SimpleTypeIdentifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11730,9 +11730,9 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   let unexpectedBeforeBaseType: UnexpectedNodes?
   let baseType: TypeBuildable
   let unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodes?
-  let period: TokenSyntax
+  let period: Token
   let unexpectedBetweenPeriodAndName: UnexpectedNodes?
-  let name: TokenSyntax
+  let name: Token
   let unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodes?
   let genericArgumentClause: GenericArgumentClause?
   /// Creates a `MemberTypeIdentifier` using the provided parameters.
@@ -11745,7 +11745,7 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   ///   - name: 
   ///   - unexpectedBetweenNameAndGenericArgumentClause: 
   ///   - genericArgumentClause: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable, unexpectedBetweenBaseTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax, unexpectedBetweenPeriodAndName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax, unexpectedBetweenNameAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable, unexpectedBetweenBaseTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token, unexpectedBetweenPeriodAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token, unexpectedBetweenNameAndGenericArgumentClause: ExpressibleAsUnexpectedNodes? = nil, genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBaseType = unexpectedBeforeBaseType?.createUnexpectedNodes()
     self.baseType = baseType.createTypeBuildable()
@@ -11762,7 +11762,7 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberTypeIdentifierSyntax`.
   func buildMemberTypeIdentifier(format: Format) -> MemberTypeIdentifierSyntax {
-    var result = MemberTypeIdentifierSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period, unexpectedBetweenPeriodAndName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
+    var result = MemberTypeIdentifierSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period.buildToken(), unexpectedBetweenPeriodAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11797,12 +11797,12 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeClassKeyword: UnexpectedNodes?
-  let classKeyword: TokenSyntax
+  let classKeyword: Token
   /// Creates a `ClassRestrictionType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeClassKeyword: 
   ///   - classKeyword: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: TokenSyntax = TokenSyntax.`class`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeClassKeyword: ExpressibleAsUnexpectedNodes? = nil, classKeyword: Token = Token.`class`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeClassKeyword = unexpectedBeforeClassKeyword?.createUnexpectedNodes()
     self.classKeyword = classKeyword
@@ -11813,7 +11813,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClassRestrictionTypeSyntax`.
   func buildClassRestrictionType(format: Format) -> ClassRestrictionTypeSyntax {
-    var result = ClassRestrictionTypeSyntax(unexpectedBeforeClassKeyword?.buildUnexpectedNodes(format: format), classKeyword: classKeyword)
+    var result = ClassRestrictionTypeSyntax(unexpectedBeforeClassKeyword?.buildUnexpectedNodes(format: format), classKeyword: classKeyword.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11848,11 +11848,11 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftSquareBracket: UnexpectedNodes?
-  let leftSquareBracket: TokenSyntax
+  let leftSquareBracket: Token
   let unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodes?
   let elementType: TypeBuildable
   let unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodes?
-  let rightSquareBracket: TokenSyntax
+  let rightSquareBracket: Token
   /// Creates a `ArrayType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquareBracket: 
@@ -11861,7 +11861,7 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   ///   - elementType: 
   ///   - unexpectedBetweenElementTypeAndRightSquareBracket: 
   ///   - rightSquareBracket: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquareBracket: ExpressibleAsUnexpectedNodes? = nil, leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftSquareBracketAndElementType: ExpressibleAsUnexpectedNodes? = nil, elementType: ExpressibleAsTypeBuildable, unexpectedBetweenElementTypeAndRightSquareBracket: ExpressibleAsUnexpectedNodes? = nil, rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquareBracket: ExpressibleAsUnexpectedNodes? = nil, leftSquareBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareBracketAndElementType: ExpressibleAsUnexpectedNodes? = nil, elementType: ExpressibleAsTypeBuildable, unexpectedBetweenElementTypeAndRightSquareBracket: ExpressibleAsUnexpectedNodes? = nil, rightSquareBracket: Token = Token.`rightSquareBracket`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquareBracket = unexpectedBeforeLeftSquareBracket?.createUnexpectedNodes()
     self.leftSquareBracket = leftSquareBracket
@@ -11877,7 +11877,7 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayTypeSyntax`.
   func buildArrayType(format: Format) -> ArrayTypeSyntax {
-    var result = ArrayTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format), leftSquareBracket: leftSquareBracket, unexpectedBetweenLeftSquareBracketAndElementType?.buildUnexpectedNodes(format: format), elementType: elementType.buildType(format: format), unexpectedBetweenElementTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format), rightSquareBracket: rightSquareBracket)
+    var result = ArrayTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format), leftSquareBracket: leftSquareBracket.buildToken(), unexpectedBetweenLeftSquareBracketAndElementType?.buildUnexpectedNodes(format: format), elementType: elementType.buildType(format: format), unexpectedBetweenElementTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format), rightSquareBracket: rightSquareBracket.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11912,15 +11912,15 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftSquareBracket: UnexpectedNodes?
-  let leftSquareBracket: TokenSyntax
+  let leftSquareBracket: Token
   let unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodes?
   let keyType: TypeBuildable
   let unexpectedBetweenKeyTypeAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndValueType: UnexpectedNodes?
   let valueType: TypeBuildable
   let unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodes?
-  let rightSquareBracket: TokenSyntax
+  let rightSquareBracket: Token
   /// Creates a `DictionaryType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquareBracket: 
@@ -11933,7 +11933,7 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   ///   - valueType: 
   ///   - unexpectedBetweenValueTypeAndRightSquareBracket: 
   ///   - rightSquareBracket: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquareBracket: ExpressibleAsUnexpectedNodes? = nil, leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`, unexpectedBetweenLeftSquareBracketAndKeyType: ExpressibleAsUnexpectedNodes? = nil, keyType: ExpressibleAsTypeBuildable, unexpectedBetweenKeyTypeAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValueType: ExpressibleAsUnexpectedNodes? = nil, valueType: ExpressibleAsTypeBuildable, unexpectedBetweenValueTypeAndRightSquareBracket: ExpressibleAsUnexpectedNodes? = nil, rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftSquareBracket: ExpressibleAsUnexpectedNodes? = nil, leftSquareBracket: Token = Token.`leftSquareBracket`, unexpectedBetweenLeftSquareBracketAndKeyType: ExpressibleAsUnexpectedNodes? = nil, keyType: ExpressibleAsTypeBuildable, unexpectedBetweenKeyTypeAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValueType: ExpressibleAsUnexpectedNodes? = nil, valueType: ExpressibleAsTypeBuildable, unexpectedBetweenValueTypeAndRightSquareBracket: ExpressibleAsUnexpectedNodes? = nil, rightSquareBracket: Token = Token.`rightSquareBracket`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftSquareBracket = unexpectedBeforeLeftSquareBracket?.createUnexpectedNodes()
     self.leftSquareBracket = leftSquareBracket
@@ -11954,7 +11954,7 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryTypeSyntax`.
   func buildDictionaryType(format: Format) -> DictionaryTypeSyntax {
-    var result = DictionaryTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format), leftSquareBracket: leftSquareBracket, unexpectedBetweenLeftSquareBracketAndKeyType?.buildUnexpectedNodes(format: format), keyType: keyType.buildType(format: format), unexpectedBetweenKeyTypeAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndValueType?.buildUnexpectedNodes(format: format), valueType: valueType.buildType(format: format), unexpectedBetweenValueTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format), rightSquareBracket: rightSquareBracket)
+    var result = DictionaryTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format), leftSquareBracket: leftSquareBracket.buildToken(), unexpectedBetweenLeftSquareBracketAndKeyType?.buildUnexpectedNodes(format: format), keyType: keyType.buildType(format: format), unexpectedBetweenKeyTypeAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValueType?.buildUnexpectedNodes(format: format), valueType: valueType.buildType(format: format), unexpectedBetweenValueTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format), rightSquareBracket: rightSquareBracket.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11991,9 +11991,9 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   let unexpectedBeforeBaseType: UnexpectedNodes?
   let baseType: TypeBuildable
   let unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodes?
-  let period: TokenSyntax
+  let period: Token
   let unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodes?
-  let typeOrProtocol: TokenSyntax
+  let typeOrProtocol: Token
   /// Creates a `MetatypeType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBaseType: 
@@ -12002,7 +12002,7 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   ///   - period: 
   ///   - unexpectedBetweenPeriodAndTypeOrProtocol: 
   ///   - typeOrProtocol: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable, unexpectedBetweenBaseTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax = TokenSyntax.`period`, unexpectedBetweenPeriodAndTypeOrProtocol: ExpressibleAsUnexpectedNodes? = nil, typeOrProtocol: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable, unexpectedBetweenBaseTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndTypeOrProtocol: ExpressibleAsUnexpectedNodes? = nil, typeOrProtocol: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeBaseType = unexpectedBeforeBaseType?.createUnexpectedNodes()
     self.baseType = baseType.createTypeBuildable()
@@ -12016,15 +12016,15 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable, unexpectedBetweenBaseTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax = TokenSyntax.`period`, unexpectedBetweenPeriodAndTypeOrProtocol: ExpressibleAsUnexpectedNodes? = nil, typeOrProtocol: String) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBaseType: unexpectedBeforeBaseType, baseType: baseType, unexpectedBetweenBaseTypeAndPeriod: unexpectedBetweenBaseTypeAndPeriod, period: period, unexpectedBetweenPeriodAndTypeOrProtocol: unexpectedBetweenPeriodAndTypeOrProtocol, typeOrProtocol: TokenSyntax.`identifier`(typeOrProtocol))
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable, unexpectedBetweenBaseTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndTypeOrProtocol: ExpressibleAsUnexpectedNodes? = nil, typeOrProtocol: String) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeBaseType: unexpectedBeforeBaseType, baseType: baseType, unexpectedBetweenBaseTypeAndPeriod: unexpectedBetweenBaseTypeAndPeriod, period: period, unexpectedBetweenPeriodAndTypeOrProtocol: unexpectedBetweenPeriodAndTypeOrProtocol, typeOrProtocol: Token.`identifier`(typeOrProtocol))
   }
   /// Builds a `MetatypeTypeSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MetatypeTypeSyntax`.
   func buildMetatypeType(format: Format) -> MetatypeTypeSyntax {
-    var result = MetatypeTypeSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period, unexpectedBetweenPeriodAndTypeOrProtocol?.buildUnexpectedNodes(format: format), typeOrProtocol: typeOrProtocol)
+    var result = MetatypeTypeSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period.buildToken(), unexpectedBetweenPeriodAndTypeOrProtocol?.buildUnexpectedNodes(format: format), typeOrProtocol: typeOrProtocol.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12061,14 +12061,14 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   let unexpectedBeforeWrappedType: UnexpectedNodes?
   let wrappedType: TypeBuildable
   let unexpectedBetweenWrappedTypeAndQuestionMark: UnexpectedNodes?
-  let questionMark: TokenSyntax
+  let questionMark: Token
   /// Creates a `OptionalType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWrappedType: 
   ///   - wrappedType: 
   ///   - unexpectedBetweenWrappedTypeAndQuestionMark: 
   ///   - questionMark: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrappedType: ExpressibleAsUnexpectedNodes? = nil, wrappedType: ExpressibleAsTypeBuildable, unexpectedBetweenWrappedTypeAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrappedType: ExpressibleAsUnexpectedNodes? = nil, wrappedType: ExpressibleAsTypeBuildable, unexpectedBetweenWrappedTypeAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: Token = Token.`postfixQuestionMark`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWrappedType = unexpectedBeforeWrappedType?.createUnexpectedNodes()
     self.wrappedType = wrappedType.createTypeBuildable()
@@ -12081,7 +12081,7 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalTypeSyntax`.
   func buildOptionalType(format: Format) -> OptionalTypeSyntax {
-    var result = OptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format), wrappedType: wrappedType.buildType(format: format), unexpectedBetweenWrappedTypeAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark)
+    var result = OptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format), wrappedType: wrappedType.buildType(format: format), unexpectedBetweenWrappedTypeAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12116,7 +12116,7 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodes?
-  let someOrAnySpecifier: TokenSyntax
+  let someOrAnySpecifier: Token
   let unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodes?
   let baseType: TypeBuildable
   /// Creates a `ConstrainedSugarType` using the provided parameters.
@@ -12125,7 +12125,7 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   ///   - someOrAnySpecifier: 
   ///   - unexpectedBetweenSomeOrAnySpecifierAndBaseType: 
   ///   - baseType: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSomeOrAnySpecifier: ExpressibleAsUnexpectedNodes? = nil, someOrAnySpecifier: TokenSyntax, unexpectedBetweenSomeOrAnySpecifierAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSomeOrAnySpecifier: ExpressibleAsUnexpectedNodes? = nil, someOrAnySpecifier: Token, unexpectedBetweenSomeOrAnySpecifierAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSomeOrAnySpecifier = unexpectedBeforeSomeOrAnySpecifier?.createUnexpectedNodes()
     self.someOrAnySpecifier = someOrAnySpecifier
@@ -12137,14 +12137,14 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforeSomeOrAnySpecifier: ExpressibleAsUnexpectedNodes? = nil, someOrAnySpecifier: String, unexpectedBetweenSomeOrAnySpecifierAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSomeOrAnySpecifier: unexpectedBeforeSomeOrAnySpecifier, someOrAnySpecifier: TokenSyntax.`identifier`(someOrAnySpecifier), unexpectedBetweenSomeOrAnySpecifierAndBaseType: unexpectedBetweenSomeOrAnySpecifierAndBaseType, baseType: baseType)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeSomeOrAnySpecifier: unexpectedBeforeSomeOrAnySpecifier, someOrAnySpecifier: Token.`identifier`(someOrAnySpecifier), unexpectedBetweenSomeOrAnySpecifierAndBaseType: unexpectedBetweenSomeOrAnySpecifierAndBaseType, baseType: baseType)
   }
   /// Builds a `ConstrainedSugarTypeSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConstrainedSugarTypeSyntax`.
   func buildConstrainedSugarType(format: Format) -> ConstrainedSugarTypeSyntax {
-    var result = ConstrainedSugarTypeSyntax(unexpectedBeforeSomeOrAnySpecifier?.buildUnexpectedNodes(format: format), someOrAnySpecifier: someOrAnySpecifier, unexpectedBetweenSomeOrAnySpecifierAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
+    var result = ConstrainedSugarTypeSyntax(unexpectedBeforeSomeOrAnySpecifier?.buildUnexpectedNodes(format: format), someOrAnySpecifier: someOrAnySpecifier.buildToken(), unexpectedBetweenSomeOrAnySpecifierAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12181,14 +12181,14 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   let unexpectedBeforeWrappedType: UnexpectedNodes?
   let wrappedType: TypeBuildable
   let unexpectedBetweenWrappedTypeAndExclamationMark: UnexpectedNodes?
-  let exclamationMark: TokenSyntax
+  let exclamationMark: Token
   /// Creates a `ImplicitlyUnwrappedOptionalType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWrappedType: 
   ///   - wrappedType: 
   ///   - unexpectedBetweenWrappedTypeAndExclamationMark: 
   ///   - exclamationMark: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrappedType: ExpressibleAsUnexpectedNodes? = nil, wrappedType: ExpressibleAsTypeBuildable, unexpectedBetweenWrappedTypeAndExclamationMark: ExpressibleAsUnexpectedNodes? = nil, exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWrappedType: ExpressibleAsUnexpectedNodes? = nil, wrappedType: ExpressibleAsTypeBuildable, unexpectedBetweenWrappedTypeAndExclamationMark: ExpressibleAsUnexpectedNodes? = nil, exclamationMark: Token = Token.`exclamationMark`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWrappedType = unexpectedBeforeWrappedType?.createUnexpectedNodes()
     self.wrappedType = wrappedType.createTypeBuildable()
@@ -12201,7 +12201,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImplicitlyUnwrappedOptionalTypeSyntax`.
   func buildImplicitlyUnwrappedOptionalType(format: Format) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    var result = ImplicitlyUnwrappedOptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format), wrappedType: wrappedType.buildType(format: format), unexpectedBetweenWrappedTypeAndExclamationMark?.buildUnexpectedNodes(format: format), exclamationMark: exclamationMark)
+    var result = ImplicitlyUnwrappedOptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format), wrappedType: wrappedType.buildType(format: format), unexpectedBetweenWrappedTypeAndExclamationMark?.buildUnexpectedNodes(format: format), exclamationMark: exclamationMark.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12238,14 +12238,14 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   let unexpectedBeforeType: UnexpectedNodes?
   let type: TypeBuildable
   let unexpectedBetweenTypeAndAmpersand: UnexpectedNodes?
-  let ampersand: TokenSyntax?
+  let ampersand: Token?
   /// Creates a `CompositionTypeElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeType: 
   ///   - type: 
   ///   - unexpectedBetweenTypeAndAmpersand: 
   ///   - ampersand: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable, unexpectedBetweenTypeAndAmpersand: ExpressibleAsUnexpectedNodes? = nil, ampersand: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable, unexpectedBetweenTypeAndAmpersand: ExpressibleAsUnexpectedNodes? = nil, ampersand: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeType = unexpectedBeforeType?.createUnexpectedNodes()
     self.type = type.createTypeBuildable()
@@ -12258,7 +12258,7 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CompositionTypeElementSyntax`.
   func buildCompositionTypeElement(format: Format) -> CompositionTypeElementSyntax {
-    var result = CompositionTypeElementSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format), unexpectedBetweenTypeAndAmpersand?.buildUnexpectedNodes(format: format), ampersand: ampersand)
+    var result = CompositionTypeElementSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format), unexpectedBetweenTypeAndAmpersand?.buildUnexpectedNodes(format: format), ampersand: ampersand?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12336,21 +12336,21 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeInOut: UnexpectedNodes?
-  let inOut: TokenSyntax?
+  let inOut: Token?
   let unexpectedBetweenInOutAndName: UnexpectedNodes?
-  let name: TokenSyntax?
+  let name: Token?
   let unexpectedBetweenNameAndSecondName: UnexpectedNodes?
-  let secondName: TokenSyntax?
+  let secondName: Token?
   let unexpectedBetweenSecondNameAndColon: UnexpectedNodes?
-  let colon: TokenSyntax?
+  let colon: Token?
   let unexpectedBetweenColonAndType: UnexpectedNodes?
   let type: TypeBuildable
   let unexpectedBetweenTypeAndEllipsis: UnexpectedNodes?
-  let ellipsis: TokenSyntax?
+  let ellipsis: Token?
   let unexpectedBetweenEllipsisAndInitializer: UnexpectedNodes?
   let initializer: InitializerClause?
   let unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `TupleTypeElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeInOut: 
@@ -12369,7 +12369,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   ///   - initializer: 
   ///   - unexpectedBetweenInitializerAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeInOut: ExpressibleAsUnexpectedNodes? = nil, inOut: TokenSyntax? = nil, unexpectedBetweenInOutAndName: ExpressibleAsUnexpectedNodes? = nil, name: TokenSyntax? = nil, unexpectedBetweenNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: TokenSyntax? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: TokenSyntax? = nil, unexpectedBetweenEllipsisAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause? = nil, unexpectedBetweenInitializerAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeInOut: ExpressibleAsUnexpectedNodes? = nil, inOut: Token? = nil, unexpectedBetweenInOutAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token? = nil, unexpectedBetweenNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: Token? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndInitializer: ExpressibleAsUnexpectedNodes? = nil, initializer: ExpressibleAsInitializerClause? = nil, unexpectedBetweenInitializerAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeInOut = unexpectedBeforeInOut?.createUnexpectedNodes()
     self.inOut = inOut
@@ -12397,7 +12397,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleTypeElementSyntax`.
   func buildTupleTypeElement(format: Format) -> TupleTypeElementSyntax {
-    var result = TupleTypeElementSyntax(unexpectedBeforeInOut?.buildUnexpectedNodes(format: format), inOut: inOut, unexpectedBetweenInOutAndName?.buildUnexpectedNodes(format: format), name: name, unexpectedBetweenNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName, unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis, unexpectedBetweenEllipsisAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format), unexpectedBetweenInitializerAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = TupleTypeElementSyntax(unexpectedBeforeInOut?.buildUnexpectedNodes(format: format), inOut: inOut?.buildToken(), unexpectedBetweenInOutAndName?.buildUnexpectedNodes(format: format), name: name?.buildToken(), unexpectedBetweenNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(), unexpectedBetweenEllipsisAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format), unexpectedBetweenInitializerAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12429,11 +12429,11 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndElements: UnexpectedNodes?
   let elements: TupleTypeElementList
   let unexpectedBetweenElementsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `TupleType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -12442,7 +12442,7 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   ///   - elements: 
   ///   - unexpectedBetweenElementsAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsTupleTypeElementList, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsTupleTypeElementList, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -12458,7 +12458,7 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleTypeSyntax`.
   func buildTupleType(format: Format) -> TupleTypeSyntax {
-    var result = TupleTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildTupleTypeElementList(format: format), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = TupleTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildTupleTypeElementList(format: format), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12493,17 +12493,17 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
   let arguments: TupleTypeElementList
   let unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   let unexpectedBetweenRightParenAndAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: TokenSyntax?
+  let asyncKeyword: Token?
   let unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodes?
-  let throwsOrRethrowsKeyword: TokenSyntax?
+  let throwsOrRethrowsKeyword: Token?
   let unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: UnexpectedNodes?
-  let arrow: TokenSyntax
+  let arrow: Token
   let unexpectedBetweenArrowAndReturnType: UnexpectedNodes?
   let returnType: TypeBuildable
   /// Creates a `FunctionType` using the provided parameters.
@@ -12522,7 +12522,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   ///   - arrow: 
   ///   - unexpectedBetweenArrowAndReturnType: 
   ///   - returnType: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsTupleTypeElementList, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`, unexpectedBetweenRightParenAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: TokenSyntax? = nil, unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsOrRethrowsKeyword: TokenSyntax? = nil, unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: ExpressibleAsUnexpectedNodes? = nil, arrow: TokenSyntax = TokenSyntax.`arrow`, unexpectedBetweenArrowAndReturnType: ExpressibleAsUnexpectedNodes? = nil, returnType: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsTupleTypeElementList, unexpectedBetweenArgumentsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, unexpectedBetweenRightParenAndAsyncKeyword: ExpressibleAsUnexpectedNodes? = nil, asyncKeyword: Token? = nil, unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: ExpressibleAsUnexpectedNodes? = nil, throwsOrRethrowsKeyword: Token? = nil, unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: ExpressibleAsUnexpectedNodes? = nil, arrow: Token = Token.`arrow`, unexpectedBetweenArrowAndReturnType: ExpressibleAsUnexpectedNodes? = nil, returnType: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -12549,7 +12549,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionTypeSyntax`.
   func buildFunctionType(format: Format) -> FunctionTypeSyntax {
-    var result = FunctionTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildTupleTypeElementList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen, unexpectedBetweenRightParenAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword, unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword, unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.buildUnexpectedNodes(format: format), arrow: arrow, unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format), returnType: returnType.buildType(format: format))
+    var result = FunctionTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildTupleTypeElementList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken(), unexpectedBetweenRightParenAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword?.buildToken(), unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.buildUnexpectedNodes(format: format), arrow: arrow.buildToken(), unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format), returnType: returnType.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12584,7 +12584,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeSpecifier: UnexpectedNodes?
-  let specifier: TokenSyntax?
+  let specifier: Token?
   let unexpectedBetweenSpecifierAndAttributes: UnexpectedNodes?
   let attributes: AttributeList?
   let unexpectedBetweenAttributesAndBaseType: UnexpectedNodes?
@@ -12597,7 +12597,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   ///   - attributes: 
   ///   - unexpectedBetweenAttributesAndBaseType: 
   ///   - baseType: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSpecifier: ExpressibleAsUnexpectedNodes? = nil, specifier: TokenSyntax? = nil, unexpectedBetweenSpecifierAndAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSpecifier: ExpressibleAsUnexpectedNodes? = nil, specifier: Token? = nil, unexpectedBetweenSpecifierAndAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSpecifier = unexpectedBeforeSpecifier?.createUnexpectedNodes()
     self.specifier = specifier
@@ -12612,7 +12612,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AttributedTypeSyntax`.
   func buildAttributedType(format: Format) -> AttributedTypeSyntax {
-    var result = AttributedTypeSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format), specifier: specifier, unexpectedBetweenSpecifierAndAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
+    var result = AttributedTypeSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format), specifier: specifier?.buildToken(), unexpectedBetweenSpecifierAndAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12649,14 +12649,14 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   let unexpectedBeforeArgumentType: UnexpectedNodes?
   let argumentType: TypeBuildable
   let unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `GenericArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeArgumentType: 
   ///   - argumentType: 
   ///   - unexpectedBetweenArgumentTypeAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeArgumentType: ExpressibleAsUnexpectedNodes? = nil, argumentType: ExpressibleAsTypeBuildable, unexpectedBetweenArgumentTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeArgumentType: ExpressibleAsUnexpectedNodes? = nil, argumentType: ExpressibleAsTypeBuildable, unexpectedBetweenArgumentTypeAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeArgumentType = unexpectedBeforeArgumentType?.createUnexpectedNodes()
     self.argumentType = argumentType.createTypeBuildable()
@@ -12669,7 +12669,7 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericArgumentSyntax`.
   func buildGenericArgument(format: Format) -> GenericArgumentSyntax {
-    var result = GenericArgumentSyntax(unexpectedBeforeArgumentType?.buildUnexpectedNodes(format: format), argumentType: argumentType.buildType(format: format), unexpectedBetweenArgumentTypeAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = GenericArgumentSyntax(unexpectedBeforeArgumentType?.buildUnexpectedNodes(format: format), argumentType: argumentType.buildType(format: format), unexpectedBetweenArgumentTypeAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12701,11 +12701,11 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
-  let leftAngleBracket: TokenSyntax
+  let leftAngleBracket: Token
   let unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodes?
   let arguments: GenericArgumentList
   let unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodes?
-  let rightAngleBracket: TokenSyntax
+  let rightAngleBracket: Token
   /// Creates a `GenericArgumentClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftAngleBracket: 
@@ -12714,7 +12714,7 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   ///   - arguments: 
   ///   - unexpectedBetweenArgumentsAndRightAngleBracket: 
   ///   - rightAngleBracket: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`, unexpectedBetweenLeftAngleBracketAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsGenericArgumentList, unexpectedBetweenArgumentsAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndArguments: ExpressibleAsUnexpectedNodes? = nil, arguments: ExpressibleAsGenericArgumentList, unexpectedBetweenArgumentsAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
     self.leftAngleBracket = leftAngleBracket
@@ -12728,7 +12728,7 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`, unexpectedBetweenLeftAngleBracketAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`, @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndArguments: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenArgumentsAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList =  {
     GenericArgumentList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndArguments: unexpectedBetweenLeftAngleBracketAndArguments, arguments: argumentsBuilder(), unexpectedBetweenArgumentsAndRightAngleBracket: unexpectedBetweenArgumentsAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
@@ -12738,7 +12738,7 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericArgumentClauseSyntax`.
   func buildGenericArgumentClause(format: Format) -> GenericArgumentClauseSyntax {
-    var result = GenericArgumentClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildGenericArgumentList(format: format), unexpectedBetweenArgumentsAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket)
+    var result = GenericArgumentClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildGenericArgumentList(format: format), unexpectedBetweenArgumentsAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12766,7 +12766,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndType: UnexpectedNodes?
   let type: TypeBuildable
   /// Creates a `TypeAnnotation` using the provided parameters.
@@ -12775,7 +12775,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   ///   - colon: 
   ///   - unexpectedBetweenColonAndType: 
   ///   - type: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
@@ -12788,7 +12788,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeAnnotationSyntax`.
   func buildTypeAnnotation(format: Format) -> TypeAnnotationSyntax {
-    var result = TypeAnnotationSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
+    var result = TypeAnnotationSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12818,9 +12818,9 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   let unexpectedBeforeType: UnexpectedNodes?
   let type: TypeBuildable?
   let unexpectedBetweenTypeAndPeriod: UnexpectedNodes?
-  let period: TokenSyntax
+  let period: Token
   let unexpectedBetweenPeriodAndCaseName: UnexpectedNodes?
-  let caseName: TokenSyntax
+  let caseName: Token
   let unexpectedBetweenCaseNameAndAssociatedTuple: UnexpectedNodes?
   let associatedTuple: TuplePattern?
   /// Creates a `EnumCasePattern` using the provided parameters.
@@ -12833,7 +12833,7 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   ///   - caseName: 
   ///   - unexpectedBetweenCaseNameAndAssociatedTuple: 
   ///   - associatedTuple: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax = TokenSyntax.`period`, unexpectedBetweenPeriodAndCaseName: ExpressibleAsUnexpectedNodes? = nil, caseName: TokenSyntax, unexpectedBetweenCaseNameAndAssociatedTuple: ExpressibleAsUnexpectedNodes? = nil, associatedTuple: ExpressibleAsTuplePattern? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndCaseName: ExpressibleAsUnexpectedNodes? = nil, caseName: Token, unexpectedBetweenCaseNameAndAssociatedTuple: ExpressibleAsUnexpectedNodes? = nil, associatedTuple: ExpressibleAsTuplePattern? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeType = unexpectedBeforeType?.createUnexpectedNodes()
     self.type = type?.createTypeBuildable()
@@ -12848,15 +12848,15 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: TokenSyntax = TokenSyntax.`period`, unexpectedBetweenPeriodAndCaseName: ExpressibleAsUnexpectedNodes? = nil, caseName: String, unexpectedBetweenCaseNameAndAssociatedTuple: ExpressibleAsUnexpectedNodes? = nil, associatedTuple: ExpressibleAsTuplePattern? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeType: unexpectedBeforeType, type: type, unexpectedBetweenTypeAndPeriod: unexpectedBetweenTypeAndPeriod, period: period, unexpectedBetweenPeriodAndCaseName: unexpectedBetweenPeriodAndCaseName, caseName: TokenSyntax.`identifier`(caseName), unexpectedBetweenCaseNameAndAssociatedTuple: unexpectedBetweenCaseNameAndAssociatedTuple, associatedTuple: associatedTuple)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndPeriod: ExpressibleAsUnexpectedNodes? = nil, period: Token = Token.`period`, unexpectedBetweenPeriodAndCaseName: ExpressibleAsUnexpectedNodes? = nil, caseName: String, unexpectedBetweenCaseNameAndAssociatedTuple: ExpressibleAsUnexpectedNodes? = nil, associatedTuple: ExpressibleAsTuplePattern? = nil) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeType: unexpectedBeforeType, type: type, unexpectedBetweenTypeAndPeriod: unexpectedBetweenTypeAndPeriod, period: period, unexpectedBetweenPeriodAndCaseName: unexpectedBetweenPeriodAndCaseName, caseName: Token.`identifier`(caseName), unexpectedBetweenCaseNameAndAssociatedTuple: unexpectedBetweenCaseNameAndAssociatedTuple, associatedTuple: associatedTuple)
   }
   /// Builds a `EnumCasePatternSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCasePatternSyntax`.
   func buildEnumCasePattern(format: Format) -> EnumCasePatternSyntax {
-    var result = EnumCasePatternSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period, unexpectedBetweenPeriodAndCaseName?.buildUnexpectedNodes(format: format), caseName: caseName, unexpectedBetweenCaseNameAndAssociatedTuple?.buildUnexpectedNodes(format: format), associatedTuple: associatedTuple?.buildTuplePattern(format: format))
+    var result = EnumCasePatternSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period.buildToken(), unexpectedBetweenPeriodAndCaseName?.buildUnexpectedNodes(format: format), caseName: caseName.buildToken(), unexpectedBetweenCaseNameAndAssociatedTuple?.buildUnexpectedNodes(format: format), associatedTuple: associatedTuple?.buildTuplePattern(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12891,7 +12891,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIsKeyword: UnexpectedNodes?
-  let isKeyword: TokenSyntax
+  let isKeyword: Token
   let unexpectedBetweenIsKeywordAndType: UnexpectedNodes?
   let type: TypeBuildable
   /// Creates a `IsTypePattern` using the provided parameters.
@@ -12900,7 +12900,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   ///   - isKeyword: 
   ///   - unexpectedBetweenIsKeywordAndType: 
   ///   - type: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIsKeyword: ExpressibleAsUnexpectedNodes? = nil, isKeyword: TokenSyntax = TokenSyntax.`is`, unexpectedBetweenIsKeywordAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIsKeyword: ExpressibleAsUnexpectedNodes? = nil, isKeyword: Token = Token.`is`, unexpectedBetweenIsKeywordAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIsKeyword = unexpectedBeforeIsKeyword?.createUnexpectedNodes()
     self.isKeyword = isKeyword
@@ -12913,7 +12913,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IsTypePatternSyntax`.
   func buildIsTypePattern(format: Format) -> IsTypePatternSyntax {
-    var result = IsTypePatternSyntax(unexpectedBeforeIsKeyword?.buildUnexpectedNodes(format: format), isKeyword: isKeyword, unexpectedBetweenIsKeywordAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
+    var result = IsTypePatternSyntax(unexpectedBeforeIsKeyword?.buildUnexpectedNodes(format: format), isKeyword: isKeyword.buildToken(), unexpectedBetweenIsKeywordAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -12950,14 +12950,14 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   let unexpectedBeforeSubPattern: UnexpectedNodes?
   let subPattern: PatternBuildable
   let unexpectedBetweenSubPatternAndQuestionMark: UnexpectedNodes?
-  let questionMark: TokenSyntax
+  let questionMark: Token
   /// Creates a `OptionalPattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSubPattern: 
   ///   - subPattern: 
   ///   - unexpectedBetweenSubPatternAndQuestionMark: 
   ///   - questionMark: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeSubPattern: ExpressibleAsUnexpectedNodes? = nil, subPattern: ExpressibleAsPatternBuildable, unexpectedBetweenSubPatternAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeSubPattern: ExpressibleAsUnexpectedNodes? = nil, subPattern: ExpressibleAsPatternBuildable, unexpectedBetweenSubPatternAndQuestionMark: ExpressibleAsUnexpectedNodes? = nil, questionMark: Token = Token.`postfixQuestionMark`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeSubPattern = unexpectedBeforeSubPattern?.createUnexpectedNodes()
     self.subPattern = subPattern.createPatternBuildable()
@@ -12970,7 +12970,7 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalPatternSyntax`.
   func buildOptionalPattern(format: Format) -> OptionalPatternSyntax {
-    var result = OptionalPatternSyntax(unexpectedBeforeSubPattern?.buildUnexpectedNodes(format: format), subPattern: subPattern.buildPattern(format: format), unexpectedBetweenSubPatternAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark)
+    var result = OptionalPatternSyntax(unexpectedBeforeSubPattern?.buildUnexpectedNodes(format: format), subPattern: subPattern.buildPattern(format: format), unexpectedBetweenSubPatternAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13005,12 +13005,12 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: TokenSyntax
+  let identifier: Token
   /// Creates a `IdentifierPattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
   ///   - identifier: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: TokenSyntax) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeIdentifier: ExpressibleAsUnexpectedNodes? = nil, identifier: Token) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeIdentifier = unexpectedBeforeIdentifier?.createUnexpectedNodes()
     self.identifier = identifier
@@ -13020,7 +13020,7 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IdentifierPatternSyntax`.
   func buildIdentifierPattern(format: Format) -> IdentifierPatternSyntax {
-    var result = IdentifierPatternSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier)
+    var result = IdentifierPatternSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13057,7 +13057,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   let unexpectedBeforePattern: UnexpectedNodes?
   let pattern: PatternBuildable
   let unexpectedBetweenPatternAndAsKeyword: UnexpectedNodes?
-  let asKeyword: TokenSyntax
+  let asKeyword: Token
   let unexpectedBetweenAsKeywordAndType: UnexpectedNodes?
   let type: TypeBuildable
   /// Creates a `AsTypePattern` using the provided parameters.
@@ -13068,7 +13068,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   ///   - asKeyword: 
   ///   - unexpectedBetweenAsKeywordAndType: 
   ///   - type: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndAsKeyword: ExpressibleAsUnexpectedNodes? = nil, asKeyword: TokenSyntax = TokenSyntax.`as`, unexpectedBetweenAsKeywordAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndAsKeyword: ExpressibleAsUnexpectedNodes? = nil, asKeyword: Token = Token.`as`, unexpectedBetweenAsKeywordAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePattern = unexpectedBeforePattern?.createUnexpectedNodes()
     self.pattern = pattern.createPatternBuildable()
@@ -13083,7 +13083,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AsTypePatternSyntax`.
   func buildAsTypePattern(format: Format) -> AsTypePatternSyntax {
-    var result = AsTypePatternSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndAsKeyword?.buildUnexpectedNodes(format: format), asKeyword: asKeyword, unexpectedBetweenAsKeywordAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
+    var result = AsTypePatternSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndAsKeyword?.buildUnexpectedNodes(format: format), asKeyword: asKeyword.buildToken(), unexpectedBetweenAsKeywordAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13118,11 +13118,11 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: TokenSyntax
+  let leftParen: Token
   let unexpectedBetweenLeftParenAndElements: UnexpectedNodes?
   let elements: TuplePatternElementList
   let unexpectedBetweenElementsAndRightParen: UnexpectedNodes?
-  let rightParen: TokenSyntax
+  let rightParen: Token
   /// Creates a `TuplePattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -13131,7 +13131,7 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   ///   - elements: 
   ///   - unexpectedBetweenElementsAndRightParen: 
   ///   - rightParen: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsTuplePatternElementList, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, elements: ExpressibleAsTuplePatternElementList, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLeftParen = unexpectedBeforeLeftParen?.createUnexpectedNodes()
     self.leftParen = leftParen
@@ -13145,7 +13145,7 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: TokenSyntax = TokenSyntax.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: TokenSyntax = TokenSyntax.`rightParen`, @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndElements: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenElementsAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`, @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList =  {
     TuplePatternElementList([])
   }) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftParen: unexpectedBeforeLeftParen, leftParen: leftParen, unexpectedBetweenLeftParenAndElements: unexpectedBetweenLeftParenAndElements, elements: elementsBuilder(), unexpectedBetweenElementsAndRightParen: unexpectedBetweenElementsAndRightParen, rightParen: rightParen)
@@ -13155,7 +13155,7 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TuplePatternSyntax`.
   func buildTuplePattern(format: Format) -> TuplePatternSyntax {
-    var result = TuplePatternSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen, unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildTuplePatternElementList(format: format), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen)
+    var result = TuplePatternSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildTuplePatternElementList(format: format), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13190,7 +13190,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeWildcard: UnexpectedNodes?
-  let wildcard: TokenSyntax
+  let wildcard: Token
   let unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodes?
   let typeAnnotation: TypeAnnotation?
   /// Creates a `WildcardPattern` using the provided parameters.
@@ -13199,7 +13199,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   ///   - wildcard: 
   ///   - unexpectedBetweenWildcardAndTypeAnnotation: 
   ///   - typeAnnotation: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeWildcard: ExpressibleAsUnexpectedNodes? = nil, wildcard: TokenSyntax = TokenSyntax.`wildcard`, unexpectedBetweenWildcardAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWildcard: ExpressibleAsUnexpectedNodes? = nil, wildcard: Token = Token.`wildcard`, unexpectedBetweenWildcardAndTypeAnnotation: ExpressibleAsUnexpectedNodes? = nil, typeAnnotation: ExpressibleAsTypeAnnotation? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeWildcard = unexpectedBeforeWildcard?.createUnexpectedNodes()
     self.wildcard = wildcard
@@ -13212,7 +13212,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WildcardPatternSyntax`.
   func buildWildcardPattern(format: Format) -> WildcardPatternSyntax {
-    var result = WildcardPatternSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format), wildcard: wildcard, unexpectedBetweenWildcardAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format))
+    var result = WildcardPatternSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format), wildcard: wildcard.buildToken(), unexpectedBetweenWildcardAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13247,13 +13247,13 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabelName: UnexpectedNodes?
-  let labelName: TokenSyntax?
+  let labelName: Token?
   let unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodes?
-  let labelColon: TokenSyntax?
+  let labelColon: Token?
   let unexpectedBetweenLabelColonAndPattern: UnexpectedNodes?
   let pattern: PatternBuildable
   let unexpectedBetweenPatternAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `TuplePatternElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabelName: 
@@ -13264,7 +13264,7 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   ///   - pattern: 
   ///   - unexpectedBetweenPatternAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: TokenSyntax? = nil, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: TokenSyntax? = nil, unexpectedBetweenLabelColonAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: Token? = nil, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: Token? = nil, unexpectedBetweenLabelColonAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabelName = unexpectedBeforeLabelName?.createUnexpectedNodes()
     self.labelName = labelName
@@ -13280,9 +13280,9 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: String?, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: TokenSyntax? = nil, unexpectedBetweenLabelColonAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabelName: ExpressibleAsUnexpectedNodes? = nil, labelName: String?, unexpectedBetweenLabelNameAndLabelColon: ExpressibleAsUnexpectedNodes? = nil, labelColon: Token? = nil, unexpectedBetweenLabelColonAndPattern: ExpressibleAsUnexpectedNodes? = nil, pattern: ExpressibleAsPatternBuildable, unexpectedBetweenPatternAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabelName: unexpectedBeforeLabelName, labelName: labelName.map {
-      TokenSyntax.`identifier`($0)
+      Token.`identifier`($0)
     }, unexpectedBetweenLabelNameAndLabelColon: unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndPattern: unexpectedBetweenLabelColonAndPattern, pattern: pattern, unexpectedBetweenPatternAndTrailingComma: unexpectedBetweenPatternAndTrailingComma, trailingComma: trailingComma)
   }
   /// Builds a `TuplePatternElementSyntax`.
@@ -13290,7 +13290,7 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TuplePatternElementSyntax`.
   func buildTuplePatternElement(format: Format) -> TuplePatternElementSyntax {
-    var result = TuplePatternElementSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format), labelName: labelName, unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format), labelColon: labelColon, unexpectedBetweenLabelColonAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = TuplePatternElementSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format), labelName: labelName?.buildToken(), unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format), labelColon: labelColon?.buildToken(), unexpectedBetweenLabelColonAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13372,7 +13372,7 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLetOrVarKeyword: UnexpectedNodes?
-  let letOrVarKeyword: TokenSyntax
+  let letOrVarKeyword: Token
   let unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodes?
   let valuePattern: PatternBuildable
   /// Creates a `ValueBindingPattern` using the provided parameters.
@@ -13381,7 +13381,7 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   ///   - letOrVarKeyword: 
   ///   - unexpectedBetweenLetOrVarKeywordAndValuePattern: 
   ///   - valuePattern: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: TokenSyntax, unexpectedBetweenLetOrVarKeywordAndValuePattern: ExpressibleAsUnexpectedNodes? = nil, valuePattern: ExpressibleAsPatternBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLetOrVarKeyword: ExpressibleAsUnexpectedNodes? = nil, letOrVarKeyword: Token, unexpectedBetweenLetOrVarKeywordAndValuePattern: ExpressibleAsUnexpectedNodes? = nil, valuePattern: ExpressibleAsPatternBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLetOrVarKeyword = unexpectedBeforeLetOrVarKeyword?.createUnexpectedNodes()
     self.letOrVarKeyword = letOrVarKeyword
@@ -13394,7 +13394,7 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ValueBindingPatternSyntax`.
   func buildValueBindingPattern(format: Format) -> ValueBindingPatternSyntax {
-    var result = ValueBindingPatternSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword, unexpectedBetweenLetOrVarKeywordAndValuePattern?.buildUnexpectedNodes(format: format), valuePattern: valuePattern.buildPattern(format: format))
+    var result = ValueBindingPatternSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndValuePattern?.buildUnexpectedNodes(format: format), valuePattern: valuePattern.buildPattern(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13432,14 +13432,14 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   let unexpectedBeforeEntry: UnexpectedNodes?
   let entry: SyntaxBuildable
   let unexpectedBetweenEntryAndTrailingComma: UnexpectedNodes?
-  let trailingComma: TokenSyntax?
+  let trailingComma: Token?
   /// Creates a `AvailabilityArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeEntry: 
   ///   - entry: The actual argument
   ///   - unexpectedBetweenEntryAndTrailingComma: 
   ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeEntry: ExpressibleAsUnexpectedNodes? = nil, entry: ExpressibleAsSyntaxBuildable, unexpectedBetweenEntryAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeEntry: ExpressibleAsUnexpectedNodes? = nil, entry: ExpressibleAsSyntaxBuildable, unexpectedBetweenEntryAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeEntry = unexpectedBeforeEntry?.createUnexpectedNodes()
     self.entry = entry.createSyntaxBuildable()
@@ -13452,7 +13452,7 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityArgumentSyntax`.
   func buildAvailabilityArgument(format: Format) -> AvailabilityArgumentSyntax {
-    var result = AvailabilityArgumentSyntax(unexpectedBeforeEntry?.buildUnexpectedNodes(format: format), entry: entry.buildSyntax(format: format), unexpectedBetweenEntryAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma)
+    var result = AvailabilityArgumentSyntax(unexpectedBeforeEntry?.buildUnexpectedNodes(format: format), entry: entry.buildSyntax(format: format), unexpectedBetweenEntryAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13481,9 +13481,9 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: TokenSyntax
+  let label: Token
   let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: TokenSyntax
+  let colon: Token
   let unexpectedBetweenColonAndValue: UnexpectedNodes?
   let value: SyntaxBuildable
   /// Creates a `AvailabilityLabeledArgument` using the provided parameters.
@@ -13494,7 +13494,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   ///   - colon: The colon separating label and value
   ///   - unexpectedBetweenColonAndValue: 
   ///   - value: The value of this labeled argument
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: TokenSyntax, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsSyntaxBuildable) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: Token, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsSyntaxBuildable) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeLabel = unexpectedBeforeLabel?.createUnexpectedNodes()
     self.label = label
@@ -13507,15 +13507,15 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: TokenSyntax = TokenSyntax.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsSyntaxBuildable) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: TokenSyntax.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: value)
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLabel: ExpressibleAsUnexpectedNodes? = nil, label: String, unexpectedBetweenLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndValue: ExpressibleAsUnexpectedNodes? = nil, value: ExpressibleAsSyntaxBuildable) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLabel: unexpectedBeforeLabel, label: Token.`identifier`(label), unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: value)
   }
   /// Builds a `AvailabilityLabeledArgumentSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityLabeledArgumentSyntax`.
   func buildAvailabilityLabeledArgument(format: Format) -> AvailabilityLabeledArgumentSyntax {
-    var result = AvailabilityLabeledArgumentSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label, unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon, unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value.buildSyntax(format: format))
+    var result = AvailabilityLabeledArgumentSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value.buildSyntax(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13544,7 +13544,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// This is typically used to add comments (e.g. for documentation).
   let leadingTrivia: Trivia
   let unexpectedBeforePlatform: UnexpectedNodes?
-  let platform: TokenSyntax
+  let platform: Token
   let unexpectedBetweenPlatformAndVersion: UnexpectedNodes?
   let version: VersionTuple?
   /// Creates a `AvailabilityVersionRestriction` using the provided parameters.
@@ -13553,7 +13553,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   ///   - platform: The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.
   ///   - unexpectedBetweenPlatformAndVersion: 
   ///   - version: 
-  public init (leadingTrivia: Trivia = [], unexpectedBeforePlatform: ExpressibleAsUnexpectedNodes? = nil, platform: TokenSyntax, unexpectedBetweenPlatformAndVersion: ExpressibleAsUnexpectedNodes? = nil, version: ExpressibleAsVersionTuple? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforePlatform: ExpressibleAsUnexpectedNodes? = nil, platform: Token, unexpectedBetweenPlatformAndVersion: ExpressibleAsUnexpectedNodes? = nil, version: ExpressibleAsVersionTuple? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforePlatform = unexpectedBeforePlatform?.createUnexpectedNodes()
     self.platform = platform
@@ -13564,14 +13564,14 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init (leadingTrivia: Trivia = [], unexpectedBeforePlatform: ExpressibleAsUnexpectedNodes? = nil, platform: String, unexpectedBetweenPlatformAndVersion: ExpressibleAsUnexpectedNodes? = nil, version: ExpressibleAsVersionTuple? = nil) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePlatform: unexpectedBeforePlatform, platform: TokenSyntax.`identifier`(platform), unexpectedBetweenPlatformAndVersion: unexpectedBetweenPlatformAndVersion, version: version)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforePlatform: unexpectedBeforePlatform, platform: Token.`identifier`(platform), unexpectedBetweenPlatformAndVersion: unexpectedBetweenPlatformAndVersion, version: version)
   }
   /// Builds a `AvailabilityVersionRestrictionSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityVersionRestrictionSyntax`.
   func buildAvailabilityVersionRestriction(format: Format) -> AvailabilityVersionRestrictionSyntax {
-    var result = AvailabilityVersionRestrictionSyntax(unexpectedBeforePlatform?.buildUnexpectedNodes(format: format), platform: platform, unexpectedBetweenPlatformAndVersion?.buildUnexpectedNodes(format: format), version: version?.buildVersionTuple(format: format))
+    var result = AvailabilityVersionRestrictionSyntax(unexpectedBeforePlatform?.buildUnexpectedNodes(format: format), platform: platform.buildToken(), unexpectedBetweenPlatformAndVersion?.buildUnexpectedNodes(format: format), version: version?.buildVersionTuple(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -13602,9 +13602,9 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   let unexpectedBeforeMajorMinor: UnexpectedNodes?
   let majorMinor: SyntaxBuildable
   let unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodes?
-  let patchPeriod: TokenSyntax?
+  let patchPeriod: Token?
   let unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodes?
-  let patchVersion: TokenSyntax?
+  let patchVersion: Token?
   /// Creates a `VersionTuple` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeMajorMinor: 
@@ -13613,7 +13613,7 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   ///   - patchPeriod: If the version contains a patch number, the periodseparating the minor from the patch number.
   ///   - unexpectedBetweenPatchPeriodAndPatchVersion: 
   ///   - patchVersion: The patch version if specified.
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeMajorMinor: ExpressibleAsUnexpectedNodes? = nil, majorMinor: ExpressibleAsSyntaxBuildable, unexpectedBetweenMajorMinorAndPatchPeriod: ExpressibleAsUnexpectedNodes? = nil, patchPeriod: TokenSyntax? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: ExpressibleAsUnexpectedNodes? = nil, patchVersion: TokenSyntax? = nil) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeMajorMinor: ExpressibleAsUnexpectedNodes? = nil, majorMinor: ExpressibleAsSyntaxBuildable, unexpectedBetweenMajorMinorAndPatchPeriod: ExpressibleAsUnexpectedNodes? = nil, patchPeriod: Token? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: ExpressibleAsUnexpectedNodes? = nil, patchVersion: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.unexpectedBeforeMajorMinor = unexpectedBeforeMajorMinor?.createUnexpectedNodes()
     self.majorMinor = majorMinor.createSyntaxBuildable()
@@ -13626,9 +13626,9 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeMajorMinor: ExpressibleAsUnexpectedNodes? = nil, majorMinor: ExpressibleAsSyntaxBuildable, unexpectedBetweenMajorMinorAndPatchPeriod: ExpressibleAsUnexpectedNodes? = nil, patchPeriod: TokenSyntax? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: ExpressibleAsUnexpectedNodes? = nil, patchVersion: String?) {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeMajorMinor: ExpressibleAsUnexpectedNodes? = nil, majorMinor: ExpressibleAsSyntaxBuildable, unexpectedBetweenMajorMinorAndPatchPeriod: ExpressibleAsUnexpectedNodes? = nil, patchPeriod: Token? = nil, unexpectedBetweenPatchPeriodAndPatchVersion: ExpressibleAsUnexpectedNodes? = nil, patchVersion: String?) {
     self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMajorMinor: unexpectedBeforeMajorMinor, majorMinor: majorMinor, unexpectedBetweenMajorMinorAndPatchPeriod: unexpectedBetweenMajorMinorAndPatchPeriod, patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion: unexpectedBetweenPatchPeriodAndPatchVersion, patchVersion: patchVersion.map {
-      TokenSyntax.`integerLiteral`($0)
+      Token.`integerLiteral`($0)
     })
   }
   /// Builds a `VersionTupleSyntax`.
@@ -13636,7 +13636,7 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `VersionTupleSyntax`.
   func buildVersionTuple(format: Format) -> VersionTupleSyntax {
-    var result = VersionTupleSyntax(unexpectedBeforeMajorMinor?.buildUnexpectedNodes(format: format), majorMinor: majorMinor.buildSyntax(format: format), unexpectedBetweenMajorMinorAndPatchPeriod?.buildUnexpectedNodes(format: format), patchPeriod: patchPeriod, unexpectedBetweenPatchPeriodAndPatchVersion?.buildUnexpectedNodes(format: format), patchVersion: patchVersion)
+    var result = VersionTupleSyntax(unexpectedBeforeMajorMinor?.buildUnexpectedNodes(format: format), majorMinor: majorMinor.buildSyntax(format: format), unexpectedBetweenMajorMinorAndPatchPeriod?.buildUnexpectedNodes(format: format), patchPeriod: patchPeriod?.buildToken(), unexpectedBetweenPatchPeriodAndPatchVersion?.buildUnexpectedNodes(format: format), patchVersion: patchVersion?.buildToken())
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }

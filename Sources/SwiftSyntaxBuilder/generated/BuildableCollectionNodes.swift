@@ -955,13 +955,13 @@ extension Array: ExpressibleAsEnumCaseElementList where Element == ExpressibleAs
     return EnumCaseElementList(self)
   }
 }
-/// `IdentifierList` represents a collection of `TokenSyntax`
+/// `IdentifierList` represents a collection of `Token`
 public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsIdentifierList {
-  let elements: [TokenSyntax]
+  let elements: [Token]
   /// Creates a `IdentifierList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `TokenSyntax`
-  public init (_ elements: [TokenSyntax]) {
+  ///   - elements: A list of `Token`
+  public init (_ elements: [Token]) {
     self.elements = elements
   }
   /// Creates a new `IdentifierList` by flattening the elements in `lists`
@@ -970,11 +970,13 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       $0.createIdentifierList().elements
     }
   }
-  public init (arrayLiteral elements: TokenSyntax...) {
+  public init (arrayLiteral elements: Token...) {
     self.init(elements)
   }
   public func buildIdentifierList(format: Format) -> IdentifierListSyntax {
-    let result = IdentifierListSyntax(elements)
+    let result = IdentifierListSyntax(elements.map {
+      $0.buildToken()
+    })
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -992,7 +994,7 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     return self
   }
 }
-extension Array: ExpressibleAsIdentifierList where Element == TokenSyntax {
+extension Array: ExpressibleAsIdentifierList where Element == Token {
   public func createIdentifierList() -> IdentifierList {
     return IdentifierList(self)
   }
@@ -1089,13 +1091,13 @@ extension Array: ExpressibleAsPrecedenceGroupNameList where Element == Expressib
     return PrecedenceGroupNameList(self)
   }
 }
-/// `TokenList` represents a collection of `TokenSyntax`
+/// `TokenList` represents a collection of `Token`
 public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTokenList {
-  let elements: [TokenSyntax]
+  let elements: [Token]
   /// Creates a `TokenList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `TokenSyntax`
-  public init (_ elements: [TokenSyntax]) {
+  ///   - elements: A list of `Token`
+  public init (_ elements: [Token]) {
     self.elements = elements
   }
   /// Creates a new `TokenList` by flattening the elements in `lists`
@@ -1104,11 +1106,13 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
       $0.createTokenList().elements
     }
   }
-  public init (arrayLiteral elements: TokenSyntax...) {
+  public init (arrayLiteral elements: Token...) {
     self.init(elements)
   }
   public func buildTokenList(format: Format) -> TokenListSyntax {
-    let result = TokenListSyntax(elements)
+    let result = TokenListSyntax(elements.map {
+      $0.buildToken()
+    })
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1126,18 +1130,18 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
     return self
   }
 }
-extension Array: ExpressibleAsTokenList where Element == TokenSyntax {
+extension Array: ExpressibleAsTokenList where Element == Token {
   public func createTokenList() -> TokenList {
     return TokenList(self)
   }
 }
-/// `NonEmptyTokenList` represents a collection of `TokenSyntax`
+/// `NonEmptyTokenList` represents a collection of `Token`
 public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsNonEmptyTokenList {
-  let elements: [TokenSyntax]
+  let elements: [Token]
   /// Creates a `NonEmptyTokenList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `TokenSyntax`
-  public init (_ elements: [TokenSyntax]) {
+  ///   - elements: A list of `Token`
+  public init (_ elements: [Token]) {
     self.elements = elements
   }
   /// Creates a new `NonEmptyTokenList` by flattening the elements in `lists`
@@ -1146,11 +1150,13 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       $0.createNonEmptyTokenList().elements
     }
   }
-  public init (arrayLiteral elements: TokenSyntax...) {
+  public init (arrayLiteral elements: Token...) {
     self.init(elements)
   }
   public func buildNonEmptyTokenList(format: Format) -> NonEmptyTokenListSyntax {
-    let result = NonEmptyTokenListSyntax(elements)
+    let result = NonEmptyTokenListSyntax(elements.map {
+      $0.buildToken()
+    })
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1168,7 +1174,7 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     return self
   }
 }
-extension Array: ExpressibleAsNonEmptyTokenList where Element == TokenSyntax {
+extension Array: ExpressibleAsNonEmptyTokenList where Element == Token {
   public func createNonEmptyTokenList() -> NonEmptyTokenList {
     return NonEmptyTokenList(self)
   }

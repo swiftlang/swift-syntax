@@ -12,18 +12,11 @@
 
 import SwiftSyntax
 
-extension CatchClause {
-  /// A convenience initializer that calculates spacing around the `catch` keyword.
-  public init(
-    leadingTrivia: Trivia = [],
-    _ catchItems: CatchItemList,
-    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList
-  ) {
+public extension TupleExprElement {
+  /// A convenience initializer that allows passing in label as an optional string.
+  /// The presence of the colon will be inferred based on the presence of the label.
+  init(label: String? = nil, expression: ExpressibleAsExprBuildable) {
     self.init(
-      leadingTrivia: leadingTrivia,
-      catchKeyword: .catchKeyword(trailingTrivia: catchItems.elements.isEmpty ? [] : .space),
-      catchItems: catchItems,
-      body: bodyBuilder()
-    )
+      label: label.map { Token.identifier($0) }, colon: label == nil ? nil : Token.colon, expression: expression)
   }
 }

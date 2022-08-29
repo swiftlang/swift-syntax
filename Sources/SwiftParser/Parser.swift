@@ -180,8 +180,12 @@ extension Parser {
     let tok = self.currentToken
     self.currentToken = self.lexemes.advance()
     return RawTokenSyntax(
-      kind: tok.tokenKind, wholeText: tok.wholeText, textRange: tok.textRange,
-      arena: arena)
+      kind: tok.tokenKind,
+      wholeText: tok.wholeText,
+      textRange: tok.textRange,
+      presence: .present,
+      arena: arena
+    )
   }
 
   /// Consumes the current token and sets its kind to the given `TokenKind`,
@@ -298,7 +302,9 @@ extension Parser {
       kind: tokenKind,
       wholeText: SyntaxText(rebasing: current.wholeText[..<endIndex]),
       textRange: current.textRange.lowerBound ..< endIndex,
-      arena: self.arena)
+      presence: .present,
+      arena: self.arena
+    )
 
     // ... or a multi-character token with the first N characters being the one
     // that we want to consume as a separate token.

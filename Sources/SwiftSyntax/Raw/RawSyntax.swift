@@ -50,6 +50,8 @@ internal struct RawSyntaxData {
     /// Text in `wholeText` before `textRange.lowerBound` is leading trivia and
     /// after `textRange.upperBound` is trailing trivia.
     var textRange: Range<SyntaxText.Index>
+
+    var presence: SourcePresence
   }
 
   /// Token typically created with `TokenSyntax.<someToken>`.
@@ -59,6 +61,7 @@ internal struct RawSyntaxData {
     var triviaPieces: RawTriviaPieceBuffer
     var numLeadingTrivia: UInt32
     var byteLength: UInt32
+    var presence: SourcePresence
   }
 
   /// Layout node including collections.
@@ -183,12 +186,23 @@ extension RawSyntax {
 
   /// The "width" of the node.
   ///
-  /// Sum of text byte lengths of all descendant token nodes.
+  /// Sum of text byte lengths of all present descendant token nodes.
   var byteLength: Int {
     switch rawData.payload {
-    case .parsedToken(let dat): return dat.wholeText.count
-    case .materializedToken(let dat): return Int(dat.byteLength)
-    case .layout(let dat): return dat.byteLength
+    case .parsedToken(let dat):
+      if dat.presence == .present {
+        return dat.wholeText.count
+      } else {
+        return 0
+      }
+    case .materializedToken(let dat):
+      if dat.presence == .present {
+        return Int(dat.byteLength)
+      } else {
+        return 0
+      }
+    case .layout(let dat):
+      return dat.byteLength
     }
   }
 
@@ -258,18 +272,19 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   public func write<Target: TextOutputStream>(to target: inout Target) {
     switch rawData.payload {
     case .parsedToken(let dat):
-      String(syntaxText: dat.wholeText).write(to: &target)
-      break
+      if dat.presence == .present {
+        String(syntaxText: dat.wholeText).write(to: &target)
+      }
     case .materializedToken(let dat):
-      for p in dat.leadingTrivia { p.write(to: &target) }
-      String(syntaxText: dat.tokenText).write(to: &target)
-      for p in dat.trailingTrivia { p.write(to: &target) }
-      break
+      if dat.presence == .present {
+        for p in dat.leadingTrivia { p.write(to: &target) }
+        String(syntaxText: dat.tokenText).write(to: &target)
+        for p in dat.trailingTrivia { p.write(to: &target) }
+      }
     case .layout(let dat):
       for case let child? in dat.layout {
         child.write(to: &target)
       }
-      break
     }
   }
 
@@ -364,17 +379,23 @@ extension RawSyntax {
   ///   - kind: Token kind.
   ///   - wholeText: Whole text of this token including trailing/leading trivia.
   ///   - textRange: Range of the token text in `wholeText`.
+  ///   - presence: Whether the token appeared in the source code or if it was synthesized.
   ///   - arena: SyntaxArea to the result node data resides.
   internal static func parsedToken(
     kind: RawTokenKind,
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
+    presence: SourcePresence,
     arena: SyntaxArena
   ) -> RawSyntax {
     assert(arena.contains(text: wholeText),
            "token text must be managed by the arena")
     let payload = RawSyntaxData.ParsedToken(
-      tokenKind: kind, wholeText: wholeText, textRange: textRange)
+      tokenKind: kind,
+      wholeText: wholeText,
+      textRange: textRange,
+      presence: presence
+    )
     return RawSyntax(arena: arena, payload: .parsedToken(payload))
   }
 
@@ -385,18 +406,20 @@ extension RawSyntax {
   /// `makeMissingToken(arena:kind:)` instead.
   ///
   /// - Parameters:
-  ///   - arena: SyntaxArea to the result node data resides.
   ///   - kind: Token kind.
   ///   - text: Token text.
   ///   - triviaPieces: Raw trivia pieces including leading and trailing trivia.
   ///   - numLeadingTrivia: Number of leading trivia pieces in `triviaPieces`.
   ///   - byteLength: Byte length of this token including trivia.
+  ///   - presence: Whether the token appeared in the source code or if it was synthesized.
+  ///   - arena: SyntaxArea to the result node data resides.
   internal static func materializedToken(
     kind: RawTokenKind,
     text: SyntaxText,
     triviaPieces: RawTriviaPieceBuffer,
     numLeadingTrivia: UInt32,
     byteLength: UInt32,
+    presence: SourcePresence,
     arena: SyntaxArena
   ) -> RawSyntax {
     assert(arena.contains(text: text) || kind.defaultText?.baseAddress == text.baseAddress,
@@ -404,10 +427,13 @@ extension RawSyntax {
     assert(triviaPieces.allSatisfy({$0.storedText.map({arena.contains(text: $0)}) ?? true}),
            "trivia text must be managed by the arena")
     let payload = RawSyntaxData.MaterializedToken(
-      tokenKind: kind, tokenText: text,
+      tokenKind: kind,
+      tokenText: text,
       triviaPieces: triviaPieces,
       numLeadingTrivia: numLeadingTrivia,
-      byteLength: byteLength)
+      byteLength: byteLength,
+      presence: presence
+    )
     return RawSyntax(arena: arena, payload: .materializedToken(payload))
   }
 
@@ -418,6 +444,7 @@ extension RawSyntax {
   ///   - text: Token text.
   ///   - leadingTriviaPieceCount: Number of leading trivia pieces.
   ///   - trailingTriviaPieceCount: Number of trailing trivia pieces.
+  ///   - presence: Whether the token appeared in the source code or if it was synthesized.
   ///   - arena: SyntaxArea to the result node data resides.
   ///   - initializingLeadingTriviaWith: A closure that initializes leading trivia pieces.
   ///   - initializingTrailingTriviaWith: A closure that initializes trailing trivia pieces.
@@ -426,6 +453,7 @@ extension RawSyntax {
     text: SyntaxText,
     leadingTriviaPieceCount: Int,
     trailingTriviaPieceCount: Int,
+    presence: SourcePresence,
     arena: SyntaxArena,
     initializingLeadingTriviaWith: (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void,
     initializingTrailingTriviaWith : (UnsafeMutableBufferPointer<RawTriviaPiece>) -> Void
@@ -442,7 +470,9 @@ extension RawSyntax {
       kind: kind, text: text, triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
       numLeadingTrivia: numericCast(leadingTriviaPieceCount),
       byteLength: numericCast(byteLength),
-      arena: arena)
+      presence: presence,
+      arena: arena
+    )
   }
 
   /// Factory method to create a materialized token node.
@@ -462,20 +492,15 @@ extension RawSyntax {
   ) -> RawSyntax {
     let decomposed = kind.decomposeToRaw()
     let rawKind = decomposed.rawKind
-    let text: SyntaxText
-    switch presence {
-    case .present:
-      text = (decomposed.string.map({arena.intern($0)}) ??
-              decomposed.rawKind.defaultText ??
-              "")
-    case .missing:
-      text = SyntaxText()
-    }
+    let text = (decomposed.string.map({arena.intern($0)}) ??
+                decomposed.rawKind.defaultText ??
+                "")
 
     return .makeMaterializedToken(
       kind: rawKind, text: text,
       leadingTriviaPieceCount: leadingTrivia.count,
       trailingTriviaPieceCount: trailingTrivia.count,
+      presence: presence,
       arena: arena,
       initializingLeadingTriviaWith: { buffer in
         guard var ptr = buffer.baseAddress else { return }
@@ -499,8 +524,10 @@ extension RawSyntax {
   ) -> RawSyntax {
     let (rawKind, _) = kind.decomposeToRaw()
     return .materializedToken(
-      kind: rawKind, text: "", triviaPieces: .init(start: nil, count: 0),
+      kind: rawKind, text: rawKind.defaultText ?? "",
+      triviaPieces: .init(start: nil, count: 0),
       numLeadingTrivia: 0, byteLength: 0,
+      presence: .missing,
       arena: arena)
   }
 }

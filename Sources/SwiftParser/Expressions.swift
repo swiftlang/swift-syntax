@@ -1004,7 +1004,12 @@ extension Parser {
       textRange = wholeText.startIndex ..< wholeText.startIndex + text.count
     }
     return RawTokenSyntax(
-      kind: kind, wholeText: wholeText, textRange: textRange, arena: self.arena)
+      kind: kind,
+      wholeText: wholeText,
+      textRange: textRange,
+      presence: .present,
+      arena: self.arena
+    )
   }
 
   mutating func parseStringLiteralDelimiter(
@@ -1118,6 +1123,7 @@ extension Parser {
         kind: .stringSegment,
         text: SyntaxText(rebasing: text[stringLiteralSegmentStart..<slashIndex]),
         leadingTriviaPieces: [], trailingTriviaPieces: [],
+        presence: .present,
         arena: self.arena)
       segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken, arena: self.arena)))
 
@@ -1133,6 +1139,7 @@ extension Parser {
           kind: .backslash,
           text: SyntaxText(rebasing: text[slashIndex..<text.index(after: slashIndex)]),
           leadingTriviaPieces: [], trailingTriviaPieces: [],
+          presence: .present,
           arena: self.arena)
 
         // `###`
@@ -1142,6 +1149,7 @@ extension Parser {
             kind: .rawStringDelimiter,
             text: SyntaxText(rebasing: text[delimiterStart..<contentStart]),
             leadingTriviaPieces: [], trailingTriviaPieces: [],
+            presence: .present,
             arena: self.arena)
         } else {
           delim = nil
@@ -1207,6 +1215,7 @@ extension Parser {
       kind: .stringSegment,
       text: SyntaxText(rebasing: segment),
       leadingTriviaPieces: [], trailingTriviaPieces: [],
+      presence: .present,
       arena: self.arena)
     segments.append(RawSyntax(RawStringSegmentSyntax(content: segmentToken,
                                                      arena: self.arena)))

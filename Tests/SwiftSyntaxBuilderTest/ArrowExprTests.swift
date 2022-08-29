@@ -4,17 +4,15 @@ import SwiftSyntaxBuilder
 
 final class ArrowExprTests: XCTestCase {
   func testArrowExpr() {
-    let leadingTrivia = Trivia.unexpectedText("␣")
-
     let testCases: [UInt: (ExpressibleAsArrowExpr, String)] = [
-      #line: (ArrowExpr(), "␣ -> "),
-      #line: (ArrowExpr(asyncKeyword: "async"), "␣async -> ")
+      #line: (ArrowExpr(), " -> "),
+      #line: (ArrowExpr(asyncKeyword: "async"), "async -> ")
     ]
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
       let arrowExpr = builder.createArrowExpr()
-      let syntax = arrowExpr.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+      let syntax = arrowExpr.buildSyntax(format: Format())
 
       var text = ""
       syntax.write(to: &text)

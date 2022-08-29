@@ -14,7 +14,7 @@ final class FunctionTests: XCTestCase {
     
     let signature = FunctionSignature(input: input, output: "Int")
     
-    let buildable = FunctionDecl(identifier: .identifier("fibonacci"), signature: signature) {
+    let buildable = FunctionDecl(leadingTrivia: leadingTrivia, identifier: .identifier("fibonacci"), signature: signature) {
       IfStmt(
         conditions: ExprList {
           IntegerLiteralExpr(digits: "n")
@@ -43,7 +43,7 @@ final class FunctionTests: XCTestCase {
         }
       })
     }
-    let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let syntax = buildable.buildSyntax(format: Format())
 
     XCTAssertEqual(syntax.description, """
       ␣func fibonacci(_ n: Int) -> Int {

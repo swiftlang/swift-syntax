@@ -31,13 +31,13 @@ class SyntaxBuildableChild:
     """
     if self.type().is_token():
        if self.child.requires_leading_newline:
-         return var_name + '.withLeadingTrivia(.newline + ' + format_name + '._makeIndent() + (' + var_name + '.leadingTrivia ?? []))'
+         return var_name + '.withLeadingTrivia(.newline + ' + format_name + '._indentTrivia + (' + var_name + '.leadingTrivia ?? []))'
        else:
          return var_name
     else:
       format = format_name
       if self.child.is_indented:
-        format += '._indented()'
+        format += '._indented'
 
       expr = var_name
       if self.type().is_optional:

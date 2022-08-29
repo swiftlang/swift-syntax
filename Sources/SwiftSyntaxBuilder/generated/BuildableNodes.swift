@@ -47,18 +47,16 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CodeBlockItemSyntax`.
-  func buildCodeBlockItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockItemSyntax {
-    let result = CodeBlockItemSyntax(unexpectedBeforeItem?.buildUnexpectedNodes(format: format, leadingTrivia: nil), item: item.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenItemAndSemicolon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), semicolon: semicolon?.buildToken(), unexpectedBetweenSemicolonAndErrorTokens?.buildUnexpectedNodes(format: format, leadingTrivia: nil), errorTokens: errorTokens?.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCodeBlockItem(format: Format) -> CodeBlockItemSyntax {
+    var result = CodeBlockItemSyntax(unexpectedBeforeItem?.buildUnexpectedNodes(format: format), item: item.buildSyntax(format: format), unexpectedBetweenItemAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon?.buildToken(), unexpectedBetweenSemicolonAndErrorTokens?.buildUnexpectedNodes(format: format), errorTokens: errorTokens?.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCodeBlockItem(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildCodeBlockItem(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsCodeBlockItem`.
@@ -114,18 +112,16 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CodeBlockSyntax`.
-  func buildCodeBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockSyntax {
-    let result = CodeBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndStatements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightBrace: rightBrace.buildToken().withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.buildToken().leadingTrivia ?? [])))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCodeBlock(format: Format) -> CodeBlockSyntax {
+    var result = CodeBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format._indented), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCodeBlock(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildCodeBlock(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsCodeBlock`.
@@ -166,18 +162,16 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InOutExprSyntax`.
-  func buildInOutExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InOutExprSyntax {
-    let result = InOutExprSyntax(unexpectedBeforeAmpersand?.buildUnexpectedNodes(format: format, leadingTrivia: nil), ampersand: ampersand.buildToken(), unexpectedBetweenAmpersandAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildInOutExpr(format: Format) -> InOutExprSyntax {
+    var result = InOutExprSyntax(unexpectedBeforeAmpersand?.buildUnexpectedNodes(format: format), ampersand: ampersand.buildToken(), unexpectedBetweenAmpersandAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildInOutExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildInOutExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsInOutExpr`.
@@ -219,18 +213,16 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundColumnExprSyntax`.
-  func buildPoundColumnExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundColumnExprSyntax {
-    let result = PoundColumnExprSyntax(unexpectedBeforePoundColumn?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundColumn: poundColumn.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundColumnExpr(format: Format) -> PoundColumnExprSyntax {
+    var result = PoundColumnExprSyntax(unexpectedBeforePoundColumn?.buildUnexpectedNodes(format: format), poundColumn: poundColumn.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundColumnExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPoundColumnExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundColumnExpr`.
@@ -285,18 +277,16 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TryExprSyntax`.
-  func buildTryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TryExprSyntax {
-    let result = TryExprSyntax(unexpectedBeforeTryKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), tryKeyword: tryKeyword.buildToken(), unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionOrExclamationMark: questionOrExclamationMark?.buildToken(), unexpectedBetweenQuestionOrExclamationMarkAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTryExpr(format: Format) -> TryExprSyntax {
+    var result = TryExprSyntax(unexpectedBeforeTryKeyword?.buildUnexpectedNodes(format: format), tryKeyword: tryKeyword.buildToken(), unexpectedBetweenTryKeywordAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark?.buildToken(), unexpectedBetweenQuestionOrExclamationMarkAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildTryExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsTryExpr`.
@@ -350,18 +340,16 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AwaitExprSyntax`.
-  func buildAwaitExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AwaitExprSyntax {
-    let result = AwaitExprSyntax(unexpectedBeforeAwaitKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), awaitKeyword: awaitKeyword.buildToken(), unexpectedBetweenAwaitKeywordAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAwaitExpr(format: Format) -> AwaitExprSyntax {
+    var result = AwaitExprSyntax(unexpectedBeforeAwaitKeyword?.buildUnexpectedNodes(format: format), awaitKeyword: awaitKeyword.buildToken(), unexpectedBetweenAwaitKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildAwaitExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildAwaitExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsAwaitExpr`.
@@ -415,18 +403,16 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MoveExprSyntax`.
-  func buildMoveExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MoveExprSyntax {
-    let result = MoveExprSyntax(unexpectedBeforeMoveKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), moveKeyword: moveKeyword.buildToken(), unexpectedBetweenMoveKeywordAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMoveExpr(format: Format) -> MoveExprSyntax {
+    var result = MoveExprSyntax(unexpectedBeforeMoveKeyword?.buildUnexpectedNodes(format: format), moveKeyword: moveKeyword.buildToken(), unexpectedBetweenMoveKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildMoveExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildMoveExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsMoveExpr`.
@@ -474,18 +460,16 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameArgumentSyntax`.
-  func buildDeclNameArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentSyntax {
-    let result = DeclNameArgumentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeclNameArgument(format: Format) -> DeclNameArgumentSyntax {
+    var result = DeclNameArgumentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclNameArgument(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDeclNameArgument(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDeclNameArgument`.
@@ -533,18 +517,16 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameArgumentsSyntax`.
-  func buildDeclNameArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
-    let result = DeclNameArgumentsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arguments: arguments.buildDeclNameArgumentList(format: format, leadingTrivia: nil), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeclNameArguments(format: Format) -> DeclNameArgumentsSyntax {
+    var result = DeclNameArgumentsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildDeclNameArgumentList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclNameArguments(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDeclNameArguments(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDeclNameArguments`.
@@ -584,18 +566,16 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IdentifierExprSyntax`.
-  func buildIdentifierExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierExprSyntax {
-    let result = IdentifierExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndDeclNameArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIdentifierExpr(format: Format) -> IdentifierExprSyntax {
+    var result = IdentifierExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildIdentifierExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildIdentifierExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsIdentifierExpr`.
@@ -637,18 +617,16 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SuperRefExprSyntax`.
-  func buildSuperRefExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SuperRefExprSyntax {
-    let result = SuperRefExprSyntax(unexpectedBeforeSuperKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), superKeyword: superKeyword.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSuperRefExpr(format: Format) -> SuperRefExprSyntax {
+    var result = SuperRefExprSyntax(unexpectedBeforeSuperKeyword?.buildUnexpectedNodes(format: format), superKeyword: superKeyword.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSuperRefExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildSuperRefExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsSuperRefExpr`.
@@ -690,18 +668,16 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `NilLiteralExprSyntax`.
-  func buildNilLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NilLiteralExprSyntax {
-    let result = NilLiteralExprSyntax(unexpectedBeforeNilKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), nilKeyword: nilKeyword.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildNilLiteralExpr(format: Format) -> NilLiteralExprSyntax {
+    var result = NilLiteralExprSyntax(unexpectedBeforeNilKeyword?.buildUnexpectedNodes(format: format), nilKeyword: nilKeyword.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildNilLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildNilLiteralExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsNilLiteralExpr`.
@@ -743,18 +719,16 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DiscardAssignmentExprSyntax`.
-  func buildDiscardAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DiscardAssignmentExprSyntax {
-    let result = DiscardAssignmentExprSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format, leadingTrivia: nil), wildcard: wildcard.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDiscardAssignmentExpr(format: Format) -> DiscardAssignmentExprSyntax {
+    var result = DiscardAssignmentExprSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format), wildcard: wildcard.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildDiscardAssignmentExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildDiscardAssignmentExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsDiscardAssignmentExpr`.
@@ -796,18 +770,16 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AssignmentExprSyntax`.
-  func buildAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssignmentExprSyntax {
-    let result = AssignmentExprSyntax(unexpectedBeforeAssignToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), assignToken: assignToken.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAssignmentExpr(format: Format) -> AssignmentExprSyntax {
+    var result = AssignmentExprSyntax(unexpectedBeforeAssignToken?.buildUnexpectedNodes(format: format), assignToken: assignToken.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildAssignmentExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildAssignmentExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsAssignmentExpr`.
@@ -856,18 +828,16 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SequenceExprSyntax`.
-  func buildSequenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SequenceExprSyntax {
-    let result = SequenceExprSyntax(unexpectedBeforeElements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elements: elements.buildExprList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSequenceExpr(format: Format) -> SequenceExprSyntax {
+    var result = SequenceExprSyntax(unexpectedBeforeElements?.buildUnexpectedNodes(format: format), elements: elements.buildExprList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSequenceExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildSequenceExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsSequenceExpr`.
@@ -909,18 +879,16 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundLineExprSyntax`.
-  func buildPoundLineExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundLineExprSyntax {
-    let result = PoundLineExprSyntax(unexpectedBeforePoundLine?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundLine: poundLine.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundLineExpr(format: Format) -> PoundLineExprSyntax {
+    var result = PoundLineExprSyntax(unexpectedBeforePoundLine?.buildUnexpectedNodes(format: format), poundLine: poundLine.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundLineExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPoundLineExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundLineExpr`.
@@ -962,18 +930,16 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFileExprSyntax`.
-  func buildPoundFileExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileExprSyntax {
-    let result = PoundFileExprSyntax(unexpectedBeforePoundFile?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundFile: poundFile.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundFileExpr(format: Format) -> PoundFileExprSyntax {
+    var result = PoundFileExprSyntax(unexpectedBeforePoundFile?.buildUnexpectedNodes(format: format), poundFile: poundFile.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFileExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPoundFileExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundFileExpr`.
@@ -1015,18 +981,16 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFileIDExprSyntax`.
-  func buildPoundFileIDExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileIDExprSyntax {
-    let result = PoundFileIDExprSyntax(unexpectedBeforePoundFileID?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundFileID: poundFileID.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundFileIDExpr(format: Format) -> PoundFileIDExprSyntax {
+    var result = PoundFileIDExprSyntax(unexpectedBeforePoundFileID?.buildUnexpectedNodes(format: format), poundFileID: poundFileID.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFileIDExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPoundFileIDExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundFileIDExpr`.
@@ -1068,18 +1032,16 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFilePathExprSyntax`.
-  func buildPoundFilePathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFilePathExprSyntax {
-    let result = PoundFilePathExprSyntax(unexpectedBeforePoundFilePath?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundFilePath: poundFilePath.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundFilePathExpr(format: Format) -> PoundFilePathExprSyntax {
+    var result = PoundFilePathExprSyntax(unexpectedBeforePoundFilePath?.buildUnexpectedNodes(format: format), poundFilePath: poundFilePath.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFilePathExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPoundFilePathExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundFilePathExpr`.
@@ -1121,18 +1083,16 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundFunctionExprSyntax`.
-  func buildPoundFunctionExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFunctionExprSyntax {
-    let result = PoundFunctionExprSyntax(unexpectedBeforePoundFunction?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundFunction: poundFunction.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundFunctionExpr(format: Format) -> PoundFunctionExprSyntax {
+    var result = PoundFunctionExprSyntax(unexpectedBeforePoundFunction?.buildUnexpectedNodes(format: format), poundFunction: poundFunction.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFunctionExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPoundFunctionExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundFunctionExpr`.
@@ -1174,18 +1134,16 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundDsohandleExprSyntax`.
-  func buildPoundDsohandleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundDsohandleExprSyntax {
-    let result = PoundDsohandleExprSyntax(unexpectedBeforePoundDsohandle?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundDsohandle: poundDsohandle.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundDsohandleExpr(format: Format) -> PoundDsohandleExprSyntax {
+    var result = PoundDsohandleExprSyntax(unexpectedBeforePoundDsohandle?.buildUnexpectedNodes(format: format), poundDsohandle: poundDsohandle.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundDsohandleExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPoundDsohandleExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundDsohandleExpr`.
@@ -1238,18 +1196,16 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SymbolicReferenceExprSyntax`.
-  func buildSymbolicReferenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SymbolicReferenceExprSyntax {
-    let result = SymbolicReferenceExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericArgumentClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSymbolicReferenceExpr(format: Format) -> SymbolicReferenceExprSyntax {
+    var result = SymbolicReferenceExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSymbolicReferenceExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildSymbolicReferenceExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsSymbolicReferenceExpr`.
@@ -1304,18 +1260,16 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrefixOperatorExprSyntax`.
-  func buildPrefixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrefixOperatorExprSyntax {
-    let result = PrefixOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), operatorToken: operatorToken?.buildToken(), unexpectedBetweenOperatorTokenAndPostfixExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), postfixExpression: postfixExpression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrefixOperatorExpr(format: Format) -> PrefixOperatorExprSyntax {
+    var result = PrefixOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken?.buildToken(), unexpectedBetweenOperatorTokenAndPostfixExpression?.buildUnexpectedNodes(format: format), postfixExpression: postfixExpression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPrefixOperatorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPrefixOperatorExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPrefixOperatorExpr`.
@@ -1356,18 +1310,16 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BinaryOperatorExprSyntax`.
-  func buildBinaryOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BinaryOperatorExprSyntax {
-    let result = BinaryOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), operatorToken: operatorToken.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildBinaryOperatorExpr(format: Format) -> BinaryOperatorExprSyntax {
+    var result = BinaryOperatorExprSyntax(unexpectedBeforeOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildBinaryOperatorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildBinaryOperatorExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsBinaryOperatorExpr`.
@@ -1431,18 +1383,16 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrowExprSyntax`.
-  func buildArrowExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrowExprSyntax {
-    let result = ArrowExprSyntax(unexpectedBeforeAsyncKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), throwsToken: throwsToken?.buildToken(), unexpectedBetweenThrowsTokenAndArrowToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arrowToken: arrowToken.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildArrowExpr(format: Format) -> ArrowExprSyntax {
+    var result = ArrowExprSyntax(unexpectedBeforeAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsToken?.buildUnexpectedNodes(format: format), throwsToken: throwsToken?.buildToken(), unexpectedBetweenThrowsTokenAndArrowToken?.buildUnexpectedNodes(format: format), arrowToken: arrowToken.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildArrowExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildArrowExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsArrowExpr`.
@@ -1495,18 +1445,16 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InfixOperatorExprSyntax`.
-  func buildInfixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InfixOperatorExprSyntax {
-    let result = InfixOperatorExprSyntax(unexpectedBeforeLeftOperand?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftOperand: leftOperand.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenLeftOperandAndOperatorOperand?.buildUnexpectedNodes(format: format, leadingTrivia: nil), operatorOperand: operatorOperand.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenOperatorOperandAndRightOperand?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightOperand: rightOperand.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildInfixOperatorExpr(format: Format) -> InfixOperatorExprSyntax {
+    var result = InfixOperatorExprSyntax(unexpectedBeforeLeftOperand?.buildUnexpectedNodes(format: format), leftOperand: leftOperand.buildExpr(format: format), unexpectedBetweenLeftOperandAndOperatorOperand?.buildUnexpectedNodes(format: format), operatorOperand: operatorOperand.buildExpr(format: format), unexpectedBetweenOperatorOperandAndRightOperand?.buildUnexpectedNodes(format: format), rightOperand: rightOperand.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildInfixOperatorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildInfixOperatorExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsInfixOperatorExpr`.
@@ -1553,18 +1501,16 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FloatLiteralExprSyntax`.
-  func buildFloatLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FloatLiteralExprSyntax {
-    let result = FloatLiteralExprSyntax(unexpectedBeforeFloatingDigits?.buildUnexpectedNodes(format: format, leadingTrivia: nil), floatingDigits: floatingDigits.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFloatLiteralExpr(format: Format) -> FloatLiteralExprSyntax {
+    var result = FloatLiteralExprSyntax(unexpectedBeforeFloatingDigits?.buildUnexpectedNodes(format: format), floatingDigits: floatingDigits.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildFloatLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildFloatLiteralExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsFloatLiteralExpr`.
@@ -1627,18 +1573,16 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleExprSyntax`.
-  func buildTupleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprSyntax {
-    let result = TupleExprSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elementList: elementList.buildTupleExprElementList(format: format, leadingTrivia: nil), unexpectedBetweenElementListAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTupleExpr(format: Format) -> TupleExprSyntax {
+    var result = TupleExprSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: elementList.buildTupleExprElementList(format: format), unexpectedBetweenElementListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTupleExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildTupleExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsTupleExpr`.
@@ -1701,18 +1645,16 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayExprSyntax`.
-  func buildArrayExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayExprSyntax {
-    let result = ArrayExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndElements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elements: elements.buildArrayElementList(format: format, leadingTrivia: nil), unexpectedBetweenElementsAndRightSquare?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightSquare: rightSquare.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildArrayExpr(format: Format) -> ArrayExprSyntax {
+    var result = ArrayExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildArrayElementList(format: format), unexpectedBetweenElementsAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildArrayExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildArrayExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsArrayExpr`.
@@ -1767,18 +1709,16 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryExprSyntax`.
-  func buildDictionaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryExprSyntax {
-    let result = DictionaryExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndContent?.buildUnexpectedNodes(format: format, leadingTrivia: nil), content: content.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenContentAndRightSquare?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightSquare: rightSquare.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDictionaryExpr(format: Format) -> DictionaryExprSyntax {
+    var result = DictionaryExprSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndContent?.buildUnexpectedNodes(format: format), content: content.buildSyntax(format: format), unexpectedBetweenContentAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildDictionaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildDictionaryExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsDictionaryExpr`.
@@ -1839,18 +1779,16 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleExprElementSyntax`.
-  func buildTupleExprElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprElementSyntax {
-    let result = TupleExprElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label?.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon?.buildToken(), unexpectedBetweenColonAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTupleExprElement(format: Format) -> TupleExprElementSyntax {
+    var result = TupleExprElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label?.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTupleExprElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildTupleExprElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsTupleExprElement`.
@@ -1895,18 +1833,16 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayElementSyntax`.
-  func buildArrayElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayElementSyntax {
-    let result = ArrayElementSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildArrayElement(format: Format) -> ArrayElementSyntax {
+    var result = ArrayElementSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildArrayElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildArrayElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsArrayElement`.
@@ -1964,18 +1900,16 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryElementSyntax`.
-  func buildDictionaryElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryElementSyntax {
-    let result = DictionaryElementSyntax(unexpectedBeforeKeyExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), keyExpression: keyExpression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenKeyExpressionAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndValueExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), valueExpression: valueExpression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenValueExpressionAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDictionaryElement(format: Format) -> DictionaryElementSyntax {
+    var result = DictionaryElementSyntax(unexpectedBeforeKeyExpression?.buildUnexpectedNodes(format: format), keyExpression: keyExpression.buildExpr(format: format), unexpectedBetweenKeyExpressionAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValueExpression?.buildUnexpectedNodes(format: format), valueExpression: valueExpression.buildExpr(format: format), unexpectedBetweenValueExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDictionaryElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDictionaryElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDictionaryElement`.
@@ -2019,18 +1953,16 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IntegerLiteralExprSyntax`.
-  func buildIntegerLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IntegerLiteralExprSyntax {
-    let result = IntegerLiteralExprSyntax(unexpectedBeforeDigits?.buildUnexpectedNodes(format: format, leadingTrivia: nil), digits: digits.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIntegerLiteralExpr(format: Format) -> IntegerLiteralExprSyntax {
+    var result = IntegerLiteralExprSyntax(unexpectedBeforeDigits?.buildUnexpectedNodes(format: format), digits: digits.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildIntegerLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildIntegerLiteralExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsIntegerLiteralExpr`.
@@ -2072,18 +2004,16 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BooleanLiteralExprSyntax`.
-  func buildBooleanLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BooleanLiteralExprSyntax {
-    let result = BooleanLiteralExprSyntax(unexpectedBeforeBooleanLiteral?.buildUnexpectedNodes(format: format, leadingTrivia: nil), booleanLiteral: booleanLiteral.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildBooleanLiteralExpr(format: Format) -> BooleanLiteralExprSyntax {
+    var result = BooleanLiteralExprSyntax(unexpectedBeforeBooleanLiteral?.buildUnexpectedNodes(format: format), booleanLiteral: booleanLiteral.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildBooleanLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildBooleanLiteralExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsBooleanLiteralExpr`.
@@ -2138,18 +2068,16 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedTernaryExprSyntax`.
-  func buildUnresolvedTernaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedTernaryExprSyntax {
-    let result = UnresolvedTernaryExprSyntax(unexpectedBeforeQuestionMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionMark: questionMark.buildToken(), unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format, leadingTrivia: nil), firstChoice: firstChoice.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colonMark: colonMark.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildUnresolvedTernaryExpr(format: Format) -> UnresolvedTernaryExprSyntax {
+    var result = UnresolvedTernaryExprSyntax(unexpectedBeforeQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken(), unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format), firstChoice: firstChoice.buildExpr(format: format), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format), colonMark: colonMark.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildUnresolvedTernaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildUnresolvedTernaryExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsUnresolvedTernaryExpr`.
@@ -2216,18 +2144,16 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TernaryExprSyntax`.
-  func buildTernaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TernaryExprSyntax {
-    let result = TernaryExprSyntax(unexpectedBeforeConditionExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), conditionExpression: conditionExpression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenConditionExpressionAndQuestionMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionMark: questionMark.buildToken(), unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format, leadingTrivia: nil), firstChoice: firstChoice.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colonMark: colonMark.buildToken(), unexpectedBetweenColonMarkAndSecondChoice?.buildUnexpectedNodes(format: format, leadingTrivia: nil), secondChoice: secondChoice.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTernaryExpr(format: Format) -> TernaryExprSyntax {
+    var result = TernaryExprSyntax(unexpectedBeforeConditionExpression?.buildUnexpectedNodes(format: format), conditionExpression: conditionExpression.buildExpr(format: format), unexpectedBetweenConditionExpressionAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken(), unexpectedBetweenQuestionMarkAndFirstChoice?.buildUnexpectedNodes(format: format), firstChoice: firstChoice.buildExpr(format: format), unexpectedBetweenFirstChoiceAndColonMark?.buildUnexpectedNodes(format: format), colonMark: colonMark.buildToken(), unexpectedBetweenColonMarkAndSecondChoice?.buildUnexpectedNodes(format: format), secondChoice: secondChoice.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTernaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildTernaryExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsTernaryExpr`.
@@ -2287,18 +2213,16 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberAccessExprSyntax`.
-  func buildMemberAccessExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberAccessExprSyntax {
-    let result = MemberAccessExprSyntax(unexpectedBeforeBase?.buildUnexpectedNodes(format: format, leadingTrivia: nil), base: base?.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenBaseAndDot?.buildUnexpectedNodes(format: format, leadingTrivia: nil), dot: dot.buildToken(), unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndDeclNameArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMemberAccessExpr(format: Format) -> MemberAccessExprSyntax {
+    var result = MemberAccessExprSyntax(unexpectedBeforeBase?.buildUnexpectedNodes(format: format), base: base?.buildExpr(format: format), unexpectedBetweenBaseAndDot?.buildUnexpectedNodes(format: format), dot: dot.buildToken(), unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildMemberAccessExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildMemberAccessExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsMemberAccessExpr`.
@@ -2340,18 +2264,16 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedIsExprSyntax`.
-  func buildUnresolvedIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedIsExprSyntax {
-    let result = UnresolvedIsExprSyntax(unexpectedBeforeIsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), isTok: isTok.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildUnresolvedIsExpr(format: Format) -> UnresolvedIsExprSyntax {
+    var result = UnresolvedIsExprSyntax(unexpectedBeforeIsTok?.buildUnexpectedNodes(format: format), isTok: isTok.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildUnresolvedIsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildUnresolvedIsExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsUnresolvedIsExpr`.
@@ -2405,18 +2327,16 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IsExprSyntax`.
-  func buildIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsExprSyntax {
-    let result = IsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndIsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), isTok: isTok.buildToken(), unexpectedBetweenIsTokAndTypeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeName: typeName.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIsExpr(format: Format) -> IsExprSyntax {
+    var result = IsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndIsTok?.buildUnexpectedNodes(format: format), isTok: isTok.buildToken(), unexpectedBetweenIsTokAndTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildIsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildIsExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsIsExpr`.
@@ -2465,18 +2385,16 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedAsExprSyntax`.
-  func buildUnresolvedAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedAsExprSyntax {
-    let result = UnresolvedAsExprSyntax(unexpectedBeforeAsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asTok: asTok.buildToken(), unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionOrExclamationMark: questionOrExclamationMark?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildUnresolvedAsExpr(format: Format) -> UnresolvedAsExprSyntax {
+    var result = UnresolvedAsExprSyntax(unexpectedBeforeAsTok?.buildUnexpectedNodes(format: format), asTok: asTok.buildToken(), unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildUnresolvedAsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildUnresolvedAsExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsUnresolvedAsExpr`.
@@ -2537,18 +2455,16 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AsExprSyntax`.
-  func buildAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsExprSyntax {
-    let result = AsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndAsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asTok: asTok.buildToken(), unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionOrExclamationMark: questionOrExclamationMark?.buildToken(), unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeName: typeName.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAsExpr(format: Format) -> AsExprSyntax {
+    var result = AsExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndAsTok?.buildUnexpectedNodes(format: format), asTok: asTok.buildToken(), unexpectedBetweenAsTokAndQuestionOrExclamationMark?.buildUnexpectedNodes(format: format), questionOrExclamationMark: questionOrExclamationMark?.buildToken(), unexpectedBetweenQuestionOrExclamationMarkAndTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildAsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildAsExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsAsExpr`.
@@ -2589,18 +2505,16 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeExprSyntax`.
-  func buildTypeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeExprSyntax {
-    let result = TypeExprSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTypeExpr(format: Format) -> TypeExprSyntax {
+    var result = TypeExprSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTypeExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildTypeExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsTypeExpr`.
@@ -2675,18 +2589,16 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureCaptureItemSyntax`.
-  func buildClosureCaptureItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
-    let result = ClosureCaptureItemSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), specifier: specifier?.buildTokenList(format: format, leadingTrivia: nil), unexpectedBetweenSpecifierAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name?.buildToken(), unexpectedBetweenNameAndAssignToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), assignToken: assignToken?.buildToken(), unexpectedBetweenAssignTokenAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildClosureCaptureItem(format: Format) -> ClosureCaptureItemSyntax {
+    var result = ClosureCaptureItemSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format), specifier: specifier?.buildTokenList(format: format), unexpectedBetweenSpecifierAndName?.buildUnexpectedNodes(format: format), name: name?.buildToken(), unexpectedBetweenNameAndAssignToken?.buildUnexpectedNodes(format: format), assignToken: assignToken?.buildToken(), unexpectedBetweenAssignTokenAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureCaptureItem(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildClosureCaptureItem(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsClosureCaptureItem`.
@@ -2746,18 +2658,16 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureCaptureSignatureSyntax`.
-  func buildClosureCaptureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
-    let result = ClosureCaptureSignatureSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndItems?.buildUnexpectedNodes(format: format, leadingTrivia: nil), items: items?.buildClosureCaptureItemList(format: format, leadingTrivia: nil), unexpectedBetweenItemsAndRightSquare?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightSquare: rightSquare.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildClosureCaptureSignature(format: Format) -> ClosureCaptureSignatureSyntax {
+    var result = ClosureCaptureSignatureSyntax(unexpectedBeforeLeftSquare?.buildUnexpectedNodes(format: format), leftSquare: leftSquare.buildToken(), unexpectedBetweenLeftSquareAndItems?.buildUnexpectedNodes(format: format), items: items?.buildClosureCaptureItemList(format: format), unexpectedBetweenItemsAndRightSquare?.buildUnexpectedNodes(format: format), rightSquare: rightSquare.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureCaptureSignature(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildClosureCaptureSignature(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsClosureCaptureSignature`.
@@ -2798,18 +2708,16 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureParamSyntax`.
-  func buildClosureParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureParamSyntax {
-    let result = ClosureParamSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildClosureParam(format: Format) -> ClosureParamSyntax {
+    var result = ClosureParamSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureParam(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildClosureParam(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsClosureParam`.
@@ -2894,18 +2802,16 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureSignatureSyntax`.
-  func buildClosureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
-    let result = ClosureSignatureSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndCapture?.buildUnexpectedNodes(format: format, leadingTrivia: nil), capture: capture?.buildClosureCaptureSignature(format: format, leadingTrivia: nil), unexpectedBetweenCaptureAndInput?.buildUnexpectedNodes(format: format, leadingTrivia: nil), input: input?.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenInputAndAsyncKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), throwsTok: throwsTok?.buildToken(), unexpectedBetweenThrowsTokAndOutput?.buildUnexpectedNodes(format: format, leadingTrivia: nil), output: output?.buildReturnClause(format: format, leadingTrivia: nil), unexpectedBetweenOutputAndInTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inTok: inTok.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildClosureSignature(format: Format) -> ClosureSignatureSyntax {
+    var result = ClosureSignatureSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndCapture?.buildUnexpectedNodes(format: format), capture: capture?.buildClosureCaptureSignature(format: format), unexpectedBetweenCaptureAndInput?.buildUnexpectedNodes(format: format), input: input?.buildSyntax(format: format), unexpectedBetweenInputAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsTok?.buildUnexpectedNodes(format: format), throwsTok: throwsTok?.buildToken(), unexpectedBetweenThrowsTokAndOutput?.buildUnexpectedNodes(format: format), output: output?.buildReturnClause(format: format), unexpectedBetweenOutputAndInTok?.buildUnexpectedNodes(format: format), inTok: inTok.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureSignature(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildClosureSignature(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsClosureSignature`.
@@ -2967,18 +2873,16 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClosureExprSyntax`.
-  func buildClosureExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureExprSyntax {
-    let result = ClosureExprSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndSignature?.buildUnexpectedNodes(format: format, leadingTrivia: nil), signature: signature?.buildClosureSignature(format: format, leadingTrivia: nil), unexpectedBetweenSignatureAndStatements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightBrace: rightBrace.buildToken().withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.buildToken().leadingTrivia ?? [])))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildClosureExpr(format: Format) -> ClosureExprSyntax {
+    var result = ClosureExprSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndSignature?.buildUnexpectedNodes(format: format), signature: signature?.buildClosureSignature(format: format), unexpectedBetweenSignatureAndStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format._indented), unexpectedBetweenStatementsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildClosureExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildClosureExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsClosureExpr`.
@@ -3019,18 +2923,16 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnresolvedPatternExprSyntax`.
-  func buildUnresolvedPatternExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedPatternExprSyntax {
-    let result = UnresolvedPatternExprSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildUnresolvedPatternExpr(format: Format) -> UnresolvedPatternExprSyntax {
+    var result = UnresolvedPatternExprSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildUnresolvedPatternExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildUnresolvedPatternExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsUnresolvedPatternExpr`.
@@ -3084,18 +2986,16 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MultipleTrailingClosureElementSyntax`.
-  func buildMultipleTrailingClosureElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MultipleTrailingClosureElementSyntax {
-    let result = MultipleTrailingClosureElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndClosure?.buildUnexpectedNodes(format: format, leadingTrivia: nil), closure: closure.buildClosureExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMultipleTrailingClosureElement(format: Format) -> MultipleTrailingClosureElementSyntax {
+    var result = MultipleTrailingClosureElementSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndClosure?.buildUnexpectedNodes(format: format), closure: closure.buildClosureExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMultipleTrailingClosureElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildMultipleTrailingClosureElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsMultipleTrailingClosureElement`.
@@ -3169,18 +3069,16 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionCallExprSyntax`.
-  func buildFunctionCallExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionCallExprSyntax {
-    let result = FunctionCallExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenCalledExpressionAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), argumentList: argumentList.buildTupleExprElementList(format: format, leadingTrivia: nil), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen?.buildToken(), unexpectedBetweenRightParenAndTrailingClosure?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format, leadingTrivia: nil), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFunctionCallExpr(format: Format) -> FunctionCallExprSyntax {
+    var result = FunctionCallExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format), calledExpression: calledExpression.buildExpr(format: format), unexpectedBetweenCalledExpressionAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken(), unexpectedBetweenRightParenAndTrailingClosure?.buildUnexpectedNodes(format: format), trailingClosure: trailingClosure?.buildClosureExpr(format: format), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildFunctionCallExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildFunctionCallExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsFunctionCallExpr`.
@@ -3261,18 +3159,16 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SubscriptExprSyntax`.
-  func buildSubscriptExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptExprSyntax {
-    let result = SubscriptExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenCalledExpressionAndLeftBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftBracket: leftBracket.buildToken(), unexpectedBetweenLeftBracketAndArgumentList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), argumentList: argumentList.buildTupleExprElementList(format: format, leadingTrivia: nil), unexpectedBetweenArgumentListAndRightBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightBracket: rightBracket.buildToken(), unexpectedBetweenRightBracketAndTrailingClosure?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format, leadingTrivia: nil), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSubscriptExpr(format: Format) -> SubscriptExprSyntax {
+    var result = SubscriptExprSyntax(unexpectedBeforeCalledExpression?.buildUnexpectedNodes(format: format), calledExpression: calledExpression.buildExpr(format: format), unexpectedBetweenCalledExpressionAndLeftBracket?.buildUnexpectedNodes(format: format), leftBracket: leftBracket.buildToken(), unexpectedBetweenLeftBracketAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightBracket?.buildUnexpectedNodes(format: format), rightBracket: rightBracket.buildToken(), unexpectedBetweenRightBracketAndTrailingClosure?.buildUnexpectedNodes(format: format), trailingClosure: trailingClosure?.buildClosureExpr(format: format), unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.buildUnexpectedNodes(format: format), additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSubscriptExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildSubscriptExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsSubscriptExpr`.
@@ -3320,18 +3216,16 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalChainingExprSyntax`.
-  func buildOptionalChainingExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalChainingExprSyntax {
-    let result = OptionalChainingExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndQuestionMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionMark: questionMark.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildOptionalChainingExpr(format: Format) -> OptionalChainingExprSyntax {
+    var result = OptionalChainingExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildOptionalChainingExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildOptionalChainingExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsOptionalChainingExpr`.
@@ -3379,18 +3273,16 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ForcedValueExprSyntax`.
-  func buildForcedValueExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForcedValueExprSyntax {
-    let result = ForcedValueExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), exclamationMark: exclamationMark.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildForcedValueExpr(format: Format) -> ForcedValueExprSyntax {
+    var result = ForcedValueExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndExclamationMark?.buildUnexpectedNodes(format: format), exclamationMark: exclamationMark.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildForcedValueExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildForcedValueExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsForcedValueExpr`.
@@ -3443,18 +3335,16 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PostfixUnaryExprSyntax`.
-  func buildPostfixUnaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixUnaryExprSyntax {
-    let result = PostfixUnaryExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndOperatorToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), operatorToken: operatorToken.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPostfixUnaryExpr(format: Format) -> PostfixUnaryExprSyntax {
+    var result = PostfixUnaryExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndOperatorToken?.buildUnexpectedNodes(format: format), operatorToken: operatorToken.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPostfixUnaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPostfixUnaryExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPostfixUnaryExpr`.
@@ -3501,18 +3391,16 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SpecializeExprSyntax`.
-  func buildSpecializeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SpecializeExprSyntax {
-    let result = SpecializeExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndGenericArgumentClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericArgumentClause: genericArgumentClause.buildGenericArgumentClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSpecializeExpr(format: Format) -> SpecializeExprSyntax {
+    var result = SpecializeExprSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause.buildGenericArgumentClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSpecializeExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildSpecializeExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsSpecializeExpr`.
@@ -3559,18 +3447,16 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StringSegmentSyntax`.
-  func buildStringSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringSegmentSyntax {
-    let result = StringSegmentSyntax(unexpectedBeforeContent?.buildUnexpectedNodes(format: format, leadingTrivia: nil), content: content.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildStringSegment(format: Format) -> StringSegmentSyntax {
+    var result = StringSegmentSyntax(unexpectedBeforeContent?.buildUnexpectedNodes(format: format), content: content.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildStringSegment(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildStringSegment(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsStringSegment`.
@@ -3641,18 +3527,16 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExpressionSegmentSyntax`.
-  func buildExpressionSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionSegmentSyntax {
-    let result = ExpressionSegmentSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format, leadingTrivia: nil), backslash: backslash.buildToken(), unexpectedBetweenBackslashAndDelimiter?.buildUnexpectedNodes(format: format, leadingTrivia: nil), delimiter: delimiter?.buildToken(), unexpectedBetweenDelimiterAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndExpressions?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expressions: expressions.buildTupleExprElementList(format: format, leadingTrivia: nil), unexpectedBetweenExpressionsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildExpressionSegment(format: Format) -> ExpressionSegmentSyntax {
+    var result = ExpressionSegmentSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: backslash.buildToken(), unexpectedBetweenBackslashAndDelimiter?.buildUnexpectedNodes(format: format), delimiter: delimiter?.buildToken(), unexpectedBetweenDelimiterAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndExpressions?.buildUnexpectedNodes(format: format), expressions: expressions.buildTupleExprElementList(format: format), unexpectedBetweenExpressionsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildExpressionSegment(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildExpressionSegment(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsExpressionSegment`.
@@ -3722,18 +3606,16 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StringLiteralExprSyntax`.
-  func buildStringLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringLiteralExprSyntax {
-    let result = StringLiteralExprSyntax(unexpectedBeforeOpenDelimiter?.buildUnexpectedNodes(format: format, leadingTrivia: nil), openDelimiter: openDelimiter?.buildToken(), unexpectedBetweenOpenDelimiterAndOpenQuote?.buildUnexpectedNodes(format: format, leadingTrivia: nil), openQuote: openQuote.buildToken(), unexpectedBetweenOpenQuoteAndSegments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), segments: segments.buildStringLiteralSegments(format: format, leadingTrivia: nil), unexpectedBetweenSegmentsAndCloseQuote?.buildUnexpectedNodes(format: format, leadingTrivia: nil), closeQuote: closeQuote.buildToken(), unexpectedBetweenCloseQuoteAndCloseDelimiter?.buildUnexpectedNodes(format: format, leadingTrivia: nil), closeDelimiter: closeDelimiter?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildStringLiteralExpr(format: Format) -> StringLiteralExprSyntax {
+    var result = StringLiteralExprSyntax(unexpectedBeforeOpenDelimiter?.buildUnexpectedNodes(format: format), openDelimiter: openDelimiter?.buildToken(), unexpectedBetweenOpenDelimiterAndOpenQuote?.buildUnexpectedNodes(format: format), openQuote: openQuote.buildToken(), unexpectedBetweenOpenQuoteAndSegments?.buildUnexpectedNodes(format: format), segments: segments.buildStringLiteralSegments(format: format), unexpectedBetweenSegmentsAndCloseQuote?.buildUnexpectedNodes(format: format), closeQuote: closeQuote.buildToken(), unexpectedBetweenCloseQuoteAndCloseDelimiter?.buildUnexpectedNodes(format: format), closeDelimiter: closeDelimiter?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildStringLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildStringLiteralExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsStringLiteralExpr`.
@@ -3780,18 +3662,16 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `RegexLiteralExprSyntax`.
-  func buildRegexLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RegexLiteralExprSyntax {
-    let result = RegexLiteralExprSyntax(unexpectedBeforeRegex?.buildUnexpectedNodes(format: format, leadingTrivia: nil), regex: regex.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildRegexLiteralExpr(format: Format) -> RegexLiteralExprSyntax {
+    var result = RegexLiteralExprSyntax(unexpectedBeforeRegex?.buildUnexpectedNodes(format: format), regex: regex.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildRegexLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildRegexLiteralExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsRegexLiteralExpr`.
@@ -3845,18 +3725,16 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `KeyPathExprSyntax`.
-  func buildKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathExprSyntax {
-    let result = KeyPathExprSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format, leadingTrivia: nil), backslash: backslash.buildToken(), unexpectedBetweenBackslashAndRootExpr?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rootExpr: rootExpr?.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenRootExprAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildKeyPathExpr(format: Format) -> KeyPathExprSyntax {
+    var result = KeyPathExprSyntax(unexpectedBeforeBackslash?.buildUnexpectedNodes(format: format), backslash: backslash.buildToken(), unexpectedBetweenBackslashAndRootExpr?.buildUnexpectedNodes(format: format), rootExpr: rootExpr?.buildExpr(format: format), unexpectedBetweenRootExprAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildKeyPathExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildKeyPathExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsKeyPathExpr`.
@@ -3898,18 +3776,16 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `KeyPathBaseExprSyntax`.
-  func buildKeyPathBaseExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathBaseExprSyntax {
-    let result = KeyPathBaseExprSyntax(unexpectedBeforePeriod?.buildUnexpectedNodes(format: format, leadingTrivia: nil), period: period.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildKeyPathBaseExpr(format: Format) -> KeyPathBaseExprSyntax {
+    var result = KeyPathBaseExprSyntax(unexpectedBeforePeriod?.buildUnexpectedNodes(format: format), period: period.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildKeyPathBaseExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildKeyPathBaseExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsKeyPathBaseExpr`.
@@ -3963,18 +3839,16 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcNamePieceSyntax`.
-  func buildObjcNamePiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcNamePieceSyntax {
-    let result = ObjcNamePieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndDot?.buildUnexpectedNodes(format: format, leadingTrivia: nil), dot: dot?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildObjcNamePiece(format: Format) -> ObjcNamePieceSyntax {
+    var result = ObjcNamePieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndDot?.buildUnexpectedNodes(format: format), dot: dot?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildObjcNamePiece(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildObjcNamePiece(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsObjcNamePiece`.
@@ -4029,18 +3903,16 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcKeyPathExprSyntax`.
-  func buildObjcKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
-    let result = ObjcKeyPathExprSyntax(unexpectedBeforeKeyPath?.buildUnexpectedNodes(format: format, leadingTrivia: nil), keyPath: keyPath.buildToken(), unexpectedBetweenKeyPathAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildObjcName(format: format, leadingTrivia: nil), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildObjcKeyPathExpr(format: Format) -> ObjcKeyPathExprSyntax {
+    var result = ObjcKeyPathExprSyntax(unexpectedBeforeKeyPath?.buildUnexpectedNodes(format: format), keyPath: keyPath.buildToken(), unexpectedBetweenKeyPathAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format), name: name.buildObjcName(format: format), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildObjcKeyPathExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildObjcKeyPathExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsObjcKeyPathExpr`.
@@ -4124,18 +3996,16 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjcSelectorExprSyntax`.
-  func buildObjcSelectorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcSelectorExprSyntax {
-    let result = ObjcSelectorExprSyntax(unexpectedBeforePoundSelector?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundSelector: poundSelector.buildToken(), unexpectedBetweenPoundSelectorAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndKind?.buildUnexpectedNodes(format: format, leadingTrivia: nil), kind: kind?.buildToken(), unexpectedBetweenKindAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon?.buildToken(), unexpectedBetweenColonAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildObjcSelectorExpr(format: Format) -> ObjcSelectorExprSyntax {
+    var result = ObjcSelectorExprSyntax(unexpectedBeforePoundSelector?.buildUnexpectedNodes(format: format), poundSelector: poundSelector.buildToken(), unexpectedBetweenPoundSelectorAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndKind?.buildUnexpectedNodes(format: format), kind: kind?.buildToken(), unexpectedBetweenKindAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndName?.buildUnexpectedNodes(format: format), name: name.buildExpr(format: format), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildObjcSelectorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildObjcSelectorExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsObjcSelectorExpr`.
@@ -4182,18 +4052,16 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PostfixIfConfigExprSyntax`.
-  func buildPostfixIfConfigExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
-    let result = PostfixIfConfigExprSyntax(unexpectedBeforeBase?.buildUnexpectedNodes(format: format, leadingTrivia: nil), base: base?.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenBaseAndConfig?.buildUnexpectedNodes(format: format, leadingTrivia: nil), config: config.buildIfConfigDecl(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPostfixIfConfigExpr(format: Format) -> PostfixIfConfigExprSyntax {
+    var result = PostfixIfConfigExprSyntax(unexpectedBeforeBase?.buildUnexpectedNodes(format: format), base: base?.buildExpr(format: format), unexpectedBetweenBaseAndConfig?.buildUnexpectedNodes(format: format), config: config.buildIfConfigDecl(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPostfixIfConfigExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildPostfixIfConfigExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsPostfixIfConfigExpr`.
@@ -4240,18 +4108,16 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EditorPlaceholderExprSyntax`.
-  func buildEditorPlaceholderExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EditorPlaceholderExprSyntax {
-    let result = EditorPlaceholderExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildEditorPlaceholderExpr(format: Format) -> EditorPlaceholderExprSyntax {
+    var result = EditorPlaceholderExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildEditorPlaceholderExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildEditorPlaceholderExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsEditorPlaceholderExpr`.
@@ -4321,18 +4187,16 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjectLiteralExprSyntax`.
-  func buildObjectLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjectLiteralExprSyntax {
-    let result = ObjectLiteralExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arguments: arguments.buildTupleExprElementList(format: format, leadingTrivia: nil), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildObjectLiteralExpr(format: Format) -> ObjectLiteralExprSyntax {
+    var result = ObjectLiteralExprSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildTupleExprElementList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildObjectLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildExpr(format: Format) -> ExprSyntax {
+    let result = buildObjectLiteralExpr(format: format)
     return ExprSyntax(result)
   }
   /// Conformance to `ExpressibleAsObjectLiteralExpr`.
@@ -4380,18 +4244,16 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeInitializerClauseSyntax`.
-  func buildTypeInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInitializerClauseSyntax {
-    let result = TypeInitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format, leadingTrivia: nil), equal: equal.buildToken(), unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format, leadingTrivia: nil), value: value.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTypeInitializerClause(format: Format) -> TypeInitializerClauseSyntax {
+    var result = TypeInitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format), equal: equal.buildToken(), unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format), value: value.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTypeInitializerClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildTypeInitializerClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsTypeInitializerClause`.
@@ -4468,18 +4330,16 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypealiasDeclSyntax`.
-  func buildTypealiasDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypealiasDeclSyntax {
-    let result = TypealiasDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndTypealiasKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typealiasKeyword: typealiasKeyword.buildToken(), unexpectedBetweenTypealiasKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterClauseAndInitializer?.buildUnexpectedNodes(format: format, leadingTrivia: nil), initializer: initializer.buildTypeInitializerClause(format: format, leadingTrivia: nil), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTypealiasDecl(format: Format) -> TypealiasDeclSyntax {
+    var result = TypealiasDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndTypealiasKeyword?.buildUnexpectedNodes(format: format), typealiasKeyword: typealiasKeyword.buildToken(), unexpectedBetweenTypealiasKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer.buildTypeInitializerClause(format: format), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildTypealiasDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildTypealiasDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsTypealiasDecl`.
@@ -4563,18 +4423,16 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AssociatedtypeDeclSyntax`.
-  func buildAssociatedtypeDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssociatedtypeDeclSyntax {
-    let result = AssociatedtypeDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndAssociatedtypeKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), associatedtypeKeyword: associatedtypeKeyword.buildToken(), unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndInheritanceClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil), unexpectedBetweenInheritanceClauseAndInitializer?.buildUnexpectedNodes(format: format, leadingTrivia: nil), initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAssociatedtypeDecl(format: Format) -> AssociatedtypeDeclSyntax {
+    var result = AssociatedtypeDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndAssociatedtypeKeyword?.buildUnexpectedNodes(format: format), associatedtypeKeyword: associatedtypeKeyword.buildToken(), unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildTypeInitializerClause(format: format), unexpectedBetweenInitializerAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildAssociatedtypeDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildAssociatedtypeDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsAssociatedtypeDecl`.
@@ -4637,18 +4495,16 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ParameterClauseSyntax`.
-  func buildParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ParameterClauseSyntax {
-    let result = ParameterClauseSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndParameterList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), parameterList: parameterList.buildFunctionParameterList(format: format, leadingTrivia: nil), unexpectedBetweenParameterListAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildParameterClause(format: Format) -> ParameterClauseSyntax {
+    var result = ParameterClauseSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndParameterList?.buildUnexpectedNodes(format: format), parameterList: parameterList.buildFunctionParameterList(format: format), unexpectedBetweenParameterListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildParameterClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildParameterClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsParameterClause`.
@@ -4689,18 +4545,16 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ReturnClauseSyntax`.
-  func buildReturnClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnClauseSyntax {
-    let result = ReturnClauseSyntax(unexpectedBeforeArrow?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arrow: arrow.buildToken(), unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), returnType: returnType.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildReturnClause(format: Format) -> ReturnClauseSyntax {
+    var result = ReturnClauseSyntax(unexpectedBeforeArrow?.buildUnexpectedNodes(format: format), arrow: arrow.buildToken(), unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format), returnType: returnType.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildReturnClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildReturnClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsReturnClause`.
@@ -4762,18 +4616,16 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionSignatureSyntax`.
-  func buildFunctionSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionSignatureSyntax {
-    let result = FunctionSignatureSyntax(unexpectedBeforeInput?.buildUnexpectedNodes(format: format, leadingTrivia: nil), input: input.buildParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenInputAndAsyncOrReasyncKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asyncOrReasyncKeyword: asyncOrReasyncKeyword?.buildToken(), unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword?.buildToken(), unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.buildUnexpectedNodes(format: format, leadingTrivia: nil), output: output?.buildReturnClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFunctionSignature(format: Format) -> FunctionSignatureSyntax {
+    var result = FunctionSignatureSyntax(unexpectedBeforeInput?.buildUnexpectedNodes(format: format), input: input.buildParameterClause(format: format), unexpectedBetweenInputAndAsyncOrReasyncKeyword?.buildUnexpectedNodes(format: format), asyncOrReasyncKeyword: asyncOrReasyncKeyword?.buildToken(), unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword?.buildToken(), unexpectedBetweenThrowsOrRethrowsKeywordAndOutput?.buildUnexpectedNodes(format: format), output: output?.buildReturnClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildFunctionSignature(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildFunctionSignature(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsFunctionSignature`.
@@ -4820,18 +4672,16 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfConfigClauseSyntax`.
-  func buildIfConfigClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigClauseSyntax {
-    let result = IfConfigClauseSyntax(unexpectedBeforePoundKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundKeyword: poundKeyword.buildToken(), unexpectedBetweenPoundKeywordAndCondition?.buildUnexpectedNodes(format: format, leadingTrivia: nil), condition: condition?.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenConditionAndElements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elements: elements.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIfConfigClause(format: Format) -> IfConfigClauseSyntax {
+    var result = IfConfigClauseSyntax(unexpectedBeforePoundKeyword?.buildUnexpectedNodes(format: format), poundKeyword: poundKeyword.buildToken(), unexpectedBetweenPoundKeywordAndCondition?.buildUnexpectedNodes(format: format), condition: condition?.buildExpr(format: format), unexpectedBetweenConditionAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildIfConfigClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildIfConfigClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsIfConfigClause`.
@@ -4872,18 +4722,16 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfConfigDeclSyntax`.
-  func buildIfConfigDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
-    let result = IfConfigDeclSyntax(unexpectedBeforeClauses?.buildUnexpectedNodes(format: format, leadingTrivia: nil), clauses: clauses.buildIfConfigClauseList(format: format, leadingTrivia: nil), unexpectedBetweenClausesAndPoundEndif?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundEndif: poundEndif.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIfConfigDecl(format: Format) -> IfConfigDeclSyntax {
+    var result = IfConfigDeclSyntax(unexpectedBeforeClauses?.buildUnexpectedNodes(format: format), clauses: clauses.buildIfConfigClauseList(format: format), unexpectedBetweenClausesAndPoundEndif?.buildUnexpectedNodes(format: format), poundEndif: poundEndif.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildIfConfigDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildIfConfigDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsIfConfigDecl`.
@@ -4945,18 +4793,16 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundErrorDeclSyntax`.
-  func buildPoundErrorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundErrorDeclSyntax {
-    let result = PoundErrorDeclSyntax(unexpectedBeforePoundError?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundError: poundError.buildToken(), unexpectedBetweenPoundErrorAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format, leadingTrivia: nil), message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundErrorDecl(format: Format) -> PoundErrorDeclSyntax {
+    var result = PoundErrorDeclSyntax(unexpectedBeforePoundError?.buildUnexpectedNodes(format: format), poundError: poundError.buildToken(), unexpectedBetweenPoundErrorAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format), message: message.buildStringLiteralExpr(format: format), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPoundErrorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildPoundErrorDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundErrorDecl`.
@@ -5018,18 +4864,16 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundWarningDeclSyntax`.
-  func buildPoundWarningDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundWarningDeclSyntax {
-    let result = PoundWarningDeclSyntax(unexpectedBeforePoundWarning?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundWarning: poundWarning.buildToken(), unexpectedBetweenPoundWarningAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format, leadingTrivia: nil), message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundWarningDecl(format: Format) -> PoundWarningDeclSyntax {
+    var result = PoundWarningDeclSyntax(unexpectedBeforePoundWarning?.buildUnexpectedNodes(format: format), poundWarning: poundWarning.buildToken(), unexpectedBetweenPoundWarningAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndMessage?.buildUnexpectedNodes(format: format), message: message.buildStringLiteralExpr(format: format), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPoundWarningDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildPoundWarningDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundWarningDecl`.
@@ -5091,18 +4935,16 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundSourceLocationSyntax`.
-  func buildPoundSourceLocation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationSyntax {
-    let result = PoundSourceLocationSyntax(unexpectedBeforePoundSourceLocation?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundSourceLocation: poundSourceLocation.buildToken(), unexpectedBetweenPoundSourceLocationAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArgs?.buildUnexpectedNodes(format: format, leadingTrivia: nil), args: args?.buildPoundSourceLocationArgs(format: format, leadingTrivia: nil), unexpectedBetweenArgsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundSourceLocation(format: Format) -> PoundSourceLocationSyntax {
+    var result = PoundSourceLocationSyntax(unexpectedBeforePoundSourceLocation?.buildUnexpectedNodes(format: format), poundSourceLocation: poundSourceLocation.buildToken(), unexpectedBetweenPoundSourceLocationAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArgs?.buildUnexpectedNodes(format: format), args: args?.buildPoundSourceLocationArgs(format: format), unexpectedBetweenArgsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPoundSourceLocation(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildPoundSourceLocation(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundSourceLocation`.
@@ -5190,18 +5032,16 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundSourceLocationArgsSyntax`.
-  func buildPoundSourceLocationArgs(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationArgsSyntax {
-    let result = PoundSourceLocationArgsSyntax(unexpectedBeforeFileArgLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), fileArgLabel: fileArgLabel.buildToken(), unexpectedBetweenFileArgLabelAndFileArgColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), fileArgColon: fileArgColon.buildToken(), unexpectedBetweenFileArgColonAndFileName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), fileName: fileName.buildToken(), unexpectedBetweenFileNameAndComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), comma: comma.buildToken(), unexpectedBetweenCommaAndLineArgLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), lineArgLabel: lineArgLabel.buildToken(), unexpectedBetweenLineArgLabelAndLineArgColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), lineArgColon: lineArgColon.buildToken(), unexpectedBetweenLineArgColonAndLineNumber?.buildUnexpectedNodes(format: format, leadingTrivia: nil), lineNumber: lineNumber.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundSourceLocationArgs(format: Format) -> PoundSourceLocationArgsSyntax {
+    var result = PoundSourceLocationArgsSyntax(unexpectedBeforeFileArgLabel?.buildUnexpectedNodes(format: format), fileArgLabel: fileArgLabel.buildToken(), unexpectedBetweenFileArgLabelAndFileArgColon?.buildUnexpectedNodes(format: format), fileArgColon: fileArgColon.buildToken(), unexpectedBetweenFileArgColonAndFileName?.buildUnexpectedNodes(format: format), fileName: fileName.buildToken(), unexpectedBetweenFileNameAndComma?.buildUnexpectedNodes(format: format), comma: comma.buildToken(), unexpectedBetweenCommaAndLineArgLabel?.buildUnexpectedNodes(format: format), lineArgLabel: lineArgLabel.buildToken(), unexpectedBetweenLineArgLabelAndLineArgColon?.buildUnexpectedNodes(format: format), lineArgColon: lineArgColon.buildToken(), unexpectedBetweenLineArgColonAndLineNumber?.buildUnexpectedNodes(format: format), lineNumber: lineNumber.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPoundSourceLocationArgs(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPoundSourceLocationArgs(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPoundSourceLocationArgs`.
@@ -5255,18 +5095,16 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclModifierDetailSyntax`.
-  func buildDeclModifierDetail(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierDetailSyntax {
-    let result = DeclModifierDetailSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndDetail?.buildUnexpectedNodes(format: format, leadingTrivia: nil), detail: detail.buildToken(), unexpectedBetweenDetailAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeclModifierDetail(format: Format) -> DeclModifierDetailSyntax {
+    var result = DeclModifierDetailSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndDetail?.buildUnexpectedNodes(format: format), detail: detail.buildToken(), unexpectedBetweenDetailAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclModifierDetail(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDeclModifierDetail(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDeclModifierDetail`.
@@ -5307,18 +5145,16 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclModifierSyntax`.
-  func buildDeclModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierSyntax {
-    let result = DeclModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndDetail?.buildUnexpectedNodes(format: format, leadingTrivia: nil), detail: detail?.buildDeclModifierDetail(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeclModifier(format: Format) -> DeclModifierSyntax {
+    var result = DeclModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndDetail?.buildUnexpectedNodes(format: format), detail: detail?.buildDeclModifierDetail(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclModifier(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDeclModifier(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDeclModifier`.
@@ -5359,18 +5195,16 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InheritedTypeSyntax`.
-  func buildInheritedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InheritedTypeSyntax {
-    let result = InheritedTypeSyntax(unexpectedBeforeTypeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeName: typeName.buildType(format: format, leadingTrivia: nil), unexpectedBetweenTypeNameAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildInheritedType(format: Format) -> InheritedTypeSyntax {
+    var result = InheritedTypeSyntax(unexpectedBeforeTypeName?.buildUnexpectedNodes(format: format), typeName: typeName.buildType(format: format), unexpectedBetweenTypeNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildInheritedType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildInheritedType(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsInheritedType`.
@@ -5423,18 +5257,16 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeInheritanceClauseSyntax`.
-  func buildTypeInheritanceClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInheritanceClauseSyntax {
-    let result = TypeInheritanceClauseSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndInheritedTypeCollection?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTypeInheritanceClause(format: Format) -> TypeInheritanceClauseSyntax {
+    var result = TypeInheritanceClauseSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndInheritedTypeCollection?.buildUnexpectedNodes(format: format), inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTypeInheritanceClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildTypeInheritanceClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsTypeInheritanceClause`.
@@ -5519,18 +5351,16 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClassDeclSyntax`.
-  func buildClassDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassDeclSyntax {
-    let result = ClassDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndClassKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), classKeyword: classKeyword.buildToken(), unexpectedBetweenClassKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildClassDecl(format: Format) -> ClassDeclSyntax {
+    var result = ClassDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndClassKeyword?.buildUnexpectedNodes(format: format), classKeyword: classKeyword.buildToken(), unexpectedBetweenClassKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildClassDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildClassDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsClassDecl`.
@@ -5622,18 +5452,16 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ActorDeclSyntax`.
-  func buildActorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ActorDeclSyntax {
-    let result = ActorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndActorKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), actorKeyword: actorKeyword.buildToken(), unexpectedBetweenActorKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildActorDecl(format: Format) -> ActorDeclSyntax {
+    var result = ActorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndActorKeyword?.buildUnexpectedNodes(format: format), actorKeyword: actorKeyword.buildToken(), unexpectedBetweenActorKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildActorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildActorDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsActorDecl`.
@@ -5725,18 +5553,16 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `StructDeclSyntax`.
-  func buildStructDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StructDeclSyntax {
-    let result = StructDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndStructKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), structKeyword: structKeyword.buildToken(), unexpectedBetweenStructKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildStructDecl(format: Format) -> StructDeclSyntax {
+    var result = StructDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndStructKeyword?.buildUnexpectedNodes(format: format), structKeyword: structKeyword.buildToken(), unexpectedBetweenStructKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildStructDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildStructDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsStructDecl`.
@@ -5828,18 +5654,16 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ProtocolDeclSyntax`.
-  func buildProtocolDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ProtocolDeclSyntax {
-    let result = ProtocolDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndProtocolKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), protocolKeyword: protocolKeyword.buildToken(), unexpectedBetweenProtocolKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), primaryAssociatedTypeClause: primaryAssociatedTypeClause?.buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: nil), unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildProtocolDecl(format: Format) -> ProtocolDeclSyntax {
+    var result = ProtocolDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndProtocolKeyword?.buildUnexpectedNodes(format: format), protocolKeyword: protocolKeyword.buildToken(), unexpectedBetweenProtocolKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.buildUnexpectedNodes(format: format), primaryAssociatedTypeClause: primaryAssociatedTypeClause?.buildPrimaryAssociatedTypeClause(format: format), unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildProtocolDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildProtocolDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsProtocolDecl`.
@@ -5925,18 +5749,16 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExtensionDeclSyntax`.
-  func buildExtensionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExtensionDeclSyntax {
-    let result = ExtensionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndExtensionKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), extensionKeyword: extensionKeyword.buildToken(), unexpectedBetweenExtensionKeywordAndExtendedType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), extendedType: extendedType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenExtendedTypeAndInheritanceClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildExtensionDecl(format: Format) -> ExtensionDeclSyntax {
+    var result = ExtensionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndExtensionKeyword?.buildUnexpectedNodes(format: format), extensionKeyword: extensionKeyword.buildToken(), unexpectedBetweenExtensionKeywordAndExtendedType?.buildUnexpectedNodes(format: format), extendedType: extendedType.buildType(format: format), unexpectedBetweenExtendedTypeAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildExtensionDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildExtensionDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsExtensionDecl`.
@@ -5999,18 +5821,16 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberDeclBlockSyntax`.
-  func buildMemberDeclBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclBlockSyntax {
-    let result = MemberDeclBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndMembers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), members: members.buildMemberDeclList(format: format._indented(), leadingTrivia: nil), unexpectedBetweenMembersAndRightBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightBrace: rightBrace.buildToken().withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.buildToken().leadingTrivia ?? [])))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMemberDeclBlock(format: Format) -> MemberDeclBlockSyntax {
+    var result = MemberDeclBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclList(format: format._indented), unexpectedBetweenMembersAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMemberDeclBlock(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildMemberDeclBlock(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsMemberDeclBlock`.
@@ -6052,18 +5872,16 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberDeclListItemSyntax`.
-  func buildMemberDeclListItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclListItemSyntax {
-    let result = MemberDeclListItemSyntax(unexpectedBeforeDecl?.buildUnexpectedNodes(format: format, leadingTrivia: nil), decl: decl.buildDecl(format: format, leadingTrivia: nil), unexpectedBetweenDeclAndSemicolon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), semicolon: semicolon?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMemberDeclListItem(format: Format) -> MemberDeclListItemSyntax {
+    var result = MemberDeclListItemSyntax(unexpectedBeforeDecl?.buildUnexpectedNodes(format: format), decl: decl.buildDecl(format: format), unexpectedBetweenDeclAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMemberDeclListItem(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildMemberDeclListItem(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsMemberDeclListItem`.
@@ -6111,18 +5929,16 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SourceFileSyntax`.
-  func buildSourceFile(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SourceFileSyntax {
-    let result = SourceFileSyntax(unexpectedBeforeStatements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), statements: statements.buildCodeBlockItemList(format: format, leadingTrivia: nil), unexpectedBetweenStatementsAndEOFToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), eofToken: eofToken.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSourceFile(format: Format) -> SourceFileSyntax {
+    var result = SourceFileSyntax(unexpectedBeforeStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format), unexpectedBetweenStatementsAndEOFToken?.buildUnexpectedNodes(format: format), eofToken: eofToken.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSourceFile(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildSourceFile(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsSourceFile`.
@@ -6163,18 +5979,16 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InitializerClauseSyntax`.
-  func buildInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerClauseSyntax {
-    let result = InitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format, leadingTrivia: nil), equal: equal.buildToken(), unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format, leadingTrivia: nil), value: value.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildInitializerClause(format: Format) -> InitializerClauseSyntax {
+    var result = InitializerClauseSyntax(unexpectedBeforeEqual?.buildUnexpectedNodes(format: format), equal: equal.buildToken(), unexpectedBetweenEqualAndValue?.buildUnexpectedNodes(format: format), value: value.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildInitializerClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildInitializerClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsInitializerClause`.
@@ -6253,18 +6067,16 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionParameterSyntax`.
-  func buildFunctionParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
-    let result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndFirstName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), firstName: firstName?.buildToken(), unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), secondName: secondName?.buildToken(), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon?.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type?.buildType(format: format, leadingTrivia: nil), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format, leadingTrivia: nil), ellipsis: ellipsis?.buildToken(), unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format, leadingTrivia: nil), defaultArgument: defaultArgument?.buildInitializerClause(format: format, leadingTrivia: nil), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFunctionParameter(format: Format) -> FunctionParameterSyntax {
+    var result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndFirstName?.buildUnexpectedNodes(format: format), firstName: firstName?.buildToken(), unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(), unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format), defaultArgument: defaultArgument?.buildInitializerClause(format: format), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildFunctionParameter(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildFunctionParameter(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsFunctionParameter`.
@@ -6353,18 +6165,16 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionDeclSyntax`.
-  func buildFunctionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclSyntax {
-    let result = FunctionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndFuncKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), funcKeyword: funcKeyword.buildToken(), unexpectedBetweenFuncKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format, leadingTrivia: nil), signature: signature.buildFunctionSignature(format: format, leadingTrivia: nil), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body?.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFunctionDecl(format: Format) -> FunctionDeclSyntax {
+    var result = FunctionDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndFuncKeyword?.buildUnexpectedNodes(format: format), funcKeyword: funcKeyword.buildToken(), unexpectedBetweenFuncKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format), signature: signature.buildFunctionSignature(format: format), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildFunctionDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildFunctionDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsFunctionDecl`.
@@ -6457,18 +6267,16 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `InitializerDeclSyntax`.
-  func buildInitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerDeclSyntax {
-    let result = InitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndInitKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), initKeyword: initKeyword.buildToken(), unexpectedBetweenInitKeywordAndOptionalMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), optionalMark: optionalMark?.buildToken(), unexpectedBetweenOptionalMarkAndGenericParameterClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format, leadingTrivia: nil), signature: signature.buildFunctionSignature(format: format, leadingTrivia: nil), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body?.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildInitializerDecl(format: Format) -> InitializerDeclSyntax {
+    var result = InitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndInitKeyword?.buildUnexpectedNodes(format: format), initKeyword: initKeyword.buildToken(), unexpectedBetweenInitKeywordAndOptionalMark?.buildUnexpectedNodes(format: format), optionalMark: optionalMark?.buildToken(), unexpectedBetweenOptionalMarkAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndSignature?.buildUnexpectedNodes(format: format), signature: signature.buildFunctionSignature(format: format), unexpectedBetweenSignatureAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildInitializerDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildInitializerDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsInitializerDecl`.
@@ -6536,18 +6344,16 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeinitializerDeclSyntax`.
-  func buildDeinitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeinitializerDeclSyntax {
-    let result = DeinitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndDeinitKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), deinitKeyword: deinitKeyword.buildToken(), unexpectedBetweenDeinitKeywordAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body?.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeinitializerDecl(format: Format) -> DeinitializerDeclSyntax {
+    var result = DeinitializerDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndDeinitKeyword?.buildUnexpectedNodes(format: format), deinitKeyword: deinitKeyword.buildToken(), unexpectedBetweenDeinitKeywordAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildDeinitializerDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildDeinitializerDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsDeinitializerDecl`.
@@ -6631,18 +6437,16 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SubscriptDeclSyntax`.
-  func buildSubscriptDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptDeclSyntax {
-    let result = SubscriptDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndSubscriptKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), subscriptKeyword: subscriptKeyword.buildToken(), unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterClauseAndIndices?.buildUnexpectedNodes(format: format, leadingTrivia: nil), indices: indices.buildParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenIndicesAndResult?.buildUnexpectedNodes(format: format, leadingTrivia: nil), result: result.buildReturnClause(format: format, leadingTrivia: nil), unexpectedBetweenResultAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndAccessor?.buildUnexpectedNodes(format: format, leadingTrivia: nil), accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSubscriptDecl(format: Format) -> SubscriptDeclSyntax {
+    var result = SubscriptDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndSubscriptKeyword?.buildUnexpectedNodes(format: format), subscriptKeyword: subscriptKeyword.buildToken(), unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.buildUnexpectedNodes(format: format), genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParameterClauseAndIndices?.buildUnexpectedNodes(format: format), indices: indices.buildParameterClause(format: format), unexpectedBetweenIndicesAndResult?.buildUnexpectedNodes(format: format), result: result.buildReturnClause(format: format), unexpectedBetweenResultAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndAccessor?.buildUnexpectedNodes(format: format), accessor: accessor?.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildSubscriptDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildSubscriptDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsSubscriptDecl`.
@@ -6695,18 +6499,16 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessLevelModifierSyntax`.
-  func buildAccessLevelModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessLevelModifierSyntax {
-    let result = AccessLevelModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndModifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifier: modifier?.buildDeclModifierDetail(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAccessLevelModifier(format: Format) -> AccessLevelModifierSyntax {
+    var result = AccessLevelModifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndModifier?.buildUnexpectedNodes(format: format), modifier: modifier?.buildDeclModifierDetail(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessLevelModifier(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAccessLevelModifier(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAccessLevelModifier`.
@@ -6753,18 +6555,16 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessPathComponentSyntax`.
-  func buildAccessPathComponent(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessPathComponentSyntax {
-    let result = AccessPathComponentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndTrailingDot?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingDot: trailingDot?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAccessPathComponent(format: Format) -> AccessPathComponentSyntax {
+    var result = AccessPathComponentSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingDot?.buildUnexpectedNodes(format: format), trailingDot: trailingDot?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessPathComponent(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAccessPathComponent(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAccessPathComponent`.
@@ -6824,18 +6624,16 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImportDeclSyntax`.
-  func buildImportDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImportDeclSyntax {
-    let result = ImportDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndImportTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), importTok: importTok.buildToken(), unexpectedBetweenImportTokAndImportKind?.buildUnexpectedNodes(format: format, leadingTrivia: nil), importKind: importKind?.buildToken(), unexpectedBetweenImportKindAndPath?.buildUnexpectedNodes(format: format, leadingTrivia: nil), path: path.buildAccessPath(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildImportDecl(format: Format) -> ImportDeclSyntax {
+    var result = ImportDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndImportTok?.buildUnexpectedNodes(format: format), importTok: importTok.buildToken(), unexpectedBetweenImportTokAndImportKind?.buildUnexpectedNodes(format: format), importKind: importKind?.buildToken(), unexpectedBetweenImportKindAndPath?.buildUnexpectedNodes(format: format), path: path.buildAccessPath(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildImportDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildImportDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsImportDecl`.
@@ -6896,18 +6694,16 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorParameterSyntax`.
-  func buildAccessorParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorParameterSyntax {
-    let result = AccessorParameterSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAccessorParameter(format: Format) -> AccessorParameterSyntax {
+    var result = AccessorParameterSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessorParameter(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAccessorParameter(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAccessorParameter`.
@@ -6990,18 +6786,16 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorDeclSyntax`.
-  func buildAccessorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorDeclSyntax {
-    let result = AccessorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifier: modifier?.buildDeclModifier(format: format, leadingTrivia: nil), unexpectedBetweenModifierAndAccessorKind?.buildUnexpectedNodes(format: format, leadingTrivia: nil), accessorKind: accessorKind.buildToken(), unexpectedBetweenAccessorKindAndParameter?.buildUnexpectedNodes(format: format, leadingTrivia: nil), parameter: parameter?.buildAccessorParameter(format: format, leadingTrivia: nil), unexpectedBetweenParameterAndAsyncKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), throwsKeyword: throwsKeyword?.buildToken(), unexpectedBetweenThrowsKeywordAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body?.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAccessorDecl(format: Format) -> AccessorDeclSyntax {
+    var result = AccessorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifier?.buildUnexpectedNodes(format: format), modifier: modifier?.buildDeclModifier(format: format), unexpectedBetweenModifierAndAccessorKind?.buildUnexpectedNodes(format: format), accessorKind: accessorKind.buildToken(), unexpectedBetweenAccessorKindAndParameter?.buildUnexpectedNodes(format: format), parameter: parameter?.buildAccessorParameter(format: format), unexpectedBetweenParameterAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsKeyword?.buildUnexpectedNodes(format: format), throwsKeyword: throwsKeyword?.buildToken(), unexpectedBetweenThrowsKeywordAndBody?.buildUnexpectedNodes(format: format), body: body?.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildAccessorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildAccessorDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsAccessorDecl`.
@@ -7056,18 +6850,16 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AccessorBlockSyntax`.
-  func buildAccessorBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
-    let result = AccessorBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndAccessors?.buildUnexpectedNodes(format: format, leadingTrivia: nil), accessors: accessors.buildAccessorList(format: format, leadingTrivia: nil), unexpectedBetweenAccessorsAndRightBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightBrace: rightBrace.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAccessorBlock(format: Format) -> AccessorBlockSyntax {
+    var result = AccessorBlockSyntax(unexpectedBeforeLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndAccessors?.buildUnexpectedNodes(format: format), accessors: accessors.buildAccessorList(format: format), unexpectedBetweenAccessorsAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessorBlock(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAccessorBlock(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAccessorBlock`.
@@ -7126,18 +6918,16 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PatternBindingSyntax`.
-  func buildPatternBinding(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternBindingSyntax {
-    let result = PatternBindingSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format, leadingTrivia: nil), initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil), unexpectedBetweenInitializerAndAccessor?.buildUnexpectedNodes(format: format, leadingTrivia: nil), accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenAccessorAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPatternBinding(format: Format) -> PatternBindingSyntax {
+    var result = PatternBindingSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format), unexpectedBetweenInitializerAndAccessor?.buildUnexpectedNodes(format: format), accessor: accessor?.buildSyntax(format: format), unexpectedBetweenAccessorAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPatternBinding(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPatternBinding(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPatternBinding`.
@@ -7202,18 +6992,16 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `VariableDeclSyntax`.
-  func buildVariableDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VariableDeclSyntax {
-    let result = VariableDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndLetOrVarKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndBindings?.buildUnexpectedNodes(format: format, leadingTrivia: nil), bindings: bindings.buildPatternBindingList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildVariableDecl(format: Format) -> VariableDeclSyntax {
+    var result = VariableDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndBindings?.buildUnexpectedNodes(format: format), bindings: bindings.buildPatternBindingList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildVariableDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildVariableDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsVariableDecl`.
@@ -7280,18 +7068,16 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCaseElementSyntax`.
-  func buildEnumCaseElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseElementSyntax {
-    let result = EnumCaseElementSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndAssociatedValue?.buildUnexpectedNodes(format: format, leadingTrivia: nil), associatedValue: associatedValue?.buildParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenAssociatedValueAndRawValue?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rawValue: rawValue?.buildInitializerClause(format: format, leadingTrivia: nil), unexpectedBetweenRawValueAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildEnumCaseElement(format: Format) -> EnumCaseElementSyntax {
+    var result = EnumCaseElementSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndAssociatedValue?.buildUnexpectedNodes(format: format), associatedValue: associatedValue?.buildParameterClause(format: format), unexpectedBetweenAssociatedValueAndRawValue?.buildUnexpectedNodes(format: format), rawValue: rawValue?.buildInitializerClause(format: format), unexpectedBetweenRawValueAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildEnumCaseElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildEnumCaseElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsEnumCaseElement`.
@@ -7357,18 +7143,16 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCaseDeclSyntax`.
-  func buildEnumCaseDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseDeclSyntax {
-    let result = EnumCaseDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndCaseKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndElements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elements: elements.buildEnumCaseElementList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildEnumCaseDecl(format: Format) -> EnumCaseDeclSyntax {
+    var result = EnumCaseDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildEnumCaseElementList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildEnumCaseDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildEnumCaseDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsEnumCaseDecl`.
@@ -7461,18 +7245,16 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumDeclSyntax`.
-  func buildEnumDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumDeclSyntax {
-    let result = EnumDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndEnumKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), enumKeyword: enumKeyword.buildToken(), unexpectedBetweenEnumKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameters?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameters: genericParameters?.buildGenericParameterClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericParametersAndInheritanceClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildEnumDecl(format: Format) -> EnumDeclSyntax {
+    var result = EnumDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndEnumKeyword?.buildUnexpectedNodes(format: format), enumKeyword: enumKeyword.buildToken(), unexpectedBetweenEnumKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndGenericParameters?.buildUnexpectedNodes(format: format), genericParameters: genericParameters?.buildGenericParameterClause(format: format), unexpectedBetweenGenericParametersAndInheritanceClause?.buildUnexpectedNodes(format: format), inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format), unexpectedBetweenInheritanceClauseAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndMembers?.buildUnexpectedNodes(format: format), members: members.buildMemberDeclBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildEnumDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildEnumDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsEnumDecl`.
@@ -7539,18 +7321,16 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorDeclSyntax`.
-  func buildOperatorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorDeclSyntax {
-    let result = OperatorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndOperatorKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), operatorKeyword: operatorKeyword.buildToken(), unexpectedBetweenOperatorKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildOperatorDecl(format: Format) -> OperatorDeclSyntax {
+    var result = OperatorDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndOperatorKeyword?.buildUnexpectedNodes(format: format), operatorKeyword: operatorKeyword.buildToken(), unexpectedBetweenOperatorKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.buildUnexpectedNodes(format: format), operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildOperatorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildOperatorDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsOperatorDecl`.
@@ -7599,18 +7379,16 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
-  func buildOperatorPrecedenceAndTypes(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorPrecedenceAndTypesSyntax {
-    let result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildOperatorPrecedenceAndTypes(format: Format) -> OperatorPrecedenceAndTypesSyntax {
+    var result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildUnexpectedNodes(format: format), precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildOperatorPrecedenceAndTypes(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsOperatorPrecedenceAndTypes`.
@@ -7690,18 +7468,16 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupDeclSyntax`.
-  func buildPrecedenceGroupDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupDeclSyntax {
-    let result = PrecedenceGroupDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format, leadingTrivia: nil), modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil), unexpectedBetweenModifiersAndPrecedencegroupKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), precedencegroupKeyword: precedencegroupKeyword.buildToken(), unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndLeftBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndGroupAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), groupAttributes: groupAttributes.buildPrecedenceGroupAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenGroupAttributesAndRightBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightBrace: rightBrace.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrecedenceGroupDecl(format: Format) -> PrecedenceGroupDeclSyntax {
+    var result = PrecedenceGroupDeclSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndModifiers?.buildUnexpectedNodes(format: format), modifiers: modifiers?.buildModifierList(format: format), unexpectedBetweenModifiersAndPrecedencegroupKeyword?.buildUnexpectedNodes(format: format), precedencegroupKeyword: precedencegroupKeyword.buildToken(), unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken(), unexpectedBetweenIdentifierAndLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndGroupAttributes?.buildUnexpectedNodes(format: format), groupAttributes: groupAttributes.buildPrecedenceGroupAttributeList(format: format), unexpectedBetweenGroupAttributesAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPrecedenceGroupDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildDecl(format: Format) -> DeclSyntax {
+    let result = buildPrecedenceGroupDecl(format: format)
     return DeclSyntax(result)
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupDecl`.
@@ -7763,18 +7539,16 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupRelationSyntax`.
-  func buildPrecedenceGroupRelation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupRelationSyntax {
-    let result = PrecedenceGroupRelationSyntax(unexpectedBeforeHigherThanOrLowerThan?.buildUnexpectedNodes(format: format, leadingTrivia: nil), higherThanOrLowerThan: higherThanOrLowerThan.buildToken(), unexpectedBetweenHigherThanOrLowerThanAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndOtherNames?.buildUnexpectedNodes(format: format, leadingTrivia: nil), otherNames: otherNames.buildPrecedenceGroupNameList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrecedenceGroupRelation(format: Format) -> PrecedenceGroupRelationSyntax {
+    var result = PrecedenceGroupRelationSyntax(unexpectedBeforeHigherThanOrLowerThan?.buildUnexpectedNodes(format: format), higherThanOrLowerThan: higherThanOrLowerThan.buildToken(), unexpectedBetweenHigherThanOrLowerThanAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndOtherNames?.buildUnexpectedNodes(format: format), otherNames: otherNames.buildPrecedenceGroupNameList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupRelation(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPrecedenceGroupRelation(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupRelation`.
@@ -7821,18 +7595,16 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupNameElementSyntax`.
-  func buildPrecedenceGroupNameElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupNameElementSyntax {
-    let result = PrecedenceGroupNameElementSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrecedenceGroupNameElement(format: Format) -> PrecedenceGroupNameElementSyntax {
+    var result = PrecedenceGroupNameElementSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupNameElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPrecedenceGroupNameElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupNameElement`.
@@ -7888,18 +7660,16 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupAssignmentSyntax`.
-  func buildPrecedenceGroupAssignment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssignmentSyntax {
-    let result = PrecedenceGroupAssignmentSyntax(unexpectedBeforeAssignmentKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), assignmentKeyword: assignmentKeyword.buildToken(), unexpectedBetweenAssignmentKeywordAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndFlag?.buildUnexpectedNodes(format: format, leadingTrivia: nil), flag: flag.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrecedenceGroupAssignment(format: Format) -> PrecedenceGroupAssignmentSyntax {
+    var result = PrecedenceGroupAssignmentSyntax(unexpectedBeforeAssignmentKeyword?.buildUnexpectedNodes(format: format), assignmentKeyword: assignmentKeyword.buildToken(), unexpectedBetweenAssignmentKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndFlag?.buildUnexpectedNodes(format: format), flag: flag.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupAssignment(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPrecedenceGroupAssignment(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupAssignment`.
@@ -7955,18 +7725,16 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrecedenceGroupAssociativitySyntax`.
-  func buildPrecedenceGroupAssociativity(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssociativitySyntax {
-    let result = PrecedenceGroupAssociativitySyntax(unexpectedBeforeAssociativityKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), associativityKeyword: associativityKeyword.buildToken(), unexpectedBetweenAssociativityKeywordAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format, leadingTrivia: nil), value: value.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrecedenceGroupAssociativity(format: Format) -> PrecedenceGroupAssociativitySyntax {
+    var result = PrecedenceGroupAssociativitySyntax(unexpectedBeforeAssociativityKeyword?.buildUnexpectedNodes(format: format), associativityKeyword: associativityKeyword.buildToken(), unexpectedBetweenAssociativityKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupAssociativity(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPrecedenceGroupAssociativity(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupAssociativity`.
@@ -8036,18 +7804,16 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CustomAttributeSyntax`.
-  func buildCustomAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CustomAttributeSyntax {
-    let result = CustomAttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), atSignToken: atSignToken.buildToken(), unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributeName: attributeName.buildType(format: format, leadingTrivia: nil), unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), argumentList: argumentList?.buildTupleExprElementList(format: format, leadingTrivia: nil), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCustomAttribute(format: Format) -> CustomAttributeSyntax {
+    var result = CustomAttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format), atSignToken: atSignToken.buildToken(), unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format), attributeName: attributeName.buildType(format: format), unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgumentList?.buildUnexpectedNodes(format: format), argumentList: argumentList?.buildTupleExprElementList(format: format), unexpectedBetweenArgumentListAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCustomAttribute(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildCustomAttribute(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsCustomAttribute`.
@@ -8115,18 +7881,16 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AttributeSyntax`.
-  func buildAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributeSyntax {
-    let result = AttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), atSignToken: atSignToken.buildToken(), unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributeName: attributeName.buildToken(), unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgument?.buildUnexpectedNodes(format: format, leadingTrivia: nil), argument: argument?.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenArgumentAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen?.buildToken(), unexpectedBetweenRightParenAndTokenList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), tokenList: tokenList?.buildTokenList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAttribute(format: Format) -> AttributeSyntax {
+    var result = AttributeSyntax(unexpectedBeforeAtSignToken?.buildUnexpectedNodes(format: format), atSignToken: atSignToken.buildToken(), unexpectedBetweenAtSignTokenAndAttributeName?.buildUnexpectedNodes(format: format), attributeName: attributeName.buildToken(), unexpectedBetweenAttributeNameAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndArgument?.buildUnexpectedNodes(format: format), argument: argument?.buildSyntax(format: format), unexpectedBetweenArgumentAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken(), unexpectedBetweenRightParenAndTokenList?.buildUnexpectedNodes(format: format), tokenList: tokenList?.buildTokenList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAttribute(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAttribute(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAttribute`.
@@ -8187,18 +7951,16 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityEntrySyntax`.
-  func buildAvailabilityEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
-    let result = AvailabilityEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndAvailabilityList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), availabilityList: availabilityList.buildAvailabilitySpecList(format: format, leadingTrivia: nil), unexpectedBetweenAvailabilityListAndSemicolon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), semicolon: semicolon.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAvailabilityEntry(format: Format) -> AvailabilityEntrySyntax {
+    var result = AvailabilityEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndAvailabilityList?.buildUnexpectedNodes(format: format), availabilityList: availabilityList.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilityListAndSemicolon?.buildUnexpectedNodes(format: format), semicolon: semicolon.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityEntry(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAvailabilityEntry(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAvailabilityEntry`.
@@ -8259,18 +8021,16 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LabeledSpecializeEntrySyntax`.
-  func buildLabeledSpecializeEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledSpecializeEntrySyntax {
-    let result = LabeledSpecializeEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format, leadingTrivia: nil), value: value.buildToken(), unexpectedBetweenValueAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildLabeledSpecializeEntry(format: Format) -> LabeledSpecializeEntrySyntax {
+    var result = LabeledSpecializeEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value.buildToken(), unexpectedBetweenValueAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildLabeledSpecializeEntry(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildLabeledSpecializeEntry(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsLabeledSpecializeEntry`.
@@ -8335,18 +8095,16 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TargetFunctionEntrySyntax`.
-  func buildTargetFunctionEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TargetFunctionEntrySyntax {
-    let result = TargetFunctionEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndDeclname?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declname: declname.buildDeclName(format: format, leadingTrivia: nil), unexpectedBetweenDeclnameAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTargetFunctionEntry(format: Format) -> TargetFunctionEntrySyntax {
+    var result = TargetFunctionEntrySyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndDeclname?.buildUnexpectedNodes(format: format), declname: declname.buildDeclName(format: format), unexpectedBetweenDeclnameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTargetFunctionEntry(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildTargetFunctionEntry(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsTargetFunctionEntry`.
@@ -8398,18 +8156,16 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `NamedAttributeStringArgumentSyntax`.
-  func buildNamedAttributeStringArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NamedAttributeStringArgumentSyntax {
-    let result = NamedAttributeStringArgumentSyntax(unexpectedBeforeNameTok?.buildUnexpectedNodes(format: format, leadingTrivia: nil), nameTok: nameTok.buildToken(), unexpectedBetweenNameTokAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndStringOrDeclname?.buildUnexpectedNodes(format: format, leadingTrivia: nil), stringOrDeclname: stringOrDeclname.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildNamedAttributeStringArgument(format: Format) -> NamedAttributeStringArgumentSyntax {
+    var result = NamedAttributeStringArgumentSyntax(unexpectedBeforeNameTok?.buildUnexpectedNodes(format: format), nameTok: nameTok.buildToken(), unexpectedBetweenNameTokAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndStringOrDeclname?.buildUnexpectedNodes(format: format), stringOrDeclname: stringOrDeclname.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildNamedAttributeStringArgument(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildNamedAttributeStringArgument(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsNamedAttributeStringArgument`.
@@ -8449,18 +8205,16 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclNameSyntax`.
-  func buildDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameSyntax {
-    let result = DeclNameSyntax(unexpectedBeforeDeclBaseName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeclName(format: Format) -> DeclNameSyntax {
+    var result = DeclNameSyntax(unexpectedBeforeDeclBaseName?.buildUnexpectedNodes(format: format), declBaseName: declBaseName.buildSyntax(format: format), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclName(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDeclName(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDeclName`.
@@ -8514,18 +8268,16 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImplementsAttributeArgumentsSyntax`.
-  func buildImplementsAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplementsAttributeArgumentsSyntax {
-    let result = ImplementsAttributeArgumentsSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type.buildSimpleTypeIdentifier(format: format, leadingTrivia: nil), unexpectedBetweenTypeAndComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), comma: comma.buildToken(), unexpectedBetweenCommaAndDeclBaseName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildImplementsAttributeArguments(format: Format) -> ImplementsAttributeArgumentsSyntax {
+    var result = ImplementsAttributeArgumentsSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildSimpleTypeIdentifier(format: format), unexpectedBetweenTypeAndComma?.buildUnexpectedNodes(format: format), comma: comma.buildToken(), unexpectedBetweenCommaAndDeclBaseName?.buildUnexpectedNodes(format: format), declBaseName: declBaseName.buildSyntax(format: format), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildImplementsAttributeArguments(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildImplementsAttributeArguments(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsImplementsAttributeArguments`.
@@ -8575,18 +8327,16 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ObjCSelectorPieceSyntax`.
-  func buildObjCSelectorPiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjCSelectorPieceSyntax {
-    let result = ObjCSelectorPieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name?.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildObjCSelectorPiece(format: Format) -> ObjCSelectorPieceSyntax {
+    var result = ObjCSelectorPieceSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name?.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildObjCSelectorPiece(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildObjCSelectorPiece(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsObjCSelectorPiece`.
@@ -8656,18 +8406,16 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiableAttributeArgumentsSyntax`.
-  func buildDifferentiableAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiableAttributeArgumentsSyntax {
-    let result = DifferentiableAttributeArgumentsSyntax(unexpectedBeforeDiffKind?.buildUnexpectedNodes(format: format, leadingTrivia: nil), diffKind: diffKind?.buildToken(), unexpectedBetweenDiffKindAndDiffKindComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), diffKindComma: diffKindComma?.buildToken(), unexpectedBetweenDiffKindCommaAndDiffParams?.buildUnexpectedNodes(format: format, leadingTrivia: nil), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil), unexpectedBetweenDiffParamsAndDiffParamsComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), diffParamsComma: diffParamsComma?.buildToken(), unexpectedBetweenDiffParamsCommaAndWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whereClause: whereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDifferentiableAttributeArguments(format: Format) -> DifferentiableAttributeArgumentsSyntax {
+    var result = DifferentiableAttributeArgumentsSyntax(unexpectedBeforeDiffKind?.buildUnexpectedNodes(format: format), diffKind: diffKind?.buildToken(), unexpectedBetweenDiffKindAndDiffKindComma?.buildUnexpectedNodes(format: format), diffKindComma: diffKindComma?.buildToken(), unexpectedBetweenDiffKindCommaAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format), unexpectedBetweenDiffParamsAndDiffParamsComma?.buildUnexpectedNodes(format: format), diffParamsComma: diffParamsComma?.buildToken(), unexpectedBetweenDiffParamsCommaAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildGenericWhereClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiableAttributeArguments(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDifferentiableAttributeArguments(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDifferentiableAttributeArguments`.
@@ -8722,18 +8470,16 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamsClauseSyntax`.
-  func buildDifferentiabilityParamsClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsClauseSyntax {
-    let result = DifferentiabilityParamsClauseSyntax(unexpectedBeforeWrtLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), wrtLabel: wrtLabel.buildToken(), unexpectedBetweenWrtLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndParameters?.buildUnexpectedNodes(format: format, leadingTrivia: nil), parameters: parameters.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDifferentiabilityParamsClause(format: Format) -> DifferentiabilityParamsClauseSyntax {
+    var result = DifferentiabilityParamsClauseSyntax(unexpectedBeforeWrtLabel?.buildUnexpectedNodes(format: format), wrtLabel: wrtLabel.buildToken(), unexpectedBetweenWrtLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndParameters?.buildUnexpectedNodes(format: format), parameters: parameters.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiabilityParamsClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDifferentiabilityParamsClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDifferentiabilityParamsClause`.
@@ -8782,18 +8528,16 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamsSyntax`.
-  func buildDifferentiabilityParams(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
-    let result = DifferentiabilityParamsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndDiffParams?.buildUnexpectedNodes(format: format, leadingTrivia: nil), diffParams: diffParams.buildDifferentiabilityParamList(format: format, leadingTrivia: nil), unexpectedBetweenDiffParamsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDifferentiabilityParams(format: Format) -> DifferentiabilityParamsSyntax {
+    var result = DifferentiabilityParamsSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams.buildDifferentiabilityParamList(format: format), unexpectedBetweenDiffParamsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiabilityParams(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDifferentiabilityParams(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDifferentiabilityParams`.
@@ -8835,18 +8579,16 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DifferentiabilityParamSyntax`.
-  func buildDifferentiabilityParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamSyntax {
-    let result = DifferentiabilityParamSyntax(unexpectedBeforeParameter?.buildUnexpectedNodes(format: format, leadingTrivia: nil), parameter: parameter.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenParameterAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDifferentiabilityParam(format: Format) -> DifferentiabilityParamSyntax {
+    var result = DifferentiabilityParamSyntax(unexpectedBeforeParameter?.buildUnexpectedNodes(format: format), parameter: parameter.buildSyntax(format: format), unexpectedBetweenParameterAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiabilityParam(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDifferentiabilityParam(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDifferentiabilityParam`.
@@ -8934,18 +8676,16 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DerivativeRegistrationAttributeArgumentsSyntax`.
-  func buildDerivativeRegistrationAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let result = DerivativeRegistrationAttributeArgumentsSyntax(unexpectedBeforeOfLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), ofLabel: ofLabel.buildToken(), unexpectedBetweenOfLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndOriginalDeclName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), originalDeclName: originalDeclName.buildQualifiedDeclName(format: format, leadingTrivia: nil), unexpectedBetweenOriginalDeclNameAndPeriod?.buildUnexpectedNodes(format: format, leadingTrivia: nil), period: period?.buildToken(), unexpectedBetweenPeriodAndAccessorKind?.buildUnexpectedNodes(format: format, leadingTrivia: nil), accessorKind: accessorKind?.buildToken(), unexpectedBetweenAccessorKindAndComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), comma: comma?.buildToken(), unexpectedBetweenCommaAndDiffParams?.buildUnexpectedNodes(format: format, leadingTrivia: nil), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDerivativeRegistrationAttributeArguments(format: Format) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    var result = DerivativeRegistrationAttributeArgumentsSyntax(unexpectedBeforeOfLabel?.buildUnexpectedNodes(format: format), ofLabel: ofLabel.buildToken(), unexpectedBetweenOfLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndOriginalDeclName?.buildUnexpectedNodes(format: format), originalDeclName: originalDeclName.buildQualifiedDeclName(format: format), unexpectedBetweenOriginalDeclNameAndPeriod?.buildUnexpectedNodes(format: format), period: period?.buildToken(), unexpectedBetweenPeriodAndAccessorKind?.buildUnexpectedNodes(format: format), accessorKind: accessorKind?.buildToken(), unexpectedBetweenAccessorKindAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(), unexpectedBetweenCommaAndDiffParams?.buildUnexpectedNodes(format: format), diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDerivativeRegistrationAttributeArguments(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDerivativeRegistrationAttributeArguments(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsDerivativeRegistrationAttributeArguments`.
@@ -8999,18 +8739,16 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `QualifiedDeclNameSyntax`.
-  func buildQualifiedDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> QualifiedDeclNameSyntax {
-    let result = QualifiedDeclNameSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), baseType: baseType?.buildType(format: format, leadingTrivia: nil), unexpectedBetweenBaseTypeAndDot?.buildUnexpectedNodes(format: format, leadingTrivia: nil), dot: dot?.buildToken(), unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildQualifiedDeclName(format: Format) -> QualifiedDeclNameSyntax {
+    var result = QualifiedDeclNameSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType?.buildType(format: format), unexpectedBetweenBaseTypeAndDot?.buildUnexpectedNodes(format: format), dot: dot?.buildToken(), unexpectedBetweenDotAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments?.buildDeclNameArguments(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildQualifiedDeclName(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildQualifiedDeclName(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsQualifiedDeclName`.
@@ -9051,18 +8789,16 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionDeclNameSyntax`.
-  func buildFunctionDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclNameSyntax {
-    let result = FunctionDeclNameSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenNameAndArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFunctionDeclName(format: Format) -> FunctionDeclNameSyntax {
+    var result = FunctionDeclNameSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildSyntax(format: format), unexpectedBetweenNameAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments?.buildDeclNameArguments(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildFunctionDeclName(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildFunctionDeclName(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsFunctionDeclName`.
@@ -9117,18 +8853,16 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BackDeployAttributeSpecListSyntax`.
-  func buildBackDeployAttributeSpecList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployAttributeSpecListSyntax {
-    let result = BackDeployAttributeSpecListSyntax(unexpectedBeforeBeforeLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), beforeLabel: beforeLabel.buildToken(), unexpectedBetweenBeforeLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndVersionList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), versionList: versionList.buildBackDeployVersionList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildBackDeployAttributeSpecList(format: Format) -> BackDeployAttributeSpecListSyntax {
+    var result = BackDeployAttributeSpecListSyntax(unexpectedBeforeBeforeLabel?.buildUnexpectedNodes(format: format), beforeLabel: beforeLabel.buildToken(), unexpectedBetweenBeforeLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndVersionList?.buildUnexpectedNodes(format: format), versionList: versionList.buildBackDeployVersionList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildBackDeployAttributeSpecList(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildBackDeployAttributeSpecList(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsBackDeployAttributeSpecList`.
@@ -9170,18 +8904,16 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BackDeployVersionArgumentSyntax`.
-  func buildBackDeployVersionArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployVersionArgumentSyntax {
-    let result = BackDeployVersionArgumentSyntax(unexpectedBeforeAvailabilityVersionRestriction?.buildUnexpectedNodes(format: format, leadingTrivia: nil), availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format, leadingTrivia: nil), unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildBackDeployVersionArgument(format: Format) -> BackDeployVersionArgumentSyntax {
+    var result = BackDeployVersionArgumentSyntax(unexpectedBeforeAvailabilityVersionRestriction?.buildUnexpectedNodes(format: format), availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format), unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildBackDeployVersionArgument(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildBackDeployVersionArgument(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsBackDeployVersionArgument`.
@@ -9234,18 +8966,16 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LabeledStmtSyntax`.
-  func buildLabeledStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledStmtSyntax {
-    let result = LabeledStmtSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), labelName: labelName.buildToken(), unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), labelColon: labelColon.buildToken(), unexpectedBetweenLabelColonAndStatement?.buildUnexpectedNodes(format: format, leadingTrivia: nil), statement: statement.buildStmt(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildLabeledStmt(format: Format) -> LabeledStmtSyntax {
+    var result = LabeledStmtSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format), labelName: labelName.buildToken(), unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format), labelColon: labelColon.buildToken(), unexpectedBetweenLabelColonAndStatement?.buildUnexpectedNodes(format: format), statement: statement.buildStmt(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildLabeledStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildLabeledStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsLabeledStmt`.
@@ -9301,18 +9031,16 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ContinueStmtSyntax`.
-  func buildContinueStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ContinueStmtSyntax {
-    let result = ContinueStmtSyntax(unexpectedBeforeContinueKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), continueKeyword: continueKeyword.buildToken(), unexpectedBetweenContinueKeywordAndLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildContinueStmt(format: Format) -> ContinueStmtSyntax {
+    var result = ContinueStmtSyntax(unexpectedBeforeContinueKeyword?.buildUnexpectedNodes(format: format), continueKeyword: continueKeyword.buildToken(), unexpectedBetweenContinueKeywordAndLabel?.buildUnexpectedNodes(format: format), label: label?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildContinueStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildContinueStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsContinueStmt`.
@@ -9374,18 +9102,16 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WhileStmtSyntax`.
-  func buildWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhileStmtSyntax {
-    let result = WhileStmtSyntax(unexpectedBeforeWhileKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whileKeyword: whileKeyword.buildToken(), unexpectedBetweenWhileKeywordAndConditions?.buildUnexpectedNodes(format: format, leadingTrivia: nil), conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildWhileStmt(format: Format) -> WhileStmtSyntax {
+    var result = WhileStmtSyntax(unexpectedBeforeWhileKeyword?.buildUnexpectedNodes(format: format), whileKeyword: whileKeyword.buildToken(), unexpectedBetweenWhileKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildWhileStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildWhileStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsWhileStmt`.
@@ -9441,18 +9167,16 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeferStmtSyntax`.
-  func buildDeferStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeferStmtSyntax {
-    let result = DeferStmtSyntax(unexpectedBeforeDeferKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), deferKeyword: deferKeyword.buildToken(), unexpectedBetweenDeferKeywordAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeferStmt(format: Format) -> DeferStmtSyntax {
+    var result = DeferStmtSyntax(unexpectedBeforeDeferKeyword?.buildUnexpectedNodes(format: format), deferKeyword: deferKeyword.buildToken(), unexpectedBetweenDeferKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildDeferStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildDeferStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsDeferStmt`.
@@ -9493,18 +9217,16 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExpressionStmtSyntax`.
-  func buildExpressionStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionStmtSyntax {
-    let result = ExpressionStmtSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildExpressionStmt(format: Format) -> ExpressionStmtSyntax {
+    var result = ExpressionStmtSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildExpressionStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildExpressionStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsExpressionStmt`.
@@ -9573,18 +9295,16 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `RepeatWhileStmtSyntax`.
-  func buildRepeatWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RepeatWhileStmtSyntax {
-    let result = RepeatWhileStmtSyntax(unexpectedBeforeRepeatKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), repeatKeyword: repeatKeyword.buildToken(), unexpectedBetweenRepeatKeywordAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil), unexpectedBetweenBodyAndWhileKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whileKeyword: whileKeyword.buildToken(), unexpectedBetweenWhileKeywordAndCondition?.buildUnexpectedNodes(format: format, leadingTrivia: nil), condition: condition.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildRepeatWhileStmt(format: Format) -> RepeatWhileStmtSyntax {
+    var result = RepeatWhileStmtSyntax(unexpectedBeforeRepeatKeyword?.buildUnexpectedNodes(format: format), repeatKeyword: repeatKeyword.buildToken(), unexpectedBetweenRepeatKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndWhileKeyword?.buildUnexpectedNodes(format: format), whileKeyword: whileKeyword.buildToken(), unexpectedBetweenWhileKeywordAndCondition?.buildUnexpectedNodes(format: format), condition: condition.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildRepeatWhileStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildRepeatWhileStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsRepeatWhileStmt`.
@@ -9653,18 +9373,16 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GuardStmtSyntax`.
-  func buildGuardStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GuardStmtSyntax {
-    let result = GuardStmtSyntax(unexpectedBeforeGuardKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), guardKeyword: guardKeyword.buildToken(), unexpectedBetweenGuardKeywordAndConditions?.buildUnexpectedNodes(format: format, leadingTrivia: nil), conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil), unexpectedBetweenConditionsAndElseKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elseKeyword: elseKeyword.buildToken(), unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildGuardStmt(format: Format) -> GuardStmtSyntax {
+    var result = GuardStmtSyntax(unexpectedBeforeGuardKeyword?.buildUnexpectedNodes(format: format), guardKeyword: guardKeyword.buildToken(), unexpectedBetweenGuardKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword.buildToken(), unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildGuardStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildGuardStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsGuardStmt`.
@@ -9712,18 +9430,16 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WhereClauseSyntax`.
-  func buildWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhereClauseSyntax {
-    let result = WhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whereKeyword: whereKeyword.buildToken(), unexpectedBetweenWhereKeywordAndGuardResult?.buildUnexpectedNodes(format: format, leadingTrivia: nil), guardResult: guardResult.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildWhereClause(format: Format) -> WhereClauseSyntax {
+    var result = WhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format), whereKeyword: whereKeyword.buildToken(), unexpectedBetweenWhereKeywordAndGuardResult?.buildUnexpectedNodes(format: format), guardResult: guardResult.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildWhereClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildWhereClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsWhereClause`.
@@ -9826,18 +9542,16 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ForInStmtSyntax`.
-  func buildForInStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForInStmtSyntax {
-    let result = ForInStmtSyntax(unexpectedBeforeForKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), forKeyword: forKeyword.buildToken(), unexpectedBetweenForKeywordAndTryKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), tryKeyword: tryKeyword?.buildToken(), unexpectedBetweenTryKeywordAndAwaitKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), awaitKeyword: awaitKeyword?.buildToken(), unexpectedBetweenAwaitKeywordAndCaseKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), caseKeyword: caseKeyword?.buildToken(), unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil), unexpectedBetweenTypeAnnotationAndInKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inKeyword: inKeyword.buildToken(), unexpectedBetweenInKeywordAndSequenceExpr?.buildUnexpectedNodes(format: format, leadingTrivia: nil), sequenceExpr: sequenceExpr.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenSequenceExprAndWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenWhereClauseAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildForInStmt(format: Format) -> ForInStmtSyntax {
+    var result = ForInStmtSyntax(unexpectedBeforeForKeyword?.buildUnexpectedNodes(format: format), forKeyword: forKeyword.buildToken(), unexpectedBetweenForKeywordAndTryKeyword?.buildUnexpectedNodes(format: format), tryKeyword: tryKeyword?.buildToken(), unexpectedBetweenTryKeywordAndAwaitKeyword?.buildUnexpectedNodes(format: format), awaitKeyword: awaitKeyword?.buildToken(), unexpectedBetweenAwaitKeywordAndCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword?.buildToken(), unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInKeyword?.buildUnexpectedNodes(format: format), inKeyword: inKeyword.buildToken(), unexpectedBetweenInKeywordAndSequenceExpr?.buildUnexpectedNodes(format: format), sequenceExpr: sequenceExpr.buildExpr(format: format), unexpectedBetweenSequenceExprAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildForInStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildForInStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsForInStmt`.
@@ -9913,18 +9627,16 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchStmtSyntax`.
-  func buildSwitchStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
-    let result = SwitchStmtSyntax(unexpectedBeforeSwitchKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), switchKeyword: switchKeyword.buildToken(), unexpectedBetweenSwitchKeywordAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenExpressionAndLeftBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndCases?.buildUnexpectedNodes(format: format, leadingTrivia: nil), cases: cases.buildSwitchCaseList(format: format, leadingTrivia: nil), unexpectedBetweenCasesAndRightBrace?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightBrace: rightBrace.buildToken().withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.buildToken().leadingTrivia ?? [])))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSwitchStmt(format: Format) -> SwitchStmtSyntax {
+    var result = SwitchStmtSyntax(unexpectedBeforeSwitchKeyword?.buildUnexpectedNodes(format: format), switchKeyword: switchKeyword.buildToken(), unexpectedBetweenSwitchKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndLeftBrace?.buildUnexpectedNodes(format: format), leftBrace: leftBrace.buildToken(), unexpectedBetweenLeftBraceAndCases?.buildUnexpectedNodes(format: format), cases: cases.buildSwitchCaseList(format: format), unexpectedBetweenCasesAndRightBrace?.buildUnexpectedNodes(format: format), rightBrace: rightBrace.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildSwitchStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildSwitchStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsSwitchStmt`.
@@ -9986,18 +9698,16 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DoStmtSyntax`.
-  func buildDoStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DoStmtSyntax {
-    let result = DoStmtSyntax(unexpectedBeforeDoKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), doKeyword: doKeyword.buildToken(), unexpectedBetweenDoKeywordAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil), unexpectedBetweenBodyAndCatchClauses?.buildUnexpectedNodes(format: format, leadingTrivia: nil), catchClauses: catchClauses?.buildCatchClauseList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDoStmt(format: Format) -> DoStmtSyntax {
+    var result = DoStmtSyntax(unexpectedBeforeDoKeyword?.buildUnexpectedNodes(format: format), doKeyword: doKeyword.buildToken(), unexpectedBetweenDoKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndCatchClauses?.buildUnexpectedNodes(format: format), catchClauses: catchClauses?.buildCatchClauseList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildDoStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildDoStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsDoStmt`.
@@ -10045,18 +9755,16 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ReturnStmtSyntax`.
-  func buildReturnStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnStmtSyntax {
-    let result = ReturnStmtSyntax(unexpectedBeforeReturnKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), returnKeyword: returnKeyword.buildToken(), unexpectedBetweenReturnKeywordAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression?.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildReturnStmt(format: Format) -> ReturnStmtSyntax {
+    var result = ReturnStmtSyntax(unexpectedBeforeReturnKeyword?.buildUnexpectedNodes(format: format), returnKeyword: returnKeyword.buildToken(), unexpectedBetweenReturnKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression?.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildReturnStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildReturnStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsReturnStmt`.
@@ -10104,18 +9812,16 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `YieldStmtSyntax`.
-  func buildYieldStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldStmtSyntax {
-    let result = YieldStmtSyntax(unexpectedBeforeYieldKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), yieldKeyword: yieldKeyword.buildToken(), unexpectedBetweenYieldKeywordAndYields?.buildUnexpectedNodes(format: format, leadingTrivia: nil), yields: yields.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildYieldStmt(format: Format) -> YieldStmtSyntax {
+    var result = YieldStmtSyntax(unexpectedBeforeYieldKeyword?.buildUnexpectedNodes(format: format), yieldKeyword: yieldKeyword.buildToken(), unexpectedBetweenYieldKeywordAndYields?.buildUnexpectedNodes(format: format), yields: yields.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildYieldStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildYieldStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsYieldStmt`.
@@ -10185,18 +9891,16 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `YieldListSyntax`.
-  func buildYieldList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldListSyntax {
-    let result = YieldListSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elementList: elementList.buildExprList(format: format, leadingTrivia: nil), unexpectedBetweenElementListAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken(), unexpectedBetweenTrailingCommaAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildYieldList(format: Format) -> YieldListSyntax {
+    var result = YieldListSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElementList?.buildUnexpectedNodes(format: format), elementList: elementList.buildExprList(format: format), unexpectedBetweenElementListAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken(), unexpectedBetweenTrailingCommaAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildYieldList(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildYieldList(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsYieldList`.
@@ -10231,18 +9935,16 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FallthroughStmtSyntax`.
-  func buildFallthroughStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FallthroughStmtSyntax {
-    let result = FallthroughStmtSyntax(unexpectedBeforeFallthroughKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), fallthroughKeyword: fallthroughKeyword.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFallthroughStmt(format: Format) -> FallthroughStmtSyntax {
+    var result = FallthroughStmtSyntax(unexpectedBeforeFallthroughKeyword?.buildUnexpectedNodes(format: format), fallthroughKeyword: fallthroughKeyword.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildFallthroughStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildFallthroughStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsFallthroughStmt`.
@@ -10298,18 +10000,16 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `BreakStmtSyntax`.
-  func buildBreakStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BreakStmtSyntax {
-    let result = BreakStmtSyntax(unexpectedBeforeBreakKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), breakKeyword: breakKeyword.buildToken(), unexpectedBetweenBreakKeywordAndLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildBreakStmt(format: Format) -> BreakStmtSyntax {
+    var result = BreakStmtSyntax(unexpectedBeforeBreakKeyword?.buildUnexpectedNodes(format: format), breakKeyword: breakKeyword.buildToken(), unexpectedBetweenBreakKeywordAndLabel?.buildUnexpectedNodes(format: format), label: label?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildBreakStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildBreakStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsBreakStmt`.
@@ -10357,18 +10057,16 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConditionElementSyntax`.
-  func buildConditionElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConditionElementSyntax {
-    let result = ConditionElementSyntax(unexpectedBeforeCondition?.buildUnexpectedNodes(format: format, leadingTrivia: nil), condition: condition.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenConditionAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildConditionElement(format: Format) -> ConditionElementSyntax {
+    var result = ConditionElementSyntax(unexpectedBeforeCondition?.buildUnexpectedNodes(format: format), condition: condition.buildSyntax(format: format), unexpectedBetweenConditionAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildConditionElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildConditionElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsConditionElement`.
@@ -10427,18 +10125,16 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityConditionSyntax`.
-  func buildAvailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
-    let result = AvailabilityConditionSyntax(unexpectedBeforePoundAvailableKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundAvailableKeyword: poundAvailableKeyword.buildToken(), unexpectedBetweenPoundAvailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format, leadingTrivia: nil), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAvailabilityCondition(format: Format) -> AvailabilityConditionSyntax {
+    var result = AvailabilityConditionSyntax(unexpectedBeforePoundAvailableKeyword?.buildUnexpectedNodes(format: format), poundAvailableKeyword: poundAvailableKeyword.buildToken(), unexpectedBetweenPoundAvailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityCondition(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAvailabilityCondition(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAvailabilityCondition`.
@@ -10491,18 +10187,16 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MatchingPatternConditionSyntax`.
-  func buildMatchingPatternCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MatchingPatternConditionSyntax {
-    let result = MatchingPatternConditionSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format, leadingTrivia: nil), initializer: initializer.buildInitializerClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMatchingPatternCondition(format: Format) -> MatchingPatternConditionSyntax {
+    var result = MatchingPatternConditionSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer.buildInitializerClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMatchingPatternCondition(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildMatchingPatternCondition(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsMatchingPatternCondition`.
@@ -10555,18 +10249,16 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalBindingConditionSyntax`.
-  func buildOptionalBindingCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalBindingConditionSyntax {
-    let result = OptionalBindingConditionSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndPattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format, leadingTrivia: nil), initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildOptionalBindingCondition(format: Format) -> OptionalBindingConditionSyntax {
+    var result = OptionalBindingConditionSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format), unexpectedBetweenTypeAnnotationAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildOptionalBindingCondition(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildOptionalBindingCondition(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsOptionalBindingCondition`.
@@ -10621,18 +10313,16 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `UnavailabilityConditionSyntax`.
-  func buildUnavailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
-    let result = UnavailabilityConditionSyntax(unexpectedBeforePoundUnavailableKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundUnavailableKeyword: poundUnavailableKeyword.buildToken(), unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format, leadingTrivia: nil), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildUnavailabilityCondition(format: Format) -> UnavailabilityConditionSyntax {
+    var result = UnavailabilityConditionSyntax(unexpectedBeforePoundUnavailableKeyword?.buildUnexpectedNodes(format: format), poundUnavailableKeyword: poundUnavailableKeyword.buildToken(), unexpectedBetweenPoundUnavailableKeywordAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndAvailabilitySpec?.buildUnexpectedNodes(format: format), availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format), unexpectedBetweenAvailabilitySpecAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildUnavailabilityCondition(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildUnavailabilityCondition(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsUnavailabilityCondition`.
@@ -10666,18 +10356,16 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DeclarationStmtSyntax`.
-  func buildDeclarationStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclarationStmtSyntax {
-    let result = DeclarationStmtSyntax(unexpectedBeforeDeclaration?.buildUnexpectedNodes(format: format, leadingTrivia: nil), declaration: declaration.buildDecl(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDeclarationStmt(format: Format) -> DeclarationStmtSyntax {
+    var result = DeclarationStmtSyntax(unexpectedBeforeDeclaration?.buildUnexpectedNodes(format: format), declaration: declaration.buildDecl(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildDeclarationStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildDeclarationStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsDeclarationStmt`.
@@ -10725,18 +10413,16 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ThrowStmtSyntax`.
-  func buildThrowStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ThrowStmtSyntax {
-    let result = ThrowStmtSyntax(unexpectedBeforeThrowKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), throwKeyword: throwKeyword.buildToken(), unexpectedBetweenThrowKeywordAndExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildThrowStmt(format: Format) -> ThrowStmtSyntax {
+    var result = ThrowStmtSyntax(unexpectedBeforeThrowKeyword?.buildUnexpectedNodes(format: format), throwKeyword: throwKeyword.buildToken(), unexpectedBetweenThrowKeywordAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildThrowStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildThrowStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsThrowStmt`.
@@ -10811,18 +10497,16 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IfStmtSyntax`.
-  func buildIfStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfStmtSyntax {
-    let result = IfStmtSyntax(unexpectedBeforeIfKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), ifKeyword: ifKeyword.buildToken(), unexpectedBetweenIfKeywordAndConditions?.buildUnexpectedNodes(format: format, leadingTrivia: nil), conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil), unexpectedBetweenBodyAndElseKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elseKeyword: elseKeyword?.buildToken(), unexpectedBetweenElseKeywordAndElseBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elseBody: elseBody?.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIfStmt(format: Format) -> IfStmtSyntax {
+    var result = IfStmtSyntax(unexpectedBeforeIfKeyword?.buildUnexpectedNodes(format: format), ifKeyword: ifKeyword.buildToken(), unexpectedBetweenIfKeywordAndConditions?.buildUnexpectedNodes(format: format), conditions: conditions.buildConditionElementList(format: format), unexpectedBetweenConditionsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format), unexpectedBetweenBodyAndElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword?.buildToken(), unexpectedBetweenElseKeywordAndElseBody?.buildUnexpectedNodes(format: format), elseBody: elseBody?.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildIfStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildIfStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsIfStmt`.
@@ -10863,18 +10547,16 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ElseIfContinuationSyntax`.
-  func buildElseIfContinuation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseIfContinuationSyntax {
-    let result = ElseIfContinuationSyntax(unexpectedBeforeIfStatement?.buildUnexpectedNodes(format: format, leadingTrivia: nil), ifStatement: ifStatement.buildIfStmt(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildElseIfContinuation(format: Format) -> ElseIfContinuationSyntax {
+    var result = ElseIfContinuationSyntax(unexpectedBeforeIfStatement?.buildUnexpectedNodes(format: format), ifStatement: ifStatement.buildIfStmt(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildElseIfContinuation(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildElseIfContinuation(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsElseIfContinuation`.
@@ -10923,18 +10605,16 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ElseBlockSyntax`.
-  func buildElseBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseBlockSyntax {
-    let result = ElseBlockSyntax(unexpectedBeforeElseKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elseKeyword: elseKeyword.buildToken(), unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildElseBlock(format: Format) -> ElseBlockSyntax {
+    var result = ElseBlockSyntax(unexpectedBeforeElseKeyword?.buildUnexpectedNodes(format: format), elseKeyword: elseKeyword.buildToken(), unexpectedBetweenElseKeywordAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildElseBlock(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildElseBlock(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsElseBlock`.
@@ -10988,18 +10668,16 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchCaseSyntax`.
-  func buildSwitchCase(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseSyntax {
-    let result = SwitchCaseSyntax(unexpectedBeforeUnknownAttr?.buildUnexpectedNodes(format: format, leadingTrivia: nil), unknownAttr: unknownAttr?.buildAttribute(format: format, leadingTrivia: nil), unexpectedBetweenUnknownAttrAndLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenLabelAndStatements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSwitchCase(format: Format) -> SwitchCaseSyntax {
+    var result = SwitchCaseSyntax(unexpectedBeforeUnknownAttr?.buildUnexpectedNodes(format: format), unknownAttr: unknownAttr?.buildAttribute(format: format), unexpectedBetweenUnknownAttrAndLabel?.buildUnexpectedNodes(format: format), label: label.buildSyntax(format: format), unexpectedBetweenLabelAndStatements?.buildUnexpectedNodes(format: format), statements: statements.buildCodeBlockItemList(format: format._indented))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSwitchCase(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildSwitchCase(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsSwitchCase`.
@@ -11041,18 +10719,16 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchDefaultLabelSyntax`.
-  func buildSwitchDefaultLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchDefaultLabelSyntax {
-    let result = SwitchDefaultLabelSyntax(unexpectedBeforeDefaultKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), defaultKeyword: defaultKeyword.buildToken(), unexpectedBetweenDefaultKeywordAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSwitchDefaultLabel(format: Format) -> SwitchDefaultLabelSyntax {
+    var result = SwitchDefaultLabelSyntax(unexpectedBeforeDefaultKeyword?.buildUnexpectedNodes(format: format), defaultKeyword: defaultKeyword.buildToken(), unexpectedBetweenDefaultKeywordAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSwitchDefaultLabel(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildSwitchDefaultLabel(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsSwitchDefaultLabel`.
@@ -11099,18 +10775,16 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CaseItemSyntax`.
-  func buildCaseItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CaseItemSyntax {
-    let result = CaseItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCaseItem(format: Format) -> CaseItemSyntax {
+    var result = CaseItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCaseItem(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildCaseItem(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsCaseItem`.
@@ -11161,18 +10835,16 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CatchItemSyntax`.
-  func buildCatchItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchItemSyntax {
-    let result = CatchItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern?.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCatchItem(format: Format) -> CatchItemSyntax {
+    var result = CatchItemSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern?.buildPattern(format: format), unexpectedBetweenPatternAndWhereClause?.buildUnexpectedNodes(format: format), whereClause: whereClause?.buildWhereClause(format: format), unexpectedBetweenWhereClauseAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCatchItem(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildCatchItem(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsCatchItem`.
@@ -11232,18 +10904,16 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SwitchCaseLabelSyntax`.
-  func buildSwitchCaseLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
-    let result = SwitchCaseLabelSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndCaseItems?.buildUnexpectedNodes(format: format, leadingTrivia: nil), caseItems: caseItems.buildCaseItemList(format: format, leadingTrivia: nil), unexpectedBetweenCaseItemsAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSwitchCaseLabel(format: Format) -> SwitchCaseLabelSyntax {
+    var result = SwitchCaseLabelSyntax(unexpectedBeforeCaseKeyword?.buildUnexpectedNodes(format: format), caseKeyword: caseKeyword.buildToken(), unexpectedBetweenCaseKeywordAndCaseItems?.buildUnexpectedNodes(format: format), caseItems: caseItems.buildCaseItemList(format: format), unexpectedBetweenCaseItemsAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSwitchCaseLabel(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildSwitchCaseLabel(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsSwitchCaseLabel`.
@@ -11298,18 +10968,16 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CatchClauseSyntax`.
-  func buildCatchClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchClauseSyntax {
-    let result = CatchClauseSyntax(unexpectedBeforeCatchKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), catchKeyword: catchKeyword.buildToken(), unexpectedBetweenCatchKeywordAndCatchItems?.buildUnexpectedNodes(format: format, leadingTrivia: nil), catchItems: catchItems?.buildCatchItemList(format: format, leadingTrivia: nil), unexpectedBetweenCatchItemsAndBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildCodeBlock(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCatchClause(format: Format) -> CatchClauseSyntax {
+    var result = CatchClauseSyntax(unexpectedBeforeCatchKeyword?.buildUnexpectedNodes(format: format), catchKeyword: catchKeyword.buildToken(), unexpectedBetweenCatchKeywordAndCatchItems?.buildUnexpectedNodes(format: format), catchItems: catchItems?.buildCatchItemList(format: format), unexpectedBetweenCatchItemsAndBody?.buildUnexpectedNodes(format: format), body: body.buildCodeBlock(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCatchClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildCatchClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsCatchClause`.
@@ -11385,18 +11053,16 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PoundAssertStmtSyntax`.
-  func buildPoundAssertStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundAssertStmtSyntax {
-    let result = PoundAssertStmtSyntax(unexpectedBeforePoundAssert?.buildUnexpectedNodes(format: format, leadingTrivia: nil), poundAssert: poundAssert.buildToken(), unexpectedBetweenPoundAssertAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndCondition?.buildUnexpectedNodes(format: format, leadingTrivia: nil), condition: condition.buildExpr(format: format, leadingTrivia: nil), unexpectedBetweenConditionAndComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), comma: comma?.buildToken(), unexpectedBetweenCommaAndMessage?.buildUnexpectedNodes(format: format, leadingTrivia: nil), message: message?.buildToken(), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPoundAssertStmt(format: Format) -> PoundAssertStmtSyntax {
+    var result = PoundAssertStmtSyntax(unexpectedBeforePoundAssert?.buildUnexpectedNodes(format: format), poundAssert: poundAssert.buildToken(), unexpectedBetweenPoundAssertAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndCondition?.buildUnexpectedNodes(format: format), condition: condition.buildExpr(format: format), unexpectedBetweenConditionAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(), unexpectedBetweenCommaAndMessage?.buildUnexpectedNodes(format: format), message: message?.buildToken(), unexpectedBetweenMessageAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildPoundAssertStmt(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildStmt(format: Format) -> StmtSyntax {
+    let result = buildPoundAssertStmt(format: format)
     return StmtSyntax(result)
   }
   /// Conformance to `ExpressibleAsPoundAssertStmt`.
@@ -11452,18 +11118,16 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericWhereClauseSyntax`.
-  func buildGenericWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericWhereClauseSyntax {
-    let result = GenericWhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), whereKeyword: whereKeyword.buildToken(), unexpectedBetweenWhereKeywordAndRequirementList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), requirementList: requirementList.buildGenericRequirementList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildGenericWhereClause(format: Format) -> GenericWhereClauseSyntax {
+    var result = GenericWhereClauseSyntax(unexpectedBeforeWhereKeyword?.buildUnexpectedNodes(format: format), whereKeyword: whereKeyword.buildToken(), unexpectedBetweenWhereKeywordAndRequirementList?.buildUnexpectedNodes(format: format), requirementList: requirementList.buildGenericRequirementList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericWhereClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildGenericWhereClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsGenericWhereClause`.
@@ -11504,18 +11168,16 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericRequirementSyntax`.
-  func buildGenericRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericRequirementSyntax {
-    let result = GenericRequirementSyntax(unexpectedBeforeBody?.buildUnexpectedNodes(format: format, leadingTrivia: nil), body: body.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenBodyAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildGenericRequirement(format: Format) -> GenericRequirementSyntax {
+    var result = GenericRequirementSyntax(unexpectedBeforeBody?.buildUnexpectedNodes(format: format), body: body.buildSyntax(format: format), unexpectedBetweenBodyAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildGenericRequirement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsGenericRequirement`.
@@ -11565,18 +11227,16 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SameTypeRequirementSyntax`.
-  func buildSameTypeRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SameTypeRequirementSyntax {
-    let result = SameTypeRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil), unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.buildUnexpectedNodes(format: format, leadingTrivia: nil), equalityToken: equalityToken.buildToken(), unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSameTypeRequirement(format: Format) -> SameTypeRequirementSyntax {
+    var result = SameTypeRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format), unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.buildUnexpectedNodes(format: format), equalityToken: equalityToken.buildToken(), unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.buildUnexpectedNodes(format: format), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSameTypeRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildSameTypeRequirement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsSameTypeRequirement`.
@@ -11666,18 +11326,16 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `LayoutRequirementSyntax`.
-  func buildLayoutRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LayoutRequirementSyntax {
-    let result = LayoutRequirementSyntax(unexpectedBeforeTypeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeIdentifier: typeIdentifier.buildType(format: format, leadingTrivia: nil), unexpectedBetweenTypeIdentifierAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndLayoutConstraint?.buildUnexpectedNodes(format: format, leadingTrivia: nil), layoutConstraint: layoutConstraint.buildToken(), unexpectedBetweenLayoutConstraintAndLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndSize?.buildUnexpectedNodes(format: format, leadingTrivia: nil), size: size?.buildToken(), unexpectedBetweenSizeAndComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), comma: comma?.buildToken(), unexpectedBetweenCommaAndAlignment?.buildUnexpectedNodes(format: format, leadingTrivia: nil), alignment: alignment?.buildToken(), unexpectedBetweenAlignmentAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildLayoutRequirement(format: Format) -> LayoutRequirementSyntax {
+    var result = LayoutRequirementSyntax(unexpectedBeforeTypeIdentifier?.buildUnexpectedNodes(format: format), typeIdentifier: typeIdentifier.buildType(format: format), unexpectedBetweenTypeIdentifierAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndLayoutConstraint?.buildUnexpectedNodes(format: format), layoutConstraint: layoutConstraint.buildToken(), unexpectedBetweenLayoutConstraintAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen?.buildToken(), unexpectedBetweenLeftParenAndSize?.buildUnexpectedNodes(format: format), size: size?.buildToken(), unexpectedBetweenSizeAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(), unexpectedBetweenCommaAndAlignment?.buildUnexpectedNodes(format: format), alignment: alignment?.buildToken(), unexpectedBetweenAlignmentAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildLayoutRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildLayoutRequirement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsLayoutRequirement`.
@@ -11743,18 +11401,16 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterSyntax`.
-  func buildGenericParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterSyntax {
-    let result = GenericParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon?.buildToken(), unexpectedBetweenColonAndInheritedType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inheritedType: inheritedType?.buildType(format: format, leadingTrivia: nil), unexpectedBetweenInheritedTypeAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildGenericParameter(format: Format) -> GenericParameterSyntax {
+    var result = GenericParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndInheritedType?.buildUnexpectedNodes(format: format), inheritedType: inheritedType?.buildType(format: format), unexpectedBetweenInheritedTypeAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericParameter(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildGenericParameter(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsGenericParameter`.
@@ -11805,18 +11461,16 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
-  func buildPrimaryAssociatedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
-    let result = PrimaryAssociatedTypeSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrimaryAssociatedType(format: Format) -> PrimaryAssociatedTypeSyntax {
+    var result = PrimaryAssociatedTypeSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrimaryAssociatedType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPrimaryAssociatedType(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPrimaryAssociatedType`.
@@ -11876,18 +11530,16 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterClauseSyntax`.
-  func buildGenericParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterClauseSyntax {
-    let result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericParameterList: genericParameterList.buildGenericParameterList(format: format, leadingTrivia: nil), unexpectedBetweenGenericParameterListAndRightAngleBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightAngleBracket: rightAngleBracket.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildGenericParameterClause(format: Format) -> GenericParameterClauseSyntax {
+    var result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format), genericParameterList: genericParameterList.buildGenericParameterList(format: format), unexpectedBetweenGenericParameterListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericParameterClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildGenericParameterClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsGenericParameterClause`.
@@ -11934,18 +11586,16 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConformanceRequirementSyntax`.
-  func buildConformanceRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConformanceRequirementSyntax {
-    let result = ConformanceRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil), unexpectedBetweenLeftTypeIdentifierAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndRightTypeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildConformanceRequirement(format: Format) -> ConformanceRequirementSyntax {
+    var result = ConformanceRequirementSyntax(unexpectedBeforeLeftTypeIdentifier?.buildUnexpectedNodes(format: format), leftTypeIdentifier: leftTypeIdentifier.buildType(format: format), unexpectedBetweenLeftTypeIdentifierAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndRightTypeIdentifier?.buildUnexpectedNodes(format: format), rightTypeIdentifier: rightTypeIdentifier.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildConformanceRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildConformanceRequirement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsConformanceRequirement`.
@@ -11993,18 +11643,16 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `PrimaryAssociatedTypeClauseSyntax`.
-  func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
-    let result = PrimaryAssociatedTypeClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildUnexpectedNodes(format: format, leadingTrivia: nil), primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format, leadingTrivia: nil), unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightAngleBracket: rightAngleBracket.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildPrimaryAssociatedTypeClause(format: Format) -> PrimaryAssociatedTypeClauseSyntax {
+    var result = PrimaryAssociatedTypeClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildUnexpectedNodes(format: format), primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format), unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildPrimaryAssociatedTypeClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsPrimaryAssociatedTypeClause`.
@@ -12044,18 +11692,16 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `SimpleTypeIdentifierSyntax`.
-  func buildSimpleTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SimpleTypeIdentifierSyntax {
-    let result = SimpleTypeIdentifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildSimpleTypeIdentifier(format: Format) -> SimpleTypeIdentifierSyntax {
+    var result = SimpleTypeIdentifierSyntax(unexpectedBeforeName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildSimpleTypeIdentifier(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildSimpleTypeIdentifier(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsSimpleTypeIdentifier`.
@@ -12115,18 +11761,16 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MemberTypeIdentifierSyntax`.
-  func buildMemberTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberTypeIdentifierSyntax {
-    let result = MemberTypeIdentifierSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), baseType: baseType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format, leadingTrivia: nil), period: period.buildToken(), unexpectedBetweenPeriodAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name.buildToken(), unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format, leadingTrivia: nil), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMemberTypeIdentifier(format: Format) -> MemberTypeIdentifierSyntax {
+    var result = MemberTypeIdentifierSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period.buildToken(), unexpectedBetweenPeriodAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(), unexpectedBetweenNameAndGenericArgumentClause?.buildUnexpectedNodes(format: format), genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildMemberTypeIdentifier(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildMemberTypeIdentifier(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsMemberTypeIdentifier`.
@@ -12168,18 +11812,16 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ClassRestrictionTypeSyntax`.
-  func buildClassRestrictionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassRestrictionTypeSyntax {
-    let result = ClassRestrictionTypeSyntax(unexpectedBeforeClassKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), classKeyword: classKeyword.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildClassRestrictionType(format: Format) -> ClassRestrictionTypeSyntax {
+    var result = ClassRestrictionTypeSyntax(unexpectedBeforeClassKeyword?.buildUnexpectedNodes(format: format), classKeyword: classKeyword.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildClassRestrictionType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildClassRestrictionType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsClassRestrictionType`.
@@ -12234,18 +11876,16 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ArrayTypeSyntax`.
-  func buildArrayType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayTypeSyntax {
-    let result = ArrayTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftSquareBracket: leftSquareBracket.buildToken(), unexpectedBetweenLeftSquareBracketAndElementType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elementType: elementType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenElementTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightSquareBracket: rightSquareBracket.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildArrayType(format: Format) -> ArrayTypeSyntax {
+    var result = ArrayTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format), leftSquareBracket: leftSquareBracket.buildToken(), unexpectedBetweenLeftSquareBracketAndElementType?.buildUnexpectedNodes(format: format), elementType: elementType.buildType(format: format), unexpectedBetweenElementTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format), rightSquareBracket: rightSquareBracket.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildArrayType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildArrayType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsArrayType`.
@@ -12313,18 +11953,16 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `DictionaryTypeSyntax`.
-  func buildDictionaryType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryTypeSyntax {
-    let result = DictionaryTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftSquareBracket: leftSquareBracket.buildToken(), unexpectedBetweenLeftSquareBracketAndKeyType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), keyType: keyType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenKeyTypeAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndValueType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), valueType: valueType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenValueTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightSquareBracket: rightSquareBracket.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildDictionaryType(format: Format) -> DictionaryTypeSyntax {
+    var result = DictionaryTypeSyntax(unexpectedBeforeLeftSquareBracket?.buildUnexpectedNodes(format: format), leftSquareBracket: leftSquareBracket.buildToken(), unexpectedBetweenLeftSquareBracketAndKeyType?.buildUnexpectedNodes(format: format), keyType: keyType.buildType(format: format), unexpectedBetweenKeyTypeAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValueType?.buildUnexpectedNodes(format: format), valueType: valueType.buildType(format: format), unexpectedBetweenValueTypeAndRightSquareBracket?.buildUnexpectedNodes(format: format), rightSquareBracket: rightSquareBracket.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildDictionaryType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildDictionaryType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsDictionaryType`.
@@ -12385,18 +12023,16 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `MetatypeTypeSyntax`.
-  func buildMetatypeType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MetatypeTypeSyntax {
-    let result = MetatypeTypeSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), baseType: baseType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format, leadingTrivia: nil), period: period.buildToken(), unexpectedBetweenPeriodAndTypeOrProtocol?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeOrProtocol: typeOrProtocol.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildMetatypeType(format: Format) -> MetatypeTypeSyntax {
+    var result = MetatypeTypeSyntax(unexpectedBeforeBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format), unexpectedBetweenBaseTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period.buildToken(), unexpectedBetweenPeriodAndTypeOrProtocol?.buildUnexpectedNodes(format: format), typeOrProtocol: typeOrProtocol.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildMetatypeType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildMetatypeType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsMetatypeType`.
@@ -12444,18 +12080,16 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalTypeSyntax`.
-  func buildOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalTypeSyntax {
-    let result = OptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenWrappedTypeAndQuestionMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionMark: questionMark.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildOptionalType(format: Format) -> OptionalTypeSyntax {
+    var result = OptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format), wrappedType: wrappedType.buildType(format: format), unexpectedBetweenWrappedTypeAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildOptionalType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildOptionalType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsOptionalType`.
@@ -12509,18 +12143,16 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ConstrainedSugarTypeSyntax`.
-  func buildConstrainedSugarType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConstrainedSugarTypeSyntax {
-    let result = ConstrainedSugarTypeSyntax(unexpectedBeforeSomeOrAnySpecifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), someOrAnySpecifier: someOrAnySpecifier.buildToken(), unexpectedBetweenSomeOrAnySpecifierAndBaseType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), baseType: baseType.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildConstrainedSugarType(format: Format) -> ConstrainedSugarTypeSyntax {
+    var result = ConstrainedSugarTypeSyntax(unexpectedBeforeSomeOrAnySpecifier?.buildUnexpectedNodes(format: format), someOrAnySpecifier: someOrAnySpecifier.buildToken(), unexpectedBetweenSomeOrAnySpecifierAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildConstrainedSugarType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildConstrainedSugarType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsConstrainedSugarType`.
@@ -12568,18 +12200,16 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImplicitlyUnwrappedOptionalTypeSyntax`.
-  func buildImplicitlyUnwrappedOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let result = ImplicitlyUnwrappedOptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenWrappedTypeAndExclamationMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), exclamationMark: exclamationMark.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildImplicitlyUnwrappedOptionalType(format: Format) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+    var result = ImplicitlyUnwrappedOptionalTypeSyntax(unexpectedBeforeWrappedType?.buildUnexpectedNodes(format: format), wrappedType: wrappedType.buildType(format: format), unexpectedBetweenWrappedTypeAndExclamationMark?.buildUnexpectedNodes(format: format), exclamationMark: exclamationMark.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildImplicitlyUnwrappedOptionalType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildImplicitlyUnwrappedOptionalType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsImplicitlyUnwrappedOptionalType`.
@@ -12627,18 +12257,16 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CompositionTypeElementSyntax`.
-  func buildCompositionTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeElementSyntax {
-    let result = CompositionTypeElementSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type.buildType(format: format, leadingTrivia: nil), unexpectedBetweenTypeAndAmpersand?.buildUnexpectedNodes(format: format, leadingTrivia: nil), ampersand: ampersand?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCompositionTypeElement(format: Format) -> CompositionTypeElementSyntax {
+    var result = CompositionTypeElementSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format), unexpectedBetweenTypeAndAmpersand?.buildUnexpectedNodes(format: format), ampersand: ampersand?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCompositionTypeElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildCompositionTypeElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsCompositionTypeElement`.
@@ -12672,18 +12300,16 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `CompositionTypeSyntax`.
-  func buildCompositionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeSyntax {
-    let result = CompositionTypeSyntax(unexpectedBeforeElements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elements: elements.buildCompositionTypeElementList(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildCompositionType(format: Format) -> CompositionTypeSyntax {
+    var result = CompositionTypeSyntax(unexpectedBeforeElements?.buildUnexpectedNodes(format: format), elements: elements.buildCompositionTypeElementList(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildCompositionType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildCompositionType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsCompositionType`.
@@ -12770,18 +12396,16 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleTypeElementSyntax`.
-  func buildTupleTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeElementSyntax {
-    let result = TupleTypeElementSyntax(unexpectedBeforeInOut?.buildUnexpectedNodes(format: format, leadingTrivia: nil), inOut: inOut?.buildToken(), unexpectedBetweenInOutAndName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), name: name?.buildToken(), unexpectedBetweenNameAndSecondName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), secondName: secondName?.buildToken(), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon?.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type.buildType(format: format, leadingTrivia: nil), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format, leadingTrivia: nil), ellipsis: ellipsis?.buildToken(), unexpectedBetweenEllipsisAndInitializer?.buildUnexpectedNodes(format: format, leadingTrivia: nil), initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil), unexpectedBetweenInitializerAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTupleTypeElement(format: Format) -> TupleTypeElementSyntax {
+    var result = TupleTypeElementSyntax(unexpectedBeforeInOut?.buildUnexpectedNodes(format: format), inOut: inOut?.buildToken(), unexpectedBetweenInOutAndName?.buildUnexpectedNodes(format: format), name: name?.buildToken(), unexpectedBetweenNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(), unexpectedBetweenEllipsisAndInitializer?.buildUnexpectedNodes(format: format), initializer: initializer?.buildInitializerClause(format: format), unexpectedBetweenInitializerAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTupleTypeElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildTupleTypeElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsTupleTypeElement`.
@@ -12833,18 +12457,16 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TupleTypeSyntax`.
-  func buildTupleType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
-    let result = TupleTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elements: elements.buildTupleTypeElementList(format: format, leadingTrivia: nil), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTupleType(format: Format) -> TupleTypeSyntax {
+    var result = TupleTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildTupleTypeElementList(format: format), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildTupleType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildTupleType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsTupleType`.
@@ -12926,18 +12548,16 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionTypeSyntax`.
-  func buildFunctionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionTypeSyntax {
-    let result = FunctionTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arguments: arguments.buildTupleTypeElementList(format: format, leadingTrivia: nil), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken(), unexpectedBetweenRightParenAndAsyncKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword?.buildToken(), unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arrow: arrow.buildToken(), unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), returnType: returnType.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildFunctionType(format: Format) -> FunctionTypeSyntax {
+    var result = FunctionTypeSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildTupleTypeElementList(format: format), unexpectedBetweenArgumentsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken(), unexpectedBetweenRightParenAndAsyncKeyword?.buildUnexpectedNodes(format: format), asyncKeyword: asyncKeyword?.buildToken(), unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.buildUnexpectedNodes(format: format), throwsOrRethrowsKeyword: throwsOrRethrowsKeyword?.buildToken(), unexpectedBetweenThrowsOrRethrowsKeywordAndArrow?.buildUnexpectedNodes(format: format), arrow: arrow.buildToken(), unexpectedBetweenArrowAndReturnType?.buildUnexpectedNodes(format: format), returnType: returnType.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildFunctionType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildFunctionType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsFunctionType`.
@@ -12991,18 +12611,16 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AttributedTypeSyntax`.
-  func buildAttributedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributedTypeSyntax {
-    let result = AttributedTypeSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), specifier: specifier?.buildToken(), unexpectedBetweenSpecifierAndAttributes?.buildUnexpectedNodes(format: format, leadingTrivia: nil), attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil), unexpectedBetweenAttributesAndBaseType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), baseType: baseType.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAttributedType(format: Format) -> AttributedTypeSyntax {
+    var result = AttributedTypeSyntax(unexpectedBeforeSpecifier?.buildUnexpectedNodes(format: format), specifier: specifier?.buildToken(), unexpectedBetweenSpecifierAndAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildAttributedType(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildAttributedType(format: format)
     return TypeSyntax(result)
   }
   /// Conformance to `ExpressibleAsAttributedType`.
@@ -13050,18 +12668,16 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericArgumentSyntax`.
-  func buildGenericArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentSyntax {
-    let result = GenericArgumentSyntax(unexpectedBeforeArgumentType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), argumentType: argumentType.buildType(format: format, leadingTrivia: nil), unexpectedBetweenArgumentTypeAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildGenericArgument(format: Format) -> GenericArgumentSyntax {
+    var result = GenericArgumentSyntax(unexpectedBeforeArgumentType?.buildUnexpectedNodes(format: format), argumentType: argumentType.buildType(format: format), unexpectedBetweenArgumentTypeAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericArgument(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildGenericArgument(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsGenericArgument`.
@@ -13121,18 +12737,16 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericArgumentClauseSyntax`.
-  func buildGenericArgumentClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
-    let result = GenericArgumentClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndArguments?.buildUnexpectedNodes(format: format, leadingTrivia: nil), arguments: arguments.buildGenericArgumentList(format: format, leadingTrivia: nil), unexpectedBetweenArgumentsAndRightAngleBracket?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightAngleBracket: rightAngleBracket.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildGenericArgumentClause(format: Format) -> GenericArgumentClauseSyntax {
+    var result = GenericArgumentClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(), unexpectedBetweenLeftAngleBracketAndArguments?.buildUnexpectedNodes(format: format), arguments: arguments.buildGenericArgumentList(format: format), unexpectedBetweenArgumentsAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericArgumentClause(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildGenericArgumentClause(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsGenericArgumentClause`.
@@ -13173,18 +12787,16 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TypeAnnotationSyntax`.
-  func buildTypeAnnotation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeAnnotationSyntax {
-    let result = TypeAnnotationSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTypeAnnotation(format: Format) -> TypeAnnotationSyntax {
+    var result = TypeAnnotationSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTypeAnnotation(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildTypeAnnotation(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsTypeAnnotation`.
@@ -13243,18 +12855,16 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `EnumCasePatternSyntax`.
-  func buildEnumCasePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCasePatternSyntax {
-    let result = EnumCasePatternSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type?.buildType(format: format, leadingTrivia: nil), unexpectedBetweenTypeAndPeriod?.buildUnexpectedNodes(format: format, leadingTrivia: nil), period: period.buildToken(), unexpectedBetweenPeriodAndCaseName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), caseName: caseName.buildToken(), unexpectedBetweenCaseNameAndAssociatedTuple?.buildUnexpectedNodes(format: format, leadingTrivia: nil), associatedTuple: associatedTuple?.buildTuplePattern(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildEnumCasePattern(format: Format) -> EnumCasePatternSyntax {
+    var result = EnumCasePatternSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndPeriod?.buildUnexpectedNodes(format: format), period: period.buildToken(), unexpectedBetweenPeriodAndCaseName?.buildUnexpectedNodes(format: format), caseName: caseName.buildToken(), unexpectedBetweenCaseNameAndAssociatedTuple?.buildUnexpectedNodes(format: format), associatedTuple: associatedTuple?.buildTuplePattern(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildEnumCasePattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildEnumCasePattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsEnumCasePattern`.
@@ -13302,18 +12912,16 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IsTypePatternSyntax`.
-  func buildIsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsTypePatternSyntax {
-    let result = IsTypePatternSyntax(unexpectedBeforeIsKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), isKeyword: isKeyword.buildToken(), unexpectedBetweenIsKeywordAndType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIsTypePattern(format: Format) -> IsTypePatternSyntax {
+    var result = IsTypePatternSyntax(unexpectedBeforeIsKeyword?.buildUnexpectedNodes(format: format), isKeyword: isKeyword.buildToken(), unexpectedBetweenIsKeywordAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildIsTypePattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildIsTypePattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsIsTypePattern`.
@@ -13361,18 +12969,16 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OptionalPatternSyntax`.
-  func buildOptionalPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalPatternSyntax {
-    let result = OptionalPatternSyntax(unexpectedBeforeSubPattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), subPattern: subPattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenSubPatternAndQuestionMark?.buildUnexpectedNodes(format: format, leadingTrivia: nil), questionMark: questionMark.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildOptionalPattern(format: Format) -> OptionalPatternSyntax {
+    var result = OptionalPatternSyntax(unexpectedBeforeSubPattern?.buildUnexpectedNodes(format: format), subPattern: subPattern.buildPattern(format: format), unexpectedBetweenSubPatternAndQuestionMark?.buildUnexpectedNodes(format: format), questionMark: questionMark.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildOptionalPattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildOptionalPattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsOptionalPattern`.
@@ -13413,18 +13019,16 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `IdentifierPatternSyntax`.
-  func buildIdentifierPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierPatternSyntax {
-    let result = IdentifierPatternSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format, leadingTrivia: nil), identifier: identifier.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildIdentifierPattern(format: Format) -> IdentifierPatternSyntax {
+    var result = IdentifierPatternSyntax(unexpectedBeforeIdentifier?.buildUnexpectedNodes(format: format), identifier: identifier.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildIdentifierPattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildIdentifierPattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsIdentifierPattern`.
@@ -13478,18 +13082,16 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AsTypePatternSyntax`.
-  func buildAsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsTypePatternSyntax {
-    let result = AsTypePatternSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndAsKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), asKeyword: asKeyword.buildToken(), unexpectedBetweenAsKeywordAndType?.buildUnexpectedNodes(format: format, leadingTrivia: nil), type: type.buildType(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAsTypePattern(format: Format) -> AsTypePatternSyntax {
+    var result = AsTypePatternSyntax(unexpectedBeforePattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndAsKeyword?.buildUnexpectedNodes(format: format), asKeyword: asKeyword.buildToken(), unexpectedBetweenAsKeywordAndType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildAsTypePattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildAsTypePattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsAsTypePattern`.
@@ -13552,18 +13154,16 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TuplePatternSyntax`.
-  func buildTuplePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
-    let result = TuplePatternSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format, leadingTrivia: nil), elements: elements.buildTuplePatternElementList(format: format, leadingTrivia: nil), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format, leadingTrivia: nil), rightParen: rightParen.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTuplePattern(format: Format) -> TuplePatternSyntax {
+    var result = TuplePatternSyntax(unexpectedBeforeLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(), unexpectedBetweenLeftParenAndElements?.buildUnexpectedNodes(format: format), elements: elements.buildTuplePatternElementList(format: format), unexpectedBetweenElementsAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildTuplePattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildTuplePattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsTuplePattern`.
@@ -13611,18 +13211,16 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `WildcardPatternSyntax`.
-  func buildWildcardPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WildcardPatternSyntax {
-    let result = WildcardPatternSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format, leadingTrivia: nil), wildcard: wildcard.buildToken(), unexpectedBetweenWildcardAndTypeAnnotation?.buildUnexpectedNodes(format: format, leadingTrivia: nil), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildWildcardPattern(format: Format) -> WildcardPatternSyntax {
+    var result = WildcardPatternSyntax(unexpectedBeforeWildcard?.buildUnexpectedNodes(format: format), wildcard: wildcard.buildToken(), unexpectedBetweenWildcardAndTypeAnnotation?.buildUnexpectedNodes(format: format), typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildWildcardPattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildWildcardPattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsWildcardPattern`.
@@ -13691,18 +13289,16 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `TuplePatternElementSyntax`.
-  func buildTuplePatternElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternElementSyntax {
-    let result = TuplePatternElementSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format, leadingTrivia: nil), labelName: labelName?.buildToken(), unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), labelColon: labelColon?.buildToken(), unexpectedBetweenLabelColonAndPattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), pattern: pattern.buildPattern(format: format, leadingTrivia: nil), unexpectedBetweenPatternAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildTuplePatternElement(format: Format) -> TuplePatternElementSyntax {
+    var result = TuplePatternElementSyntax(unexpectedBeforeLabelName?.buildUnexpectedNodes(format: format), labelName: labelName?.buildToken(), unexpectedBetweenLabelNameAndLabelColon?.buildUnexpectedNodes(format: format), labelColon: labelColon?.buildToken(), unexpectedBetweenLabelColonAndPattern?.buildUnexpectedNodes(format: format), pattern: pattern.buildPattern(format: format), unexpectedBetweenPatternAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTuplePatternElement(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildTuplePatternElement(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsTuplePatternElement`.
@@ -13740,18 +13336,16 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ExpressionPatternSyntax`.
-  func buildExpressionPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionPatternSyntax {
-    let result = ExpressionPatternSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format, leadingTrivia: nil), expression: expression.buildExpr(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildExpressionPattern(format: Format) -> ExpressionPatternSyntax {
+    var result = ExpressionPatternSyntax(unexpectedBeforeExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildExpressionPattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildExpressionPattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsExpressionPattern`.
@@ -13799,18 +13393,16 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ValueBindingPatternSyntax`.
-  func buildValueBindingPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ValueBindingPatternSyntax {
-    let result = ValueBindingPatternSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format, leadingTrivia: nil), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndValuePattern?.buildUnexpectedNodes(format: format, leadingTrivia: nil), valuePattern: valuePattern.buildPattern(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildValueBindingPattern(format: Format) -> ValueBindingPatternSyntax {
+    var result = ValueBindingPatternSyntax(unexpectedBeforeLetOrVarKeyword?.buildUnexpectedNodes(format: format), letOrVarKeyword: letOrVarKeyword.buildToken(), unexpectedBetweenLetOrVarKeywordAndValuePattern?.buildUnexpectedNodes(format: format), valuePattern: valuePattern.buildPattern(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildValueBindingPattern(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildPattern(format: Format) -> PatternSyntax {
+    let result = buildValueBindingPattern(format: format)
     return PatternSyntax(result)
   }
   /// Conformance to `ExpressibleAsValueBindingPattern`.
@@ -13859,18 +13451,16 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityArgumentSyntax`.
-  func buildAvailabilityArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityArgumentSyntax {
-    let result = AvailabilityArgumentSyntax(unexpectedBeforeEntry?.buildUnexpectedNodes(format: format, leadingTrivia: nil), entry: entry.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenEntryAndTrailingComma?.buildUnexpectedNodes(format: format, leadingTrivia: nil), trailingComma: trailingComma?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAvailabilityArgument(format: Format) -> AvailabilityArgumentSyntax {
+    var result = AvailabilityArgumentSyntax(unexpectedBeforeEntry?.buildUnexpectedNodes(format: format), entry: entry.buildSyntax(format: format), unexpectedBetweenEntryAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityArgument(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAvailabilityArgument(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAvailabilityArgument`.
@@ -13924,18 +13514,16 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityLabeledArgumentSyntax`.
-  func buildAvailabilityLabeledArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityLabeledArgumentSyntax {
-    let result = AvailabilityLabeledArgumentSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format, leadingTrivia: nil), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format, leadingTrivia: nil), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format, leadingTrivia: nil), value: value.buildSyntax(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAvailabilityLabeledArgument(format: Format) -> AvailabilityLabeledArgumentSyntax {
+    var result = AvailabilityLabeledArgumentSyntax(unexpectedBeforeLabel?.buildUnexpectedNodes(format: format), label: label.buildToken(), unexpectedBetweenLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(), unexpectedBetweenColonAndValue?.buildUnexpectedNodes(format: format), value: value.buildSyntax(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityLabeledArgument(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAvailabilityLabeledArgument(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAvailabilityLabeledArgument`.
@@ -13982,18 +13570,16 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `AvailabilityVersionRestrictionSyntax`.
-  func buildAvailabilityVersionRestriction(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityVersionRestrictionSyntax {
-    let result = AvailabilityVersionRestrictionSyntax(unexpectedBeforePlatform?.buildUnexpectedNodes(format: format, leadingTrivia: nil), platform: platform.buildToken(), unexpectedBetweenPlatformAndVersion?.buildUnexpectedNodes(format: format, leadingTrivia: nil), version: version?.buildVersionTuple(format: format, leadingTrivia: nil))
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildAvailabilityVersionRestriction(format: Format) -> AvailabilityVersionRestrictionSyntax {
+    var result = AvailabilityVersionRestrictionSyntax(unexpectedBeforePlatform?.buildUnexpectedNodes(format: format), platform: platform.buildToken(), unexpectedBetweenPlatformAndVersion?.buildUnexpectedNodes(format: format), version: version?.buildVersionTuple(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityVersionRestriction(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildAvailabilityVersionRestriction(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsAvailabilityVersionRestriction`.
@@ -14049,18 +13635,16 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `VersionTupleSyntax`.
-  func buildVersionTuple(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VersionTupleSyntax {
-    let result = VersionTupleSyntax(unexpectedBeforeMajorMinor?.buildUnexpectedNodes(format: format, leadingTrivia: nil), majorMinor: majorMinor.buildSyntax(format: format, leadingTrivia: nil), unexpectedBetweenMajorMinorAndPatchPeriod?.buildUnexpectedNodes(format: format, leadingTrivia: nil), patchPeriod: patchPeriod?.buildToken(), unexpectedBetweenPatchPeriodAndPatchVersion?.buildUnexpectedNodes(format: format, leadingTrivia: nil), patchVersion: patchVersion?.buildToken())
-    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
-    if combinedLeadingTrivia.isEmpty {
-      return result
-    } else {
-      return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+  func buildVersionTuple(format: Format) -> VersionTupleSyntax {
+    var result = VersionTupleSyntax(unexpectedBeforeMajorMinor?.buildUnexpectedNodes(format: format), majorMinor: majorMinor.buildSyntax(format: format), unexpectedBetweenMajorMinorAndPatchPeriod?.buildUnexpectedNodes(format: format), patchPeriod: patchPeriod?.buildToken(), unexpectedBetweenPatchPeriodAndPatchVersion?.buildUnexpectedNodes(format: format), patchVersion: patchVersion?.buildToken())
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
+    return format._format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildVersionTuple(format: format, leadingTrivia: additionalLeadingTrivia)
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildVersionTuple(format: format)
     return Syntax(result)
   }
   /// Conformance to `ExpressibleAsVersionTuple`.

@@ -40,7 +40,7 @@ public struct Token: SyntaxBuildable, ExpressibleAsBinaryOperatorExpr, Expressib
     tokenSyntax
   }
   
-  public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
+  public func buildSyntax(format: Format) -> Syntax {
     Syntax(tokenSyntax)
   }
   

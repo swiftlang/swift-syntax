@@ -6,6 +6,7 @@ final class EnumCaseElementTests: XCTestCase {
   func testEnumInit() {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let buildable = EnumDecl(
+      leadingTrivia: leadingTrivia,
       identifier: "Greeting",
       inheritanceClause: TypeInheritanceClause {
         InheritedType(typeName: "String")
@@ -23,7 +24,7 @@ final class EnumCaseElementTests: XCTestCase {
         EnumCaseElement(identifier: "hi")
       }
     }
-    let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let syntax = buildable.buildSyntax(format: Format())
 
     XCTAssertEqual(syntax.description,
       """

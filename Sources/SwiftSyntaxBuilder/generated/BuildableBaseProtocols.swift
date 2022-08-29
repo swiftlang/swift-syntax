@@ -17,14 +17,12 @@ import SwiftSyntax
 public protocol DeclListBuildable: SyntaxListBuildable {
   /// Builds list of `DeclSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
+  func buildDeclList(format: Format) -> [DeclSyntax]
 }
 public protocol DeclBuildable: ExpressibleAsDeclBuildable, DeclListBuildable, SyntaxBuildable {
   /// Builds list of `DeclSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildDecl(format: Format, leadingTrivia: Trivia?) -> DeclSyntax
+  func buildDecl(format: Format) -> DeclSyntax
 }
 public extension DeclBuildable {
   /// Satisfies conformance to `ExpressibleAsDeclBuildable`.
@@ -33,33 +31,29 @@ public extension DeclBuildable {
   }
   /// Builds list of `DeclSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   ///
   /// Satisfies conformance to `DeclListBuildable`
-  func buildDeclList(format: Format, leadingTrivia: Trivia? = nil) -> [DeclSyntax] {
-    return [buildDecl(format: format, leadingTrivia: leadingTrivia)]
+  func buildDeclList(format: Format) -> [DeclSyntax] {
+    return [buildDecl(format: format)]
   }
   /// Builds a `DeclSyntax`.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   /// - Returns: A new `Syntax` with the built `DeclSyntax`.
   ///
   /// Satisfies conformance to `SyntaxBuildable`.
-  func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    return Syntax(buildDecl(format: format, leadingTrivia: leadingTrivia))
+  func buildSyntax(format: Format) -> Syntax {
+    return Syntax(buildDecl(format: format))
   }
 }
 public protocol ExprListBuildable: SyntaxListBuildable {
   /// Builds list of `ExprSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildExprList(format: Format, leadingTrivia: Trivia?) -> [ExprSyntax]
+  func buildExprList(format: Format) -> [ExprSyntax]
 }
 public protocol ExprBuildable: ExpressibleAsExprBuildable, ExprListBuildable, SyntaxBuildable {
   /// Builds list of `ExprSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildExpr(format: Format, leadingTrivia: Trivia?) -> ExprSyntax
+  func buildExpr(format: Format) -> ExprSyntax
 }
 public extension ExprBuildable {
   /// Satisfies conformance to `ExpressibleAsExprBuildable`.
@@ -68,33 +62,29 @@ public extension ExprBuildable {
   }
   /// Builds list of `ExprSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   ///
   /// Satisfies conformance to `ExprListBuildable`
-  func buildExprList(format: Format, leadingTrivia: Trivia? = nil) -> [ExprSyntax] {
-    return [buildExpr(format: format, leadingTrivia: leadingTrivia)]
+  func buildExprList(format: Format) -> [ExprSyntax] {
+    return [buildExpr(format: format)]
   }
   /// Builds a `ExprSyntax`.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   /// - Returns: A new `Syntax` with the built `ExprSyntax`.
   ///
   /// Satisfies conformance to `SyntaxBuildable`.
-  func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    return Syntax(buildExpr(format: format, leadingTrivia: leadingTrivia))
+  func buildSyntax(format: Format) -> Syntax {
+    return Syntax(buildExpr(format: format))
   }
 }
 public protocol PatternListBuildable: SyntaxListBuildable {
   /// Builds list of `PatternSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildPatternList(format: Format, leadingTrivia: Trivia?) -> [PatternSyntax]
+  func buildPatternList(format: Format) -> [PatternSyntax]
 }
 public protocol PatternBuildable: ExpressibleAsPatternBuildable, PatternListBuildable, SyntaxBuildable {
   /// Builds list of `PatternSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildPattern(format: Format, leadingTrivia: Trivia?) -> PatternSyntax
+  func buildPattern(format: Format) -> PatternSyntax
 }
 public extension PatternBuildable {
   /// Satisfies conformance to `ExpressibleAsPatternBuildable`.
@@ -103,33 +93,29 @@ public extension PatternBuildable {
   }
   /// Builds list of `PatternSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   ///
   /// Satisfies conformance to `PatternListBuildable`
-  func buildPatternList(format: Format, leadingTrivia: Trivia? = nil) -> [PatternSyntax] {
-    return [buildPattern(format: format, leadingTrivia: leadingTrivia)]
+  func buildPatternList(format: Format) -> [PatternSyntax] {
+    return [buildPattern(format: format)]
   }
   /// Builds a `PatternSyntax`.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   /// - Returns: A new `Syntax` with the built `PatternSyntax`.
   ///
   /// Satisfies conformance to `SyntaxBuildable`.
-  func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    return Syntax(buildPattern(format: format, leadingTrivia: leadingTrivia))
+  func buildSyntax(format: Format) -> Syntax {
+    return Syntax(buildPattern(format: format))
   }
 }
 public protocol StmtListBuildable: SyntaxListBuildable {
   /// Builds list of `StmtSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildStmtList(format: Format, leadingTrivia: Trivia?) -> [StmtSyntax]
+  func buildStmtList(format: Format) -> [StmtSyntax]
 }
 public protocol StmtBuildable: ExpressibleAsStmtBuildable, StmtListBuildable, SyntaxBuildable {
   /// Builds list of `StmtSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildStmt(format: Format, leadingTrivia: Trivia?) -> StmtSyntax
+  func buildStmt(format: Format) -> StmtSyntax
 }
 public extension StmtBuildable {
   /// Satisfies conformance to `ExpressibleAsStmtBuildable`.
@@ -138,33 +124,29 @@ public extension StmtBuildable {
   }
   /// Builds list of `StmtSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   ///
   /// Satisfies conformance to `StmtListBuildable`
-  func buildStmtList(format: Format, leadingTrivia: Trivia? = nil) -> [StmtSyntax] {
-    return [buildStmt(format: format, leadingTrivia: leadingTrivia)]
+  func buildStmtList(format: Format) -> [StmtSyntax] {
+    return [buildStmt(format: format)]
   }
   /// Builds a `StmtSyntax`.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   /// - Returns: A new `Syntax` with the built `StmtSyntax`.
   ///
   /// Satisfies conformance to `SyntaxBuildable`.
-  func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    return Syntax(buildStmt(format: format, leadingTrivia: leadingTrivia))
+  func buildSyntax(format: Format) -> Syntax {
+    return Syntax(buildStmt(format: format))
   }
 }
 public protocol SyntaxListBuildable {
   /// Builds list of `Syntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildSyntaxList(format: Format, leadingTrivia: Trivia?) -> [Syntax]
+  func buildSyntaxList(format: Format) -> [Syntax]
 }
 public protocol SyntaxBuildable: ExpressibleAsSyntaxBuildable, SyntaxListBuildable {
   /// Builds list of `Syntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax
+  func buildSyntax(format: Format) -> Syntax
 }
 public extension SyntaxBuildable {
   /// Satisfies conformance to `ExpressibleAsSyntaxBuildable`.
@@ -173,24 +155,21 @@ public extension SyntaxBuildable {
   }
   /// Builds list of `Syntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   ///
   /// Satisfies conformance to `SyntaxListBuildable`
-  func buildSyntaxList(format: Format, leadingTrivia: Trivia? = nil) -> [Syntax] {
-    return [buildSyntax(format: format, leadingTrivia: leadingTrivia)]
+  func buildSyntaxList(format: Format) -> [Syntax] {
+    return [buildSyntax(format: format)]
   }
 }
 public protocol TypeListBuildable: SyntaxListBuildable {
   /// Builds list of `TypeSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildTypeList(format: Format, leadingTrivia: Trivia?) -> [TypeSyntax]
+  func buildTypeList(format: Format) -> [TypeSyntax]
 }
 public protocol TypeBuildable: ExpressibleAsTypeBuildable, TypeListBuildable, SyntaxBuildable {
   /// Builds list of `TypeSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
-  func buildType(format: Format, leadingTrivia: Trivia?) -> TypeSyntax
+  func buildType(format: Format) -> TypeSyntax
 }
 public extension TypeBuildable {
   /// Satisfies conformance to `ExpressibleAsTypeBuildable`.
@@ -199,19 +178,17 @@ public extension TypeBuildable {
   }
   /// Builds list of `TypeSyntax`s.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   ///
   /// Satisfies conformance to `TypeListBuildable`
-  func buildTypeList(format: Format, leadingTrivia: Trivia? = nil) -> [TypeSyntax] {
-    return [buildType(format: format, leadingTrivia: leadingTrivia)]
+  func buildTypeList(format: Format) -> [TypeSyntax] {
+    return [buildType(format: format)]
   }
   /// Builds a `TypeSyntax`.
   /// - Parameter format: The `Format` to use.
-  /// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.
   /// - Returns: A new `Syntax` with the built `TypeSyntax`.
   ///
   /// Satisfies conformance to `SyntaxBuildable`.
-  func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    return Syntax(buildType(format: format, leadingTrivia: leadingTrivia))
+  func buildSyntax(format: Format) -> Syntax {
+    return Syntax(buildType(format: format))
   }
 }

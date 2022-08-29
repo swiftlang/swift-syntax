@@ -120,11 +120,6 @@ let tokenFile = SourceFile {
             colon: .colon,
             type: "Format"
           )
-          FunctionParameter(
-            firstName: .identifier("leadingTrivia"),
-            colon: .colon,
-            type: OptionalType(wrappedType: "Trivia")
-          )
         },
         output: "Syntax"
       )

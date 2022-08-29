@@ -14,6 +14,7 @@
 
 let STMT_NODES: [Node] = [
   Node(name: "LabeledStmt",
+       nameForDiagnostics: "labeled statement",
        kind: "Stmt",
        children: [
          Child(name: "LabelName",
@@ -31,6 +32,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ContinueStmt",
+       nameForDiagnostics: "'continue' statement",
        kind: "Stmt",
        children: [
          Child(name: "ContinueKeyword",
@@ -47,6 +49,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "WhileStmt",
+       nameForDiagnostics: "'while' statement",
        kind: "Stmt",
        traits: [
          "WithCodeBlock"
@@ -65,6 +68,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "DeferStmt",
+       nameForDiagnostics: "'defer' statement",
        kind: "Stmt",
        traits: [
          "WithCodeBlock"
@@ -80,6 +84,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ExpressionStmt",
+       nameForDiagnostics: "expression",
        kind: "Stmt",
        children: [
          Child(name: "Expression",
@@ -87,6 +92,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "SwitchCaseList",
+       nameForDiagnostics: nil,
        kind: "SyntaxCollection",
        element: "Syntax",
        elementName: "SwitchCase",
@@ -94,6 +100,7 @@ let STMT_NODES: [Node] = [
        elementsSeparatedByNewline: true),
 
   Node(name: "RepeatWhileStmt",
+       nameForDiagnostics: "'repeat' statement",
        kind: "Stmt",
        traits: [
          "WithCodeBlock"
@@ -116,6 +123,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "GuardStmt",
+       nameForDiagnostics: "'guard' statement",
        kind: "Stmt",
        traits: [
          "WithCodeBlock"
@@ -139,6 +147,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "WhereClause",
+       nameForDiagnostics: "'where' clause",
        kind: "Syntax",
        children: [
          Child(name: "WhereKeyword",
@@ -151,6 +160,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ForInStmt",
+       nameForDiagnostics: "'for' statement",
        kind: "Stmt",
        traits: [
          "WithCodeBlock"
@@ -203,6 +213,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "SwitchStmt",
+       nameForDiagnostics: "'switch' statement",
        kind: "Stmt",
        traits: [
          "Braced"
@@ -232,10 +243,12 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "CatchClauseList",
+       nameForDiagnostics: "'catch' clause",
        kind: "SyntaxCollection",
        element: "CatchClause"),
 
   Node(name: "DoStmt",
+       nameForDiagnostics: "'do' statement",
        kind: "Stmt",
        traits: [
          "WithCodeBlock"
@@ -255,6 +268,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ReturnStmt",
+       nameForDiagnostics: "'return' statement",
        kind: "Stmt",
        children: [
          Child(name: "ReturnKeyword",
@@ -268,6 +282,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "YieldStmt",
+       nameForDiagnostics: "'yield' statement",
        kind: "Stmt",
        children: [
          Child(name: "YieldKeyword",
@@ -286,6 +301,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "YieldList",
+       nameForDiagnostics: nil,
        kind: "Syntax",
        children: [
          Child(name: "LeftParen",
@@ -310,6 +326,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "FallthroughStmt",
+       nameForDiagnostics: "'fallthrough' statement",
        kind: "Stmt",
        children: [
          Child(name: "FallthroughKeyword",
@@ -320,6 +337,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "BreakStmt",
+       nameForDiagnostics: "'break' statement",
        kind: "Stmt",
        children: [
          Child(name: "BreakKeyword",
@@ -336,14 +354,17 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "CaseItemList",
+       nameForDiagnostics: nil,
        kind: "SyntaxCollection",
        element: "CaseItem"),
 
   Node(name: "CatchItemList",
+       nameForDiagnostics: nil,
        kind: "SyntaxCollection",
        element: "CatchItem"),
 
   Node(name: "ConditionElement",
+       nameForDiagnostics: nil,
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -372,6 +393,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "AvailabilityCondition",
+       nameForDiagnostics: "'#availabile' condition",
        kind: "Syntax",
        children: [
          Child(name: "PoundAvailableKeyword",
@@ -395,6 +417,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "MatchingPatternCondition",
+       nameForDiagnostics: "pattern matching",
        kind: "Syntax",
        children: [
          Child(name: "CaseKeyword",
@@ -412,6 +435,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "OptionalBindingCondition",
+       nameForDiagnostics: "optional binding",
        kind: "Syntax",
        children: [
          Child(name: "LetOrVarKeyword",
@@ -431,6 +455,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "UnavailabilityCondition",
+       nameForDiagnostics: "'#unavailable' condition",
        kind: "Syntax",
        children: [
          Child(name: "PoundUnavailableKeyword",
@@ -454,10 +479,12 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ConditionElementList",
+       nameForDiagnostics: nil,
        kind: "SyntaxCollection",
        element: "ConditionElement"),
 
   Node(name: "DeclarationStmt",
+       nameForDiagnostics: "declaration",
        kind: "Stmt",
        children: [
          Child(name: "Declaration",
@@ -465,6 +492,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ThrowStmt",
+       nameForDiagnostics: "'throw' statement",
        kind: "Stmt",
        children: [
          Child(name: "ThrowKeyword",
@@ -477,6 +505,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "IfStmt",
+       nameForDiagnostics: "'if' statement",
        kind: "Stmt",
        traits: [
          "WithCodeBlock"
@@ -510,6 +539,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ElseIfContinuation",
+       nameForDiagnostics: nil,
        kind: "Syntax",
        children: [
          Child(name: "IfStatement",
@@ -517,6 +547,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "ElseBlock",
+       nameForDiagnostics: "else block",
        kind: "Syntax",
        traits: [
          "WithCodeBlock"
@@ -532,6 +563,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "SwitchCase",
+       nameForDiagnostics: "switch case",
        kind: "Syntax",
        traits: [
          "WithStatements"
@@ -555,6 +587,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "SwitchDefaultLabel",
+       nameForDiagnostics: nil,
        kind: "Syntax",
        children: [
          Child(name: "DefaultKeyword",
@@ -570,6 +603,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "CaseItem",
+       nameForDiagnostics: nil,
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -589,6 +623,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "CatchItem",
+       nameForDiagnostics: nil,
        kind: "Syntax",
        traits: [
          "WithTrailingComma"
@@ -609,6 +644,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "SwitchCaseLabel",
+       nameForDiagnostics: nil,
        kind: "Syntax",
        children: [
          Child(name: "CaseKeyword",
@@ -627,6 +663,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "CatchClause",
+       nameForDiagnostics: "'catch' clause",
        kind: "Syntax",
        traits: [
          "WithCodeBlock"
@@ -646,6 +683,7 @@ let STMT_NODES: [Node] = [
        ]),
 
   Node(name: "PoundAssertStmt",
+       nameForDiagnostics: "'#assert' statement",
        kind: "Stmt",
        children: [
          Child(name: "PoundAssert",

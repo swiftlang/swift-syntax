@@ -451,7 +451,7 @@ final class DeclarationTests: XCTestCase {
       """,
       diagnostics: [
         // FIXME: This diagnostic should be more contextual
-        DiagnosticSpec(message: "Expected '->'")
+        DiagnosticSpec(message: "Expected '->' in return clause")
       ]
     )
   }
@@ -469,9 +469,9 @@ final class DeclarationTests: XCTestCase {
       """,
       // FIXME: These are simply bad diagnostics. We should be complaining that identifiers cannot start with digits.
       diagnostics: [
-        DiagnosticSpec(message: "Expected '' in declaration"),
-        DiagnosticSpec(message: "Expected '{'"),
-        DiagnosticSpec(message: "Expected '}'"),
+        DiagnosticSpec(message: "Expected '' in class"),
+        DiagnosticSpec(message: "Expected '{' to start class"),
+        DiagnosticSpec(message: "Expected '}' to end class"),
       ]
     )
   }
@@ -506,7 +506,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(
           message: """
             Unexpected text '
-              / ###line 25 "line-directive.swift"'
+              / ###line 25 "line-directive.swift"' found in struct
             """
         )
       ]
@@ -530,8 +530,8 @@ final class DeclarationTests: XCTestCase {
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do #^DIAG_1^#eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.#^DIAG_2^#
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '{'"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}'"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '{' to start 'do' statement"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end 'do' statement"),
       ]
     )
   }
@@ -595,9 +595,9 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "MISSING_COLON", message: "Expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "MISSING_RPAREN", message: "Expected ')' to end parameter clause"),
         // FIXME: We should issues something like "Expected identifier in declaration"
-        DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected '' in declaration"),
-        DiagnosticSpec(locationMarker: "BRACES", message: "Expected '{'"),
-        DiagnosticSpec(locationMarker: "BRACES", message: "Expected '}'"),
+        DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected '' in struct"),
+        DiagnosticSpec(locationMarker: "BRACES", message: "Expected '{' to start struct"),
+        DiagnosticSpec(locationMarker: "BRACES", message: "Expected '}' to end struct"),
       ]
     )
   }
@@ -647,7 +647,7 @@ final class DeclarationTests: XCTestCase {
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "COLON", message: "Expected ':' in function parameter"),
-        DiagnosticSpec(locationMarker: "RSQUARE_COLON" , message: "Expected ']' to end type"),
+        DiagnosticSpec(locationMarker: "RSQUARE_COLON" , message: "Expected ']' to end array type"),
         DiagnosticSpec(locationMarker: "RSQUARE_COLON", message: "Expected ')' to end parameter clause"),
       ]
     )

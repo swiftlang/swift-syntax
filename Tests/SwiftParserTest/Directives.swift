@@ -75,7 +75,7 @@ final class DirectiveTests: XCTestCase {
     AssertParse(
       "#if test#^DIAG^#",
       diagnostics: [
-        DiagnosticSpec(message: "Expected '#endif' in declaration")
+        DiagnosticSpec(message: "Expected '#endif' in conditional compilation block")
       ]
     )
   }

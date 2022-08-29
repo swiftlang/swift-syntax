@@ -6,7 +6,11 @@ def make_swift_node(node):
   """
   spaces = 9
   parameters = ['name: "%s"' % node.syntax_kind]
-  
+  if node.name_for_diagnostics:
+    parameters += [f'nameForDiagnostics: "{node.name_for_diagnostics}"']
+  else:
+    parameters += ['nameForDiagnostics: nil']
+
   if node.description:
     parameters += ['description: "%s"' % flat_documentation(node.description)]
 

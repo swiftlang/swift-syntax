@@ -16,25 +16,14 @@ import SwiftSyntax
 let diagnosticDomain: String = "SwiftParser"
 
 extension Syntax {
-  // FIXME: These should be defined in gyb_syntax_support.
   var nodeTypeNameForDiagnostics: String? {
-    if self.is(DeclSyntax.self) {
-      return "declaration"
-    } else if self.is(ExprSyntax.self) {
-      return "expression"
-    } else if self.is(PatternSyntax.self) {
-      return "pattern"
-    } else if self.is(StmtSyntax.self) {
-      return "statement"
-    } else if self.is(TypeSyntax.self) {
-      return "type"
-    } else if self.is(FunctionParameterSyntax.self) {
-      return "function parameter"
-    } else if self.is(ParameterClauseSyntax.self) {
-      return "parameter clause"
-    } else {
-      return nil
+    if let name = self.as(SyntaxEnum.self).nameForDiagnostics {
+      return name
     }
+    if let parent = self.parent {
+      return parent.nodeTypeNameForDiagnostics
+    }
+    return nil
   }
 }
 

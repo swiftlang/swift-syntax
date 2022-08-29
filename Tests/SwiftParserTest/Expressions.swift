@@ -172,6 +172,15 @@ final class ExpressionTests: XCTestCase {
       """
       """#
     )
+
+    AssertParse(
+       #"""
+       "\(()
+       """#,
+       diagnostics: [
+         // FIXME: Some diagnostics should be emitted for such broken input.
+       ]
+     )
   }
 
   func testStringLiterals() {
@@ -276,6 +285,17 @@ final class ExpressionTests: XCTestCase {
       "\(x)"
       """#
     )
+
+    AssertParse(
+       ##"""
+       #^D0^#""""#^D1^#
+       """##,
+       diagnostics: [
+         // FIXME: Weird diagnostics doesn't recover code even if follow it
+         DiagnosticSpec(locationMarker: "D0", message: "Expected '\"' in expression"),
+         DiagnosticSpec(locationMarker: "D1", message: "Expected '\"' in expression")
+       ]
+     )
   }
 
   func testSingleQuoteStringLiteral() {

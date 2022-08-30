@@ -633,6 +633,11 @@ public extension Token {
   static var `poundColorLiteral`: Token {
     Token(tokenSyntax: TokenSyntax.poundColorLiteralKeyword())
   }
+  
+  /// The `#_hasSymbol` keyword
+  static var `poundHasSymbol`: Token {
+    Token(tokenSyntax: TokenSyntax.poundHasSymbolKeyword())
+  }
   static func `integerLiteral`(_ text: String) -> Token {
     Token(tokenSyntax: TokenSyntax.integerLiteral(text))
   }

@@ -296,6 +296,7 @@ let SYNTAX_TOKENS: [TokenSpec] = [
   PoundObjectLiteralSpec(name: "PoundFileLiteral", kind: "pound_fileLiteral", serializationCode: 76, text: "#fileLiteral", description: "file reference", protocol: "ExpressibleByFileReferenceLiteral"),
   PoundObjectLiteralSpec(name: "PoundImageLiteral", kind: "pound_imageLiteral", serializationCode: 77, text: "#imageLiteral", description: "image", protocol: "ExpressibleByImageLiteral"),
   PoundObjectLiteralSpec(name: "PoundColorLiteral", kind: "pound_colorLiteral", serializationCode: 75, text: "#colorLiteral", description: "color", protocol: "ExpressibleByColorLiteral"),
+  PoundConfigSpec(name: "PoundHasSymbol", kind: "pound__hasSymbol", serializationCode: 125, text: "#_hasSymbol"),
   LiteralSpec(name: "IntegerLiteral", kind: "integer_literal", serializationCode: 111),
   LiteralSpec(name: "FloatingLiteral", kind: "floating_literal", serializationCode: 112),
   LiteralSpec(name: "StringLiteral", kind: "string_literal", serializationCode: 113),

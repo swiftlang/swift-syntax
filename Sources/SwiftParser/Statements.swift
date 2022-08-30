@@ -228,6 +228,11 @@ extension Parser {
     if self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]) {
       return self.parsePoundAvailableConditionElement()
     }
+    
+    // Parse a #_hasSymbol condition if present.
+    if self.at(.poundHasSymbolKeyword) {
+      return self.parsePoundHasSymbolConditionElement()
+    }
 
     // Parse the basic expression case.  If we have a leading let/var/case
     // keyword or an assignment, then we know this is a binding.
@@ -351,6 +356,30 @@ extension Parser {
     case .macro:
       fatalError("Macros are not allowed in this position!")
     }
+  }
+  
+  /// Parse a `#_hasSymbol` condition.
+  ///
+  /// Grammar
+  /// =======
+  ///
+  ///     has-symbol-condition → '#_hasSymbol' '(' expr ')'
+  @_spi(RawSyntax)
+  public mutating func parsePoundHasSymbolConditionElement() -> RawSyntax {
+    let (unexpectedBeforeKeyword, keyword) = self.expect(.poundHasSymbolKeyword)
+    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
+    let expr = self.parseExpression()
+    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
+    return RawSyntax(RawHasSymbolConditionSyntax(
+      unexpectedBeforeKeyword,
+      hasSymbolKeyword: keyword,
+      unexpectedBeforeLParen,
+      leftParen: lparen,
+      expression: expr,
+      unexpectedBeforeRParen,
+      rightParen: rparen,
+      arena: self.arena)
+    )
   }
 }
 

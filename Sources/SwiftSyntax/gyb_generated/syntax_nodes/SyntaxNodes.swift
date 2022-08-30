@@ -13646,6 +13646,232 @@ extension UnavailabilityConditionSyntax: CustomReflectable {
   }
 }
 
+// MARK: - HasSymbolConditionSyntax
+
+public struct HasSymbolConditionSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `HasSymbolConditionSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .hasSymbolCondition else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `HasSymbolConditionSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .hasSymbolCondition)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeHasSymbolKeyword: UnexpectedNodesSyntax? = nil,
+    hasSymbolKeyword: TokenSyntax,
+    _ unexpectedBetweenHasSymbolKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax,
+    _ unexpectedBetweenLeftParenAndExpression: UnexpectedNodesSyntax? = nil,
+    expression: ExprSyntax,
+    _ unexpectedBetweenExpressionAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeHasSymbolKeyword?.raw,
+      hasSymbolKeyword.raw,
+      unexpectedBetweenHasSymbolKeywordAndLeftParen?.raw,
+      leftParen.raw,
+      unexpectedBetweenLeftParenAndExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndRightParen?.raw,
+      rightParen.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.hasSymbolCondition,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeHasSymbolKeyword: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeHasSymbolKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeHasSymbolKeyword` replaced.
+  /// - param newChild: The new `unexpectedBeforeHasSymbolKeyword` to replace the node's
+  ///                   current `unexpectedBeforeHasSymbolKeyword`, if present.
+  public func withUnexpectedBeforeHasSymbolKeyword(
+    _ newChild: UnexpectedNodesSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return HasSymbolConditionSyntax(newData)
+  }
+
+  public var hasSymbolKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withHasSymbolKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `hasSymbolKeyword` replaced.
+  /// - param newChild: The new `hasSymbolKeyword` to replace the node's
+  ///                   current `hasSymbolKeyword`, if present.
+  public func withHasSymbolKeyword(
+    _ newChild: TokenSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return HasSymbolConditionSyntax(newData)
+  }
+
+  public var unexpectedBetweenHasSymbolKeywordAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenHasSymbolKeywordAndLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenHasSymbolKeywordAndLeftParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenHasSymbolKeywordAndLeftParen` to replace the node's
+  ///                   current `unexpectedBetweenHasSymbolKeywordAndLeftParen`, if present.
+  public func withUnexpectedBetweenHasSymbolKeywordAndLeftParen(
+    _ newChild: UnexpectedNodesSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return HasSymbolConditionSyntax(newData)
+  }
+
+  public var leftParen: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftParen` replaced.
+  /// - param newChild: The new `leftParen` to replace the node's
+  ///                   current `leftParen`, if present.
+  public func withLeftParen(
+    _ newChild: TokenSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return HasSymbolConditionSyntax(newData)
+  }
+
+  public var unexpectedBetweenLeftParenAndExpression: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenLeftParenAndExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeftParenAndExpression` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeftParenAndExpression` to replace the node's
+  ///                   current `unexpectedBetweenLeftParenAndExpression`, if present.
+  public func withUnexpectedBetweenLeftParenAndExpression(
+    _ newChild: UnexpectedNodesSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return HasSymbolConditionSyntax(newData)
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(
+    _ newChild: ExprSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default)
+    let newData = data.replacingChild(raw, at: 5)
+    return HasSymbolConditionSyntax(newData)
+  }
+
+  public var unexpectedBetweenExpressionAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenExpressionAndRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenExpressionAndRightParen` replaced.
+  /// - param newChild: The new `unexpectedBetweenExpressionAndRightParen` to replace the node's
+  ///                   current `unexpectedBetweenExpressionAndRightParen`, if present.
+  public func withUnexpectedBetweenExpressionAndRightParen(
+    _ newChild: UnexpectedNodesSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return HasSymbolConditionSyntax(newData)
+  }
+
+  public var rightParen: TokenSyntax {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightParen` replaced.
+  /// - param newChild: The new `rightParen` to replace the node's
+  ///                   current `rightParen`, if present.
+  public func withRightParen(
+    _ newChild: TokenSyntax?) -> HasSymbolConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default)
+    let newData = data.replacingChild(raw, at: 7)
+    return HasSymbolConditionSyntax(newData)
+  }
+}
+
+extension HasSymbolConditionSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeHasSymbolKeyword": unexpectedBeforeHasSymbolKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "hasSymbolKeyword": Syntax(hasSymbolKeyword).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenHasSymbolKeywordAndLeftParen": unexpectedBetweenHasSymbolKeywordAndLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLeftParenAndExpression": unexpectedBetweenLeftParenAndExpression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenExpressionAndRightParen": unexpectedBetweenExpressionAndRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - ElseIfContinuationSyntax
 
 public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {

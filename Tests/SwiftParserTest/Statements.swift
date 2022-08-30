@@ -226,4 +226,18 @@ final class StatementTests: XCTestCase {
       ]
     )
   }
+  
+  func testIfHasSymbol() {
+    AssertParse(
+      """
+      if #_hasSymbol(foo) {}
+      """
+    )
+    
+    AssertParse(
+      """
+      if #_hasSymbol(foo as () -> ()) {}
+      """
+    )
+  }
 }

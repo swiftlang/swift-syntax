@@ -1746,6 +1746,17 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[7], as: RawTokenSyntax.self)
     break
+  case .hasSymbolCondition:
+    assert(layout.count == 8)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTokenSyntax.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawExprSyntax.self)
+    _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[7], as: RawTokenSyntax.self)
+    break
   case .conditionElementList:
     for element in layout {
       _verify(element, as: RawConditionElementSyntax.self)

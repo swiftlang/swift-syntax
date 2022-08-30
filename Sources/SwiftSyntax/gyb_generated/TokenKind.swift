@@ -123,6 +123,7 @@ public enum TokenKind: Hashable {
   case poundFileLiteralKeyword
   case poundImageLiteralKeyword
   case poundColorLiteralKeyword
+  case poundHasSymbolKeyword
   case integerLiteral(String)
   case floatingLiteral(String)
   case stringLiteral(String)
@@ -306,6 +307,8 @@ public enum TokenKind: Hashable {
       self = .poundImageLiteralKeyword
     case "#colorLiteral":
       self = .poundColorLiteralKeyword
+    case "#_hasSymbol":
+      self = .poundHasSymbolKeyword
     default:
       return nil
     }
@@ -424,6 +427,7 @@ public enum TokenKind: Hashable {
     case .poundFileLiteralKeyword: return "#fileLiteral"
     case .poundImageLiteralKeyword: return "#imageLiteral"
     case .poundColorLiteralKeyword: return "#colorLiteral"
+    case .poundHasSymbolKeyword: return "#_hasSymbol"
     case .integerLiteral(let text): return text
     case .floatingLiteral(let text): return text
     case .stringLiteral(let text): return text
@@ -559,6 +563,7 @@ public enum TokenKind: Hashable {
     case .poundFileLiteralKeyword: return true
     case .poundImageLiteralKeyword: return true
     case .poundColorLiteralKeyword: return true
+    case .poundHasSymbolKeyword: return true
     case .integerLiteral: return false
     case .floatingLiteral: return false
     case .stringLiteral: return false
@@ -694,6 +699,7 @@ public enum TokenKind: Hashable {
     case .poundFileLiteralKeyword: return false
     case .poundImageLiteralKeyword: return false
     case .poundColorLiteralKeyword: return false
+    case .poundHasSymbolKeyword: return false
     case .integerLiteral: return false
     case .floatingLiteral: return false
     case .stringLiteral: return false
@@ -824,6 +830,7 @@ public enum TokenKind: Hashable {
     case .poundFileLiteralKeyword: return "pound_fileLiteral"
     case .poundImageLiteralKeyword: return "pound_imageLiteral"
     case .poundColorLiteralKeyword: return "pound_colorLiteral"
+    case .poundHasSymbolKeyword: return "pound__hasSymbol"
     case .integerLiteral(_): return "integer_literal"
     case .floatingLiteral(_): return "floating_literal"
     case .stringLiteral(_): return "string_literal"
@@ -954,6 +961,7 @@ public enum TokenKind: Hashable {
     case .poundFileLiteralKeyword: return SourceLength(utf8Length: 12)
     case .poundImageLiteralKeyword: return SourceLength(utf8Length: 13)
     case .poundColorLiteralKeyword: return SourceLength(utf8Length: 13)
+    case .poundHasSymbolKeyword: return SourceLength(utf8Length: 11)
     case .integerLiteral(let text): return SourceLength(of: text)
     case .floatingLiteral(let text): return SourceLength(of: text)
     case .stringLiteral(let text): return SourceLength(of: text)
@@ -1086,6 +1094,7 @@ extension TokenKind: Equatable {
     case (.poundFileLiteralKeyword, .poundFileLiteralKeyword): return true
     case (.poundImageLiteralKeyword, .poundImageLiteralKeyword): return true
     case (.poundColorLiteralKeyword, .poundColorLiteralKeyword): return true
+    case (.poundHasSymbolKeyword, .poundHasSymbolKeyword): return true
     case (.integerLiteral(let lhsText), .integerLiteral(let rhsText)):
       return lhsText == rhsText
     case (.floatingLiteral(let lhsText), .floatingLiteral(let rhsText)):
@@ -1232,6 +1241,7 @@ public enum RawTokenKind: Equatable, Hashable {
   case poundFileLiteralKeyword
   case poundImageLiteralKeyword
   case poundColorLiteralKeyword
+  case poundHasSymbolKeyword
   case integerLiteral
   case floatingLiteral
   case stringLiteral
@@ -1360,6 +1370,7 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundFileLiteralKeyword: return "#fileLiteral"
     case .poundImageLiteralKeyword: return "#imageLiteral"
     case .poundColorLiteralKeyword: return "#colorLiteral"
+    case .poundHasSymbolKeyword: return "#_hasSymbol"
     case .stringInterpolationAnchor: return ")"
     case .yield: return "yield"
     default: return nil
@@ -1482,6 +1493,7 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundFileLiteralKeyword: return true
     case .poundImageLiteralKeyword: return true
     case .poundColorLiteralKeyword: return true
+    case .poundHasSymbolKeyword: return true
     case .integerLiteral: return false
     case .floatingLiteral: return false
     case .stringLiteral: return false
@@ -1617,6 +1629,7 @@ public enum RawTokenKind: Equatable, Hashable {
     case .poundFileLiteralKeyword: return false
     case .poundImageLiteralKeyword: return false
     case .poundColorLiteralKeyword: return false
+    case .poundHasSymbolKeyword: return false
     case .integerLiteral: return false
     case .floatingLiteral: return false
     case .stringLiteral: return false
@@ -1753,6 +1766,7 @@ public enum RawTokenKind: Equatable, Hashable {
       switch text {
       case "fileprivate": self = .fileprivateKeyword
       case "fallthrough": self = .fallthroughKeyword
+      case "#_hasSymbol": self = .poundHasSymbolKeyword
       default: return nil
       }
     case 12:
@@ -2114,6 +2128,9 @@ extension TokenKind {
     case .poundColorLiteralKeyword:
       assert(text.isEmpty || rawKind.defaultText == text)
       return .poundColorLiteralKeyword
+    case .poundHasSymbolKeyword:
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundHasSymbolKeyword
     case .integerLiteral:
       return .integerLiteral(String(syntaxText: text))
     case .floatingLiteral:
@@ -2264,6 +2281,7 @@ extension TokenKind {
     case .poundFileLiteralKeyword: return (.poundFileLiteralKeyword, nil)
     case .poundImageLiteralKeyword: return (.poundImageLiteralKeyword, nil)
     case .poundColorLiteralKeyword: return (.poundColorLiteralKeyword, nil)
+    case .poundHasSymbolKeyword: return (.poundHasSymbolKeyword, nil)
     case .integerLiteral(let str): return (.integerLiteral, str)
     case .floatingLiteral(let str): return (.floatingLiteral, str)
     case .stringLiteral(let str): return (.stringLiteral, str)

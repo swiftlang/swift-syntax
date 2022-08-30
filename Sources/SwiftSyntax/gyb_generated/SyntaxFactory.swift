@@ -5445,6 +5445,39 @@ public enum SyntaxFactory {
     ], arena: .default))
     return UnavailabilityConditionSyntax(data)
   }
+  @available(*, deprecated, message: "Use initializer on HasSymbolConditionSyntax")
+  public static func makeHasSymbolCondition(_ unexpectedBeforeHasSymbolKeyword: UnexpectedNodesSyntax? = nil, hasSymbolKeyword: TokenSyntax, _ unexpectedBetweenHasSymbolKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, leftParen: TokenSyntax, _ unexpectedBetweenLeftParenAndExpression: UnexpectedNodesSyntax? = nil, expression: ExprSyntax, _ unexpectedBetweenExpressionAndRightParen: UnexpectedNodesSyntax? = nil, rightParen: TokenSyntax) -> HasSymbolConditionSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeHasSymbolKeyword?.raw,
+      hasSymbolKeyword.raw,
+      unexpectedBetweenHasSymbolKeywordAndLeftParen?.raw,
+      leftParen.raw,
+      unexpectedBetweenLeftParenAndExpression?.raw,
+      expression.raw,
+      unexpectedBetweenExpressionAndRightParen?.raw,
+      rightParen.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.hasSymbolCondition,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return HasSymbolConditionSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on HasSymbolConditionSyntax")
+  public static func makeBlankHasSymbolCondition(presence: SourcePresence = .present) -> HasSymbolConditionSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .hasSymbolCondition,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.leftParen, arena: .default),
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingExpr, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.rightParen, arena: .default),
+    ], arena: .default))
+    return HasSymbolConditionSyntax(data)
+  }
   @available(*, deprecated, message: "Use initializer on ConditionElementListSyntax")
   public static func makeConditionElementList(
     _ elements: [ConditionElementSyntax]) -> ConditionElementListSyntax {
@@ -8104,6 +8137,15 @@ public enum SyntaxFactory {
     trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundColorLiteralKeyword, presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+  @available(*, deprecated, message: "Use TokenSyntax.poundHasSymbolKeywordKeyword instead")
+  public static func makePoundHasSymbolKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = .space
+  ) -> TokenSyntax {
+    return makeToken(.poundHasSymbolKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

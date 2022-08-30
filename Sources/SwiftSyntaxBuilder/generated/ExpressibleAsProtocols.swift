@@ -1593,6 +1593,14 @@ public extension ExpressibleAsUnavailabilityCondition {
     return createUnavailabilityCondition()
   }
 }
+public protocol ExpressibleAsHasSymbolCondition: ExpressibleAsSyntaxBuildable {
+  func createHasSymbolCondition() -> HasSymbolCondition
+}
+public extension ExpressibleAsHasSymbolCondition {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createHasSymbolCondition()
+  }
+}
 public protocol ExpressibleAsConditionElementList {
   func createConditionElementList() -> ConditionElementList
 }

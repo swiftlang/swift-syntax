@@ -1394,6 +1394,14 @@ extension Format {
     }
     return result
   }
+  func format(syntax: HasSymbolConditionSyntax) -> HasSymbolConditionSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
   func format(syntax: ConditionElementListSyntax) -> ConditionElementListSyntax {
     syntax
   }
@@ -2070,6 +2078,8 @@ extension Format {
     case .poundImageLiteralKeyword: 
       return syntax.withTrailingTrivia(.space)
     case .poundColorLiteralKeyword: 
+      return syntax.withTrailingTrivia(.space)
+    case .poundHasSymbolKeyword: 
       return syntax.withTrailingTrivia(.space)
     case .integerLiteral: 
       return syntax

@@ -12766,6 +12766,84 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
     return result
   }
 }
+public struct HasSymbolCondition: SyntaxBuildable, ExpressibleAsHasSymbolCondition {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforeHasSymbolKeyword: UnexpectedNodes?
+  var hasSymbolKeyword: Token
+  var unexpectedBetweenHasSymbolKeywordAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndRightParen: UnexpectedNodes?
+  var rightParen: Token
+  /// Creates a `HasSymbolCondition` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeHasSymbolKeyword: 
+  ///   - hasSymbolKeyword: 
+  ///   - unexpectedBetweenHasSymbolKeywordAndLeftParen: 
+  ///   - leftParen: 
+  ///   - unexpectedBetweenLeftParenAndExpression: 
+  ///   - expression: 
+  ///   - unexpectedBetweenExpressionAndRightParen: 
+  ///   - rightParen: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeHasSymbolKeyword: ExpressibleAsUnexpectedNodes? = nil, hasSymbolKeyword: Token, unexpectedBetweenHasSymbolKeywordAndLeftParen: ExpressibleAsUnexpectedNodes? = nil, leftParen: Token = Token.`leftParen`, unexpectedBetweenLeftParenAndExpression: ExpressibleAsUnexpectedNodes? = nil, expression: ExpressibleAsExprBuildable, unexpectedBetweenExpressionAndRightParen: ExpressibleAsUnexpectedNodes? = nil, rightParen: Token = Token.`rightParen`) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforeHasSymbolKeyword = unexpectedBeforeHasSymbolKeyword?.createUnexpectedNodes()
+    self.hasSymbolKeyword = hasSymbolKeyword
+    self.unexpectedBetweenHasSymbolKeywordAndLeftParen = unexpectedBetweenHasSymbolKeywordAndLeftParen?.createUnexpectedNodes()
+    self.leftParen = leftParen
+    assert(leftParen.text == #"("#)
+    self.unexpectedBetweenLeftParenAndExpression = unexpectedBetweenLeftParenAndExpression?.createUnexpectedNodes()
+    self.expression = expression.createExprBuildable()
+    self.unexpectedBetweenExpressionAndRightParen = unexpectedBetweenExpressionAndRightParen?.createUnexpectedNodes()
+    self.rightParen = rightParen
+    assert(rightParen.text == #")"#)
+  }
+  /// Builds a `HasSymbolConditionSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `HasSymbolConditionSyntax`.
+  func buildHasSymbolCondition(format: Format) -> HasSymbolConditionSyntax {
+    var result = HasSymbolConditionSyntax(unexpectedBeforeHasSymbolKeyword?.buildUnexpectedNodes(format: format), hasSymbolKeyword: hasSymbolKeyword.buildToken(format: format), unexpectedBetweenHasSymbolKeywordAndLeftParen?.buildUnexpectedNodes(format: format), leftParen: leftParen.buildToken(format: format), unexpectedBetweenLeftParenAndExpression?.buildUnexpectedNodes(format: format), expression: expression.buildExpr(format: format), unexpectedBetweenExpressionAndRightParen?.buildUnexpectedNodes(format: format), rightParen: rightParen.buildToken(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildHasSymbolCondition(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsHasSymbolCondition`.
+  public func createHasSymbolCondition() -> HasSymbolCondition {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `HasSymbolCondition` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
 public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// The leading trivia attached to this syntax node once built.
   var leadingTrivia: Trivia

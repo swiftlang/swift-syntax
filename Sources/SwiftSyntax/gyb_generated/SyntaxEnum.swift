@@ -218,6 +218,7 @@ public enum SyntaxEnum {
   case matchingPatternCondition(MatchingPatternConditionSyntax)
   case optionalBindingCondition(OptionalBindingConditionSyntax)
   case unavailabilityCondition(UnavailabilityConditionSyntax)
+  case hasSymbolCondition(HasSymbolConditionSyntax)
   case conditionElementList(ConditionElementListSyntax)
   case declarationStmt(DeclarationStmtSyntax)
   case throwStmt(ThrowStmtSyntax)
@@ -692,6 +693,8 @@ public enum SyntaxEnum {
       return "optional binding"
     case .unavailabilityCondition:
       return "'#unavailable' condition"
+    case .hasSymbolCondition:
+      return "'#_hasSymbol' condition"
     case .conditionElementList:
       return nil
     case .declarationStmt:
@@ -1234,6 +1237,8 @@ public extension Syntax {
       return .optionalBindingCondition(OptionalBindingConditionSyntax(self)!)
     case .unavailabilityCondition:
       return .unavailabilityCondition(UnavailabilityConditionSyntax(self)!)
+    case .hasSymbolCondition:
+      return .hasSymbolCondition(HasSymbolConditionSyntax(self)!)
     case .conditionElementList:
       return .conditionElementList(ConditionElementListSyntax(self)!)
     case .declarationStmt:

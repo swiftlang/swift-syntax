@@ -12166,6 +12166,79 @@ public struct RawUnavailabilityConditionSyntax: RawSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
+public struct RawHasSymbolConditionSyntax: RawSyntaxNodeProtocol {
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .hasSymbolCondition
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeHasSymbolKeyword: RawUnexpectedNodesSyntax? = nil,
+    hasSymbolKeyword: RawTokenSyntax,
+    _ unexpectedBetweenHasSymbolKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil,
+    leftParen: RawTokenSyntax,
+    _ unexpectedBetweenLeftParenAndExpression: RawUnexpectedNodesSyntax? = nil,
+    expression: RawExprSyntax,
+    _ unexpectedBetweenExpressionAndRightParen: RawUnexpectedNodesSyntax? = nil,
+    rightParen: RawTokenSyntax,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .hasSymbolCondition, uninitializedCount: 8, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeHasSymbolKeyword?.raw
+      layout[1] = hasSymbolKeyword.raw
+      layout[2] = unexpectedBetweenHasSymbolKeywordAndLeftParen?.raw
+      layout[3] = leftParen.raw
+      layout[4] = unexpectedBetweenLeftParenAndExpression?.raw
+      layout[5] = expression.raw
+      layout[6] = unexpectedBetweenExpressionAndRightParen?.raw
+      layout[7] = rightParen.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforeHasSymbolKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var hasSymbolKeyword: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenHasSymbolKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var leftParen: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenLeftParenAndExpression: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var expression: RawExprSyntax {
+    layoutView.children[5].map(RawExprSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenExpressionAndRightParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var rightParen: RawTokenSyntax {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  }
+}
+
+@_spi(RawSyntax)
 public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
   var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!

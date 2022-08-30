@@ -180,9 +180,9 @@ struct RawSyntaxTokenView {
   func formKind() -> TokenKind {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
+      return TokenKind.fromRaw(kind: dat.tokenKind, text: String(syntaxText: dat.tokenText))
     case .materializedToken(let dat):
-      return TokenKind.fromRaw(kind: dat.tokenKind, text: dat.tokenText)
+      return TokenKind.fromRaw(kind: dat.tokenKind, text: String(syntaxText: dat.tokenText))
     case .layout(_):
       preconditionFailure("Must be invoked on a token")
     }

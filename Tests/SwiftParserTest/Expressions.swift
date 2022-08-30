@@ -371,7 +371,6 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testSingleQuoteStringLiteral() {
-    // FIXME: This test case should produce a diagnostics
     AssertParse(
       #"""
       'red'

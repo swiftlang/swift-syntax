@@ -103,7 +103,7 @@ extension TokenConsumer {
   /// Checks whether the parser is currently positioned at any token in `Subset`.
   /// If this is the case, return the `Subset` case that the parser is positioned in
   /// as well as a handle to consume that token.
-  func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
+  func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (kind: Subset, handle: TokenConsumptionHandle)? {
     if let matchedKind = Subset(self.currentToken) {
       return (matchedKind, TokenConsumptionHandle(
         tokenKind: matchedKind.rawTokenKind,

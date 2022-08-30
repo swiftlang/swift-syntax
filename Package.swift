@@ -107,7 +107,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftParser",
-      dependencies: ["SwiftDiagnostics", "SwiftSyntax"],
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftSyntaxBuilder"],
       exclude: [
         "CMakeLists.txt",
         "README.md",

@@ -691,11 +691,33 @@ extension Parser {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforeDynamicReplacementToken, dynamicReplacementToken) = self.expectContextualKeyword("_dynamicReplacement")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeLabel, label) = self.expect(.forKeyword)
+
+    // Expect 'for' and remap it to an identifier
+    enum ForIdentifier: RawTokenKindSubset {
+      case forKeyword
+      var rawTokenKind: RawTokenKind { return .forKeyword }
+      var remappedKind: RawTokenKind? { return .identifier }
+    }
+    let unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
+    let label: RawTokenSyntax
+    if let (_, handle) = self.canRecoverTo(anyIn: ForIdentifier.self) {
+      (unexpectedBeforeLabel, label) = self.eat(handle)
+    } else {
+      unexpectedBeforeLabel = nil
+      label = RawTokenSyntax(missing: .identifier, text: "for", arena: self.arena)
+    }
+
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let (base, args) = self.parseDeclNameRef([
-      .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
-    ])
+    let base: RawTokenSyntax
+    let args: RawDeclNameArgumentsSyntax?
+    if label.isMissing && colon.isMissing && self.currentToken.isAtStartOfLine {
+      base = RawTokenSyntax(missing: .identifier, arena: self.arena)
+      args = nil
+    } else {
+      (base, args) = self.parseDeclNameRef([
+        .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
+      ])
+    }
     let method = RawDeclNameSyntax(declBaseName: RawSyntax(base), declNameArguments: args, arena: self.arena)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(

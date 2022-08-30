@@ -84,7 +84,7 @@ extension Parser.Lookahead {
   mutating func canRecoverTo<Subset: RawTokenKindSubset>(
     anyIn subset: Subset.Type,
     recoveryPrecedence: TokenPrecedence? = nil
-  ) -> (Subset, RecoveryConsumptionHandle)? {
+  ) -> (kind: Subset, handle: RecoveryConsumptionHandle)? {
     let initialTokensConsumed = self.tokensConsumed
 
     assert(!subset.allCases.isEmpty, "Subset must have at least one case")

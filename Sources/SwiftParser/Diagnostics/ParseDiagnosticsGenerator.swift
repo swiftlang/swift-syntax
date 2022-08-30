@@ -33,12 +33,17 @@ fileprivate extension FixIt.Change {
     )
   }
 
-  static func makePresent(node: TokenSyntax, leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> FixIt.Change {
-    assert(node.presence == .missing)
+  static func makePresent<T: SyntaxProtocol>(node: T) -> FixIt.Change {
     return .replace(
       oldNode: Syntax(node),
-      newNode: Syntax(TokenSyntax(node.tokenKind, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia, presence: .present))
+      newNode: PresentMaker().visit(Syntax(node))
     )
+  }
+}
+
+fileprivate extension FixIt {
+  init(message: StaticParserFixIt, changes: [Change]) {
+    self.init(message: message as FixItMessage, changes: changes)
   }
 }
 
@@ -109,12 +114,32 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.presence == .missing {
-      addDiagnostic(node, MissingTokenError(missingToken: node))
+      addDiagnostic(node, MissingTokenError(missingToken: node), fixIts: [
+        FixIt(message: InsertTokenFixIt(missingToken: node), changes: [
+          .makePresent(node: node)
+        ])
+      ])
     }
     return .skipChildren
   }
 
   // MARK: - Specialized diagnostic generation
+
+  public override func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let argument = node.argument, argument.isMissingAllTokens {
+      addDiagnostic(argument, MissingAttributeArgument(attributeName: node.attributeName), fixIts: [
+        FixIt(message: .insertAttributeArguments, changes: [
+          .makePresent(node: argument)
+        ])
+      ])
+      markNodesAsHandled(argument.id)
+      return .visitChildren
+    }
+    return .visitChildren
+  }
 
   public override func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
@@ -153,9 +178,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
        let unexpectedBeforeReturnType = output.unexpectedBetweenArrowAndReturnType,
        let throwsInReturnPosition = unexpectedBeforeReturnType.tokens(withKind: .throwsKeyword).first {
       addDiagnostic(throwsInReturnPosition, .throwsInReturnPosition, fixIts: [
-        FixIt(message: StaticParserFixIt.moveThrowBeforeArrow, changes: [
+        FixIt(message: .moveThrowBeforeArrow, changes: [
           .makeMissing(node: throwsInReturnPosition),
-          .makePresent(node: missingThrowsKeyword, trailingTrivia: .space),
+          .makePresent(node: missingThrowsKeyword),
         ])
       ])
       markNodesAsHandled(unexpectedBeforeReturnType.id, missingThrowsKeyword.id, throwsInReturnPosition.id)
@@ -164,7 +189,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  override public func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+  public override func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }

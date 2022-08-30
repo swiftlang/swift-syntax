@@ -266,7 +266,7 @@ extension Parser {
   /// used to consume the unexpected tokens and the token we recovered to.
   func canRecoverTo<Subset: RawTokenKindSubset>(
     anyIn subset: Subset.Type
-  ) -> (Subset, RecoveryConsumptionHandle)? {
+  ) -> (kind: Subset, handle: RecoveryConsumptionHandle)? {
     if let (kind, handle) = self.at(anyIn: subset) {
       return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
     }

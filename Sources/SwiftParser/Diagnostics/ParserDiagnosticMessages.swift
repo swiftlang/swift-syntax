@@ -74,7 +74,7 @@ public extension ParserFixIt {
   }
 }
 
-// MARK: - Static diagnostics
+// MARK: - Errors (please sort alphabetically)
 
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticParserError: String, DiagnosticMessage {
@@ -92,16 +92,6 @@ public enum StaticParserError: String, DiagnosticMessage {
   public var severity: DiagnosticSeverity { .error }
 }
 
-public enum StaticParserFixIt: String, FixItMessage {
-  case moveThrowBeforeArrow = "Move 'throws' before '->'"
-
-  public var message: String { self.rawValue }
-
-  public var fixItID: MessageID {
-    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
-  }
-}
-
 // MARK: - Diagnostics (please sort alphabetically)
 
 public struct ExtaneousCodeAtTopLevel: ParserError {
@@ -113,6 +103,15 @@ public struct ExtaneousCodeAtTopLevel: ParserError {
     } else {
       return "Extraneous code at top level"
     }
+  }
+}
+
+public struct MissingAttributeArgument: ParserError {
+  /// The name of the attribute that's missing the argument, without `@`.
+  public let attributeName: TokenSyntax
+
+  public var message: String {
+    return "Expected argument for '@\(attributeName)' attribute"
   }
 }
 
@@ -156,4 +155,23 @@ public struct UnexpectedNodesError: ParserError {
     }
     return message
   }
+}
+
+// MARK: - Fix-Its (please sort alphabetically)
+
+public enum StaticParserFixIt: String, FixItMessage {
+  case insertAttributeArguments = "Insert attribute argument"
+  case moveThrowBeforeArrow = "Move 'throws' before '->'"
+
+  public var message: String { self.rawValue }
+
+  public var fixItID: MessageID {
+    MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(self)")
+  }
+}
+
+public struct InsertTokenFixIt: ParserFixIt {
+  let missingToken: TokenSyntax
+
+  public var message: String { "Insert '\(missingToken.text)'" }
 }

@@ -67,13 +67,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
-    diagnostics.append(Diagnostic(node: Syntax(node), message: message, highlights: highlights, fixIts: fixIts))
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, position: AbsolutePosition? = nil, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
+    diagnostics.append(Diagnostic(node: Syntax(node), position: position, message: message, highlights: highlights, fixIts: fixIts))
   }
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
-    addDiagnostic(node, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts)
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, position: AbsolutePosition? = nil, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
+    addDiagnostic(node, position: position, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts)
   }
 
   /// If a diagnostic is generated that covers multiple syntax nodes, mark them as handles so they don't produce the generic diagnostics anymore.

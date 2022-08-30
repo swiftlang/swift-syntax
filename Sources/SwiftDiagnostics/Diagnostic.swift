@@ -19,6 +19,10 @@ public struct Diagnostic: CustomDebugStringConvertible {
   /// The node at whose start location the message should be displayed.
   public let node: Syntax
 
+  /// The position at which the location should be anchored.
+  /// By default, this is the start location of `node`.
+  public let position: AbsolutePosition
+
   /// Nodes that should be highlighted in the source code.
   public let highlights: [Syntax]
 
@@ -26,9 +30,10 @@ public struct Diagnostic: CustomDebugStringConvertible {
   /// Each Fix-It offers a different way to resolve the diagnostic. Usually, there's only one.
   public let fixIts: [FixIt]
 
-  public init(node: Syntax, message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
-    self.diagMessage = message
+  public init(node: Syntax, position: AbsolutePosition? = nil, message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
     self.node = node
+    self.position = position ?? node.positionAfterSkippingLeadingTrivia
+    self.diagMessage = message
     self.highlights = highlights
     self.fixIts = fixIts
   }
@@ -46,7 +51,7 @@ public struct Diagnostic: CustomDebugStringConvertible {
 
   /// The location at which the diagnostic should be displayed.
   public func location(converter: SourceLocationConverter) -> SourceLocation {
-    return node.startLocation(converter: converter)
+    return converter.location(for: position)
   }
 
   public var debugDescription: String {

@@ -107,29 +107,56 @@ final class VariableTests: XCTestCase {
   }
 
   func testAttributedVariables() {
-    let attributedVar = VariableDecl(
-      attributes: CustomAttribute(attributeName: "Test", argumentList: nil),
-      .var,
-      name: "x",
-      type: "Int"
-    )
+    let testCases: [UInt: (VariableDecl, String)] = [
+      #line: (
+        VariableDecl(
+          attributes: CustomAttribute("Test"),
+          .var,
+          name: "x",
+          type: "Int"
+        ),
+        """
+        @Test var x: Int
+        """
+      ),
+      #line: (
+        VariableDecl(
+          attributes: CustomAttribute("Test"),
+          name: "y",
+          type: "String"
+        ) {
+          StringLiteralExpr("Hello world!")
+        },
+        """
+        @Test var y: String {
+            "Hello world!"
+        }
+        """
+      ),
+      #line: (
+        VariableDecl(
+          attributes: CustomAttribute("WithArgs") {
+            TupleExprElement(expression: "value1")
+            TupleExprElement(label: "label", expression: "value2")
+          },
+          name: "z",
+          type: "Float"
+        ) {
+          FloatLiteralExpr(0.0)
+        },
+        """
+        @WithArgs(value1, label: value2) var z: Float {
+            0.0
+        }
+        """
+      ),
+    ]
 
-    XCTAssertEqual(attributedVar.buildSyntax(format: Format()).description, """
-      @Test var x: Int
-      """)
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      let syntax = builder.buildSyntax(format: Format())
 
-    let attributedProperty = VariableDecl(
-      attributes: CustomAttribute(attributeName: "Test", argumentList: nil),
-      name: "y",
-      type: "String"
-    ) {
-      StringLiteralExpr("Hello world!")
+      XCTAssertEqual(syntax.description, expected, line: line)
     }
-
-    XCTAssertEqual(attributedProperty.buildSyntax(format: Format()).description, """
-      @Test var y: String {
-          "Hello world!"
-      }
-      """)
   }
 }

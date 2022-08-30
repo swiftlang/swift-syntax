@@ -214,7 +214,6 @@ final class ExpressionTests: XCTestCase {
       "\",#^DIAG^#
       """#,
       diagnostics: [
-        // FIXME: Should be Expected '"' in string literal
         DiagnosticSpec(message: #"Expected '"' in string literal"#)
       ]
     )
@@ -279,7 +278,6 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testSingleQuoteStringLiteral() {
-    // FIXME: This test case should produce a diagnostics
     AssertParse(
       #"""
       'red'

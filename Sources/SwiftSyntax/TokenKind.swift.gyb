@@ -231,16 +231,17 @@ for token in SYNTAX_TOKENS:
 
 extension TokenKind {
   /// If the `rawKind` has a `defaultText`, `text` can be empty.
-  static func fromRaw(kind rawKind: RawTokenKind, text: SyntaxText) -> TokenKind {
+  @_spi(RawSyntax)
+  public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind {
     switch rawKind {
     case .eof: return .eof
 % for token in SYNTAX_TOKENS:
     case .${token.swift_kind()}:
 %   if token.text:
-      assert(text.isEmpty || rawKind.defaultText == text)
+      assert(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .${token.swift_kind()}
 %   else:
-      return .${token.swift_kind()}(String(syntaxText: text))
+      return .${token.swift_kind()}(text)
 %   end
 % end
     }
@@ -248,7 +249,8 @@ extension TokenKind {
 
   /// Returns the `RawTokenKind` of this `TokenKind` and, if this `TokenKind`
   /// has associated text, the associated text, otherwise `nil`.
-  func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
+  @_spi(RawSyntax)
+  public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
     switch self {
     case .eof: return (.eof, nil)
 % for token in SYNTAX_TOKENS:

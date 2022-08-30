@@ -14,7 +14,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "Expected '=' in pattern matching"),
-        DiagnosticSpec(message: "Unexpected text '* ! = x ' found in 'if' statement"),
+        DiagnosticSpec(message: "Unexpected text '* ! = x' found in 'if' statement"),
       ]
     )
   }
@@ -165,34 +165,43 @@ final class StatementTests: XCTestCase {
   }
 
   func testBogusSwitchStatement() {
-    // FIXME: This test case should produce a diagnostics
     AssertParse(
       """
-      switch x {
+      switch x {#^END_SWITCH^#
         print()
       #if true
         print()
       #endif
-        case .A, .B:
+        #^EXTRANEOUS^#case .A, .B:
           break
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "END_SWITCH", message: "Expected '}' to end 'switch' statement"),
+        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous code at top level")
+
+      ]
     )
 
     AssertParse(
       """
-      switch x {
+      switch x {#^END_SWITCH^#
       print()
       #if ENABLE_C
-      case .NOT_EXIST:
+      #^UNEXPECTED^#case .NOT_EXIST:
         break
       case .C:
         break
       #endif
-      case .A, .B:
+      #^EXTRANEOUS^#case .A, .B:
         break
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "END_SWITCH", message: "Expected '}' to end 'switch' statement"),
+        DiagnosticSpec(locationMarker: "UNEXPECTED", message: "Unexpected text found in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous code at top level")
+      ]
     )
   }
 

@@ -507,11 +507,9 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // FIXME: The diagnostic should not contain a newline.
         DiagnosticSpec(
           message: """
-            Unexpected text '
-              / ###line 25 "line-directive.swift"' found in struct
+            Unexpected text '/ ###line 25 "line-directive.swift"' found in struct
             """
         )
       ]
@@ -519,13 +517,15 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testBogusProtocolRequirements() {
-    // FIXME: This test case should produce a diagnostics
     AssertParse(
       """
       protocol P {
-        var prop : Int { get bogus rethrows set }
+        var prop : Int { get #^DIAG^#bogus rethrows set }
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text 'bogus rethrows set' found in variable")
+      ]
     )
   }
 

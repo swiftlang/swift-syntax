@@ -202,7 +202,7 @@ final class ExpressionTests: XCTestCase {
       " >> \( abc #^DIAG^#} ) << "
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '} ' found in string literal")
+        DiagnosticSpec(message: "Unexpected text '}' found in string literal")
       ]
     )
 

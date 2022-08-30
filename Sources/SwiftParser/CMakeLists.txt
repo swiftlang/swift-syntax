@@ -37,10 +37,6 @@ target_link_libraries(SwiftParser PUBLIC
 
 set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftParser)
 
-# Rename the installed library to avoid clashing with the C++
-# "libswiftParser" on case-insensitive file systems.
-set_target_properties(SwiftParser PROPERTIES OUTPUT_NAME "SwiftSwiftParser")
-
 # NOTE: workaround for CMake not setting up include flags yet
 set_target_properties(SwiftParser PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})

@@ -77,10 +77,10 @@ extension Parser {
           condition = nil
         } else if self.at(.poundElseifKeyword)  {
           poundIf = self.consumeAnyToken()
-          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+          condition = self.parseSequenceExpression(.basic, forDirective: true).map(RawExprSyntax.init)
         } else {
           assert(poundIf.tokenKind == .poundIfKeyword)
-          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+          condition = self.parseSequenceExpression(.basic, forDirective: true).map(RawExprSyntax.init)
         }
 
         var elements = [Element]()

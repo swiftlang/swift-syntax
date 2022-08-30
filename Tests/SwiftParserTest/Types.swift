@@ -6,12 +6,12 @@ final class TypeTests: XCTestCase {
   func testClosureParsing() throws {
     AssertParse(
       "(a, b) -> c",
-      { $0.parseType() }
+      { $0.parseType()! }
     )
 
     AssertParse(
       "@MainActor (a, b) async throws -> c",
-      { $0.parseType() }
+      { $0.parseType()! }
     )
   }
 
@@ -23,7 +23,7 @@ final class TypeTests: XCTestCase {
                   V, Baz<Quux>
               >>
       """,
-      { $0.parseType() }
+      { $0.parseType()! }
     )
   }
 }

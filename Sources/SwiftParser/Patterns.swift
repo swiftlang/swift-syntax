@@ -98,7 +98,10 @@ extension Parser {
     let colon = self.eat(.colon)
     let result = self.parseType()
     let type = RawTypeAnnotationSyntax(
-      colon: colon, type: result, arena: self.arena)
+      colon: colon,
+      type: result.orMissing(arena: self.arena),
+      arena: self.arena
+    )
     return (pattern, type)
   }
 
@@ -154,13 +157,19 @@ extension Parser {
       let isKeyword = self.eat(.isKeyword)
       let type = self.parseType()
       return RawPatternSyntax(RawIsTypePatternSyntax(
-        isKeyword: isKeyword, type: type, arena: self.arena))
+        isKeyword: isKeyword,
+        type: type.orMissing(arena: self.arena),
+        arena: self.arena
+      ))
     } else {
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will
       // disambiguate.
-      let expr = RawExprSyntax(self.parseSequenceExpression(.basic, inVarOrLet: true))
-      return RawPatternSyntax(RawExpressionPatternSyntax(expression: expr, arena: self.arena))
+      let expr = self.parseSequenceExpression(.basic, inVarOrLet: true).map(RawExprSyntax.init)
+      return RawPatternSyntax(RawExpressionPatternSyntax(
+        expression: expr.orMissing(arena: self.arena),
+        arena: self.arena
+      ))
     }
   }
 }

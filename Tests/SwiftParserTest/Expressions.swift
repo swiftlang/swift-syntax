@@ -130,7 +130,10 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-      "[,#^DIAG^#",
+      """
+      [
+        ,#^DIAG^#
+      """,
       diagnostics: [
         DiagnosticSpec(message: "Expected ']' to end array")
       ]
@@ -138,11 +141,12 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       """
-      ([1:#^DIAG^#)
+      (
+        [
+          1:#^DIAG^#
+      )
       """,
       diagnostics: [
-        // FIXME: Why is this diagnostic produced?
-        DiagnosticSpec(message: "Expected ':' in dictionary"),
         DiagnosticSpec(message: "Expected ']' to end dictionary"),
       ]
     )

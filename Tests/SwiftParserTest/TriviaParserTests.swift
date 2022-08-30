@@ -130,7 +130,7 @@ final class TriviaParserTests: XCTestCase {
         func foo() {
         }
         """) { parser in
-      let fn = parser.parseDeclaration().as(RawFunctionDeclSyntax.self)!
+      let fn = parser.parseDeclaration()!.as(RawFunctionDeclSyntax.self)!
 
       XCTAssertEqual(fn.funcKeyword.leadingTriviaPieces, [
         .docLineComment("/// Foo."),

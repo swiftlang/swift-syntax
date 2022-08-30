@@ -51,16 +51,19 @@ extension Parser {
   ///     control-transfer-statement → return-statement
   ///     control-transfer-statement → throw-statement
   @_spi(RawSyntax)
-  public mutating func parseStatement() -> RawStmtSyntax {
+  public mutating func parseStatement() -> RawStmtSyntax? {
     // If this is a label on a loop/switch statement, consume it and pass it into
     // parsing logic below.
-    func label<S: RawStmtSyntaxNodeProtocol>(_ stmt: S, with label: Parser.StatementLabel?) -> RawStmtSyntax {
+    func label<S: RawStmtSyntaxNodeProtocol>(_ stmt: S?, with label: Parser.StatementLabel?) -> RawStmtSyntax? {
       guard let label = label else {
-        return RawStmtSyntax(stmt)
+        return stmt.map(RawStmtSyntax.init)
       }
       return RawStmtSyntax(RawLabeledStmtSyntax(
-        labelName: label.label, labelColon: label.colon, statement: RawStmtSyntax(stmt),
-        arena: self.arena))
+        labelName: label.label,
+        labelColon: label.colon,
+        statement: stmt.map(RawStmtSyntax.init).orMissing(arena: self.arena),
+        arena: self.arena
+      ))
     }
 
     let optLabel = self.parseOptionalStatementLabel()
@@ -103,8 +106,7 @@ extension Parser {
       // FIXME: This drops `optLabel`.
       return RawStmtSyntax(self.parseYieldStatement())
     default:
-      let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
-      return label(missingStmt, with: optLabel)
+      return label(nil as RawMissingStmtSyntax?, with: optLabel)
     }
   }
 }
@@ -188,10 +190,13 @@ extension Parser {
     var elements = [RawConditionElementSyntax]()
     var keepGoing: RawTokenSyntax? = nil
     repeat {
-      let condition = self.parseConditionElement()
+      guard let condition = self.parseConditionElement() else {
+        break
+      }
       keepGoing = self.consume(if: .comma)
       elements.append(RawConditionElementSyntax(
-        condition: RawSyntax(condition), trailingComma: keepGoing,
+        condition: RawSyntax(condition),
+        trailingComma: keepGoing,
         arena: self.arena))
     } while keepGoing != nil
 
@@ -208,7 +213,7 @@ extension Parser {
   ///     case-condition → 'case' pattern initializer
   ///     optional-binding-condition → 'let' pattern initializer? | 'var' pattern initializer?
   @_spi(RawSyntax)
-  public mutating func parseConditionElement() -> RawSyntax {
+  public mutating func parseConditionElement() -> RawSyntax? {
     // Parse a leading #available/#unavailable condition if present.
     if self.at(.poundAvailableKeyword) || self.at(.poundUnavailableKeyword) {
       return self.parsePoundAvailableConditionElement()
@@ -229,7 +234,7 @@ extension Parser {
       // another clause, so parse it as an expression.  This also avoids
       // lookahead + backtracking on simple if conditions that are obviously
       // boolean conditions.
-      return RawSyntax(self.parseExpression(.basic))
+      return self.parseExpression(.basic).map(RawSyntax.init)
     }
 
     // We're parsing a conditional binding.
@@ -255,8 +260,10 @@ extension Parser {
       let colon = self.eat(.colon)
       let type = self.parseType()
       annotation = RawTypeAnnotationSyntax(
-        colon: colon, type: type,
-        arena: self.arena)
+        colon: colon,
+        type: type.orMissing(arena: self.arena),
+        arena: self.arena
+      )
     } else {
       annotation = nil
     }
@@ -269,8 +276,10 @@ extension Parser {
       let eq = self.eat(.equal)
       let value = self.parseExpression(.basic)
       initializer = RawInitializerClauseSyntax(
-        equal: eq, value: value,
-        arena: self.arena)
+        equal: eq,
+        value: value.orMissing(arena: self.arena),
+        arena: self.arena
+      )
     } else {
       initializer = nil
     }
@@ -351,7 +360,8 @@ extension Parser {
     let throwKeyword = self.eat(.throwKeyword)
     let expr = self.parseExpression()
     return RawThrowStmtSyntax(
-      throwKeyword: throwKeyword, expression: expr,
+      throwKeyword: throwKeyword,
+      expression: expr.orMissing(arena: self.arena),
       arena: self.arena)
   }
 }
@@ -477,7 +487,7 @@ extension Parser {
       body: body,
       unexpectedBeforeWhileKeyword,
       whileKeyword: whileKeyword,
-      condition: condition,
+      condition: condition.orMissing(arena: self.arena),
       arena: self.arena)
   }
 }
@@ -515,8 +525,10 @@ extension Parser {
         let colon = self.eat(.colon)
         let resultType = self.parseType()
         type = RawTypeAnnotationSyntax(
-          colon: colon, type: resultType,
-          arena: self.arena)
+          colon: colon,
+          type: resultType.orMissing(arena: self.arena),
+          arena: self.arena
+        )
       } else {
         type = nil
       }
@@ -534,7 +546,8 @@ extension Parser {
       let whereKeyword = self.eat(.whereKeyword)
       let guardExpr = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
-        whereKeyword: whereKeyword, guardResult: guardExpr,
+        whereKeyword: whereKeyword,
+        guardResult: guardExpr.orMissing(arena: self.arena),
         arena: self.arena)
     } else {
       whereClause = nil
@@ -551,7 +564,7 @@ extension Parser {
       typeAnnotation: type,
       unexpectedBeforeInKeyword,
       inKeyword: inKeyword,
-      sequenceExpr: expr,
+      sequenceExpr: expr.orMissing(arena: self.arena),
       whereClause: whereClause,
       body: body,
       arena: self.arena
@@ -581,7 +594,7 @@ extension Parser {
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
     return RawSwitchStmtSyntax(
       switchKeyword: switchKeyword,
-      expression: subject,
+      expression: subject.orMissing(arena: self.arena),
       unexpectedBeforeLBrace,
       leftBrace: lbrace,
       cases: cases,
@@ -769,7 +782,8 @@ extension Parser {
       let whereKeyword = self.eat(.whereKeyword)
       let guardExpr = self.parseExpression(flavor)
       whereClause = RawWhereClauseSyntax(
-        whereKeyword: whereKeyword, guardResult: guardExpr,
+        whereKeyword: whereKeyword,
+        guardResult: guardExpr.orMissing(arena: self.arena),
         arena: self.arena)
     } else {
       whereClause = nil
@@ -826,7 +840,7 @@ extension Parser {
     assert(self.currentToken.tokenText == "yield")
     let yield = self.consume(remapping: .yield)
 
-    let yields: RawSyntax
+    let yields: RawSyntax?
     if self.at(.leftParen) {
       let lparen = self.eat(.leftParen)
       let exprList: RawExprListSyntax
@@ -834,7 +848,10 @@ extension Parser {
         var keepGoing = true
         var elementList = [RawExprSyntax]()
         while !self.at(.eof) && !self.at(.rightParen) && keepGoing {
-          elementList.append(self.parseExpression())
+          guard let element = self.parseExpression() else {
+            break
+          }
+          elementList.append(element)
           // FIXME: Need explicit syntax for yield lists or we'll drop this comma!
           keepGoing = self.consume(if: .comma) != nil
         }
@@ -848,11 +865,12 @@ extension Parser {
         rightParen: rparen,
         arena: self.arena))
     } else {
-      yields = RawSyntax(self.parseExpression())
+      yields = self.parseExpression().map(RawSyntax.init)
     }
 
     return RawYieldStmtSyntax(
-      yieldKeyword: yield, yields: yields,
+      yieldKeyword: yield,
+      yields: yields.orMissing(arena: self.arena),
       arena: self.arena)
   }
 }
@@ -970,7 +988,7 @@ extension Parser {
       poundAssert: poundAssert,
       unexpectedBeforeLParen,
       leftParen: lparen,
-      condition: condition,
+      condition: condition.orMissing(arena: self.arena),
       comma: comma,
       message: message,
       unexpectedBeforeRParen,

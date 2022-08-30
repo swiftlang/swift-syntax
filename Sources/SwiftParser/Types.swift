@@ -32,9 +32,11 @@ extension Parser {
   ///     type → self-type
   ///     type → '(' type ')'
   @_spi(RawSyntax)
-  public mutating func parseType() -> RawTypeSyntax {
+  public mutating func parseType() -> RawTypeSyntax? {
     let (specifier, attrList) = self.parseTypeAttributeList()
-    var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
+    guard var base = self.parseSimpleOrCompositionType().map(RawTypeSyntax.init) else {
+      return nil
+    }
     if self.lookahead().isAtFunctionTypeArrow() {
       let firstEffect = self.parseEffectsSpecifier()
       let secondEffect = self.parseEffectsSpecifier()
@@ -65,7 +67,7 @@ extension Parser {
         asyncKeyword: firstEffect,
         throwsOrRethrowsKeyword: secondEffect,
         arrow: arrow,
-        returnType: returnTy,
+        returnType: returnTy.orMissing(arena: self.arena),
         arena: self.arena))
     }
 
@@ -90,7 +92,7 @@ extension Parser {
   ///     protocol-composition-type → type-identifier '&' protocol-composition-continuation
   ///     protocol-composition-continuation → type-identifier | protocol-composition-type
   @_spi(RawSyntax)
-  public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
+  public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax? {
     let someOrAny: RawTokenSyntax?
     if self.currentToken.isContextualKeyword("some") || self.currentToken.isContextualKeyword("any") {
       someOrAny = self.consumeAnyToken()
@@ -102,7 +104,10 @@ extension Parser {
     guard self.currentToken.isContextualPunctuator("&") else {
       if let someOrAny = someOrAny {
         return RawTypeSyntax(RawConstrainedSugarTypeSyntax(
-          someOrAnySpecifier: someOrAny, baseType: base, arena: self.arena))
+          someOrAnySpecifier: someOrAny,
+          baseType: base.orMissing(arena: self.arena),
+          arena: self.arena
+        ))
       } else {
         return base
       }
@@ -112,7 +117,10 @@ extension Parser {
     if self.currentToken.isContextualPunctuator("&") {
       let firstAmpersand = self.consumeAnyToken()
       elements.append(RawCompositionTypeElementSyntax(
-        type: base, ampersand: firstAmpersand, arena: self.arena))
+        type: base.orMissing(arena: self.arena),
+        ampersand: firstAmpersand,
+        arena: self.arena
+      ))
 
       var keepGoing = false
       repeat {
@@ -125,7 +133,10 @@ extension Parser {
           ampersand = nil
         }
         elements.append(RawCompositionTypeElementSyntax(
-          type: elementType, ampersand: ampersand, arena: self.arena))
+          type: elementType.orMissing(arena: self.arena),
+          ampersand: ampersand,
+          arena: self.arena
+        ))
       } while keepGoing
 
       base = RawTypeSyntax(RawCompositionTypeSyntax(
@@ -135,7 +146,10 @@ extension Parser {
 
     if let someOrAny = someOrAny {
       return RawTypeSyntax(RawConstrainedSugarTypeSyntax(
-        someOrAnySpecifier: someOrAny, baseType: base, arena: self.arena))
+        someOrAnySpecifier: someOrAny,
+        baseType: base.orMissing(arena: self.arena),
+        arena: self.arena
+      ))
     } else {
       return base
     }
@@ -154,7 +168,7 @@ extension Parser {
   ///
   ///     metatype-type → type '.' 'Type' | type '.' 'Protocol'
   @_spi(RawSyntax)
-  public mutating func parseSimpleType() -> RawTypeSyntax {
+  public mutating func parseSimpleType() -> RawTypeSyntax? {
     var base: RawTypeSyntax
     switch self.currentToken.tokenKind {
     case .capitalSelfKeyword,
@@ -168,7 +182,7 @@ extension Parser {
     case .wildcardKeyword:
       base = RawTypeSyntax(self.parsePlaceholderType())
     default:
-      return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
+      return nil
     }
 
     // '.Type', '.Protocol', '?', '!', and '[]' still leave us with type-simple.
@@ -302,8 +316,7 @@ extension Parser {
     do {
       var keepGoing: RawTokenSyntax? = nil
       repeat {
-        let type = self.parseType()
-        if arguments.isEmpty && type.is(RawMissingTypeSyntax.self) {
+        guard let type = self.parseType() else {
           break
         }
         keepGoing = self.consume(if: .comma)
@@ -383,7 +396,7 @@ extension Parser {
             secondName: second,
             unexpectedBeforeColon,
             colon: colon,
-            type: type,
+            type: type.orMissing(arena: self.arena),
             ellipsis: nil,
             initializer: nil,
             trailingComma: trailingComma,
@@ -420,9 +433,9 @@ extension Parser {
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
       return RawTypeSyntax(RawDictionaryTypeSyntax(
         leftSquareBracket: lsquare,
-        keyType: firstType,
+        keyType: firstType.orMissing(arena: self.arena),
         colon: colon,
-        valueType: secondType,
+        valueType: secondType.orMissing(arena: self.arena),
         unexpectedBeforeRSquareBracket,
         rightSquareBracket: rSquareBracket,
         arena: self.arena
@@ -431,7 +444,7 @@ extension Parser {
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
       return RawTypeSyntax(RawArrayTypeSyntax(
         leftSquareBracket: lsquare,
-        elementType: firstType,
+        elementType: firstType.orMissing(arena: self.arena),
         unexpectedBeforeRSquareBracket,
         rightSquareBracket: rSquareBracket,
         arena: self.arena

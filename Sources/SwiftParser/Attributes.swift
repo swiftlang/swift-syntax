@@ -217,15 +217,20 @@ extension Parser {
     // argument lists "immediately" following the attribute name.
     guard self.at(.leftParen) && !self.currentToken.isAtStartOfLine && self.lookahead().isCustomAttributeArgument() else {
       return RawCustomAttributeSyntax(
-        atSignToken: atSign, attributeName: attrName,
-        leftParen: nil, argumentList: nil, rightParen: nil,
-        arena: self.arena)
+        atSignToken: atSign,
+        attributeName: attrName.orMissing(arena: self.arena),
+        leftParen: nil,
+        argumentList: nil,
+        rightParen: nil,
+        arena: self.arena
+      )
     }
     let leftParen = self.eat(.leftParen)
     let arguments = self.parseArgumentListElements()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawCustomAttributeSyntax(
-      atSignToken: atSign, attributeName: attrName,
+      atSignToken: atSign,
+      attributeName: attrName.orMissing(arena: self.arena),
       leftParen: leftParen,
       argumentList: RawTupleExprElementListSyntax(elements: arguments, arena: self.arena),
       unexpectedBeforeRightParen,

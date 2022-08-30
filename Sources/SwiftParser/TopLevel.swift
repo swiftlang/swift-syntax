@@ -125,13 +125,13 @@ extension Parser {
     let item = self.parseItem()
     let semi = self.consume(if: .semicolon)
 
-    if item.raw.byteLength == 0 && semi == nil {
+    if item == nil && semi == nil {
       return nil
     }
-    return .init(item: item, semicolon: semi, errorTokens: nil, arena: self.arena)
+    return .init(item: item ?? RawSyntax(RawMissingSyntax(arena: self.arena)), semicolon: semi, errorTokens: nil, arena: self.arena)
   }
 
-  private mutating func parseItem() -> RawSyntax {
+  private mutating func parseItem() -> RawSyntax? {
     if self.at(.poundIfKeyword) {
       return RawSyntax(self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
@@ -143,11 +143,11 @@ extension Parser {
     } else if self.at(.poundSourceLocationKeyword) {
       return RawSyntax(self.parsePoundSourceLocationDirective())
     } else if self.lookahead().isStartOfDeclaration() {
-      return RawSyntax(self.parseDeclaration())
+      return self.parseDeclaration().map(RawSyntax.init)
     } else if self.lookahead().isStartOfStatement() {
-      return RawSyntax(self.parseStatement())
+      return self.parseStatement().map(RawSyntax.init)
     } else {
-      return RawSyntax(self.parseExpression())
+      return self.parseExpression().map(RawSyntax.init)
     }
   }
 }

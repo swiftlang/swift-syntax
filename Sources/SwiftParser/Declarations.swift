@@ -48,10 +48,12 @@ extension Parser {
   ///
   ///     declarations → declaration declarations?
   @_spi(RawSyntax)
-  public mutating func parseDeclaration() -> RawDeclSyntax {
+  public mutating func parseDeclaration() -> RawDeclSyntax? {
     if self.at(.poundIfKeyword) {
       return RawDeclSyntax(self.parsePoundIfDirective { parser in
-        var parsedDecl = parser.parseDeclaration()
+        guard let parsedDecl = parser.parseDeclaration() else {
+          return nil
+        }
         let semicolon = parser.consume(if: .semicolon)
         return RawMemberDeclListItemSyntax(
           decl: parsedDecl,
@@ -104,10 +106,14 @@ extension Parser {
     case _ where self.currentToken.isContextualKeyword("actor"):
       return RawDeclSyntax(self.parseActorDeclaration(attrs))
     default:
-      return RawDeclSyntax(RawMissingDeclSyntax(
-        attributes: attrs.attributes,
-        modifiers: attrs.modifiers,
-        arena: self.arena))
+      if attrs.attributes == nil && attrs.modifiers == nil {
+        return nil
+      } else {
+        return RawDeclSyntax(RawMissingDeclSyntax(
+          attributes: attrs.attributes,
+          modifiers: attrs.modifiers,
+          arena: self.arena))
+      }
     }
   }
 }
@@ -201,7 +207,7 @@ extension Parser {
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       extensionKeyword: extensionKeyword,
-      extendedType: type,
+      extendedType: type.orMissing(arena: self.arena),
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
       members: members,
@@ -303,8 +309,7 @@ extension Parser {
     do {
       var keepGoing: RawTokenSyntax? = nil
       repeat {
-        let firstType = self.parseType()
-        guard !firstType.is(RawMissingTypeSyntax.self) else {
+        guard let firstType = self.parseType() else {
           keepGoing = self.consume(if: .comma)
           elements.append(RawGenericRequirementSyntax(
             body: RawSyntax(RawMissingSyntax(arena: self.arena)),
@@ -314,7 +319,7 @@ extension Parser {
           continue
         }
 
-        let requirement: RawSyntax
+        let requirement: RawSyntax?
         if self.at(.colon) {
           // A conformance-requirement.
           let colon = self.eat(.colon)
@@ -368,7 +373,7 @@ extension Parser {
             requirement = RawSyntax(RawConformanceRequirementSyntax(
               leftTypeIdentifier: firstType,
               colon: colon,
-              rightTypeIdentifier: secondType,
+              rightTypeIdentifier: secondType.orMissing(arena: self.arena),
               arena: self.arena))
           }
         } else if (self.currentToken.isAnyOperator && self.currentToken.tokenText == "==") || self.at(.equal) {
@@ -377,20 +382,25 @@ extension Parser {
           requirement = RawSyntax(RawSameTypeRequirementSyntax(
             leftTypeIdentifier: firstType,
             equalityToken: equal,
-            rightTypeIdentifier: secondType,
+            rightTypeIdentifier: secondType.orMissing(arena: self.arena),
             arena: self.arena))
         } else {
-          requirement = RawSyntax(RawSameTypeRequirementSyntax(
-            leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-            equalityToken: RawTokenSyntax(missing: .equal, arena: self.arena),
-            rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-            arena: self.arena
-          ))
+          requirement = nil
         }
 
         keepGoing = self.consume(if: .comma)
-        elements.append(RawGenericRequirementSyntax(
-          body: requirement, trailingComma: keepGoing, arena: self.arena))
+        if requirement != nil || keepGoing != nil {
+          elements.append(RawGenericRequirementSyntax(
+            body: requirement ?? RawSyntax(RawSameTypeRequirementSyntax(
+              leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              equalityToken: RawTokenSyntax(missing: .equal, arena: self.arena),
+              rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              arena: self.arena
+            )),
+            trailingComma: keepGoing,
+            arena: self.arena
+          ))
+        }
       } while keepGoing != nil
     }
 
@@ -408,13 +418,12 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       while !self.at(.eof) && !self.at(.rightBrace) {
-        let decl = self.parseDeclaration()
+        guard let decl = self.parseDeclaration() else {
+          break
+        }
         let semi = self.consume(if: .semicolon)
         elements.append(RawMemberDeclListItemSyntax(
           decl: decl, semicolon: semi, arena: self.arena))
-        if decl.is(RawMissingDeclSyntax.self) {
-          break
-        }
       }
     }
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -521,7 +530,7 @@ extension Parser {
     do {
       var keepGoing: RawTokenSyntax? = nil
       repeat {
-        let type: RawTypeSyntax
+        let type: RawTypeSyntax?
         if self.at(.classKeyword) {
           let classKeyword = self.eat(.classKeyword)
           type = RawTypeSyntax(RawClassRestrictionTypeSyntax(
@@ -532,8 +541,14 @@ extension Parser {
         }
 
         keepGoing = self.consume(if: .comma)
-        elements.append(RawInheritedTypeSyntax(
-          typeName: type, trailingComma: keepGoing, arena: self.arena))
+
+        if type != nil || keepGoing != nil {
+          elements.append(RawInheritedTypeSyntax(
+            typeName: type.orMissing(arena: self.arena),
+            trailingComma: keepGoing,
+            arena: self.arena
+          ))
+        }
       } while keepGoing != nil
     }
     return RawTypeInheritanceClauseSyntax(
@@ -653,7 +668,11 @@ extension Parser {
         if self.at(.equal) {
           let eq = self.eat(.equal)
           let value = self.parseExpression()
-          rawValue = RawInitializerClauseSyntax(equal: eq, value: value, arena: self.arena)
+          rawValue = RawInitializerClauseSyntax(
+            equal: eq,
+            value: value.orMissing(arena: self.arena),
+            arena: self.arena
+          )
         } else {
           rawValue = nil
         }
@@ -888,7 +907,8 @@ extension Parser {
       let equal = self.eat(.equal)
       let type = self.parseType()
       defaultType = RawTypeInitializerClauseSyntax(
-        equal: equal, value: type,
+        equal: equal,
+        value: type.orMissing(arena: self.arena),
         arena: self.arena)
     } else {
       defaultType = nil
@@ -1159,7 +1179,7 @@ extension Parser {
     let returnClause = RawReturnClauseSyntax(
       arrow: arrow,
       unexpectedBeforeReturnType,
-      returnType: result,
+      returnType: result.orMissing(arena: self.arena),
       arena: self.arena)
     return (returnClause, misplacedThrowsKeyword)
   }
@@ -1269,15 +1289,11 @@ extension Parser {
 
     let indices = self.parseParameterClause()
 
-    let result: RawReturnClauseSyntax
+    let result: RawReturnClauseSyntax?
     if self.at(.arrow) {
       result = self.parseFunctionReturnClause().returnClause
     } else {
-      result = RawReturnClauseSyntax(
-        arrow: RawTokenSyntax(missing: .arrow, arena: self.arena),
-        returnType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-        arena: self.arena
-      )
+      result = nil
     }
 
     // Parse a 'where' clause if present.
@@ -1301,7 +1317,11 @@ extension Parser {
       subscriptKeyword: subscriptKeyword,
       genericParameterClause: genericParameterClause,
       indices: indices,
-      result: result,
+      result: result ?? RawReturnClauseSyntax(
+        arrow: RawTokenSyntax(missing: .arrow, arena: self.arena),
+        returnType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+        arena: self.arena
+      ),
       genericWhereClause: genericWhereClause,
       accessor: accessor,
       arena: self.arena)
@@ -1341,7 +1361,8 @@ extension Parser {
           let equal = self.eat(.equal)
           let value = self.parseExpression()
           initializer = RawInitializerClauseSyntax(
-            equal: equal, value: value,
+            equal: equal,
+            value: value.orMissing(arena: self.arena),
             arena: self.arena)
         } else {
           initializer = nil
@@ -1600,7 +1621,7 @@ extension Parser {
     let initializer = RawTypeInitializerClauseSyntax(
       unexpectedBeforeEqual,
       equal: equal,
-      value: value,
+      value: value.orMissing(arena: self.arena),
       arena: self.arena
     )
 

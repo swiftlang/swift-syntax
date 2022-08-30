@@ -438,8 +438,12 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testExtraneousRightBraceRecovery() {
-    // FIXME: This test case should produce a diagnostics
-    AssertParse("class ABC { let def = ghi(jkl: mno) } }")
+    AssertParse(
+      "class ABC { let def = ghi(jkl: mno) } #^DIAG^#}",
+      diagnostics: [
+        DiagnosticSpec(message: "Extraneous '}' at top level")
+      ]
+    )
   }
 
   func testMissingSubscriptReturnClause() {
@@ -472,6 +476,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(message: "Expected '' in class"),
         DiagnosticSpec(message: "Expected '{' to start class"),
         DiagnosticSpec(message: "Expected '}' to end class"),
+        DiagnosticSpec(message: "Extraneous code at top level"),
       ]
     )
   }
@@ -527,11 +532,10 @@ final class DeclarationTests: XCTestCase {
   func testTextRecovery() {
     AssertParse(
       """
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do #^DIAG_1^#eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.#^DIAG_2^#
+      Lorem ipsum dolor sit amet#^DIAG^#, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '{' to start 'do' statement"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end 'do' statement"),
+        DiagnosticSpec(message: "Extraneous code at top level"),
       ]
     )
   }
@@ -598,6 +602,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected '' in struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Expected '{' to start struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Expected '}' to end struct"),
+        DiagnosticSpec(locationMarker: "BRACES", message: "Extraneous ': Int) {}' at top level"),
       ]
     )
   }
@@ -630,7 +635,7 @@ final class DeclarationTests: XCTestCase {
 
   func testDontRecoverFromUnbalancedParens() {
     AssertParse(
-      "func foo(first second #^COLON^#[third #^RSQUARE_COLON^#fourth: Int) {}",
+      "func foo(first second #^COLON^#[third #^RSQUARE_COLON^#fourth#^EXTRANEOUS^#: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         firstName: TokenSyntax.identifier("first"),
@@ -649,6 +654,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "COLON", message: "Expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "RSQUARE_COLON" , message: "Expected ']' to end array type"),
         DiagnosticSpec(locationMarker: "RSQUARE_COLON", message: "Expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous ': Int) {}' at top level")
       ]
     )
   }
@@ -657,7 +663,7 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       """
       func foo(first second #^COLON^#third#^RPAREN^#
-      : Int) {}
+      #^EXTRANEOUS^#: Int) {}
       """,
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
@@ -672,6 +678,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "COLON", message: "Expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "RPAREN", message: "Expected ')' to end parameter clause"),
+        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous ': Int) {}' at top level")
       ]
     )
   }

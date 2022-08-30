@@ -119,17 +119,26 @@ final class StatementTests: XCTestCase {
   }
 
   func testTopLevelCaseRecovery() {
-    // FIXME: These test cases should produce diagnostics
     AssertParse(
-      "/*#-editable-code Swift Platground editable area*/default/*#-end-editable-code*/"
+      "/*#-editable-code Swift Platground editable area*/#^DIAG^#default/*#-end-editable-code*/",
+      diagnostics: [
+        DiagnosticSpec(message: "Extraneous 'default' at top level")
+      ]
     )
 
-    AssertParse("case:")
+    AssertParse(
+      "#^DIAG^#case:",
+      diagnostics: [
+        DiagnosticSpec(message: "Extraneous 'case:' at top level")
+      ])
 
     AssertParse(
       #"""
-      case: { ("Hello World") }
-      """#
+      #^DIAG^#case: { ("Hello World") }
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Extraneous 'case: { ("Hello World") }' at top level"#)
+      ]
     )
   }
 
@@ -139,16 +148,19 @@ final class StatementTests: XCTestCase {
   }
 
   func testAttributesOnStatements() {
-    // FIXME: This test case should produce a diagnostics
     AssertParse(
       """
-      func test1() {
-        @s return
+      func test1() {#^END_FUNCTION^#
+        #^EXTRANEOUS^#@s return
       }
       func test2() {
         @unknown return
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "END_FUNCTION", message: "Expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous code at top level")
+      ]
     )
   }
 
@@ -184,12 +196,12 @@ final class StatementTests: XCTestCase {
     )
   }
 
-  // FIXME: This test case should produce a diagnostic
   func testBogusLineLabel() {
     AssertParse(
-      """
-      LABEL:
-      """
+      "LABEL#^DIAG^#:",
+      diagnostics: [
+        DiagnosticSpec(message: "Extraneous ':' at top level")
+      ]
     )
   }
 }

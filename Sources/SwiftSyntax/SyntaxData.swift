@@ -70,7 +70,8 @@ struct AbsoluteSyntaxInfo {
 }
 
 /// Represents a unique value for a node within its own tree.
-struct SyntaxIndexInTree: Hashable {
+@_spi(RawSyntax)
+public struct SyntaxIndexInTree: Comparable, Hashable {
   let indexInTree: UInt32
 
   static var zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
@@ -99,6 +100,10 @@ struct SyntaxIndexInTree: Hashable {
   init(indexInTree: UInt32) {
     self.indexInTree = indexInTree
   }
+
+  public static func < (lhs: SyntaxIndexInTree, rhs: SyntaxIndexInTree) -> Bool {
+    return lhs.indexInTree < rhs.indexInTree
+  }
 }
 
 /// Provides a stable and unique identity for `Syntax` nodes.
@@ -106,7 +111,8 @@ public struct SyntaxIdentifier: Hashable {
   /// Unique value for each root node created.
   let rootId: UInt32
   /// Unique value for a node within its own tree.
-  let indexInTree: SyntaxIndexInTree
+  @_spi(RawSyntax)
+  public let indexInTree: SyntaxIndexInTree
 
   func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
     let newIndexInTree = indexInTree.advancedBy(raw)

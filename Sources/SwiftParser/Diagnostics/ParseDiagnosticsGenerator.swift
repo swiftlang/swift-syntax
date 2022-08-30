@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 extension UnexpectedNodesSyntax {
   func tokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {
@@ -58,6 +58,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   ) -> [Diagnostic] {
     let diagProducer = ParseDiagnosticsGenerator()
     diagProducer.walk(tree)
+    diagProducer.diagnostics.sort {
+      return $0.node.id.indexInTree < $1.node.id.indexInTree
+    }
     return diagProducer.diagnostics
   }
 
@@ -168,6 +171,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if node.leftParen.presence == .missing && node.parameterList.isEmpty && node.rightParen.presence == .missing {
       addDiagnostic(node, .missingFunctionParameterClause)
       markNodesAsHandled(node.leftParen.id, node.parameterList.id, node.rightParen.id)
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let extraneous = node.unexpectedBetweenStatementsAndEOFToken, !extraneous.isEmpty {
+      addDiagnostic(extraneous, ExtaneousCodeAtTopLevel(extraneousCode: extraneous))
+      markNodesAsHandled(extraneous.id)
     }
     return .visitChildren
   }

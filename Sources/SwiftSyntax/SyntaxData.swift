@@ -64,8 +64,8 @@ struct AbsoluteSyntaxInfo {
     return .init(position: newPosition, nodeId: newNodeId)
   }
 
-  static var forRoot: AbsoluteSyntaxInfo {
-    return .init(position: .forRoot, nodeId: .newRoot())
+  static func forRoot(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
+    return .init(position: .forRoot, nodeId: .forRoot(raw))
   }
 }
 
@@ -103,8 +103,13 @@ struct SyntaxIndexInTree: Hashable {
 
 /// Provides a stable and unique identity for `Syntax` nodes.
 public struct SyntaxIdentifier: Hashable {
-  /// Unique value for each root node created.
-  let rootId: UInt32
+  /// Unique value for the root node.
+  ///
+  /// Multiple trees may have the same 'rootId' if their root RawSyntax is the
+  /// same instance. This guarantees that the trees with the same 'rootId' have
+  /// exact the same structure. But, two trees with exactly the same structure
+  /// might still have different 'rootId's.
+  let rootId: UInt
   /// Unique value for a node within its own tree.
   let indexInTree: SyntaxIndexInTree
 
@@ -123,8 +128,8 @@ public struct SyntaxIdentifier: Hashable {
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
-  static func newRoot() -> SyntaxIdentifier {
-    return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()),
+  static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
+    return .init(rootId: UInt(bitPattern: raw.pointer),
                  indexInTree: .zero)
   }
 }
@@ -168,14 +173,14 @@ struct AbsoluteRawSyntax {
     return nil
   }
 
-  func replacingSelf(_ newRaw: RawSyntax, newRootId: UInt32) -> AbsoluteRawSyntax {
+  func replacingSelf(_ newRaw: RawSyntax, newRootId: UInt) -> AbsoluteRawSyntax {
     let nodeId = SyntaxIdentifier(rootId: newRootId, indexInTree: info.nodeId.indexInTree)
     let newInfo = AbsoluteSyntaxInfo(position: info.position, nodeId: nodeId)
     return .init(raw: newRaw, info: newInfo)
   }
 
   static func forRoot(_ raw: RawSyntax) -> AbsoluteRawSyntax {
-    return .init(raw: raw, info: .forRoot)
+    return .init(raw: raw, info: .forRoot(raw))
   }
 }
 

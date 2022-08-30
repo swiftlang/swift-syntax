@@ -52,20 +52,6 @@ extension Parser {
     if self.at(.poundIfKeyword) {
       return RawDeclSyntax(self.parsePoundIfDirective { parser in
         var parsedDecl = parser.parseDeclaration()
-        if parsedDecl.is(RawMissingDeclSyntax.self) {
-          // Try to recover from a bogus decl.
-          var tokenList = [RawTokenSyntax]()
-          while !parser.at(.eof) && !parser.at(.poundElseKeyword) &&
-                  !parser.at(.poundElseifKeyword) && !parser.at(.poundEndifKeyword) {
-            let tokens = parser.recover()
-            guard !tokens.isEmpty else {
-              break
-            }
-            tokenList.append(contentsOf: tokens)
-          }
-          let unexpected = RawUnexpectedNodesSyntax(elements: tokenList.map(RawSyntax.init), arena: parser.arena)
-          parsedDecl = RawDeclSyntax(RawMissingDeclSyntax(unexpected, attributes: nil, modifiers: nil, arena: parser.arena))
-        }
         let semicolon = parser.consume(if: .semicolon)
         return RawMemberDeclListItemSyntax(
           decl: parsedDecl,
@@ -1504,22 +1490,6 @@ extension Parser {
           // There can only be an implicit getter if no other accessors were
           // seen before this one.
           guard elements.isEmpty else {
-            // Recover until the matching right brace. It's a little
-            // presumptuous of us to assume everything between here and there
-            // is an accessor, but we cannot stick unexpected anywhere for the
-            // moment...
-            while !self.at(.eof) && !self.at(.rightBrace) {
-              for token in self.recover() {
-                elements.append(RawAccessorDeclSyntax(
-                  attributes: nil, modifier: nil,
-                  accessorKind: token,
-                  parameter: nil,
-                  asyncKeyword: nil, throwsKeyword: nil,
-                  body: nil,
-                  arena: self.arena))
-              }
-            }
-
             let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
             return RawSyntax(RawAccessorBlockSyntax(
               leftBrace: lbrace,
@@ -1723,7 +1693,7 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
     do {
-      while !self.at(.eof) && !self.at(.rightBrace) {
+      LOOP: while !self.at(.eof) && !self.at(.rightBrace) {
         switch self.currentToken.tokenText {
         case "associativity":
           let associativity = self.consumeIdentifier()
@@ -1776,15 +1746,7 @@ extension Parser {
             otherNames: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),
             arena: self.arena)))
         default:
-          var tokenList = [RawTokenSyntax]()
-          while !self.at(.eof) && !self.at(.rightBrace) {
-            let tokens = self.recover()
-            guard !tokens.isEmpty else {
-              break
-            }
-            tokenList.append(contentsOf: tokens)
-          }
-          elements.append(RawSyntax(RawTokenListSyntax(elements: tokenList, arena: self.arena)))
+          break LOOP
         }
       }
     }

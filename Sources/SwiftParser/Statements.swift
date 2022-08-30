@@ -618,18 +618,7 @@ extension Parser {
           return RawSyntax(firstCase)
         }))
       } else {
-        var tokenList = [RawTokenSyntax]()
-        while !self.at(.eof) && !self.at(.rightBrace)
-                && !self.at(.poundElseifKeyword)
-                && !self.at(.poundElseKeyword) && !self.at(.poundEndifKeyword)
-                && !self.lookahead().isStartOfConditionalSwitchCases() {
-          let tokens = self.recover()
-          guard !tokens.isEmpty else {
-            break
-          }
-          tokenList.append(contentsOf: tokens)
-        }
-        elements.append(RawSyntax(RawNonEmptyTokenListSyntax(elements: tokenList, arena: self.arena)))
+        break
       }
     }
     return RawSwitchCaseListSyntax(elements: elements, arena: self.arena)
@@ -654,10 +643,6 @@ extension Parser {
       while self.at(.atSign) {
         tokenList.append(self.eat(.atSign))
         tokenList.append(self.consumeIdentifier())
-
-        if self.at(.leftParen) {
-          tokenList.append(contentsOf: self.recover())
-        }
       }
 
       unknownAttr = RawAttributeSyntax(

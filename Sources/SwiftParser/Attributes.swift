@@ -340,7 +340,7 @@ extension Parser {
     guard self.at(.leftParen) else {
       // If no opening '(' for parameter list, parse a single parameter.
       let param = self.parseDifferentiabilityParameter().map(RawSyntax.init(_:))
-                  ?? RawSyntax(RawTokenListSyntax(elements: self.recover(), arena: self.arena))
+                  ?? RawSyntax(RawMissingSyntax(arena: self.arena))
       return RawDifferentiabilityParamsClauseSyntax(
         wrtLabel: wrt,
         unexpectedBeforeColon,

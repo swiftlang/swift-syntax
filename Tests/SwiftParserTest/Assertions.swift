@@ -135,6 +135,12 @@ func AssertDiagnostic<T: SyntaxProtocol>(
   if let message = spec.message {
     AssertStringsEqualWithDiff(diag.message, message, file: file, line: line)
   }
+  if diag.message.contains("\n") {
+    XCTFail("""
+      Diagnostic message should only span a single line. Message was:
+      \(diag.message)
+      """)
+  }
   if let highlight = spec.highlight {
     AssertStringsEqualWithDiff(diag.highlights.map(\.description).joined(), highlight, file: file, line: line)
   }

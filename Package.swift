@@ -68,7 +68,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntax",
-      dependencies: [],
+      dependencies: ["_CSwiftSyntax"],
       exclude: [
         "CMakeLists.txt",
         "Misc.swift.gyb",
@@ -101,7 +101,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntaxParser",
-      dependencies: ["SwiftSyntax", "_CSwiftSyntax"],
+      dependencies: ["SwiftSyntax"],
       exclude: [
         "NodeDeclarationHash.swift.gyb",
         "Serialization.swift.gyb",

@@ -91,7 +91,7 @@ public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
 
 fileprivate extension AbsoluteSyntaxInfo {
   /// Construct `AbsoluteSyntaxInfo` from the given index data and a `rootId`.
-  init(index: SyntaxChildrenIndexData, rootId: UInt) {
+  init(index: SyntaxChildrenIndexData, rootId: UInt32) {
     let position = AbsoluteSyntaxPosition(offset: index.offset,
                                           indexInParent: index.indexInParent)
     let identifier = SyntaxIdentifier(rootId: rootId,
@@ -137,7 +137,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
   }
 
   /// The rootId of the tree the child nodes belong to
-  private let rootId: UInt
+  private let rootId: UInt32
   /// The number of childer in `parent`. Cached to avoid reaching into `parent` for every index
   /// advancement
   // FIXME: Do we need this cached?

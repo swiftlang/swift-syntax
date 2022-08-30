@@ -64,8 +64,8 @@ struct AbsoluteSyntaxInfo {
     return .init(position: newPosition, nodeId: newNodeId)
   }
 
-  static func forRoot(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
-    return .init(position: .forRoot, nodeId: .forRoot(raw))
+  static var forRoot: AbsoluteSyntaxInfo {
+    return .init(position: .forRoot, nodeId: .newRoot())
   }
 }
 
@@ -104,7 +104,7 @@ struct SyntaxIndexInTree: Hashable {
 /// Provides a stable and unique identity for `Syntax` nodes.
 public struct SyntaxIdentifier: Hashable {
   /// Unique value for each root node created.
-  let rootId: UInt
+  let rootId: UInt32
   /// Unique value for a node within its own tree.
   let indexInTree: SyntaxIndexInTree
 
@@ -123,8 +123,8 @@ public struct SyntaxIdentifier: Hashable {
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
-  static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
-    return .init(rootId: UInt(bitPattern: raw.pointer),
+  static func newRoot() -> SyntaxIdentifier {
+    return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()),
                  indexInTree: .zero)
   }
 }
@@ -168,14 +168,14 @@ struct AbsoluteRawSyntax {
     return nil
   }
 
-  func replacingSelf(_ newRaw: RawSyntax, newRootId: UInt) -> AbsoluteRawSyntax {
+  func replacingSelf(_ newRaw: RawSyntax, newRootId: UInt32) -> AbsoluteRawSyntax {
     let nodeId = SyntaxIdentifier(rootId: newRootId, indexInTree: info.nodeId.indexInTree)
     let newInfo = AbsoluteSyntaxInfo(position: info.position, nodeId: nodeId)
     return .init(raw: newRaw, info: newInfo)
   }
 
   static func forRoot(_ raw: RawSyntax) -> AbsoluteRawSyntax {
-    return .init(raw: raw, info: .forRoot(raw))
+    return .init(raw: raw, info: .forRoot)
   }
 }
 

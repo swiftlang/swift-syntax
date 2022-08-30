@@ -53,6 +53,7 @@
   ],
   "Internal": [
     "SyntaxArena.swift",
+    "AtomicCounter.swift",
     "SyntaxVerifier.swift",
     "BumpPtrAllocator.swift",
   ]

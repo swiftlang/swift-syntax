@@ -125,7 +125,7 @@ let DECL_NODES: [Node] = [
        ]),
 
   Node(name: "ReturnClause",
-       nameForDiagnostics: "return clause",
+       nameForDiagnostics: "None",
        kind: "Syntax",
        children: [
          Child(name: "Arrow",
@@ -667,7 +667,7 @@ let DECL_NODES: [Node] = [
        elementsSeparatedByNewline: true),
 
   Node(name: "MemberDeclListItem",
-       nameForDiagnostics: "member",
+       nameForDiagnostics: "None",
        description: "A member declaration of a type consisting of a declaration and anoptional semicolon;",
        kind: "Syntax",
        children: [

@@ -13,7 +13,9 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
+        DiagnosticSpec(message: "Expected expression after 'case' in pattern"),
         DiagnosticSpec(message: "Expected '=' in pattern matching"),
+        DiagnosticSpec(message: "Expected expression after '=' in pattern matching"),
         DiagnosticSpec(message: "Unexpected text '* ! = x' found in 'if' statement"),
       ]
     )
@@ -143,7 +145,6 @@ final class StatementTests: XCTestCase {
   }
 
   func testMissingIfClauseIntroducer() {
-    // FIXME: This test case should produce a diagnostics
     AssertParse("if _ = 42 {}")
   }
 

@@ -114,6 +114,25 @@ public struct ExtaneousCodeAtTopLevel: ParserError {
   }
 }
 
+public struct MissingNodeError: ParserError {
+  public let missingNode: Syntax
+
+  public var message: String {
+    var message = "Expected \(missingNode.nodeTypeNameForDiagnostics ?? "syntax")"
+    if let lastChild = missingNode.lastToken(viewMode: .fixedUp) {
+      message += " after '\(lastChild.text)'"
+    } else if let previousToken = missingNode.previousToken(viewMode: .fixedUp) {
+      message += " after '\(previousToken.text)'"
+    }
+    if let parent = missingNode.parent, let parentTypeName = parent.nodeTypeNameForDiagnostics {
+      if parentTypeName != "source file" {
+        message += " in \(parentTypeName)"
+      }
+    }
+    return message
+  }
+}
+
 public struct MissingTokenError: ParserError {
   public let missingToken: TokenSyntax
 

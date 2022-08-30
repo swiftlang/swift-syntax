@@ -97,7 +97,8 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       "_ = foo/* */?.description#^DIAG^#",
       diagnostics: [
-        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression")
+        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression"),
+        DiagnosticSpec(message: "Expected expression after ':'"),
       ]
     )
     
@@ -346,9 +347,12 @@ final class DeclarationTests: XCTestCase {
     AssertParse(
       """
       struct a {
-        public
+        public#^DIAG^#
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected declaration after 'public' in struct")
+      ]
     )
   }
 
@@ -439,7 +443,12 @@ final class DeclarationTests: XCTestCase {
 
   func testExtraneousRightBraceRecovery() {
     AssertParse(
-      "class ABC { let def = ghi(jkl: mno) } #^DIAG^#}",
+      """
+      class ABC {
+        let def = ghi(jkl: mno)
+      }
+      #^DIAG^#}
+      """,
       diagnostics: [
         DiagnosticSpec(message: "Extraneous '}' at top level")
       ]
@@ -454,8 +463,8 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        // FIXME: This diagnostic should be more contextual
-        DiagnosticSpec(message: "Expected '->' in return clause")
+        DiagnosticSpec(message: "Expected '->' in subscript"),
+        DiagnosticSpec(message: "Expected type after '->' in subscript"),
       ]
     )
   }

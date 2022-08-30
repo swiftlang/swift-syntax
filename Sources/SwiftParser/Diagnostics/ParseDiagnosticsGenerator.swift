@@ -114,7 +114,39 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .skipChildren
   }
 
+  private func handleMissingSyntax<T: SyntaxProtocol>(_ node: T) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    addDiagnostic(node, position: node.endPosition, MissingNodeError(missingNode: Syntax(node)))
+    return .skipChildren
+  }
+
   // MARK: - Specialized diagnostic generation
+
+  public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
+
+  public override func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
+    return handleMissingSyntax(node)
+  }
 
   public override func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
@@ -138,7 +170,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         Syntax(node.unexpectedBetweenWhereClauseAndBody),
         Syntax(unexpectedCondition)
       ] as [Syntax?]).compactMap({ $0 }))
-      markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
+      markNodesAsHandled(node.inKeyword.id, node.sequenceExpr.id, unexpectedCondition.id)
     }
     return .visitChildren
   }

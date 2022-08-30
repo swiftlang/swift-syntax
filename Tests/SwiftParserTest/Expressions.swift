@@ -4,10 +4,17 @@ import XCTest
 
 final class ExpressionTests: XCTestCase {
   func testTernary() {
-    AssertParse("let a =")
+    AssertParse(
+      "let a =#^DIAG^#",
+      diagnostics: [
+        DiagnosticSpec(message: "Expected expression after '=' in variable")
+      ]
+    )
 
     AssertParse("a ? b : c ? d : e")
-    AssertParse("a ? b :")
+    AssertParse(
+      "a ? b :"
+    )
   }
 
   func testSequence() {
@@ -131,11 +138,12 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
       """
-      [
-        ,#^DIAG^#
+      [#^EXPECTED_EXPR^#
+        ,#^END_ARRAY^#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected ']' to end array")
+        DiagnosticSpec(locationMarker: "EXPECTED_EXPR", message: "Expected expression after '[' in array"),
+        DiagnosticSpec(locationMarker: "END_ARRAY", message: "Expected ']' to end array"),
       ]
     )
 
@@ -147,6 +155,7 @@ final class ExpressionTests: XCTestCase {
       )
       """,
       diagnostics: [
+        DiagnosticSpec(message: "Expected expression after ':' in dictionary"),
         DiagnosticSpec(message: "Expected ']' to end dictionary"),
       ]
     )
@@ -291,9 +300,14 @@ final class ExpressionTests: XCTestCase {
 
   func testStringBogusClosingDelimiters() {
     AssertParse(
-      #"\\(#^DIAG^#"#,
+      ##"""
+      \#^AFTER_SLASH^#\(#^AFTER_PAREN^#
+      """##,
       diagnostics: [
-        DiagnosticSpec(message: "Expected ')' to end tuple")
+        DiagnosticSpec(locationMarker: "AFTER_SLASH", message: #"Expected expression after '\' in key path"#),
+        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected expression after '(' in tuple"),
+        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected ')' to end tuple"),
+        DiagnosticSpec(locationMarker: "AFTER_PAREN", message: "Expected expression after ')' in key path"),
       ]
     )
 
@@ -334,7 +348,8 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "foo ? 1#^DIAG^#",
       diagnostics: [
-        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression")
+        DiagnosticSpec(message: "Expected ':' after '? ...' in ternary expression"),
+        DiagnosticSpec(message: "Expected expression after ':'"),
       ]
     )
   }
@@ -342,12 +357,18 @@ final class ExpressionTests: XCTestCase {
   func testBogusKeypathBaseRecovery() {
     AssertParse(
       #"""
-      func nestThoseIfs() {\n    if false != true {\n       print "\(i)\"\n#^DIAG^#
+      func nestThoseIfs() {
+        \n    #^KEY_PATH_1^#
+        if false != true {
+          \n       #^KEY_PATH_2^#
+          print "\(i)\"\n#^END^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in string literal"#),
-        DiagnosticSpec(message: "Expected '}' to end 'if' statement"),
-        DiagnosticSpec(message: "Expected '}' to end function"),
+        DiagnosticSpec(locationMarker: "KEY_PATH_1", message: "Expected expression after 'n' in key path"),
+        DiagnosticSpec(locationMarker: "KEY_PATH_2", message: "Expected expression after 'n' in key path"),
+        DiagnosticSpec(locationMarker: "END", message: #"Expected '"' in string literal"#),
+        DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end 'if' statement"),
+        DiagnosticSpec(locationMarker: "END", message: "Expected '}' to end function"),
       ]
     )
   }
@@ -357,7 +378,7 @@ final class ExpressionTests: XCTestCase {
       "[(Int) -> #^DIAG^#throws Int]()",
       diagnostics: [
         // FIXME: We should suggest to move 'throws' in front of '->'
-        DiagnosticSpec(message: "Unexpected text 'throws Int' found in array")
+        DiagnosticSpec(message: "Unexpected text 'throws Int' found in array"),
       ]
     )
 
@@ -370,7 +391,6 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testBogusThrowingTernary() {
-    // FIXME: This test case should produce a diagnostics
     AssertParse(
       """
       do {

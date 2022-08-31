@@ -13,8 +13,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected '='"),
-        DiagnosticSpec(message: "Unexpected text '* ! = x '"),
+        DiagnosticSpec(message: "Expected '=' in pattern matching"),
+        DiagnosticSpec(message: "Unexpected text '* ! = x ' found in 'if' statement"),
       ]
     )
   }

@@ -14,15 +14,18 @@
 
 let ATTRIBUTE_NODES: [Node] = [
   Node(name: "TokenList",
+       nameForDiagnostics: "token list",
        kind: "SyntaxCollection",
        element: "Token"),
 
   Node(name: "NonEmptyTokenList",
+       nameForDiagnostics: "token list",
        kind: "SyntaxCollection",
        element: "Token",
        omitWhenEmpty: true),
 
   Node(name: "CustomAttribute",
+       nameForDiagnostics: "attribute",
        description: "A custom `@` attribute.",
        kind: "Syntax",
        children: [
@@ -55,6 +58,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "Attribute",
+       nameForDiagnostics: "attribute",
        description: "An `@` attribute.",
        kind: "Syntax",
        children: [
@@ -129,6 +133,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "AttributeList",
+       nameForDiagnostics: "attributes",
        kind: "SyntaxCollection",
        element: "Syntax",
        elementName: "Attribute",
@@ -136,6 +141,7 @@ let ATTRIBUTE_NODES: [Node] = [
        omitWhenEmpty: true),
 
   Node(name: "SpecializeAttributeSpecList",
+       nameForDiagnostics: "argument to '@_specialize",
        description: "A collection of arguments for the `@_specialize` attribute",
        kind: "SyntaxCollection",
        element: "Syntax",
@@ -143,6 +149,7 @@ let ATTRIBUTE_NODES: [Node] = [
        elementChoices: ["LabeledSpecializeEntry", "AvailabilityEntry", "TargetFunctionEntry", "GenericWhereClause"]),
 
   Node(name: "AvailabilityEntry",
+       nameForDiagnostics: "availability entry",
        description: "The availability argument for the _specialize attribute",
        kind: "Syntax",
        children: [
@@ -169,6 +176,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "LabeledSpecializeEntry",
+       nameForDiagnostics: "attribute argument",
        description: "A labeled argument for the `@_specialize` attribute like`exported: true`",
        kind: "Syntax",
        traits: [
@@ -200,6 +208,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "TargetFunctionEntry",
+       nameForDiagnostics: "attribute argument",
        description: "A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`",
        kind: "Syntax",
        traits: [
@@ -231,6 +240,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "NamedAttributeStringArgument",
+       nameForDiagnostics: "attribute argument",
        description: "The argument for the `@_dynamic_replacement` or `@_private`attribute of the form `for: \"function()\"` or `sourceFile:\"Src.swift\"`",
        kind: "Syntax",
        children: [
@@ -257,6 +267,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "DeclName",
+       nameForDiagnostics: "declaration name",
        kind: "Syntax",
        children: [
          Child(name: "DeclBaseName",
@@ -281,6 +292,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "ImplementsAttributeArguments",
+       nameForDiagnostics: "@_implements arguemnts",
        description: "The arguments for the `@_implements` attribute of the form`Type, methodName(arg1Label:arg2Label:)`",
        kind: "Syntax",
        children: [
@@ -315,6 +327,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "ObjCSelectorPiece",
+       nameForDiagnostics: "Objective-C selector piece",
        description: "A piece of an Objective-C selector. Either consisting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument",
        kind: "Syntax",
        children: [
@@ -333,10 +346,12 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "ObjCSelector",
+       nameForDiagnostics: "Objective-C selector",
        kind: "SyntaxCollection",
        element: "ObjCSelectorPiece"),
 
   Node(name: "DifferentiableAttributeArguments",
+       nameForDiagnostics: "'@differentiable' arguments",
        description: "The arguments for the `@differentiable` attribute: an optionaldifferentiability kind, an optional differentiability parameter clause,and an optional 'where' clause.",
        kind: "Syntax",
        children: [
@@ -374,6 +389,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "DifferentiabilityParamsClause",
+       nameForDiagnostics: "'@differentiable' argument",
        description: "A clause containing differentiability parameters.",
        kind: "Syntax",
        children: [
@@ -403,6 +419,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "DifferentiabilityParams",
+       nameForDiagnostics: "differentiability parameters",
        description: "The differentiability parameters.",
        kind: "Syntax",
        children: [
@@ -423,10 +440,12 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "DifferentiabilityParamList",
+       nameForDiagnostics: "differentiability parameters",
        kind: "SyntaxCollection",
        element: "DifferentiabilityParam"),
 
   Node(name: "DifferentiabilityParam",
+       nameForDiagnostics: "differentiability parameter",
        description: "A differentiability parameter: either the \"self\" identifier, a functionparameter name, or a function parameter index.",
        kind: "Syntax",
        traits: [
@@ -461,6 +480,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "DerivativeRegistrationAttributeArguments",
+       nameForDiagnostics: "attribute arguments",
        description: "The arguments for the '@derivative(of:)' and '@transpose(of:)'attributes: the 'of:' label, the original declaration name, and anoptional differentiability parameter list.",
        kind: "Syntax",
        children: [
@@ -512,6 +532,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "QualifiedDeclName",
+       nameForDiagnostics: "declaration name",
        description: "An optionally qualified function declaration name (e.g. `+(_:_:)`,`A.B.C.foo(_:_:)`).",
        kind: "Syntax",
        children: [
@@ -543,6 +564,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "FunctionDeclName",
+       nameForDiagnostics: "function declaration name",
        description: "A function declaration name (e.g. `foo(_:_:)`).",
        kind: "Syntax",
        children: [
@@ -573,6 +595,7 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "BackDeployAttributeSpecList",
+       nameForDiagnostics: "'@_backDeploy' arguments",
        description: "A collection of arguments for the `@_backDeploy` attribute",
        kind: "Syntax",
        children: [
@@ -598,10 +621,12 @@ let ATTRIBUTE_NODES: [Node] = [
        ]),
 
   Node(name: "BackDeployVersionList",
+       nameForDiagnostics: "version list",
        kind: "SyntaxCollection",
        element: "BackDeployVersionArgument"),
 
   Node(name: "BackDeployVersionArgument",
+       nameForDiagnostics: "version",
        description: "A single platform/version pair in a `@_backDeploy` attribute,e.g. `iOS 10.1`.",
        kind: "Syntax",
        children: [

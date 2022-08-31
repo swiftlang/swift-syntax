@@ -132,7 +132,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       "[,#^DIAG^#",
       diagnostics: [
-        DiagnosticSpec(message: "Expected ']' to end expression")
+        DiagnosticSpec(message: "Expected ']' to end array")
       ]
     )
 
@@ -142,8 +142,8 @@ final class ExpressionTests: XCTestCase {
       """,
       diagnostics: [
         // FIXME: Why is this diagnostic produced?
-        DiagnosticSpec(message: "Expected ':'"),
-        DiagnosticSpec(message: "Expected ']' to end expression"),
+        DiagnosticSpec(message: "Expected ':' in dictionary"),
+        DiagnosticSpec(message: "Expected ']' to end dictionary"),
       ]
     )
   }
@@ -202,7 +202,7 @@ final class ExpressionTests: XCTestCase {
       " >> \( abc #^DIAG^#} ) << "
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '} '")
+        DiagnosticSpec(message: "Unexpected text '} ' found in string literal")
       ]
     )
 
@@ -223,8 +223,7 @@ final class ExpressionTests: XCTestCase {
       "\",#^DIAG^#
       """#,
       diagnostics: [
-        // FIXME: Should be Expected '"' in string literal
-        DiagnosticSpec(message: #"Expected '"' in expression"#)
+        DiagnosticSpec(message: #"Expected '"' in string literal"#)
       ]
     )
 
@@ -291,8 +290,7 @@ final class ExpressionTests: XCTestCase {
        """"#^DIAG^#
        """##,
        diagnostics: [
-         // FIXME: This should say: Expected '"""' in string literal
-         DiagnosticSpec(message: #"Expected '"""' in expression"#)
+         DiagnosticSpec(message: #"Expected '"""' in string literal"#)
        ]
      )
 
@@ -301,8 +299,7 @@ final class ExpressionTests: XCTestCase {
        """""#^DIAG^#
        """##,
        diagnostics: [
-         // FIXME: This should say: Expected '"""' in string literal
-         DiagnosticSpec(message: #"Expected '"""' in expression"#)
+         DiagnosticSpec(message: #"Expected '"""' in string literal"#)
        ]
      )
 
@@ -328,7 +325,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       #"\\(#^DIAG^#"#,
       diagnostics: [
-        DiagnosticSpec(message: "Expected ')' to end expression")
+        DiagnosticSpec(message: "Expected ')' to end tuple")
       ]
     )
 
@@ -343,7 +340,7 @@ final class ExpressionTests: XCTestCase {
       "#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in expression"#)
+        DiagnosticSpec(message: #"Expected '"' in string literal"#)
       ]
     )
 
@@ -352,7 +349,7 @@ final class ExpressionTests: XCTestCase {
       "'#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in expression"#)
+        DiagnosticSpec(message: #"Expected '"' in string literal"#)
       ]
     )
   }
@@ -380,9 +377,9 @@ final class ExpressionTests: XCTestCase {
       func nestThoseIfs() {\n    if false != true {\n       print "\(i)\"\n#^DIAG^#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"Expected '"' in expression"#),
-        DiagnosticSpec(message: "Expected '}'"),
-        DiagnosticSpec(message: "Expected '}'"),
+        DiagnosticSpec(message: #"Expected '"' in string literal"#),
+        DiagnosticSpec(message: "Expected '}' to end 'if' statement"),
+        DiagnosticSpec(message: "Expected '}' to end function"),
       ]
     )
   }
@@ -392,14 +389,14 @@ final class ExpressionTests: XCTestCase {
       "[(Int) -> #^DIAG^#throws Int]()",
       diagnostics: [
         // FIXME: We should suggest to move 'throws' in front of '->'
-        DiagnosticSpec(message: "Unexpected text 'throws Int' found in expression")
+        DiagnosticSpec(message: "Unexpected text 'throws Int' found in array")
       ]
     )
 
     AssertParse(
       "let _ = [Int throws #^DIAG^#Int]()",
       diagnostics: [
-        DiagnosticSpec(message: "Expected '->' in expression")
+        DiagnosticSpec(message: "Expected '->' in array")
       ]
     )
   }

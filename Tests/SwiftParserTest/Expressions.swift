@@ -288,13 +288,30 @@ final class ExpressionTests: XCTestCase {
 
     AssertParse(
        ##"""
-       #^D0^#""""#^D1^#
+       """"#^DIAG^#
        """##,
        diagnostics: [
-         // FIXME: Weird diagnostics doesn't recover code even if follow it
-         DiagnosticSpec(locationMarker: "D0", message: "Expected '\"' in expression"),
-         DiagnosticSpec(locationMarker: "D1", message: "Expected '\"' in expression")
+         // FIXME: This should say: Expected '"""' in string literal
+         DiagnosticSpec(message: #"Expected '"""' in expression"#)
        ]
+     )
+
+    AssertParse(
+       ##"""
+       """""#^DIAG^#
+       """##,
+       diagnostics: [
+         // FIXME: This should say: Expected '"""' in string literal
+         DiagnosticSpec(message: #"Expected '"""' in expression"#)
+       ]
+     )
+
+    // FIXME: We currently don't enforce that multiline string literal
+    // contents must start on a new line
+    AssertParse(
+       ##"""
+       """"""#^DIAG^#
+       """##
      )
   }
 

@@ -25,9 +25,9 @@ extension VariableDecl {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes,
+      attributes: attributes?.createAttributeList().withTrailingTrivia(.space),
       modifiers: modifiers,
-      letOrVarKeyword: attributes != nil ? letOrVarKeyword.withLeadingTrivia(.space) : letOrVarKeyword
+      letOrVarKeyword: letOrVarKeyword
     ) {
       PatternBinding(
         pattern: name,
@@ -48,9 +48,9 @@ extension VariableDecl {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes,
+      attributes: attributes?.createAttributeList().withTrailingTrivia(.space),
       modifiers: modifiers,
-      letOrVarKeyword: .var.withLeadingTrivia(attributes != nil ? .space : .zero)
+      letOrVarKeyword: .var
     ) {
       PatternBinding(
         pattern: name,

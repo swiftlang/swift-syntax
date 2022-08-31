@@ -15,15 +15,27 @@ import SwiftSyntax
 
 let diagnosticDomain: String = "SwiftParser"
 
-extension Syntax {
+extension SyntaxProtocol {
   var nodeTypeNameForDiagnostics: String? {
-    if let name = self.as(SyntaxEnum.self).nameForDiagnostics {
+    if let name = Syntax(self).as(SyntaxEnum.self).nameForDiagnostics {
       return name
     }
     if let parent = self.parent {
       return parent.nodeTypeNameForDiagnostics
     }
     return nil
+  }
+
+  /// If the syntax node (excluding leading and trailing trivia) only spans a
+  /// single line and has less than 100 characters (and thus fits into a
+  /// diagnostic message), return that. Otherwise, return `nil`.
+  var contentForDiagnosticsIfShortSingleLine: String? {
+    let contentWithoutTrivia = self.withoutLeadingTrivia().withoutTrailingTrivia().description
+    if contentWithoutTrivia.contains("\n") || contentWithoutTrivia.count > 100 {
+      return nil
+    } else {
+      return contentWithoutTrivia
+    }
   }
 }
 
@@ -90,6 +102,18 @@ public enum StaticParserFixIt: String, FixItMessage {
 
 // MARK: - Diagnostics (please sort alphabetically)
 
+public struct ExtaneousCodeAtTopLevel: ParserError {
+  public let extraneousCode: UnexpectedNodesSyntax
+
+  public var message: String {
+    if let shortContent = extraneousCode.contentForDiagnosticsIfShortSingleLine {
+      return "Extraneous '\(shortContent)' at top level"
+    } else {
+      return "Extraneous code at top level"
+    }
+  }
+}
+
 public struct MissingTokenError: ParserError {
   public let missingToken: TokenSyntax
 
@@ -117,10 +141,17 @@ public struct UnexpectedNodesError: ParserError {
   public let unexpectedNodes: UnexpectedNodesSyntax
 
   public var message: String {
-    if let parentTypeName = unexpectedNodes.parent?.nodeTypeNameForDiagnostics {
-      return "Unexpected text '\(unexpectedNodes.description)' found in \(parentTypeName)"
-    } else {
-      return "Unexpected text '\(unexpectedNodes.description)'"
+    let parentTypeName = unexpectedNodes.parent?.nodeTypeNameForDiagnostics
+    let shortContent = unexpectedNodes.contentForDiagnosticsIfShortSingleLine
+    switch (parentTypeName, shortContent) {
+    case (let parentTypeName?, let shortContent?):
+      return "Unexpected text '\(shortContent)' found in \(parentTypeName)"
+    case (let parentTypeName?, nil):
+      return "Unexpected text found in \(parentTypeName)"
+    case (nil, let shortContent?):
+      return "Unexpected text '\(shortContent)'"
+    case (nil, nil):
+      return "Unexpected text"
     }
   }
 }

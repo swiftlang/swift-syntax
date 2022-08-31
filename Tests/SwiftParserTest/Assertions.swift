@@ -118,16 +118,11 @@ func AssertDiagnostic<T: SyntaxProtocol>(
        let actualColumn = actualLocation.column,
        let expectedLine = expectedLocation.line,
        let expectedColumn = expectedLocation.column {
-      XCTAssertEqual(
-        actualLine, expectedLine,
-        "Expected diagnostic on line \(expectedLine) but got \(actualLine)",
-        file: file, line: line
-      )
-      XCTAssertEqual(
-        actualColumn, expectedColumn,
-        "Expected diagnostic on column \(expectedColumn) but got \(actualColumn)",
-        file: file, line: line
-      )
+      if actualLine != expectedLine || actualColumn != expectedColumn {
+        XCTFail("Expected diagnostic on \(expectedLine):\(expectedColumn) but got \(actualLine):\(actualColumn)",
+                file: file, line: line
+        )
+      }
     } else {
       XCTFail("Failed to resolve diagnostic location to line/column", file: file, line: line)
     }
@@ -139,6 +134,12 @@ func AssertDiagnostic<T: SyntaxProtocol>(
   }
   if let message = spec.message {
     AssertStringsEqualWithDiff(diag.message, message, file: file, line: line)
+  }
+  if diag.message.contains("\n") {
+    XCTFail("""
+      Diagnostic message should only span a single line. Message was:
+      \(diag.message)
+      """)
   }
   if let highlight = spec.highlight {
     AssertStringsEqualWithDiff(diag.highlights.map(\.description).joined(), highlight, file: file, line: line)
@@ -198,10 +199,12 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
 
       // Diagnostics
       let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-      XCTAssertEqual(diags.count, expectedDiagnostics.count, """
-      Expected \(expectedDiagnostics.count) diagnostics but received \(diags.count):
-      \(diags.map(\.debugDescription).joined(separator: "\n"))
-      """, file: file, line: line)
+      if diags.count != expectedDiagnostics.count {
+        XCTFail("""
+        Expected \(expectedDiagnostics.count) diagnostics but received \(diags.count):
+        \(diags.map(\.debugDescription).joined(separator: "\n"))
+        """, file: file, line: line)
+      }
       for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
         AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: file, line: line)
       }

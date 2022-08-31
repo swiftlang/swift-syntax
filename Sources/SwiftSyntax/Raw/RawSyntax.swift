@@ -137,7 +137,8 @@ public struct RawSyntax {
 
 extension RawSyntax {
   /// The syntax kind of this raw syntax.
-  var kind: SyntaxKind {
+  @_spi(RawSyntax)
+  public var kind: SyntaxKind {
     switch rawData.payload {
     case .parsedToken(_): return .token
     case .materializedToken(_): return .token
@@ -187,7 +188,8 @@ extension RawSyntax {
   /// The "width" of the node.
   ///
   /// Sum of text byte lengths of all present descendant token nodes.
-  var byteLength: Int {
+  @_spi(RawSyntax)
+  public var byteLength: Int {
     switch rawData.payload {
     case .parsedToken(let dat):
       if dat.presence == .present {

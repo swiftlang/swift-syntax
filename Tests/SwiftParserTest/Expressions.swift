@@ -174,13 +174,13 @@ final class ExpressionTests: XCTestCase {
     )
 
     AssertParse(
-       #"""
-       "\(()
-       """#,
-       diagnostics: [
-         // FIXME: Some diagnostics should be emitted for such broken input.
-       ]
-     )
+      #"""
+      #^DIAG^#"\(()
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: #"Extraneous '"\(()' at top level"#)
+      ]
+    )
   }
 
   func testStringLiterals() {
@@ -202,7 +202,7 @@ final class ExpressionTests: XCTestCase {
       " >> \( abc #^DIAG^#} ) << "
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '} ' found in string literal")
+        DiagnosticSpec(message: "Unexpected text '}' found in string literal")
       ]
     )
 

@@ -26,8 +26,13 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
+    var extraneousTokens = [RawSyntax]()
+    while currentToken.tokenKind != .eof {
+      extraneousTokens.append(RawSyntax(consumeAnyToken()))
+    }
+    let unexpectedBeforeEof = extraneousTokens.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: extraneousTokens, arena: self.arena)
     let eof = self.eat(.eof)
-    return .init(statements: items, eofToken: eof, arena: self.arena)
+    return .init(statements: items, unexpectedBeforeEof, eofToken: eof, arena: self.arena)
   }
 }
 
@@ -40,8 +45,8 @@ extension Parser {
   ///     top-level-declaration → statements?
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
-    while !self.at(.eof) {
-      elements.append(self.parseCodeBlockItem())
+    while let newElement = self.parseCodeBlockItem() {
+      elements.append(newElement)
     }
     return .init(elements: elements, arena: self.arena)
   }
@@ -67,8 +72,8 @@ extension Parser {
   mutating func parseCodeBlock() -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var items = [RawCodeBlockItemSyntax]()
-    while !self.at(.eof) && !self.at(.rightBrace) {
-      items.append(self.parseCodeBlockItem())
+    while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
+      items.append(newItem)
     }
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
 
@@ -89,9 +94,8 @@ extension Parser {
 
   /// Parse an individual item - either in a code block or at the top level.
   ///
-  /// This function performs the majority of recovery because it
-  /// is both the first and last opportunity the parser has to examine the
-  /// input stream before encountering a closing delimiter or the end of input.
+  /// Returns `nil` if the parser did not consume any tokens while trying to
+  /// parse the code block item.
   ///
   /// Grammar
   /// =======
@@ -107,46 +111,16 @@ extension Parser {
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
   @_spi(RawSyntax)
-  public mutating func parseCodeBlockItem() -> RawCodeBlockItemSyntax {
+  public mutating func parseCodeBlockItem() -> RawCodeBlockItemSyntax? {
     // FIXME: It is unfortunate that the Swift book refers to these as
     // "statements" and not "items".
-    if let recovery = self.recoverFromBadItem() {
-      return recovery
-    }
-
     let item = self.parseItem()
     let semi = self.consume(if: .semicolon)
 
-    let errorTokens: RawSyntax?
-    if item.is(RawMissingExprSyntax.self) || item.is(RawMissingStmtSyntax.self) {
-      var elements = [RawTokenSyntax]()
-      if self.at(.atSign) {
-        // Recover from erroneously placed attribute.
-        elements.append(self.eat(.atSign))
-        if self.currentToken.isIdentifier {
-          elements.append(self.consumeAnyToken())
-        }
-      }
-
-      while
-        !self.at(.eof),
-        !self.at(.rightBrace),
-        !self.at(.poundIfKeyword), !self.at(.poundElseKeyword),
-        !self.at(.poundElseifKeyword),
-        !self.lookahead().isStartOfStatement(),
-        !self.lookahead().isStartOfDeclaration()
-      {
-        let tokens = self.recover()
-        guard !tokens.isEmpty else {
-          break
-        }
-        elements.append(contentsOf: tokens)
-      }
-      errorTokens = RawSyntax(RawNonEmptyTokenListSyntax(elements: elements, arena: self.arena))
-    } else {
-      errorTokens = nil
+    if item.raw.byteLength == 0 && semi == nil {
+      return nil
     }
-    return .init(item: item, semicolon: semi, errorTokens: errorTokens, arena: self.arena)
+    return .init(item: item, semicolon: semi, errorTokens: nil, arena: self.arena)
   }
 
   private mutating func parseItem() -> RawSyntax {

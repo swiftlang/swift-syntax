@@ -1547,8 +1547,8 @@ extension Parser {
     // Parse the body.
     var elements = [RawCodeBlockItemSyntax]()
     do {
-      while !self.at(.eof) && !self.at(.rightBrace) {
-        elements.append(self.parseCodeBlockItem())
+      while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
+        elements.append(newItem)
       }
     }
 
@@ -1714,7 +1714,7 @@ extension Parser {
   }
 
   @_spi(RawSyntax)
-  public mutating func parseClosureCaptureSpecifiers() -> RawTokenListSyntax {
+  public mutating func parseClosureCaptureSpecifiers() -> RawTokenListSyntax? {
     var specifiers = [RawTokenSyntax]()
     do {
       // Check for the strength specifier: "weak", "unowned", or
@@ -1734,26 +1734,14 @@ extension Parser {
         guard next.tokenKind == .equal || next.tokenKind == .comma
             || next.tokenKind == .rightSquareBracket || next.tokenKind == .period
         else {
-          // Recover from unexpected in the capture specifiers.
-          //
-          // FIXME: This is quite poor modeling in SwiftSyntax.
-          specifiers.append(contentsOf: self.recover())
-          return RawTokenListSyntax(elements: specifiers, arena: self.arena)
+          return nil
         }
       } else {
-        // Recover from unexpected in the capture specifiers.
-        //
-        // FIXME: This is quite poor modeling in SwiftSyntax.
-        specifiers.append(contentsOf: self.recover())
-        return RawTokenListSyntax(elements: specifiers, arena: self.arena)
+        return nil
       }
 
       guard self.currentToken.isIdentifier || self.at(.selfKeyword) else {
-        // Recover from unexpected in the capture specifiers.
-        //
-        // FIXME: This is quite poor modeling in SwiftSyntax.
-        specifiers.append(contentsOf: self.recover())
-        return RawTokenListSyntax(elements: specifiers, arena: self.arena)
+        return nil
       }
     }
     // Squash all tokens, if any, as the specifier of the captured item.

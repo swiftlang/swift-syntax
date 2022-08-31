@@ -53,13 +53,6 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "_CSwiftSyntax",
-      exclude: [
-        "CMakeLists.txt",
-        "README.md"
-      ]
-    ),
-    .target(
       name: "SwiftDiagnostics",
       dependencies: ["SwiftSyntax"],
       exclude: [
@@ -68,7 +61,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntax",
-      dependencies: ["_CSwiftSyntax"],
+      dependencies: [],
       exclude: [
         "CMakeLists.txt",
         "Misc.swift.gyb",

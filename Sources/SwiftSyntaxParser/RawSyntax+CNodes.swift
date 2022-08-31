@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_implementationOnly import _CSwiftSyntax
 @_spi(RawSyntax) import SwiftSyntax
 
 extension RawSyntax {

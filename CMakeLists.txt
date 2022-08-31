@@ -13,9 +13,6 @@ project(SwiftSyntax LANGUAGES C Swift)
 set(SWIFT_VERSION 5)
 set(CMAKE_Swift_LANGUAGE_VERSION ${SWIFT_VERSION})
 
-# ensure Swift compiler can find _CSwiftSyntax
-add_compile_options($<$<COMPILE_LANGUAGE:Swift>:-I$<SEMICOLON>${CMAKE_CURRENT_SOURCE_DIR}/Sources/_CSwiftSyntax/include>)
-
 set(CMAKE_Swift_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/swift)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

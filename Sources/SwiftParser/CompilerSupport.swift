@@ -37,7 +37,7 @@ public func _parserConsistencyCheck(
       var bufferArray = [UInt8](buffer)
       bufferArray.append(0)
       if "\(sourceFile)" != String(cString: bufferArray) {
-        debugPrint(
+        print(
           "\(String(cString: filename)): error: file failed to round-trip")
         return 1
       }

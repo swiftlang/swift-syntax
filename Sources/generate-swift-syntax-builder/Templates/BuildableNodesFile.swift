@@ -20,6 +20,9 @@ let buildableNodesFile = SourceFile {
     path: "SwiftSyntax"
   )
 
+  let triviaSides = ["leading", "trailing"]
+  let trivias = triviaSides.map { "\($0)Trivia" }
+
   for node in SYNTAX_NODES where node.isBuildable {
     let type = node.type
     let baseType = node.baseType
@@ -35,15 +38,14 @@ let buildableNodesFile = SourceFile {
       identifier: type.buildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: conformances)
     ) {
-      VariableDecl(
-        leadingTrivia: [
-          "/// The leading trivia attached to this syntax node once built.",
-          "/// This is typically used to add comments (e.g. for documentation).",
-        ].map { .docLineComment($0) + .newline }.reduce([], +),
-        .var,
-        name: "leadingTrivia",
-        type: "Trivia"
-      )
+      for (side, trivia) in zip(triviaSides, trivias) {
+        VariableDecl(
+          leadingTrivia: .docLineComment("/// The \(side) trivia attached to this syntax node once built.") + .newline,
+          .var,
+          name: trivia,
+          type: "Trivia"
+        )
+      }
 
       // Generate members
       for child in node.children {
@@ -51,13 +53,13 @@ let buildableNodesFile = SourceFile {
       }
 
       // Generate initializers
-      createDefaultInitializer(node: node)
+      createDefaultInitializer(node: node, trivias: trivias)
       if let convenienceInit = createConvenienceInitializer(node: node) {
         convenienceInit
       }
 
       // Generate function declarations
-      createBuildFunction(node: node)
+      createBuildFunction(node: node, trivias: trivias)
       createBuildBaseTypeFunction(node: node)
       createExpressibleAsCreateFunction(type: node.type)
       createDisambiguatingExpressibleAsCreateFunction(type: node.type, baseType: node.baseType)
@@ -65,14 +67,14 @@ let buildableNodesFile = SourceFile {
         createDisambiguatingExpressibleAsCreateFunction(type: node.baseType, baseType: .init(syntaxKind: "Syntax"))
       }
       if hasTrailingComma {
-        createWithTrailingCommaFunction(node: node)
+        createWithTrailingCommaFunction()
       }
     }
   }
 }
 
 /// Create the default initializer for the given node.
-private func createDefaultInitializer(node: Node) -> InitializerDecl {
+private func createDefaultInitializer(node: Node, trivias: [String]) -> InitializerDecl {
   let type = node.type
   return InitializerDecl(
     leadingTrivia: ([
@@ -84,12 +86,14 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
     modifiers: [Token.public],
     signature: FunctionSignature(
       input: ParameterClause {
-        FunctionParameter(
-          firstName: .identifier("leadingTrivia"),
-          colon: .colon,
-          type: "Trivia",
-          defaultArgument: ArrayExpr()
-        )
+        for trivia in trivias {
+          FunctionParameter(
+            firstName: .identifier(trivia),
+            colon: .colon,
+            type: "Trivia",
+            defaultArgument: ArrayExpr()
+          )
+        }
         for child in node.children {
           FunctionParameter(
             firstName: .identifier(child.swiftName),
@@ -101,10 +105,12 @@ private func createDefaultInitializer(node: Node) -> InitializerDecl {
       }
     )
   ) {
-    SequenceExpr {
-      MemberAccessExpr(base: "self", name: "leadingTrivia")
-      AssignmentExpr()
-      "leadingTrivia"
+    for trivia in trivias {
+      SequenceExpr {
+        MemberAccessExpr(base: "self", name: trivia)
+        AssignmentExpr()
+        trivia
+      }
     }
     for child in node.children {
       SequenceExpr {
@@ -226,7 +232,7 @@ private func createConvenienceInitializer(node: Node) -> InitializerDecl? {
 }
 
 /// Generate the function building the node syntax.
-private func createBuildFunction(node: Node) -> FunctionDecl {
+private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl {
   let type = node.type
   let children = node.children
   return FunctionDecl(
@@ -254,29 +260,31 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
         }
       }
     )
-    IfStmt(
-      conditions: ExprList {
-        PrefixOperatorExpr(
-          operatorToken: .prefixOperator("!"),
-          postfixExpression: MemberAccessExpr(base: "leadingTrivia", name: "isEmpty")
-        )
-      }
-    ) {
-      SequenceExpr {
-        "result"
-        AssignmentExpr()
-        FunctionCallExpr(MemberAccessExpr(base: "result", name: "withLeadingTrivia")) {
-          TupleExprElement(expression: SequenceExpr {
-            "leadingTrivia"
-            BinaryOperatorExpr("+")
-            TupleExpr {
-              SequenceExpr {
-                MemberAccessExpr(base: "result", name: "leadingTrivia")
-                BinaryOperatorExpr("??")
-                ArrayExpr()
+    for trivia in trivias {
+      IfStmt(
+        conditions: ExprList {
+          PrefixOperatorExpr(
+            operatorToken: .prefixOperator("!"),
+            postfixExpression: MemberAccessExpr(base: trivia, name: "isEmpty")
+          )
+        }
+      ) {
+        SequenceExpr {
+          "result"
+          AssignmentExpr()
+          FunctionCallExpr(MemberAccessExpr(base: "result", name: "with\(trivia.withFirstCharacterUppercased)")) {
+            TupleExprElement(expression: SequenceExpr {
+              trivia
+              BinaryOperatorExpr("+")
+              TupleExpr {
+                SequenceExpr {
+                  MemberAccessExpr(base: "result", name: trivia)
+                  BinaryOperatorExpr("??")
+                  ArrayExpr()
+                }
               }
-            }
-          })
+            })
+          }
         }
       }
     }
@@ -316,9 +324,8 @@ private func createBuildBaseTypeFunction(node: Node) -> FunctionDecl {
 }
 
 /// Generate the `withTrailingComma` function.
-private func createWithTrailingCommaFunction(node: Node) -> FunctionDecl {
-  let children = node.children
-  return FunctionDecl(
+private func createWithTrailingCommaFunction() -> FunctionDecl {
+  FunctionDecl(
     leadingTrivia: .docLineComment("/// Conformance to `HasTrailingComma`.") + .newline,
     modifiers: [Token.public],
     identifier: .identifier("withTrailingComma"),

@@ -107,57 +107,6 @@ extension Parser {
   }
 }
 
-extension Parser {
-  /// A recovery function that recovers from a number of special cases for syntax
-  /// elements that cannot possibly be the start of items.
-  ///
-  /// This function  is intended to be called at the start of item parsing so
-  /// that future calls to item parsing will have a better shot at succeeding
-  /// without necessarily invoking the general purpose recovery
-  /// mechanism.
-  ///
-  /// - Returns: A syntax node capturing the result of recovering from a bad
-  ///            item parse, or `nil` if recovery did not occur.
-  mutating func recoverFromBadItem() -> RawCodeBlockItemSyntax? {
-    if let extraRightBrace = self.consume(if: .rightBrace) {
-      // If we see an extraneous right brace, we need to make progress by
-      // eating it. The legacy parser forms an unknown stmt kind here, so
-      // we match it.
-      let missingStmt = RawMissingStmtSyntax(arena: self.arena)
-      return RawCodeBlockItemSyntax(
-        item: RawSyntax(missingStmt),
-        semicolon: nil,
-        errorTokens: RawSyntax(RawNonEmptyTokenListSyntax(elements: [ extraRightBrace ], arena: self.arena)),
-        arena: self.arena)
-    } else if self.at(.caseKeyword) || self.at(.defaultKeyword) {
-      // If there's a case or default label at the top level then the user
-      // has tried to write one outside of the scope of a switch statement.
-      // Recover up to the next braced block.
-      let missingStmt = RawMissingStmtSyntax(arena: self.arena)
-      let extraTokens = self.recover()
-      return RawCodeBlockItemSyntax(
-        item: RawSyntax(missingStmt),
-        semicolon: nil,
-        errorTokens: RawSyntax(RawNonEmptyTokenListSyntax(elements: extraTokens, arena: self.arena)),
-        arena: self.arena)
-    } else if self.at(.poundElseKeyword) || self.at(.poundElseifKeyword)
-        || self.at(.poundEndifKeyword) {
-      // In the case of a catastrophic parse error, consume any trailing
-      // #else, #elseif, or #endif and move on to the next statement or
-      // declaration block.
-      let token = self.consumeAnyToken()
-      // Create 'MissingDecl' for orphan directives.
-      return RawCodeBlockItemSyntax(
-        item: RawSyntax(RawMissingDeclSyntax(attributes: nil, modifiers: nil, arena: self.arena)),
-        semicolon: nil,
-        errorTokens: RawSyntax(RawNonEmptyTokenListSyntax(elements: [ token ], arena: self.arena)),
-        arena: self.arena)
-    } else {
-      return nil
-    }
-  }
-}
-
 // MARK: Lookahead
 
 extension Parser.Lookahead {

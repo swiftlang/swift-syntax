@@ -1530,8 +1530,8 @@ extension Parser {
           }
 
           var body = [RawCodeBlockItemSyntax]()
-          while !self.at(.eof) && !self.at(.rightBrace) {
-            body.append(self.parseCodeBlockItem())
+          while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
+            body.append(newItem)
           }
           let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
           return RawSyntax(RawCodeBlockSyntax(

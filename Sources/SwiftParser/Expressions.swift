@@ -1547,8 +1547,8 @@ extension Parser {
     // Parse the body.
     var elements = [RawCodeBlockItemSyntax]()
     do {
-      while !self.at(.eof) && !self.at(.rightBrace) {
-        elements.append(self.parseCodeBlockItem())
+      while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
+        elements.append(newItem)
       }
     }
 

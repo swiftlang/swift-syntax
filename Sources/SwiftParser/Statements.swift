@@ -681,13 +681,13 @@ extension Parser {
     let statements: RawCodeBlockItemListSyntax
     do {
       var items = [RawCodeBlockItemSyntax]()
-      while !self.at(.eof) &&
-              !self.at(.rightBrace) &&
+      while !self.at(.rightBrace) &&
               !self.at(.poundEndifKeyword) &&
               !self.at(.poundElseifKeyword) &&
               !self.at(.poundElseKeyword) &&
-              !self.lookahead().isStartOfConditionalSwitchCases() {
-        items.append(self.parseCodeBlockItem())
+              !self.lookahead().isStartOfConditionalSwitchCases(),
+            let newItem = self.parseCodeBlockItem() {
+        items.append(newItem)
       }
       statements = RawCodeBlockItemListSyntax(elements: items, arena: self.arena)
     }

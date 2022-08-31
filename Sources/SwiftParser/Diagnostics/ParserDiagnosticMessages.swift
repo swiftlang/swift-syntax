@@ -90,6 +90,21 @@ public enum StaticParserFixIt: String, FixItMessage {
 
 // MARK: - Diagnostics (please sort alphabetically)
 
+public struct ExtaneousCodeAtTopLevel: ParserError {
+  public let extraneousCode: UnexpectedNodesSyntax
+
+  public var message: String {
+    let extraneousCodeStr = extraneousCode.withoutLeadingTrivia().withoutTrailingTrivia().description
+    // If the extraneous code is multi-line or long (100 is in arbitrarily chosen value),
+    // it just spams the diagnostic. Just show a generic diagnostic in this case.
+    if extraneousCodeStr.contains("\n") || extraneousCodeStr.count > 100 {
+      return "Extraneous code at top level"
+    } else {
+      return "Extraneous '\(extraneousCodeStr)' at top level"
+    }
+  }
+}
+
 public struct MissingTokenError: ParserError {
   public let missingToken: TokenSyntax
 

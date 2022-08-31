@@ -81,19 +81,21 @@ final class DirectiveTests: XCTestCase {
   }
 
   func testExtraSyntaxInDirective() {
-    // FIXME: This test case should produce a diagnostics
-    
     AssertParse(
       """
       #if os(iOS)
-        func foo() {}
-      } // expected-error{{unexpected '}' in conditional compilation block}}
+        func foo() {}#^DIAG_1^#
+      #^DIAG_2^#}
       #else
         func bar() {}
         func baz() {}
       } // expected-error{{unexpected '}' in conditional compilation block}}
       #endif
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '#endif' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Extraneous code at top level"),
+      ]
     )
   }
 

@@ -687,7 +687,11 @@ extension Parser {
               !self.at(.poundElseifKeyword) &&
               !self.at(.poundElseKeyword) &&
               !self.lookahead().isStartOfConditionalSwitchCases() {
-        items.append(self.parseCodeBlockItem())
+        if let newItem = self.parseCodeBlockItem() {
+          items.append(newItem)
+        } else {
+          break
+        }
       }
       statements = RawCodeBlockItemListSyntax(elements: items, arena: self.arena)
     }

@@ -188,7 +188,9 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
         if elementType.isToken {
           TupleExprElement(
             expression: FunctionCallExpr(MemberAccessExpr(base: "elements", name: "map"), trailingClosure: ClosureExpr {
-              FunctionCallExpr(MemberAccessExpr(base: Token.dollarIdentifier("$0"), name: "buildToken"))
+              FunctionCallExpr(MemberAccessExpr(base: Token.dollarIdentifier("$0"), name: "buildToken")) {
+                TupleExprElement(label: "format", expression: "format")
+              }
             })
           )
         } else {

@@ -27,6 +27,8 @@ class TokenSpec {
   let text: String?
   let classification: String
   let isKeyword: Bool
+  let requiresLeadingSpace: Bool
+  let requiresTrailingSpace: Bool
 
   var swiftKind: String {
     let name = lowercaseFirstWord(name: self.name)
@@ -38,7 +40,17 @@ class TokenSpec {
     }
   }
 
-  init(name: String, kind: String, serializationCode: Int, unprefixedKind: String? = nil, text: String? = nil, classification: String = "None", isKeyword: Bool = false) {
+  init(
+    name: String,
+    kind: String,
+    serializationCode: Int,
+    unprefixedKind: String? = nil,
+    text: String? = nil,
+    classification: String = "None",
+    isKeyword: Bool = false,
+    requiresLeadingSpace: Bool = false,
+    requiresTrailingSpace: Bool = false
+  ) {
     self.name = name
     self.kind = kind
     self.serializationCode = serializationCode
@@ -50,13 +62,32 @@ class TokenSpec {
     self.text = text
     self.classification = classification
     self.isKeyword = isKeyword
+    self.requiresLeadingSpace = requiresLeadingSpace
+    self.requiresTrailingSpace = requiresTrailingSpace
   }
 }
 
 /// Represents a keyword token.
 class KeywordSpec: TokenSpec {
-  init(name: String, serializationCode: Int, text: String, classification: String = "Keyword") {
-    super.init(name: name, kind: "kw_\(text)", serializationCode: serializationCode, unprefixedKind: text, text: text, classification: classification, isKeyword: true)
+  init(
+    name: String,
+    serializationCode: Int,
+    text: String,
+    classification: String = "Keyword",
+    requiresLeadingSpace: Bool = false,
+    requiresTrailingSpace: Bool = false
+  ) {
+    super.init(
+      name: name,
+      kind: "kw_\(text)",
+      serializationCode: serializationCode,
+      unprefixedKind: text,
+      text: text,
+      classification: classification,
+      isKeyword: true,
+      requiresLeadingSpace: requiresLeadingSpace,
+      requiresTrailingSpace: requiresTrailingSpace
+    )
   }
 }
 
@@ -73,8 +104,23 @@ class PatternKeywordSpec: SwiftKeywordSpec { }
 class SilKeywordSpec: KeywordSpec { }
 
 class PoundKeywordSpec: TokenSpec {
-  init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "Keyword") {
-    super.init(name: name, kind: "pound_\(kind)", serializationCode: serializationCode, unprefixedKind: kind, text: text, classification: classification, isKeyword: true)
+  init(
+    name: String,
+    kind: String,
+    serializationCode: Int,
+    text: String,
+    classification: String = "Keyword"
+  ) {
+    super.init(
+      name: name,
+      kind: "pound_\(kind)",
+      serializationCode: serializationCode,
+      unprefixedKind: kind,
+      text: text,
+      classification: classification,
+      isKeyword: true,
+      requiresTrailingSpace: true
+    )
   }
 }
 
@@ -82,24 +128,62 @@ class PoundObjectLiteralSpec: PoundKeywordSpec {
   let description: String
   let `protocol`: String
 
-  init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "ObjectLiteral", description: String, `protocol`: String) {
+  init(
+    name: String,
+    kind: String,
+    serializationCode: Int,
+    text: String,
+    classification: String = "ObjectLiteral",
+    description: String,
+    `protocol`: String
+  ) {
     self.description = `description`
     self.`protocol` = `protocol`
-    super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
+    super.init(
+      name: name,
+      kind: kind,
+      serializationCode: serializationCode,
+      text: text,
+      classification: classification
+    )
   }
 }
 
 class PoundConfigSpec: PoundKeywordSpec { }
 
 class PoundDirectiveKeywordSpec: PoundKeywordSpec {
-  override init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "PoundDirectiveKeyword") {
-    super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
+  override init(
+    name: String,
+    kind: String,
+    serializationCode: Int,
+    text: String,
+    classification: String = "PoundDirectiveKeyword"
+  ) {
+    super.init(
+      name: name,
+      kind: kind,
+      serializationCode: serializationCode,
+      text: text,
+      classification: classification
+    )
   }
 }
 
 class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
-  override init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "PoundDirectiveKeyword") {
-    super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
+  override init(
+    name: String,
+    kind: String,
+    serializationCode: Int,
+    text: String,
+    classification: String = "PoundDirectiveKeyword"
+  ) {
+    super.init(
+      name: name,
+      kind: kind,
+      serializationCode: serializationCode,
+      text: text,
+      classification: classification
+    )
   }
 }
 
@@ -127,6 +211,14 @@ let SYNTAX_TOKENS: [TokenSpec] = [
 %   else:
 %     print("Unknown token `%s`", (token.name), file=sys.stderr)
 %     sys.exit(1)
+%   end
+%   if class_name in ['Keyword', 'SwiftKeyword', 'DeclKeyword', 'StmtKeyword', 'ExprKeyword', 'PatternKeyword', 'SilKeyword', 'Punctuator', 'Misc', 'Literal']:
+%     if token.requires_leading_space:
+%       parameters += ['requiresLeadingSpace: true']
+%     end
+%     if token.requires_trailing_space:
+%       parameters += ['requiresTrailingSpace: true']
+%     end
 %   end
   ${class_name}Spec(${", ".join(parameters)}),
 % end

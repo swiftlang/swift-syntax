@@ -3,7 +3,7 @@ import SwiftSyntax
 
 fileprivate func cannedStructDecl() -> StructDeclSyntax {
   let structKW = TokenSyntax.structKeyword(trailingTrivia: .space)
-  let fooID = TokenSyntax.identifier("Foo")
+  let fooID = TokenSyntax.identifier("Foo", trailingTrivia: .space)
   let rBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newline)
   let members = MemberDeclBlockSyntax(
     leftBrace: .leftBraceToken(),
@@ -34,7 +34,7 @@ public class SyntaxCreationTests: XCTestCase {
                    }
                    """)
 
-    let forType = TokenSyntax.identifier("`for`")
+    let forType = TokenSyntax.identifier("`for`", trailingTrivia: .space)
     let newBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newlines(2))
 
     let renamed = structDecl.withIdentifier(forType)
@@ -62,7 +62,7 @@ public class SyntaxCreationTests: XCTestCase {
   }
 
   public func testTokenSyntax() {
-    let tok = TokenSyntax.structKeyword()
+    let tok = TokenSyntax.structKeyword(trailingTrivia: .space)
     XCTAssertEqual("\(tok)", "struct ")
     XCTAssertEqual(tok.presence, .present)
 
@@ -223,7 +223,7 @@ public class SyntaxCreationTests: XCTestCase {
     )
     let operatorNames = ["==", "!=", "+", "-", "*", "/", "<", ">", "<=", ">="]
     operatorNames.forEach { operatorName in
-      let operatorToken = TokenSyntax.spacedBinaryOperator(operatorName, trailingTrivia: .space)
+      let operatorToken = TokenSyntax.spacedBinaryOperator(operatorName, leadingTrivia: .space, trailingTrivia: .space)
       let operatorExpr = BinaryOperatorExprSyntax(operatorToken: operatorToken)
       let exprList = ExprListSyntax([ExprSyntax(first),
                                                  ExprSyntax(operatorExpr),

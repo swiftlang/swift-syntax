@@ -22,6 +22,7 @@ set_target_properties(SwiftDiagnostics PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
 
 install(TARGETS SwiftDiagnostics
+  EXPORT SwiftSyntaxTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)

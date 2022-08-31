@@ -22,3 +22,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_MACOSX_RPATH YES)
 
 add_subdirectory(Sources)
+
+export(EXPORT SwiftSyntaxTargets
+       FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/SwiftSyntaxTargets.cmake"
+       NAMESPACE SwiftSyntax::
+)

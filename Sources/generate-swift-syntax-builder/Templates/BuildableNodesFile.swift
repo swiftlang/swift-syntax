@@ -40,14 +40,14 @@ let buildableNodesFile = SourceFile {
           "/// The leading trivia attached to this syntax node once built.",
           "/// This is typically used to add comments (e.g. for documentation).",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
-        .let,
+        .var,
         name: "leadingTrivia",
         type: "Trivia"
       )
 
       // Generate members
       for child in node.children {
-        VariableDecl(.let, name: child.swiftName, type: child.type.buildable)
+        VariableDecl(.var, name: child.swiftName, type: child.type.buildable)
       }
 
       // Generate initializers
@@ -334,19 +334,16 @@ private func createWithTrailingCommaFunction(node: Node) -> FunctionDecl {
       output: "Self"
     )
   ) {
-    FunctionCallExpr("Self") {
-      for child in children {
-        TupleExprElement(
-          label: child.swiftName,
-          expression: child.name == "TrailingComma" ? SequenceExpr {
-            TernaryExpr(
-              if: "withComma",
-              then: MemberAccessExpr(name: "comma"),
-              else: NilLiteralExpr()
-            )
-          } : child.swiftName
-        )
-      }
+    VariableDecl(.var, name: "result", initializer: "self")
+    SequenceExpr {
+      MemberAccessExpr(base: "result", name: "trailingComma")
+      AssignmentExpr()
+      TernaryExpr(
+        if: "withComma",
+        then: MemberAccessExpr(name: "comma"),
+        else: NilLiteralExpr()
+      )
     }
+    ReturnStmt(expression: "result")
   }
 }

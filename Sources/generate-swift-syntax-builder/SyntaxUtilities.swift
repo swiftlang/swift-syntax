@@ -99,3 +99,59 @@ func createDisambiguatingExpressibleAsCreateFunction(type: SyntaxBuildableType, 
     "/// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.",
   ]) 
 }
+
+/// Generate a `withATrivia` function.
+func createWithTriviaFunction(trivia: String) -> FunctionDecl {
+  FunctionDecl(
+    modifiers: [Token.public],
+    identifier: .identifier("with\(trivia.withFirstCharacterUppercased)"),
+    signature: FunctionSignature(
+      input: ParameterClause {
+        FunctionParameter(
+          firstName: .wildcard,
+          secondName: .identifier(trivia),
+          colon: .colon,
+          type: "Trivia"
+        )
+      },
+      output: "Self"
+    )
+  ) {
+    VariableDecl(.var, name: "result", initializer: "self")
+    SequenceExpr {
+      MemberAccessExpr(base: "result", name: trivia)
+      AssignmentExpr()
+      trivia
+    }
+    ReturnStmt(expression: "result")
+  }
+}
+
+func createTriviaAttachment(varName: String, triviaVarName: String, trivia: String) -> IfStmt {
+  IfStmt(
+    conditions: ExprList {
+      PrefixOperatorExpr(
+        operatorToken: .prefixOperator("!"),
+        postfixExpression: MemberAccessExpr(base: triviaVarName, name: "isEmpty")
+      )
+    }
+  ) {
+    SequenceExpr {
+      varName
+      AssignmentExpr()
+      FunctionCallExpr(MemberAccessExpr(base: varName, name: "with\(trivia.withFirstCharacterUppercased)")) {
+        TupleExprElement(expression: SequenceExpr {
+          triviaVarName
+          BinaryOperatorExpr("+")
+          TupleExpr {
+            SequenceExpr {
+              MemberAccessExpr(base: varName, name: trivia)
+              BinaryOperatorExpr("??")
+              ArrayExpr()
+            }
+          }
+        })
+      }
+    }
+  }
+}

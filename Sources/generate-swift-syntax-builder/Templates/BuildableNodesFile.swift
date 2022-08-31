@@ -264,32 +264,7 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
       }
     )
     for trivia in trivias {
-      IfStmt(
-        conditions: ExprList {
-          PrefixOperatorExpr(
-            operatorToken: .prefixOperator("!"),
-            postfixExpression: MemberAccessExpr(base: trivia, name: "isEmpty")
-          )
-        }
-      ) {
-        SequenceExpr {
-          "result"
-          AssignmentExpr()
-          FunctionCallExpr(MemberAccessExpr(base: "result", name: "with\(trivia.withFirstCharacterUppercased)")) {
-            TupleExprElement(expression: SequenceExpr {
-              trivia
-              BinaryOperatorExpr("+")
-              TupleExpr {
-                SequenceExpr {
-                  MemberAccessExpr(base: "result", name: trivia)
-                  BinaryOperatorExpr("??")
-                  ArrayExpr()
-                }
-              }
-            })
-          }
-        }
-      }
+      createTriviaAttachment(varName: "result", triviaVarName: trivia, trivia: trivia)
     }
     ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
       TupleExprElement(
@@ -353,33 +328,6 @@ private func createWithTrailingCommaFunction() -> FunctionDecl {
         then: MemberAccessExpr(name: "comma"),
         else: NilLiteralExpr()
       )
-    }
-    ReturnStmt(expression: "result")
-  }
-}
-
-/// Generate a `withATrivia` function.
-private func createWithTriviaFunction(trivia: String) -> FunctionDecl {
-  FunctionDecl(
-    modifiers: [Token.public],
-    identifier: .identifier("with\(trivia.withFirstCharacterUppercased)"),
-    signature: FunctionSignature(
-      input: ParameterClause {
-        FunctionParameter(
-          firstName: .wildcard,
-          secondName: .identifier(trivia),
-          colon: .colon,
-          type: "Trivia"
-        )
-      },
-      output: "Self"
-    )
-  ) {
-    VariableDecl(.var, name: "result", initializer: "self")
-    SequenceExpr {
-      MemberAccessExpr(base: "result", name: trivia)
-      AssignmentExpr()
-      trivia
     }
     ReturnStmt(expression: "result")
   }

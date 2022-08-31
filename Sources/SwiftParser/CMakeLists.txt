@@ -12,6 +12,7 @@ add_library(SwiftParser STATIC
   Declarations.swift
   Directives.swift
   CharacterInfo.swift
+  CompilerSupport.swift
   Attributes.swift
   Lookahead.swift
   Expressions.swift
@@ -39,7 +40,8 @@ set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftParser)
 
 # NOTE: workaround for CMake not setting up include flags yet
 set_target_properties(SwiftParser PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+  INTERFACE_INCLUDE_DIRECTORIES
+  "${CMAKE_Swift_MODULE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR}")
 
 install(TARGETS SwiftParser
   EXPORT SwiftSyntaxTargets

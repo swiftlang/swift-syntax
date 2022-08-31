@@ -110,7 +110,8 @@ let package = Package(
       dependencies: ["SwiftDiagnostics", "SwiftSyntax"],
       exclude: [
         "CMakeLists.txt",
-        "README.md"
+        "README.md",
+        "SwiftParserCompilerSupport.h"
       ]
     ),
     .executableTarget(

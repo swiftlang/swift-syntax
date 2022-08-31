@@ -116,10 +116,16 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     kind: RawTokenKind,
     wholeText: SyntaxText,
     textRange: Range<SyntaxText.Index>,
+    presence: SourcePresence,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.parsedToken(
-      kind: kind, wholeText: wholeText, textRange: textRange, arena: arena)
+      kind: kind,
+      wholeText: wholeText,
+      textRange: textRange,
+      presence: presence,
+      arena: arena
+    )
     self = RawTokenSyntax(raw: raw)
   }
 
@@ -130,12 +136,15 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     text: SyntaxText,
     leadingTriviaPieces: [RawTriviaPiece],
     trailingTriviaPieces: [RawTriviaPiece],
+    presence: SourcePresence,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeMaterializedToken(
-      kind: kind, text: text,
+      kind: kind,
+      text: text,
       leadingTriviaPieceCount: leadingTriviaPieces.count,
       trailingTriviaPieceCount: trailingTriviaPieces.count,
+      presence: presence,
       arena: arena,
       initializingLeadingTriviaWith: { buffer in
         _ = buffer.initialize(from: leadingTriviaPieces)
@@ -146,10 +155,18 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   /// Creates a missing `TokenSyntax` with the specified kind.
+  /// If `text` is passed, it will be used to represent the missing token's text.
+  /// If `text` is `nil`, the `kind`'s default text will be used.
+  /// If that is also `nil`, the token will have empty text.
   public init(missing kind: RawTokenKind, arena: __shared SyntaxArena) {
     self.init(
-      kind: kind, text: "", leadingTriviaPieces: [], trailingTriviaPieces: [],
-      arena: arena)
+      kind: kind,
+      text: kind.defaultText ?? "",
+      leadingTriviaPieces: [],
+      trailingTriviaPieces: [],
+      presence: .missing,
+      arena: arena
+    )
   }
 }
 

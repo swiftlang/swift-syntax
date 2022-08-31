@@ -65,6 +65,7 @@ extension RawSyntax {
       kind: tokenKind, text: tokenText,
       leadingTriviaPieceCount: leadingTriviaInfo.count,
       trailingTriviaPieceCount: trailingTriviaInfo.count,
+      presence: cnode.present ? .present : .missing,
       arena: arena,
       initializingLeadingTriviaWith: {
         initializeRawTriviaBuffer($0, 0, leadingTriviaInfo)

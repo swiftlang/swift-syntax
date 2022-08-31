@@ -18,13 +18,13 @@ import SwiftSyntax
 public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeItem: UnexpectedNodes?
-  let item: SyntaxBuildable
-  let unexpectedBetweenItemAndSemicolon: UnexpectedNodes?
-  let semicolon: Token?
-  let unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodes?
-  let errorTokens: SyntaxBuildable?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeItem: UnexpectedNodes?
+  var item: SyntaxBuildable
+  var unexpectedBetweenItemAndSemicolon: UnexpectedNodes?
+  var semicolon: Token?
+  var unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodes?
+  var errorTokens: SyntaxBuildable?
   /// Creates a `CodeBlockItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeItem: 
@@ -74,13 +74,13 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
 public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: Token
-  let unexpectedBetweenLeftBraceAndStatements: UnexpectedNodes?
-  let statements: CodeBlockItemList
-  let unexpectedBetweenStatementsAndRightBrace: UnexpectedNodes?
-  let rightBrace: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftBrace: UnexpectedNodes?
+  var leftBrace: Token
+  var unexpectedBetweenLeftBraceAndStatements: UnexpectedNodes?
+  var statements: CodeBlockItemList
+  var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodes?
+  var rightBrace: Token
   /// Creates a `CodeBlock` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -139,11 +139,11 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
 public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAmpersand: UnexpectedNodes?
-  let ampersand: Token
-  let unexpectedBetweenAmpersandAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAmpersand: UnexpectedNodes?
+  var ampersand: Token
+  var unexpectedBetweenAmpersandAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `InOutExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAmpersand: 
@@ -196,9 +196,9 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
 public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundColumn: UnexpectedNodes?
-  let poundColumn: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundColumn: UnexpectedNodes?
+  var poundColumn: Token
   /// Creates a `PoundColumnExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundColumn: 
@@ -247,13 +247,13 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
 public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeTryKeyword: UnexpectedNodes?
-  let tryKeyword: Token
-  let unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: UnexpectedNodes?
-  let questionOrExclamationMark: Token?
-  let unexpectedBetweenQuestionOrExclamationMarkAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeTryKeyword: UnexpectedNodes?
+  var tryKeyword: Token
+  var unexpectedBetweenTryKeywordAndQuestionOrExclamationMark: UnexpectedNodes?
+  var questionOrExclamationMark: Token?
+  var unexpectedBetweenQuestionOrExclamationMarkAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `TryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeTryKeyword: 
@@ -311,11 +311,11 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
 public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAwaitKeyword: UnexpectedNodes?
-  let awaitKeyword: Token
-  let unexpectedBetweenAwaitKeywordAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAwaitKeyword: UnexpectedNodes?
+  var awaitKeyword: Token
+  var unexpectedBetweenAwaitKeywordAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `AwaitExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAwaitKeyword: 
@@ -374,11 +374,11 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
 public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeMoveKeyword: UnexpectedNodes?
-  let moveKeyword: Token
-  let unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeMoveKeyword: UnexpectedNodes?
+  var moveKeyword: Token
+  var unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `MoveExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeMoveKeyword: 
@@ -437,11 +437,11 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
 public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndColon: UnexpectedNodes?
-  let colon: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndColon: UnexpectedNodes?
+  var colon: Token
   /// Creates a `DeclNameArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -487,13 +487,13 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
 public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
-  let arguments: DeclNameArgumentList
-  let unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
+  var arguments: DeclNameArgumentList
+  var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `DeclNameArguments` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -544,11 +544,11 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
 public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodes?
-  let declNameArguments: DeclNameArguments?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodes?
+  var declNameArguments: DeclNameArguments?
   /// Creates a `IdentifierExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -600,9 +600,9 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
 public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeSuperKeyword: UnexpectedNodes?
-  let superKeyword: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeSuperKeyword: UnexpectedNodes?
+  var superKeyword: Token
   /// Creates a `SuperRefExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSuperKeyword: 
@@ -651,9 +651,9 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
 public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeNilKeyword: UnexpectedNodes?
-  let nilKeyword: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeNilKeyword: UnexpectedNodes?
+  var nilKeyword: Token
   /// Creates a `NilLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeNilKeyword: 
@@ -702,9 +702,9 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
 public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignmentExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWildcard: UnexpectedNodes?
-  let wildcard: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWildcard: UnexpectedNodes?
+  var wildcard: Token
   /// Creates a `DiscardAssignmentExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWildcard: 
@@ -753,9 +753,9 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
 public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAssignToken: UnexpectedNodes?
-  let assignToken: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAssignToken: UnexpectedNodes?
+  var assignToken: Token
   /// Creates a `AssignmentExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAssignToken: 
@@ -804,9 +804,9 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
 public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeElements: UnexpectedNodes?
-  let elements: ExprList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeElements: UnexpectedNodes?
+  var elements: ExprList
   /// Creates a `SequenceExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeElements: 
@@ -862,9 +862,9 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
 public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundLine: UnexpectedNodes?
-  let poundLine: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundLine: UnexpectedNodes?
+  var poundLine: Token
   /// Creates a `PoundLineExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundLine: 
@@ -913,9 +913,9 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
 public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundFile: UnexpectedNodes?
-  let poundFile: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundFile: UnexpectedNodes?
+  var poundFile: Token
   /// Creates a `PoundFileExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFile: 
@@ -964,9 +964,9 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
 public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundFileID: UnexpectedNodes?
-  let poundFileID: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundFileID: UnexpectedNodes?
+  var poundFileID: Token
   /// Creates a `PoundFileIDExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFileID: 
@@ -1015,9 +1015,9 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
 public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundFilePath: UnexpectedNodes?
-  let poundFilePath: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundFilePath: UnexpectedNodes?
+  var poundFilePath: Token
   /// Creates a `PoundFilePathExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFilePath: 
@@ -1066,9 +1066,9 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
 public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundFunction: UnexpectedNodes?
-  let poundFunction: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundFunction: UnexpectedNodes?
+  var poundFunction: Token
   /// Creates a `PoundFunctionExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundFunction: 
@@ -1117,9 +1117,9 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
 public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundDsohandle: UnexpectedNodes?
-  let poundDsohandle: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundDsohandle: UnexpectedNodes?
+  var poundDsohandle: Token
   /// Creates a `PoundDsohandleExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundDsohandle: 
@@ -1168,11 +1168,11 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
 public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferenceExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodes?
-  let genericArgumentClause: GenericArgumentClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodes?
+  var genericArgumentClause: GenericArgumentClause?
   /// Creates a `SymbolicReferenceExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -1230,11 +1230,11 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
 public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeOperatorToken: UnexpectedNodes?
-  let operatorToken: Token?
-  let unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodes?
-  let postfixExpression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeOperatorToken: UnexpectedNodes?
+  var operatorToken: Token?
+  var unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodes?
+  var postfixExpression: ExprBuildable
   /// Creates a `PrefixOperatorExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeOperatorToken: 
@@ -1294,9 +1294,9 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
 public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeOperatorToken: UnexpectedNodes?
-  let operatorToken: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeOperatorToken: UnexpectedNodes?
+  var operatorToken: Token
   /// Creates a `BinaryOperatorExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeOperatorToken: 
@@ -1344,13 +1344,13 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
 public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: Token?
-  let unexpectedBetweenAsyncKeywordAndThrowsToken: UnexpectedNodes?
-  let throwsToken: Token?
-  let unexpectedBetweenThrowsTokenAndArrowToken: UnexpectedNodes?
-  let arrowToken: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAsyncKeyword: UnexpectedNodes?
+  var asyncKeyword: Token?
+  var unexpectedBetweenAsyncKeywordAndThrowsToken: UnexpectedNodes?
+  var throwsToken: Token?
+  var unexpectedBetweenThrowsTokenAndArrowToken: UnexpectedNodes?
+  var arrowToken: Token
   /// Creates a `ArrowExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAsyncKeyword: 
@@ -1417,13 +1417,13 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
 public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftOperand: UnexpectedNodes?
-  let leftOperand: ExprBuildable
-  let unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodes?
-  let operatorOperand: ExprBuildable
-  let unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodes?
-  let rightOperand: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftOperand: UnexpectedNodes?
+  var leftOperand: ExprBuildable
+  var unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodes?
+  var operatorOperand: ExprBuildable
+  var unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodes?
+  var rightOperand: ExprBuildable
   /// Creates a `InfixOperatorExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftOperand: 
@@ -1479,9 +1479,9 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
 public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeFloatingDigits: UnexpectedNodes?
-  let floatingDigits: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeFloatingDigits: UnexpectedNodes?
+  var floatingDigits: Token
   /// Creates a `FloatLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeFloatingDigits: 
@@ -1535,13 +1535,13 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
 public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndElementList: UnexpectedNodes?
-  let elementList: TupleExprElementList
-  let unexpectedBetweenElementListAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndElementList: UnexpectedNodes?
+  var elementList: TupleExprElementList
+  var unexpectedBetweenElementListAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `TupleExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -1607,13 +1607,13 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
 public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftSquare: UnexpectedNodes?
-  let leftSquare: Token
-  let unexpectedBetweenLeftSquareAndElements: UnexpectedNodes?
-  let elements: ArrayElementList
-  let unexpectedBetweenElementsAndRightSquare: UnexpectedNodes?
-  let rightSquare: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftSquare: UnexpectedNodes?
+  var leftSquare: Token
+  var unexpectedBetweenLeftSquareAndElements: UnexpectedNodes?
+  var elements: ArrayElementList
+  var unexpectedBetweenElementsAndRightSquare: UnexpectedNodes?
+  var rightSquare: Token
   /// Creates a `ArrayExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquare: 
@@ -1679,13 +1679,13 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
 public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftSquare: UnexpectedNodes?
-  let leftSquare: Token
-  let unexpectedBetweenLeftSquareAndContent: UnexpectedNodes?
-  let content: SyntaxBuildable
-  let unexpectedBetweenContentAndRightSquare: UnexpectedNodes?
-  let rightSquare: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftSquare: UnexpectedNodes?
+  var leftSquare: Token
+  var unexpectedBetweenLeftSquareAndContent: UnexpectedNodes?
+  var content: SyntaxBuildable
+  var unexpectedBetweenContentAndRightSquare: UnexpectedNodes?
+  var rightSquare: Token
   /// Creates a `DictionaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquare: 
@@ -1743,15 +1743,15 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
 public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: Token?
-  let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: Token?
-  let unexpectedBetweenColonAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabel: UnexpectedNodes?
+  var label: Token?
+  var unexpectedBetweenLabelAndColon: UnexpectedNodes?
+  var colon: Token?
+  var unexpectedBetweenColonAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `TupleExprElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -1804,17 +1804,19 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeLabel: unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndExpression: unexpectedBetweenColonAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `ArrayElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -1858,21 +1860,23 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeExpression: unexpectedBeforeExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeKeyExpression: UnexpectedNodes?
-  let keyExpression: ExprBuildable
-  let unexpectedBetweenKeyExpressionAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndValueExpression: UnexpectedNodes?
-  let valueExpression: ExprBuildable
-  let unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeKeyExpression: UnexpectedNodes?
+  var keyExpression: ExprBuildable
+  var unexpectedBetweenKeyExpressionAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndValueExpression: UnexpectedNodes?
+  var valueExpression: ExprBuildable
+  var unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `DictionaryElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeKeyExpression: 
@@ -1925,15 +1929,17 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeKeyExpression: unexpectedBeforeKeyExpression, keyExpression: keyExpression, unexpectedBetweenKeyExpressionAndColon: unexpectedBetweenKeyExpressionAndColon, colon: colon, unexpectedBetweenColonAndValueExpression: unexpectedBetweenColonAndValueExpression, valueExpression: valueExpression, unexpectedBetweenValueExpressionAndTrailingComma: unexpectedBetweenValueExpressionAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDigits: UnexpectedNodes?
-  let digits: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDigits: UnexpectedNodes?
+  var digits: Token
   /// Creates a `IntegerLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDigits: 
@@ -1987,9 +1993,9 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
 public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBooleanLiteral: UnexpectedNodes?
-  let booleanLiteral: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBooleanLiteral: UnexpectedNodes?
+  var booleanLiteral: Token
   /// Creates a `BooleanLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBooleanLiteral: 
@@ -2038,13 +2044,13 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
 public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTernaryExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeQuestionMark: UnexpectedNodes?
-  let questionMark: Token
-  let unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodes?
-  let firstChoice: ExprBuildable
-  let unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodes?
-  let colonMark: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeQuestionMark: UnexpectedNodes?
+  var questionMark: Token
+  var unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodes?
+  var firstChoice: ExprBuildable
+  var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodes?
+  var colonMark: Token
   /// Creates a `UnresolvedTernaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeQuestionMark: 
@@ -2102,17 +2108,17 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
 public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeConditionExpression: UnexpectedNodes?
-  let conditionExpression: ExprBuildable
-  let unexpectedBetweenConditionExpressionAndQuestionMark: UnexpectedNodes?
-  let questionMark: Token
-  let unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodes?
-  let firstChoice: ExprBuildable
-  let unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodes?
-  let colonMark: Token
-  let unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodes?
-  let secondChoice: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeConditionExpression: UnexpectedNodes?
+  var conditionExpression: ExprBuildable
+  var unexpectedBetweenConditionExpressionAndQuestionMark: UnexpectedNodes?
+  var questionMark: Token
+  var unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodes?
+  var firstChoice: ExprBuildable
+  var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodes?
+  var colonMark: Token
+  var unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodes?
+  var secondChoice: ExprBuildable
   /// Creates a `TernaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeConditionExpression: 
@@ -2178,15 +2184,15 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
 public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBase: UnexpectedNodes?
-  let base: ExprBuildable?
-  let unexpectedBetweenBaseAndDot: UnexpectedNodes?
-  let dot: Token
-  let unexpectedBetweenDotAndName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodes?
-  let declNameArguments: DeclNameArguments?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBase: UnexpectedNodes?
+  var base: ExprBuildable?
+  var unexpectedBetweenBaseAndDot: UnexpectedNodes?
+  var dot: Token
+  var unexpectedBetweenDotAndName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodes?
+  var declNameArguments: DeclNameArguments?
   /// Creates a `MemberAccessExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBase: 
@@ -2247,9 +2253,9 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
 public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIsTok: UnexpectedNodes?
-  let isTok: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIsTok: UnexpectedNodes?
+  var isTok: Token
   /// Creates a `UnresolvedIsExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIsTok: 
@@ -2298,13 +2304,13 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
 public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndIsTok: UnexpectedNodes?
-  let isTok: Token
-  let unexpectedBetweenIsTokAndTypeName: UnexpectedNodes?
-  let typeName: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndIsTok: UnexpectedNodes?
+  var isTok: Token
+  var unexpectedBetweenIsTokAndTypeName: UnexpectedNodes?
+  var typeName: TypeBuildable
   /// Creates a `IsExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -2361,11 +2367,11 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
 public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAsTok: UnexpectedNodes?
-  let asTok: Token
-  let unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
-  let questionOrExclamationMark: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAsTok: UnexpectedNodes?
+  var asTok: Token
+  var unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
+  var questionOrExclamationMark: Token?
   /// Creates a `UnresolvedAsExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAsTok: 
@@ -2419,15 +2425,15 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
 public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndAsTok: UnexpectedNodes?
-  let asTok: Token
-  let unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
-  let questionOrExclamationMark: Token?
-  let unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodes?
-  let typeName: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndAsTok: UnexpectedNodes?
+  var asTok: Token
+  var unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodes?
+  var questionOrExclamationMark: Token?
+  var unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodes?
+  var typeName: TypeBuildable
   /// Creates a `AsExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -2489,9 +2495,9 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
 public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeType: UnexpectedNodes?
-  let type: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeType: UnexpectedNodes?
+  var type: TypeBuildable
   /// Creates a `TypeExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeType: 
@@ -2539,17 +2545,17 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
 public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureItem, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeSpecifier: UnexpectedNodes?
-  let specifier: TokenList?
-  let unexpectedBetweenSpecifierAndName: UnexpectedNodes?
-  let name: Token?
-  let unexpectedBetweenNameAndAssignToken: UnexpectedNodes?
-  let assignToken: Token?
-  let unexpectedBetweenAssignTokenAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeSpecifier: UnexpectedNodes?
+  var specifier: TokenList?
+  var unexpectedBetweenSpecifierAndName: UnexpectedNodes?
+  var name: Token?
+  var unexpectedBetweenNameAndAssignToken: UnexpectedNodes?
+  var assignToken: Token?
+  var unexpectedBetweenAssignTokenAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `ClosureCaptureItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSpecifier: 
@@ -2614,19 +2620,21 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeSpecifier: unexpectedBeforeSpecifier, specifier: specifier, unexpectedBetweenSpecifierAndName: unexpectedBetweenSpecifierAndName, name: name, unexpectedBetweenNameAndAssignToken: unexpectedBetweenNameAndAssignToken, assignToken: assignToken, unexpectedBetweenAssignTokenAndExpression: unexpectedBetweenAssignTokenAndExpression, expression: expression, unexpectedBetweenExpressionAndTrailingComma: unexpectedBetweenExpressionAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCaptureSignature {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftSquare: UnexpectedNodes?
-  let leftSquare: Token
-  let unexpectedBetweenLeftSquareAndItems: UnexpectedNodes?
-  let items: ClosureCaptureItemList?
-  let unexpectedBetweenItemsAndRightSquare: UnexpectedNodes?
-  let rightSquare: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftSquare: UnexpectedNodes?
+  var leftSquare: Token
+  var unexpectedBetweenLeftSquareAndItems: UnexpectedNodes?
+  var items: ClosureCaptureItemList?
+  var unexpectedBetweenItemsAndRightSquare: UnexpectedNodes?
+  var rightSquare: Token
   /// Creates a `ClosureCaptureSignature` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquare: 
@@ -2685,11 +2693,11 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
 public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `ClosureParam` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -2733,27 +2741,29 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeName: unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndCapture: UnexpectedNodes?
-  let capture: ClosureCaptureSignature?
-  let unexpectedBetweenCaptureAndInput: UnexpectedNodes?
-  let input: SyntaxBuildable?
-  let unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: Token?
-  let unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodes?
-  let throwsTok: Token?
-  let unexpectedBetweenThrowsTokAndOutput: UnexpectedNodes?
-  let output: ReturnClause?
-  let unexpectedBetweenOutputAndInTok: UnexpectedNodes?
-  let inTok: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndCapture: UnexpectedNodes?
+  var capture: ClosureCaptureSignature?
+  var unexpectedBetweenCaptureAndInput: UnexpectedNodes?
+  var input: SyntaxBuildable?
+  var unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodes?
+  var asyncKeyword: Token?
+  var unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodes?
+  var throwsTok: Token?
+  var unexpectedBetweenThrowsTokAndOutput: UnexpectedNodes?
+  var output: ReturnClause?
+  var unexpectedBetweenOutputAndInTok: UnexpectedNodes?
+  var inTok: Token
   /// Creates a `ClosureSignature` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -2829,15 +2839,15 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
 public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: Token
-  let unexpectedBetweenLeftBraceAndSignature: UnexpectedNodes?
-  let signature: ClosureSignature?
-  let unexpectedBetweenSignatureAndStatements: UnexpectedNodes?
-  let statements: CodeBlockItemList
-  let unexpectedBetweenStatementsAndRightBrace: UnexpectedNodes?
-  let rightBrace: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftBrace: UnexpectedNodes?
+  var leftBrace: Token
+  var unexpectedBetweenLeftBraceAndSignature: UnexpectedNodes?
+  var signature: ClosureSignature?
+  var unexpectedBetweenSignatureAndStatements: UnexpectedNodes?
+  var statements: CodeBlockItemList
+  var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodes?
+  var rightBrace: Token
   /// Creates a `ClosureExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -2907,9 +2917,9 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
 public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatternExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePattern: UnexpectedNodes?
-  let pattern: PatternBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforePattern: UnexpectedNodes?
+  var pattern: PatternBuildable
   /// Creates a `UnresolvedPatternExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -2957,13 +2967,13 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
 public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMultipleTrailingClosureElement {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: Token
-  let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndClosure: UnexpectedNodes?
-  let closure: ClosureExpr
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabel: UnexpectedNodes?
+  var label: Token
+  var unexpectedBetweenLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndClosure: UnexpectedNodes?
+  var closure: ClosureExpr
   /// Creates a `MultipleTrailingClosureElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -3013,19 +3023,19 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
 public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeCalledExpression: UnexpectedNodes?
-  let calledExpression: ExprBuildable
-  let unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodes?
-  let leftParen: Token?
-  let unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes?
-  let argumentList: TupleExprElementList
-  let unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes?
-  let rightParen: Token?
-  let unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes?
-  let trailingClosure: ClosureExpr?
-  let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes?
-  let additionalTrailingClosures: MultipleTrailingClosureElementList?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeCalledExpression: UnexpectedNodes?
+  var calledExpression: ExprBuildable
+  var unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodes?
+  var leftParen: Token?
+  var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes?
+  var argumentList: TupleExprElementList
+  var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes?
+  var rightParen: Token?
+  var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodes?
+  var trailingClosure: ClosureExpr?
+  var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes?
+  var additionalTrailingClosures: MultipleTrailingClosureElementList?
   /// Creates a `FunctionCallExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCalledExpression: 
@@ -3103,19 +3113,19 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
 public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeCalledExpression: UnexpectedNodes?
-  let calledExpression: ExprBuildable
-  let unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodes?
-  let leftBracket: Token
-  let unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodes?
-  let argumentList: TupleExprElementList
-  let unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodes?
-  let rightBracket: Token
-  let unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodes?
-  let trailingClosure: ClosureExpr?
-  let unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes?
-  let additionalTrailingClosures: MultipleTrailingClosureElementList?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeCalledExpression: UnexpectedNodes?
+  var calledExpression: ExprBuildable
+  var unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodes?
+  var leftBracket: Token
+  var unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodes?
+  var argumentList: TupleExprElementList
+  var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodes?
+  var rightBracket: Token
+  var unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodes?
+  var trailingClosure: ClosureExpr?
+  var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodes?
+  var additionalTrailingClosures: MultipleTrailingClosureElementList?
   /// Creates a `SubscriptExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCalledExpression: 
@@ -3193,11 +3203,11 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
 public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChainingExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndQuestionMark: UnexpectedNodes?
-  let questionMark: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndQuestionMark: UnexpectedNodes?
+  var questionMark: Token
   /// Creates a `OptionalChainingExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -3250,11 +3260,11 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
 public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndExclamationMark: UnexpectedNodes?
-  let exclamationMark: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndExclamationMark: UnexpectedNodes?
+  var exclamationMark: Token
   /// Creates a `ForcedValueExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -3307,11 +3317,11 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
 public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodes?
-  let operatorToken: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodes?
+  var operatorToken: Token
   /// Creates a `PostfixUnaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -3369,11 +3379,11 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
 public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndGenericArgumentClause: UnexpectedNodes?
-  let genericArgumentClause: GenericArgumentClause
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndGenericArgumentClause: UnexpectedNodes?
+  var genericArgumentClause: GenericArgumentClause
   /// Creates a `SpecializeExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -3425,9 +3435,9 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
 public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeContent: UnexpectedNodes?
-  let content: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeContent: UnexpectedNodes?
+  var content: Token
   /// Creates a `StringSegment` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeContent: 
@@ -3474,17 +3484,17 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
 public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBackslash: UnexpectedNodes?
-  let backslash: Token
-  let unexpectedBetweenBackslashAndDelimiter: UnexpectedNodes?
-  let delimiter: Token?
-  let unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndExpressions: UnexpectedNodes?
-  let expressions: TupleExprElementList
-  let unexpectedBetweenExpressionsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBackslash: UnexpectedNodes?
+  var backslash: Token
+  var unexpectedBetweenBackslashAndDelimiter: UnexpectedNodes?
+  var delimiter: Token?
+  var unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndExpressions: UnexpectedNodes?
+  var expressions: TupleExprElementList
+  var unexpectedBetweenExpressionsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `ExpressionSegment` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBackslash: 
@@ -3554,17 +3564,17 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
 public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeOpenDelimiter: UnexpectedNodes?
-  let openDelimiter: Token?
-  let unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodes?
-  let openQuote: Token
-  let unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodes?
-  let segments: StringLiteralSegments
-  let unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodes?
-  let closeQuote: Token
-  let unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodes?
-  let closeDelimiter: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeOpenDelimiter: UnexpectedNodes?
+  var openDelimiter: Token?
+  var unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodes?
+  var openQuote: Token
+  var unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodes?
+  var segments: StringLiteralSegments
+  var unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodes?
+  var closeQuote: Token
+  var unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodes?
+  var closeDelimiter: Token?
   /// Creates a `StringLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeOpenDelimiter: 
@@ -3640,9 +3650,9 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
 public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeRegex: UnexpectedNodes?
-  let regex: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeRegex: UnexpectedNodes?
+  var regex: Token
   /// Creates a `RegexLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeRegex: 
@@ -3696,13 +3706,13 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
 public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBackslash: UnexpectedNodes?
-  let backslash: Token
-  let unexpectedBetweenBackslashAndRootExpr: UnexpectedNodes?
-  let rootExpr: ExprBuildable?
-  let unexpectedBetweenRootExprAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBackslash: UnexpectedNodes?
+  var backslash: Token
+  var unexpectedBetweenBackslashAndRootExpr: UnexpectedNodes?
+  var rootExpr: ExprBuildable?
+  var unexpectedBetweenRootExprAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `KeyPathExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBackslash: 
@@ -3759,9 +3769,9 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
 public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePeriod: UnexpectedNodes?
-  let period: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePeriod: UnexpectedNodes?
+  var period: Token
   /// Creates a `KeyPathBaseExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePeriod: 
@@ -3810,11 +3820,11 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
 public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndDot: UnexpectedNodes?
-  let dot: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndDot: UnexpectedNodes?
+  var dot: Token?
   /// Creates a `ObjcNamePiece` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -3866,15 +3876,15 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
 public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeKeyPath: UnexpectedNodes?
-  let keyPath: Token
-  let unexpectedBetweenKeyPathAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndName: UnexpectedNodes?
-  let name: ObjcName
-  let unexpectedBetweenNameAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeKeyPath: UnexpectedNodes?
+  var keyPath: Token
+  var unexpectedBetweenKeyPathAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndName: UnexpectedNodes?
+  var name: ObjcName
+  var unexpectedBetweenNameAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `ObjcKeyPathExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeKeyPath: 
@@ -3937,19 +3947,19 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
 public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundSelector: UnexpectedNodes?
-  let poundSelector: Token
-  let unexpectedBetweenPoundSelectorAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndKind: UnexpectedNodes?
-  let kind: Token?
-  let unexpectedBetweenKindAndColon: UnexpectedNodes?
-  let colon: Token?
-  let unexpectedBetweenColonAndName: UnexpectedNodes?
-  let name: ExprBuildable
-  let unexpectedBetweenNameAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundSelector: UnexpectedNodes?
+  var poundSelector: Token
+  var unexpectedBetweenPoundSelectorAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndKind: UnexpectedNodes?
+  var kind: Token?
+  var unexpectedBetweenKindAndColon: UnexpectedNodes?
+  var colon: Token?
+  var unexpectedBetweenColonAndName: UnexpectedNodes?
+  var name: ExprBuildable
+  var unexpectedBetweenNameAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `ObjcSelectorExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundSelector: 
@@ -4030,11 +4040,11 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
 public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBase: UnexpectedNodes?
-  let base: ExprBuildable?
-  let unexpectedBetweenBaseAndConfig: UnexpectedNodes?
-  let config: IfConfigDecl
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBase: UnexpectedNodes?
+  var base: ExprBuildable?
+  var unexpectedBetweenBaseAndConfig: UnexpectedNodes?
+  var config: IfConfigDecl
   /// Creates a `PostfixIfConfigExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBase: 
@@ -4086,9 +4096,9 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
 public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlaceholderExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIdentifier: UnexpectedNodes?
+  var identifier: Token
   /// Creates a `EditorPlaceholderExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -4142,15 +4152,15 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
 public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
-  let arguments: TupleExprElementList
-  let unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
+  var arguments: TupleExprElementList
+  var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `ObjectLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -4221,11 +4231,11 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
 public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializerClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeEqual: UnexpectedNodes?
-  let equal: Token
-  let unexpectedBetweenEqualAndValue: UnexpectedNodes?
-  let value: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeEqual: UnexpectedNodes?
+  var equal: Token
+  var unexpectedBetweenEqualAndValue: UnexpectedNodes?
+  var value: TypeBuildable
   /// Creates a `TypeInitializerClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeEqual: 
@@ -4271,21 +4281,21 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
 public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodes?
-  let typealiasKeyword: Token
-  let unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
-  let genericParameterClause: GenericParameterClause?
-  let unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodes?
-  let initializer: TypeInitializerClause
-  let unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodes?
+  var typealiasKeyword: Token
+  var unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
+  var genericParameterClause: GenericParameterClause?
+  var unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodes?
+  var initializer: TypeInitializerClause
+  var unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
   /// Creates a `TypealiasDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -4364,21 +4374,21 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
 public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodes?
-  let associatedtypeKeyword: Token
-  let unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodes?
-  let inheritanceClause: TypeInheritanceClause?
-  let unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodes?
-  let initializer: TypeInitializerClause?
-  let unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodes?
+  var associatedtypeKeyword: Token
+  var unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodes?
+  var inheritanceClause: TypeInheritanceClause?
+  var unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodes?
+  var initializer: TypeInitializerClause?
+  var unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
   /// Creates a `AssociatedtypeDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -4457,13 +4467,13 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
 public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndParameterList: UnexpectedNodes?
-  let parameterList: FunctionParameterList
-  let unexpectedBetweenParameterListAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodes?
+  var parameterList: FunctionParameterList
+  var unexpectedBetweenParameterListAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `ParameterClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -4522,11 +4532,11 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
 public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeArrow: UnexpectedNodes?
-  let arrow: Token
-  let unexpectedBetweenArrowAndReturnType: UnexpectedNodes?
-  let returnType: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeArrow: UnexpectedNodes?
+  var arrow: Token
+  var unexpectedBetweenArrowAndReturnType: UnexpectedNodes?
+  var returnType: TypeBuildable
   /// Creates a `ReturnClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeArrow: 
@@ -4572,15 +4582,15 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
 public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeInput: UnexpectedNodes?
-  let input: ParameterClause
-  let unexpectedBetweenInputAndAsyncOrReasyncKeyword: UnexpectedNodes?
-  let asyncOrReasyncKeyword: Token?
-  let unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodes?
-  let throwsOrRethrowsKeyword: Token?
-  let unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: UnexpectedNodes?
-  let output: ReturnClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeInput: UnexpectedNodes?
+  var input: ParameterClause
+  var unexpectedBetweenInputAndAsyncOrReasyncKeyword: UnexpectedNodes?
+  var asyncOrReasyncKeyword: Token?
+  var unexpectedBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodes?
+  var throwsOrRethrowsKeyword: Token?
+  var unexpectedBetweenThrowsOrRethrowsKeywordAndOutput: UnexpectedNodes?
+  var output: ReturnClause?
   /// Creates a `FunctionSignature` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeInput: 
@@ -4643,13 +4653,13 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
 public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundKeyword: UnexpectedNodes?
-  let poundKeyword: Token
-  let unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodes?
-  let condition: ExprBuildable?
-  let unexpectedBetweenConditionAndElements: UnexpectedNodes?
-  let elements: SyntaxBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundKeyword: UnexpectedNodes?
+  var poundKeyword: Token
+  var unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodes?
+  var condition: ExprBuildable?
+  var unexpectedBetweenConditionAndElements: UnexpectedNodes?
+  var elements: SyntaxBuildable
   /// Creates a `IfConfigClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundKeyword: 
@@ -4699,11 +4709,11 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
 public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeClauses: UnexpectedNodes?
-  let clauses: IfConfigClauseList
-  let unexpectedBetweenClausesAndPoundEndif: UnexpectedNodes?
-  let poundEndif: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeClauses: UnexpectedNodes?
+  var clauses: IfConfigClauseList
+  var unexpectedBetweenClausesAndPoundEndif: UnexpectedNodes?
+  var poundEndif: Token
   /// Creates a `IfConfigDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeClauses: 
@@ -4756,15 +4766,15 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
 public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundError: UnexpectedNodes?
-  let poundError: Token
-  let unexpectedBetweenPoundErrorAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndMessage: UnexpectedNodes?
-  let message: StringLiteralExpr
-  let unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundError: UnexpectedNodes?
+  var poundError: Token
+  var unexpectedBetweenPoundErrorAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndMessage: UnexpectedNodes?
+  var message: StringLiteralExpr
+  var unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `PoundErrorDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundError: 
@@ -4827,15 +4837,15 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
 public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundWarning: UnexpectedNodes?
-  let poundWarning: Token
-  let unexpectedBetweenPoundWarningAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndMessage: UnexpectedNodes?
-  let message: StringLiteralExpr
-  let unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundWarning: UnexpectedNodes?
+  var poundWarning: Token
+  var unexpectedBetweenPoundWarningAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndMessage: UnexpectedNodes?
+  var message: StringLiteralExpr
+  var unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `PoundWarningDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundWarning: 
@@ -4898,15 +4908,15 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
 public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocation {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundSourceLocation: UnexpectedNodes?
-  let poundSourceLocation: Token
-  let unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndArgs: UnexpectedNodes?
-  let args: PoundSourceLocationArgs?
-  let unexpectedBetweenArgsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundSourceLocation: UnexpectedNodes?
+  var poundSourceLocation: Token
+  var unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndArgs: UnexpectedNodes?
+  var args: PoundSourceLocationArgs?
+  var unexpectedBetweenArgsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `PoundSourceLocation` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundSourceLocation: 
@@ -4969,21 +4979,21 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
 public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSourceLocationArgs {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeFileArgLabel: UnexpectedNodes?
-  let fileArgLabel: Token
-  let unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodes?
-  let fileArgColon: Token
-  let unexpectedBetweenFileArgColonAndFileName: UnexpectedNodes?
-  let fileName: Token
-  let unexpectedBetweenFileNameAndComma: UnexpectedNodes?
-  let comma: Token
-  let unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodes?
-  let lineArgLabel: Token
-  let unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodes?
-  let lineArgColon: Token
-  let unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodes?
-  let lineNumber: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeFileArgLabel: UnexpectedNodes?
+  var fileArgLabel: Token
+  var unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodes?
+  var fileArgColon: Token
+  var unexpectedBetweenFileArgColonAndFileName: UnexpectedNodes?
+  var fileName: Token
+  var unexpectedBetweenFileNameAndComma: UnexpectedNodes?
+  var comma: Token
+  var unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodes?
+  var lineArgLabel: Token
+  var unexpectedBetweenLineArgLabelAndLineArgColon: UnexpectedNodes?
+  var lineArgColon: Token
+  var unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodes?
+  var lineNumber: Token
   /// Creates a `PoundSourceLocationArgs` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeFileArgLabel: 
@@ -5059,13 +5069,13 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
 public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDetail {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndDetail: UnexpectedNodes?
-  let detail: Token
-  let unexpectedBetweenDetailAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndDetail: UnexpectedNodes?
+  var detail: Token
+  var unexpectedBetweenDetailAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `DeclModifierDetail` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -5122,11 +5132,11 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
 public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndDetail: UnexpectedNodes?
-  let detail: DeclModifierDetail?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndDetail: UnexpectedNodes?
+  var detail: DeclModifierDetail?
   /// Creates a `DeclModifier` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -5172,11 +5182,11 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
 public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeTypeName: UnexpectedNodes?
-  let typeName: TypeBuildable
-  let unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeTypeName: UnexpectedNodes?
+  var typeName: TypeBuildable
+  var unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `InheritedType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeTypeName: 
@@ -5220,17 +5230,19 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeTypeName: unexpectedBeforeTypeName, typeName: typeName, unexpectedBetweenTypeNameAndTrailingComma: unexpectedBetweenTypeNameAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritanceClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodes?
-  let inheritedTypeCollection: InheritedTypeList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodes?
+  var inheritedTypeCollection: InheritedTypeList
   /// Creates a `TypeInheritanceClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeColon: 
@@ -5284,23 +5296,23 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
 public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodes?
-  let classKeyword: Token
-  let unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
-  let genericParameterClause: GenericParameterClause?
-  let unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
-  let inheritanceClause: TypeInheritanceClause?
-  let unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
-  let members: MemberDeclBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodes?
+  var classKeyword: Token
+  var unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
+  var genericParameterClause: GenericParameterClause?
+  var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
+  var inheritanceClause: TypeInheritanceClause?
+  var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
+  var members: MemberDeclBlock
   /// Creates a `ClassDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -5385,23 +5397,23 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
 public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodes?
-  let actorKeyword: Token
-  let unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
-  let genericParameterClause: GenericParameterClause?
-  let unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
-  let inheritanceClause: TypeInheritanceClause?
-  let unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
-  let members: MemberDeclBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodes?
+  var actorKeyword: Token
+  var unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
+  var genericParameterClause: GenericParameterClause?
+  var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
+  var inheritanceClause: TypeInheritanceClause?
+  var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
+  var members: MemberDeclBlock
   /// Creates a `ActorDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -5486,23 +5498,23 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
 public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodes?
-  let structKeyword: Token
-  let unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
-  let genericParameterClause: GenericParameterClause?
-  let unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
-  let inheritanceClause: TypeInheritanceClause?
-  let unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
-  let members: MemberDeclBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodes?
+  var structKeyword: Token
+  var unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
+  var genericParameterClause: GenericParameterClause?
+  var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodes?
+  var inheritanceClause: TypeInheritanceClause?
+  var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
+  var members: MemberDeclBlock
   /// Creates a `StructDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -5587,23 +5599,23 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
 public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodes?
-  let protocolKeyword: Token
-  let unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodes?
-  let primaryAssociatedTypeClause: PrimaryAssociatedTypeClause?
-  let unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodes?
-  let inheritanceClause: TypeInheritanceClause?
-  let unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
-  let members: MemberDeclBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodes?
+  var protocolKeyword: Token
+  var unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodes?
+  var primaryAssociatedTypeClause: PrimaryAssociatedTypeClause?
+  var unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodes?
+  var inheritanceClause: TypeInheritanceClause?
+  var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
+  var members: MemberDeclBlock
   /// Creates a `ProtocolDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -5688,21 +5700,21 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
 public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodes?
-  let extensionKeyword: Token
-  let unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodes?
-  let extendedType: TypeBuildable
-  let unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodes?
-  let inheritanceClause: TypeInheritanceClause?
-  let unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
-  let members: MemberDeclBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodes?
+  var extensionKeyword: Token
+  var unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodes?
+  var extendedType: TypeBuildable
+  var unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodes?
+  var inheritanceClause: TypeInheritanceClause?
+  var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
+  var members: MemberDeclBlock
   /// Creates a `ExtensionDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -5783,13 +5795,13 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
 public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: Token
-  let unexpectedBetweenLeftBraceAndMembers: UnexpectedNodes?
-  let members: MemberDeclList
-  let unexpectedBetweenMembersAndRightBrace: UnexpectedNodes?
-  let rightBrace: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftBrace: UnexpectedNodes?
+  var leftBrace: Token
+  var unexpectedBetweenLeftBraceAndMembers: UnexpectedNodes?
+  var members: MemberDeclList
+  var unexpectedBetweenMembersAndRightBrace: UnexpectedNodes?
+  var rightBrace: Token
   /// Creates a `MemberDeclBlock` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -5849,11 +5861,11 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
 public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListItem {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDecl: UnexpectedNodes?
-  let decl: DeclBuildable
-  let unexpectedBetweenDeclAndSemicolon: UnexpectedNodes?
-  let semicolon: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDecl: UnexpectedNodes?
+  var decl: DeclBuildable
+  var unexpectedBetweenDeclAndSemicolon: UnexpectedNodes?
+  var semicolon: Token?
   /// Creates a `MemberDeclListItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDecl: 
@@ -5899,11 +5911,11 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
 public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeStatements: UnexpectedNodes?
-  let statements: CodeBlockItemList
-  let unexpectedBetweenStatementsAndEOFToken: UnexpectedNodes?
-  let eofToken: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeStatements: UnexpectedNodes?
+  var statements: CodeBlockItemList
+  var unexpectedBetweenStatementsAndEOFToken: UnexpectedNodes?
+  var eofToken: Token
   /// Creates a `SourceFile` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeStatements: 
@@ -5956,11 +5968,11 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
 public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeEqual: UnexpectedNodes?
-  let equal: Token
-  let unexpectedBetweenEqualAndValue: UnexpectedNodes?
-  let value: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeEqual: UnexpectedNodes?
+  var equal: Token
+  var unexpectedBetweenEqualAndValue: UnexpectedNodes?
+  var value: ExprBuildable
   /// Creates a `InitializerClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeEqual: 
@@ -6006,23 +6018,23 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
 public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndFirstName: UnexpectedNodes?
-  let firstName: Token?
-  let unexpectedBetweenFirstNameAndSecondName: UnexpectedNodes?
-  let secondName: Token?
-  let unexpectedBetweenSecondNameAndColon: UnexpectedNodes?
-  let colon: Token?
-  let unexpectedBetweenColonAndType: UnexpectedNodes?
-  let type: TypeBuildable?
-  let unexpectedBetweenTypeAndEllipsis: UnexpectedNodes?
-  let ellipsis: Token?
-  let unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodes?
-  let defaultArgument: InitializerClause?
-  let unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndFirstName: UnexpectedNodes?
+  var firstName: Token?
+  var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodes?
+  var secondName: Token?
+  var unexpectedBetweenSecondNameAndColon: UnexpectedNodes?
+  var colon: Token?
+  var unexpectedBetweenColonAndType: UnexpectedNodes?
+  var type: TypeBuildable?
+  var unexpectedBetweenTypeAndEllipsis: UnexpectedNodes?
+  var ellipsis: Token?
+  var unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodes?
+  var defaultArgument: InitializerClause?
+  var unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `FunctionParameter` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6092,29 +6104,31 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndFirstName: unexpectedBetweenAttributesAndFirstName, firstName: firstName, unexpectedBetweenFirstNameAndSecondName: unexpectedBetweenFirstNameAndSecondName, secondName: secondName, unexpectedBetweenSecondNameAndColon: unexpectedBetweenSecondNameAndColon, colon: colon, unexpectedBetweenColonAndType: unexpectedBetweenColonAndType, type: type, unexpectedBetweenTypeAndEllipsis: unexpectedBetweenTypeAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndDefaultArgument: unexpectedBetweenEllipsisAndDefaultArgument, defaultArgument: defaultArgument, unexpectedBetweenDefaultArgumentAndTrailingComma: unexpectedBetweenDefaultArgumentAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodes?
-  let funcKeyword: Token
-  let unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
-  let genericParameterClause: GenericParameterClause?
-  let unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes?
-  let signature: FunctionSignature
-  let unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodes?
-  let body: CodeBlock?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodes?
+  var funcKeyword: Token
+  var unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodes?
+  var genericParameterClause: GenericParameterClause?
+  var unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes?
+  var signature: FunctionSignature
+  var unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodes?
+  var body: CodeBlock?
   /// Creates a `FunctionDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6199,23 +6213,23 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
 public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodes?
-  let initKeyword: Token
-  let unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodes?
-  let optionalMark: Token?
-  let unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodes?
-  let genericParameterClause: GenericParameterClause?
-  let unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes?
-  let signature: FunctionSignature
-  let unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodes?
-  let body: CodeBlock?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodes?
+  var initKeyword: Token
+  var unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodes?
+  var optionalMark: Token?
+  var unexpectedBetweenOptionalMarkAndGenericParameterClause: UnexpectedNodes?
+  var genericParameterClause: GenericParameterClause?
+  var unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodes?
+  var signature: FunctionSignature
+  var unexpectedBetweenSignatureAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodes?
+  var body: CodeBlock?
   /// Creates a `InitializerDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6301,15 +6315,15 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
 public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodes?
-  let deinitKeyword: Token
-  let unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodes?
-  let body: CodeBlock?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodes?
+  var deinitKeyword: Token
+  var unexpectedBetweenDeinitKeywordAndBody: UnexpectedNodes?
+  var body: CodeBlock?
   /// Creates a `DeinitializerDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6378,23 +6392,23 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
 public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodes?
-  let subscriptKeyword: Token
-  let unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodes?
-  let genericParameterClause: GenericParameterClause?
-  let unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodes?
-  let indices: ParameterClause
-  let unexpectedBetweenIndicesAndResult: UnexpectedNodes?
-  let result: ReturnClause
-  let unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodes?
-  let accessor: SyntaxBuildable?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodes?
+  var subscriptKeyword: Token
+  var unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodes?
+  var genericParameterClause: GenericParameterClause?
+  var unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodes?
+  var indices: ParameterClause
+  var unexpectedBetweenIndicesAndResult: UnexpectedNodes?
+  var result: ReturnClause
+  var unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodes?
+  var accessor: SyntaxBuildable?
   /// Creates a `SubscriptDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6471,11 +6485,11 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
 public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModifier {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndModifier: UnexpectedNodes?
-  let modifier: DeclModifierDetail?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndModifier: UnexpectedNodes?
+  var modifier: DeclModifierDetail?
   /// Creates a `AccessLevelModifier` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -6526,11 +6540,11 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
 public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathComponent {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndTrailingDot: UnexpectedNodes?
-  let trailingDot: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndTrailingDot: UnexpectedNodes?
+  var trailingDot: Token?
   /// Creates a `AccessPathComponent` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -6582,17 +6596,17 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
 public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndImportTok: UnexpectedNodes?
-  let importTok: Token
-  let unexpectedBetweenImportTokAndImportKind: UnexpectedNodes?
-  let importKind: Token?
-  let unexpectedBetweenImportKindAndPath: UnexpectedNodes?
-  let path: AccessPath
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndImportTok: UnexpectedNodes?
+  var importTok: Token
+  var unexpectedBetweenImportTokAndImportKind: UnexpectedNodes?
+  var importKind: Token?
+  var unexpectedBetweenImportKindAndPath: UnexpectedNodes?
+  var path: AccessPath
   /// Creates a `ImportDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6658,13 +6672,13 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
 public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `AccessorParameter` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -6721,21 +6735,21 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
 public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifier: UnexpectedNodes?
-  let modifier: DeclModifier?
-  let unexpectedBetweenModifierAndAccessorKind: UnexpectedNodes?
-  let accessorKind: Token
-  let unexpectedBetweenAccessorKindAndParameter: UnexpectedNodes?
-  let parameter: AccessorParameter?
-  let unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: Token?
-  let unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodes?
-  let throwsKeyword: Token?
-  let unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodes?
-  let body: CodeBlock?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifier: UnexpectedNodes?
+  var modifier: DeclModifier?
+  var unexpectedBetweenModifierAndAccessorKind: UnexpectedNodes?
+  var accessorKind: Token
+  var unexpectedBetweenAccessorKindAndParameter: UnexpectedNodes?
+  var parameter: AccessorParameter?
+  var unexpectedBetweenParameterAndAsyncKeyword: UnexpectedNodes?
+  var asyncKeyword: Token?
+  var unexpectedBetweenAsyncKeywordAndThrowsKeyword: UnexpectedNodes?
+  var throwsKeyword: Token?
+  var unexpectedBetweenThrowsKeywordAndBody: UnexpectedNodes?
+  var body: CodeBlock?
   /// Creates a `AccessorDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -6820,13 +6834,13 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
 public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftBrace: UnexpectedNodes?
-  let leftBrace: Token
-  let unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodes?
-  let accessors: AccessorList
-  let unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodes?
-  let rightBrace: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftBrace: UnexpectedNodes?
+  var leftBrace: Token
+  var unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodes?
+  var accessors: AccessorList
+  var unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodes?
+  var rightBrace: Token
   /// Creates a `AccessorBlock` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftBrace: 
@@ -6877,17 +6891,17 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
 public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePattern: UnexpectedNodes?
-  let pattern: PatternBuildable
-  let unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
-  let typeAnnotation: TypeAnnotation?
-  let unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodes?
-  let initializer: InitializerClause?
-  let unexpectedBetweenInitializerAndAccessor: UnexpectedNodes?
-  let accessor: SyntaxBuildable?
-  let unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforePattern: UnexpectedNodes?
+  var pattern: PatternBuildable
+  var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
+  var typeAnnotation: TypeAnnotation?
+  var unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodes?
+  var initializer: InitializerClause?
+  var unexpectedBetweenInitializerAndAccessor: UnexpectedNodes?
+  var accessor: SyntaxBuildable?
+  var unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `PatternBinding` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -6943,21 +6957,23 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforePattern: unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndTypeAnnotation: unexpectedBetweenPatternAndTypeAnnotation, typeAnnotation: typeAnnotation, unexpectedBetweenTypeAnnotationAndInitializer: unexpectedBetweenTypeAnnotationAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndAccessor: unexpectedBetweenInitializerAndAccessor, accessor: accessor, unexpectedBetweenAccessorAndTrailingComma: unexpectedBetweenAccessorAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodes?
-  let letOrVarKeyword: Token
-  let unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodes?
-  let bindings: PatternBindingList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndLetOrVarKeyword: UnexpectedNodes?
+  var letOrVarKeyword: Token
+  var unexpectedBetweenLetOrVarKeywordAndBindings: UnexpectedNodes?
+  var bindings: PatternBindingList
   /// Creates a `VariableDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -7027,15 +7043,15 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
 public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodes?
-  let associatedValue: ParameterClause?
-  let unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodes?
-  let rawValue: InitializerClause?
-  let unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodes?
+  var associatedValue: ParameterClause?
+  var unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodes?
+  var rawValue: InitializerClause?
+  var unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `EnumCaseElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -7093,22 +7109,24 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeIdentifier: unexpectedBeforeIdentifier, identifier: identifier, unexpectedBetweenIdentifierAndAssociatedValue: unexpectedBetweenIdentifierAndAssociatedValue, associatedValue: associatedValue, unexpectedBetweenAssociatedValueAndRawValue: unexpectedBetweenAssociatedValueAndRawValue, rawValue: rawValue, unexpectedBetweenRawValueAndTrailingComma: unexpectedBetweenRawValueAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 /// A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.
 public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodes?
-  let caseKeyword: Token
-  let unexpectedBetweenCaseKeywordAndElements: UnexpectedNodes?
-  let elements: EnumCaseElementList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodes?
+  var caseKeyword: Token
+  var unexpectedBetweenCaseKeywordAndElements: UnexpectedNodes?
+  var elements: EnumCaseElementList
   /// Creates a `EnumCaseDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -7178,23 +7196,23 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
 public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodes?
-  let enumKeyword: Token
-  let unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodes?
-  let genericParameters: GenericParameterClause?
-  let unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodes?
-  let inheritanceClause: TypeInheritanceClause?
-  let unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
-  let genericWhereClause: GenericWhereClause?
-  let unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
-  let members: MemberDeclBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodes?
+  var enumKeyword: Token
+  var unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodes?
+  var genericParameters: GenericParameterClause?
+  var unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodes?
+  var inheritanceClause: TypeInheritanceClause?
+  var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndMembers: UnexpectedNodes?
+  var members: MemberDeclBlock
   /// Creates a `EnumDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -7280,17 +7298,17 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
 public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodes?
-  let operatorKeyword: Token
-  let unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodes?
-  let operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodes?
+  var operatorKeyword: Token
+  var unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodes?
+  var operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
   /// Creates a `OperatorDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -7356,11 +7374,11 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
 public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperatorPrecedenceAndTypes {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodes?
-  let precedenceGroupAndDesignatedTypes: IdentifierList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodes?
+  var precedenceGroupAndDesignatedTypes: IdentifierList
   /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeColon: 
@@ -7407,21 +7425,21 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
 public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDecl {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
-  let modifiers: ModifierList?
-  let unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodes?
-  let precedencegroupKeyword: Token
-  let unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodes?
-  let identifier: Token
-  let unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodes?
-  let leftBrace: Token
-  let unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodes?
-  let groupAttributes: PrecedenceGroupAttributeList
-  let unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodes?
-  let rightBrace: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndModifiers: UnexpectedNodes?
+  var modifiers: ModifierList?
+  var unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodes?
+  var precedencegroupKeyword: Token
+  var unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodes?
+  var identifier: Token
+  var unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodes?
+  var leftBrace: Token
+  var unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodes?
+  var groupAttributes: PrecedenceGroupAttributeList
+  var unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodes?
+  var rightBrace: Token
   /// Creates a `PrecedenceGroupDecl` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -7503,13 +7521,13 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
 public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceGroupRelation {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodes?
-  let higherThanOrLowerThan: Token
-  let unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndOtherNames: UnexpectedNodes?
-  let otherNames: PrecedenceGroupNameList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodes?
+  var higherThanOrLowerThan: Token
+  var unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndOtherNames: UnexpectedNodes?
+  var otherNames: PrecedenceGroupNameList
   /// Creates a `PrecedenceGroupRelation` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeHigherThanOrLowerThan: 
@@ -7566,11 +7584,11 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
 public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPrecedenceGroupNameElement {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `PrecedenceGroupNameElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -7623,13 +7641,13 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
 public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenceGroupAssignment {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAssignmentKeyword: UnexpectedNodes?
-  let assignmentKeyword: Token
-  let unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndFlag: UnexpectedNodes?
-  let flag: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAssignmentKeyword: UnexpectedNodes?
+  var assignmentKeyword: Token
+  var unexpectedBetweenAssignmentKeywordAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndFlag: UnexpectedNodes?
+  var flag: Token
   /// Creates a `PrecedenceGroupAssignment` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAssignmentKeyword: 
@@ -7688,13 +7706,13 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
 public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPrecedenceGroupAssociativity {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAssociativityKeyword: UnexpectedNodes?
-  let associativityKeyword: Token
-  let unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndValue: UnexpectedNodes?
-  let value: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAssociativityKeyword: UnexpectedNodes?
+  var associativityKeyword: Token
+  var unexpectedBetweenAssociativityKeywordAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndValue: UnexpectedNodes?
+  var value: Token
   /// Creates a `PrecedenceGroupAssociativity` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAssociativityKeyword: 
@@ -7753,17 +7771,17 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
 public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAtSignToken: UnexpectedNodes?
-  let atSignToken: Token
-  let unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodes?
-  let attributeName: TypeBuildable
-  let unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodes?
-  let leftParen: Token?
-  let unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes?
-  let argumentList: TupleExprElementList?
-  let unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes?
-  let rightParen: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAtSignToken: UnexpectedNodes?
+  var atSignToken: Token
+  var unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodes?
+  var attributeName: TypeBuildable
+  var unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodes?
+  var leftParen: Token?
+  var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodes?
+  var argumentList: TupleExprElementList?
+  var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodes?
+  var rightParen: Token?
   /// Creates a `CustomAttribute` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAtSignToken: 
@@ -7832,19 +7850,19 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
 public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAtSignToken: UnexpectedNodes?
-  let atSignToken: Token
-  let unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodes?
-  let attributeName: Token
-  let unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodes?
-  let leftParen: Token?
-  let unexpectedBetweenLeftParenAndArgument: UnexpectedNodes?
-  let argument: SyntaxBuildable?
-  let unexpectedBetweenArgumentAndRightParen: UnexpectedNodes?
-  let rightParen: Token?
-  let unexpectedBetweenRightParenAndTokenList: UnexpectedNodes?
-  let tokenList: TokenList?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAtSignToken: UnexpectedNodes?
+  var atSignToken: Token
+  var unexpectedBetweenAtSignTokenAndAttributeName: UnexpectedNodes?
+  var attributeName: Token
+  var unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodes?
+  var leftParen: Token?
+  var unexpectedBetweenLeftParenAndArgument: UnexpectedNodes?
+  var argument: SyntaxBuildable?
+  var unexpectedBetweenArgumentAndRightParen: UnexpectedNodes?
+  var rightParen: Token?
+  var unexpectedBetweenRightParenAndTokenList: UnexpectedNodes?
+  var tokenList: TokenList?
   /// Creates a `Attribute` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAtSignToken: 
@@ -7909,15 +7927,15 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
 public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: Token
-  let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndAvailabilityList: UnexpectedNodes?
-  let availabilityList: AvailabilitySpecList
-  let unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodes?
-  let semicolon: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabel: UnexpectedNodes?
+  var label: Token
+  var unexpectedBetweenLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndAvailabilityList: UnexpectedNodes?
+  var availabilityList: AvailabilitySpecList
+  var unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodes?
+  var semicolon: Token
   /// Creates a `AvailabilityEntry` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -7979,15 +7997,15 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
 public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpecializeEntry, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: Token
-  let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndValue: UnexpectedNodes?
-  let value: Token
-  let unexpectedBetweenValueAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabel: UnexpectedNodes?
+  var label: Token
+  var unexpectedBetweenLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndValue: UnexpectedNodes?
+  var value: Token
+  var unexpectedBetweenValueAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `LabeledSpecializeEntry` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -8046,22 +8064,24 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeLabel: unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndValue: unexpectedBetweenColonAndValue, value: value, unexpectedBetweenValueAndTrailingComma: unexpectedBetweenValueAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 /// A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`
 public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionEntry, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: Token
-  let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndDeclname: UnexpectedNodes?
-  let declname: DeclName
-  let unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabel: UnexpectedNodes?
+  var label: Token
+  var unexpectedBetweenLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndDeclname: UnexpectedNodes?
+  var declname: DeclName
+  var unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `TargetFunctionEntry` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -8120,20 +8140,22 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeLabel: unexpectedBeforeLabel, label: label, unexpectedBetweenLabelAndColon: unexpectedBetweenLabelAndColon, colon: colon, unexpectedBetweenColonAndDeclname: unexpectedBetweenColonAndDeclname, declname: declname, unexpectedBetweenDeclnameAndTrailingComma: unexpectedBetweenDeclnameAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 /// The argument for the `@_dynamic_replacement` or `@_private`attribute of the form `for: "function()"` or `sourceFile:"Src.swift"`
 public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedAttributeStringArgument {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeNameTok: UnexpectedNodes?
-  let nameTok: Token
-  let unexpectedBetweenNameTokAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodes?
-  let stringOrDeclname: SyntaxBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeNameTok: UnexpectedNodes?
+  var nameTok: Token
+  var unexpectedBetweenNameTokAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodes?
+  var stringOrDeclname: SyntaxBuildable
   /// Creates a `NamedAttributeStringArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeNameTok: 
@@ -8183,11 +8205,11 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
 public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDeclBaseName: UnexpectedNodes?
-  let declBaseName: SyntaxBuildable
-  let unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes?
-  let declNameArguments: DeclNameArguments?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDeclBaseName: UnexpectedNodes?
+  var declBaseName: SyntaxBuildable
+  var unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes?
+  var declNameArguments: DeclNameArguments?
   /// Creates a `DeclName` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDeclBaseName: 
@@ -8233,15 +8255,15 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
 public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplementsAttributeArguments {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeType: UnexpectedNodes?
-  let type: SimpleTypeIdentifier
-  let unexpectedBetweenTypeAndComma: UnexpectedNodes?
-  let comma: Token
-  let unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodes?
-  let declBaseName: SyntaxBuildable
-  let unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes?
-  let declNameArguments: DeclNameArguments?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeType: UnexpectedNodes?
+  var type: SimpleTypeIdentifier
+  var unexpectedBetweenTypeAndComma: UnexpectedNodes?
+  var comma: Token
+  var unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodes?
+  var declBaseName: SyntaxBuildable
+  var unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes?
+  var declNameArguments: DeclNameArguments?
   /// Creates a `ImplementsAttributeArguments` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeType: 
@@ -8296,11 +8318,11 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
 public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token?
-  let unexpectedBetweenNameAndColon: UnexpectedNodes?
-  let colon: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token?
+  var unexpectedBetweenNameAndColon: UnexpectedNodes?
+  var colon: Token?
   /// Creates a `ObjCSelectorPiece` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -8355,17 +8377,17 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
 public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDifferentiableAttributeArguments {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDiffKind: UnexpectedNodes?
-  let diffKind: Token?
-  let unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodes?
-  let diffKindComma: Token?
-  let unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodes?
-  let diffParams: DifferentiabilityParamsClause?
-  let unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodes?
-  let diffParamsComma: Token?
-  let unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodes?
-  let whereClause: GenericWhereClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDiffKind: UnexpectedNodes?
+  var diffKind: Token?
+  var unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodes?
+  var diffKindComma: Token?
+  var unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodes?
+  var diffParams: DifferentiabilityParamsClause?
+  var unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodes?
+  var diffParamsComma: Token?
+  var unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodes?
+  var whereClause: GenericWhereClause?
   /// Creates a `DifferentiableAttributeArguments` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDiffKind: 
@@ -8434,13 +8456,13 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
 public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDifferentiabilityParamsClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWrtLabel: UnexpectedNodes?
-  let wrtLabel: Token
-  let unexpectedBetweenWrtLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndParameters: UnexpectedNodes?
-  let parameters: SyntaxBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWrtLabel: UnexpectedNodes?
+  var wrtLabel: Token
+  var unexpectedBetweenWrtLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndParameters: UnexpectedNodes?
+  var parameters: SyntaxBuildable
   /// Creates a `DifferentiabilityParamsClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWrtLabel: 
@@ -8498,13 +8520,13 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
 public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentiabilityParams {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodes?
-  let diffParams: DifferentiabilityParamList
-  let unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodes?
+  var diffParams: DifferentiabilityParamList
+  var unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `DifferentiabilityParams` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -8556,11 +8578,11 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
 public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiabilityParam, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeParameter: UnexpectedNodes?
-  let parameter: SyntaxBuildable
-  let unexpectedBetweenParameterAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeParameter: UnexpectedNodes?
+  var parameter: SyntaxBuildable
+  var unexpectedBetweenParameterAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `DifferentiabilityParam` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeParameter: 
@@ -8604,28 +8626,30 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeParameter: unexpectedBeforeParameter, parameter: parameter, unexpectedBetweenParameterAndTrailingComma: unexpectedBetweenParameterAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 /// The arguments for the '@derivative(of:)' and '@transpose(of:)'attributes: the 'of:' label, the original declaration name, and anoptional differentiability parameter list.
 public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, ExpressibleAsDerivativeRegistrationAttributeArguments {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeOfLabel: UnexpectedNodes?
-  let ofLabel: Token
-  let unexpectedBetweenOfLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodes?
-  let originalDeclName: QualifiedDeclName
-  let unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodes?
-  let period: Token?
-  let unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodes?
-  let accessorKind: Token?
-  let unexpectedBetweenAccessorKindAndComma: UnexpectedNodes?
-  let comma: Token?
-  let unexpectedBetweenCommaAndDiffParams: UnexpectedNodes?
-  let diffParams: DifferentiabilityParamsClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeOfLabel: UnexpectedNodes?
+  var ofLabel: Token
+  var unexpectedBetweenOfLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodes?
+  var originalDeclName: QualifiedDeclName
+  var unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodes?
+  var period: Token?
+  var unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodes?
+  var accessorKind: Token?
+  var unexpectedBetweenAccessorKindAndComma: UnexpectedNodes?
+  var comma: Token?
+  var unexpectedBetweenCommaAndDiffParams: UnexpectedNodes?
+  var diffParams: DifferentiabilityParamsClause?
   /// Creates a `DerivativeRegistrationAttributeArguments` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeOfLabel: 
@@ -8704,15 +8728,15 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
 public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBaseType: UnexpectedNodes?
-  let baseType: TypeBuildable?
-  let unexpectedBetweenBaseTypeAndDot: UnexpectedNodes?
-  let dot: Token?
-  let unexpectedBetweenDotAndName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndArguments: UnexpectedNodes?
-  let arguments: DeclNameArguments?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBaseType: UnexpectedNodes?
+  var baseType: TypeBuildable?
+  var unexpectedBetweenBaseTypeAndDot: UnexpectedNodes?
+  var dot: Token?
+  var unexpectedBetweenDotAndName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndArguments: UnexpectedNodes?
+  var arguments: DeclNameArguments?
   /// Creates a `QualifiedDeclName` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBaseType: 
@@ -8767,11 +8791,11 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
 public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: SyntaxBuildable
-  let unexpectedBetweenNameAndArguments: UnexpectedNodes?
-  let arguments: DeclNameArguments?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: SyntaxBuildable
+  var unexpectedBetweenNameAndArguments: UnexpectedNodes?
+  var arguments: DeclNameArguments?
   /// Creates a `FunctionDeclName` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -8817,13 +8841,13 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
 public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDeployAttributeSpecList {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBeforeLabel: UnexpectedNodes?
-  let beforeLabel: Token
-  let unexpectedBetweenBeforeLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndVersionList: UnexpectedNodes?
-  let versionList: BackDeployVersionList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBeforeLabel: UnexpectedNodes?
+  var beforeLabel: Token
+  var unexpectedBetweenBeforeLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndVersionList: UnexpectedNodes?
+  var versionList: BackDeployVersionList
   /// Creates a `BackDeployAttributeSpecList` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBeforeLabel: 
@@ -8881,11 +8905,11 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
 public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeployVersionArgument {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodes?
-  let availabilityVersionRestriction: AvailabilityVersionRestriction
-  let unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodes?
+  var availabilityVersionRestriction: AvailabilityVersionRestriction
+  var unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `BackDeployVersionArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAvailabilityVersionRestriction: 
@@ -8931,13 +8955,13 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
 public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabelName: UnexpectedNodes?
-  let labelName: Token
-  let unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodes?
-  let labelColon: Token
-  let unexpectedBetweenLabelColonAndStatement: UnexpectedNodes?
-  let statement: StmtBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabelName: UnexpectedNodes?
+  var labelName: Token
+  var unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodes?
+  var labelColon: Token
+  var unexpectedBetweenLabelColonAndStatement: UnexpectedNodes?
+  var statement: StmtBuildable
   /// Creates a `LabeledStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabelName: 
@@ -9000,11 +9024,11 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
 public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeContinueKeyword: UnexpectedNodes?
-  let continueKeyword: Token
-  let unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodes?
-  let label: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeContinueKeyword: UnexpectedNodes?
+  var continueKeyword: Token
+  var unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodes?
+  var label: Token?
   /// Creates a `ContinueStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeContinueKeyword: 
@@ -9065,13 +9089,13 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
 public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWhileKeyword: UnexpectedNodes?
-  let whileKeyword: Token
-  let unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodes?
-  let conditions: ConditionElementList
-  let unexpectedBetweenConditionsAndBody: UnexpectedNodes?
-  let body: CodeBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWhileKeyword: UnexpectedNodes?
+  var whileKeyword: Token
+  var unexpectedBetweenWhileKeywordAndConditions: UnexpectedNodes?
+  var conditions: ConditionElementList
+  var unexpectedBetweenConditionsAndBody: UnexpectedNodes?
+  var body: CodeBlock
   /// Creates a `WhileStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWhileKeyword: 
@@ -9136,11 +9160,11 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
 public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDeferKeyword: UnexpectedNodes?
-  let deferKeyword: Token
-  let unexpectedBetweenDeferKeywordAndBody: UnexpectedNodes?
-  let body: CodeBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDeferKeyword: UnexpectedNodes?
+  var deferKeyword: Token
+  var unexpectedBetweenDeferKeywordAndBody: UnexpectedNodes?
+  var body: CodeBlock
   /// Creates a `DeferStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDeferKeyword: 
@@ -9201,9 +9225,9 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
 public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `ExpressionStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -9251,15 +9275,15 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
 public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeRepeatKeyword: UnexpectedNodes?
-  let repeatKeyword: Token
-  let unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodes?
-  let body: CodeBlock
-  let unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodes?
-  let whileKeyword: Token
-  let unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodes?
-  let condition: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeRepeatKeyword: UnexpectedNodes?
+  var repeatKeyword: Token
+  var unexpectedBetweenRepeatKeywordAndBody: UnexpectedNodes?
+  var body: CodeBlock
+  var unexpectedBetweenBodyAndWhileKeyword: UnexpectedNodes?
+  var whileKeyword: Token
+  var unexpectedBetweenWhileKeywordAndCondition: UnexpectedNodes?
+  var condition: ExprBuildable
   /// Creates a `RepeatWhileStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeRepeatKeyword: 
@@ -9329,15 +9353,15 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
 public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeGuardKeyword: UnexpectedNodes?
-  let guardKeyword: Token
-  let unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodes?
-  let conditions: ConditionElementList
-  let unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodes?
-  let elseKeyword: Token
-  let unexpectedBetweenElseKeywordAndBody: UnexpectedNodes?
-  let body: CodeBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeGuardKeyword: UnexpectedNodes?
+  var guardKeyword: Token
+  var unexpectedBetweenGuardKeywordAndConditions: UnexpectedNodes?
+  var conditions: ConditionElementList
+  var unexpectedBetweenConditionsAndElseKeyword: UnexpectedNodes?
+  var elseKeyword: Token
+  var unexpectedBetweenElseKeywordAndBody: UnexpectedNodes?
+  var body: CodeBlock
   /// Creates a `GuardStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeGuardKeyword: 
@@ -9407,11 +9431,11 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
 public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWhereKeyword: UnexpectedNodes?
-  let whereKeyword: Token
-  let unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodes?
-  let guardResult: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWhereKeyword: UnexpectedNodes?
+  var whereKeyword: Token
+  var unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodes?
+  var guardResult: ExprBuildable
   /// Creates a `WhereClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWhereKeyword: 
@@ -9457,27 +9481,27 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
 public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeForKeyword: UnexpectedNodes?
-  let forKeyword: Token
-  let unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodes?
-  let tryKeyword: Token?
-  let unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodes?
-  let awaitKeyword: Token?
-  let unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodes?
-  let caseKeyword: Token?
-  let unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodes?
-  let pattern: PatternBuildable
-  let unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
-  let typeAnnotation: TypeAnnotation?
-  let unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodes?
-  let inKeyword: Token
-  let unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodes?
-  let sequenceExpr: ExprBuildable
-  let unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodes?
-  let whereClause: WhereClause?
-  let unexpectedBetweenWhereClauseAndBody: UnexpectedNodes?
-  let body: CodeBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeForKeyword: UnexpectedNodes?
+  var forKeyword: Token
+  var unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodes?
+  var tryKeyword: Token?
+  var unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodes?
+  var awaitKeyword: Token?
+  var unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodes?
+  var caseKeyword: Token?
+  var unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodes?
+  var pattern: PatternBuildable
+  var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
+  var typeAnnotation: TypeAnnotation?
+  var unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodes?
+  var inKeyword: Token
+  var unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodes?
+  var sequenceExpr: ExprBuildable
+  var unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodes?
+  var whereClause: WhereClause?
+  var unexpectedBetweenWhereClauseAndBody: UnexpectedNodes?
+  var body: CodeBlock
   /// Creates a `ForInStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeForKeyword: 
@@ -9576,17 +9600,17 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
 public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeSwitchKeyword: UnexpectedNodes?
-  let switchKeyword: Token
-  let unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
-  let unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodes?
-  let leftBrace: Token
-  let unexpectedBetweenLeftBraceAndCases: UnexpectedNodes?
-  let cases: SwitchCaseList
-  let unexpectedBetweenCasesAndRightBrace: UnexpectedNodes?
-  let rightBrace: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeSwitchKeyword: UnexpectedNodes?
+  var switchKeyword: Token
+  var unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
+  var unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodes?
+  var leftBrace: Token
+  var unexpectedBetweenLeftBraceAndCases: UnexpectedNodes?
+  var cases: SwitchCaseList
+  var unexpectedBetweenCasesAndRightBrace: UnexpectedNodes?
+  var rightBrace: Token
   /// Creates a `SwitchStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSwitchKeyword: 
@@ -9661,13 +9685,13 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
 public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDoKeyword: UnexpectedNodes?
-  let doKeyword: Token
-  let unexpectedBetweenDoKeywordAndBody: UnexpectedNodes?
-  let body: CodeBlock
-  let unexpectedBetweenBodyAndCatchClauses: UnexpectedNodes?
-  let catchClauses: CatchClauseList?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDoKeyword: UnexpectedNodes?
+  var doKeyword: Token
+  var unexpectedBetweenDoKeywordAndBody: UnexpectedNodes?
+  var body: CodeBlock
+  var unexpectedBetweenBodyAndCatchClauses: UnexpectedNodes?
+  var catchClauses: CatchClauseList?
   /// Creates a `DoStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDoKeyword: 
@@ -9732,11 +9756,11 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
 public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeReturnKeyword: UnexpectedNodes?
-  let returnKeyword: Token
-  let unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeReturnKeyword: UnexpectedNodes?
+  var returnKeyword: Token
+  var unexpectedBetweenReturnKeywordAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable?
   /// Creates a `ReturnStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeReturnKeyword: 
@@ -9789,11 +9813,11 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
 public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeYieldKeyword: UnexpectedNodes?
-  let yieldKeyword: Token
-  let unexpectedBetweenYieldKeywordAndYields: UnexpectedNodes?
-  let yields: SyntaxBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeYieldKeyword: UnexpectedNodes?
+  var yieldKeyword: Token
+  var unexpectedBetweenYieldKeywordAndYields: UnexpectedNodes?
+  var yields: SyntaxBuildable
   /// Creates a `YieldStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeYieldKeyword: 
@@ -9846,15 +9870,15 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
 public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndElementList: UnexpectedNodes?
-  let elementList: ExprList
-  let unexpectedBetweenElementListAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
-  let unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndElementList: UnexpectedNodes?
+  var elementList: ExprList
+  var unexpectedBetweenElementListAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
+  var unexpectedBetweenTrailingCommaAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `YieldList` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -9918,9 +9942,9 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
 public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeFallthroughKeyword: UnexpectedNodes?
-  let fallthroughKeyword: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeFallthroughKeyword: UnexpectedNodes?
+  var fallthroughKeyword: Token
   /// Creates a `FallthroughStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeFallthroughKeyword: 
@@ -9969,11 +9993,11 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
 public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBreakKeyword: UnexpectedNodes?
-  let breakKeyword: Token
-  let unexpectedBetweenBreakKeywordAndLabel: UnexpectedNodes?
-  let label: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBreakKeyword: UnexpectedNodes?
+  var breakKeyword: Token
+  var unexpectedBetweenBreakKeywordAndLabel: UnexpectedNodes?
+  var label: Token?
   /// Creates a `BreakStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBreakKeyword: 
@@ -10034,11 +10058,11 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
 public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeCondition: UnexpectedNodes?
-  let condition: SyntaxBuildable
-  let unexpectedBetweenConditionAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeCondition: UnexpectedNodes?
+  var condition: SyntaxBuildable
+  var unexpectedBetweenConditionAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `ConditionElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCondition: 
@@ -10082,21 +10106,23 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeCondition: unexpectedBeforeCondition, condition: condition, unexpectedBetweenConditionAndTrailingComma: unexpectedBetweenConditionAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityCondition {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundAvailableKeyword: UnexpectedNodes?
-  let poundAvailableKeyword: Token
-  let unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes?
-  let availabilitySpec: AvailabilitySpecList
-  let unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundAvailableKeyword: UnexpectedNodes?
+  var poundAvailableKeyword: Token
+  var unexpectedBetweenPoundAvailableKeywordAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes?
+  var availabilitySpec: AvailabilitySpecList
+  var unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `AvailabilityCondition` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundAvailableKeyword: 
@@ -10152,15 +10178,15 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
 public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPatternCondition {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeCaseKeyword: UnexpectedNodes?
-  let caseKeyword: Token
-  let unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodes?
-  let pattern: PatternBuildable
-  let unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
-  let typeAnnotation: TypeAnnotation?
-  let unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodes?
-  let initializer: InitializerClause
+  var leadingTrivia: Trivia
+  var unexpectedBeforeCaseKeyword: UnexpectedNodes?
+  var caseKeyword: Token
+  var unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodes?
+  var pattern: PatternBuildable
+  var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
+  var typeAnnotation: TypeAnnotation?
+  var unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodes?
+  var initializer: InitializerClause
   /// Creates a `MatchingPatternCondition` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCaseKeyword: 
@@ -10214,15 +10240,15 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
 public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBindingCondition {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLetOrVarKeyword: UnexpectedNodes?
-  let letOrVarKeyword: Token
-  let unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodes?
-  let pattern: PatternBuildable
-  let unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
-  let typeAnnotation: TypeAnnotation?
-  let unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodes?
-  let initializer: InitializerClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLetOrVarKeyword: UnexpectedNodes?
+  var letOrVarKeyword: Token
+  var unexpectedBetweenLetOrVarKeywordAndPattern: UnexpectedNodes?
+  var pattern: PatternBuildable
+  var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodes?
+  var typeAnnotation: TypeAnnotation?
+  var unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodes?
+  var initializer: InitializerClause?
   /// Creates a `OptionalBindingCondition` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLetOrVarKeyword: 
@@ -10276,15 +10302,15 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
 public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabilityCondition {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundUnavailableKeyword: UnexpectedNodes?
-  let poundUnavailableKeyword: Token
-  let unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes?
-  let availabilitySpec: AvailabilitySpecList
-  let unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundUnavailableKeyword: UnexpectedNodes?
+  var poundUnavailableKeyword: Token
+  var unexpectedBetweenPoundUnavailableKeywordAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodes?
+  var availabilitySpec: AvailabilitySpecList
+  var unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `UnavailabilityCondition` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundUnavailableKeyword: 
@@ -10340,9 +10366,9 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
 public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDeclaration: UnexpectedNodes?
-  let declaration: DeclBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDeclaration: UnexpectedNodes?
+  var declaration: DeclBuildable
   /// Creates a `DeclarationStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDeclaration: 
@@ -10390,11 +10416,11 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
 public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeThrowKeyword: UnexpectedNodes?
-  let throwKeyword: Token
-  let unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeThrowKeyword: UnexpectedNodes?
+  var throwKeyword: Token
+  var unexpectedBetweenThrowKeywordAndExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `ThrowStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeThrowKeyword: 
@@ -10447,17 +10473,17 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
 public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIfKeyword: UnexpectedNodes?
-  let ifKeyword: Token
-  let unexpectedBetweenIfKeywordAndConditions: UnexpectedNodes?
-  let conditions: ConditionElementList
-  let unexpectedBetweenConditionsAndBody: UnexpectedNodes?
-  let body: CodeBlock
-  let unexpectedBetweenBodyAndElseKeyword: UnexpectedNodes?
-  let elseKeyword: Token?
-  let unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodes?
-  let elseBody: SyntaxBuildable?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIfKeyword: UnexpectedNodes?
+  var ifKeyword: Token
+  var unexpectedBetweenIfKeywordAndConditions: UnexpectedNodes?
+  var conditions: ConditionElementList
+  var unexpectedBetweenConditionsAndBody: UnexpectedNodes?
+  var body: CodeBlock
+  var unexpectedBetweenBodyAndElseKeyword: UnexpectedNodes?
+  var elseKeyword: Token?
+  var unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodes?
+  var elseBody: SyntaxBuildable?
   /// Creates a `IfStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIfKeyword: 
@@ -10531,9 +10557,9 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
 public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuation {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIfStatement: UnexpectedNodes?
-  let ifStatement: IfStmt
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIfStatement: UnexpectedNodes?
+  var ifStatement: IfStmt
   /// Creates a `ElseIfContinuation` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIfStatement: 
@@ -10574,11 +10600,11 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
 public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeElseKeyword: UnexpectedNodes?
-  let elseKeyword: Token
-  let unexpectedBetweenElseKeywordAndBody: UnexpectedNodes?
-  let body: CodeBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeElseKeyword: UnexpectedNodes?
+  var elseKeyword: Token
+  var unexpectedBetweenElseKeywordAndBody: UnexpectedNodes?
+  var body: CodeBlock
   /// Creates a `ElseBlock` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeElseKeyword: 
@@ -10632,13 +10658,13 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
 public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeUnknownAttr: UnexpectedNodes?
-  let unknownAttr: Attribute?
-  let unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodes?
-  let label: SyntaxBuildable
-  let unexpectedBetweenLabelAndStatements: UnexpectedNodes?
-  let statements: CodeBlockItemList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeUnknownAttr: UnexpectedNodes?
+  var unknownAttr: Attribute?
+  var unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodes?
+  var label: SyntaxBuildable
+  var unexpectedBetweenLabelAndStatements: UnexpectedNodes?
+  var statements: CodeBlockItemList
   /// Creates a `SwitchCase` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeUnknownAttr: 
@@ -10695,11 +10721,11 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
 public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLabel {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeDefaultKeyword: UnexpectedNodes?
-  let defaultKeyword: Token
-  let unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodes?
-  let colon: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeDefaultKeyword: UnexpectedNodes?
+  var defaultKeyword: Token
+  var unexpectedBetweenDefaultKeywordAndColon: UnexpectedNodes?
+  var colon: Token
   /// Creates a `SwitchDefaultLabel` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeDefaultKeyword: 
@@ -10746,13 +10772,13 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
 public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePattern: UnexpectedNodes?
-  let pattern: PatternBuildable
-  let unexpectedBetweenPatternAndWhereClause: UnexpectedNodes?
-  let whereClause: WhereClause?
-  let unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforePattern: UnexpectedNodes?
+  var pattern: PatternBuildable
+  var unexpectedBetweenPatternAndWhereClause: UnexpectedNodes?
+  var whereClause: WhereClause?
+  var unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `CaseItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -10800,19 +10826,21 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforePattern: unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndWhereClause: unexpectedBetweenPatternAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndTrailingComma: unexpectedBetweenWhereClauseAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePattern: UnexpectedNodes?
-  let pattern: PatternBuildable?
-  let unexpectedBetweenPatternAndWhereClause: UnexpectedNodes?
-  let whereClause: WhereClause?
-  let unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforePattern: UnexpectedNodes?
+  var pattern: PatternBuildable?
+  var unexpectedBetweenPatternAndWhereClause: UnexpectedNodes?
+  var whereClause: WhereClause?
+  var unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `CatchItem` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -10860,19 +10888,21 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforePattern: unexpectedBeforePattern, pattern: pattern, unexpectedBetweenPatternAndWhereClause: unexpectedBetweenPatternAndWhereClause, whereClause: whereClause, unexpectedBetweenWhereClauseAndTrailingComma: unexpectedBetweenWhereClauseAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeCaseKeyword: UnexpectedNodes?
-  let caseKeyword: Token
-  let unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodes?
-  let caseItems: CaseItemList
-  let unexpectedBetweenCaseItemsAndColon: UnexpectedNodes?
-  let colon: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeCaseKeyword: UnexpectedNodes?
+  var caseKeyword: Token
+  var unexpectedBetweenCaseKeywordAndCaseItems: UnexpectedNodes?
+  var caseItems: CaseItemList
+  var unexpectedBetweenCaseItemsAndColon: UnexpectedNodes?
+  var colon: Token
   /// Creates a `SwitchCaseLabel` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCaseKeyword: 
@@ -10931,13 +10961,13 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
 public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeCatchKeyword: UnexpectedNodes?
-  let catchKeyword: Token
-  let unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodes?
-  let catchItems: CatchItemList?
-  let unexpectedBetweenCatchItemsAndBody: UnexpectedNodes?
-  let body: CodeBlock
+  var leadingTrivia: Trivia
+  var unexpectedBeforeCatchKeyword: UnexpectedNodes?
+  var catchKeyword: Token
+  var unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodes?
+  var catchItems: CatchItemList?
+  var unexpectedBetweenCatchItemsAndBody: UnexpectedNodes?
+  var body: CodeBlock
   /// Creates a `CatchClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeCatchKeyword: 
@@ -10995,19 +11025,19 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
 public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePoundAssert: UnexpectedNodes?
-  let poundAssert: Token
-  let unexpectedBetweenPoundAssertAndLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndCondition: UnexpectedNodes?
-  let condition: ExprBuildable
-  let unexpectedBetweenConditionAndComma: UnexpectedNodes?
-  let comma: Token?
-  let unexpectedBetweenCommaAndMessage: UnexpectedNodes?
-  let message: Token?
-  let unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforePoundAssert: UnexpectedNodes?
+  var poundAssert: Token
+  var unexpectedBetweenPoundAssertAndLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndCondition: UnexpectedNodes?
+  var condition: ExprBuildable
+  var unexpectedBetweenConditionAndComma: UnexpectedNodes?
+  var comma: Token?
+  var unexpectedBetweenCommaAndMessage: UnexpectedNodes?
+  var message: Token?
+  var unexpectedBetweenMessageAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `PoundAssertStmt` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePoundAssert: 
@@ -11087,11 +11117,11 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
 public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWhereKeyword: UnexpectedNodes?
-  let whereKeyword: Token
-  let unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodes?
-  let requirementList: GenericRequirementList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWhereKeyword: UnexpectedNodes?
+  var whereKeyword: Token
+  var unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodes?
+  var requirementList: GenericRequirementList
   /// Creates a `GenericWhereClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWhereKeyword: 
@@ -11145,11 +11175,11 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
 public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequirement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBody: UnexpectedNodes?
-  let body: SyntaxBuildable
-  let unexpectedBetweenBodyAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBody: UnexpectedNodes?
+  var body: SyntaxBuildable
+  var unexpectedBetweenBodyAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `GenericRequirement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBody: 
@@ -11193,19 +11223,21 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeBody: unexpectedBeforeBody, body: body, unexpectedBetweenBodyAndTrailingComma: unexpectedBetweenBodyAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequirement {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftTypeIdentifier: UnexpectedNodes?
-  let leftTypeIdentifier: TypeBuildable
-  let unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodes?
-  let equalityToken: Token
-  let unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodes?
-  let rightTypeIdentifier: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodes?
+  var leftTypeIdentifier: TypeBuildable
+  var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodes?
+  var equalityToken: Token
+  var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodes?
+  var rightTypeIdentifier: TypeBuildable
   /// Creates a `SameTypeRequirement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftTypeIdentifier: 
@@ -11254,23 +11286,23 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
 public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeTypeIdentifier: UnexpectedNodes?
-  let typeIdentifier: TypeBuildable
-  let unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodes?
-  let layoutConstraint: Token
-  let unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodes?
-  let leftParen: Token?
-  let unexpectedBetweenLeftParenAndSize: UnexpectedNodes?
-  let size: Token?
-  let unexpectedBetweenSizeAndComma: UnexpectedNodes?
-  let comma: Token?
-  let unexpectedBetweenCommaAndAlignment: UnexpectedNodes?
-  let alignment: Token?
-  let unexpectedBetweenAlignmentAndRightParen: UnexpectedNodes?
-  let rightParen: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeTypeIdentifier: UnexpectedNodes?
+  var typeIdentifier: TypeBuildable
+  var unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodes?
+  var layoutConstraint: Token
+  var unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodes?
+  var leftParen: Token?
+  var unexpectedBetweenLeftParenAndSize: UnexpectedNodes?
+  var size: Token?
+  var unexpectedBetweenSizeAndComma: UnexpectedNodes?
+  var comma: Token?
+  var unexpectedBetweenCommaAndAlignment: UnexpectedNodes?
+  var alignment: Token?
+  var unexpectedBetweenAlignmentAndRightParen: UnexpectedNodes?
+  var rightParen: Token?
   /// Creates a `LayoutRequirement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeTypeIdentifier: 
@@ -11353,17 +11385,17 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
 public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndColon: UnexpectedNodes?
-  let colon: Token?
-  let unexpectedBetweenColonAndInheritedType: UnexpectedNodes?
-  let inheritedType: TypeBuildable?
-  let unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndColon: UnexpectedNodes?
+  var colon: Token?
+  var unexpectedBetweenColonAndInheritedType: UnexpectedNodes?
+  var inheritedType: TypeBuildable?
+  var unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `GenericParameter` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
@@ -11426,17 +11458,19 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeAttributes: unexpectedBeforeAttributes, attributes: attributes, unexpectedBetweenAttributesAndName: unexpectedBetweenAttributesAndName, name: name, unexpectedBetweenNameAndColon: unexpectedBetweenNameAndColon, colon: colon, unexpectedBetweenColonAndInheritedType: unexpectedBetweenColonAndInheritedType, inheritedType: inheritedType, unexpectedBetweenInheritedTypeAndTrailingComma: unexpectedBetweenInheritedTypeAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `PrimaryAssociatedType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -11486,19 +11520,21 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeName: unexpectedBeforeName, name: name, unexpectedBetweenNameAndTrailingComma: unexpectedBetweenNameAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParameterClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
-  let leftAngleBracket: Token
-  let unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodes?
-  let genericParameterList: GenericParameterList
-  let unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodes?
-  let rightAngleBracket: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
+  var leftAngleBracket: Token
+  var unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodes?
+  var genericParameterList: GenericParameterList
+  var unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodes?
+  var rightAngleBracket: Token
   /// Creates a `GenericParameterClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftAngleBracket: 
@@ -11557,13 +11593,13 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
 public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceRequirement {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftTypeIdentifier: UnexpectedNodes?
-  let leftTypeIdentifier: TypeBuildable
-  let unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodes?
-  let rightTypeIdentifier: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodes?
+  var leftTypeIdentifier: TypeBuildable
+  var unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodes?
+  var rightTypeIdentifier: TypeBuildable
   /// Creates a `ConformanceRequirement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftTypeIdentifier: 
@@ -11613,13 +11649,13 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
 public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
-  let leftAngleBracket: Token
-  let unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodes?
-  let primaryAssociatedTypeList: PrimaryAssociatedTypeList
-  let unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodes?
-  let rightAngleBracket: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
+  var leftAngleBracket: Token
+  var unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodes?
+  var primaryAssociatedTypeList: PrimaryAssociatedTypeList
+  var unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodes?
+  var rightAngleBracket: Token
   /// Creates a `PrimaryAssociatedTypeClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftAngleBracket: 
@@ -11670,11 +11706,11 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
 public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdentifier {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodes?
-  let genericArgumentClause: GenericArgumentClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodes?
+  var genericArgumentClause: GenericArgumentClause?
   /// Creates a `SimpleTypeIdentifier` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeName: 
@@ -11726,15 +11762,15 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
 public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdentifier {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBaseType: UnexpectedNodes?
-  let baseType: TypeBuildable
-  let unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodes?
-  let period: Token
-  let unexpectedBetweenPeriodAndName: UnexpectedNodes?
-  let name: Token
-  let unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodes?
-  let genericArgumentClause: GenericArgumentClause?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBaseType: UnexpectedNodes?
+  var baseType: TypeBuildable
+  var unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodes?
+  var period: Token
+  var unexpectedBetweenPeriodAndName: UnexpectedNodes?
+  var name: Token
+  var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodes?
+  var genericArgumentClause: GenericArgumentClause?
   /// Creates a `MemberTypeIdentifier` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBaseType: 
@@ -11795,9 +11831,9 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
 public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestrictionType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeClassKeyword: UnexpectedNodes?
-  let classKeyword: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeClassKeyword: UnexpectedNodes?
+  var classKeyword: Token
   /// Creates a `ClassRestrictionType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeClassKeyword: 
@@ -11846,13 +11882,13 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
 public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftSquareBracket: UnexpectedNodes?
-  let leftSquareBracket: Token
-  let unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodes?
-  let elementType: TypeBuildable
-  let unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodes?
-  let rightSquareBracket: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftSquareBracket: UnexpectedNodes?
+  var leftSquareBracket: Token
+  var unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodes?
+  var elementType: TypeBuildable
+  var unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodes?
+  var rightSquareBracket: Token
   /// Creates a `ArrayType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquareBracket: 
@@ -11910,17 +11946,17 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
 public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftSquareBracket: UnexpectedNodes?
-  let leftSquareBracket: Token
-  let unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodes?
-  let keyType: TypeBuildable
-  let unexpectedBetweenKeyTypeAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndValueType: UnexpectedNodes?
-  let valueType: TypeBuildable
-  let unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodes?
-  let rightSquareBracket: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftSquareBracket: UnexpectedNodes?
+  var leftSquareBracket: Token
+  var unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodes?
+  var keyType: TypeBuildable
+  var unexpectedBetweenKeyTypeAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndValueType: UnexpectedNodes?
+  var valueType: TypeBuildable
+  var unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodes?
+  var rightSquareBracket: Token
   /// Creates a `DictionaryType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftSquareBracket: 
@@ -11987,13 +12023,13 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
 public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeBaseType: UnexpectedNodes?
-  let baseType: TypeBuildable
-  let unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodes?
-  let period: Token
-  let unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodes?
-  let typeOrProtocol: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeBaseType: UnexpectedNodes?
+  var baseType: TypeBuildable
+  var unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodes?
+  var period: Token
+  var unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodes?
+  var typeOrProtocol: Token
   /// Creates a `MetatypeType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeBaseType: 
@@ -12057,11 +12093,11 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
 public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWrappedType: UnexpectedNodes?
-  let wrappedType: TypeBuildable
-  let unexpectedBetweenWrappedTypeAndQuestionMark: UnexpectedNodes?
-  let questionMark: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWrappedType: UnexpectedNodes?
+  var wrappedType: TypeBuildable
+  var unexpectedBetweenWrappedTypeAndQuestionMark: UnexpectedNodes?
+  var questionMark: Token
   /// Creates a `OptionalType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWrappedType: 
@@ -12114,11 +12150,11 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
 public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugarType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodes?
-  let someOrAnySpecifier: Token
-  let unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodes?
-  let baseType: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodes?
+  var someOrAnySpecifier: Token
+  var unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodes?
+  var baseType: TypeBuildable
   /// Creates a `ConstrainedSugarType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSomeOrAnySpecifier: 
@@ -12177,11 +12213,11 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
 public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImplicitlyUnwrappedOptionalType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWrappedType: UnexpectedNodes?
-  let wrappedType: TypeBuildable
-  let unexpectedBetweenWrappedTypeAndExclamationMark: UnexpectedNodes?
-  let exclamationMark: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWrappedType: UnexpectedNodes?
+  var wrappedType: TypeBuildable
+  var unexpectedBetweenWrappedTypeAndExclamationMark: UnexpectedNodes?
+  var exclamationMark: Token
   /// Creates a `ImplicitlyUnwrappedOptionalType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWrappedType: 
@@ -12234,11 +12270,11 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
 public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionTypeElement {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeType: UnexpectedNodes?
-  let type: TypeBuildable
-  let unexpectedBetweenTypeAndAmpersand: UnexpectedNodes?
-  let ampersand: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeType: UnexpectedNodes?
+  var type: TypeBuildable
+  var unexpectedBetweenTypeAndAmpersand: UnexpectedNodes?
+  var ampersand: Token?
   /// Creates a `CompositionTypeElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeType: 
@@ -12284,9 +12320,9 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
 public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeElements: UnexpectedNodes?
-  let elements: CompositionTypeElementList
+  var leadingTrivia: Trivia
+  var unexpectedBeforeElements: UnexpectedNodes?
+  var elements: CompositionTypeElementList
   /// Creates a `CompositionType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeElements: 
@@ -12334,23 +12370,23 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
 public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeInOut: UnexpectedNodes?
-  let inOut: Token?
-  let unexpectedBetweenInOutAndName: UnexpectedNodes?
-  let name: Token?
-  let unexpectedBetweenNameAndSecondName: UnexpectedNodes?
-  let secondName: Token?
-  let unexpectedBetweenSecondNameAndColon: UnexpectedNodes?
-  let colon: Token?
-  let unexpectedBetweenColonAndType: UnexpectedNodes?
-  let type: TypeBuildable
-  let unexpectedBetweenTypeAndEllipsis: UnexpectedNodes?
-  let ellipsis: Token?
-  let unexpectedBetweenEllipsisAndInitializer: UnexpectedNodes?
-  let initializer: InitializerClause?
-  let unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeInOut: UnexpectedNodes?
+  var inOut: Token?
+  var unexpectedBetweenInOutAndName: UnexpectedNodes?
+  var name: Token?
+  var unexpectedBetweenNameAndSecondName: UnexpectedNodes?
+  var secondName: Token?
+  var unexpectedBetweenSecondNameAndColon: UnexpectedNodes?
+  var colon: Token?
+  var unexpectedBetweenColonAndType: UnexpectedNodes?
+  var type: TypeBuildable
+  var unexpectedBetweenTypeAndEllipsis: UnexpectedNodes?
+  var ellipsis: Token?
+  var unexpectedBetweenEllipsisAndInitializer: UnexpectedNodes?
+  var initializer: InitializerClause?
+  var unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `TupleTypeElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeInOut: 
@@ -12421,19 +12457,21 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeInOut: unexpectedBeforeInOut, inOut: inOut, unexpectedBetweenInOutAndName: unexpectedBetweenInOutAndName, name: name, unexpectedBetweenNameAndSecondName: unexpectedBetweenNameAndSecondName, secondName: secondName, unexpectedBetweenSecondNameAndColon: unexpectedBetweenSecondNameAndColon, colon: colon, unexpectedBetweenColonAndType: unexpectedBetweenColonAndType, type: type, unexpectedBetweenTypeAndEllipsis: unexpectedBetweenTypeAndEllipsis, ellipsis: ellipsis, unexpectedBetweenEllipsisAndInitializer: unexpectedBetweenEllipsisAndInitializer, initializer: initializer, unexpectedBetweenInitializerAndTrailingComma: unexpectedBetweenInitializerAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndElements: UnexpectedNodes?
-  let elements: TupleTypeElementList
-  let unexpectedBetweenElementsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndElements: UnexpectedNodes?
+  var elements: TupleTypeElementList
+  var unexpectedBetweenElementsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `TupleType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -12491,21 +12529,21 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
 public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
-  let arguments: TupleTypeElementList
-  let unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
-  let unexpectedBetweenRightParenAndAsyncKeyword: UnexpectedNodes?
-  let asyncKeyword: Token?
-  let unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodes?
-  let throwsOrRethrowsKeyword: Token?
-  let unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: UnexpectedNodes?
-  let arrow: Token
-  let unexpectedBetweenArrowAndReturnType: UnexpectedNodes?
-  let returnType: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndArguments: UnexpectedNodes?
+  var arguments: TupleTypeElementList
+  var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
+  var unexpectedBetweenRightParenAndAsyncKeyword: UnexpectedNodes?
+  var asyncKeyword: Token?
+  var unexpectedBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: UnexpectedNodes?
+  var throwsOrRethrowsKeyword: Token?
+  var unexpectedBetweenThrowsOrRethrowsKeywordAndArrow: UnexpectedNodes?
+  var arrow: Token
+  var unexpectedBetweenArrowAndReturnType: UnexpectedNodes?
+  var returnType: TypeBuildable
   /// Creates a `FunctionType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -12582,13 +12620,13 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
 public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeSpecifier: UnexpectedNodes?
-  let specifier: Token?
-  let unexpectedBetweenSpecifierAndAttributes: UnexpectedNodes?
-  let attributes: AttributeList?
-  let unexpectedBetweenAttributesAndBaseType: UnexpectedNodes?
-  let baseType: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeSpecifier: UnexpectedNodes?
+  var specifier: Token?
+  var unexpectedBetweenSpecifierAndAttributes: UnexpectedNodes?
+  var attributes: AttributeList?
+  var unexpectedBetweenAttributesAndBaseType: UnexpectedNodes?
+  var baseType: TypeBuildable
   /// Creates a `AttributedType` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSpecifier: 
@@ -12645,11 +12683,11 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
 public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeArgumentType: UnexpectedNodes?
-  let argumentType: TypeBuildable
-  let unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeArgumentType: UnexpectedNodes?
+  var argumentType: TypeBuildable
+  var unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `GenericArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeArgumentType: 
@@ -12693,19 +12731,21 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeArgumentType: unexpectedBeforeArgumentType, argumentType: argumentType, unexpectedBetweenArgumentTypeAndTrailingComma: unexpectedBetweenArgumentTypeAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgumentClause {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
-  let leftAngleBracket: Token
-  let unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodes?
-  let arguments: GenericArgumentList
-  let unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodes?
-  let rightAngleBracket: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftAngleBracket: UnexpectedNodes?
+  var leftAngleBracket: Token
+  var unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodes?
+  var arguments: GenericArgumentList
+  var unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodes?
+  var rightAngleBracket: Token
   /// Creates a `GenericArgumentClause` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftAngleBracket: 
@@ -12764,11 +12804,11 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
 public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndType: UnexpectedNodes?
-  let type: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndType: UnexpectedNodes?
+  var type: TypeBuildable
   /// Creates a `TypeAnnotation` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeColon: 
@@ -12814,15 +12854,15 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
 public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeType: UnexpectedNodes?
-  let type: TypeBuildable?
-  let unexpectedBetweenTypeAndPeriod: UnexpectedNodes?
-  let period: Token
-  let unexpectedBetweenPeriodAndCaseName: UnexpectedNodes?
-  let caseName: Token
-  let unexpectedBetweenCaseNameAndAssociatedTuple: UnexpectedNodes?
-  let associatedTuple: TuplePattern?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeType: UnexpectedNodes?
+  var type: TypeBuildable?
+  var unexpectedBetweenTypeAndPeriod: UnexpectedNodes?
+  var period: Token
+  var unexpectedBetweenPeriodAndCaseName: UnexpectedNodes?
+  var caseName: Token
+  var unexpectedBetweenCaseNameAndAssociatedTuple: UnexpectedNodes?
+  var associatedTuple: TuplePattern?
   /// Creates a `EnumCasePattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeType: 
@@ -12889,11 +12929,11 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
 public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIsKeyword: UnexpectedNodes?
-  let isKeyword: Token
-  let unexpectedBetweenIsKeywordAndType: UnexpectedNodes?
-  let type: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIsKeyword: UnexpectedNodes?
+  var isKeyword: Token
+  var unexpectedBetweenIsKeywordAndType: UnexpectedNodes?
+  var type: TypeBuildable
   /// Creates a `IsTypePattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIsKeyword: 
@@ -12946,11 +12986,11 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
 public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeSubPattern: UnexpectedNodes?
-  let subPattern: PatternBuildable
-  let unexpectedBetweenSubPatternAndQuestionMark: UnexpectedNodes?
-  let questionMark: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeSubPattern: UnexpectedNodes?
+  var subPattern: PatternBuildable
+  var unexpectedBetweenSubPatternAndQuestionMark: UnexpectedNodes?
+  var questionMark: Token
   /// Creates a `OptionalPattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeSubPattern: 
@@ -13003,9 +13043,9 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
 public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeIdentifier: UnexpectedNodes?
-  let identifier: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeIdentifier: UnexpectedNodes?
+  var identifier: Token
   /// Creates a `IdentifierPattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeIdentifier: 
@@ -13053,13 +13093,13 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
 public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePattern: UnexpectedNodes?
-  let pattern: PatternBuildable
-  let unexpectedBetweenPatternAndAsKeyword: UnexpectedNodes?
-  let asKeyword: Token
-  let unexpectedBetweenAsKeywordAndType: UnexpectedNodes?
-  let type: TypeBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforePattern: UnexpectedNodes?
+  var pattern: PatternBuildable
+  var unexpectedBetweenPatternAndAsKeyword: UnexpectedNodes?
+  var asKeyword: Token
+  var unexpectedBetweenAsKeywordAndType: UnexpectedNodes?
+  var type: TypeBuildable
   /// Creates a `AsTypePattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePattern: 
@@ -13116,13 +13156,13 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
 public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLeftParen: UnexpectedNodes?
-  let leftParen: Token
-  let unexpectedBetweenLeftParenAndElements: UnexpectedNodes?
-  let elements: TuplePatternElementList
-  let unexpectedBetweenElementsAndRightParen: UnexpectedNodes?
-  let rightParen: Token
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLeftParen: UnexpectedNodes?
+  var leftParen: Token
+  var unexpectedBetweenLeftParenAndElements: UnexpectedNodes?
+  var elements: TuplePatternElementList
+  var unexpectedBetweenElementsAndRightParen: UnexpectedNodes?
+  var rightParen: Token
   /// Creates a `TuplePattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLeftParen: 
@@ -13188,11 +13228,11 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
 public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeWildcard: UnexpectedNodes?
-  let wildcard: Token
-  let unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodes?
-  let typeAnnotation: TypeAnnotation?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeWildcard: UnexpectedNodes?
+  var wildcard: Token
+  var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodes?
+  var typeAnnotation: TypeAnnotation?
   /// Creates a `WildcardPattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeWildcard: 
@@ -13245,15 +13285,15 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
 public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabelName: UnexpectedNodes?
-  let labelName: Token?
-  let unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodes?
-  let labelColon: Token?
-  let unexpectedBetweenLabelColonAndPattern: UnexpectedNodes?
-  let pattern: PatternBuildable
-  let unexpectedBetweenPatternAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabelName: UnexpectedNodes?
+  var labelName: Token?
+  var unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodes?
+  var labelColon: Token?
+  var unexpectedBetweenLabelColonAndPattern: UnexpectedNodes?
+  var pattern: PatternBuildable
+  var unexpectedBetweenPatternAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `TuplePatternElement` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabelName: 
@@ -13314,15 +13354,17 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   }
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
-    Self(unexpectedBeforeLabelName: unexpectedBeforeLabelName, labelName: labelName, unexpectedBetweenLabelNameAndLabelColon: unexpectedBetweenLabelNameAndLabelColon, labelColon: labelColon, unexpectedBetweenLabelColonAndPattern: unexpectedBetweenLabelColonAndPattern, pattern: pattern, unexpectedBetweenPatternAndTrailingComma: unexpectedBetweenPatternAndTrailingComma, trailingComma: withComma ? .comma : nil)
+    var result = self
+    result.trailingComma = withComma ? .comma : nil
+    return result
   }
 }
 public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeExpression: UnexpectedNodes?
-  let expression: ExprBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeExpression: UnexpectedNodes?
+  var expression: ExprBuildable
   /// Creates a `ExpressionPattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeExpression: 
@@ -13370,11 +13412,11 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
 public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPattern {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLetOrVarKeyword: UnexpectedNodes?
-  let letOrVarKeyword: Token
-  let unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodes?
-  let valuePattern: PatternBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLetOrVarKeyword: UnexpectedNodes?
+  var letOrVarKeyword: Token
+  var unexpectedBetweenLetOrVarKeywordAndValuePattern: UnexpectedNodes?
+  var valuePattern: PatternBuildable
   /// Creates a `ValueBindingPattern` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLetOrVarKeyword: 
@@ -13428,11 +13470,11 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
 public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityArgument {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeEntry: UnexpectedNodes?
-  let entry: SyntaxBuildable
-  let unexpectedBetweenEntryAndTrailingComma: UnexpectedNodes?
-  let trailingComma: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeEntry: UnexpectedNodes?
+  var entry: SyntaxBuildable
+  var unexpectedBetweenEntryAndTrailingComma: UnexpectedNodes?
+  var trailingComma: Token?
   /// Creates a `AvailabilityArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeEntry: 
@@ -13479,13 +13521,13 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
 public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailabilityLabeledArgument {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeLabel: UnexpectedNodes?
-  let label: Token
-  let unexpectedBetweenLabelAndColon: UnexpectedNodes?
-  let colon: Token
-  let unexpectedBetweenColonAndValue: UnexpectedNodes?
-  let value: SyntaxBuildable
+  var leadingTrivia: Trivia
+  var unexpectedBeforeLabel: UnexpectedNodes?
+  var label: Token
+  var unexpectedBetweenLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndValue: UnexpectedNodes?
+  var value: SyntaxBuildable
   /// Creates a `AvailabilityLabeledArgument` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeLabel: 
@@ -13542,11 +13584,11 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
 public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvailabilityVersionRestriction {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforePlatform: UnexpectedNodes?
-  let platform: Token
-  let unexpectedBetweenPlatformAndVersion: UnexpectedNodes?
-  let version: VersionTuple?
+  var leadingTrivia: Trivia
+  var unexpectedBeforePlatform: UnexpectedNodes?
+  var platform: Token
+  var unexpectedBetweenPlatformAndVersion: UnexpectedNodes?
+  var version: VersionTuple?
   /// Creates a `AvailabilityVersionRestriction` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforePlatform: 
@@ -13598,13 +13640,13 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
 public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
-  let leadingTrivia: Trivia
-  let unexpectedBeforeMajorMinor: UnexpectedNodes?
-  let majorMinor: SyntaxBuildable
-  let unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodes?
-  let patchPeriod: Token?
-  let unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodes?
-  let patchVersion: Token?
+  var leadingTrivia: Trivia
+  var unexpectedBeforeMajorMinor: UnexpectedNodes?
+  var majorMinor: SyntaxBuildable
+  var unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodes?
+  var patchPeriod: Token?
+  var unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodes?
+  var patchVersion: Token?
   /// Creates a `VersionTuple` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeMajorMinor: 

@@ -75,6 +75,16 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// The leading trivia attached to this syntax node once built.
@@ -145,6 +155,16 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -207,6 +227,16 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -262,6 +292,16 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
@@ -332,6 +372,16 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -399,6 +449,16 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
@@ -468,6 +528,16 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// The leading trivia attached to this syntax node once built.
@@ -522,6 +592,16 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments {
@@ -585,6 +665,16 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -646,6 +736,16 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -701,6 +801,16 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
@@ -758,6 +868,16 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignmentExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -814,6 +934,16 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -869,6 +999,16 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
@@ -933,6 +1073,16 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -988,6 +1138,16 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
@@ -1045,6 +1205,16 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1100,6 +1270,16 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
@@ -1157,6 +1337,16 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1213,6 +1403,16 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1268,6 +1468,16 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferenceExpr {
@@ -1335,6 +1545,16 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr {
@@ -1405,6 +1625,16 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1459,6 +1689,16 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
@@ -1538,6 +1778,16 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1605,6 +1855,16 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1665,6 +1925,16 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
@@ -1743,6 +2013,16 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1820,6 +2100,16 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -1888,6 +2178,16 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, HasTrailingComma {
@@ -1963,6 +2263,16 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -2022,6 +2332,16 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -2098,6 +2418,16 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -2159,6 +2489,16 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -2214,6 +2554,16 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTernaryExpr {
@@ -2283,6 +2633,16 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
@@ -2365,6 +2725,16 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -2439,6 +2809,16 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -2494,6 +2874,16 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
@@ -2563,6 +2953,16 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -2625,6 +3025,16 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
@@ -2701,6 +3111,16 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -2755,6 +3175,16 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureItem, HasTrailingComma {
@@ -2844,6 +3274,16 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCaptureSignature {
   /// The leading trivia attached to this syntax node once built.
@@ -2914,6 +3354,16 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -2973,6 +3423,16 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -3070,6 +3530,16 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -3153,6 +3623,16 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatternExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -3207,6 +3687,16 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMultipleTrailingClosureElement {
@@ -3268,6 +3758,16 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
@@ -3364,6 +3864,16 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -3459,6 +3969,16 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChainingExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -3521,6 +4041,16 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -3582,6 +4112,16 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
@@ -3650,6 +4190,16 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -3711,6 +4261,16 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// The leading trivia attached to this syntax node once built.
@@ -3764,6 +4324,16 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment {
@@ -3849,6 +4419,16 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
@@ -3941,6 +4521,16 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -4001,6 +4591,16 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
@@ -4070,6 +4670,16 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -4125,6 +4735,16 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
@@ -4186,6 +4806,16 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
@@ -4262,6 +4892,16 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
@@ -4361,6 +5001,16 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -4422,6 +5072,16 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlaceholderExpr {
   /// The leading trivia attached to this syntax node once built.
@@ -4482,6 +5142,16 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
@@ -4567,6 +5237,16 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializerClause {
   /// The leading trivia attached to this syntax node once built.
@@ -4621,6 +5301,16 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
@@ -4720,6 +5410,16 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl {
   /// The leading trivia attached to this syntax node once built.
@@ -4818,6 +5518,16 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// The leading trivia attached to this syntax node once built.
@@ -4888,6 +5598,16 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// The leading trivia attached to this syntax node once built.
@@ -4942,6 +5662,16 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature {
@@ -5019,6 +5749,16 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// The leading trivia attached to this syntax node once built.
@@ -5079,6 +5819,16 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
@@ -5141,6 +5891,16 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
@@ -5218,6 +5978,16 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// The leading trivia attached to this syntax node once built.
@@ -5294,6 +6064,16 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocation {
   /// The leading trivia attached to this syntax node once built.
@@ -5369,6 +6149,16 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSourceLocationArgs {
@@ -5465,6 +6255,16 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDetail {
   /// The leading trivia attached to this syntax node once built.
@@ -5533,6 +6333,16 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// The leading trivia attached to this syntax node once built.
@@ -5587,6 +6397,16 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTrailingComma {
@@ -5647,6 +6467,16 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -5711,6 +6541,16 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
@@ -5818,6 +6658,16 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// The leading trivia attached to this syntax node once built.
@@ -5923,6 +6773,16 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
@@ -6030,6 +6890,16 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// The leading trivia attached to this syntax node once built.
@@ -6136,6 +7006,16 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// The leading trivia attached to this syntax node once built.
@@ -6236,6 +7116,16 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// The leading trivia attached to this syntax node once built.
@@ -6306,6 +7196,16 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A member declaration of a type consisting of a declaration and anoptional semicolon;
 public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListItem {
@@ -6361,6 +7261,16 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
@@ -6424,6 +7334,16 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause {
   /// The leading trivia attached to this syntax node once built.
@@ -6478,6 +7398,16 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter, HasTrailingComma {
@@ -6576,6 +7506,16 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -6684,6 +7624,16 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// The leading trivia attached to this syntax node once built.
@@ -6791,6 +7741,16 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// The leading trivia attached to this syntax node once built.
@@ -6872,6 +7832,16 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
@@ -6971,6 +7941,16 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModifier {
   /// The leading trivia attached to this syntax node once built.
@@ -7030,6 +8010,16 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathComponent {
@@ -7091,6 +8081,16 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
@@ -7173,6 +8173,16 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter {
   /// The leading trivia attached to this syntax node once built.
@@ -7240,6 +8250,16 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
@@ -7345,6 +8365,16 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// The leading trivia attached to this syntax node once built.
@@ -7406,6 +8436,16 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasTrailingComma {
@@ -7484,6 +8524,16 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -7568,6 +8618,16 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.
 public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, HasTrailingComma {
@@ -7646,6 +8706,16 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -7730,6 +8800,16 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// A Swift `enum` declaration.
@@ -7838,6 +8918,16 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A Swift `operator` declaration.
 public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
@@ -7919,6 +9009,16 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
 public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperatorPrecedenceAndTypes {
@@ -7974,6 +9074,16 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// A Swift `precedencegroup` declaration.
@@ -8076,6 +9186,16 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// Specify the new precedence group's relation to existing precedencegroups.
 public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceGroupRelation {
@@ -8145,6 +9265,16 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPrecedenceGroupNameElement {
   /// The leading trivia attached to this syntax node once built.
@@ -8205,6 +9335,16 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// Specifies the precedence of an operator when used in an operationthat includes optional chaining.
@@ -8276,6 +9416,16 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// Specifies how a sequence of operators with the same precedence levelare grouped together in the absence of grouping parentheses.
 public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPrecedenceGroupAssociativity {
@@ -8345,6 +9495,16 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// A custom `@` attribute.
@@ -8430,6 +9590,16 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// An `@` attribute.
 public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
@@ -8512,6 +9682,16 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// The availability argument for the _specialize attribute
 public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry {
@@ -8586,6 +9766,16 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// A labeled argument for the `@_specialize` attribute like`exported: true`
@@ -8666,6 +9856,16 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -8749,6 +9949,16 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// The argument for the `@_dynamic_replacement` or `@_private`attribute of the form `for: "function()"` or `sourceFile:"Src.swift"`
 public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedAttributeStringArgument {
@@ -8811,6 +10021,16 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// The leading trivia attached to this syntax node once built.
@@ -8864,6 +10084,16 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// The arguments for the `@_implements` attribute of the form`Type, methodName(arg1Label:arg2Label:)`
@@ -8933,6 +10163,16 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A piece of an Objective-C selector. Either consisting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument
 public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece {
@@ -8996,6 +10236,16 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// The arguments for the `@differentiable` attribute: an optionaldifferentiability kind, an optional differentiability parameter clause,and an optional 'where' clause.
@@ -9081,6 +10331,16 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A clause containing differentiability parameters.
 public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDifferentiabilityParamsClause {
@@ -9150,6 +10410,16 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// The differentiability parameters.
 public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentiabilityParams {
@@ -9213,6 +10483,16 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A differentiability parameter: either the "self" identifier, a functionparameter name, or a function parameter index.
 public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiabilityParam, HasTrailingComma {
@@ -9273,6 +10553,16 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -9373,6 +10663,16 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// An optionally qualified function declaration name (e.g. `+(_:_:)`,`A.B.C.foo(_:_:)`).
 public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName {
@@ -9441,6 +10741,16 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
@@ -9495,6 +10805,16 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// A collection of arguments for the `@_backDeploy` attribute
@@ -9565,6 +10885,16 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A single platform/version pair in a `@_backDeploy` attribute,e.g. `iOS 10.1`.
 public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeployVersionArgument {
@@ -9620,6 +10950,16 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
@@ -9695,6 +11035,16 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -9764,6 +11114,16 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
@@ -9841,6 +11201,16 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -9911,6 +11281,16 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -9965,6 +11345,16 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
@@ -10049,6 +11439,16 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -10132,6 +11532,16 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// The leading trivia attached to this syntax node once built.
@@ -10186,6 +11596,16 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
@@ -10311,6 +11731,16 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -10401,6 +11831,16 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -10477,6 +11917,16 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -10539,6 +11989,16 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -10600,6 +12060,16 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
@@ -10678,6 +12148,16 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -10733,6 +12213,16 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
@@ -10804,6 +12294,16 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -10863,6 +12363,16 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -10934,6 +12444,16 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPatternCondition {
   /// The leading trivia attached to this syntax node once built.
@@ -11001,6 +12521,16 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBindingCondition {
   /// The leading trivia attached to this syntax node once built.
@@ -11067,6 +12597,16 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabilityCondition {
@@ -11137,6 +12677,16 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// The leading trivia attached to this syntax node once built.
@@ -11191,6 +12741,16 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
@@ -11253,6 +12813,16 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
@@ -11343,6 +12913,16 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuation {
   /// The leading trivia attached to this syntax node once built.
@@ -11390,6 +12970,16 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
@@ -11453,6 +13043,16 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
@@ -11522,6 +13122,16 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLabel {
   /// The leading trivia attached to this syntax node once built.
@@ -11577,6 +13187,16 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma {
@@ -11645,6 +13265,16 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -11710,6 +13340,16 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -11782,6 +13422,16 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// The leading trivia attached to this syntax node once built.
@@ -11850,6 +13500,16 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
@@ -11948,6 +13608,16 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClause {
   /// The leading trivia attached to this syntax node once built.
@@ -12011,6 +13681,16 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequirement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -12072,6 +13752,16 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequirement {
   /// The leading trivia attached to this syntax node once built.
@@ -12131,6 +13821,16 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement {
@@ -12236,6 +13936,16 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -12322,6 +14032,16 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -12387,6 +14107,16 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -12459,6 +14189,16 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceRequirement {
   /// The leading trivia attached to this syntax node once built.
@@ -12519,6 +14259,16 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeClause {
@@ -12582,6 +14332,16 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdentifier {
   /// The leading trivia attached to this syntax node once built.
@@ -12642,6 +14402,16 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdentifier {
@@ -12717,6 +14487,16 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestrictionType {
   /// The leading trivia attached to this syntax node once built.
@@ -12772,6 +14552,16 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
@@ -12841,6 +14631,16 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
@@ -12924,6 +14724,16 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// The leading trivia attached to this syntax node once built.
@@ -12999,6 +14809,16 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// The leading trivia attached to this syntax node once built.
@@ -13060,6 +14880,16 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugarType {
@@ -13129,6 +14959,16 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImplicitlyUnwrappedOptionalType {
   /// The leading trivia attached to this syntax node once built.
@@ -13191,6 +15031,16 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionTypeElement {
   /// The leading trivia attached to this syntax node once built.
@@ -13246,6 +15096,16 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// The leading trivia attached to this syntax node once built.
@@ -13300,6 +15160,16 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, HasTrailingComma {
@@ -13401,6 +15271,16 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// The leading trivia attached to this syntax node once built.
@@ -13469,6 +15349,16 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
@@ -13566,6 +15456,16 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// The leading trivia attached to this syntax node once built.
@@ -13634,6 +15534,16 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
@@ -13693,6 +15603,16 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   public func withTrailingComma(_ withComma: Bool) -> Self {
     var result = self
     result.trailingComma = withComma ? .comma : nil
+    return result
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
     return result
   }
 }
@@ -13765,6 +15685,16 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// The leading trivia attached to this syntax node once built.
@@ -13819,6 +15749,16 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
@@ -13900,6 +15840,16 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// The leading trivia attached to this syntax node once built.
@@ -13961,6 +15911,16 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
@@ -14024,6 +15984,16 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPattern {
   /// The leading trivia attached to this syntax node once built.
@@ -14078,6 +16048,16 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
@@ -14146,6 +16126,16 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
@@ -14224,6 +16214,16 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// The leading trivia attached to this syntax node once built.
@@ -14285,6 +16285,16 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternElement, HasTrailingComma {
@@ -14368,6 +16378,16 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
     result.trailingComma = withComma ? .comma : nil
     return result
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPattern {
   /// The leading trivia attached to this syntax node once built.
@@ -14422,6 +16442,16 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPattern {
@@ -14485,6 +16515,16 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A single argument to an `@available` argument like `*`, `iOS 10.1`,or `message: "This has been deprecated"`.
 public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityArgument {
@@ -14540,6 +16580,16 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// A argument to an `@available` attribute that consists of a label anda value, e.g. `message: "This has been deprecated"`.
@@ -14609,6 +16659,16 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// An argument to `@available` that restricts the availability on acertain platform to a version, e.g. `iOS 10` or `swift 3.4`.
 public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvailabilityVersionRestriction {
@@ -14669,6 +16729,16 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 /// A version number of the form major.minor.patch in which the minorand patch part may be omitted.
@@ -14739,5 +16809,15 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }

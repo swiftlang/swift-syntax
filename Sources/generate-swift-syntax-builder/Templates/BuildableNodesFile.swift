@@ -69,6 +69,9 @@ let buildableNodesFile = SourceFile {
       if hasTrailingComma {
         createWithTrailingCommaFunction()
       }
+      for trivia in trivias {
+        createWithTriviaFunction(trivia: trivia)
+      }
     }
   }
 }
@@ -350,6 +353,33 @@ private func createWithTrailingCommaFunction() -> FunctionDecl {
         then: MemberAccessExpr(name: "comma"),
         else: NilLiteralExpr()
       )
+    }
+    ReturnStmt(expression: "result")
+  }
+}
+
+/// Generate a `withATrivia` function.
+private func createWithTriviaFunction(trivia: String) -> FunctionDecl {
+  FunctionDecl(
+    modifiers: [Token.public],
+    identifier: .identifier("with\(trivia.withFirstCharacterUppercased)"),
+    signature: FunctionSignature(
+      input: ParameterClause {
+        FunctionParameter(
+          firstName: .wildcard,
+          secondName: .identifier(trivia),
+          colon: .colon,
+          type: "Trivia"
+        )
+      },
+      output: "Self"
+    )
+  ) {
+    VariableDecl(.var, name: "result", initializer: "self")
+    SequenceExpr {
+      MemberAccessExpr(base: "result", name: trivia)
+      AssignmentExpr()
+      trivia
     }
     ReturnStmt(expression: "result")
   }

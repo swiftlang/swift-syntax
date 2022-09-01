@@ -20,6 +20,21 @@ public struct OperatorPrecedence {
 
   public init() { }
 
+  /// Initialize the operator precedence instance with a given set of
+  /// operators and precedence groups.
+  public init(
+    precedenceGroups: [PrecedenceGroup],
+    operators: [Operator],
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows {
+    for group in precedenceGroups {
+      try record(group, errorHandler: errorHandler)
+    }
+    for op in operators {
+      try record(op, errorHandler: errorHandler)
+    }
+  }
+
   /// Record the operator, if it matters.
   /// FIXME: Terrible API used only for tests
   public mutating func record(

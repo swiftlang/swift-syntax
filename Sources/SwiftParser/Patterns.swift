@@ -161,18 +161,22 @@ extension Parser {
   /// for-in loops and guard clauses.
   mutating func parseMatchingPattern() -> RawPatternSyntax {
     // Parse productions that can only be patterns.
-    if let letOrVar = self.consume(ifAny: [.varKeyword, .letKeyword]) {
+    switch self.at(anyIn: MatchingPatternStart.self) {
+    case (.varKeyword, let handle)?,
+      (.letKeyword, let handle)?:
+      let letOrVar = self.eat(handle)
       let value = self.parseMatchingPattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
         letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
-    } else if let isKeyword = self.consume(if: .isKeyword) {
+    case (.isKeyword, let handle)?:
+      let isKeyword = self.eat(handle)
       let type = self.parseType()
       return RawPatternSyntax(RawIsTypePatternSyntax(
         isKeyword: isKeyword,
         type: type,
         arena: self.arena
       ))
-    } else {
+    case nil:
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will
       // disambiguate.

@@ -430,3 +430,169 @@ enum PoundDeclarationStart: RawTokenKindSubset {
     }
   }
 }
+
+// MARK: Expression start
+
+enum AwaitTry: RawTokenKindSubset {
+  case awaitContextualKeyword
+  case tryKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .awaitContextualKeyword: return .identifier
+    case .tryKeyword: return .tryKeyword
+    }
+  }
+
+  var contextualKeyword: SyntaxText? {
+    switch self {
+    case .awaitContextualKeyword: return "await"
+    default: return nil
+    }
+  }
+}
+
+enum ExpressionPrefixOperator: RawTokenKindSubset {
+  case backslash
+  case prefixAmpersand
+  case prefixOperator
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .backslash: return .backslash
+    case .prefixAmpersand: return .prefixAmpersand
+    case .prefixOperator: return .prefixOperator
+    }
+  }
+}
+
+enum MatchingPatternStart: RawTokenKindSubset {
+  case isKeyword
+  case letKeyword
+  case varKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .isKeyword: return .isKeyword
+    case .letKeyword: return .letKeyword
+    case .varKeyword: return .varKeyword
+    }
+  }
+}
+
+enum PrimaryExpressionStart: RawTokenKindSubset {
+  case __column__Keyword
+  case __dso_handle__Keyword
+  case __file__Keyword
+  case __function__Keyword
+  case __line__Keyword
+  case anyKeyword
+  case capitalSelfKeyword
+  case dollarIdentifier
+  case falseKeyword
+  case floatingLiteral
+  case identifier
+  case integerLiteral
+  case leftBrace
+  case leftParen
+  case leftSquareBracket
+  case nilKeyword
+  case period
+  case poundColorLiteralKeyword
+  case poundColumnKeyword
+  case poundDsohandleKeyword
+  case poundFileKeyword
+  case poundFileLiteralKeyword
+  case poundFilePathKeyword
+  case poundFunctionKeyword
+  case poundImageLiteralKeyword
+  case poundKeyPathKeyword
+  case poundLineKeyword
+  case poundSelectorKeyword
+  case prefixPeriod
+  case regexLiteral
+  case selfKeyword
+  case stringLiteral
+  case superKeyword
+  case trueKeyword
+  case wildcardKeyword
+
+  var rawTokenKind: SwiftSyntax.RawTokenKind {
+    switch self {
+    case .__column__Keyword: return .__column__Keyword
+    case .__dso_handle__Keyword: return .__dso_handle__Keyword
+    case .__file__Keyword: return .__file__Keyword
+    case .__function__Keyword: return .__function__Keyword
+    case .__line__Keyword: return .__line__Keyword
+    case .anyKeyword: return .anyKeyword
+    case .capitalSelfKeyword: return .capitalSelfKeyword
+    case .dollarIdentifier: return .dollarIdentifier
+    case .falseKeyword: return .falseKeyword
+    case .floatingLiteral: return .floatingLiteral
+    case .identifier: return .identifier
+    case .integerLiteral: return .integerLiteral
+    case .leftBrace: return .leftBrace
+    case .leftParen: return .leftParen
+    case .leftSquareBracket: return .leftSquareBracket
+    case .nilKeyword: return .nilKeyword
+    case .period: return .period
+    case .poundColorLiteralKeyword: return .poundColorLiteralKeyword
+    case .poundColumnKeyword: return .poundColumnKeyword
+    case .poundDsohandleKeyword: return .poundDsohandleKeyword
+    case .poundFileKeyword: return .poundFileKeyword
+    case .poundFileLiteralKeyword: return .poundFileLiteralKeyword
+    case .poundFilePathKeyword: return .poundFilePathKeyword
+    case .poundFunctionKeyword: return .poundFunctionKeyword
+    case .poundImageLiteralKeyword: return .poundImageLiteralKeyword
+    case .poundKeyPathKeyword: return .poundKeyPathKeyword
+    case .poundLineKeyword: return .poundLineKeyword
+    case .poundSelectorKeyword: return .poundSelectorKeyword
+    case .prefixPeriod: return .prefixPeriod
+    case .regexLiteral: return .regexLiteral
+    case .selfKeyword: return .selfKeyword
+    case .stringLiteral: return .stringLiteral
+    case .superKeyword: return .superKeyword
+    case .trueKeyword: return .trueKeyword
+    case .wildcardKeyword: return .wildcardKeyword
+    }
+  }
+
+  var remappedKind: RawTokenKind? {
+    switch self {
+    case .period: return .prefixPeriod
+    default: return nil
+    }
+  }
+}
+
+enum ExpressionStart: RawTokenKindSubset {
+  case awaitTry(AwaitTry)
+  case expressionPrefixOperator(ExpressionPrefixOperator)
+  case matchingPatternStart(MatchingPatternStart)
+  case primaryExpressionStart(PrimaryExpressionStart)
+
+  static var allCases: [ExpressionStart] {
+    return AwaitTry.allCases.map(Self.awaitTry)
+    + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
+    + MatchingPatternStart.allCases.map(Self.matchingPatternStart)
+    + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
+  }
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .awaitTry(let underlyingKind): return underlyingKind.rawTokenKind
+    case .expressionPrefixOperator(let underlyingKind): return underlyingKind.rawTokenKind
+    case .matchingPatternStart(let underlyingKind): return underlyingKind.rawTokenKind
+    case .primaryExpressionStart(let underlyingKind): return underlyingKind.rawTokenKind
+    }
+  }
+
+  var contextualKeyword: SyntaxText? {
+    switch self {
+    case .awaitTry(let underlyingKind): return underlyingKind.contextualKeyword
+    case .expressionPrefixOperator(let underlyingKind): return underlyingKind.contextualKeyword
+    case .matchingPatternStart(let underlyingKind): return underlyingKind.contextualKeyword
+    case .primaryExpressionStart(let underlyingKind): return underlyingKind.contextualKeyword
+    }
+  }
+}

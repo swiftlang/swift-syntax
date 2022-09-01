@@ -278,6 +278,19 @@ extension Parser.Lookahead {
     }
   }
 
+  func isStartOfExpression() -> Bool {
+    if self.at(anyIn: ExpressionStart.self) != nil {
+      return true
+    }
+    if self.at(.atSign) || self.at(.inoutKeyword) {
+      var backtrack = self.lookahead()
+      if backtrack.canParseType() {
+        return true
+      }
+    }
+    return false
+  }
+
   func isParenthesizedUnowned() -> Bool {
     assert(self.atContextualKeyword("unowned") && self.peek().tokenKind == .leftParen,
            "Invariant violated")

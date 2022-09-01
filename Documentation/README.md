@@ -22,7 +22,7 @@
     let package = Package(
       name: "MyTool",
       dependencies: [
-        .package(url: "https://github.com/apple/swift-syntax.git", .revision("swift-DEVELOPMENT-SNAPSHOT-2019-02-26")),
+        .package(url: "https://github.com/apple/swift-syntax.git", .revision("swift-DEVELOPMENT-SNAPSHOT-2019-02-26-a")),
       ],
       targets: [
         .target(name: "MyTool", dependencies: ["SwiftSyntax"]),
@@ -30,7 +30,7 @@
     )
     ```
 
-Tags will be created for every nightly build in the form of `swift-DEVELOPMENT-SNAPSHOT-<DATE>`. The revision field
+Tags will be created for every nightly build in the form of `swift-DEVELOPMENT-SNAPSHOT-<DATE>-a`. The revision field
 should be specified with the intended tag.
 
 Different from building SwiftSyntax from source, declaring SwiftSyntax as a SwiftPM dependency doesn't require

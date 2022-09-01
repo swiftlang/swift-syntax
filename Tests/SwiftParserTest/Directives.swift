@@ -84,17 +84,17 @@ final class DirectiveTests: XCTestCase {
     AssertParse(
       """
       #if os(iOS)
-        func foo() {}#^DIAG_1^#
-      #^DIAG_2^#}
+        func foo() {}
+      #^DIAG_1^#}
       #else
         func bar() {}
         func baz() {}
-      } // expected-error{{unexpected '}' in conditional compilation block}}
+      #^DIAG_2^#}
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '#endif' in conditional compilation block"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Unexpected text '}' in conditional compilation block"),
       ]
     )
   }

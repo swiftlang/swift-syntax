@@ -71,26 +71,16 @@ extension Parser {
       var firstIteration = true
       var loopProgress = LoopProgressCondition()
       while loopProgress.evaluate(self.currentToken),
-              self.atAny(firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]) {
+              let poundInfo = self.canRecoverTo(firstIteration ? [.poundIfKeyword] : [.poundElseifKeyword, .poundElseKeyword]) {
         firstIteration = false
         // Parse the condition.
-        let unexpectedBeforePoundIf: RawUnexpectedNodesSyntax?
-        let poundIf: RawTokenSyntax
+        let (unexpectedBeforePoundIf, poundIf) = self.eat(poundInfo.tokenKind)
         let condition: RawExprSyntax?
-        if self.at(.poundIfKeyword) {
-          unexpectedBeforePoundIf = nil
-          poundIf = self.consumeAnyToken()
+        switch poundInfo.tokenKind {
+        case .poundIfKeyword, .poundElseifKeyword:
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
-        } else if self.at(.poundElseKeyword) {
-          unexpectedBeforePoundIf = nil
-          poundIf = self.consumeAnyToken()
+        default:
           condition = nil
-        } else if self.at(.poundElseifKeyword)  {
-          unexpectedBeforePoundIf = nil
-          poundIf = self.consumeAnyToken()
-          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
-        } else {
-          preconditionFailure("The loop condition should guarantee that we are at one of these tokens")
         }
 
         var elements = [Element]()

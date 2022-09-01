@@ -31,18 +31,21 @@ public enum TokenPrecedence: Comparable, Hashable {
   /// A punctuator that is a strong indicator that it separates two distinct parts of the source code, like two statements
   case strongPunctuator
   /// The '{' token because it typically marks the body of a declaration.
-  /// `closingDelimiter` must have type `strongPunctuator`
-  case strongBracketet(closingDelimiter: RawTokenKind)
+  case openingBrace
   /// Tokens that start a new declaration
   case declKeyword
+  /// `#if`, `#elseif`, `#else` or `#endif`.
+  case poundIf
 
   /// If the precedence is `weakBracketed` or `strongBracketed`, the closing delimeter of the bracketed group.
   var closingTokenKind: RawTokenKind? {
     switch self {
     case .weakBracketed(closingDelimiter: let closingDelimiter):
       return closingDelimiter
-    case .strongBracketet(closingDelimiter: let closingDelimiter):
-      return closingDelimiter
+    case .openingBrace:
+      return .rightBrace
+    case .poundIf:
+      return .poundEndifKeyword
     default:
       return nil
     }
@@ -64,10 +67,12 @@ public enum TokenPrecedence: Comparable, Hashable {
         return 4
       case .strongPunctuator:
         return 5
-      case .strongBracketet:
+      case .openingBrace:
         return 6
       case .declKeyword:
         return 7
+      case .poundIf:
+        return 8
       }
     }
 
@@ -150,9 +155,9 @@ public enum TokenPrecedence: Comparable, Hashable {
 
       // MARK: Strong bracketet
     case .leftBrace:
-      self = .strongBracketet(closingDelimiter: .rightBrace)
-    case .poundElseifKeyword, .poundElseKeyword, .poundIfKeyword:
-      self = .strongBracketet(closingDelimiter: .poundEndifKeyword)
+      self = .openingBrace
+    case .poundElseifKeyword, .poundElseKeyword, .poundIfKeyword, .poundEndifKeyword:
+      self = .poundIf
 
       // MARK: Strong punctuator
     case
@@ -162,8 +167,8 @@ public enum TokenPrecedence: Comparable, Hashable {
         .arrow,
       // '@' typically occurs at the start of declarations
         .atSign,
-      // Match the '}' and '#endif' as strongBracketet
-        .poundEndifKeyword, .rightBrace,
+      // Match the '}' as strongBracketet
+        .rightBrace,
       // EOF is here because it is a very stong marker and doesn't belong anywhere else
         .eof:
       self = .strongPunctuator

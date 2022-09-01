@@ -79,7 +79,12 @@ extension OperatorPrecedence {
     XCTAssertFalse(parenthesizedSyntax.containsExprSequence)
 
     // Make sure the two have the same structure.
-    XCTAssertSameStructure(foldedSyntax, parenthesizedSyntax)
+    let subtreeMatcher = SubtreeMatcher(Syntax(foldedSyntax), markers: [:])
+    do {
+      try subtreeMatcher.assertSameStructure(Syntax(parenthesizedSyntax))
+    } catch {
+      XCTFail("Matching for a subtree failed with error: \(error)")
+    }
   }
 }
 

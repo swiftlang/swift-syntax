@@ -42,10 +42,6 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
 }
 
 extension MissingSyntax: CustomReflectable {
@@ -99,10 +95,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeItem: UnexpectedNodesSyntax? {
@@ -288,10 +280,6 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
@@ -487,10 +475,6 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -625,10 +609,6 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -830,10 +810,6 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
@@ -1057,10 +1033,6 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -1200,10 +1172,6 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeKeyExpression: UnexpectedNodesSyntax? {
@@ -1435,10 +1403,6 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeSpecifier: UnexpectedNodesSyntax? {
@@ -1728,10 +1692,6 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -1926,10 +1886,6 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2081,10 +2037,6 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -2462,10 +2414,6 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2637,10 +2585,6 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeContent: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2740,10 +2684,6 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeBackslash: UnexpectedNodesSyntax? {
@@ -3026,10 +2966,6 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -3161,10 +3097,6 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeEqual: UnexpectedNodesSyntax? {
@@ -3301,10 +3233,6 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -3500,10 +3428,6 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeArrow: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -3642,10 +3566,6 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeInput: UnexpectedNodesSyntax? {
@@ -3873,10 +3793,6 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforePoundKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -4071,10 +3987,6 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? {
@@ -4428,10 +4340,6 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -4607,10 +4515,6 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -4744,10 +4648,6 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeTypeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -4879,10 +4779,6 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeColon: UnexpectedNodesSyntax? {
@@ -5037,10 +4933,6 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
@@ -5240,10 +5132,6 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeDecl: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -5377,10 +5265,6 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeStatements: UnexpectedNodesSyntax? {
@@ -5531,10 +5415,6 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeEqual: UnexpectedNodesSyntax? {
@@ -5691,10 +5571,6 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -6113,10 +5989,6 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -6248,10 +6120,6 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
@@ -6389,10 +6257,6 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -6572,10 +6436,6 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
@@ -6781,10 +6641,6 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
@@ -7064,10 +6920,6 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -7301,10 +7153,6 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeColon: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -7464,10 +7312,6 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? {
@@ -7670,10 +7514,6 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -7813,10 +7653,6 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAssignmentKeyword: UnexpectedNodesSyntax? {
@@ -8007,10 +7843,6 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAssociativityKeyword: UnexpectedNodesSyntax? {
@@ -8207,10 +8039,6 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? {
@@ -8514,10 +8342,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAtSignToken: UnexpectedNodesSyntax? {
@@ -8870,10 +8694,6 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -9124,10 +8944,6 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -9366,10 +9182,6 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -9604,10 +9416,6 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeNameTok: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -9785,10 +9593,6 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -9939,10 +9743,6 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeType: UnexpectedNodesSyntax? {
@@ -10183,10 +9983,6 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -10336,10 +10132,6 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeDiffKind: UnexpectedNodesSyntax? {
@@ -10620,10 +10412,6 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -10806,10 +10594,6 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -11010,10 +10794,6 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeParameter: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -11170,10 +10950,6 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeOfLabel: UnexpectedNodesSyntax? {
@@ -11550,10 +11326,6 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeBaseType: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -11786,10 +11558,6 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -11935,10 +11703,6 @@ public struct BackDeployAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable 
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeBeforeLabel: UnexpectedNodesSyntax? {
@@ -12146,10 +11910,6 @@ public struct BackDeployVersionArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -12285,10 +12045,6 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? {
@@ -12429,10 +12185,6 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -12672,10 +12424,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeCondition: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -12815,10 +12563,6 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforePoundAvailableKeyword: UnexpectedNodesSyntax? {
@@ -13065,10 +12809,6 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -13294,10 +13034,6 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLetOrVarKeyword: UnexpectedNodesSyntax? {
@@ -13526,10 +13262,6 @@ public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforePoundUnavailableKeyword: UnexpectedNodesSyntax? {
@@ -13764,10 +13496,6 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeIfStatement: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -13855,10 +13583,6 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeElseKeyword: UnexpectedNodesSyntax? {
@@ -13995,10 +13719,6 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? {
@@ -14195,10 +13915,6 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeDefaultKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -14333,10 +14049,6 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
@@ -14520,10 +14232,6 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -14704,10 +14412,6 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? {
@@ -14907,10 +14611,6 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -15105,10 +14805,6 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -15259,10 +14955,6 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeBody: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -15398,10 +15090,6 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? {
@@ -15601,10 +15289,6 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? {
@@ -16014,10 +15698,6 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -16301,10 +15981,6 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -16440,10 +16116,6 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? {
@@ -16643,10 +16315,6 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -16824,10 +16492,6 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? {
@@ -17023,10 +16687,6 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -17182,10 +16842,6 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeInOut: UnexpectedNodesSyntax? {
@@ -17585,10 +17241,6 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeArgumentType: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -17724,10 +17376,6 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? {
@@ -17923,10 +17571,6 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeColon: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -18065,10 +17709,6 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLabelName: UnexpectedNodesSyntax? {
@@ -18296,10 +17936,6 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeEntry: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -18444,10 +18080,6 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
@@ -18632,10 +18264,6 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforePlatform: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -18780,10 +18408,6 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? {

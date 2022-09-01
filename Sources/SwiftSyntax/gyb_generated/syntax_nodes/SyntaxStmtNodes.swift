@@ -42,10 +42,6 @@ public struct UnknownStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
 }
 
 extension UnknownStmtSyntax: CustomReflectable {
@@ -83,10 +79,6 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 }
 
@@ -137,10 +129,6 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeLabelName: UnexpectedNodesSyntax? {
@@ -318,10 +306,6 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -457,10 +441,6 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeWhileKeyword: UnexpectedNodesSyntax? {
@@ -656,10 +636,6 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -788,10 +764,6 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -887,10 +859,6 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? {
@@ -1117,10 +1085,6 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeGuardKeyword: UnexpectedNodesSyntax? {
@@ -1389,10 +1353,6 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeForKeyword: UnexpectedNodesSyntax? {
@@ -1888,10 +1848,6 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2175,10 +2131,6 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2373,10 +2325,6 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeReturnKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2510,10 +2458,6 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2642,10 +2586,6 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeFallthroughKeyword: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2733,10 +2673,6 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeBreakKeyword: UnexpectedNodesSyntax? {
@@ -2868,10 +2804,6 @@ public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeDeclaration: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2959,10 +2891,6 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeThrowKeyword: UnexpectedNodesSyntax? {
@@ -3107,10 +3035,6 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? {
@@ -3408,10 +3332,6 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforePoundAssert: UnexpectedNodesSyntax? {

@@ -95,10 +95,6 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
 %     for (idx, child) in enumerate(node.children):
 %       child_node = NODE_MAP.get(child.syntax_kind)
 %

@@ -67,10 +67,6 @@ extension Syntax {
   public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
   }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self.asProtocol(SyntaxProtocol.self))
-  }
 }
 
 extension Syntax: CustomReflectable {
@@ -113,9 +109,6 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Converts the given `Syntax` node to this type. Returns `nil` if the
   /// conversion is not possible.
   init?(_ syntaxNode: Syntax)
-
-  /// Returns the underlying syntax node type.
-  var syntaxNodeType: SyntaxProtocol.Type { get }
 }
 
 extension SyntaxProtocol {
@@ -127,6 +120,10 @@ extension SyntaxProtocol {
   @_spi(RawSyntax)
   public var raw: RawSyntax {
     return _syntaxNode.data.raw
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return self.raw.kind.syntaxNodeType
   }
 }
 

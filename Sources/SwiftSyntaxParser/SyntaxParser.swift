@@ -165,7 +165,7 @@ public enum SyntaxParser {
           return CParseLookupResult(length: 0, node: nil)
         }
         let lengthToSkip = foundNode.byteSize
-        let opaqueNode = foundNode.withUnsafeRawSyntax({ $0.toOpaque() })
+        let opaqueNode = foundNode.raw.toOpaque()
         return CParseLookupResult(
           length: lengthToSkip,
           node: UnsafeMutableRawPointer(mutating: opaqueNode))

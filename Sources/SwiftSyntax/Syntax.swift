@@ -655,109 +655,6 @@ extension ReversedTokenSequence: CustomReflectable {
   }
 }
 
-/// Represents a node from the syntax tree.
-///
-/// This is a more efficient representation than `Syntax` because it avoids casts
-/// to `Syntax` for representing the parent hierarchy.
-/// It provides generic information, like the node's position, range, and
-/// a unique `id`, while still allowing getting the associated `Syntax`
-/// object if necessary.
-///
-/// `SyntaxParser` uses `SyntaxNode` to efficiently report which syntax nodes
-/// got re-used during incremental re-parsing.
-public struct SyntaxNode {
-  let absoluteRaw: AbsoluteRawSyntax
-  let parents: ArraySlice<AbsoluteRawSyntax>
-
-  internal init(node: AbsoluteRawSyntax, parents: ArraySlice<AbsoluteRawSyntax>) {
-    self.absoluteRaw = node
-    self.parents = parents
-  }
-
-  var raw: RawSyntax {
-    return absoluteRaw.raw
-  }
-
-  @_spi(RawSyntax)
-  public func withUnsafeRawSyntax<R>(_ body: (RawSyntax) throws -> R) rethrows -> R {
-    return try body(raw)
-  }
-
-  /// Converts this node to a `SyntaxData` object.
-  ///
-  /// This operation results in wrapping all of the node's parents into
-  /// `SyntaxData` objects. There's a cost associated with it that should be
-  /// taken into account before used inside performance critical code.
-  internal var asSyntaxData: SyntaxData {
-    if let parent = parent {
-      return SyntaxData(absoluteRaw, parent: parent.asSyntax)
-    } else {
-      return SyntaxData.forRoot(absoluteRaw.raw)
-    }
-  }
-
-  /// Converts this node to a `Syntax` object.
-  ///
-  /// This operation results in wrapping this node and all of its parents into
-  /// `Syntax` objects. There's a cost associated with it that should be taken
-  /// into account before used inside performance critical code.
-  public var asSyntax: Syntax {
-    return Syntax(self.asSyntaxData)
-  }
-
-  /// The parent of this syntax node, or `nil` if this node is the root.
-  public var parent: SyntaxNode? {
-    guard !parents.isEmpty else { return nil }
-    return SyntaxNode(node: parents.last!, parents: parents.dropLast())
-  }
-
-  /// The absolute position of the starting point of this node.
-  public var position: AbsolutePosition {
-    return absoluteRaw.position
-  }
-
-  /// The end position of this node, including its trivia.
-  public var endPosition: AbsolutePosition {
-    return absoluteRaw.endPosition
-  }
-
-  /// The textual byte length of this node including leading and trailing trivia.
-  public var byteSize: Int {
-    return totalLength.utf8Length
-  }
-
-  /// The byte source range of this node including leading and trailing trivia.
-  public var byteRange: ByteSourceRange {
-    return ByteSourceRange(offset: position.utf8Offset, length: byteSize)
-  }
-
-  /// The length of this node including all of its trivia.
-  public var totalLength: SourceLength {
-    return raw.totalLength
-  }
-}
-
-extension SyntaxNode: Identifiable {
-  /// Returns a value representing the unique identity of the node.
-  public var id: SyntaxIdentifier {
-    return absoluteRaw.info.nodeId
-  }
-}
-
-extension SyntaxNode: CustomStringConvertible, TextOutputStreamable {
-  /// A source-accurate description of this node.
-  public var description: String {
-    return raw.description
-  }
-
-  /// Prints the raw value of this node to the provided stream.
-  /// - Parameter stream: The stream to which to print the raw tree.
-  public func write<Target>(to target: inout Target)
-    where Target: TextOutputStream {
-      raw.write(to: &target)
-  }
-}
-
 /// Expose `recursiveDescription` on raw nodes for debugging purposes.
 extension RawSyntaxNodeProtocol {
   /// Print this raw syntax node including all of its children.
@@ -766,3 +663,6 @@ extension RawSyntaxNodeProtocol {
     return Syntax(raw: raw).recursiveDescription
   }
 }
+
+@available(*, unavailable, message: "use 'Syntax' instead")
+public struct SyntaxNode {}

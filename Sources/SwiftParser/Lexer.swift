@@ -111,7 +111,7 @@ public struct Lexer {
 extension Lexer {
   /// A sequence of ``Lexer/Lexeme`` tokens starting from a ``Lexer/Cursor``
   /// that points into an input buffer.
-  public struct LexemeSequence: IteratorProtocol, Sequence {
+  public struct LexemeSequence: IteratorProtocol, Sequence, CustomDebugStringConvertible {
     fileprivate let start: Lexer.Cursor
     fileprivate var cursor: Lexer.Cursor
     fileprivate var nextToken: Lexer.Lexeme
@@ -157,6 +157,15 @@ extension Lexer {
 
     func peek() -> Lexer.Lexeme {
       return self.nextToken
+    }
+
+    public var debugDescription: String {
+      let remainingText = self.nextToken.debugDescription + String(syntaxText: SyntaxText(baseAddress: self.cursor.input.baseAddress, count: self.cursor.input.count))
+      if remainingText.count > 100 {
+        return remainingText.prefix(100) + "..."
+      } else {
+        return remainingText
+      }
     }
   }
 

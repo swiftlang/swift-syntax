@@ -220,6 +220,22 @@ extension Parser.Lookahead {
     return TokenClassification.isDeclarationStart(subparser.currentToken)
   }
 
+  func isStartOfExpression() -> Bool {
+    if self.atAny(TokenClassification.expressionStartKeywords) {
+      return true
+    }
+    if self.currentToken.isContextualKeyword(TokenClassification.contextualExpressionStartKeywords) {
+      return true
+    }
+    if self.at(.atSign) || self.at(.inoutKeyword) {
+      var backtrack = self.lookahead()
+      if backtrack.canParseType() {
+        return true
+      }
+    }
+    return false
+  }
+
   func isParenthesizedUnowned() -> Bool {
     assert(self.currentToken.tokenText == "unowned" && self.peek().tokenKind == .leftParen,
            "Invariant violated")

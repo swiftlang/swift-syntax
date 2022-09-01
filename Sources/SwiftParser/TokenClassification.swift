@@ -16,7 +16,7 @@
 enum TokenClassification {
   // MARK: Declaration start
 
-  static var declarationStartKeywords: [RawTokenKind] = [
+  static let declarationStartKeywords: [RawTokenKind] = [
     .associatedtypeKeyword,
     .classKeyword,
     // We don't consider caseKeyword a declStartKeyword because it cannot start a
@@ -37,7 +37,7 @@ enum TokenClassification {
     .varKeyword
   ]
 
-  static var contextualDeclarationStartKeywords: [SyntaxText] = [
+  static let contextualDeclarationStartKeywords: [SyntaxText] = [
     "actor"
   ]
 
@@ -63,6 +63,57 @@ enum TokenClassification {
       return false
     }
   }
+
+  // MARK: Expressions
+
+  static let expressionStartKeywords: [RawTokenKind] = [
+    .__column__Keyword,
+    .__dso_handle__Keyword,
+    .__file__Keyword,
+    .__function__Keyword,
+    .__line__Keyword,
+    .anyKeyword,
+    .backslash,
+    .capitalSelfKeyword,
+    .dollarIdentifier,
+    .falseKeyword,
+    .floatingLiteral,
+    .identifier,
+    .integerLiteral,
+    .isKeyword,
+    .leftBrace,
+    .leftParen,
+    .leftSquareBracket,
+    .letKeyword,
+    .nilKeyword,
+    .period,
+    .poundColorLiteralKeyword,
+    .poundColumnKeyword,
+    .poundDsohandleKeyword,
+    .poundFileKeyword,
+    .poundFileLiteralKeyword,
+    .poundFilePathKeyword,
+    .poundFunctionKeyword,
+    .poundImageLiteralKeyword,
+    .poundKeyPathKeyword,
+    .poundLineKeyword,
+    .poundSelectorKeyword,
+    .prefixAmpersand,
+    .prefixOperator,
+    .prefixPeriod,
+    .regexLiteral,
+    .selfKeyword,
+    .stringLiteral,
+    .superKeyword,
+    .trueKeyword,
+    .tryKeyword,
+    .varKeyword,
+    .wildcardKeyword,
+  ]
+
+  static let contextualExpressionStartKeywords: [SyntaxText] = [
+    "await"
+  ]
 
   // MARK: Pound declaration
 

@@ -14,7 +14,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "Expected '=' in pattern matching"),
-        DiagnosticSpec(message: "Unexpected text '* ! = x' found in 'if' statement"),
+        DiagnosticSpec(message: "Unexpected text '* ! = x' in 'if' statement"),
       ]
     )
   }
@@ -199,7 +199,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "END_SWITCH", message: "Expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "UNEXPECTED", message: "Unexpected text found in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "UNEXPECTED", message: "Unexpected text in conditional compilation block"),
         DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous code at top level")
       ]
     )

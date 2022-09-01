@@ -188,12 +188,18 @@ extension Lexer.Lexeme {
     }
   }
 
-  func isContextualDeclKeyword() -> Bool {
-    guard self.isIdentifier else {
+  func isContextualKeyword(_ names: [SyntaxText]) -> Bool {
+    switch self.tokenKind {
+    case .identifier, .contextualKeyword:
+      return names.contains(self.tokenText)
+    default:
       return false
     }
-    switch self.tokenText {
-    case "final",
+  }
+
+  func isContextualDeclKeyword() -> Bool {
+    return isContextualKeyword([
+      "final",
       "required",
       "optional",
       "lazy",
@@ -217,11 +223,8 @@ extension Lexer.Lexeme {
       "nonisolated",
       "distributed",
       "_const",
-      "_local":
-      return true
-    default:
-      return false
-    }
+      "_local",
+    ])
   }
 
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {

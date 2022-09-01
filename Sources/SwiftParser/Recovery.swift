@@ -22,7 +22,7 @@ extension Parser.Lookahead {
   /// tokens this lookahead skipped over to find `kind` by consuming
   /// `lookahead.tokensConsumed` as unexpected.
   mutating func canRecoverTo(_ kind: RawTokenKind) -> Bool {
-    // If the `Set` implementation has noticable performance overheads, we could
+    // If the `Array` implementation has noticable performance overheads, we could
     // provide a matching implementaiton for a single `TokenKind` here.
     return canRecoverTo([kind])
   }

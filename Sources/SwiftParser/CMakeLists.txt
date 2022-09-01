@@ -23,6 +23,7 @@ add_library(SwiftParser STATIC
   Patterns.swift
   Availability.swift
   TriviaParser.swift
+  TokenClassification.swift
   TokenConsumer.swift
   Parser.swift
   Recovery.swift

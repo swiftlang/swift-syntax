@@ -202,7 +202,7 @@ extension Parser {
 
   /// Attempts to consume a token of the given kind.
   /// If it cannot be found, the parser tries
-  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
   ///     expected token and see if the token occurs after that unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
@@ -223,9 +223,36 @@ extension Parser {
     return (nil, RawTokenSyntax(missing: kind, arena: self.arena))
   }
 
+  /// Attempts to consume a contextual keyword with the given name.
+  /// Recovery skips tokens that have lower precedence than `precedence`.
+  /// If it cannot be found, the parser tries
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
+  ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
+  ///     a missing contextual keyword.
+  @_spi(RawSyntax)
+  public mutating func expectContextualKeyword(
+    _ name: SyntaxText,
+    precedence: TokenPrecedence
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    if self.currentToken.isContextualKeyword(name) {
+      return (nil, self.consumeAnyToken())
+    }
+    var lookahead = self.lookahead()
+    if lookahead.canRecoverTo([.identifier, .contextualKeyword], contextualPrecedences: [name: precedence]) != nil {
+      var unexpectedNodes = [RawSyntax]()
+      for _ in 0..<lookahead.tokensConsumed {
+        unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
+      }
+      assert(currentToken.isContextualKeyword(name))
+      let token = consumeAnyToken()
+      return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
+    }
+    return (nil, RawTokenSyntax(missing: .contextualKeyword, text: name, arena: self.arena))
+  }
+
   /// Attempts to consume a token whose kind is in `kinds`.
   /// If it cannot be found, the parser tries
-  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
   ///     lowest precedence of the expected token kinds and see if a token of
   ///     the requested kinds occurs after the unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
@@ -241,13 +268,13 @@ extension Parser {
       }
     }
     var lookahead = self.lookahead()
-    if lookahead.canRecoverTo(kinds) {
+    if let recoveredTo = lookahead.canRecoverTo(kinds)?.tokenKind {
+      assert(kinds.contains(recoveredTo))
       var unexpectedNodes = [RawSyntax]()
       for _ in 0..<lookahead.tokensConsumed {
         unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
       }
-      let token = consumeAnyToken()
-      assert(kinds.contains(token.tokenKind))
+      let token = self.eatWithoutRecovery(recoveredTo)
       return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
     }
     return (nil, RawTokenSyntax(missing: defaultKind, arena: self.arena))
@@ -280,6 +307,30 @@ extension Parser {
     let (unexpected, token) = expect(kind)
     assert(!token.isMissing)
     return (unexpected, token)
+  }
+
+  /// See `expectContextualKeyword`.
+  /// Asserts that the expected token has not been synthesized.
+  @_spi(RawSyntax)
+  public mutating func eatContextualKeyword(
+    _ name: SyntaxText,
+    precendence: TokenPrecedence
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: Token) {
+    let (unexpected, token) = expectContextualKeyword(name, precedence: precendence)
+    assert(!token.isMissing)
+    return (unexpected, token)
+  }
+
+  /// See `Lookahead.canRecoverTo`.
+  func canRecoverTo(
+    _ kinds: [RawTokenKind],
+    contextualPrecedences: [SyntaxText: TokenPrecedence] = [:]
+  ) -> Parser.Lookahead.RecoveryMatch? {
+    if kinds.contains(self.currentToken.tokenKind) {
+      return Parser.Lookahead.RecoveryMatch(self.currentToken)
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo(kinds, contextualPrecedences: contextualPrecedences)
   }
 }
 

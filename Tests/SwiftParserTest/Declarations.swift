@@ -34,6 +34,18 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testFuncAfterUnbalancedClosingBrace() {
+    AssertParse(
+      """
+      #^DIAG^#}
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text '}' found in function")
+      ]
+    )
+  }
+
   func testClassParsing() {
     AssertParse("class Foo {}")
 
@@ -71,6 +83,20 @@ final class DeclarationTests: XCTestCase {
       """
     )
   }
+
+  func testActorAfterUnbalancedClosingBrace() {
+    AssertParse(
+      """
+      #^DIAG^#}
+      actor Foo {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text '}' found in actor")
+      ]
+    )
+  }
+
+
 
   func testProtocolParsing() {
     AssertParse("protocol Foo {}")

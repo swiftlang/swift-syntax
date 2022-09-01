@@ -140,6 +140,8 @@ extension Parser {
       return RawSyntax(self.parseStatement())
     } else if self.lookahead().isStartOfExpression() {
       return RawSyntax(self.parseExpression())
+    } else if self.lookahead().isStartOfDeclaration(allowRecovery: true) {
+      return RawSyntax(self.parseDeclaration())
     } else {
       return RawSyntax(RawMissingExprSyntax(arena: self.arena))
     }

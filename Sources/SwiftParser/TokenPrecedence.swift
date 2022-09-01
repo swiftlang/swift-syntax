@@ -15,7 +15,7 @@ import SwiftSyntax
 /// Describes how distinctive a token is for parser recovery. When expecting a
 /// token, tokens with a lower token precedence may be skipped and considered
 /// unexpected.
-public enum TokenPrecedence: Comparable {
+public enum TokenPrecedence: Comparable, Hashable {
   /// Tokens that can be used similar to variable names or literals
   case identifierLike
   /// Keywords and operators that can occur in the middle of an expression

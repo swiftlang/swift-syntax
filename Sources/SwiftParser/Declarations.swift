@@ -68,7 +68,11 @@ extension Parser {
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
       modifiers: self.parseModifierList())
-    switch self.currentToken.tokenKind {
+    let declIntroducer = self.canRecoverTo(
+      TokenClassification.declarationStartKeywords + [.caseKeyword],
+      contextualPrecedences: TokenClassification.contextualDeclarationStartPrecedences
+    )
+    switch declIntroducer?.tokenKind {
     case .importKeyword:
       return RawDeclSyntax(self.parseImportDeclaration(attrs))
     case .classKeyword:
@@ -101,7 +105,7 @@ extension Parser {
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs))
     case .precedencegroupKeyword:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs))
-    case _ where self.currentToken.isContextualKeyword("actor"):
+    case _ where declIntroducer?.text == "actor":
       return RawDeclSyntax(self.parseActorDeclaration(attrs))
     default:
       return RawDeclSyntax(RawMissingDeclSyntax(
@@ -953,8 +957,7 @@ extension Parser {
   ///     actor-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseActorDeclaration(_ attrs: DeclAttributes) -> RawActorDeclSyntax {
-    assert(self.currentToken.isContextualKeyword("actor"))
-    let actorKeyword = self.consumeIdentifier()
+    let (unexpectedBeforeActorKeyword, actorKeyword) = self.eatContextualKeyword("actor", precendence: .declKeyword)
     let name = self.consumeIdentifier()
 
     let generics: RawGenericParameterClauseSyntax?
@@ -984,6 +987,7 @@ extension Parser {
     return RawActorDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
+      unexpectedBeforeActorKeyword,
       actorKeyword: actorKeyword,
       identifier: name,
       genericParameterClause: generics,

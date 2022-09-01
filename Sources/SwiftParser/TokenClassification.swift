@@ -41,6 +41,10 @@ enum TokenClassification {
     "actor"
   ]
 
+  static var contextualDeclarationStartPrecedences: [SyntaxText: TokenPrecedence] {
+    Dictionary(uniqueKeysWithValues: contextualDeclarationStartKeywords.map({ ($0, .declKeyword) }))
+  }
+
   static func isDeclarationStart(_ lexeme: Lexer.Lexeme) -> Bool {
     if declarationStartKeywords.contains(lexeme.tokenKind) {
       return true

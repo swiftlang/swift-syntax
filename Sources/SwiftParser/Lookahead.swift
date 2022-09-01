@@ -177,21 +177,13 @@ extension Parser.Lookahead {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  func isStartOfDeclaration() -> Bool {
+  func isStartOfDeclaration(allowRecovery: Bool = false) -> Bool {
     // Fast path: If we are at a declaration keyword already, we don't need a subparser
     if TokenClassification.isDeclarationStart(self.currentToken) || TokenClassification.isPoundDeclarationKeyword(self.currentToken) {
       return true
     }
 
-    // Another fast path: If we aren't currently positioned at an attribute or modifier, we can't eat those to reach a declaration start.
-    if !self.at(.atSign) && !TokenClassification.isDeclarationModifier(self.currentToken) {
-      return false
-    }
-
     var subparser = self.lookahead()
-    if TokenClassification.isPoundDeclarationKeyword(subparser.currentToken) {
-      return true
-    }
 
     var hasAttribute = false
     var attributeProgress = LoopProgressCondition()
@@ -217,7 +209,11 @@ extension Parser.Lookahead {
       }
     }
 
-    return TokenClassification.isDeclarationStart(subparser.currentToken)
+    if allowRecovery {
+      return subparser.canRecoverTo(TokenClassification.declarationStartKeywords, contextualPrecedences: TokenClassification.contextualDeclarationStartPrecedences) != nil
+    } else {
+      return TokenClassification.isDeclarationStart(subparser.currentToken)
+    }
   }
 
   func isStartOfExpression() -> Bool {

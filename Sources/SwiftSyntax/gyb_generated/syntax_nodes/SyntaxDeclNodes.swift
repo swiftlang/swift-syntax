@@ -42,10 +42,6 @@ public struct UnknownDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     let data = SyntaxData.forRoot(raw)
     self.init(data)
   }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
 }
 
 extension UnknownDeclSyntax: CustomReflectable {
@@ -91,10 +87,6 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -285,10 +277,6 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -698,10 +686,6 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -1090,10 +1074,6 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeClauses: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -1250,10 +1230,6 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforePoundError: UnexpectedNodesSyntax? {
@@ -1482,10 +1458,6 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforePoundWarning: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -1710,10 +1682,6 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforePoundSourceLocation: UnexpectedNodesSyntax? {
@@ -1957,10 +1925,6 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -2418,10 +2382,6 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -2875,10 +2835,6 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -3336,10 +3292,6 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -3791,10 +3743,6 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -4204,10 +4152,6 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -4665,10 +4609,6 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -5109,10 +5049,6 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -5392,10 +5328,6 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -5841,10 +5773,6 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -6181,10 +6109,6 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -6566,10 +6490,6 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -6855,10 +6775,6 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -7166,10 +7082,6 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -7642,10 +7554,6 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 0, parent: Syntax(self))
@@ -7975,10 +7883,6 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       from: layout, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {

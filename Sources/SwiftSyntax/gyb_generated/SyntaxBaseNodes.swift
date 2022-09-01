@@ -80,10 +80,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
   public func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
@@ -181,10 +177,6 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 #endif
 
     self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
   }
 
   public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
@@ -286,10 +278,6 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
   public func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
@@ -389,10 +377,6 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
   public func `is`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
@@ -490,10 +474,6 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 #endif
 
     self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
   }
 
   public func `is`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {

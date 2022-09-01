@@ -99,10 +99,6 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
   public func `is`<S: ${node.name}Protocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }

@@ -25,10 +25,6 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = syntax
   }
 
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
   /// Creates an `UnknownSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
@@ -91,10 +87,6 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     )
     let data = SyntaxData.forRoot(raw)
     self.init(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
   }
 
   public var presence: SourcePresence {

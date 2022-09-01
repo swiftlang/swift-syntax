@@ -144,8 +144,6 @@ public enum TokenPrecedence: Comparable {
         .caseKeyword, .catchKeyword, .defaultKeyword, .elseKeyword,
       // Return-like statements
         .breakKeyword, .continueKeyword, .fallthroughKeyword, .returnKeyword, .throwKeyword, .yield,
-      // Misc
-        .importKeyword,
       // #error and #warning are statement-like
         .poundErrorKeyword, .poundWarningKeyword:
       self = .stmtKeyword
@@ -181,7 +179,9 @@ public enum TokenPrecedence: Comparable {
       // Variables
         .letKeyword, .varKeyword,
       // Operator stuff
-        .operatorKeyword, .precedencegroupKeyword:
+        .operatorKeyword, .precedencegroupKeyword,
+      // Misc
+        .importKeyword:
       self = .declKeyword
     }
   }

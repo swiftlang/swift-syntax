@@ -47,7 +47,7 @@ There are a number of implementation tasks involved in realizing the parser, whi
 * [ ] Tooling and automation
   * [ ] Improve test harness to easily check the expected parse trees + diagnostics
   * [ ] Migrate [attribute definitions](https://github.com/apple/swift/blob/main/include/swift/AST/Attr.def) from C++ to Swift
-  * [ ] Migrate [grammar definition](https://github.com/apple/swift/tree/main/utils/gyb_syntax_support) to the swift-syntax repository
+  * [x] Migrate [grammar definition](https://github.com/apple/swift/tree/main/utils/gyb_syntax_support) to the swift-syntax repository
   * [ ] Migrate grammar definition from Python to Swift
   * [ ] Replace uses of gyb with SwiftSyntax-based generation
 * [ ] Auditing the grammar to ensure that it accurately represents the Swift grammar

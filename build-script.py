@@ -171,7 +171,9 @@ def generate_single_gyb_file(
     gyb_command += line_directive_flags
     gyb_command += additional_gyb_flags
 
-    check_call(gyb_command, verbose=verbose)
+    env = dict()
+    env["PYTHONPATH"] = GENERATESWIFTSYNTAXBUILDER_DIR
+    check_call(gyb_command, env=env, verbose=verbose)
 
     # Copy the file if different from the file already present in
     # gyb_generated

@@ -14,7 +14,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "Expected '=' in pattern matching"),
-        DiagnosticSpec(message: "Unexpected text '* ! = x' found in 'if' statement"),
+        DiagnosticSpec(message: "Unexpected text '* ! = x' in 'if' statement"),
       ]
     )
   }
@@ -158,8 +158,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "TEST_1", message: "Unexpected text '@s return' found in function"),
-        DiagnosticSpec(locationMarker: "TEST_2", message: "Unexpected text '@unknown return' found in function")
+        DiagnosticSpec(locationMarker: "TEST_1", message: "Unexpected text '@s return' in function"),
+        DiagnosticSpec(locationMarker: "TEST_2", message: "Unexpected text '@unknown return' in function")
       ]
     )
   }
@@ -177,7 +177,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text found in 'switch' statement"),
+        DiagnosticSpec(message: "Unexpected text in 'switch' statement"),
 
       ]
     )
@@ -197,7 +197,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text found in 'switch' statement")
+        DiagnosticSpec(message: "Unexpected text in 'switch' statement")
       ]
     )
   }

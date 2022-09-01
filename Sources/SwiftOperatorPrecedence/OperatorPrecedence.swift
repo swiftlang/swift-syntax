@@ -36,8 +36,7 @@ public struct OperatorPrecedence {
   }
 
   /// Record the operator, if it matters.
-  /// FIXME: Terrible API used only for tests
-  public mutating func record(
+  mutating func record(
     _ op: Operator,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows {
@@ -53,8 +52,7 @@ public struct OperatorPrecedence {
   }
 
   /// Record the precedence group.
-  /// FIXME: Terrible API used only for tests
-  public mutating func record(
+  mutating func record(
     _ group: PrecedenceGroup,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows {

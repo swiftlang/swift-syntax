@@ -217,7 +217,7 @@ extension Parser {
       for _ in 0..<lookahead.tokensConsumed {
         unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
       }
-      let token = eat(kind)
+      let token = eatWithoutRecovery(kind)
       return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
     }
     return (nil, RawTokenSyntax(missing: kind, arena: self.arena))
@@ -273,6 +273,13 @@ extension Parser {
       }
     }
     return RawTokenSyntax(missing: kind, arena: self.arena)
+  }
+
+  @_spi(RawSyntax)
+  public mutating func eat(_ kind: RawTokenKind) -> (unexpected: RawUnexpectedNodesSyntax?, token: Token) {
+    let (unexpected, token) = expect(kind)
+    assert(!token.isMissing)
+    return (unexpected, token)
   }
 }
 

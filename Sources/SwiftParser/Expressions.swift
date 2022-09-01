@@ -152,12 +152,13 @@ extension Parser {
 
     case .infixQuestionMark:
       // Save the '?'.
-      let question = self.eat(.infixQuestionMark)
+      let (unexpectedBeforeQuestion, question) = self.eat(.infixQuestionMark)
       let firstChoice = self.parseSequenceExpression(flavor)
       // Make sure there's a matching ':' after the middle expr.
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
       let op = RawUnresolvedTernaryExprSyntax(
+        unexpectedBeforeQuestion,
         questionMark: question,
         firstChoice: firstChoice,
         unexpectedBeforeColon,
@@ -176,13 +177,21 @@ extension Parser {
       return (RawExprSyntax(op), rhs)
 
     case .equal where !inVarOrLet:
-      let eq = self.eat(.equal)
-      let op = RawAssignmentExprSyntax(assignToken: eq, arena: self.arena)
+      let (unexpectedBeforeEq, eq) = self.eat(.equal)
+      let op = RawAssignmentExprSyntax(
+        unexpectedBeforeEq,
+        assignToken: eq,
+        arena: self.arena
+      )
       return (RawExprSyntax(op), nil)
 
     case .isKeyword:
-      let isKeyword = self.eat(.isKeyword)
-      let op = RawUnresolvedIsExprSyntax(isTok: isKeyword, arena: self.arena)
+      let (unexpectedBeforeIsKeyword, isKeyword) = self.eat(.isKeyword)
+      let op = RawUnresolvedIsExprSyntax(
+        unexpectedBeforeIsKeyword,
+        isTok: isKeyword,
+        arena: self.arena
+      )
 
       // Parse the right type expression operand as part of the 'is' production.
       let type = self.parseType()
@@ -191,7 +200,7 @@ extension Parser {
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
     case .asKeyword:
-      let asKeyword = self.eat(.asKeyword)
+      let (unexpectedBeforeAsKeyword, asKeyword) = self.eat(.asKeyword)
       let failable: RawTokenSyntax?
       if self.at(.postfixQuestionMark) || self.at(.exclamationMark) {
         failable = self.consumeAnyToken()
@@ -199,7 +208,11 @@ extension Parser {
         failable = nil
       }
       let op = RawUnresolvedAsExprSyntax(
-        asTok: asKeyword, questionOrExclamationMark: failable, arena: self.arena)
+        unexpectedBeforeAsKeyword,
+        asTok: asKeyword,
+        questionOrExclamationMark: failable,
+        arena: self.arena
+      )
 
       // Parse the right type expression operand as part of the 'as' production.
       let type = self.parseType()
@@ -274,7 +287,7 @@ extension Parser {
       return self.parseUnaryExpression(flavor, forDirective: forDirective)
     }
 
-    let tryKeyword = self.eat(.tryKeyword)
+    let (unexpectedBeforeTryKeyword, tryKeyword) = self.eat(.tryKeyword)
     let mark: RawTokenSyntax?
     if self.at(.exclamationMark) || self.at(.postfixQuestionMark) {
       mark = self.consumeAnyToken()
@@ -284,6 +297,7 @@ extension Parser {
 
     let expression = self.parseSequenceExpressionElement(flavor)
     return RawExprSyntax(RawTryExprSyntax(
+      unexpectedBeforeTryKeyword,
       tryKeyword: tryKeyword,
       questionOrExclamationMark: mark,
       expression: expression,
@@ -308,21 +322,27 @@ extension Parser {
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
     switch self.currentToken.tokenKind {
     case .prefixAmpersand:
-      let amp = self.eat(.prefixAmpersand)
+      let (unexpectedBeforeAmp, amp) = self.eat(.prefixAmpersand)
       let expr = self.parseUnaryExpression(flavor)
       return RawExprSyntax(RawInOutExprSyntax(
-        ampersand: amp, expression: RawExprSyntax(expr),
-        arena: self.arena))
+        unexpectedBeforeAmp,
+        ampersand: amp,
+        expression: RawExprSyntax(expr),
+        arena: self.arena
+      ))
 
     case .backslash:
       return RawExprSyntax(self.parseKeyPathExpression(forDirective: forDirective))
 
     case .prefixOperator:
-      let op = self.eat(.prefixOperator)
+      let (unexpectedBeforeOp, op) = self.eat(.prefixOperator)
       let postfix = self.parseUnaryExpression(flavor, forDirective: forDirective)
       return RawExprSyntax(RawPrefixOperatorExprSyntax(
-        operatorToken: op, postfixExpression: postfix,
-        arena: self.arena))
+        unexpectedBeforeOp,
+        operatorToken: op,
+        postfixExpression: postfix,
+        arena: self.arena
+      ))
 
     default:
       // If the next token is not an operator, just parse this as expr-postfix.
@@ -378,10 +398,15 @@ extension Parser {
 
     // Handle "x.self" expr.
     if self.at(.selfKeyword) {
-      let selfKeyword = self.eat(.selfKeyword)
+      let (unexpectedBeforeSelfKeyword, selfKeyword) = self.eat(.selfKeyword)
       return RawExprSyntax(RawMemberAccessExprSyntax(
-        base: start, dot: period, name: selfKeyword, declNameArguments: nil,
-        arena: self.arena))
+        base: start,
+        dot: period,
+        unexpectedBeforeSelfKeyword,
+        name: selfKeyword,
+        declNameArguments: nil,
+        arena: self.arena
+      ))
     }
 
     let (ident, args) = self.parseDeclNameRef([ .keywords, .compoundNames ])
@@ -472,7 +497,7 @@ extension Parser {
       // If there is an expr-call-suffix, parse it and form a call.
       if self.at(.leftParen) && !self.currentToken.isAtStartOfLine {
         // Parse the argument list.
-        let lparen = self.eat(.leftParen)
+        let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
         let args = self.parseArgumentListElements()
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
@@ -488,6 +513,7 @@ extension Parser {
 
         leadingExpr = RawExprSyntax(RawFunctionCallExprSyntax(
           calledExpression: leadingExpr,
+          unexpectedBeforeLParen,
           leftParen: lparen,
           argumentList: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
           unexpectedBeforeRParen,
@@ -501,7 +527,7 @@ extension Parser {
       // Check for a [expr] suffix.
       // Note that this cannot be the start of a new line.
       if self.at(.leftSquareBracket) && !self.currentToken.isAtStartOfLine {
-        let lsquare = self.eat(.leftSquareBracket)
+        let (unexpectedBeforeLSquare, lsquare) = self.eat(.leftSquareBracket)
         let args = self.parseArgumentListElements()
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
 
@@ -517,6 +543,7 @@ extension Parser {
 
         leadingExpr = RawExprSyntax(RawSubscriptExprSyntax(
           calledExpression: leadingExpr,
+          unexpectedBeforeLSquare,
           leftBracket: lsquare,
           argumentList: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
           unexpectedBeforeRSquare,
@@ -574,10 +601,13 @@ extension Parser {
         //        if (periodHasKeyPathBehavior && startsWithSymbol(Tok, '.'))
         //          break
 
-        let op = self.eat(.postfixOperator)
+        let (unexpectedBeforeOp, op) = self.eat(.postfixOperator)
         leadingExpr = RawExprSyntax(RawPostfixUnaryExprSyntax(
-          expression: leadingExpr, operatorToken: op,
-          arena: self.arena))
+          expression: leadingExpr,
+          unexpectedBeforeOp,
+          operatorToken: op,
+          arena: self.arena
+        ))
         continue
       }
 
@@ -593,7 +623,7 @@ extension Parser {
           //     #if CONDITION_2
           //       .someMember
           repeat {
-            backtrack.eat(.poundIfKeyword)
+            backtrack.eatWithoutRecovery(.poundIfKeyword)
             while !backtrack.at(.eof) && !backtrack.currentToken.isAtStartOfLine {
               backtrack.skipSingle()
             }
@@ -632,7 +662,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseKeyPathExpression(forDirective: Bool) -> RawKeyPathExprSyntax {
     // Consume '\'.
-    let backslash = self.eat(.backslash)
+    let (unexpectedBeforeBackslash, backslash) = self.eat(.backslash)
 
     // For uniformity, \.foo is parsed as if it were MAGIC.foo, so we need to
     // make sure the . is there, but parsing the ? in \.? as .? doesn't make
@@ -661,6 +691,7 @@ extension Parser {
     }
 
     return RawKeyPathExprSyntax(
+      unexpectedBeforeBackslash,
       backslash: backslash,
       rootExpr: root,
       expression: expression,
@@ -691,54 +722,114 @@ extension Parser {
   public mutating func parsePrimaryExpression(_ flavor: ExprFlavor) -> RawExprSyntax {
     switch self.currentToken.tokenKind {
     case .integerLiteral:
-      let digits = self.eat(.integerLiteral)
-      return RawExprSyntax(RawIntegerLiteralExprSyntax(digits: digits, arena: self.arena))
+      let (unexpectedBeforeDigits, digits) = self.eat(.integerLiteral)
+      return RawExprSyntax(RawIntegerLiteralExprSyntax(
+        unexpectedBeforeDigits,
+        digits: digits,
+        arena: self.arena
+      ))
     case .floatingLiteral:
-      let digits = self.eat(.floatingLiteral)
-      return RawExprSyntax(RawFloatLiteralExprSyntax(floatingDigits: digits, arena: self.arena))
+      let (unexpectedBeforeDigits, digits) = self.eat(.floatingLiteral)
+      return RawExprSyntax(RawFloatLiteralExprSyntax(
+        unexpectedBeforeDigits,
+        floatingDigits: digits,
+        arena: self.arena
+      ))
     case .stringLiteral:
       return RawExprSyntax(self.parseStringLiteral())
     case .regexLiteral:
       return RawExprSyntax(self.parseRegexLiteral())
     case .nilKeyword:
-      let nilKeyword = self.eat(.nilKeyword)
-      return RawExprSyntax(RawNilLiteralExprSyntax(nilKeyword: nilKeyword, arena: self.arena))
+      let (unexpectedBeforeNilKeyword, nilKeyword) = self.eat(.nilKeyword)
+      return RawExprSyntax(RawNilLiteralExprSyntax(
+        unexpectedBeforeNilKeyword,
+        nilKeyword: nilKeyword,
+        arena: self.arena
+      ))
     case .trueKeyword, .falseKeyword:
-      let tok = self.eat(self.currentToken.tokenKind)
-      return RawExprSyntax(RawBooleanLiteralExprSyntax(booleanLiteral: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(self.currentToken.tokenKind)
+      return RawExprSyntax(RawBooleanLiteralExprSyntax(
+        unexpectedBeforeTok,
+        booleanLiteral: tok,
+        arena: self.arena
+      ))
     case .__file__Keyword:
-      let tok = self.eat(.__file__Keyword)
-      return RawExprSyntax(RawPoundFileExprSyntax(poundFile: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.__file__Keyword)
+      return RawExprSyntax(RawPoundFileExprSyntax(
+        unexpectedBeforeTok,
+        poundFile: tok,
+        arena: self.arena
+      ))
     case .poundFileKeyword:
-      let tok = self.eat(.poundFileKeyword)
-      return RawExprSyntax(RawPoundFileExprSyntax(poundFile: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.poundFileKeyword)
+      return RawExprSyntax(RawPoundFileExprSyntax(
+        unexpectedBeforeTok,
+        poundFile: tok,
+        arena: self.arena
+      ))
     case .poundFilePathKeyword:
-      let tok = self.eat(.poundFilePathKeyword)
-      return RawExprSyntax(RawPoundFilePathExprSyntax(poundFilePath: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.poundFilePathKeyword)
+      return RawExprSyntax(RawPoundFilePathExprSyntax(
+        unexpectedBeforeTok,
+        poundFilePath: tok,
+        arena: self.arena
+      ))
     case .poundFunctionKeyword:
-      let tok = self.eat(.poundFunctionKeyword)
-      return RawExprSyntax(RawPoundFunctionExprSyntax(poundFunction: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.poundFunctionKeyword)
+      return RawExprSyntax(RawPoundFunctionExprSyntax(
+        unexpectedBeforeTok,
+        poundFunction: tok,
+        arena: self.arena
+      ))
     case .__function__Keyword:
-      let tok = self.eat(.__function__Keyword)
-      return RawExprSyntax(RawPoundFunctionExprSyntax(poundFunction: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.__function__Keyword)
+      return RawExprSyntax(RawPoundFunctionExprSyntax(
+        unexpectedBeforeTok,
+        poundFunction: tok,
+        arena: self.arena
+      ))
     case .poundLineKeyword:
-      let tok = self.eat(.poundLineKeyword)
-      return RawExprSyntax(RawPoundLineExprSyntax(poundLine: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.poundLineKeyword)
+      return RawExprSyntax(RawPoundLineExprSyntax(
+        unexpectedBeforeTok,
+        poundLine: tok,
+        arena: self.arena
+      ))
     case .__line__Keyword:
-      let tok = self.eat(.__line__Keyword)
-      return RawExprSyntax(RawPoundLineExprSyntax(poundLine: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.__line__Keyword)
+      return RawExprSyntax(RawPoundLineExprSyntax(
+        unexpectedBeforeTok,
+        poundLine: tok,
+        arena: self.arena
+      ))
     case .poundColumnKeyword:
-      let tok = self.eat(.poundColumnKeyword)
-      return RawExprSyntax(RawPoundColumnExprSyntax(poundColumn: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.poundColumnKeyword)
+      return RawExprSyntax(RawPoundColumnExprSyntax(
+        unexpectedBeforeTok,
+        poundColumn: tok,
+        arena: self.arena
+      ))
     case .__column__Keyword:
-      let tok = self.eat(.__column__Keyword)
-      return RawExprSyntax(RawPoundColumnExprSyntax(poundColumn: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.__column__Keyword)
+      return RawExprSyntax(RawPoundColumnExprSyntax(
+        unexpectedBeforeTok,
+        poundColumn: tok,
+        arena: self.arena
+      ))
     case .poundDsohandleKeyword:
-      let tok = self.eat(.poundDsohandleKeyword)
-      return RawExprSyntax(RawPoundDsohandleExprSyntax(poundDsohandle: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.poundDsohandleKeyword)
+      return RawExprSyntax(RawPoundDsohandleExprSyntax(
+        unexpectedBeforeTok,
+        poundDsohandle: tok,
+        arena: self.arena
+      ))
     case .__dso_handle__Keyword:
-      let tok = self.eat(.__dso_handle__Keyword)
-      return RawExprSyntax(RawPoundDsohandleExprSyntax(poundDsohandle: tok, arena: self.arena))
+      let (unexpectedBeforeTok, tok) = self.eat(.__dso_handle__Keyword)
+      return RawExprSyntax(RawPoundDsohandleExprSyntax(
+        unexpectedBeforeTok,
+        poundDsohandle: tok,
+        arena: self.arena
+      ))
     case .identifier, .selfKeyword:
       // 'any' followed by another identifier is an existential type.
       if self.currentToken.isContextualKeyword("any"),
@@ -758,9 +849,12 @@ extension Parser {
     case .dollarIdentifier:
       return RawExprSyntax(self.parseAnonymousClosureArgument())
     case .wildcardKeyword: // _
-      let wild = self.eat(.wildcardKeyword)
+      let (unexpectedBeforeWild, wild) = self.eat(.wildcardKeyword)
       return RawExprSyntax(RawDiscardAssignmentExprSyntax(
-        wildcard: wild, arena: self.arena))
+        unexpectedBeforeWild,
+        wildcard: wild,
+        arena: self.arena
+      ))
     case .poundSelectorKeyword:
       return RawExprSyntax(self.parseObjectiveCSelectorLiteral())
     case .poundKeyPathKeyword:
@@ -1241,8 +1335,12 @@ extension Parser {
   ///     regular-expression-literal → '\' `Any valid regular expression characters` '\'
   @_spi(RawSyntax)
   public mutating func parseRegexLiteral() -> RawRegexLiteralExprSyntax {
-    let literal = self.eat(.regexLiteral)
-    return RawRegexLiteralExprSyntax(regex: literal, arena: self.arena)
+    let (unexpectedBeforeLiteral, literal) = self.eat(.regexLiteral)
+    return RawRegexLiteralExprSyntax(
+      unexpectedBeforeLiteral,
+      regex: literal,
+      arena: self.arena
+    )
   }
 }
 
@@ -1255,7 +1353,7 @@ extension Parser {
   ///     key-path-string-expression → '#keyPath' '(' expression ')'
   @_spi(RawSyntax)
   public mutating func parseObjectiveCKeyPathExpression() -> RawObjcKeyPathExprSyntax {
-    let keyword = self.eat(.poundKeyPathKeyword)
+    let (unexpectedBeforeKeyword, keyword) = self.eat(.poundKeyPathKeyword)
     // Parse the leading '('.
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
 
@@ -1281,6 +1379,7 @@ extension Parser {
     // Parse the closing ')'.
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawObjcKeyPathExprSyntax(
+      unexpectedBeforeKeyword,
       keyPath: keyword,
       unexpectedBeforeLParen,
       leftParen: lparen,
@@ -1300,8 +1399,12 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSuperExpression() -> RawSuperRefExprSyntax {
     // Parse the 'super' reference.
-    let superKeyword = self.eat(.superKeyword)
-    return RawSuperRefExprSyntax(superKeyword: superKeyword, arena: self.arena)
+    let (unexpectedBeforeSuperKeyword, superKeyword) = self.eat(.superKeyword)
+    return RawSuperRefExprSyntax(
+      unexpectedBeforeSuperKeyword,
+      superKeyword: superKeyword,
+      arena: self.arena
+    )
   }
 }
 
@@ -1315,10 +1418,11 @@ extension Parser {
   ///     tuple-element-list → tuple-element | tuple-element ',' tuple-element-list
   @_spi(RawSyntax)
   public mutating func parseTupleExpression() -> RawTupleExprSyntax {
-    let lparen = self.eat(.leftParen)
+    let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
     let elements = self.parseArgumentListElements()
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawTupleExprSyntax(
+      unexpectedBeforeLParen,
       leftParen: lparen,
       elementList: RawTupleExprElementListSyntax(elements: elements, arena: self.arena),
       unexpectedBeforeRParen,
@@ -1370,25 +1474,32 @@ extension Parser {
   ///     dictionary-literal-items → dictionary-literal-item ','? | dictionary-literal-item ',' dictionary-literal-items
   @_spi(RawSyntax)
   public mutating func parseCollectionLiteral() -> RawExprSyntax {
-    let lsquare = self.eat(.leftSquareBracket)
+    let (unexpectedBeforeLSquare, lsquare) = self.eat(.leftSquareBracket)
 
     if self.at(.rightSquareBracket) {
-      let rsquare = self.eat(.rightSquareBracket)
+      let (unexpectedBeforeRSquare, rsquare) = self.eat(.rightSquareBracket)
       return RawExprSyntax(RawArrayExprSyntax(
+        unexpectedBeforeLSquare,
         leftSquare: lsquare,
         elements: RawArrayElementListSyntax(elements: [], arena: self.arena),
+        unexpectedBeforeRSquare,
         rightSquare: rsquare,
         arena: self.arena))
     }
 
     if self.at(.colon) && self.peek().tokenKind == .rightSquareBracket {
-      let colon = self.eat(.colon)
-      let rsquare = self.eat(.rightSquareBracket)
+      let (unexpectedBeforeColon, colon) = self.eat(.colon)
+      let (unexpectedBeforeRSquare, rsquare) = self.eat(.rightSquareBracket)
       // FIXME: We probably want a separate node for the empty case.
       return RawExprSyntax(RawDictionaryExprSyntax(
-          leftSquare: lsquare,
-          content: RawSyntax(colon),
-          rightSquare: rsquare, arena: self.arena))
+        unexpectedBeforeLSquare,
+        leftSquare: lsquare,
+        unexpectedBeforeColon,
+        content: RawSyntax(colon),
+        unexpectedBeforeRSquare,
+        rightSquare: rsquare,
+        arena: self.arena
+      ))
     }
 
     var elementKind: CollectionKind? = nil
@@ -1462,10 +1573,14 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseDefaultArgument() -> RawInitializerClauseSyntax {
-    let eq = self.eat(.equal)
+    let (unexpectedBeforeEq, eq) = self.eat(.equal)
     let expr = self.parseExpression()
     return RawInitializerClauseSyntax(
-      equal: eq, value: expr, arena: self.arena)
+      unexpectedBeforeEq,
+      equal: eq,
+      value: expr,
+      arena: self.arena
+    )
   }
 }
 
@@ -1493,13 +1608,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseObjectiveCSelectorLiteral() -> RawObjcSelectorExprSyntax {
     // Consume '#selector'.
-    let selector = self.eat(.poundSelectorKeyword)
+    let (unexpectedBeforeSelector, selector) = self.eat(.poundSelectorKeyword)
     // Parse the leading '('.
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
 
     // Parse possible 'getter:' or 'setter:' modifiers, and determine
     // the kind of selector we're working with.
     let kind: RawTokenSyntax?
+    let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
     let colon: RawTokenSyntax?
     if
       self.peek().tokenKind == .colon,
@@ -1507,9 +1623,10 @@ extension Parser {
     {
       // Parse the modifier.
       kind = self.consume(remapping: .contextualKeyword)
-      colon = self.eat(.colon)
+      (unexpectedBeforeColon, colon) = self.eat(.colon)
     } else {
       kind = nil
+      unexpectedBeforeColon = nil
       colon = nil
     }
 
@@ -1518,10 +1635,12 @@ extension Parser {
     // Parse the closing ')'.
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawObjcSelectorExprSyntax(
+      unexpectedBeforeSelector,
       poundSelector: selector,
       unexpectedBeforeLParen,
       leftParen: lparen,
       kind: kind,
+      unexpectedBeforeColon,
       colon: colon,
       name: subexpr,
       unexpectedBeforeRParen,
@@ -1540,7 +1659,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseClosureExpression() -> RawClosureExprSyntax {
     // Parse the opening left brace.
-    let lbrace = self.eat(.leftBrace)
+    let (unexpectedBeforeLBrace, lbrace) = self.eat(.leftBrace)
     // Parse the closure-signature, if present.
     let signature = self.parseClosureSignatureIfPresent()
 
@@ -1555,6 +1674,7 @@ extension Parser {
     // Parse the closing '}'.
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
     return RawClosureExprSyntax(
+      unexpectedBeforeLBrace,
       leftBrace: lbrace,
       signature: signature,
       statements: RawCodeBlockItemListSyntax(elements: elements, arena: arena),
@@ -1605,7 +1725,7 @@ extension Parser {
 
     let captures: RawClosureCaptureSignatureSyntax?
     if self.at(.leftSquareBracket) {
-      let lsquare = self.eat(.leftSquareBracket)
+      let (unexpectedBeforeLSquare, lsquare) = self.eat(.leftSquareBracket)
       // At this point, we know we have a closure signature. Parse the capture list
       // and parameters.
       var elements = [RawClosureCaptureItemSyntax]()
@@ -1618,17 +1738,19 @@ extension Parser {
           // The thing being capture specified is an identifier, or as an identifier
           // followed by an expression.
           let name: RawTokenSyntax?
+          let unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax?
           let assignToken: RawTokenSyntax?
           let expression: RawExprSyntax
           if self.peek().tokenKind == .equal {
             // The name is a new declaration.
             name = self.consumeIdentifier()
-            assignToken = self.eat(.equal)
+            (unexpectedBeforeAssignToken, assignToken) = self.eat(.equal)
             expression = self.parseExpression()
           } else {
             // This is the simple case - the identifier is both the name and
             // the expression to capture.
             name = nil
+            unexpectedBeforeAssignToken = nil
             assignToken = nil
             expression = RawExprSyntax(self.parseIdentifierExpression())
           }
@@ -1637,6 +1759,7 @@ extension Parser {
           elements.append(RawClosureCaptureItemSyntax(
             specifier: specifier,
             name: name,
+            unexpectedBeforeAssignToken,
             assignToken: assignToken,
             expression: expression,
             trailingComma: keepGoing,
@@ -1646,6 +1769,7 @@ extension Parser {
       let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
 
       captures = RawClosureCaptureSignatureSyntax(
+        unexpectedBeforeLSquare,
         leftSquare: lsquare,
         items: elements.isEmpty ? nil : RawClosureCaptureItemListSyntax(elements: elements, arena: self.arena),
         unexpectedBeforeRSquare,
@@ -1668,15 +1792,21 @@ extension Parser {
           // Parse identifier (',' identifier)*
           var keepGoing: RawTokenSyntax? = nil
           repeat {
+            let unexpectedBeforeName: RawUnexpectedNodesSyntax?
             let name: RawTokenSyntax
             if self.currentToken.isIdentifier {
+              unexpectedBeforeName = nil
               name = self.consumeIdentifier()
             } else {
-              name = self.eat(.wildcardKeyword)
+              (unexpectedBeforeName, name) = self.eat(.wildcardKeyword)
             }
             keepGoing = consume(if: .comma)
             params.append(RawClosureParamSyntax(
-              name: name, trailingComma: keepGoing, arena: self.arena))
+              unexpectedBeforeName,
+              name: name,
+              trailingComma: keepGoing,
+              arena: self.arena
+            ))
           } while keepGoing != nil
         }
 
@@ -1689,13 +1819,17 @@ extension Parser {
       // Parse the optional explicit return type.
       if self.at(.arrow) {
         // Consume the '->'.
-        let arrow = self.eat(.arrow)
+        let (unexpectedBeforeArrow, arrow) = self.eat(.arrow)
 
         // Parse the type.
         let returnTy = self.parseType()
 
         output = RawReturnClauseSyntax(
-          arrow: arrow, returnType: returnTy, arena: self.arena)
+          unexpectedBeforeArrow,
+          arrow: arrow,
+          returnType: returnTy,
+          arena: self.arena
+        )
       }
     }
 
@@ -1769,12 +1903,14 @@ extension Parser {
     var keepGoing: RawTokenSyntax? = nil
     repeat {
       let label: RawTokenSyntax?
+      let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
       let colon: RawTokenSyntax?
       if self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon {
         label = self.consumeAnyToken()
-        colon = self.eat(.colon)
+        (unexpectedBeforeColon, colon) = self.eat(.colon)
       } else {
         label = nil
+        unexpectedBeforeColon = nil
         colon = nil
       }
 
@@ -1792,7 +1928,13 @@ extension Parser {
       }
       keepGoing = self.consume(if: .comma)
       result.append(RawTupleExprElementSyntax(
-        label: label, colon: colon, expression: expr, trailingComma: keepGoing, arena: self.arena))
+        label: label,
+        unexpectedBeforeColon,
+        colon: colon,
+        expression: expr,
+        trailingComma: keepGoing,
+        arena: self.arena
+      ))
     } while keepGoing != nil
     return result
   }
@@ -1809,12 +1951,13 @@ extension Parser {
   ///     tuple-element-list → tuple-element | tuple-element ',' tuple-element-list
   @_spi(RawSyntax)
   public mutating func parseArgumentList(_ flavor: ExprFlavor) -> RawTupleExprSyntax {
-    let lparen = self.eat(.leftParen)
+    let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
     let args = self.parseArgumentListElements()
     let (unexpectedBeforeRightParen, rparen) = self.expect(.rightParen)
 
     // FIXME: Introduce new SyntaxKind for ArgumentList (rdar://81786229)
     return RawTupleExprSyntax(
+      unexpectedBeforeLParen,
       leftParen: lparen,
       elementList: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
       unexpectedBeforeRightParen,
@@ -1920,7 +2063,7 @@ extension Parser.Lookahead {
     // to see if it is immediately followed by a token which indicates we should
     // consider it part of the preceding expression
     var backtrack = self.lookahead()
-    backtrack.eat(.leftBrace)
+    backtrack.eatWithoutRecovery(.leftBrace)
     while !backtrack.at(.eof) && !backtrack.at(.rightBrace) {
       backtrack.consumeAnyToken()
     }
@@ -1969,7 +2112,7 @@ extension Parser.Lookahead {
     // Consume attributes.
     var lookahead = self.lookahead()
     while lookahead.at(.atSign) {
-      lookahead.eat(.atSign)
+      lookahead.eatWithoutRecovery(.atSign)
       guard lookahead.currentToken.isIdentifier else {
         break
       }

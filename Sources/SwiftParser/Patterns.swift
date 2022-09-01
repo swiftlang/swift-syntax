@@ -47,10 +47,11 @@ extension Parser {
   mutating func parsePattern() -> RawPatternSyntax {
     switch self.currentToken.tokenKind {
     case .leftParen:
-      let lparen = self.eat(.leftParen)
+      let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
       let elements = self.parsePatternTupleElements()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       return RawPatternSyntax(RawTuplePatternSyntax(
+        unexpectedBeforeLParen,
         leftParen: lparen,
         elements: elements,
         unexpectedBeforeRParen,
@@ -58,24 +59,36 @@ extension Parser {
         arena: self.arena
       ))
     case .wildcardKeyword:
-      let wildcard = self.eat(.wildcardKeyword)
+      let (unexpectedBeforeWildcard, wildcard) = self.eat(.wildcardKeyword)
       return RawPatternSyntax(RawWildcardPatternSyntax(
-        wildcard: wildcard, typeAnnotation: nil, arena: self.arena))
+        unexpectedBeforeWildcard,
+        wildcard: wildcard,
+        typeAnnotation: nil,
+        arena: self.arena
+      ))
     case .identifier:
-      let identifier = self.eat(self.currentToken.tokenKind)
+      let (unexpectedBeforeIdentifier, identifier) = self.eat(self.currentToken.tokenKind)
       return RawPatternSyntax(RawIdentifierPatternSyntax(
-        identifier: identifier, arena: self.arena))
+        unexpectedBeforeIdentifier,
+        identifier: identifier,
+        arena: self.arena
+      ))
     case .letKeyword, .varKeyword:
+      let unexpectedBeforeLetOrVar: RawUnexpectedNodesSyntax?
       let letOrVar: RawTokenSyntax
       if self.at(.letKeyword) {
-        letOrVar = self.eat(.letKeyword)
+        (unexpectedBeforeLetOrVar, letOrVar) = self.eat(.letKeyword)
       } else {
         assert(self.at(.varKeyword))
-        letOrVar = self.eat(.varKeyword)
+        (unexpectedBeforeLetOrVar, letOrVar) = self.eat(.varKeyword)
       }
       let value = self.parsePattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
-        letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
+        unexpectedBeforeLetOrVar,
+        letOrVarKeyword: letOrVar,
+        valuePattern: value,
+        arena: self.arena
+      ))
     default:
       return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
     }
@@ -95,10 +108,14 @@ extension Parser {
       return (pattern, nil)
     }
 
-    let colon = self.eat(.colon)
+    let (unexpectedBeforeColon, colon) = self.eat(.colon)
     let result = self.parseType()
     let type = RawTypeAnnotationSyntax(
-      colon: colon, type: result, arena: self.arena)
+      unexpectedBeforeColon,
+      colon: colon,
+      type: result,
+      arena: self.arena
+    )
     return (pattern, type)
   }
 
@@ -116,12 +133,14 @@ extension Parser {
       while !self.at(.eof) && !self.at(.rightParen) && keepGoing {
         // If the tuple element has a label, parse it.
         let label: RawTokenSyntax?
+        let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
         let colon: RawTokenSyntax?
         if self.currentToken.tokenKind == .identifier, self.peek().tokenKind == .colon {
           label = self.consumeAnyToken()
-          colon = self.eat(.colon)
+          (unexpectedBeforeColon, colon) = self.eat(.colon)
         } else {
           label = nil
+          unexpectedBeforeColon = nil
           colon = nil
         }
         let pattern = self.parsePattern()
@@ -129,6 +148,7 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(RawTuplePatternElementSyntax(
           labelName: label,
+          unexpectedBeforeColon,
           labelColon: colon,
           pattern: pattern,
           trailingComma: trailingComma,
@@ -151,10 +171,14 @@ extension Parser {
         letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
     } else if self.at(.isKeyword) {
       // matching-pattern ::= 'is' type
-      let isKeyword = self.eat(.isKeyword)
+      let (unexpectedBeforeIsKeyword, isKeyword) = self.eat(.isKeyword)
       let type = self.parseType()
       return RawPatternSyntax(RawIsTypePatternSyntax(
-        isKeyword: isKeyword, type: type, arena: self.arena))
+        unexpectedBeforeIsKeyword,
+        isKeyword: isKeyword,
+        type: type,
+        arena: self.arena
+      ))
     } else {
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will

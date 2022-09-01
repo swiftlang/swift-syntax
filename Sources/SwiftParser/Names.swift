@@ -104,16 +104,21 @@ extension Parser {
         // Check to see if there is an argument label.
         assert(self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
-        let colon = self.eat(.colon)
+        let (unexpectedBeforeColon, colon) = self.eat(.colon)
         elements.append(RawDeclNameArgumentSyntax(
-          name: name, colon: colon, arena: arena))
+          name: name,
+          unexpectedBeforeColon,
+          colon: colon,
+          arena: arena
+        ))
       }
     }
-    let rparen = self.eat(.rightParen)
+    let (unexpectedBeforeRParen, rparen) = self.eat(.rightParen)
     return RawDeclNameArgumentsSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
       arguments: RawDeclNameArgumentListSyntax(elements: elements, arena: self.arena),
+      unexpectedBeforeRParen,
       rightParen: rparen,
       arena: arena)
   }

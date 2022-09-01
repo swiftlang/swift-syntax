@@ -178,29 +178,33 @@ extension Parser {
       return RawSyntax(self.parseCustomAttribute())
     }
 
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     let ident = self.consumeIdentifier()
+    let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
     let leftParen: RawTokenSyntax?
     let arg: RawSyntax?
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if self.at(.leftParen) {
       var args = [RawTokenSyntax]()
-      leftParen = self.eat(.leftParen)
+      (unexpectedBeforeLeftParen, leftParen) = self.eat(.leftParen)
       while !self.at(.eof), !self.at(.rightParen) {
         args.append(self.consumeAnyToken())
       }
       arg = RawSyntax(RawTokenListSyntax(elements: args, arena: self.arena))
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
+      unexpectedBeforeLeftParen = nil
       leftParen = nil
       arg = nil
       unexpectedBeforeRightParen = nil
       rightParen = nil
     }
     return RawSyntax(RawAttributeSyntax(
+      unexpectedBeforeAtSign,
       atSignToken: atSign,
       attributeName: ident,
+      unexpectedBeforeLeftParen,
       leftParen: leftParen,
       argument: arg,
       unexpectedBeforeRightParen,
@@ -210,7 +214,7 @@ extension Parser {
   }
 
   mutating func parseCustomAttribute() -> RawCustomAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     let attrName = self.parseType()
 
     // Custom attributes are stricter than normal attributes about their
@@ -221,11 +225,14 @@ extension Parser {
         leftParen: nil, argumentList: nil, rightParen: nil,
         arena: self.arena)
     }
-    let leftParen = self.eat(.leftParen)
+    let (unexpectedBeforeLeftParen, leftParen) = self.eat(.leftParen)
     let arguments = self.parseArgumentListElements()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawCustomAttributeSyntax(
-      atSignToken: atSign, attributeName: attrName,
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      attributeName: attrName,
+      unexpectedBeforeLeftParen,
       leftParen: leftParen,
       argumentList: RawTupleExprElementListSyntax(elements: arguments, arena: self.arena),
       unexpectedBeforeRightParen,
@@ -236,7 +243,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseAvailabilityAttribute() -> RawAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     assert(self.currentToken.tokenText == "available")
     let available = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
@@ -254,6 +261,7 @@ extension Parser {
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
     return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
       atSignToken: atSign,
       attributeName: available,
       unexpectedBeforeLeftParen,
@@ -268,7 +276,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseDifferentiableAttribute() -> RawAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     assert(self.currentToken.tokenText == "differentiable")
     let differentiable = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
@@ -277,6 +285,7 @@ extension Parser {
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
     return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
       atSignToken: atSign,
       attributeName: differentiable,
       unexpectedBeforeLeftParen,
@@ -350,7 +359,7 @@ extension Parser {
       )
     }
 
-    let leftParen = self.eat(.leftParen)
+    let (unexpectedBeforeLeftParen, leftParen) = self.eat(.leftParen)
     var elements = [RawDifferentiabilityParamSyntax]()
     while !self.at(.eof) && !self.at(.rightParen) {
       guard let param = self.parseDifferentiabilityParameter() else {
@@ -362,6 +371,7 @@ extension Parser {
 
     let parameters = RawDifferentiabilityParamListSyntax(elements: elements, arena: self.arena)
     let list = RawDifferentiabilityParamsSyntax(
+      unexpectedBeforeLeftParen,
       leftParen: leftParen,
       diffParams: parameters,
       unexpectedBeforeRightParen,
@@ -390,10 +400,14 @@ extension Parser {
       return RawDifferentiabilityParamSyntax(
         parameter: RawSyntax(token), trailingComma: comma, arena: self.arena)
     case .selfKeyword:
-      let token = self.eat(.selfKeyword)
+      let (unexpectedBeforeToken, token) = self.eat(.selfKeyword)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityParamSyntax(
-        parameter: RawSyntax(token), trailingComma: comma, arena: self.arena)
+        unexpectedBeforeToken,
+        parameter: RawSyntax(token),
+        trailingComma: comma,
+        arena: self.arena
+      )
     default:
       return nil
     }
@@ -402,19 +416,21 @@ extension Parser {
 
 extension Parser {
   mutating func parseObjectiveCAttribute() -> RawAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     assert(self.currentToken.tokenText == "objc")
     let objc = self.consumeAnyToken()
 
+    let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
     let leftParen: RawTokenSyntax?
     let argument: RawObjCSelectorSyntax?
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if self.at(.leftParen) {
-      leftParen = self.eat(.leftParen)
+      (unexpectedBeforeLeftParen, leftParen) = self.eat(.leftParen)
       argument = self.parseObjectiveCSelector()
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
+      unexpectedBeforeLeftParen = nil
       leftParen = nil
       argument = nil
       unexpectedBeforeRightParen = nil
@@ -422,7 +438,10 @@ extension Parser {
     }
 
     return RawAttributeSyntax(
-      atSignToken: atSign, attributeName: objc,
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      attributeName: objc,
+      unexpectedBeforeLeftParen,
       leftParen: leftParen,
       argument: argument.map(RawSyntax.init),
       unexpectedBeforeRightParen,
@@ -436,9 +455,13 @@ extension Parser {
     while !self.at(.eof) && !self.at(.rightParen) {
       // Empty selector piece.
       if self.at(.colon) {
-        let colon = self.eat(.colon)
+        let (unexpectedBeforeColon, colon) = self.eat(.colon)
         elements.append(RawObjCSelectorPieceSyntax(
-          name: nil, colon: colon, arena: self.arena))
+          name: nil,
+          unexpectedBeforeColon,
+          colon: colon,
+          arena: self.arena
+        ))
         continue
       }
 
@@ -458,13 +481,14 @@ extension Parser {
 
 extension Parser {
   mutating func parseSpecializeAttribute() -> RawAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     assert(self.currentToken.tokenText == "_specialize")
     let specializeToken = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let argument = self.parseSpecializeAttributeSpecList()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
       atSignToken: atSign,
       attributeName: specializeToken,
       unexpectedBeforeLeftParen,
@@ -630,7 +654,7 @@ extension Parser {
 
 extension Parser {
   mutating func parsePrivateImportAttribute() -> RawAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     assert(self.currentToken.tokenText == "_private")
     let privateToken = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
@@ -639,6 +663,7 @@ extension Parser {
     let filename = self.consumeAnyToken()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
       atSignToken: atSign,
       attributeName: privateToken,
       unexpectedBeforeLeftParen,
@@ -659,7 +684,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseDynamicReplacementAttribute() -> RawAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     assert(self.currentToken.tokenText == "_dynamicReplacement")
     let dynamicReplacementToken = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
@@ -676,6 +701,7 @@ extension Parser {
     let method = RawDeclNameSyntax(declBaseName: RawSyntax(base), declNameArguments: args, arena: self.arena)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
       atSignToken: atSign,
       attributeName: dynamicReplacementToken,
       unexpectedBeforeLeftParen,
@@ -696,13 +722,14 @@ extension Parser {
 
 extension Parser {
   mutating func parseSPIAttribute() -> RawAttributeSyntax {
-    let atSign = self.eat(.atSign)
+    let (unexpectedBeforeAtSign, atSign) = self.eat(.atSign)
     assert(self.currentToken.tokenText == "_spi")
     let spiToken = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let label = self.consumeAnyToken()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
       atSignToken: atSign,
       attributeName: spiToken,
       unexpectedBeforeLeftParen,

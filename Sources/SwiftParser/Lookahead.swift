@@ -145,7 +145,7 @@ extension Parser.Lookahead {
     }
 
     repeat {
-      self.eat(.atSign)
+      self.eatWithoutRecovery(.atSign)
       self.consumeIdentifier()
       if self.consume(if: .leftParen) != nil {
         while !self.at(.eof), !self.at(.rightParen), !self.at(.poundEndifKeyword) {
@@ -310,9 +310,9 @@ extension Parser.Lookahead {
         self.isParenthesizedUnowned() {
       var lookahead = self.lookahead()
       lookahead.consumeIdentifier()
-      lookahead.eat(.leftParen)
+      lookahead.eatWithoutRecovery(.leftParen)
       lookahead.consumeIdentifier()
-      lookahead.eat(.rightParen)
+      lookahead.eatWithoutRecovery(.rightParen)
       return lookahead.isStartOfDeclaration()
     }
 
@@ -381,7 +381,7 @@ extension Parser.Lookahead {
 
     // Eat the "{".
     var lookahead = self.lookahead()
-    lookahead.eat(.leftBrace)
+    lookahead.eatWithoutRecovery(.leftBrace)
 
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {

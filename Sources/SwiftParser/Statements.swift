@@ -59,8 +59,12 @@ extension Parser {
         return RawStmtSyntax(stmt)
       }
       return RawStmtSyntax(RawLabeledStmtSyntax(
-        labelName: label.label, labelColon: label.colon, statement: RawStmtSyntax(stmt),
-        arena: self.arena))
+        labelName: label.label,
+        label.unexpectedBeforeColon,
+        labelColon: label.colon,
+        statement: RawStmtSyntax(stmt),
+        arena: self.arena
+      ))
     }
 
     let optLabel = self.parseOptionalStatementLabel()
@@ -121,7 +125,7 @@ extension Parser {
   ///     else-clause  → 'else' code-block | else if-statement
   @_spi(RawSyntax)
   public mutating func parseIfStatement() -> RawIfStmtSyntax {
-    let ifKeyword = self.eat(.ifKeyword)
+    let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(.ifKeyword)
     // A scope encloses the condition and true branch for any variables bound
     // by a conditional binding. The else branch does *not* see these variables.
     let conditions = self.parseConditionList()
@@ -141,6 +145,7 @@ extension Parser {
     }
 
     return RawIfStmtSyntax(
+      unexpectedBeforeIfKeyword,
       ifKeyword: ifKeyword,
       conditions: conditions,
       body: body,
@@ -158,11 +163,12 @@ extension Parser {
   ///     guard-statement → 'guard' condition-list 'else' code-block
   @_spi(RawSyntax)
   public mutating func parseGuardStatement() -> RawGuardStmtSyntax {
-    let guardKeyword = self.eat(.guardKeyword)
+    let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(.guardKeyword)
     let conditions = self.parseConditionList()
     let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.elseKeyword)
     let body = self.parseCodeBlock()
     return RawGuardStmtSyntax(
+      unexpectedBeforeGuardKeyword,
       guardKeyword: guardKeyword,
       conditions: conditions,
       unexpectedBeforeElseKeyword,
@@ -252,11 +258,14 @@ extension Parser {
     // Now parse an optional type annotation.
     let annotation: RawTypeAnnotationSyntax?
     if self.at(.colon) {
-      let colon = self.eat(.colon)
+      let (unexpectedBeforeColon, colon) = self.eat(.colon)
       let type = self.parseType()
       annotation = RawTypeAnnotationSyntax(
-        colon: colon, type: type,
-        arena: self.arena)
+        unexpectedBeforeColon,
+        colon: colon,
+        type: type,
+        arena: self.arena
+      )
     } else {
       annotation = nil
     }
@@ -266,11 +275,14 @@ extension Parser {
     //  `let newBinding`, which is shorthand for `let newBinding = newBinding`
     let initializer: RawInitializerClauseSyntax?
     if self.at(.equal) {
-      let eq = self.eat(.equal)
+      let (unexpectedBeforeEq, eq) = self.eat(.equal)
       let value = self.parseExpression(.basic)
       initializer = RawInitializerClauseSyntax(
-        equal: eq, value: value,
-        arena: self.arena)
+        unexpectedBeforeEq,
+        equal: eq,
+        value: value,
+        arena: self.arena
+      )
     } else {
       initializer = nil
     }
@@ -348,11 +360,14 @@ extension Parser {
   ///     throw-statement → 'throw' expression
   @_spi(RawSyntax)
   public mutating func parseThrowStatement() -> RawThrowStmtSyntax {
-    let throwKeyword = self.eat(.throwKeyword)
+    let (unexpectedBeforeThrowKeyword, throwKeyword) = self.eat(.throwKeyword)
     let expr = self.parseExpression()
     return RawThrowStmtSyntax(
-      throwKeyword: throwKeyword, expression: expr,
-      arena: self.arena)
+      unexpectedBeforeThrowKeyword,
+      throwKeyword: throwKeyword,
+      expression: expr,
+      arena: self.arena
+    )
   }
 }
 
@@ -367,11 +382,14 @@ extension Parser {
   ///     defer-statement → 'defer' code-block
   @_spi(RawSyntax)
   public mutating func parseDeferStatement() -> RawDeferStmtSyntax {
-    let deferKeyword = self.eat(.deferKeyword)
+    let (unexpectedBeforeDeferKeyword, deferKeyword) = self.eat(.deferKeyword)
     let items = self.parseCodeBlock()
     return RawDeferStmtSyntax(
-      deferKeyword: deferKeyword, body: items,
-      arena: self.arena)
+      unexpectedBeforeDeferKeyword,
+      deferKeyword: deferKeyword,
+      body: items,
+      arena: self.arena
+    )
   }
 }
 
@@ -386,7 +404,7 @@ extension Parser {
   ///     do-statement → 'do' code-block catch-clauses?
   @_spi(RawSyntax)
   public mutating func parseDoStatement() -> RawDoStmtSyntax {
-    let doKeyword = self.eat(.doKeyword)
+    let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(.doKeyword)
     let body = self.parseCodeBlock()
 
     // If the next token is 'catch', this is a 'do'/'catch' statement.
@@ -399,6 +417,7 @@ extension Parser {
     }
 
     return RawDoStmtSyntax(
+      unexpectedBeforeDoKeyword,
       doKeyword: doKeyword,
       body: body,
       catchClauses: elements.isEmpty ? nil : RawCatchClauseListSyntax(elements: elements, arena: self.arena),
@@ -418,7 +437,7 @@ extension Parser {
   ///     catch-pattern-list → catch-pattern | catch-pattern ',' catch-pattern-list
   @_spi(RawSyntax)
   public mutating func parseCatchClause() -> RawCatchClauseSyntax {
-    let catchKeyword = self.eat(.catchKeyword)
+    let (unexpectedBeforeCatchKeyword, catchKeyword) = self.eat(.catchKeyword)
     var catchItems = [RawCatchItemSyntax]()
     if !self.at(.leftBrace) {
       var keepGoing: RawTokenSyntax? = nil
@@ -432,6 +451,7 @@ extension Parser {
     }
     let body = self.parseCodeBlock()
     return RawCatchClauseSyntax(
+      unexpectedBeforeCatchKeyword,
       catchKeyword: catchKeyword,
       catchItems: catchItems.isEmpty ? nil : RawCatchItemListSyntax(elements: catchItems, arena:  self.arena),
       body: body,
@@ -450,12 +470,16 @@ extension Parser {
   ///     while-statement → 'while' condition-list code-block
   @_spi(RawSyntax)
   public mutating func parseWhileStatement() -> RawWhileStmtSyntax {
-    let whileKeyword = self.eat(.whileKeyword)
+    let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(.whileKeyword)
     let conditions = self.parseConditionList()
     let body = self.parseCodeBlock()
     return RawWhileStmtSyntax(
-      whileKeyword: whileKeyword, conditions: conditions, body: body,
-      arena: self.arena)
+      unexpectedBeforeWhileKeyword,
+      whileKeyword: whileKeyword,
+      conditions: conditions,
+      body: body,
+      arena: self.arena
+    )
   }
 }
 
@@ -468,11 +492,12 @@ extension Parser {
   ///     repeat-while-statement → 'repeat' code-block 'while' expression
   @_spi(RawSyntax)
   public mutating func parseRepeatWhileStatement() -> RawRepeatWhileStmtSyntax {
-    let repeatKeyword = self.eat(.repeatKeyword)
+    let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(.repeatKeyword)
     let body = self.parseCodeBlock()
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.whileKeyword)
     let condition = self.parseExpression()
     return RawRepeatWhileStmtSyntax(
+      unexpectedBeforeRepeatKeyword,
       repeatKeyword: repeatKeyword,
       body: body,
       unexpectedBeforeWhileKeyword,
@@ -493,7 +518,7 @@ extension Parser {
   ///     for-in-statement → 'for' 'case'? pattern 'in' expression where-clause? code-block
   @_spi(RawSyntax)
   public mutating func parseForEachStatement() -> RawForInStmtSyntax {
-    let forKeyword = self.eat(.forKeyword)
+    let (unexpectedBeforeForKeyword, forKeyword) = self.eat(.forKeyword)
     let tryKeyword = self.consume(if: .tryKeyword)
 
     let awaitKeyword: RawTokenSyntax?
@@ -512,11 +537,14 @@ extension Parser {
       pattern = self.parseMatchingPattern()
       // Now parse an optional type annotation.
       if self.at(.colon) {
-        let colon = self.eat(.colon)
+        let (unexpectedBeforeColon, colon) = self.eat(.colon)
         let resultType = self.parseType()
         type = RawTypeAnnotationSyntax(
-          colon: colon, type: resultType,
-          arena: self.arena)
+          unexpectedBeforeColon,
+          colon: colon,
+          type: resultType,
+          arena: self.arena
+        )
       } else {
         type = nil
       }
@@ -531,11 +559,14 @@ extension Parser {
     // Parse the 'where' expression if present.
     let whereClause: RawWhereClauseSyntax?
     if self.at(.whereKeyword) {
-      let whereKeyword = self.eat(.whereKeyword)
+      let (unexpectedBeforeWhereKeyword, whereKeyword) = self.eat(.whereKeyword)
       let guardExpr = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
-        whereKeyword: whereKeyword, guardResult: guardExpr,
-        arena: self.arena)
+        unexpectedBeforeWhereKeyword,
+        whereKeyword: whereKeyword,
+        guardResult: guardExpr,
+        arena: self.arena
+      )
     } else {
       whereClause = nil
     }
@@ -543,6 +574,7 @@ extension Parser {
     // stmt-brace
     let body = self.parseCodeBlock()
     return RawForInStmtSyntax(
+      unexpectedBeforeForKeyword,
       forKeyword: forKeyword,
       tryKeyword: tryKeyword,
       awaitKeyword: awaitKeyword,
@@ -571,7 +603,7 @@ extension Parser {
   ///     switch-cases → switch-case switch-cases?
   @_spi(RawSyntax)
   public mutating func parseSwitchStatement() -> RawSwitchStmtSyntax {
-    let switchKeyword = self.eat(.switchKeyword)
+    let (unexpectedBeforeSwitchKeyword, switchKeyword) = self.eat(.switchKeyword)
 
     let subject = self.parseExpression(.basic)
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
@@ -580,6 +612,7 @@ extension Parser {
 
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
     return RawSwitchStmtSyntax(
+      unexpectedBeforeSwitchKeyword,
       switchKeyword: switchKeyword,
       expression: subject,
       unexpectedBeforeLBrace,
@@ -636,20 +669,25 @@ extension Parser {
   public mutating func parseSwitchCase() -> RawSwitchCaseSyntax {
     var unknownAttr: RawAttributeSyntax?
     if self.at(.atSign) {
-      let at = self.eat(.atSign)
+      let (unexpectedBeforeAt, at) = self.eat(.atSign)
       let ident = self.consumeIdentifier()
 
       var tokenList = [RawTokenSyntax]()
       while self.at(.atSign) {
-        tokenList.append(self.eat(.atSign))
+        tokenList.append(self.eatWithoutRecovery(.atSign))
         tokenList.append(self.consumeIdentifier())
       }
 
       unknownAttr = RawAttributeSyntax(
-        atSignToken: at, attributeName: ident,
-        leftParen: nil, argument: nil, rightParen: nil,
+        unexpectedBeforeAt,
+        atSignToken: at,
+        attributeName: ident,
+        leftParen: nil,
+        argument: nil,
+        rightParen: nil,
         tokenList: tokenList.isEmpty ? nil : RawTokenListSyntax(elements: tokenList, arena: self.arena),
-        arena: self.arena)
+        arena: self.arena
+      )
     } else {
       unknownAttr = nil
     }
@@ -691,7 +729,7 @@ extension Parser {
   ///     case-item-list → pattern where-clause? | pattern where-clause? ',' case-item-list
   @_spi(RawSyntax)
   public mutating func parseSwitchCaseLabel() -> RawSwitchCaseLabelSyntax {
-    let caseKeyword = self.eat(.caseKeyword)
+    let (unexpectedBeforeCaseKeyword, caseKeyword) = self.eat(.caseKeyword)
     var caseItems = [RawCaseItemSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -705,6 +743,7 @@ extension Parser {
     }
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     return RawSwitchCaseLabelSyntax(
+      unexpectedBeforeCaseKeyword,
       caseKeyword: caseKeyword,
       caseItems: RawCaseItemListSyntax(elements: caseItems, arena: self.arena),
       unexpectedBeforeColon,
@@ -720,9 +759,10 @@ extension Parser {
   ///     default-label → attributes? 'default' ':'
   @_spi(RawSyntax)
   public mutating func parseSwitchDefaultLabel() -> RawSwitchDefaultLabelSyntax {
-    let defaultKeyword = self.eat(.defaultKeyword)
+    let (unexpectedBeforeDefaultKeyword, defaultKeyword) = self.eat(.defaultKeyword)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     return RawSwitchDefaultLabelSyntax(
+      unexpectedBeforeDefaultKeyword,
       defaultKeyword: defaultKeyword,
       unexpectedBeforeColon,
       colon: colon,
@@ -762,11 +802,14 @@ extension Parser {
     // vars in scope.
     let whereClause: RawWhereClauseSyntax?
     if self.at(.whereKeyword) {
-      let whereKeyword = self.eat(.whereKeyword)
+      let (unexpectedBeforeWhereKeyword, whereKeyword) = self.eat(.whereKeyword)
       let guardExpr = self.parseExpression(flavor)
       whereClause = RawWhereClauseSyntax(
-        whereKeyword: whereKeyword, guardResult: guardExpr,
-        arena: self.arena)
+        unexpectedBeforeWhereKeyword,
+        whereKeyword: whereKeyword,
+        guardResult: guardExpr,
+        arena: self.arena
+      )
     } else {
       whereClause = nil
     }
@@ -785,7 +828,7 @@ extension Parser {
   ///     return-statement → 'return' expression?
   @_spi(RawSyntax)
   public mutating func parseReturnStatement() -> RawReturnStmtSyntax {
-    let ret = self.eat(.returnKeyword)
+    let (unexpectedBeforeRet, ret) = self.eat(.returnKeyword)
 
     // Handle the ambiguity between consuming the expression and allowing the
     // enclosing stmt-brace to get it by eagerly eating it unless the return is
@@ -803,8 +846,11 @@ extension Parser {
       expr = nil
     }
     return RawReturnStmtSyntax(
-      returnKeyword: ret, expression: expr,
-      arena: self.arena)
+      unexpectedBeforeRet,
+      returnKeyword: ret,
+      expression: expr,
+      arena: self.arena
+    )
   }
 }
 
@@ -824,7 +870,7 @@ extension Parser {
 
     let yields: RawSyntax
     if self.at(.leftParen) {
-      let lparen = self.eat(.leftParen)
+      let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
       let exprList: RawExprListSyntax
       do {
         var keepGoing = true
@@ -838,6 +884,7 @@ extension Parser {
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       yields = RawSyntax(RawYieldListSyntax(
+        unexpectedBeforeLParen,
         leftParen: lparen,
         elementList: exprList, trailingComma: nil,
         unexpectedBeforeRParen,
@@ -857,10 +904,16 @@ extension Parser {
   @_spi(RawSyntax)
   public struct StatementLabel {
     public var label: RawTokenSyntax
+    public var unexpectedBeforeColon: RawUnexpectedNodesSyntax?
     public var colon: RawTokenSyntax
 
-    public init(label: RawTokenSyntax, colon: RawTokenSyntax) {
+    public init(
+      label: RawTokenSyntax,
+      unexpectedBeforeColon: RawUnexpectedNodesSyntax?,
+      colon: RawTokenSyntax
+    ) {
       self.label = label
+      self.unexpectedBeforeColon = unexpectedBeforeColon
       self.colon = colon
     }
   }
@@ -879,8 +932,12 @@ extension Parser {
     }
 
     let label = self.consumeIdentifier()
-    let colon = self.eat(.colon)
-    return StatementLabel(label: label, colon: colon)
+    let (unexpectedBeforeColon, colon) = self.eat(.colon)
+    return StatementLabel(
+      label: label,
+      unexpectedBeforeColon: unexpectedBeforeColon,
+      colon: colon
+    )
   }
 }
 
@@ -893,11 +950,14 @@ extension Parser {
   ///     break-statement → 'break' label-name?
   @_spi(RawSyntax)
   public mutating func parseBreakStatement() -> RawBreakStmtSyntax {
-    let breakKeyword = self.eat(.breakKeyword)
+    let (unexpectedBeforeBreakKeyword, breakKeyword) = self.eat(.breakKeyword)
     let label = self.parseOptionalControlTransferTarget()
     return RawBreakStmtSyntax(
-      breakKeyword: breakKeyword, label: label,
-      arena: self.arena)
+      unexpectedBeforeBreakKeyword,
+      breakKeyword: breakKeyword,
+      label: label,
+      arena: self.arena
+    )
   }
 
   /// Parse a continue statement.
@@ -908,11 +968,14 @@ extension Parser {
   ///     continue-statement → 'continue' label-name?
   @_spi(RawSyntax)
   public mutating func parseContinueStatement() -> RawContinueStmtSyntax {
-    let continueKeyword = self.eat(.continueKeyword)
+    let (unexpectedBeforeContinueKeyword, continueKeyword) = self.eat(.continueKeyword)
     let label = self.parseOptionalControlTransferTarget()
     return RawContinueStmtSyntax(
-      continueKeyword: continueKeyword, label: label,
-      arena: self.arena)
+      unexpectedBeforeContinueKeyword,
+      continueKeyword: continueKeyword,
+      label: label,
+      arena: self.arena
+    )
   }
 
   /// Parse a fallthrough statement.
@@ -923,10 +986,12 @@ extension Parser {
   ///     fallthrough-statement → 'fallthrough'
   @_spi(RawSyntax)
   public mutating func parseFallthroughStatement() -> RawFallthroughStmtSyntax {
-    let fallthroughKeyword = self.eat(.fallthroughKeyword)
+    let (unexpectedBeforeFallthroughKeyword, fallthroughKeyword) = self.eat(.fallthroughKeyword)
     return RawFallthroughStmtSyntax(
+      unexpectedBeforeFallthroughKeyword,
       fallthroughKeyword: fallthroughKeyword,
-      arena: self.arena)
+      arena: self.arena
+    )
   }
 
   // label-name → identifier
@@ -951,7 +1016,7 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parsePoundAssertStatement() -> RawPoundAssertStmtSyntax {
-    let poundAssert = self.eat(.poundAssertKeyword)
+    let (unexpectedBeforePoundAssert, poundAssert) = self.eat(.poundAssertKeyword)
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let condition = self.parseExpression()
     let comma = self.consume(if: .comma)
@@ -963,6 +1028,7 @@ extension Parser {
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawPoundAssertStmtSyntax(
+      unexpectedBeforePoundAssert,
       poundAssert: poundAssert,
       unexpectedBeforeLParen,
       leftParen: lparen,
@@ -1027,7 +1093,7 @@ extension Parser.Lookahead {
       // token.
       var backtrack = self.lookahead()
       backtrack.consumeIdentifier()
-      backtrack.eat(.colon)
+      backtrack.eatWithoutRecovery(.colon)
 
       // We treating IDENTIFIER: { as start of statement to provide missed 'do'
       // diagnostics. This case will be handled in parseStmt().
@@ -1046,7 +1112,7 @@ extension Parser.Lookahead {
         return false
       }
       var backtrack = self.lookahead()
-      backtrack.eat(.atSign)
+      backtrack.eatWithoutRecovery(.atSign)
       backtrack.consumeIdentifier()
       return backtrack.isStartOfStatement()
     default:
@@ -1070,7 +1136,7 @@ extension Parser.Lookahead {
         return false
       }
 
-      lookahead.eat(.atSign)
+      lookahead.eatWithoutRecovery(.atSign)
       lookahead.consumeIdentifier()
     }
 

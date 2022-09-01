@@ -127,6 +127,7 @@ let package = Package(
         dependencies: ["SwiftSyntaxBuilder"],
         exclude: [
           "gyb_helpers",
+          "gyb_syntax_support",
           "AttributeNodes.swift.gyb",
           "AvailabilityNodes.swift.gyb",
           "BuilderInitializableTypes.swift.gyb",

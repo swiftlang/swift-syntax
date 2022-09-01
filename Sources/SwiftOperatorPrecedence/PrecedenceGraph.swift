@@ -43,6 +43,52 @@ struct PrecedenceGraph {
     return precedenceGroups[groupName]
   }
 
+  /// Search the precedence-group relationships, starting at the given
+  /// (fromGroup, fromSyntax) and following precedence groups in the
+  /// specified direction.
+  private func searchRelationships(
+    initialGroupName: PrecedenceGroupName, initialSyntax: SyntaxProtocol?,
+    targetGroupName: PrecedenceGroupName,
+    direction: PrecedenceRelation.Kind,
+    errorHandler: OperatorPrecedenceErrorHandler
+  ) rethrows -> Precedence? {
+    // Keep track of all of the groups we have seen during our exploration of
+    // the graph. This detects cycles and prevents extraneous work.
+    var groupsSeen: Set<PrecedenceGroupName> = []
+
+    var stack: [(PrecedenceGroupName, SyntaxProtocol?)] =
+      [(initialGroupName, initialSyntax)]
+    while let (currentGroupName, currentGroupSyntax) = stack.popLast() {
+      guard let currentGroup = lookupGroup(currentGroupName) else {
+        try errorHandler(
+          .missingGroup(currentGroupName, referencedFrom: currentGroupSyntax))
+        continue
+      }
+
+      for relation in currentGroup.relations {
+        if relation.kind == direction {
+          // If we hit our initial group, we're done.
+          let otherGroupName = relation.groupName
+          if otherGroupName == targetGroupName {
+            switch direction {
+            case .lowerThan:
+              return .lowerThan
+
+            case .higherThan:
+              return .higherThan
+            }
+          }
+
+          if groupsSeen.insert(otherGroupName).inserted {
+            stack.append((otherGroupName, relation.syntax))
+          }
+        }
+      }
+    }
+
+    return nil
+  }
+
   /// Determine the precedence relationship between two precedence groups.
   ///
   /// Follow the precedence relationships among the precedence groups to
@@ -58,64 +104,16 @@ struct PrecedenceGraph {
       return .unrelated
     }
 
-    // Keep track of all of the groups we have seen during our exploration of
-    // the graph. This detects cycles and prevents extraneous work.
-    var groupsSeen: Set<PrecedenceGroupName> = []
-
-    // Walk all of the lower-than relationships from the end group. If we
-    // reach the start group, the start has lower precedence than the end.
-    var stack: [(PrecedenceGroupName, SyntaxProtocol?)] =
-      [(endGroupName, endSyntax)]
-    while let (currentGroupName, currentGroupSyntax) = stack.popLast() {
-      guard let currentGroup = lookupGroup(currentGroupName) else {
-        try errorHandler(
-          .missingGroup(currentGroupName, referencedFrom: currentGroupSyntax))
-        continue
-      }
-
-      for relation in currentGroup.relations {
-        if relation.kind == .lowerThan {
-          // If we hit our start group, we're done.
-          let otherGroupName = relation.groupName
-          if otherGroupName == startGroupName {
-            return .lowerThan
-          }
-
-          if groupsSeen.insert(otherGroupName).inserted {
-            stack.append((otherGroupName, relation.syntax))
-          }
-        }
-      }
-    }
-
-    // Walk all of the higher-than relationships from the start group. If we
-    // reach the end group, the start has higher precedence than the end.
-    assert(stack.isEmpty)
-    groupsSeen.removeAll()
-    stack.append((startGroupName, startSyntax))
-    while let (currentGroupName, currentGroupSyntax) = stack.popLast() {
-      guard let currentGroup = lookupGroup(currentGroupName) else {
-        try errorHandler(
-          .missingGroup(currentGroupName, referencedFrom: currentGroupSyntax))
-        continue
-      }
-
-      for relation in currentGroup.relations {
-        if relation.kind == .higherThan {
-          // If we hit our end group, we're done.
-          let otherGroupName = relation.groupName
-          if otherGroupName == endGroupName {
-            return .higherThan
-          }
-
-          if groupsSeen.insert(otherGroupName).inserted {
-            stack.append((otherGroupName, relation.syntax))
-          }
-        }
-      }
-    }
-
-    // The two are incomparable.
-    return .unrelated
+    // Walk all of the relationships from the end down, then from the beginning
+    // up, to determine whether there is a relation between the two groups.
+    return try searchRelationships(
+      initialGroupName: endGroupName, initialSyntax: endSyntax,
+      targetGroupName: startGroupName, direction: .lowerThan,
+      errorHandler: errorHandler
+    ) ?? searchRelationships(
+      initialGroupName: startGroupName, initialSyntax: startSyntax,
+      targetGroupName: endGroupName, direction: .higherThan,
+      errorHandler: errorHandler
+    ) ?? .unrelated
   }
 }

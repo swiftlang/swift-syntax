@@ -64,7 +64,7 @@ extension OperatorPrecedence {
   /// Look for the precedence group corresponding to the given operator.
   func lookupOperatorPrecedenceGroupName(
     _ operatorName: OperatorName,
-    referencedFrom syntax: SyntaxProtocol?,
+    referencedFrom syntax: Syntax?,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
     guard let op = operators[operatorName] else {

@@ -68,7 +68,9 @@ extension OperatorPrecedenceError : DiagnosticMessage {
 }
 
 extension OperatorPrecedenceError {
-  private func fixupDiagnosticDisplayNode(_ node: SyntaxProtocol?) -> Syntax {
+  private func fixupDiagnosticDisplayNode<Node: SyntaxProtocol>(
+    _ node: Node?
+  ) -> Syntax {
     if let node = node {
       return Syntax(node)
     }

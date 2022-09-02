@@ -18,13 +18,13 @@ public enum OperatorPrecedenceError: Error {
   case groupAlreadyExists(existing: PrecedenceGroup, new: PrecedenceGroup)
 
   /// The named precedence group is missing from the precedence graph.
-  case missingGroup(PrecedenceGroupName, referencedFrom: SyntaxProtocol?)
+  case missingGroup(PrecedenceGroupName, referencedFrom: Syntax?)
 
   /// Error produced when a given operator already exists.
   case operatorAlreadyExists(existing: Operator, new: Operator)
 
   /// The named operator is missing from the precedence graph.
-  case missingOperator(OperatorName, referencedFrom: SyntaxProtocol?)
+  case missingOperator(OperatorName, referencedFrom: Syntax?)
 
   /// No associativity relationship between operators.
   case incomparableOperators(

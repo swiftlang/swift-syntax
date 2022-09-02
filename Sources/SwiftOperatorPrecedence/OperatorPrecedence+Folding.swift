@@ -21,7 +21,7 @@ extension OperatorPrecedence {
   private struct PrecedenceBound {
     let groupName: PrecedenceGroupName?
     let isStrict: Bool
-    let syntax: SyntaxProtocol?
+    let syntax: Syntax?
   }
 
   /// Determine whether we should consider an operator in the given group
@@ -29,7 +29,7 @@ extension OperatorPrecedence {
   private func shouldConsiderOperator(
     fromGroup groupName: PrecedenceGroupName?,
     in bound: PrecedenceBound,
-    operatorSyntax: SyntaxProtocol?,
+    operatorSyntax: Syntax,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows -> Bool {
     guard let boundGroupName = bound.groupName else {
@@ -60,7 +60,7 @@ extension OperatorPrecedence {
     if let binaryExpr = expr.as(BinaryOperatorExprSyntax.self) {
       let operatorName = binaryExpr.operatorToken.text
       return try lookupOperatorPrecedenceGroupName(
-        operatorName, referencedFrom: binaryExpr.operatorToken,
+        operatorName, referencedFrom: Syntax(binaryExpr.operatorToken),
         errorHandler: errorHandler
       )
     }
@@ -176,9 +176,9 @@ extension OperatorPrecedence {
   /// Determine the associativity between two precedence groups.
   private func associativity(
     firstGroup: PrecedenceGroupName?,
-    firstGroupSyntax: SyntaxProtocol?,
+    firstGroupSyntax: Syntax?,
     secondGroup: PrecedenceGroupName?,
-    secondGroupSyntax: SyntaxProtocol?,
+    secondGroupSyntax: Syntax?,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows -> Associativity {
     guard let firstGroup = firstGroup, let secondGroup = secondGroup else {
@@ -235,7 +235,7 @@ extension OperatorPrecedence {
       let opPrecedence = try lookupPrecedence(
         of: op, errorHandler: errorHandler)
       if try !shouldConsiderOperator(
-        fromGroup: opPrecedence, in: bound, operatorSyntax: op
+        fromGroup: opPrecedence, in: bound, operatorSyntax: Syntax(op)
       ) {
         return nil
       }
@@ -280,7 +280,7 @@ extension OperatorPrecedence {
       // If the second operator's precedence is lower than the
       // precedence bound, break out of the loop.
       if try !shouldConsiderOperator(
-        fromGroup: op2Precedence, in: bound, operatorSyntax: op1,
+        fromGroup: op2Precedence, in: bound, operatorSyntax: Syntax(op1),
         errorHandler: errorHandler
       ) {
         break
@@ -288,9 +288,9 @@ extension OperatorPrecedence {
 
       let associativity = try associativity(
         firstGroup: op1Precedence,
-        firstGroupSyntax: op1,
+        firstGroupSyntax: Syntax(op1),
         secondGroup: op2Precedence,
-        secondGroupSyntax: op2,
+        secondGroupSyntax: Syntax(op2),
         errorHandler: errorHandler
       )
 
@@ -313,7 +313,7 @@ extension OperatorPrecedence {
         rhs = try fold(
           rhs, rest: &rest,
           bound: PrecedenceBound(
-            groupName: op1Precedence, isStrict: true, syntax: op1
+            groupName: op1Precedence, isStrict: true, syntax: Syntax(op1)
           ),
           errorHandler: errorHandler
         )
@@ -324,7 +324,7 @@ extension OperatorPrecedence {
         rhs = try fold(
           rhs, rest: &rest,
           bound: PrecedenceBound(
-            groupName: op1Precedence, isStrict: false, syntax: op1
+            groupName: op1Precedence, isStrict: false, syntax: Syntax(op1)
           ),
           errorHandler: errorHandler
         )

@@ -76,26 +76,6 @@ extension OperatorPrecedence {
     return op.precedenceGroup
   }
 
-  /// Look for the precedence group corresponding to the given operator.
-  func lookupOperatorPrecedenceGroup(
-    _ operatorName: OperatorName,
-    referencedFrom syntax: SyntaxProtocol?,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
-  ) rethrows -> PrecedenceGroup? {
-    guard let groupName = try lookupOperatorPrecedenceGroupName(
-      operatorName, referencedFrom: syntax, errorHandler: errorHandler)
-    else {
-      return nil
-    }
-
-    guard let group = precedenceGraph.lookupGroup(groupName) else {
-      try errorHandler(.missingGroup(groupName, referencedFrom: syntax))
-      return nil
-    }
-
-    return group
-  }
-
   /// Determine the relative precedence between two precedence groups.
   func precedence(
     relating startGroupName: PrecedenceGroupName?,

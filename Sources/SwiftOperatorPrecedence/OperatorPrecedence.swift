@@ -75,24 +75,4 @@ extension OperatorPrecedence {
 
     return op.precedenceGroup
   }
-
-  /// Determine the relative precedence between two precedence groups.
-  func precedence(
-    relating startGroupName: PrecedenceGroupName?,
-    to endGroupName: PrecedenceGroupName?,
-    startSyntax: SyntaxProtocol?,
-    endSyntax: SyntaxProtocol?,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
-  ) rethrows -> Precedence {
-    guard let startGroupName = startGroupName, let endGroupName = endGroupName
-    else {
-      return .unrelated
-    }
-
-    return try precedenceGraph.precedence(
-      relating: startGroupName, to: endGroupName,
-      startSyntax: startSyntax, endSyntax: endSyntax,
-      errorHandler: errorHandler
-    )
-  }
 }

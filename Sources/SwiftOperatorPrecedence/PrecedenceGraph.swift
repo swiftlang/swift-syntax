@@ -107,6 +107,10 @@ struct PrecedenceGraph {
   ///
   /// Follow the precedence relationships among the precedence groups to
   /// determine the precedence of the start group relative to the end group.
+  ///
+  /// - Returns: Precedence.lowerThan if startGroupName has lower precedence
+  /// than endGroupName, Precedence.higherThan if startGroupName has higher
+  /// precedence than endGroup name, and Precedence.unrelated otherwise.
   func precedence(
     relating startGroupName: PrecedenceGroupName,
     to endGroupName: PrecedenceGroupName,

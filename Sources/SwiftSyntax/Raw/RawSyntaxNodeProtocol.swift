@@ -158,10 +158,14 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   /// If `text` is passed, it will be used to represent the missing token's text.
   /// If `text` is `nil`, the `kind`'s default text will be used.
   /// If that is also `nil`, the token will have empty text.
-  public init(missing kind: RawTokenKind, arena: __shared SyntaxArena) {
+  public init(
+    missing kind: RawTokenKind,
+    text: SyntaxText? = nil,
+    arena: __shared SyntaxArena
+  ) {
     self.init(
       kind: kind,
-      text: kind.defaultText ?? "",
+      text: text ?? kind.defaultText ?? "",
       leadingTriviaPieces: [],
       trailingTriviaPieces: [],
       presence: .missing,

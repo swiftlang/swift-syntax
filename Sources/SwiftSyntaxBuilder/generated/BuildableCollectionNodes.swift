@@ -16,6 +16,10 @@
 import SwiftSyntax
 /// `CodeBlockItemList` represents a collection of `CodeBlockItem`
 public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCodeBlockItemList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [CodeBlockItem]
   /// Creates a `CodeBlockItemList` with the provided list of elements.
   /// - Parameters:
@@ -35,9 +39,15 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     self.init(elements)
   }
   public func buildCodeBlockItemList(format: Format) -> CodeBlockItemListSyntax {
-    let result = CodeBlockItemListSyntax(elements.map {
+    var result = CodeBlockItemListSyntax(elements.map {
       $0.buildCodeBlockItem(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -54,9 +64,23 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// A collection of syntax nodes that occurred in the source code butcould not be used to form a valid syntax tree.
 public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsUnexpectedNodes {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [SyntaxBuildable]
   /// Creates a `UnexpectedNodes` with the provided list of elements.
   /// - Parameters:
@@ -76,9 +100,15 @@ public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
     self.init(elements)
   }
   public func buildUnexpectedNodes(format: Format) -> UnexpectedNodesSyntax {
-    let result = UnexpectedNodesSyntax(elements.map {
+    var result = UnexpectedNodesSyntax(elements.map {
       $0.buildSyntax(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -95,6 +125,16 @@ public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsUnexpectedNodes where Element == ExpressibleAsSyntaxBuildable {
   public func createUnexpectedNodes() -> UnexpectedNodes {
@@ -103,6 +143,10 @@ extension Array: ExpressibleAsUnexpectedNodes where Element == ExpressibleAsSynt
 }
 /// `TupleExprElementList` represents a collection of `TupleExprElement`
 public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTupleExprElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [TupleExprElement]
   /// Creates a `TupleExprElementList` with the provided list of elements.
   /// - Parameters:
@@ -122,9 +166,15 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildTupleExprElementList(format: Format) -> TupleExprElementListSyntax {
-    let result = TupleExprElementListSyntax(elements.map {
+    var result = TupleExprElementListSyntax(elements.map {
       $0.buildTupleExprElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -141,6 +191,16 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsTupleExprElementList where Element == ExpressibleAsTupleExprElement {
   public func createTupleExprElementList() -> TupleExprElementList {
@@ -149,6 +209,10 @@ extension Array: ExpressibleAsTupleExprElementList where Element == ExpressibleA
 }
 /// `ArrayElementList` represents a collection of `ArrayElement`
 public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsArrayElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [ArrayElement]
   /// Creates a `ArrayElementList` with the provided list of elements.
   /// - Parameters:
@@ -168,9 +232,15 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
     self.init(elements)
   }
   public func buildArrayElementList(format: Format) -> ArrayElementListSyntax {
-    let result = ArrayElementListSyntax(elements.map {
+    var result = ArrayElementListSyntax(elements.map {
       $0.buildArrayElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -187,9 +257,23 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// `DictionaryElementList` represents a collection of `DictionaryElement`
 public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDictionaryElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [DictionaryElement]
   /// Creates a `DictionaryElementList` with the provided list of elements.
   /// - Parameters:
@@ -209,9 +293,15 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildDictionaryElementList(format: Format) -> DictionaryElementListSyntax {
-    let result = DictionaryElementListSyntax(elements.map {
+    var result = DictionaryElementListSyntax(elements.map {
       $0.buildDictionaryElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -228,6 +318,16 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsDictionaryElementList where Element == ExpressibleAsDictionaryElement {
   public func createDictionaryElementList() -> DictionaryElementList {
@@ -236,6 +336,10 @@ extension Array: ExpressibleAsDictionaryElementList where Element == Expressible
 }
 /// `StringLiteralSegments` represents a collection of `SyntaxBuildable`
 public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsStringLiteralSegments {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [SyntaxBuildable]
   /// Creates a `StringLiteralSegments` with the provided list of elements.
   /// - Parameters:
@@ -255,9 +359,15 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildStringLiteralSegments(format: Format) -> StringLiteralSegmentsSyntax {
-    let result = StringLiteralSegmentsSyntax(elements.map {
+    var result = StringLiteralSegmentsSyntax(elements.map {
       $0.buildSyntax(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -274,6 +384,16 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsStringLiteralSegments where Element == ExpressibleAsSyntaxBuildable {
   public func createStringLiteralSegments() -> StringLiteralSegments {
@@ -282,6 +402,10 @@ extension Array: ExpressibleAsStringLiteralSegments where Element == Expressible
 }
 /// `DeclNameArgumentList` represents a collection of `DeclNameArgument`
 public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDeclNameArgumentList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [DeclNameArgument]
   /// Creates a `DeclNameArgumentList` with the provided list of elements.
   /// - Parameters:
@@ -301,9 +425,15 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildDeclNameArgumentList(format: Format) -> DeclNameArgumentListSyntax {
-    let result = DeclNameArgumentListSyntax(elements.map {
+    var result = DeclNameArgumentListSyntax(elements.map {
       $0.buildDeclNameArgument(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -320,6 +450,16 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsDeclNameArgumentList where Element == ExpressibleAsDeclNameArgument {
   public func createDeclNameArgumentList() -> DeclNameArgumentList {
@@ -328,6 +468,10 @@ extension Array: ExpressibleAsDeclNameArgumentList where Element == ExpressibleA
 }
 /// A list of expressions connected by operators. This list is containedby a `SequenceExprSyntax`.
 public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsExprList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [ExprBuildable]
   /// Creates a `ExprList` with the provided list of elements.
   /// - Parameters:
@@ -347,9 +491,15 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
     self.init(elements)
   }
   public func buildExprList(format: Format) -> ExprListSyntax {
-    let result = ExprListSyntax(elements.map {
+    var result = ExprListSyntax(elements.map {
       $0.buildExpr(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -366,9 +516,23 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// `ClosureCaptureItemList` represents a collection of `ClosureCaptureItem`
 public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsClosureCaptureItemList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [ClosureCaptureItem]
   /// Creates a `ClosureCaptureItemList` with the provided list of elements.
   /// - Parameters:
@@ -388,9 +552,15 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
     self.init(elements)
   }
   public func buildClosureCaptureItemList(format: Format) -> ClosureCaptureItemListSyntax {
-    let result = ClosureCaptureItemListSyntax(elements.map {
+    var result = ClosureCaptureItemListSyntax(elements.map {
       $0.buildClosureCaptureItem(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -407,6 +577,16 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsClosureCaptureItemList where Element == ExpressibleAsClosureCaptureItem {
   public func createClosureCaptureItemList() -> ClosureCaptureItemList {
@@ -415,6 +595,10 @@ extension Array: ExpressibleAsClosureCaptureItemList where Element == Expressibl
 }
 /// `ClosureParamList` represents a collection of `ClosureParam`
 public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsClosureParamList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [ClosureParam]
   /// Creates a `ClosureParamList` with the provided list of elements.
   /// - Parameters:
@@ -434,9 +618,15 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
     self.init(elements)
   }
   public func buildClosureParamList(format: Format) -> ClosureParamListSyntax {
-    let result = ClosureParamListSyntax(elements.map {
+    var result = ClosureParamListSyntax(elements.map {
       $0.buildClosureParam(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -453,6 +643,16 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsClosureParamList where Element == ExpressibleAsClosureParam {
   public func createClosureParamList() -> ClosureParamList {
@@ -461,6 +661,10 @@ extension Array: ExpressibleAsClosureParamList where Element == ExpressibleAsClo
 }
 /// `MultipleTrailingClosureElementList` represents a collection of `MultipleTrailingClosureElement`
 public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsMultipleTrailingClosureElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [MultipleTrailingClosureElement]
   /// Creates a `MultipleTrailingClosureElementList` with the provided list of elements.
   /// - Parameters:
@@ -480,9 +684,15 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
     self.init(elements)
   }
   public func buildMultipleTrailingClosureElementList(format: Format) -> MultipleTrailingClosureElementListSyntax {
-    let result = MultipleTrailingClosureElementListSyntax(elements.map {
+    var result = MultipleTrailingClosureElementListSyntax(elements.map {
       $0.buildMultipleTrailingClosureElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -499,6 +709,16 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsMultipleTrailingClosureElementList where Element == ExpressibleAsMultipleTrailingClosureElement {
   public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
@@ -507,6 +727,10 @@ extension Array: ExpressibleAsMultipleTrailingClosureElementList where Element =
 }
 /// `ObjcName` represents a collection of `ObjcNamePiece`
 public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsObjcName {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [ObjcNamePiece]
   /// Creates a `ObjcName` with the provided list of elements.
   /// - Parameters:
@@ -526,9 +750,15 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
     self.init(elements)
   }
   public func buildObjcName(format: Format) -> ObjcNameSyntax {
-    let result = ObjcNameSyntax(elements.map {
+    var result = ObjcNameSyntax(elements.map {
       $0.buildObjcNamePiece(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -545,6 +775,16 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsObjcName where Element == ExpressibleAsObjcNamePiece {
   public func createObjcName() -> ObjcName {
@@ -553,6 +793,10 @@ extension Array: ExpressibleAsObjcName where Element == ExpressibleAsObjcNamePie
 }
 /// `FunctionParameterList` represents a collection of `FunctionParameter`
 public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsFunctionParameterList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [FunctionParameter]
   /// Creates a `FunctionParameterList` with the provided list of elements.
   /// - Parameters:
@@ -572,9 +816,15 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildFunctionParameterList(format: Format) -> FunctionParameterListSyntax {
-    let result = FunctionParameterListSyntax(elements.map {
+    var result = FunctionParameterListSyntax(elements.map {
       $0.buildFunctionParameter(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -591,6 +841,16 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsFunctionParameterList where Element == ExpressibleAsFunctionParameter {
   public func createFunctionParameterList() -> FunctionParameterList {
@@ -599,6 +859,10 @@ extension Array: ExpressibleAsFunctionParameterList where Element == Expressible
 }
 /// `IfConfigClauseList` represents a collection of `IfConfigClause`
 public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsIfConfigClauseList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [IfConfigClause]
   /// Creates a `IfConfigClauseList` with the provided list of elements.
   /// - Parameters:
@@ -618,9 +882,15 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
     self.init(elements)
   }
   public func buildIfConfigClauseList(format: Format) -> IfConfigClauseListSyntax {
-    let result = IfConfigClauseListSyntax(elements.map {
+    var result = IfConfigClauseListSyntax(elements.map {
       $0.buildIfConfigClause(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -637,6 +907,16 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsIfConfigClauseList where Element == ExpressibleAsIfConfigClause {
   public func createIfConfigClauseList() -> IfConfigClauseList {
@@ -645,6 +925,10 @@ extension Array: ExpressibleAsIfConfigClauseList where Element == ExpressibleAsI
 }
 /// `InheritedTypeList` represents a collection of `InheritedType`
 public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsInheritedTypeList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [InheritedType]
   /// Creates a `InheritedTypeList` with the provided list of elements.
   /// - Parameters:
@@ -664,9 +948,15 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     self.init(elements)
   }
   public func buildInheritedTypeList(format: Format) -> InheritedTypeListSyntax {
-    let result = InheritedTypeListSyntax(elements.map {
+    var result = InheritedTypeListSyntax(elements.map {
       $0.buildInheritedType(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -683,6 +973,16 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsInheritedTypeList where Element == ExpressibleAsInheritedType {
   public func createInheritedTypeList() -> InheritedTypeList {
@@ -691,6 +991,10 @@ extension Array: ExpressibleAsInheritedTypeList where Element == ExpressibleAsIn
 }
 /// `MemberDeclList` represents a collection of `MemberDeclListItem`
 public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsMemberDeclList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [MemberDeclListItem]
   /// Creates a `MemberDeclList` with the provided list of elements.
   /// - Parameters:
@@ -710,9 +1014,15 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     self.init(elements)
   }
   public func buildMemberDeclList(format: Format) -> MemberDeclListSyntax {
-    let result = MemberDeclListSyntax(elements.map {
+    var result = MemberDeclListSyntax(elements.map {
       $0.buildMemberDeclListItem(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -729,9 +1039,23 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// `ModifierList` represents a collection of `DeclModifier`
 public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsModifierList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [DeclModifier]
   /// Creates a `ModifierList` with the provided list of elements.
   /// - Parameters:
@@ -751,9 +1075,15 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildModifierList(format: Format) -> ModifierListSyntax {
-    let result = ModifierListSyntax(elements.map {
+    var result = ModifierListSyntax(elements.map {
       $0.buildDeclModifier(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -770,6 +1100,16 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsModifierList where Element == ExpressibleAsDeclModifier {
   public func createModifierList() -> ModifierList {
@@ -778,6 +1118,10 @@ extension Array: ExpressibleAsModifierList where Element == ExpressibleAsDeclMod
 }
 /// `AccessPath` represents a collection of `AccessPathComponent`
 public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAccessPath {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [AccessPathComponent]
   /// Creates a `AccessPath` with the provided list of elements.
   /// - Parameters:
@@ -797,9 +1141,15 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
     self.init(elements)
   }
   public func buildAccessPath(format: Format) -> AccessPathSyntax {
-    let result = AccessPathSyntax(elements.map {
+    var result = AccessPathSyntax(elements.map {
       $0.buildAccessPathComponent(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -816,6 +1166,16 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsAccessPath where Element == ExpressibleAsAccessPathComponent {
   public func createAccessPath() -> AccessPath {
@@ -824,6 +1184,10 @@ extension Array: ExpressibleAsAccessPath where Element == ExpressibleAsAccessPat
 }
 /// `AccessorList` represents a collection of `AccessorDecl`
 public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAccessorList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [AccessorDecl]
   /// Creates a `AccessorList` with the provided list of elements.
   /// - Parameters:
@@ -843,9 +1207,15 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildAccessorList(format: Format) -> AccessorListSyntax {
-    let result = AccessorListSyntax(elements.map {
+    var result = AccessorListSyntax(elements.map {
       $0.buildAccessorDecl(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -862,9 +1232,23 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 /// `PatternBindingList` represents a collection of `PatternBinding`
 public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPatternBindingList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [PatternBinding]
   /// Creates a `PatternBindingList` with the provided list of elements.
   /// - Parameters:
@@ -884,9 +1268,15 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
     self.init(elements)
   }
   public func buildPatternBindingList(format: Format) -> PatternBindingListSyntax {
-    let result = PatternBindingListSyntax(elements.map {
+    var result = PatternBindingListSyntax(elements.map {
       $0.buildPatternBinding(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -903,6 +1293,16 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsPatternBindingList where Element == ExpressibleAsPatternBinding {
   public func createPatternBindingList() -> PatternBindingList {
@@ -911,6 +1311,10 @@ extension Array: ExpressibleAsPatternBindingList where Element == ExpressibleAsP
 }
 /// A collection of 0 or more `EnumCaseElement`s.
 public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsEnumCaseElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [EnumCaseElement]
   /// Creates a `EnumCaseElementList` with the provided list of elements.
   /// - Parameters:
@@ -930,9 +1334,15 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
     self.init(elements)
   }
   public func buildEnumCaseElementList(format: Format) -> EnumCaseElementListSyntax {
-    let result = EnumCaseElementListSyntax(elements.map {
+    var result = EnumCaseElementListSyntax(elements.map {
       $0.buildEnumCaseElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -949,6 +1359,16 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsEnumCaseElementList where Element == ExpressibleAsEnumCaseElement {
   public func createEnumCaseElementList() -> EnumCaseElementList {
@@ -957,6 +1377,10 @@ extension Array: ExpressibleAsEnumCaseElementList where Element == ExpressibleAs
 }
 /// `IdentifierList` represents a collection of `Token`
 public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsIdentifierList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [Token]
   /// Creates a `IdentifierList` with the provided list of elements.
   /// - Parameters:
@@ -974,9 +1398,15 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     self.init(elements)
   }
   public func buildIdentifierList(format: Format) -> IdentifierListSyntax {
-    let result = IdentifierListSyntax(elements.map {
+    var result = IdentifierListSyntax(elements.map {
       $0.buildToken(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -993,6 +1423,16 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsIdentifierList where Element == Token {
   public func createIdentifierList() -> IdentifierList {
@@ -1001,6 +1441,10 @@ extension Array: ExpressibleAsIdentifierList where Element == Token {
 }
 /// `PrecedenceGroupAttributeList` represents a collection of `SyntaxBuildable`
 public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrecedenceGroupAttributeList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [SyntaxBuildable]
   /// Creates a `PrecedenceGroupAttributeList` with the provided list of elements.
   /// - Parameters:
@@ -1020,9 +1464,15 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
     self.init(elements)
   }
   public func buildPrecedenceGroupAttributeList(format: Format) -> PrecedenceGroupAttributeListSyntax {
-    let result = PrecedenceGroupAttributeListSyntax(elements.map {
+    var result = PrecedenceGroupAttributeListSyntax(elements.map {
       $0.buildSyntax(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1039,6 +1489,16 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsPrecedenceGroupAttributeList where Element == ExpressibleAsSyntaxBuildable {
   public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
@@ -1047,6 +1507,10 @@ extension Array: ExpressibleAsPrecedenceGroupAttributeList where Element == Expr
 }
 /// `PrecedenceGroupNameList` represents a collection of `PrecedenceGroupNameElement`
 public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrecedenceGroupNameList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [PrecedenceGroupNameElement]
   /// Creates a `PrecedenceGroupNameList` with the provided list of elements.
   /// - Parameters:
@@ -1066,9 +1530,15 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
     self.init(elements)
   }
   public func buildPrecedenceGroupNameList(format: Format) -> PrecedenceGroupNameListSyntax {
-    let result = PrecedenceGroupNameListSyntax(elements.map {
+    var result = PrecedenceGroupNameListSyntax(elements.map {
       $0.buildPrecedenceGroupNameElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1085,6 +1555,16 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsPrecedenceGroupNameList where Element == ExpressibleAsPrecedenceGroupNameElement {
   public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
@@ -1093,6 +1573,10 @@ extension Array: ExpressibleAsPrecedenceGroupNameList where Element == Expressib
 }
 /// `TokenList` represents a collection of `Token`
 public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTokenList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [Token]
   /// Creates a `TokenList` with the provided list of elements.
   /// - Parameters:
@@ -1110,9 +1594,15 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
     self.init(elements)
   }
   public func buildTokenList(format: Format) -> TokenListSyntax {
-    let result = TokenListSyntax(elements.map {
+    var result = TokenListSyntax(elements.map {
       $0.buildToken(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1129,6 +1619,16 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsTokenList where Element == Token {
   public func createTokenList() -> TokenList {
@@ -1137,6 +1637,10 @@ extension Array: ExpressibleAsTokenList where Element == Token {
 }
 /// `NonEmptyTokenList` represents a collection of `Token`
 public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsNonEmptyTokenList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [Token]
   /// Creates a `NonEmptyTokenList` with the provided list of elements.
   /// - Parameters:
@@ -1154,9 +1658,15 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     self.init(elements)
   }
   public func buildNonEmptyTokenList(format: Format) -> NonEmptyTokenListSyntax {
-    let result = NonEmptyTokenListSyntax(elements.map {
+    var result = NonEmptyTokenListSyntax(elements.map {
       $0.buildToken(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1173,6 +1683,16 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsNonEmptyTokenList where Element == Token {
   public func createNonEmptyTokenList() -> NonEmptyTokenList {
@@ -1181,6 +1701,10 @@ extension Array: ExpressibleAsNonEmptyTokenList where Element == Token {
 }
 /// `AttributeList` represents a collection of `SyntaxBuildable`
 public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAttributeList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [SyntaxBuildable]
   /// Creates a `AttributeList` with the provided list of elements.
   /// - Parameters:
@@ -1200,9 +1724,15 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
     self.init(elements)
   }
   public func buildAttributeList(format: Format) -> AttributeListSyntax {
-    let result = AttributeListSyntax(elements.map {
+    var result = AttributeListSyntax(elements.map {
       $0.buildSyntax(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1219,6 +1749,16 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsAttributeList where Element == ExpressibleAsSyntaxBuildable {
   public func createAttributeList() -> AttributeList {
@@ -1227,6 +1767,10 @@ extension Array: ExpressibleAsAttributeList where Element == ExpressibleAsSyntax
 }
 /// A collection of arguments for the `@_specialize` attribute
 public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsSpecializeAttributeSpecList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [SyntaxBuildable]
   /// Creates a `SpecializeAttributeSpecList` with the provided list of elements.
   /// - Parameters:
@@ -1246,9 +1790,15 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
     self.init(elements)
   }
   public func buildSpecializeAttributeSpecList(format: Format) -> SpecializeAttributeSpecListSyntax {
-    let result = SpecializeAttributeSpecListSyntax(elements.map {
+    var result = SpecializeAttributeSpecListSyntax(elements.map {
       $0.buildSyntax(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1265,6 +1815,16 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsSpecializeAttributeSpecList where Element == ExpressibleAsSyntaxBuildable {
   public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
@@ -1273,6 +1833,10 @@ extension Array: ExpressibleAsSpecializeAttributeSpecList where Element == Expre
 }
 /// `ObjCSelector` represents a collection of `ObjCSelectorPiece`
 public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsObjCSelector {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [ObjCSelectorPiece]
   /// Creates a `ObjCSelector` with the provided list of elements.
   /// - Parameters:
@@ -1292,9 +1856,15 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildObjCSelector(format: Format) -> ObjCSelectorSyntax {
-    let result = ObjCSelectorSyntax(elements.map {
+    var result = ObjCSelectorSyntax(elements.map {
       $0.buildObjCSelectorPiece(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1311,6 +1881,16 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsObjCSelector where Element == ExpressibleAsObjCSelectorPiece {
   public func createObjCSelector() -> ObjCSelector {
@@ -1319,6 +1899,10 @@ extension Array: ExpressibleAsObjCSelector where Element == ExpressibleAsObjCSel
 }
 /// `DifferentiabilityParamList` represents a collection of `DifferentiabilityParam`
 public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDifferentiabilityParamList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [DifferentiabilityParam]
   /// Creates a `DifferentiabilityParamList` with the provided list of elements.
   /// - Parameters:
@@ -1338,9 +1922,15 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
     self.init(elements)
   }
   public func buildDifferentiabilityParamList(format: Format) -> DifferentiabilityParamListSyntax {
-    let result = DifferentiabilityParamListSyntax(elements.map {
+    var result = DifferentiabilityParamListSyntax(elements.map {
       $0.buildDifferentiabilityParam(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1357,6 +1947,16 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsDifferentiabilityParamList where Element == ExpressibleAsDifferentiabilityParam {
   public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
@@ -1365,6 +1965,10 @@ extension Array: ExpressibleAsDifferentiabilityParamList where Element == Expres
 }
 /// `BackDeployVersionList` represents a collection of `BackDeployVersionArgument`
 public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsBackDeployVersionList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [BackDeployVersionArgument]
   /// Creates a `BackDeployVersionList` with the provided list of elements.
   /// - Parameters:
@@ -1384,9 +1988,15 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
     self.init(elements)
   }
   public func buildBackDeployVersionList(format: Format) -> BackDeployVersionListSyntax {
-    let result = BackDeployVersionListSyntax(elements.map {
+    var result = BackDeployVersionListSyntax(elements.map {
       $0.buildBackDeployVersionArgument(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1403,6 +2013,16 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsBackDeployVersionList where Element == ExpressibleAsBackDeployVersionArgument {
   public func createBackDeployVersionList() -> BackDeployVersionList {
@@ -1411,6 +2031,10 @@ extension Array: ExpressibleAsBackDeployVersionList where Element == Expressible
 }
 /// `SwitchCaseList` represents a collection of `SyntaxBuildable`
 public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsSwitchCaseList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [SyntaxBuildable]
   /// Creates a `SwitchCaseList` with the provided list of elements.
   /// - Parameters:
@@ -1430,9 +2054,15 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     self.init(elements)
   }
   public func buildSwitchCaseList(format: Format) -> SwitchCaseListSyntax {
-    let result = SwitchCaseListSyntax(elements.map {
+    var result = SwitchCaseListSyntax(elements.map {
       $0.buildSyntax(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1449,6 +2079,16 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsSwitchCaseList where Element == ExpressibleAsSyntaxBuildable {
   public func createSwitchCaseList() -> SwitchCaseList {
@@ -1457,6 +2097,10 @@ extension Array: ExpressibleAsSwitchCaseList where Element == ExpressibleAsSynta
 }
 /// `CatchClauseList` represents a collection of `CatchClause`
 public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCatchClauseList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [CatchClause]
   /// Creates a `CatchClauseList` with the provided list of elements.
   /// - Parameters:
@@ -1476,9 +2120,15 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
     self.init(elements)
   }
   public func buildCatchClauseList(format: Format) -> CatchClauseListSyntax {
-    let result = CatchClauseListSyntax(elements.map {
+    var result = CatchClauseListSyntax(elements.map {
       $0.buildCatchClause(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1495,6 +2145,16 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsCatchClauseList where Element == ExpressibleAsCatchClause {
   public func createCatchClauseList() -> CatchClauseList {
@@ -1503,6 +2163,10 @@ extension Array: ExpressibleAsCatchClauseList where Element == ExpressibleAsCatc
 }
 /// `CaseItemList` represents a collection of `CaseItem`
 public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCaseItemList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [CaseItem]
   /// Creates a `CaseItemList` with the provided list of elements.
   /// - Parameters:
@@ -1522,9 +2186,15 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     self.init(elements)
   }
   public func buildCaseItemList(format: Format) -> CaseItemListSyntax {
-    let result = CaseItemListSyntax(elements.map {
+    var result = CaseItemListSyntax(elements.map {
       $0.buildCaseItem(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1541,6 +2211,16 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsCaseItemList where Element == ExpressibleAsCaseItem {
   public func createCaseItemList() -> CaseItemList {
@@ -1549,6 +2229,10 @@ extension Array: ExpressibleAsCaseItemList where Element == ExpressibleAsCaseIte
 }
 /// `CatchItemList` represents a collection of `CatchItem`
 public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCatchItemList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [CatchItem]
   /// Creates a `CatchItemList` with the provided list of elements.
   /// - Parameters:
@@ -1568,9 +2252,15 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
     self.init(elements)
   }
   public func buildCatchItemList(format: Format) -> CatchItemListSyntax {
-    let result = CatchItemListSyntax(elements.map {
+    var result = CatchItemListSyntax(elements.map {
       $0.buildCatchItem(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1587,6 +2277,16 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsCatchItemList where Element == ExpressibleAsCatchItem {
   public func createCatchItemList() -> CatchItemList {
@@ -1595,6 +2295,10 @@ extension Array: ExpressibleAsCatchItemList where Element == ExpressibleAsCatchI
 }
 /// `ConditionElementList` represents a collection of `ConditionElement`
 public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsConditionElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [ConditionElement]
   /// Creates a `ConditionElementList` with the provided list of elements.
   /// - Parameters:
@@ -1614,9 +2318,15 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildConditionElementList(format: Format) -> ConditionElementListSyntax {
-    let result = ConditionElementListSyntax(elements.map {
+    var result = ConditionElementListSyntax(elements.map {
       $0.buildConditionElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1633,6 +2343,16 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsConditionElementList where Element == ExpressibleAsConditionElement {
   public func createConditionElementList() -> ConditionElementList {
@@ -1641,6 +2361,10 @@ extension Array: ExpressibleAsConditionElementList where Element == ExpressibleA
 }
 /// `GenericRequirementList` represents a collection of `GenericRequirement`
 public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericRequirementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [GenericRequirement]
   /// Creates a `GenericRequirementList` with the provided list of elements.
   /// - Parameters:
@@ -1660,9 +2384,15 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
     self.init(elements)
   }
   public func buildGenericRequirementList(format: Format) -> GenericRequirementListSyntax {
-    let result = GenericRequirementListSyntax(elements.map {
+    var result = GenericRequirementListSyntax(elements.map {
       $0.buildGenericRequirement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1679,6 +2409,16 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsGenericRequirementList where Element == ExpressibleAsGenericRequirement {
   public func createGenericRequirementList() -> GenericRequirementList {
@@ -1687,6 +2427,10 @@ extension Array: ExpressibleAsGenericRequirementList where Element == Expressibl
 }
 /// `GenericParameterList` represents a collection of `GenericParameter`
 public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericParameterList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [GenericParameter]
   /// Creates a `GenericParameterList` with the provided list of elements.
   /// - Parameters:
@@ -1706,9 +2450,15 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildGenericParameterList(format: Format) -> GenericParameterListSyntax {
-    let result = GenericParameterListSyntax(elements.map {
+    var result = GenericParameterListSyntax(elements.map {
       $0.buildGenericParameter(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1725,6 +2475,16 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsGenericParameterList where Element == ExpressibleAsGenericParameter {
   public func createGenericParameterList() -> GenericParameterList {
@@ -1733,6 +2493,10 @@ extension Array: ExpressibleAsGenericParameterList where Element == ExpressibleA
 }
 /// `PrimaryAssociatedTypeList` represents a collection of `PrimaryAssociatedType`
 public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [PrimaryAssociatedType]
   /// Creates a `PrimaryAssociatedTypeList` with the provided list of elements.
   /// - Parameters:
@@ -1752,9 +2516,15 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
     self.init(elements)
   }
   public func buildPrimaryAssociatedTypeList(format: Format) -> PrimaryAssociatedTypeListSyntax {
-    let result = PrimaryAssociatedTypeListSyntax(elements.map {
+    var result = PrimaryAssociatedTypeListSyntax(elements.map {
       $0.buildPrimaryAssociatedType(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1771,6 +2541,16 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsPrimaryAssociatedTypeList where Element == ExpressibleAsPrimaryAssociatedType {
   public func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
@@ -1779,6 +2559,10 @@ extension Array: ExpressibleAsPrimaryAssociatedTypeList where Element == Express
 }
 /// `CompositionTypeElementList` represents a collection of `CompositionTypeElement`
 public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCompositionTypeElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [CompositionTypeElement]
   /// Creates a `CompositionTypeElementList` with the provided list of elements.
   /// - Parameters:
@@ -1798,9 +2582,15 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
     self.init(elements)
   }
   public func buildCompositionTypeElementList(format: Format) -> CompositionTypeElementListSyntax {
-    let result = CompositionTypeElementListSyntax(elements.map {
+    var result = CompositionTypeElementListSyntax(elements.map {
       $0.buildCompositionTypeElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1817,6 +2607,16 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsCompositionTypeElementList where Element == ExpressibleAsCompositionTypeElement {
   public func createCompositionTypeElementList() -> CompositionTypeElementList {
@@ -1825,6 +2625,10 @@ extension Array: ExpressibleAsCompositionTypeElementList where Element == Expres
 }
 /// `TupleTypeElementList` represents a collection of `TupleTypeElement`
 public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTupleTypeElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [TupleTypeElement]
   /// Creates a `TupleTypeElementList` with the provided list of elements.
   /// - Parameters:
@@ -1844,9 +2648,15 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildTupleTypeElementList(format: Format) -> TupleTypeElementListSyntax {
-    let result = TupleTypeElementListSyntax(elements.map {
+    var result = TupleTypeElementListSyntax(elements.map {
       $0.buildTupleTypeElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1863,6 +2673,16 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsTupleTypeElementList where Element == ExpressibleAsTupleTypeElement {
   public func createTupleTypeElementList() -> TupleTypeElementList {
@@ -1871,6 +2691,10 @@ extension Array: ExpressibleAsTupleTypeElementList where Element == ExpressibleA
 }
 /// `GenericArgumentList` represents a collection of `GenericArgument`
 public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericArgumentList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [GenericArgument]
   /// Creates a `GenericArgumentList` with the provided list of elements.
   /// - Parameters:
@@ -1890,9 +2714,15 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
     self.init(elements)
   }
   public func buildGenericArgumentList(format: Format) -> GenericArgumentListSyntax {
-    let result = GenericArgumentListSyntax(elements.map {
+    var result = GenericArgumentListSyntax(elements.map {
       $0.buildGenericArgument(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1909,6 +2739,16 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsGenericArgumentList where Element == ExpressibleAsGenericArgument {
   public func createGenericArgumentList() -> GenericArgumentList {
@@ -1917,6 +2757,10 @@ extension Array: ExpressibleAsGenericArgumentList where Element == ExpressibleAs
 }
 /// `TuplePatternElementList` represents a collection of `TuplePatternElement`
 public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTuplePatternElementList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [TuplePatternElement]
   /// Creates a `TuplePatternElementList` with the provided list of elements.
   /// - Parameters:
@@ -1936,9 +2780,15 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
     self.init(elements)
   }
   public func buildTuplePatternElementList(format: Format) -> TuplePatternElementListSyntax {
-    let result = TuplePatternElementListSyntax(elements.map {
+    var result = TuplePatternElementListSyntax(elements.map {
       $0.buildTuplePatternElement(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -1955,6 +2805,16 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
 }
 extension Array: ExpressibleAsTuplePatternElementList where Element == ExpressibleAsTuplePatternElement {
   public func createTuplePatternElementList() -> TuplePatternElementList {
@@ -1963,6 +2823,10 @@ extension Array: ExpressibleAsTuplePatternElementList where Element == Expressib
 }
 /// `AvailabilitySpecList` represents a collection of `AvailabilityArgument`
 public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAvailabilitySpecList {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia = []
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia = []
   let elements: [AvailabilityArgument]
   /// Creates a `AvailabilitySpecList` with the provided list of elements.
   /// - Parameters:
@@ -1982,9 +2846,15 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     self.init(elements)
   }
   public func buildAvailabilitySpecList(format: Format) -> AvailabilitySpecListSyntax {
-    let result = AvailabilitySpecListSyntax(elements.map {
+    var result = AvailabilitySpecListSyntax(elements.map {
       $0.buildAvailabilityArgument(format: format)
     })
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
     return format._format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
@@ -2000,6 +2870,16 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
   }
 }
 extension Array: ExpressibleAsAvailabilitySpecList where Element == ExpressibleAsAvailabilityArgument {

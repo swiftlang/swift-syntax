@@ -32,4 +32,40 @@ final class TriviaTests: XCTestCase {
     XCTAssertEqual(y, x + .space)
     XCTAssertEqual(y, [.newlines(1), .spaces(1)])
   }
+
+  func testAttachedTrivia() {
+    let testCases: [UInt: (VariableDecl, String)] = [
+      #line: (
+        VariableDecl(.let, name: "x", type: "Int").withLeadingTrivia(.space),
+        " let x: Int"
+      ),
+      #line: (
+        VariableDecl(.let, name: "x", type: "Int").withTrailingTrivia(.space),
+        "let x: Int "
+      ),
+    ]
+    for (line, testCase) in testCases {
+      let (decl, expected) = testCase
+      let syntax = decl.buildSyntax(format: Format())
+      XCTAssertEqual(syntax.description, expected, line: line)
+    }
+  }
+
+  func testAttachedListTrivia() {
+    let testCases: [UInt: (AttributeList, String)] = [
+      #line: (
+        AttributeList([CustomAttribute("Test")]).withLeadingTrivia(.space),
+        " @Test"
+      ),
+      #line: (
+        AttributeList([CustomAttribute("A").withTrailingTrivia(.space), CustomAttribute("B")]).withTrailingTrivia(.space),
+        "@A @B "
+      ),
+    ]
+    for (line, testCase) in testCases {
+      let (decl, expected) = testCase
+      let syntax = decl.buildSyntax(format: Format())
+      XCTAssertEqual(syntax.description, expected, line: line)
+    }
+  }
 }

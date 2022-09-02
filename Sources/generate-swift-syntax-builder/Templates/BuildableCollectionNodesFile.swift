@@ -20,6 +20,9 @@ let buildableCollectionNodesFile = SourceFile {
     path: "SwiftSyntax"
   )
 
+  let triviaSides = ["leading", "trailing"]
+  let trivias = triviaSides.map { "\($0)Trivia" }
+
   for node in SYNTAX_NODES where node.isSyntaxCollection {
     let type = node.type
     let elementType = node.collectionElementType
@@ -34,6 +37,16 @@ let buildableCollectionNodesFile = SourceFile {
       identifier: type.buildableBaseName,
       inheritanceClause: createTypeInheritanceClause(conformances: conformances)
     ) {
+      for (side, trivia) in zip(triviaSides, trivias) {
+        VariableDecl(
+          leadingTrivia: .docLineComment("/// The \(side) trivia attached to this syntax node once built.") + .newline,
+          .var,
+          name: trivia,
+          type: "Trivia",
+          initializer: ArrayExpr()
+        )
+      }
+
       VariableDecl(.let, name: "elements", type: ArrayType(elementType: elementType.buildable))
 
       // Generate initializers
@@ -42,10 +55,14 @@ let buildableCollectionNodesFile = SourceFile {
       createArrayLiteralInitializer(node: node)
 
       // Generate function declarations
-      createBuildFunction(node: node)
+      createBuildFunction(node: node, trivias: trivias)
       createBuildSyntaxFunction(node: node)
       createExpressibleAsCreateFunction(type: type)
       createDisambiguatingExpressibleAsCreateFunction(type: type, baseType: .init(syntaxKind: "Syntax"))
+
+      for trivia in trivias {
+        createWithTriviaFunction(trivia: trivia)
+      }
     }
 
     // For nodes without expressible-as conformances, conform Array to the corresponding expressible-as
@@ -170,7 +187,7 @@ private func createArrayLiteralInitializer(node: Node) -> InitializerDecl {
 }
 
 /// Generate the function building the collection syntax.
-private func createBuildFunction(node: Node) -> FunctionDecl {
+private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl {
   let type = node.type
   let elementType = node.collectionElementType
   return FunctionDecl(
@@ -182,7 +199,7 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
     )
   ) {
     VariableDecl(
-      .let,
+      .var,
       name: "result",
       initializer: FunctionCallExpr("\(type.syntaxBaseName)") {
         if elementType.isToken {
@@ -204,6 +221,9 @@ private func createBuildFunction(node: Node) -> FunctionDecl {
         }
       }
     )
+    for trivia in trivias {
+      createTriviaAttachment(varName: "result", triviaVarName: trivia, trivia: trivia)
+    }
     ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
       TupleExprElement(
         label: "syntax",

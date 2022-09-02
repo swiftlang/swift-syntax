@@ -925,24 +925,21 @@ extension Parser {
       text = text.dropFirst(closeQuote.tokenText.count)
     }
     /// Parse closing raw string delimiter if exist.
-    let closeDelimiter: RawTokenSyntax? = {
-      if let closeDelimiter = self.parseStringLiteralDelimiter(
-        at: .trailing,
-        text: text
-      ) {
-        return closeDelimiter
-      }
-
-      if let openDelimiter = openDelimiter {
-        return RawTokenSyntax(
-          missing: .rawStringDelimiter,
-          text: openDelimiter.tokenText,
-          arena: arena
-        )
-      }
-
-      return nil
-    }()
+    let closeDelimiter: RawTokenSyntax?
+    if let delimiter = self.parseStringLiteralDelimiter(
+      at: .trailing,
+      text: text
+    ) {
+      closeDelimiter = delimiter
+    } else if let openDelimiter = openDelimiter {
+      closeDelimiter = RawTokenSyntax(
+        missing: .rawStringDelimiter,
+        text: openDelimiter.tokenText,
+        arena: arena
+      )
+    } else {
+      closeDelimiter = nil
+    }
     assert((openDelimiter == nil) == (closeDelimiter == nil),
            "existence of open/close delimiter should match")
     if let closeDelimiter = closeDelimiter, !closeDelimiter.isMissing {

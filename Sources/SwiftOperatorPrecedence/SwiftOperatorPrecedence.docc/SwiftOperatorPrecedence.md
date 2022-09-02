@@ -81,7 +81,7 @@ By default, any of the operations that can produce an error, whether folding a s
 ```swift
 var errors: [OperatorPrecedenceError] = []
 let foldedExpr2e = opPrecedence.foldSingle(sequenceExpr2) { error in 
-    errors.append(error)
+  errors.append(error)
 }
 ```
 

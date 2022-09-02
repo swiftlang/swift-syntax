@@ -20,8 +20,9 @@ extension PrecedenceGroup {
     self.syntax = syntax
 
     for attr in syntax.groupAttributes {
+      switch attr.as(SyntaxEnum.self) {
       // Relation (lowerThan, higherThan)
-      if let relation = attr.as(PrecedenceGroupRelationSyntax.self) {
+      case .precedenceGroupRelation(let relation):
         let isLowerThan = relation.higherThanOrLowerThan.text == "lowerThan"
         for otherGroup in relation.otherNames {
           let otherGroupName = otherGroup.name.text
@@ -32,17 +33,12 @@ extension PrecedenceGroup {
           self.relations.append(relation)
         }
 
-        continue
-      }
-
       // Assignment
-      if let assignment = attr.as(PrecedenceGroupAssignmentSyntax.self) {
+      case .precedenceGroupAssignment(let assignment):
         self.assignment = assignment.flag.text == "true"
-        continue
-      }
 
       // Associativity
-      if let associativity = attr.as(PrecedenceGroupAssociativitySyntax.self) {
+      case .precedenceGroupAssociativity(let associativity):
         switch associativity.value.text {
         case "left":
           self.associativity = .left
@@ -56,6 +52,9 @@ extension PrecedenceGroup {
         default:
           break
         }
+
+      default:
+        break
       }
     }
   }
@@ -68,15 +67,9 @@ extension Operator {
   init(from syntax: OperatorDeclSyntax) {
     self.syntax = syntax
 
-    let kindModifier = syntax.modifiers?.first { modifier in
-      OperatorKind(rawValue: modifier.name.text) != nil
-    }
-
-    if let kindModifier = kindModifier {
-      kind = OperatorKind(rawValue: kindModifier.name.text)!
-    } else {
-      kind = .infix
-    }
+    kind = syntax.modifiers?.compactMap {
+      OperatorKind(rawValue: $0.name.text)
+    }.first ?? .infix
 
     name = syntax.identifier.text
 

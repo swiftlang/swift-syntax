@@ -73,8 +73,9 @@ let formatFile = SourceFile {
     }
 
     VariableDecl(
+      attributes: [CustomAttribute("_spi") { TupleExprElement(expression: "Testing") }],
       modifiers: [Token.public],
-      name: "_indentTrivia",
+      name: "indentTrivia",
       type: "Trivia"
     ) {
       TernaryExpr(
@@ -102,7 +103,7 @@ let formatFile = SourceFile {
       SequenceExpr {
         MemberAccessExpr(name: "newline")
         BinaryOperatorExpr("+")
-        "_indentTrivia"
+        "indentTrivia"
       }
     }
   }

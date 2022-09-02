@@ -28,6 +28,8 @@ extension Parser {
 }
 
 extension Parser {
+  // FIXME: This should be gyb'ed. Go refactor include/AST/Attr.def to use
+  // swift-syntax's definition of these attributes instead.
   enum DeclarationAttribute: SyntaxText {
     case _silgen_name = "_silgen_name"
     case available = "available"
@@ -155,28 +157,29 @@ extension Parser {
   }
 
   mutating func parseAttribute() -> RawSyntax {
-    switch self.peek().tokenText {
-    case "available":
+    guard let declAttr = DeclarationAttribute(rawValue: self.peek().tokenText) else {
+      return RawSyntax(self.parseCustomAttribute())
+    }
+
+    switch declAttr {
+    case .available:
       return RawSyntax(self.parseAvailabilityAttribute())
-    case "differentiable":
+    case .differentiable:
       return RawSyntax(self.parseDifferentiableAttribute())
-    case "objc":
+    case .objc:
       return RawSyntax(self.parseObjectiveCAttribute())
-    case "_specialize":
+    case ._specialize:
       return RawSyntax(self.parseSpecializeAttribute())
-    case "_private":
+    case ._private:
       return RawSyntax(self.parsePrivateImportAttribute())
-    case "_dynamicReplacement":
+    case ._dynamicReplacement:
       return RawSyntax(self.parseDynamicReplacementAttribute())
-    case "_spi":
+    case ._spi:
       return RawSyntax(self.parseSPIAttribute())
     default:
       break
     }
 
-    guard DeclarationAttribute(rawValue: self.peek().tokenText) != nil else {
-      return RawSyntax(self.parseCustomAttribute())
-    }
 
     let atSign = self.eat(.atSign)
     let ident = self.consumeIdentifier()
@@ -583,6 +586,8 @@ extension Parser {
 }
 
 extension Parser {
+  // FIXME: This should be gyb'ed. Go refactor include/AST/Attr.def to use
+  // swift-syntax's infrastructure.
   enum TypeAttribute: SyntaxText {
     case autoclosure = "autoclosure"
     case convention = "convention"

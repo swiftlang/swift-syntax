@@ -10,12 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+import ArgumentParser
 import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
 /// SwiftSyntaxBuilder sources to be generated
-let sourceTemplates = [
+private let sourceTemplates: [(SourceFile, String)] = [
   (buildableBaseProtocolsFile, "BuildableBaseProtocols.swift"),
   (buildableCollectionNodesFile, "BuildableCollectionNodes.swift"),
   (buildableNodesFile, "BuildableNodes.swift"),
@@ -24,24 +25,25 @@ let sourceTemplates = [
   (tokenFile, "Token.swift"),
 ]
 
-guard CommandLine.arguments.count > 1 else {
-  fatalError("Please add a destination as the first argument")
+@main
+struct GenerateSwiftSyntaxBuilder: ParsableCommand {
+  @Argument(help: "The path to the destination directory where the source files are to be generated")
+  var generatedPath: String
+
+  func run() throws {
+    let generatedURL = URL(fileURLWithPath: generatedPath)
+    let format = Format(indentWidth: 2)
+
+    try FileManager.default.createDirectory(
+      atPath: generatedURL.path,
+      withIntermediateDirectories: true,
+      attributes: nil
+    )
+
+    for (sourceFile, name) in sourceTemplates {
+      let fileURL = generatedURL.appendingPathComponent(name)
+      let syntax = sourceFile.buildSyntax(format: format)
+      try "\(syntax)\n".write(to: fileURL, atomically: true, encoding: .utf8)
+    }
+  }
 }
-
-let destination = CommandLine.arguments[1]
-let generatedPath = URL(fileURLWithPath: destination)
-
-try FileManager.default.createDirectory(
-  atPath: generatedPath.path,
-  withIntermediateDirectories: true,
-  attributes: nil
-)
-
-let format = Format(indentWidth: 2)
-
-for (sourceFile, name) in sourceTemplates {
-  let filePath = generatedPath.appendingPathComponent(name)
-  let syntax = sourceFile.buildSyntax(format: format)
-  try "\(syntax)\n".write(to: filePath, atomically: true, encoding: .utf8)
-}
-

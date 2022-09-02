@@ -124,7 +124,7 @@ let package = Package(
     ),
     .executableTarget(
         name: "generate-swift-syntax-builder",
-        dependencies: ["SwiftSyntaxBuilder"],
+        dependencies: ["SwiftSyntaxBuilder", .product(name: "ArgumentParser", package: "swift-argument-parser")],
         exclude: [
           "gyb_helpers",
           "gyb_syntax_support",

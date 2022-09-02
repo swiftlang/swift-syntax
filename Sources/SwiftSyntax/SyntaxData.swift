@@ -190,71 +190,78 @@ struct AbsoluteRawSyntax {
   }
 }
 
-/// Indirect wrapper for a `Syntax` node to avoid cyclic inclusion of the 
-/// `Syntax` struct in `SyntaxData`
-class SyntaxBox: CustomStringConvertible, 
-    CustomDebugStringConvertible, TextOutputStreamable {
-  let value: Syntax
-
-  init(_ value: Syntax) {
-    self.value = value
-  }
-
-  // SyntaxBox should be transparent in all descriptions
-
-  /// A source-accurate description of this node.
-  var description: String {
-    return value.description
-  }
-
-  /// Returns a description used by dump.
-  var debugDescription: String {
-    return value.debugDescription
-  }
-
-  /// Prints the raw value of this node to the provided stream.
-  /// - Parameter stream: The stream to which to print the raw tree.
-  func write<Target>(to target: inout Target)
-    where Target: TextOutputStream {
-    return value.write(to: &target)
-  }
-}
-
 /// SyntaxData is the underlying storage for each Syntax node.
 ///
 /// SyntaxData is an implementation detail, and should not be exposed to clients
 /// of SwiftSyntax.
 struct SyntaxData {
-  private enum ParentOrArena {
-    // For non-root nodes.
-    case parent(SyntaxBox)
+  private enum Info {
+    case root(Root)
+    indirect case nonRoot(NonRoot)
+
     // For root node.
-    case arena(SyntaxArena)
-  }
-  private let parentOrArena: ParentOrArena
-  private var arena: SyntaxArena {
-    switch parentOrArena {
-    case .arena(let arena): return arena
-    case .parent(let parentBox): return parentBox.value.data.arena
+    struct Root {
+      var arena: SyntaxArena
+    }
+
+    // For non-root nodes.
+    struct NonRoot {
+      var parent: SyntaxData
+      var absoluteInfo: AbsoluteSyntaxInfo
     }
   }
-  var parent: Syntax? {
-    switch parentOrArena {
-    case .parent(let parentBox): return parentBox.value
-    case .arena(_): return nil
+
+  private let info: Info
+  let raw: RawSyntax
+
+  private var rootInfo: Info.Root {
+    switch info {
+    case .root(let info): return info
+    case .nonRoot(let info): return info.parent.rootInfo
     }
   }
-  let absoluteRaw: AbsoluteRawSyntax
 
-  var raw: RawSyntax { return absoluteRaw.raw }
+  private var nonRootInfo: Info.NonRoot? {
+    switch info {
+    case .root(_): return nil
+    case .nonRoot(let info): return info
+    }
+  }
 
-  var indexInParent: Int { return Int(absoluteRaw.info.indexInParent) }
+  private var rootArena: SyntaxArena {
+    rootInfo.arena
+  }
 
-  var nodeId: SyntaxIdentifier { return absoluteRaw.info.nodeId }
+  private var root: SyntaxData {
+    switch info {
+    case .root(_): return self
+    case .nonRoot(let info): return info.parent.root
+    }
+  }
+
+  var parent: SyntaxData? {
+    nonRootInfo?.parent
+  }
+
+  var absoluteInfo: AbsoluteSyntaxInfo {
+    nonRootInfo?.absoluteInfo ?? .forRoot(raw)
+  }
+
+  var absoluteRaw: AbsoluteRawSyntax {
+    AbsoluteRawSyntax(raw: raw, info: absoluteInfo)
+  }
+
+  var indexInParent: Int {
+    Int(absoluteInfo.indexInParent)
+  }
+
+  var nodeId: SyntaxIdentifier {
+    absoluteInfo.nodeId
+  }
 
   /// The position of the start of this node's leading trivia
   var position: AbsolutePosition {
-    return absoluteRaw.position
+    AbsolutePosition(utf8Offset: Int(absoluteInfo.offset))
   }
 
   /// The position of the start of this node's content, skipping its trivia
@@ -269,13 +276,17 @@ struct SyntaxData {
 
   /// The end position of this node, including its trivia.
   var endPosition: AbsolutePosition {
-    return absoluteRaw.endPosition
+    position + raw.totalLength
   }
 
   /// "designated" memberwise initializer of `SyntaxData`.
-  private init(_ absoluteRaw: AbsoluteRawSyntax, parentOrArena: ParentOrArena) {
-    self.parentOrArena = parentOrArena
-    self.absoluteRaw = absoluteRaw
+  private init(_ raw: RawSyntax, info: Info) {
+    self.raw = raw
+    self.info = info
+  }
+
+  init(_ raw: RawSyntax, parent: SyntaxData, absoluteInfo: AbsoluteSyntaxInfo) {
+    self.init(raw, info: .nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo)))
   }
 
   /// Creates a `SyntaxData` with the provided raw syntax and parent.
@@ -283,12 +294,12 @@ struct SyntaxData {
   ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
   ///   - parent: The parent of this node, or `nil` if this node is the root.
   init(_ absoluteRaw: AbsoluteRawSyntax, parent: Syntax) {
-    self.init(absoluteRaw, parentOrArena: .parent(SyntaxBox(parent)))
+    self.init(absoluteRaw.raw, parent: parent.data, absoluteInfo: absoluteRaw.info)
   }
 
   /// Creates a `SyntaxData` for a root raw node.
   static func forRoot(_ raw: RawSyntax) -> SyntaxData {
-    SyntaxData(.forRoot(raw), parentOrArena: .arena(raw.arena))
+    SyntaxData(raw, info: .root(.init(arena: raw.arena)))
   }
 
   /// Returns the child data at the provided index in this data's layout.
@@ -306,7 +317,7 @@ struct SyntaxData {
     var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
     for _ in 0..<index { _ = iter.next() }
     let (raw, info) = iter.next()!
-    return SyntaxData(AbsoluteRawSyntax(raw: raw!, info: info), parent: parent)
+    return SyntaxData(raw!, parent: self, absoluteInfo: info)
   }
 
   /// Creates a copy of `self` and recursively creates `SyntaxData` nodes up to
@@ -319,7 +330,7 @@ struct SyntaxData {
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent = parent {
-      let parentData = parent.data.replacingChild(newRaw, at: indexInParent)
+      let parentData = parent.replacingChild(newRaw, at: indexInParent)
       let newParent = Syntax(parentData)
       return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
     } else {

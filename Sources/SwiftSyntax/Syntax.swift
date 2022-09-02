@@ -140,7 +140,7 @@ public extension SyntaxProtocol {
 
   /// The index of this node in a `SyntaxChildren` collection.
   var index: SyntaxChildrenIndex {
-    return SyntaxChildrenIndex(self.data.absoluteRaw.info)
+    return SyntaxChildrenIndex(self.data.absoluteInfo)
   }
 
   /// Whether or not this node is a token one.
@@ -168,7 +168,7 @@ public extension SyntaxProtocol {
 
   /// The parent of this syntax node, or `nil` if this node is the root.
   var parent: Syntax? {
-    return data.parent
+    return data.parent.map(Syntax.init(_:))
   }
 
   /// The index of this node in the parent's children.

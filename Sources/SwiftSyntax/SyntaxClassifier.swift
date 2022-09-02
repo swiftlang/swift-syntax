@@ -18,7 +18,7 @@ extension SyntaxData {
       guard let parent = curData.parent else { break }
       contextualClassif = SyntaxClassification.classify(parentKind: parent.raw.kind,
         indexInParent: curData.indexInParent, childKind: raw.kind)
-      curData = parent.data
+      curData = parent
     } while contextualClassif == nil
     return contextualClassif
   }

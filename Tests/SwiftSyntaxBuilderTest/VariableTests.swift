@@ -150,6 +150,20 @@ final class VariableTests: XCTestCase {
         }
         """
       ),
+      #line: (
+        VariableDecl(
+          attributes: CustomAttribute("WithArgs") {
+            TupleExprElement(expression: "value")
+          },
+          modifiers: [Token.public],
+          .let,
+          name: "z",
+          type: "Float"
+        ),
+        """
+        @WithArgs(value) public let z: Float
+        """
+      ),
     ]
 
     for (line, testCase) in testCases {

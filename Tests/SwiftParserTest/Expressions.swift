@@ -412,4 +412,13 @@ final class ExpressionTests: XCTestCase {
       """
     )
   }
+
+  func testParseArrowExpr() {
+    AssertParse(
+      "Foo #^ASYNC^#async ->",
+      { $0.parseSequenceExpression(.basic, forDirective: false) },
+      substructure: Syntax(TokenSyntax.contextualKeyword("async")),
+      substructureAfterMarker: "ASYNC"
+    )
+  }
 }

@@ -168,6 +168,14 @@ extension Parser {
 // MARK: Consuming Tokens
 
 extension Parser {
+  /// After calling `consume(ifAnyFrom:)` we know which token we are positioned
+  /// at based on that function's return type. This handle allows consuming that
+  /// token.
+  struct TokenConsumptionHandle {
+    /// The kind that is expected to be consumed if the handle is eaten.
+    var tokenKind: RawTokenKind
+  }
+
   @_spi(RawSyntax)
   public mutating func missingToken(_ kind: RawTokenKind) -> RawTokenSyntax {
     return RawTokenSyntax(missing: kind, arena: arena)
@@ -200,6 +208,81 @@ extension Parser {
     return self.consumeAnyToken()
   }
 
+  /// If the current token has `kind1` and is followed by `kind2` consume both tokens and return them.
+  /// Otherwise, return `nil`.
+  @_spi(RawSyntax)
+  public mutating func consume(if kind1: RawTokenKind, followedBy kind2: RawTokenKind) -> (Token, Token)? {
+    if self.at(kind1) && self.peek().tokenKind == kind2 {
+      return (consumeAnyToken(), consumeAnyToken())
+    } else {
+      return nil
+    }
+  }
+
+  /// If the current token satisfies `condition1` and the next token satisfies
+  /// `condition2` consume both tokens and return them.
+  /// Otherwise, return `nil`.
+  @_spi(RawSyntax)
+  public mutating func consume(
+    if condition1: (Lexer.Lexeme) -> Bool,
+    followedBy condition2: (Lexer.Lexeme) -> Bool
+  ) -> (Token, Token)? {
+    if condition1(self.currentToken) && condition2(self.peek()) {
+      return (consumeAnyToken(), consumeAnyToken())
+    } else {
+      return nil
+    }
+  }
+
+  /// Examines the current token and consumes it if its kind matches the
+  /// given `TokenKind` and additionally satisfies `condition`. If a token was
+  /// consumed, the result is that token, else the result is `nil`.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Returns: A token of the given kind if one was consumed, else `nil`.
+  @_spi(RawSyntax)
+  public mutating func consume(
+    if kind: RawTokenKind,
+    where condition: (Lexer.Lexeme, Self) -> Bool
+  ) -> Token? {
+    guard self.at(kind) && condition(self.currentToken, self) else {
+      return nil
+    }
+    return self.consumeAnyToken()
+  }
+
+  /// Examines the current token and consumes it if its kind is in `kinds` and
+  /// additionally satisfies `condition`. If a token was consumed, the result is
+  /// that token, else the result is `nil`.
+  ///
+  /// - Parameter kind: The kinds of token to consume.
+  /// - Returns: A token of the given kind if one was consumed, else `nil`.
+  public mutating func consume(ifAny kinds: RawTokenKind..., where condition: (Lexer.Lexeme, Parser) -> Bool) -> Token? {
+    for kind in kinds {
+      if let consumed = self.consume(if: kind, where: condition) {
+        return consumed
+      }
+    }
+    return nil
+  }
+
+  /// Checks whether the parser is currently positioned at any token in `Subset`.
+  /// If this is the case, return the `Subset` case that the parser is positioned in
+  /// as well as a handle to consume that token.
+  func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
+    for kind in Subset.allCases {
+      if self.at(kind.rawTokenKind) && kind.accepts(lexeme: currentToken, parser: self) {
+        return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind))
+      }
+    }
+    return nil
+  }
+
+  /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
+  mutating func eat(_ handle: TokenConsumptionHandle) -> RawTokenSyntax {
+    return consume(if: handle.tokenKind)!
+  }
+
   /// Attempts to consume a token of the given kind.
   /// If it cannot be found, the parser tries
   ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
@@ -217,7 +300,7 @@ extension Parser {
       for _ in 0..<lookahead.tokensConsumed {
         unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
       }
-      let token = eatWithoutRecovery(kind)
+      let token = self.consume(if: kind)!
       return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
     }
     return (nil, RawTokenSyntax(missing: kind, arena: self.arena))
@@ -273,13 +356,6 @@ extension Parser {
       }
     }
     return RawTokenSyntax(missing: kind, arena: self.arena)
-  }
-
-  @_spi(RawSyntax)
-  public mutating func eat(_ kind: RawTokenKind) -> (unexpected: RawUnexpectedNodesSyntax?, token: Token) {
-    let (unexpected, token) = expect(kind)
-    assert(!token.isMissing)
-    return (unexpected, token)
   }
 }
 

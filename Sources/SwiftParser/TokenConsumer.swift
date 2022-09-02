@@ -70,16 +70,4 @@ extension TokenConsumer {
     }
     return nil
   }
-
-  /// Consumes the current token, and asserts that the kind of token that was
-  /// consumed matches the given kind.
-  ///
-  /// If the token kind did not match, this function will abort. It is useful
-  /// to insert structural invariants during parsing.
-  ///
-  /// - Parameter kind: The kind of token to consume.
-  /// - Returns: A token of the given kind.
-  public mutating func eatWithoutRecovery(_ kind: RawTokenKind) -> Token {
-    return self.consume(if: kind)!
-  }
 }

@@ -43,20 +43,60 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseModifierList() -> RawModifierListSyntax? {
+    enum ExpectedTokenKind: RawTokenKindSubset {
+      case privateKeyword
+      case fileprivateKeyword
+      case internalKeyword
+      case publicKeyword
+      case staticKeyword
+      case classKeyword
+      case identifier
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .privateKeyword: return .privateKeyword
+        case .fileprivateKeyword: return .fileprivateKeyword
+        case .internalKeyword: return .internalKeyword
+        case .publicKeyword: return .publicKeyword
+        case .staticKeyword: return .staticKeyword
+        case .classKeyword: return .classKeyword
+        case .identifier: return .identifier
+        }
+      }
+
+      func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+        switch self {
+        case .classKeyword:
+          // If 'class' is a modifier on another decl kind, like var or func,
+          // then treat it as a modifier.
+          var lookahead = parser.lookahead()
+          lookahead.eat(.classKeyword)
+          // When followed by an 'override' or CC token inside a class,
+          // treat 'class' as a modifier in the case of a following CC
+          // token, we cannot be sure there is no intention to override
+          // or witness something static.
+          return lookahead.isStartOfDeclaration() || lookahead.currentToken.isContextualKeyword("override")
+        default:
+          return true
+        }
+      }
+    }
+
     var elements = [RawDeclModifierSyntax]()
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
-      switch self.currentToken.tokenKind {
-      case .privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword:
-        let name = self.consumeAnyToken()
+      switch self.at(anyIn: ExpectedTokenKind.self) {
+      case (.privateKeyword, let handle)?,
+          (.fileprivateKeyword, let handle)?,
+          (.internalKeyword, let handle)?,
+          (.publicKeyword, let handle)?:
+        let name = self.eat(handle)
         let details: RawDeclModifierDetailSyntax?
-        if self.at(.leftParen) {
-          let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
+        if let lparen = self.consume(if: .leftParen) {
           assert(self.currentToken.isContextualKeyword("set"))
           let detail = self.consumeIdentifier()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           details = RawDeclModifierDetailSyntax(
-            unexpectedBeforeLParen,
             leftParen: lparen,
             detail: detail,
             unexpectedBeforeRParen,
@@ -69,38 +109,22 @@ extension Parser {
 
         elements.append(RawDeclModifierSyntax(
           name: name, detail: details, arena: self.arena))
-      case .staticKeyword:
-        let (unexpectedBeforeStaticKeyword, staticKeyword) = self.eat(.staticKeyword)
+      case (.staticKeyword, let handle)?:
+        let staticKeyword = self.eat(handle)
         elements.append(RawDeclModifierSyntax(
-          unexpectedBeforeStaticKeyword,
           name: staticKeyword,
           detail: nil,
           arena: self.arena
         ))
-      case .classKeyword:
-        // If 'class' is a modifier on another decl kind, like var or func,
-        // then treat it as a modifier.
-        do {
-          var lookahead = self.lookahead()
-          lookahead.eatWithoutRecovery(.classKeyword)
-          // When followed by an 'override' or CC token inside a class,
-          // treat 'class' as a modifier in the case of a following CC
-          // token, we cannot be sure there is no intention to override
-          // or witness something static.
-          guard lookahead.isStartOfDeclaration() || lookahead.currentToken.isContextualKeyword("override") else {
-            // This 'class' is a real ClassDecl introducer.
-            break MODIFIER_LOOP
-          }
-        }
-        let (unexpectedBeforeClassKeyword, classKeyword) = self.eat(.classKeyword)
+      case (.classKeyword, let handle)?:
+        let classKeyword = self.eat(handle)
         elements.append(RawDeclModifierSyntax(
-          unexpectedBeforeClassKeyword,
           name: classKeyword,
           detail: nil,
           arena: self.arena
         ))
         continue
-      case .identifier:
+      case (.identifier, _)?:
         // Context sensitive keywords.
         // FIXME: Sink this into the GYB
         switch DeclModifier(rawValue: self.currentToken.tokenText) {
@@ -149,9 +173,9 @@ extension Parser {
   }
 
   mutating func parseModifierDetail() -> RawDeclModifierDetailSyntax {
-    let (unexpectedBeforeLeftParen, leftParen) = self.eat(.leftParen)
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let detailToken = self.consumeAnyToken()
-    let (unexpectedBeforeRightParen, rightParen) = self.eat(.rightParen)
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawDeclModifierDetailSyntax(
       unexpectedBeforeLeftParen,
       leftParen: leftParen,

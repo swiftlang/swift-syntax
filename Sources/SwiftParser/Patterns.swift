@@ -45,51 +45,60 @@ extension Parser {
   ///
   ///     expression-pattern → expression
   mutating func parsePattern() -> RawPatternSyntax {
-    switch self.currentToken.tokenKind {
-    case .leftParen:
-      let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
+    enum ExpectedTokens: RawTokenKindSubset {
+      case leftParen
+      case wildcardKeyword
+      case identifier
+      case letKeyword
+      case varKeyword
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .leftParen: return .leftParen
+        case .wildcardKeyword: return .wildcardKeyword
+        case .identifier: return .identifier
+        case .letKeyword: return .letKeyword
+        case .varKeyword: return .varKeyword
+        }
+      }
+
+    }
+
+    switch self.at(anyIn: ExpectedTokens.self) {
+    case (.leftParen, let handle)?:
+      let lparen = self.eat(handle)
       let elements = self.parsePatternTupleElements()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       return RawPatternSyntax(RawTuplePatternSyntax(
-        unexpectedBeforeLParen,
         leftParen: lparen,
         elements: elements,
         unexpectedBeforeRParen,
         rightParen: rparen,
         arena: self.arena
       ))
-    case .wildcardKeyword:
-      let (unexpectedBeforeWildcard, wildcard) = self.eat(.wildcardKeyword)
+    case (.wildcardKeyword, let handle)?:
+      let wildcard = self.eat(handle)
       return RawPatternSyntax(RawWildcardPatternSyntax(
-        unexpectedBeforeWildcard,
         wildcard: wildcard,
         typeAnnotation: nil,
         arena: self.arena
       ))
-    case .identifier:
-      let (unexpectedBeforeIdentifier, identifier) = self.eat(self.currentToken.tokenKind)
+    case (.identifier, let handle)?:
+      let identifier = self.eat(handle)
       return RawPatternSyntax(RawIdentifierPatternSyntax(
-        unexpectedBeforeIdentifier,
         identifier: identifier,
         arena: self.arena
       ))
-    case .letKeyword, .varKeyword:
-      let unexpectedBeforeLetOrVar: RawUnexpectedNodesSyntax?
-      let letOrVar: RawTokenSyntax
-      if self.at(.letKeyword) {
-        (unexpectedBeforeLetOrVar, letOrVar) = self.eat(.letKeyword)
-      } else {
-        assert(self.at(.varKeyword))
-        (unexpectedBeforeLetOrVar, letOrVar) = self.eat(.varKeyword)
-      }
+    case (.letKeyword, let handle)?,
+      (.varKeyword, let handle)?:
+      let letOrVar = self.eat(handle)
       let value = self.parsePattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
-        unexpectedBeforeLetOrVar,
         letOrVarKeyword: letOrVar,
         valuePattern: value,
         arena: self.arena
       ))
-    default:
+    case nil:
       return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
     }
   }
@@ -104,14 +113,12 @@ extension Parser {
     let pattern = self.parsePattern()
 
     // Now parse an optional type annotation.
-    guard self.at(.colon) else {
+    guard let colon = self.consume(if: .colon) else {
       return (pattern, nil)
     }
 
-    let (unexpectedBeforeColon, colon) = self.eat(.colon)
     let result = self.parseType()
     let type = RawTypeAnnotationSyntax(
-      unexpectedBeforeColon,
       colon: colon,
       type: result,
       arena: self.arena
@@ -132,23 +139,13 @@ extension Parser {
       var keepGoing = true
       while !self.at(.eof) && !self.at(.rightParen) && keepGoing {
         // If the tuple element has a label, parse it.
-        let label: RawTokenSyntax?
-        let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
-        let colon: RawTokenSyntax?
-        if self.currentToken.tokenKind == .identifier, self.peek().tokenKind == .colon {
-          label = self.consumeAnyToken()
-          (unexpectedBeforeColon, colon) = self.eat(.colon)
-        } else {
-          label = nil
-          unexpectedBeforeColon = nil
-          colon = nil
-        }
+        let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
+        let (label, colon) = (labelAndColon?.0, labelAndColon?.1)
         let pattern = self.parsePattern()
         let trailingComma = self.consume(if: .comma)
         keepGoing = trailingComma != nil
         elements.append(RawTuplePatternElementSyntax(
           labelName: label,
-          unexpectedBeforeColon,
           labelColon: colon,
           pattern: pattern,
           trailingComma: trailingComma,
@@ -169,12 +166,9 @@ extension Parser {
       let value = self.parseMatchingPattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
         letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
-    } else if self.at(.isKeyword) {
-      // matching-pattern ::= 'is' type
-      let (unexpectedBeforeIsKeyword, isKeyword) = self.eat(.isKeyword)
+    } else if let isKeyword = self.consume(if: .isKeyword) {
       let type = self.parseType()
       return RawPatternSyntax(RawIsTypePatternSyntax(
-        unexpectedBeforeIsKeyword,
         isKeyword: isKeyword,
         type: type,
         arena: self.arena

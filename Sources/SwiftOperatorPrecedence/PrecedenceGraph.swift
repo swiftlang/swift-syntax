@@ -12,6 +12,20 @@ enum Precedence {
   case unrelated
   case higherThan
   case lowerThan
+
+  /// Flip the precedence order around.
+  var flipped: Precedence {
+    switch self {
+    case .unrelated:
+      return .unrelated
+
+    case .higherThan:
+      return .lowerThan
+
+    case .lowerThan:
+      return .higherThan
+    }
+  }
 }
 
 /// A graph formed from a set of precedence groups, which can be used to
@@ -114,6 +128,18 @@ struct PrecedenceGraph {
       initialGroupName: startGroupName, initialSyntax: startSyntax,
       targetGroupName: endGroupName, direction: .higherThan,
       errorHandler: errorHandler
-    ) ?? .unrelated
+    ) ?? searchRelationships(
+      initialGroupName: startGroupName, initialSyntax: startSyntax,
+      targetGroupName: endGroupName, direction: .lowerThan,
+      errorHandler: errorHandler
+    ).map {
+      $0.flipped
+    } ?? searchRelationships(
+      initialGroupName: endGroupName, initialSyntax: endSyntax,
+      targetGroupName: startGroupName, direction: .higherThan,
+      errorHandler: errorHandler
+    ).map {
+      $0.flipped
+    } ?? .unrelated
   }
 }

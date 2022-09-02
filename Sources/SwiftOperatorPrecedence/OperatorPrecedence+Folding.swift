@@ -196,23 +196,22 @@ extension OperatorPrecedence {
       return group.associativity
     }
 
-    if try precedence(
+    let prec = try precedence(
       relating: firstGroup, to: secondGroup,
       startSyntax: firstGroupSyntax, endSyntax: secondGroupSyntax,
       errorHandler: errorHandler
-    ) == .higherThan {
+    )
+
+    switch prec {
+    case .higherThan:
       return .left
-    }
 
-    if try precedence(
-      relating: secondGroup, to: firstGroup,
-      startSyntax: secondGroupSyntax, endSyntax: firstGroupSyntax,
-      errorHandler: errorHandler
-    ) == .higherThan {
+    case .lowerThan:
       return .right
-    }
 
-    return .none
+    case .unrelated:
+      return .none
+    }
   }
 
   /// "Fold" an expression sequence where the left-hand side has been broken

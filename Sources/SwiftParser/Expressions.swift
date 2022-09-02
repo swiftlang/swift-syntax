@@ -349,7 +349,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     forDirective: Bool
   ) -> RawExprSyntax {
-    let head = self.parsePrimaryExpression(flavor)
+    let head = self.parsePrimaryExpression()
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
@@ -688,7 +688,7 @@ extension Parser {
   ///     primary-expression → selector-expression
   ///     primary-expression → key-path-string-expression
   @_spi(RawSyntax)
-  public mutating func parsePrimaryExpression(_ flavor: ExprFlavor) -> RawExprSyntax {
+  public mutating func parsePrimaryExpression() -> RawExprSyntax {
     switch self.currentToken.tokenKind {
     case .integerLiteral:
       let digits = self.eat(.integerLiteral)

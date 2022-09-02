@@ -935,11 +935,8 @@ extension Parser {
 
       if let openDelimiter = openDelimiter {
         return RawTokenSyntax(
-          kind: .rawStringDelimiter,
+          missing: .rawStringDelimiter,
           text: openDelimiter.tokenText,
-          leadingTriviaPieces: [],
-          trailingTriviaPieces: [],
-          presence: .missing,
           arena: arena
         )
       }

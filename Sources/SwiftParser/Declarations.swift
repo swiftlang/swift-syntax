@@ -51,7 +51,7 @@ extension Parser {
   public mutating func parseDeclaration() -> RawDeclSyntax {
     if self.at(.poundIfKeyword) {
       return RawDeclSyntax(self.parsePoundIfDirective { parser in
-        var parsedDecl = parser.parseDeclaration()
+        let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
         return RawMemberDeclListItemSyntax(
           decl: parsedDecl,

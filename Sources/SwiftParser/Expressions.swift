@@ -907,7 +907,9 @@ extension Parser {
       at: openDelimiter != nil ? .leadingRaw : .leading,
       text: text
     ) ?? RawTokenSyntax(missing: .stringQuote, arena: arena)
-    text = text.dropFirst(openQuote.tokenText.count)
+    if !openQuote.isMissing {
+      text = text.dropFirst(openQuote.tokenText.count)
+    }
 
     /// Parse segments.
     let (segments, closeStart) = self.parseStringLiteralSegments(
@@ -917,16 +919,37 @@ extension Parser {
     /// Parse close quote.
     let closeQuote = self.parseStringLiteralQuote(
       at: openDelimiter != nil ? .trailingRaw : .trailing,
-      text: text[closeStart...]
+      text: text
     ) ?? RawTokenSyntax(missing: openQuote.tokenKind, arena: arena)
-    text = text.dropFirst(closeQuote.byteLength)
-
+    if !closeQuote.isMissing {
+      text = text.dropFirst(closeQuote.tokenText.count)
+    }
     /// Parse closing raw string delimiter if exist.
-    let closeDelimiter = self.parseStringLiteralDelimiter(at: .trailing, text: text)
+    let closeDelimiter: RawTokenSyntax? = {
+      if let closeDelimiter = self.parseStringLiteralDelimiter(
+        at: .trailing,
+        text: text
+      ) {
+        return closeDelimiter
+      }
+
+      if let openDelimiter = openDelimiter {
+        return RawTokenSyntax(
+          kind: .rawStringDelimiter,
+          text: openDelimiter.tokenText,
+          leadingTriviaPieces: [],
+          trailingTriviaPieces: [],
+          presence: .missing,
+          arena: arena
+        )
+      }
+
+      return nil
+    }()
     assert((openDelimiter == nil) == (closeDelimiter == nil),
            "existence of open/close delimiter should match")
-    if let closeDelimiter = closeDelimiter {
-      text = text.dropFirst(closeDelimiter.tokenText.count)
+    if let closeDelimiter = closeDelimiter, !closeDelimiter.isMissing {
+      text = text.dropFirst(closeDelimiter.byteLength)
     }
 
     assert(text.isEmpty,
@@ -1060,7 +1083,10 @@ extension Parser {
       // position == .leadingRaw implies that we saw a `#` before the quote.
       // A multiline string literal must always start its contents on a new line.
       // Thus we are parsing somethign like #"""#, which is not a multiline string literal but a raw literal containing a single quote.
-      if position == .leadingRaw && text[index] == UInt8(ascii: "#") {
+      if position == .leadingRaw,
+         index < text.endIndex,
+         text[index] == UInt8(ascii: "#")
+      {
         quoteCount = 1
         index = text.index(text.startIndex, offsetBy: quoteCount)
       }

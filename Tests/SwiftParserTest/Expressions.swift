@@ -310,6 +310,36 @@ final class ExpressionTests: XCTestCase {
        """"""#^DIAG^#
        """##
      )
+
+    AssertParse(
+      ##"""
+      #"#^DQ^##^DD^#
+      """##,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DQ", message: #"Expected '"' in string literal"#),
+        DiagnosticSpec(locationMarker: "DD", message: #"Expected '#' in string literal"#)
+      ]
+    )
+
+    AssertParse(
+      ##"""
+      #"""#^DQ^##^DD^#
+      """##,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DQ", message: #"Expected '"""' in string literal"#),
+        DiagnosticSpec(locationMarker: "DD", message: #"Expected '#' in string literal"#)
+      ]
+    )
+
+    AssertParse(
+      ##"""
+      #"""a#^DQ^##^DD^#
+      """##,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DQ", message: #"Expected '"""' in string literal"#),
+        DiagnosticSpec(locationMarker: "DD", message: #"Expected '#' in string literal"#)
+      ]
+    )
   }
 
   func testSingleQuoteStringLiteral() {

@@ -30,6 +30,9 @@ struct GenerateSwiftSyntaxBuilder: ParsableCommand {
   @Argument(help: "The path to the destination directory where the source files are to be generated")
   var generatedPath: String
 
+  @Flag(help: "Enable verbose output")
+  var verbose: Bool = false
+
   func run() throws {
     let generatedURL = URL(fileURLWithPath: generatedPath)
     let format = Format(indentWidth: 2)
@@ -42,6 +45,9 @@ struct GenerateSwiftSyntaxBuilder: ParsableCommand {
 
     for (sourceFile, name) in sourceTemplates {
       let fileURL = generatedURL.appendingPathComponent(name)
+      if verbose {
+        print("Generating \(fileURL.path)...")
+      }
       let syntax = sourceFile.buildSyntax(format: format)
       try "\(syntax)\n".write(to: fileURL, atomically: true, encoding: .utf8)
     }

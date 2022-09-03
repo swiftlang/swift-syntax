@@ -162,9 +162,35 @@ func AssertDiagnostic<T: SyntaxProtocol>(
 /// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `#^DIAG^#`.
 /// `parseSyntax` can be used to adjust the production that should be used as the entry point to parse the source code.
 /// If `substructure` is not `nil`, asserts that the parsed syntax tree contains this substructure.
+func AssertParse(
+  _ markedSource: String,
+  substructure expectedSubstructure: Syntax? = nil,
+  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+  fixedSource expectedFixedSource: String? = nil,
+  file: StaticString = #file,
+  line: UInt = #line
+) {
+  return AssertParse(markedSource,
+                     { $0.parseSourceFile() },
+                     substructure: expectedSubstructure,
+                     diagnostics: expectedDiagnostics,
+                     fixedSource: expectedFixedSource,
+                     file: file,
+                     line: line)
+}
+
+/// Parse `markedSource` and perform the following assertions:
+///  - The parsed syntax tree should be printable back to the original source code (round-tripping)
+///  - Parsing produced the given `diagnostics` (`diagnostics = []` asserts that the parse was successful)
+///  - If `fixedSource` is not `nil`, assert that applying all fixes from the diagnostics produces `fixedSource`
+/// The source file can be marked with markers of the form `#^DIAG^#` to mark source locations that can be referred to by `diagnostics`.
+/// These markers are removed before parsing the source file.
+/// By default, `DiagnosticSpec` asserts that the diagnostics is produced at a location marked by `#^DIAG^#`.
+/// `parseSyntax` can be used to adjust the production that should be used as the entry point to parse the source code.
+/// If `substructure` is not `nil`, asserts that the parsed syntax tree contains this substructure.
 func AssertParse<Node: RawSyntaxNodeProtocol>(
   _ markedSource: String,
-  _ parseSyntax: (inout Parser) -> Node = { $0.parseSourceFile() },
+  _ parseSyntax: (inout Parser) -> Node,
   substructure expectedSubstructure: Syntax? = nil,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   fixedSource expectedFixedSource: String? = nil,

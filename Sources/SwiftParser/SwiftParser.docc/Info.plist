@@ -32,6 +32,30 @@
 				<key>version</key>
 				<string>10.15</string>
 			</dict>
+			<dict>
+				<key>name</key>
+				<string>Mac Catalyst</string>
+				<key>version</key>
+				<string>13.0</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>iOS</string>
+				<key>version</key>
+				<string>13.0</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>tvOS</string>
+				<key>version</key>
+				<string>13.0</string>
+			</dict>
+			<dict>
+				<key>name</key>
+				<string>watchOS</string>
+				<key>version</key>
+				<string>6.0</string>
+			</dict>
 		</array>
 	</dict>
 </dict>

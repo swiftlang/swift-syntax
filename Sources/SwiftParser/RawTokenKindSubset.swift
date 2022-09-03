@@ -15,15 +15,17 @@
 /// Allows callers of `at(anyOf:)` to expect being positioned at a subset of all
 /// `RawTokenKind`s.
 protocol RawTokenKindSubset: CaseIterable {
+  associatedtype ParserType = Parser
+
   var rawTokenKind: RawTokenKind { get }
 
   /// Allows more flexible rejection of further token kinds based on the token's
   /// contents or lookahead. Useful to e.g. look for contextual keywords.
-  func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool
+  func accepts(lexeme: Lexer.Lexeme, parser: ParserType) -> Bool
 }
 
 extension RawTokenKindSubset {
-  func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+  func accepts(lexeme: Lexer.Lexeme, parser: ParserType) -> Bool {
     return true
   }
 }

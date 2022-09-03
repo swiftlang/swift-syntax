@@ -49,7 +49,22 @@ extension Parser {
   ///     declarations → declaration declarations?
   @_spi(RawSyntax)
   public mutating func parseDeclaration() -> RawDeclSyntax {
-    if self.at(.poundIfKeyword) {
+    enum PoundIfTokenKind: RawTokenKindSubset {
+      case poundIfKeyword
+      case poundWarningKeyword
+      case poundErrorKeyword
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .poundIfKeyword: return .poundIfKeyword
+        case .poundWarningKeyword: return .poundWarningKeyword
+        case .poundErrorKeyword: return .poundErrorKeyword
+        }
+      }
+    }
+
+    switch self.at(anyIn: PoundIfTokenKind.self) {
+    case (.poundIfKeyword, _)?:
       return RawDeclSyntax(self.parsePoundIfDirective { parser in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
@@ -58,52 +73,106 @@ extension Parser {
           semicolon: semicolon,
           arena: parser.arena)
       }
-      syntax: { parser, elements in
+                           syntax: { parser, elements in
         return RawSyntax(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
       })
-    } else if self.at(any: .poundWarningKeyword, .poundErrorKeyword) {
+    case (.poundWarningKeyword, _)?, (.poundErrorKeyword, _)?:
       return self.parsePoundDiagnosticDeclaration()
+    case nil:
+      break
+    }
+
+    enum DeclStartTokenKind: RawTokenKindSubset {
+      case importKeyword
+      case classKeyword
+      case enumKeyword
+      case caseKeyword
+      case structKeyword
+      case protocolKeyword
+      case associatedtypeKeyword
+      case typealiasKeyword
+      case extensionKeyword
+      case funcKeyword
+      case subscriptKeyword
+      case letKeyword
+      case varKeyword
+      case initKeyword
+      case deinitKeyword
+      case operatorKeyword
+      case precedencegroupKeyword
+      case identifier
+
+      func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+        switch self {
+        case .identifier: return lexeme.isContextualKeyword("actor")
+        default: return true
+        }
+      }
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .importKeyword: return .importKeyword
+        case .classKeyword: return .classKeyword
+        case .enumKeyword: return .enumKeyword
+        case .caseKeyword: return .caseKeyword
+        case .structKeyword: return .structKeyword
+        case .protocolKeyword: return .protocolKeyword
+        case .associatedtypeKeyword: return .associatedtypeKeyword
+        case .typealiasKeyword: return .typealiasKeyword
+        case .extensionKeyword: return .extensionKeyword
+        case .funcKeyword: return .funcKeyword
+        case .subscriptKeyword: return .subscriptKeyword
+        case .letKeyword: return .letKeyword
+        case .varKeyword: return .varKeyword
+        case .initKeyword: return .initKeyword
+        case .deinitKeyword: return .deinitKeyword
+        case .operatorKeyword: return .operatorKeyword
+        case .precedencegroupKeyword: return .precedencegroupKeyword
+        case .identifier: return .identifier
+        }
+      }
     }
 
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
       modifiers: self.parseModifierList())
-    switch self.currentToken.tokenKind {
-    case .importKeyword:
+    switch self.at(anyIn: DeclStartTokenKind.self) {
+    case (.importKeyword, _)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs))
-    case .classKeyword:
+    case (.classKeyword, _)?:
       return RawDeclSyntax(self.parseClassDeclaration(attrs))
-    case .enumKeyword:
+    case (.enumKeyword, _)?:
       return RawDeclSyntax(self.parseEnumDeclaration(attrs))
-    case .caseKeyword:
+    case (.caseKeyword, _)?:
       return RawDeclSyntax(self.parseDeclEnumCase(attrs))
-    case .structKeyword:
+    case (.structKeyword, _)?:
       return RawDeclSyntax(self.parseStructDeclaration(attrs))
-    case .protocolKeyword:
+    case (.protocolKeyword, _)?:
       return RawDeclSyntax(self.parseProtocolDeclaration(attrs))
-    case .associatedtypeKeyword:
+    case (.associatedtypeKeyword, _)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs))
-    case .typealiasKeyword:
+    case (.typealiasKeyword, _)?:
       return RawDeclSyntax(self.parseTypealiasDeclaration(attrs))
-    case .extensionKeyword:
+    case (.extensionKeyword, _)?:
       return RawDeclSyntax(self.parseExtensionDeclaration(attrs))
-    case .funcKeyword:
+    case (.funcKeyword, _)?:
       return RawDeclSyntax(self.parseFuncDeclaration(attrs))
-    case .subscriptKeyword:
+    case (.subscriptKeyword, _)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs))
-    case .letKeyword, .varKeyword:
+    case (.letKeyword, _)?,
+      (.varKeyword, _)?:
       return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs))
-    case .initKeyword:
+    case (.initKeyword, _)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs))
-    case .deinitKeyword:
+    case (.deinitKeyword, _)?:
       return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs))
-    case .operatorKeyword:
+    case (.operatorKeyword, _)?:
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs))
-    case .precedencegroupKeyword:
+    case (.precedencegroupKeyword, _)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs))
-    case _ where self.currentToken.isContextualKeyword("actor"):
+    case (.identifier, _)?:
       return RawDeclSyntax(self.parseActorDeclaration(attrs))
-    default:
+    case nil:
       return RawDeclSyntax(RawMissingDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
@@ -318,8 +387,35 @@ extension Parser {
           continue
         }
 
+        enum ExpectedTokenKind: RawTokenKindSubset {
+          case colon
+          case spacedBinaryOperator
+          case unspacedBinaryOperator
+          case postfixOperator
+          case prefixOperator
+
+          func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+            switch self {
+            case .colon: return true
+            default: return lexeme.tokenText == "=="
+            }
+          }
+
+          var rawTokenKind: RawTokenKind {
+            switch self {
+            case .colon: return .colon
+            case .spacedBinaryOperator: return .spacedBinaryOperator
+            case .unspacedBinaryOperator: return .unspacedBinaryOperator
+            case .postfixOperator: return .postfixOperator
+            case .prefixOperator: return .prefixOperator
+            }
+          }
+        }
+
         let requirement: RawSyntax
-        if let colon = self.consume(if: .colon) {
+        switch self.at(anyIn: ExpectedTokenKind.self) {
+        case (.colon, let handle)?:
+          let colon = self.eat(handle)
           // A conformance-requirement.
           if self.currentToken.isIdentifier, let layoutConstraint = LayoutConstraint(rawValue: self.currentToken.tokenText) {
             // Parse a layout constraint.
@@ -375,7 +471,10 @@ extension Parser {
               rightTypeIdentifier: secondType,
               arena: self.arena))
           }
-        } else if (self.currentToken.isAnyOperator && self.currentToken.tokenText == "==") || self.at(.equal) {
+        case (.spacedBinaryOperator, _)?,
+          (.unspacedBinaryOperator, _)?,
+          (.postfixOperator, _)?,
+          (.prefixOperator, _)?:
           let equal = self.consumeAnyToken()
           let secondType = self.parseType()
           requirement = RawSyntax(RawSameTypeRequirementSyntax(
@@ -383,7 +482,7 @@ extension Parser {
             equalityToken: equal,
             rightTypeIdentifier: secondType,
             arena: self.arena))
-        } else {
+        case nil:
           requirement = RawSyntax(RawSameTypeRequirementSyntax(
             leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
             equalityToken: RawTokenSyntax(missing: .equal, arena: self.arena),
@@ -1788,18 +1887,30 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parsePoundDiagnosticDeclaration() -> RawDeclSyntax {
-    assert(self.at(any: .poundErrorKeyword, .poundWarningKeyword))
+    enum ExpectedTokenKind: RawTokenKindSubset {
+      case poundErrorKeyword
+      case poundWarningKeyword
 
-    let directive: PoundDiagnosticKind
-    if let poundError = self.consume(if: .poundErrorKeyword) {
-      directive = .error(poundError: poundError)
-    } else if let poundWarning = self.consume(if: .poundWarningKeyword) {
-      directive = .warning(poundWarning: poundWarning)
-    } else {
-      assert(false, "Should not happen based on assertion at start of function")
-      directive = .error(poundError: RawTokenSyntax(missing: .poundErrorKeyword, arena: self.arena))
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .poundErrorKeyword: return .poundErrorKeyword
+        case .poundWarningKeyword: return .poundWarningKeyword
+        }
+      }
     }
 
+
+    let directive: PoundDiagnosticKind
+
+    switch self.at(anyIn: ExpectedTokenKind.self) {
+    case (.poundErrorKeyword, let handle)?:
+      directive = .error(poundError: self.eat(handle))
+    case (.poundWarningKeyword, let handle)?:
+      directive = .warning(poundWarning: self.eat(handle))
+    case nil:
+      directive = .error(poundError: RawTokenSyntax(missing: .poundErrorKeyword, arena: self.arena))
+    }
+    
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let stringLiteral: RawStringLiteralExprSyntax
     if self.currentToken.tokenKind == .stringLiteral {

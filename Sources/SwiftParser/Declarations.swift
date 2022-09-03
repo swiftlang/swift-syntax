@@ -381,7 +381,7 @@ extension Parser {
             arena: self.arena))
         } else {
           requirement = RawSyntax(RawSameTypeRequirementSyntax(
-            leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+            leftTypeIdentifier: firstType,
             equalityToken: RawTokenSyntax(missing: .equal, arena: self.arena),
             rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
             arena: self.arena

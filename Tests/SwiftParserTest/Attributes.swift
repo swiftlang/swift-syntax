@@ -17,4 +17,18 @@ final class AttributeTests: XCTestCase {
       ]
     )
   }
+  
+  func testMissingGenericTypeToAttribute() {
+    AssertParse(
+    """
+    @differentiable(reverse wrt,where T #^DIAG_1^#
+    func podcastPlaybackSpeed() {
+    }
+    """,
+    diagnostics: [
+      DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '=' in same type requirement"),
+//      DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ')' to end attribute"),
+    ]
+    )
+  }
 }

@@ -10721,6 +10721,178 @@ extension SyntaxTransformVisitor {
       return visit(node)
     }
   }
+  
+  public func visit(_ data: ExprSyntax) -> [ResultType] {
+    switch data.raw.kind {
+    case .unknownExpr:
+      let node = data.as(UnknownExprSyntax.self)!
+      return visit(node)
+    case .missingExpr:
+      let node = data.as(MissingExprSyntax.self)!
+      return visit(node)
+    case .inOutExpr:
+      let node = data.as(InOutExprSyntax.self)!
+      return visit(node)
+    case .poundColumnExpr:
+      let node = data.as(PoundColumnExprSyntax.self)!
+      return visit(node)
+    case .tryExpr:
+      let node = data.as(TryExprSyntax.self)!
+      return visit(node)
+    case .awaitExpr:
+      let node = data.as(AwaitExprSyntax.self)!
+      return visit(node)
+    case .moveExpr:
+      let node = data.as(MoveExprSyntax.self)!
+      return visit(node)
+    case .identifierExpr:
+      let node = data.as(IdentifierExprSyntax.self)!
+      return visit(node)
+    case .superRefExpr:
+      let node = data.as(SuperRefExprSyntax.self)!
+      return visit(node)
+    case .nilLiteralExpr:
+      let node = data.as(NilLiteralExprSyntax.self)!
+      return visit(node)
+    case .discardAssignmentExpr:
+      let node = data.as(DiscardAssignmentExprSyntax.self)!
+      return visit(node)
+    case .assignmentExpr:
+      let node = data.as(AssignmentExprSyntax.self)!
+      return visit(node)
+    case .sequenceExpr:
+      let node = data.as(SequenceExprSyntax.self)!
+      return visit(node)
+    case .poundLineExpr:
+      let node = data.as(PoundLineExprSyntax.self)!
+      return visit(node)
+    case .poundFileExpr:
+      let node = data.as(PoundFileExprSyntax.self)!
+      return visit(node)
+    case .poundFileIDExpr:
+      let node = data.as(PoundFileIDExprSyntax.self)!
+      return visit(node)
+    case .poundFilePathExpr:
+      let node = data.as(PoundFilePathExprSyntax.self)!
+      return visit(node)
+    case .poundFunctionExpr:
+      let node = data.as(PoundFunctionExprSyntax.self)!
+      return visit(node)
+    case .poundDsohandleExpr:
+      let node = data.as(PoundDsohandleExprSyntax.self)!
+      return visit(node)
+    case .symbolicReferenceExpr:
+      let node = data.as(SymbolicReferenceExprSyntax.self)!
+      return visit(node)
+    case .prefixOperatorExpr:
+      let node = data.as(PrefixOperatorExprSyntax.self)!
+      return visit(node)
+    case .binaryOperatorExpr:
+      let node = data.as(BinaryOperatorExprSyntax.self)!
+      return visit(node)
+    case .arrowExpr:
+      let node = data.as(ArrowExprSyntax.self)!
+      return visit(node)
+    case .infixOperatorExpr:
+      let node = data.as(InfixOperatorExprSyntax.self)!
+      return visit(node)
+    case .floatLiteralExpr:
+      let node = data.as(FloatLiteralExprSyntax.self)!
+      return visit(node)
+    case .tupleExpr:
+      let node = data.as(TupleExprSyntax.self)!
+      return visit(node)
+    case .arrayExpr:
+      let node = data.as(ArrayExprSyntax.self)!
+      return visit(node)
+    case .dictionaryExpr:
+      let node = data.as(DictionaryExprSyntax.self)!
+      return visit(node)
+    case .integerLiteralExpr:
+      let node = data.as(IntegerLiteralExprSyntax.self)!
+      return visit(node)
+    case .booleanLiteralExpr:
+      let node = data.as(BooleanLiteralExprSyntax.self)!
+      return visit(node)
+    case .unresolvedTernaryExpr:
+      let node = data.as(UnresolvedTernaryExprSyntax.self)!
+      return visit(node)
+    case .ternaryExpr:
+      let node = data.as(TernaryExprSyntax.self)!
+      return visit(node)
+    case .memberAccessExpr:
+      let node = data.as(MemberAccessExprSyntax.self)!
+      return visit(node)
+    case .unresolvedIsExpr:
+      let node = data.as(UnresolvedIsExprSyntax.self)!
+      return visit(node)
+    case .isExpr:
+      let node = data.as(IsExprSyntax.self)!
+      return visit(node)
+    case .unresolvedAsExpr:
+      let node = data.as(UnresolvedAsExprSyntax.self)!
+      return visit(node)
+    case .asExpr:
+      let node = data.as(AsExprSyntax.self)!
+      return visit(node)
+    case .typeExpr:
+      let node = data.as(TypeExprSyntax.self)!
+      return visit(node)
+    case .closureExpr:
+      let node = data.as(ClosureExprSyntax.self)!
+      return visit(node)
+    case .unresolvedPatternExpr:
+      let node = data.as(UnresolvedPatternExprSyntax.self)!
+      return visit(node)
+    case .functionCallExpr:
+      let node = data.as(FunctionCallExprSyntax.self)!
+      return visit(node)
+    case .subscriptExpr:
+      let node = data.as(SubscriptExprSyntax.self)!
+      return visit(node)
+    case .optionalChainingExpr:
+      let node = data.as(OptionalChainingExprSyntax.self)!
+      return visit(node)
+    case .forcedValueExpr:
+      let node = data.as(ForcedValueExprSyntax.self)!
+      return visit(node)
+    case .postfixUnaryExpr:
+      let node = data.as(PostfixUnaryExprSyntax.self)!
+      return visit(node)
+    case .specializeExpr:
+      let node = data.as(SpecializeExprSyntax.self)!
+      return visit(node)
+    case .stringLiteralExpr:
+      let node = data.as(StringLiteralExprSyntax.self)!
+      return visit(node)
+    case .regexLiteralExpr:
+      let node = data.as(RegexLiteralExprSyntax.self)!
+      return visit(node)
+    case .keyPathExpr:
+      let node = data.as(KeyPathExprSyntax.self)!
+      return visit(node)
+    case .keyPathBaseExpr:
+      let node = data.as(KeyPathBaseExprSyntax.self)!
+      return visit(node)
+    case .objcKeyPathExpr:
+      let node = data.as(ObjcKeyPathExprSyntax.self)!
+      return visit(node)
+    case .objcSelectorExpr:
+      let node = data.as(ObjcSelectorExprSyntax.self)!
+      return visit(node)
+    case .postfixIfConfigExpr:
+      let node = data.as(PostfixIfConfigExprSyntax.self)!
+      return visit(node)
+    case .editorPlaceholderExpr:
+      let node = data.as(EditorPlaceholderExprSyntax.self)!
+      return visit(node)
+    case .objectLiteralExpr:
+      let node = data.as(ObjectLiteralExprSyntax.self)!
+      return visit(node)
+    default:
+      fatalError("Not expression?")
+    }
+  }
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)

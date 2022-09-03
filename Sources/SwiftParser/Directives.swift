@@ -87,7 +87,7 @@ extension Parser {
 
         var elements = [Element]()
         do {
-          while !self.at(.eof) && !self.at(.poundElseKeyword) && !self.at(.poundElseifKeyword) && !self.at(.poundEndifKeyword) {
+          while !self.at(any: .eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword) {
             guard let element = parseElement(&self) else {
               break
             }
@@ -101,7 +101,7 @@ extension Parser {
           condition: condition,
           elements: syntax(&self, elements),
           arena: self.arena))
-      } while self.at(.poundElseifKeyword) || self.at(.poundElseKeyword)
+      } while self.at(any: .poundElseifKeyword, .poundElseKeyword)
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)

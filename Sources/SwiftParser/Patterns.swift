@@ -137,7 +137,7 @@ extension Parser {
     var elements = [RawTuplePatternElementSyntax]()
     do {
       var keepGoing = true
-      while !self.at(.eof) && !self.at(.rightParen) && keepGoing {
+      while !self.at(any: .eof, .rightParen) && keepGoing {
         // If the tuple element has a label, parse it.
         let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
         let (label, colon) = (labelAndColon?.0, labelAndColon?.1)
@@ -161,8 +161,7 @@ extension Parser {
   /// for-in loops and guard clauses.
   mutating func parseMatchingPattern() -> RawPatternSyntax {
     // Parse productions that can only be patterns.
-    if self.at(.varKeyword) || self.at(.letKeyword) {
-      let letOrVar = self.consumeAnyToken()
+    if let letOrVar = self.consume(ifAny: .varKeyword, .letKeyword) {
       let value = self.parseMatchingPattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
         letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))

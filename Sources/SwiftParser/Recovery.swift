@@ -42,7 +42,7 @@ extension Parser.Lookahead {
           self.currentToken.isAtStartOfLine {
         break
       }
-      if self.atAny(kinds) {
+      if self.at(any: kinds) {
         return true
       }
       let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)

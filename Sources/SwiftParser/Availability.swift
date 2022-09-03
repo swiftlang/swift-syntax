@@ -54,7 +54,7 @@ extension Parser {
         {
           var tokens = [RawTokenSyntax]()
           tokens.append(self.consumeAnyToken())
-          while !self.at(.eof) && !self.at(.comma) && !self.at(.rightParen) {
+          while !self.at(any: .eof, .comma, .rightParen) {
             tokens.append(self.consumeAnyToken())
           }
           let syntax = RawTokenListSyntax(elements: tokens, arena: self.arena)
@@ -169,7 +169,7 @@ extension Parser {
       return RawSyntax(star)
     }
 
-    if self.currentToken.isIdentifier || self.at(.wildcardKeyword) {
+    if self.at(any:.identifier, .wildcardKeyword) {
       if self.currentToken.tokenText == "swift" || self.currentToken.tokenText == "_PackageDescription" {
         return RawSyntax(self.parsePlatformAgnosticVersionConstraintSpec())
       }
@@ -179,11 +179,14 @@ extension Parser {
   }
 
   mutating func parsePlatformAgnosticVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
-    assert(self.currentToken.isIdentifier || self.at(.wildcardKeyword))
-    let platform = self.consumeAnyToken()
+    let (unexpectedBeforePlatform, platform) = self.expectAny([.identifier, .wildcardKeyword], default: .identifier)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
-      platform: platform, version: version, arena: self.arena)
+      unexpectedBeforePlatform,
+      platform: platform,
+      version: version,
+      arena: self.arena
+    )
   }
 
   /// Parse a platform-specific version constraint.

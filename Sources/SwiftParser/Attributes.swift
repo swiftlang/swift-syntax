@@ -186,7 +186,7 @@ extension Parser {
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
       var args = [RawTokenSyntax]()
-      while !self.at(.eof), !self.at(.rightParen) {
+      while !self.at(any: .eof, .rightParen) {
         args.append(self.consumeAnyToken())
       }
       arg = RawSyntax(RawTokenListSyntax(elements: args, arena: self.arena))
@@ -355,7 +355,7 @@ extension Parser {
     }
 
     var elements = [RawDifferentiabilityParamSyntax]()
-    while !self.at(.eof) && !self.at(.rightParen) {
+    while !self.at(any: .eof, .rightParen) {
       guard let param = self.parseDifferentiabilityParameter() else {
         break
       }
@@ -453,7 +453,7 @@ extension Parser {
 
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
-    while !self.at(.eof) && !self.at(.rightParen) {
+    while !self.at(any: .eof, .rightParen) {
       // Empty selector piece.
       if let colon = self.consume(if: .colon) {
         elements.append(RawObjCSelectorPieceSyntax(
@@ -511,7 +511,7 @@ extension Parser {
   mutating func parseSpecializeAttributeSpecList() -> RawSpecializeAttributeSpecListSyntax {
     var elements = [RawSyntax]()
     // Parse optional "exported" and "kind" labeled parameters.
-    while !self.at(.eof) && !self.at(.whereKeyword) {
+    while !self.at(any: .eof, .whereKeyword) {
       let ident = self.parseAnyIdentifier()
       guard let knownParameter = SpecializeParameter(rawValue: ident.tokenText) else {
         fatalError()

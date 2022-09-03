@@ -18,12 +18,12 @@ protocol RawTokenKindSubset: CaseIterable {
   var rawTokenKind: RawTokenKind { get }
 
   /// Allows more flexible rejection of further token kinds based on the token's
-  /// contents or lookahead. Useful to e.g. look for contextual keywords.
-  func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool
+  /// contents. Useful to e.g. look for contextual keywords.
+  func accepts(lexeme: Lexer.Lexeme) -> Bool
 }
 
 extension RawTokenKindSubset {
-  func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+  func accepts(lexeme: Lexer.Lexeme) -> Bool {
     return true
   }
 }

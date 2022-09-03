@@ -63,23 +63,6 @@ extension Parser {
         case .identifier: return .identifier
         }
       }
-
-      func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
-        switch self {
-        case .classKeyword:
-          // If 'class' is a modifier on another decl kind, like var or func,
-          // then treat it as a modifier.
-          var lookahead = parser.lookahead()
-          lookahead.eat(.classKeyword)
-          // When followed by an 'override' or CC token inside a class,
-          // treat 'class' as a modifier in the case of a following CC
-          // token, we cannot be sure there is no intention to override
-          // or witness something static.
-          return lookahead.isStartOfDeclaration() || lookahead.currentToken.isContextualKeyword("override")
-        default:
-          return true
-        }
-      }
     }
 
     var elements = [RawDeclModifierSyntax]()
@@ -117,13 +100,23 @@ extension Parser {
           arena: self.arena
         ))
       case (.classKeyword, let handle)?:
-        let classKeyword = self.eat(handle)
-        elements.append(RawDeclModifierSyntax(
-          name: classKeyword,
-          detail: nil,
-          arena: self.arena
-        ))
-        continue
+        var lookahead = self.lookahead()
+        lookahead.eat(.classKeyword)
+        // When followed by an 'override' or CC token inside a class,
+        // treat 'class' as a modifier in the case of a following CC
+        // token, we cannot be sure there is no intention to override
+        // or witness something static.
+        if lookahead.isStartOfDeclaration() || lookahead.currentToken.isContextualKeyword("override") {
+          let classKeyword = self.eat(handle)
+          elements.append(RawDeclModifierSyntax(
+            name: classKeyword,
+            detail: nil,
+            arena: self.arena
+          ))
+          continue
+        } else {
+          break MODIFIER_LOOP
+        }
       case (.identifier, _)?:
         // Context sensitive keywords.
         // FIXME: Sink this into the GYB

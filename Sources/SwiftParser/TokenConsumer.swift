@@ -23,7 +23,7 @@ public protocol TokenConsumer {
   mutating func missingToken(_ kind: RawTokenKind) -> Token
 }
 
-// MARK: Consuming Tokens
+// MARK: Checking if we are at one specific token
 
 extension TokenConsumer {
   /// Returns whether the kind of the current token matches the given
@@ -44,27 +44,64 @@ extension TokenConsumer {
     return kind.contains(self.currentToken.tokenKind)
   }
 
+  /// Checks whether the parser is currently positioned at any token in `Subset`.
+  /// If this is the case, return the `Subset` case that the parser is positioned in
+  /// as well as a handle to consume that token.
+  func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
+    for kind in Subset.allCases {
+      if self.at(kind.rawTokenKind) && kind.accepts(lexeme: currentToken) {
+        return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind))
+      }
+    }
+    return nil
+  }
+
+  /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
+  mutating func eat(_ handle: TokenConsumptionHandle) -> Token {
+    return consume(if: handle.tokenKind)!
+  }
+}
+
+// MARK: Consuming tokens
+
+/// After calling `consume(ifAnyFrom:)` we know which token we are positioned
+/// at based on that function's return type. This handle allows consuming that
+/// token.
+struct TokenConsumptionHandle {
+  /// The kind that is expected to be consumed if the handle is eaten.
+  var tokenKind: RawTokenKind
+}
+
+extension TokenConsumer {
   /// Examines the current token and consumes it if its kind matches the
-  /// given `TokenKind`. If a token was consumed, the result is that token, else
-  /// the result is `nil`.
+  /// given `TokenKind` and additionally satisfies `condition`. If a token was
+  /// consumed, the result is that token, else the result is `nil`.
   ///
   /// - Parameter kind: The kind of token to consume.
   /// - Returns: A token of the given kind if one was consumed, else `nil`.
-  public mutating func consume(if kind: RawTokenKind) -> Token? {
-    guard self.at(kind) else {
-      return nil
+  @_spi(RawSyntax)
+  public mutating func consume(
+    if kind: RawTokenKind,
+    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true}
+  ) -> Token? {
+    if self.at(kind) && condition(self.currentToken, self) {
+      return self.consumeAnyToken()
     }
-    return self.consumeAnyToken()
+    return nil
   }
 
-  /// Examines the current token and consumes it if its kind is in `kinds`. If a
-  /// token was consumed, the result is that token, else the result is `nil`.
+  /// Examines the current token and consumes it if its kind is in `kinds` and
+  /// additionally satisfies `condition`. If a token was consumed, the result is
+  /// that token, else the result is `nil`.
   ///
   /// - Parameter kind: The kinds of token to consume.
   /// - Returns: A token of the given kind if one was consumed, else `nil`.
-  public mutating func consume(ifAny kinds: RawTokenKind...) -> Token? {
+  public mutating func consume(
+    ifAny kinds: RawTokenKind...,
+    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true }
+  ) -> Token? {
     for kind in kinds {
-      if let consumed = self.consume(if: kind) {
+      if let consumed = self.consume(if: kind, where: condition) {
         return consumed
       }
     }

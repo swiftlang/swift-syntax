@@ -212,6 +212,39 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testAccessLevelModifier() {
+    AssertParse(
+      """
+      private(#^DIAG^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DLEFT^#get, set#^DRIGHT^#, didSet)
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DLEFT", message: "Unexpected text 'get,' found in modifier"),
+        DiagnosticSpec(locationMarker: "DRIGHT", message: "Unexpected text ', didSet' found in modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DSET^#get, didSet#^DRPAREN^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DSET", message: "Expected 'set' in modifier"),
+        DiagnosticSpec(locationMarker: "DSET", message: "Unexpected text 'get, didSet' found in modifier"),
+        DiagnosticSpec(locationMarker: "DRPAREN", message: "Expected ')' to end modifier"),
+      ]
+    )
+  }
+
   func testTypealias() {
     AssertParse("typealias Foo = Int")
 

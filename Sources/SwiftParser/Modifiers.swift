@@ -173,4 +173,63 @@ extension Parser {
       arena: self.arena
     )
   }
+
+  mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
+    assert(
+      [
+        RawTokenKind.privateKeyword,
+        .fileprivateKeyword,
+        .internalKeyword,
+        .publicKeyword
+      ].contains(self.currentToken.tokenKind)
+    )
+    let name = self.consumeAnyToken()
+    let details: RawDeclModifierDetailSyntax?
+    if let lparen = self.consume(if: .leftParen) {
+      var beforeDetail: [RawTokenSyntax] = []
+      var detail: RawTokenSyntax? = nil
+      while !atAny([.eof, .rightParen]) {
+        if currentToken.isContextualKeyword("set") {
+          detail = consume(remapping: .contextualKeyword)
+          break
+        }
+        beforeDetail.append(consumeAnyToken())
+      }
+      var afterDetail: [RawTokenSyntax] = []
+      if let _ = detail {
+        while !atAny([.eof, .rightParen]) {
+          afterDetail.append(consumeAnyToken())
+        }
+      } else {
+        afterDetail = beforeDetail
+        beforeDetail = []
+      }
+      let rparen = consume(if: .rightParen) ??
+        RawTokenSyntax(missing: .rightParen, arena: arena)
+      details = RawDeclModifierDetailSyntax(
+        leftParen: lparen,
+        beforeDetail.isEmpty ? nil :
+        RawUnexpectedNodesSyntax(
+          elements: beforeDetail.map { RawSyntax($0) }, arena: arena
+        ),
+        detail: detail ?? RawTokenSyntax(
+          missing: .contextualKeyword,
+          text: arena.intern("set"),
+          arena: arena
+        ),
+        afterDetail.isEmpty ? nil :
+        RawUnexpectedNodesSyntax(
+          elements: afterDetail.map { RawSyntax($0) },
+          arena: arena
+        ),
+        rightParen: rparen,
+        arena: self.arena
+      )
+    } else {
+      details = nil
+    }
+    return RawDeclModifierSyntax(
+      name: name, detail: details, arena: self.arena
+    )
+  }
 }

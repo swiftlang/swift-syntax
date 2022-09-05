@@ -1086,9 +1086,10 @@ extension Parser {
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
-    if self.at(any: [.exclamationMark, .postfixQuestionMark])
-        || (self.currentToken.isAnyOperator && self.currentToken.tokenText == "!") {
-      failable = self.consumeAnyToken()
+    if let parsedFailable = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark]) {
+      failable = parsedFailable
+    } else if let parsedFailable = self.consumeIfContextualPunctuator("!") {
+      failable = parsedFailable
     } else {
       failable = nil
     }
@@ -1201,7 +1202,7 @@ extension Parser {
         }
 
         let ellipsis: RawTokenSyntax?
-        if self.currentToken.isEllipsis {
+        if self.atContextualPunctuator("...") {
           ellipsis = self.consumeAnyToken(remapping: .ellipsis)
         } else {
           ellipsis = nil

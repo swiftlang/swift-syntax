@@ -10893,6 +10893,46 @@ extension SyntaxTransformVisitor {
       fatalError("Not expression?")
     }
   }
+  
+  public func visit(_ data: PatternSyntax) -> [ResultType] {
+    switch data.raw.kind {
+    case .unknownPattern:
+      let node = data.as(UnknownPatternSyntax.self)!
+      return visit(node)
+    case .missingPattern:
+      let node = data.as(MissingPatternSyntax.self)!
+      return visit(node)
+    case .enumCasePattern:
+      let node = data.as(EnumCasePatternSyntax.self)!
+      return visit(node)
+    case .isTypePattern:
+      let node = data.as(IsTypePatternSyntax.self)!
+      return visit(node)
+    case .optionalPattern:
+      let node = data.as(OptionalPatternSyntax.self)!
+      return visit(node)
+    case .identifierPattern:
+      let node = data.as(IdentifierPatternSyntax.self)!
+      return visit(node)
+    case .asTypePattern:
+      let node = data.as(AsTypePatternSyntax.self)!
+      return visit(node)
+    case .tuplePattern:
+      let node = data.as(TuplePatternSyntax.self)!
+      return visit(node)
+    case .wildcardPattern:
+      let node = data.as(WildcardPatternSyntax.self)!
+      return visit(node)
+    case .expressionPattern:
+      let node = data.as(ExpressionPatternSyntax.self)!
+      return visit(node)
+    case .valueBindingPattern:
+      let node = data.as(ValueBindingPatternSyntax.self)!
+      return visit(node)
+    default:
+      fatalError("Not expression?")
+    }
+  }
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)

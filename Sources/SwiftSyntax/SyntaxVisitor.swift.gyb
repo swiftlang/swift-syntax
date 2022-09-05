@@ -218,6 +218,20 @@ extension SyntaxTransformVisitor {
       fatalError("Not expression?")
     }
   }
+  
+  public func visit(_ data: PatternSyntax) -> [ResultType] {
+    switch data.raw.kind {
+  % for node in NON_BASE_SYNTAX_NODES:
+  %   if node.base_kind == "Pattern":
+    case .${node.swift_syntax_kind}:
+      let node = data.as(${node.name}.self)!
+      return visit(node)
+  %   end
+  % end
+    default:
+      fatalError("Not expression?")
+    }
+  }
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)

@@ -15,34 +15,29 @@
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  /// Tries eating tokens until it finds a token of `kind` without skipping any
-  /// higher precedence tokens. If it found a token of `kind` in this way,
-  /// returns `true`, otherwise `false`.
+  /// Tries eating tokens until it finds a token whose kind is in `kinds` or a
+  /// contextual keyword with a text in `contextualKeywords` without skipping
+  /// tokens that have a precedence that's higher than the lowest precedence in
+  /// `kinds`. If it found a token of `kind` in this way, returns `true`,
+  /// otherwise `false`.
   /// If this method returns `true`, the parser probably wants to consume the
   /// tokens this lookahead skipped over to find `kind` by consuming
   /// `lookahead.tokensConsumed` as unexpected.
-  mutating func canRecoverTo(_ kind: RawTokenKind) -> Bool {
-    // If the `Set` implementation has noticable performance overheads, we could
-    // provide a matching implementaiton for a single `TokenKind` here.
-    return canRecoverTo([kind])
-  }
-
-  /// Tries eating tokens until it finds a token whose kind is in `kinds`
-  /// without skipping tokens that have a precedence that's higher than the
-  /// lowest precedence in `kinds`. If it found a token of `kind` in this way,
-  /// returns `true`, otherwise `false`.
-  /// If this method returns `true`, the parser probably wants to consume the
-  /// tokens this lookahead skipped over to find `kind` by consuming
-  /// `lookahead.tokensConsumed` as unexpected.
-  mutating func canRecoverTo(_ kinds: [RawTokenKind]) -> Bool {
+  mutating func canRecoverTo(
+    _ kinds: [RawTokenKind],
+    contextualKeywords: [SyntaxText] = []
+  ) -> Bool {
     assert(!kinds.isEmpty)
-    let recoveryPrecedence = kinds.map(TokenPrecedence.init).min()!
+    var recoveryPrecedence = kinds.map(TokenPrecedence.init).min()!
+    if !contextualKeywords.isEmpty {
+      recoveryPrecedence = min(recoveryPrecedence, TokenPrecedence(.identifier), TokenPrecedence(.contextualKeyword))
+    }
     while !self.at(.eof) {
       if !recoveryPrecedence.shouldSkipOverNewlines,
           self.currentToken.isAtStartOfLine {
         break
       }
-      if self.at(any: kinds) {
+      if self.at(any: kinds, contextualKeywords: contextualKeywords) {
         return true
       }
       let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
@@ -51,7 +46,7 @@ extension Parser.Lookahead {
       }
       self.consumeAnyToken()
       if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
-        guard self.canRecoverTo(closingDelimiter) else {
+        guard self.canRecoverTo([closingDelimiter]) else {
           break
         }
         self.eat(closingDelimiter)

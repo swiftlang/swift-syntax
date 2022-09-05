@@ -21,6 +21,7 @@ public protocol TokenConsumer {
   /// Whether the current token matches the given kind.
   mutating func consumeAnyToken() -> Token
   mutating func missingToken(_ kind: RawTokenKind) -> Token
+  mutating func peek() -> Lexer.Lexeme
 }
 
 // MARK: Checking if we are at one specific token
@@ -71,6 +72,36 @@ extension TokenConsumer {
   }
 }
 
+// MARK: Consuming Tokens with Lookahead
+
+extension TokenConsumer {
+  /// If the current token has `kind1` and is followed by `kind2` consume both tokens and return them.
+  /// Otherwise, return `nil`.
+  @_spi(RawSyntax)
+  public mutating func consume(if kind1: RawTokenKind, followedBy kind2: RawTokenKind) -> (Token, Token)? {
+    if self.at(kind1) && self.peek().tokenKind == kind2 {
+      return (consumeAnyToken(), consumeAnyToken())
+    } else {
+      return nil
+    }
+  }
+
+  /// If the current token satisfies `condition1` and the next token satisfies
+  /// `condition2` consume both tokens and return them.
+  /// Otherwise, return `nil`.
+  @_spi(RawSyntax)
+  public mutating func consume(
+    if condition1: (Lexer.Lexeme) -> Bool,
+    followedBy condition2: (Lexer.Lexeme) -> Bool
+  ) -> (Token, Token)? {
+    if condition1(self.currentToken) && condition2(self.peek()) {
+      return (consumeAnyToken(), consumeAnyToken())
+    } else {
+      return nil
+    }
+  }
+}
+
 // MARK: Consuming tokens
 
 /// After calling `consume(ifAnyFrom:)` we know which token we are positioned
@@ -115,5 +146,29 @@ extension TokenConsumer {
       }
     }
     return nil
+  }
+}
+
+// MARK: Expecting Tokens
+
+extension TokenConsumer {
+  /// Attempts to consume a token of the given kind, synthesizing a missing
+  /// token if the current token's kind does not match.
+  ///
+  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
+  /// In general, `expect` or `expectAny` should be preferred.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Returns: A token of the given kind.
+  @_spi(RawSyntax)
+  public mutating func expectWithoutRecovery(
+    _ kind: RawTokenKind,
+    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true }
+  ) -> Token {
+    if let token = self.consume(if: kind, where: condition) {
+      return token
+    } else {
+      return missingToken(kind)
+    }
   }
 }

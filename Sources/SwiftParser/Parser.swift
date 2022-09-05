@@ -245,17 +245,15 @@ extension Parser {
   /// - Parameter kind: The kind of token to consume.
   /// - Returns: A token of the given kind.
   @_spi(RawSyntax)
-  public mutating func expectWithoutLookahead(_ kind: RawTokenKind, _ text: SyntaxText? = nil) -> RawTokenSyntax {
-    if self.currentToken.tokenKind == kind {
-      if let text = text {
-        if self.currentToken.tokenText == text {
-          return self.consumeAnyToken()
-        }
-      } else {
-        return self.consumeAnyToken()
-      }
+  public mutating func expectWithoutRecovery(
+    _ kind: RawTokenKind,
+    where condition: (Lexer.Lexeme, Parser) -> Bool = { (_, _) in true }
+  ) -> RawTokenSyntax {
+    if let token = self.consume(if: kind, where: condition) {
+      return token
+    } else {
+      return RawTokenSyntax(missing: kind, arena: self.arena)
     }
-    return RawTokenSyntax(missing: kind, arena: self.arena)
   }
 
   /// Attempts to consume a token of the given kind.

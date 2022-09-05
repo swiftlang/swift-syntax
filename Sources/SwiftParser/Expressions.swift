@@ -1356,7 +1356,7 @@ extension Parser {
           } else {
             runexpected = nil
           }
-          let rparen = subparser.expectWithoutLookahead(.rightParen)
+          let rparen = subparser.expectWithoutRecovery(.rightParen)
 
           segments.append(RawSyntax(RawExpressionSegmentSyntax(
             backslash: slashToken,
@@ -1919,8 +1919,8 @@ extension Parser {
         specifiers.append(self.consumeIdentifier())
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
-          specifiers.append(self.expectWithoutLookahead(.identifier, "unsafe"))
-          specifiers.append(self.expectWithoutLookahead(.rightParen))
+          specifiers.append(self.expectWithoutRecovery(.identifier, where: { (lexeme, parser) in lexeme.tokenText == "unsafe" }))
+          specifiers.append(self.expectWithoutRecovery(.rightParen))
         }
       } else if (self.currentToken.isIdentifier || self.at(.selfKeyword)) {
         let next = self.peek()

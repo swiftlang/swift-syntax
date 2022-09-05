@@ -178,7 +178,7 @@ extension Parser {
       if self.at(any: .period, .prefixPeriod) {
         if self.peek().isContextualKeyword("Type") || self.peek().isContextualKeyword("Protocol") {
           let period = self.consumeAnyToken()
-          let type = self.consumeIdentifier()
+          let type = self.expectIdentifier()
           base = RawTypeSyntax(RawMetatypeTypeSyntax(
             baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
         }
@@ -515,7 +515,7 @@ extension Parser.Lookahead {
           (self.peek().isContextualKeyword("Type")
            || self.peek().isContextualKeyword("Protocol")) {
         self.consumeAnyToken()
-        self.consumeIdentifier()
+        self.expectIdentifier()
         continue
       }
       if self.currentToken.isOptionalToken {
@@ -796,12 +796,12 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAt, at) = self.expect(.atSign)
-    let ident = self.consumeIdentifier()
+    let ident = self.expectIdentifier()
     if let attr = Parser.TypeAttribute(rawValue: ident.tokenText) {
       // Ok, it is a valid attribute, eat it, and then process it.
       if case .convention = attr {
         let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-        let convention = self.consumeIdentifier()
+        let convention = self.expectIdentifier()
         let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
         return RawAttributeSyntax(
           atSignToken: at,

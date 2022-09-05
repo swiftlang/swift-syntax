@@ -53,13 +53,13 @@ extension Parser {
     // Consume the base name.
     let ident: RawTokenSyntax
     if self.currentToken.isIdentifier || self.at(any: .selfKeyword, .capitalSelfKeyword) {
-      ident = self.consumeIdentifier()
+      ident = self.expectIdentifier()
     } else if flags.contains(.operators) && self.currentToken.isAnyOperator {
       ident = self.consume(remapping: .identifier)
     } else if flags.contains(.keywords) && self.currentToken.tokenKind.isKeyword {
       ident = self.consume(remapping: .identifier)
     } else {
-      ident = self.consumeIdentifier()
+      ident = self.expectIdentifier()
     }
 
     // Parse an argument list, if the flags allow it and it's present.
@@ -329,25 +329,3 @@ extension Lexer.Lexeme {
   }
 }
 
-extension TokenConsumer {
-  mutating func consumeIdentifier() -> Token {
-    switch self.currentToken.tokenKind {
-    case .selfKeyword,
-        .capitalSelfKeyword,
-        .anyKeyword,
-        .identifier:
-      return self.consumeAnyToken()
-    default:
-      return self.missingToken(.identifier)
-    }
-  }
-
-  mutating func consumeInteger() -> Token {
-    switch self.currentToken.tokenKind {
-    case .integerLiteral:
-      return self.consumeAnyToken()
-    default:
-      return self.missingToken(.integerLiteral)
-    }
-  }
-}

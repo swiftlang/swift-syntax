@@ -28,4 +28,24 @@ extension RawTokenKindSubset {
   func accepts(lexeme: Lexer.Lexeme, parser: ParserType) -> Bool {
     return true
   }
+
+  static var allRawTokenKinds: [RawTokenKind] {
+    return self.allCases.map { $0.rawTokenKind }
+  }
+}
+
+enum IdentifierTokens: RawTokenKindSubset {
+  case anyKeyword
+  case capitalSelfKeyword
+  case identifier
+  case selfKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .anyKeyword: return .anyKeyword
+    case .capitalSelfKeyword: return .capitalSelfKeyword
+    case .identifier: return .identifier
+    case .selfKeyword: return .selfKeyword
+    }
+  }
 }

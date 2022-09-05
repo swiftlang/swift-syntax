@@ -171,4 +171,33 @@ extension TokenConsumer {
       return missingToken(kind)
     }
   }
+
+  /// Attempts to consume a token of the given kind, synthesizing a missing
+  /// token if the current token's kind does not match.
+  ///
+  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
+  /// In general, `expect` or `expectAny` should be preferred.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Returns: A token of the given kind.
+  @_spi(RawSyntax)
+  public mutating func expectAnyWithoutRecovery(
+    _ kinds: [RawTokenKind],
+    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true },
+    default defaultKind: RawTokenKind
+  ) -> Token {
+    if let token = self.consume(ifAny: kinds, where: condition) {
+      return token
+    } else {
+      return missingToken(defaultKind)
+    }
+  }
+}
+
+// MARK: Convenience functions
+
+extension TokenConsumer {
+  mutating func expectIdentifier() -> Token {
+    return self.expectAnyWithoutRecovery(IdentifierTokens.allRawTokenKinds, default: .identifier)
+  }
 }

@@ -1966,8 +1966,15 @@ extension Parser {
     var result = [RawTupleExprElementSyntax]()
     var keepGoing: RawTokenSyntax? = nil
     repeat {
-      let labelAndColon = self.consume(if: { $0.canBeArgumentLabel }, followedBy: { $0.tokenKind == .colon })
-      let (label, colon) = (labelAndColon?.0, labelAndColon?.1)
+      let label: RawTokenSyntax?
+      let colon: RawTokenSyntax?
+      if let (_, labelHandle) = self.at(anyIn: CanBeArgumentLabel.self), self.peek().tokenKind == .colon {
+        label = self.eat(labelHandle)
+        colon = self.consume(if: .colon)!
+      } else {
+        label = nil
+        colon = nil
+      }
 
       // See if we have an operator decl ref '(<op>)'. The operator token in
       // this case lexes as a binary operator because it neither leads nor
@@ -2037,7 +2044,8 @@ extension Parser {
     // Parse labeled trailing closures.
     var elements = [RawMultipleTrailingClosureElementSyntax]()
     while self.lookahead().isStartOfLabelledTrailingClosure() {
-      let label = self.parseArgumentLabel()
+      assert(self.at(anyIn: CanBeArgumentLabel.self) != nil)
+      let label = self.consumeAnyToken()
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let closure = self.parseClosureExpression()
       elements.append(RawMultipleTrailingClosureElementSyntax(
@@ -2059,7 +2067,7 @@ extension Parser.Lookahead {
     // Fast path: the next two tokens must be a label and a colon.
     // But 'default:' is ambiguous with switch cases and we disallow it
     // (unless escaped) even outside of switches.
-    if !self.currentToken.canBeArgumentLabel
+    if self.at(anyIn: CanBeArgumentLabel.self) != nil
         || self.at(.defaultKeyword)
         || self.peek().tokenKind != .colon {
       return false

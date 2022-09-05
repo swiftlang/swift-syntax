@@ -1153,7 +1153,7 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawFunctionParameterSyntax]()
     // If we are missing the left parenthesis and the next token doesn't appear to be an argument label, don't parse any parameters.
-    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel || currentToken.isKeyword)
+    let shouldSkipParameterParsing = lparen.isMissing && (self.at(anyIn: CanBeArgumentLabel.self) == nil || currentToken.isKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
       while !self.at(any: [.eof, .rightParen]) && keepGoing {
@@ -1167,14 +1167,14 @@ extension Parser {
         let shouldParseType: Bool
 
         if self.lookahead().startsParameterName(isClosure) {
-          if self.currentToken.canBeArgumentLabel {
-            firstName = self.parseArgumentLabel()
+          if let (_, handle) = self.at(anyIn: CanBeArgumentLabel.self) {
+            firstName = self.eat(handle)
           } else {
             firstName = nil
           }
 
-          if self.currentToken.canBeArgumentLabel {
-            secondName = self.parseArgumentLabel()
+          if let (_, handle) = self.at(anyIn: CanBeArgumentLabel.self) {
+            secondName = self.eat(handle)
           } else {
             secondName = nil
           }

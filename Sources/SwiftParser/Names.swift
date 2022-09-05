@@ -20,11 +20,6 @@ extension Parser {
       return RawTokenSyntax(missing: .identifier, arena: arena)
     }
   }
-
-  mutating func parseArgumentLabel() -> RawTokenSyntax {
-    assert(self.currentToken.canBeArgumentLabel)
-    return self.consumeAnyToken()
-  }
 }
 
 extension Parser {
@@ -84,7 +79,7 @@ extension Parser {
     // A close parenthesis, if empty lists are allowed.
     let nextIsRParen = flags.contains(.zeroArgCompoundNames) && next.tokenKind == .rightParen
     // An argument label.
-    let nextIsArgLabel = next.canBeArgumentLabel || next.tokenKind == .colon
+    let nextIsArgLabel = CanBeArgumentLabel(next) != nil || next.tokenKind == .colon
 
     guard nextIsRParen || nextIsArgLabel else {
       return nil
@@ -102,7 +97,7 @@ extension Parser {
     do {
       while !self.at(any: [.eof, .rightParen]) {
         // Check to see if there is an argument label.
-        assert(self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon)
+        assert(self.at(anyIn: CanBeArgumentLabel.self) != nil && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(RawDeclNameArgumentSyntax(
@@ -133,7 +128,7 @@ extension Parser.Lookahead {
 
     while !lookahead.at(any: [.eof, .rightParen]) {
       // Check to see if there is an argument label.
-      guard lookahead.currentToken.canBeArgumentLabel && lookahead.peek().tokenKind == .colon else {
+      guard lookahead.at(anyIn: CanBeArgumentLabel.self) != nil && lookahead.peek().tokenKind == .colon else {
         return false
       }
 
@@ -152,22 +147,6 @@ extension Parser.Lookahead {
 }
 
 extension Lexer.Lexeme {
-  var canBeArgumentLabel: Bool {
-    switch self.tokenKind {
-    case .identifier where self.tokenText == "__shared" || self.tokenText == "__owned":
-      return false
-    case .identifier, .wildcardKeyword:
-      // Identifiers, escaped identifiers, and '_' can be argument labels.
-      return true
-    case .inoutKeyword:
-      // inout cannot be used as an argument label.
-      return false
-    default:
-      // All other keywords can be argument labels.
-      return self.isKeyword
-    }
-  }
-
   var isBinaryOperator: Bool {
     return (self.tokenKind == .spacedBinaryOperator ||
             self.tokenKind == .unspacedBinaryOperator)

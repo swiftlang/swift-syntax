@@ -368,13 +368,14 @@ extension Parser {
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
         let colon: RawTokenSyntax?
         if self.lookahead().startsParameterName(false) {
-          first = self.parseArgumentLabel()
+          assert(self.at(anyIn: CanBeArgumentLabel.self) != nil)
+          first = self.consumeAnyToken()
           if let parsedColon = self.consume(if: .colon) {
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon {
-            second = self.parseArgumentLabel()
+          } else if let (_, handle) = self.at(anyIn: CanBeArgumentLabel.self), self.peek().tokenKind == .colon {
+            second = self.eat(handle)
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {
             second = nil
@@ -558,8 +559,8 @@ extension Parser.Lookahead {
       // by a type annotation.
       if self.startsParameterName(/*isClosure=*/false) {
         self.consumeAnyToken()
-        if self.currentToken.canBeArgumentLabel {
-          self.consumeAnyToken()
+        if let (_, handle) = self.at(anyIn: CanBeArgumentLabel.self) {
+          self.eat(handle)
           guard self.at(.colon) else {
             return false
           }

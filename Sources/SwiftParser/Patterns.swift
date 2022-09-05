@@ -257,7 +257,7 @@ extension Parser.Lookahead {
   /// parsing a parameter.
   func startsParameterName(_ isClosure: Bool) -> Bool {
     // To have a parameter name here, we need a name.
-    guard self.currentToken.canBeArgumentLabel else {
+    guard self.at(anyIn: CanBeArgumentLabel.self) != nil else {
       return false
     }
 
@@ -268,11 +268,9 @@ extension Parser.Lookahead {
     }
 
     // If the next token can be an argument label, we might have a name.
-    if nextTok.canBeArgumentLabel {
+    if CanBeArgumentLabel(nextTok) != nil {
       // If the first name wasn't "isolated", we're done.
-      if !self.atContextualKeyword("isolated") &&
-          !self.atContextualKeyword("some") &&
-          !self.atContextualKeyword("any") {
+      if !self.at(any: [], contextualKeywords: ["isolated", "some", "any"]) {
         return true
       }
 
@@ -286,7 +284,7 @@ extension Parser.Lookahead {
         }
         backtrack.consumeAnyToken()
         backtrack.consumeAnyToken()
-        return backtrack.currentToken.canBeArgumentLabel && nextTok.tokenKind == .colon
+        return CanBeArgumentLabel(backtrack.currentToken) != nil && nextTok.tokenKind == .colon
       }
     }
 

@@ -10933,6 +10933,58 @@ extension SyntaxTransformVisitor {
       fatalError("Not expression?")
     }
   }
+  
+  public func visit(_ data: TypeSyntax) -> [ResultType] {
+    switch data.raw.kind {
+    case .unknownType:
+      let node = data.as(UnknownTypeSyntax.self)!
+      return visit(node)
+    case .missingType:
+      let node = data.as(MissingTypeSyntax.self)!
+      return visit(node)
+    case .simpleTypeIdentifier:
+      let node = data.as(SimpleTypeIdentifierSyntax.self)!
+      return visit(node)
+    case .memberTypeIdentifier:
+      let node = data.as(MemberTypeIdentifierSyntax.self)!
+      return visit(node)
+    case .classRestrictionType:
+      let node = data.as(ClassRestrictionTypeSyntax.self)!
+      return visit(node)
+    case .arrayType:
+      let node = data.as(ArrayTypeSyntax.self)!
+      return visit(node)
+    case .dictionaryType:
+      let node = data.as(DictionaryTypeSyntax.self)!
+      return visit(node)
+    case .metatypeType:
+      let node = data.as(MetatypeTypeSyntax.self)!
+      return visit(node)
+    case .optionalType:
+      let node = data.as(OptionalTypeSyntax.self)!
+      return visit(node)
+    case .constrainedSugarType:
+      let node = data.as(ConstrainedSugarTypeSyntax.self)!
+      return visit(node)
+    case .implicitlyUnwrappedOptionalType:
+      let node = data.as(ImplicitlyUnwrappedOptionalTypeSyntax.self)!
+      return visit(node)
+    case .compositionType:
+      let node = data.as(CompositionTypeSyntax.self)!
+      return visit(node)
+    case .tupleType:
+      let node = data.as(TupleTypeSyntax.self)!
+      return visit(node)
+    case .functionType:
+      let node = data.as(FunctionTypeSyntax.self)!
+      return visit(node)
+    case .attributedType:
+      let node = data.as(AttributedTypeSyntax.self)!
+      return visit(node)
+    default:
+      fatalError("Not expression?")
+    }
+  }
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)

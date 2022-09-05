@@ -49,21 +49,7 @@ extension Parser {
   ///     declarations → declaration declarations?
   @_spi(RawSyntax)
   public mutating func parseDeclaration() -> RawDeclSyntax {
-    enum PoundIfTokenKind: RawTokenKindSubset {
-      case poundIfKeyword
-      case poundWarningKeyword
-      case poundErrorKeyword
-
-      var rawTokenKind: RawTokenKind {
-        switch self {
-        case .poundIfKeyword: return .poundIfKeyword
-        case .poundWarningKeyword: return .poundWarningKeyword
-        case .poundErrorKeyword: return .poundErrorKeyword
-        }
-      }
-    }
-
-    switch self.at(anyIn: PoundIfTokenKind.self) {
+    switch self.at(anyIn: PoundDeclarationStart.self) {
     case (.poundIfKeyword, _)?:
       return RawDeclSyntax(self.parsePoundIfDirective { parser in
         let parsedDecl = parser.parseDeclaration()
@@ -82,61 +68,10 @@ extension Parser {
       break
     }
 
-    enum DeclStartTokenKind: RawTokenKindSubset {
-      case importKeyword
-      case classKeyword
-      case enumKeyword
-      case caseKeyword
-      case structKeyword
-      case protocolKeyword
-      case associatedtypeKeyword
-      case typealiasKeyword
-      case extensionKeyword
-      case funcKeyword
-      case subscriptKeyword
-      case letKeyword
-      case varKeyword
-      case initKeyword
-      case deinitKeyword
-      case operatorKeyword
-      case precedencegroupKeyword
-      case actor
-
-      var contextualKeyword: SyntaxText? {
-        switch self {
-        case .actor: return "actor"
-        default: return nil
-        }
-      }
-
-      var rawTokenKind: RawTokenKind {
-        switch self {
-        case .importKeyword: return .importKeyword
-        case .classKeyword: return .classKeyword
-        case .enumKeyword: return .enumKeyword
-        case .caseKeyword: return .caseKeyword
-        case .structKeyword: return .structKeyword
-        case .protocolKeyword: return .protocolKeyword
-        case .associatedtypeKeyword: return .associatedtypeKeyword
-        case .typealiasKeyword: return .typealiasKeyword
-        case .extensionKeyword: return .extensionKeyword
-        case .funcKeyword: return .funcKeyword
-        case .subscriptKeyword: return .subscriptKeyword
-        case .letKeyword: return .letKeyword
-        case .varKeyword: return .varKeyword
-        case .initKeyword: return .initKeyword
-        case .deinitKeyword: return .deinitKeyword
-        case .operatorKeyword: return .operatorKeyword
-        case .precedencegroupKeyword: return .precedencegroupKeyword
-        case .actor: return .identifier
-        }
-      }
-    }
-
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
       modifiers: self.parseModifierList())
-    switch self.at(anyIn: DeclStartTokenKind.self) {
+    switch self.at(anyIn: DeclarationStart.self) {
     case (.importKeyword, _)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs))
     case (.classKeyword, _)?:
@@ -170,7 +105,7 @@ extension Parser {
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs))
     case (.precedencegroupKeyword, _)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs))
-    case (.actor, _)?:
+    case (.actorContextualKeyword, _)?:
       return RawDeclSyntax(self.parseActorDeclaration(attrs))
     case nil:
       return RawDeclSyntax(RawMissingDeclSyntax(

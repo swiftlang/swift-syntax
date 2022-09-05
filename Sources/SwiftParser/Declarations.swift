@@ -207,23 +207,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseImportKind() -> RawTokenSyntax? {
-    guard self.currentToken.tokenKind.isKeyword else {
-      return nil
-    }
-
-    switch self.currentToken.tokenKind {
-    case .typealiasKeyword,
-        .structKeyword,
-        .classKeyword,
-        .enumKeyword,
-        .protocolKeyword,
-        .varKeyword,
-        .letKeyword,
-        .funcKeyword:
-      return self.consumeAnyToken()
-    default:
-      return nil
-    }
+    return self.consume(ifAny: [.typealiasKeyword, .structKeyword, .classKeyword, .enumKeyword, .protocolKeyword, .varKeyword, .letKeyword, .funcKeyword])
   }
 
   @_spi(RawSyntax)
@@ -303,10 +287,9 @@ extension Parser {
         let colon = self.consume(if: .colon)
         let inherited: RawTypeSyntax?
         if colon != nil {
-          switch self.currentToken.tokenKind {
-          case .identifier, .protocolKeyword, .anyKeyword:
+          if self.at(any: [.identifier, .protocolKeyword, .anyKeyword]) {
             inherited = self.parseType()
-          default:
+          } else {
             inherited = nil
           }
         } else {
@@ -1919,7 +1902,7 @@ extension Parser {
     
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let stringLiteral: RawStringLiteralExprSyntax
-    if self.currentToken.tokenKind == .stringLiteral {
+    if self.at(.stringLiteral) {
       stringLiteral = self.parseStringLiteral()
     } else {
       stringLiteral = RawStringLiteralExprSyntax(

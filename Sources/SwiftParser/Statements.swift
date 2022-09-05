@@ -815,11 +815,11 @@ extension Parser {
     // followed by a '}', '', statement or decl start keyword sequence.
     let expr: RawExprSyntax?
     if
-      [
+      self.at(any: [
         RawTokenKind.rightBrace, .semicolon, .eof,
         .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
         .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword
-      ].firstIndex(of: self.currentToken.tokenKind) == nil
+      ])
         && !self.lookahead().isStartOfStatement() && !self.lookahead().isStartOfDeclaration() {
       expr = self.parseExpression()
     } else {
@@ -1096,7 +1096,7 @@ extension Parser.Lookahead {
 
   func isBooleanExpr() -> Bool {
     var lookahead = self.lookahead()
-    return !lookahead.canParseTypedPattern() || lookahead.currentToken.tokenKind != .equal
+    return !lookahead.canParseTypedPattern() || !lookahead.at(.equal)
   }
 
   /// Returns whether the parser's current position is the start of a switch case,

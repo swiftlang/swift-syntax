@@ -191,16 +191,38 @@ extension Parser.Lookahead {
   ///   pattern ::= 'var' pattern
   ///   pattern ::= 'let' pattern
   mutating func canParsePattern() -> Bool {
-    switch self.currentToken.tokenKind {
-    case .identifier, .wildcardKeyword:
-      self.consumeAnyToken()
+    enum PatternStartTokens: RawTokenKindSubset {
+      typealias ParserType = Parser.Lookahead
+
+      case identifier
+      case wildcardKeyword
+      case letKeyword
+      case varKeyword
+      case leftParen
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .identifier: return .identifier
+        case .wildcardKeyword: return .wildcardKeyword
+        case .letKeyword: return .letKeyword
+        case .varKeyword: return .varKeyword
+        case .leftParen: return .leftParen
+        }
+      }
+    }
+
+    switch self.at(anyIn: PatternStartTokens.self) {
+    case (.identifier, let handle)?,
+        (.wildcardKeyword, let handle)?:
+      self.eat(handle)
       return true
-    case .letKeyword, .varKeyword:
-      self.consumeAnyToken()
+    case (.letKeyword, let handle)?,
+      (.varKeyword, let handle)?:
+      self.eat(handle)
       return self.canParsePattern()
-    case .leftParen:
+    case (.leftParen, _)?:
       return self.canParsePatternTuple()
-    default:
+    case nil:
       return false
     }
   }

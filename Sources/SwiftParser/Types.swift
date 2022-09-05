@@ -751,7 +751,7 @@ extension Parser.Lookahead {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypeAttributeList() -> (RawTokenSyntax?, RawAttributeListSyntax?) {
-    let specifier = self.consume(ifAny: .inoutKeyword, .identifier, where: { (lexeme, parser) in
+    let specifier = self.consume(ifAny: [.inoutKeyword, .identifier], where: { (lexeme, parser) in
       switch lexeme.tokenKind {
       case .identifier: return lexeme.isContextualKeyword(["__shared", "__owned"])
       default: return true
@@ -777,7 +777,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
     var elements = [RawSyntax]()
-    while let token = self.consume(ifAny: .inoutKeyword, .identifier, where: { (lexeme, parser) in
+    while let token = self.consume(ifAny: [.inoutKeyword, .identifier], where: { (lexeme, parser) in
       if lexeme.tokenKind  == .identifier {
         return lexeme.isContextualKeyword(["__shared", "__owned", "isolated", "_const"])
       } else {

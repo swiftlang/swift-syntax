@@ -106,7 +106,7 @@ extension TokenConsumer {
   /// - Parameter kind: The kinds of token to consume.
   /// - Returns: A token of the given kind if one was consumed, else `nil`.
   public mutating func consume(
-    ifAny kinds: RawTokenKind...,
+    ifAny kinds: [RawTokenKind],
     where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true }
   ) -> Token? {
     for kind in kinds {

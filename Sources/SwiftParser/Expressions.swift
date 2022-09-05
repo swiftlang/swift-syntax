@@ -237,7 +237,7 @@ extension Parser {
 
     case (.asKeyword, let handle)?:
       let asKeyword = self.eat(handle)
-      let failable = self.consume(ifAny: .postfixQuestionMark, .exclamationMark)
+      let failable = self.consume(ifAny: [.postfixQuestionMark, .exclamationMark])
       let op = RawUnresolvedAsExprSyntax(
         asTok: asKeyword,
         questionOrExclamationMark: failable,
@@ -310,7 +310,7 @@ extension Parser {
       return self.parseUnaryExpression(flavor, forDirective: forDirective)
     }
 
-    let mark = self.consume(ifAny: .exclamationMark, .postfixQuestionMark)
+    let mark = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark])
 
     let expression = self.parseSequenceExpressionElement(flavor)
     return RawExprSyntax(RawTryExprSyntax(

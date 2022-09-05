@@ -1270,7 +1270,7 @@ extension Parser {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     var misplacedThrowsKeyword: RawTokenSyntax? = nil
     let unexpectedBeforeReturnType: RawUnexpectedNodesSyntax?
-    if let throwsKeyword = self.consume(ifAny: .rethrowsKeyword, .throwsKeyword) {
+    if let throwsKeyword = self.consume(ifAny: [.rethrowsKeyword, .throwsKeyword]) {
       misplacedThrowsKeyword = throwsKeyword
       unexpectedBeforeReturnType = RawUnexpectedNodesSyntax(elements: [RawSyntax(throwsKeyword)], arena: self.arena)
     } else {
@@ -1343,7 +1343,7 @@ extension Parser {
       async = nil
     }
 
-    var throwsKeyword = self.consume(ifAny: .throwsKeyword, .rethrowsKeyword)
+    var throwsKeyword = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword])
 
     let output: RawReturnClauseSyntax?
     if self.at(.arrow) {
@@ -1553,12 +1553,12 @@ extension Parser {
     }
 
     // 'throws'/'rethrows'
-    if let throwsRethrows = self.consume(ifAny: .throwsKeyword, .rethrowsKeyword) {
+    if let throwsRethrows = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword]) {
       return throwsRethrows
     }
 
     // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: .throwKeyword, .tryKeyword, where: { (lexeme, parser) in
+    if let throwTry = self.consume(ifAny: [.throwKeyword, .tryKeyword], where: { (lexeme, parser) in
       !lexeme.isAtStartOfLine
     }) {
       return throwTry

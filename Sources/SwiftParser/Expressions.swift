@@ -259,7 +259,7 @@ extension Parser {
 
     case (.async, _)?, (.arrow, _)?, (.throwsKeyword, _)?:
       let asyncKeyword: RawTokenSyntax?
-      if self.currentToken.isContextualKeyword("async") {
+      if self.atContextualKeyword("async") {
         asyncKeyword = self.consumeAnyToken(remapping: .contextualKeyword)
       } else {
         asyncKeyword = nil
@@ -295,7 +295,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     forDirective: Bool = false
   ) -> RawExprSyntax {
-    if self.currentToken.isContextualKeyword("await") {
+    if self.atContextualKeyword("await") {
       let awaitTok = self.consumeAnyToken()
       let sub = self.parseSequenceExpressionElement(flavor)
       return RawExprSyntax(RawAwaitExprSyntax(
@@ -923,7 +923,7 @@ extension Parser {
       ))
     case (.identifier, _)?, (.selfKeyword, _)?:
       // 'any' followed by another identifier is an existential type.
-      if self.currentToken.isContextualKeyword("any"),
+      if self.atContextualKeyword("any"),
          self.peek().tokenKind == .identifier,
          self.peek().isAtStartOfLine
       {
@@ -1699,7 +1699,7 @@ extension Parser {
     // Parse possible 'getter:' or 'setter:' modifiers, and determine
     // the kind of selector we're working with.
     let kindAndColon = self.consume(
-      if: { $0.isContextualKeyword("getter") || $0.isContextualKeyword("setter")},
+      if: { $0.isContextualKeyword(["getter", "setter"])},
       followedBy: { $0.tokenKind == .colon }
     )
     let (kind, colon) = (kindAndColon?.0, kindAndColon?.1)
@@ -1920,9 +1920,9 @@ extension Parser {
     do {
       // Check for the strength specifier: "weak", "unowned", or
       // "unowned(safe/unsafe)".
-      if self.currentToken.isContextualKeyword("weak") {
+      if self.atContextualKeyword("weak") {
         specifiers.append(self.expectIdentifier())
-      } else if self.currentToken.isContextualKeyword("unowned") {
+      } else if self.atContextualKeyword("unowned") {
         specifiers.append(self.expectIdentifier())
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)

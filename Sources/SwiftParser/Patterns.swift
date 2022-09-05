@@ -250,9 +250,9 @@ extension Parser.Lookahead {
     // If the next token can be an argument label, we might have a name.
     if nextTok.canBeArgumentLabel {
       // If the first name wasn't "isolated", we're done.
-      if !self.currentToken.isContextualKeyword("isolated") &&
-          !self.currentToken.isContextualKeyword("some") &&
-          !self.currentToken.isContextualKeyword("any") {
+      if !self.atContextualKeyword("isolated") &&
+          !self.atContextualKeyword("some") &&
+          !self.atContextualKeyword("any") {
         return true
       }
 

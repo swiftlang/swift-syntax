@@ -100,7 +100,7 @@ extension Parser {
     case .poundAssertKeyword:
       // FIXME: This drops `optLabel`.
       return RawStmtSyntax(self.parsePoundAssertStatement())
-    case _ where self.currentToken.isContextualKeyword("yield"):
+    case _ where self.atContextualKeyword("yield"):
       fallthrough
     case .yield:
       // FIXME: This drops `optLabel`.
@@ -515,7 +515,7 @@ extension Parser {
     let tryKeyword = self.consume(if: .tryKeyword)
 
     let awaitKeyword: RawTokenSyntax?
-    if self.currentToken.isContextualKeyword("await") {
+    if self.atContextualKeyword("await") {
       awaitKeyword = self.consumeAnyToken()
     } else {
       awaitKeyword = nil
@@ -1054,7 +1054,7 @@ extension Parser.Lookahead {
       // "identifier ':' for/while/do/switch" is a label on a loop/switch.
       guard self.peek().tokenKind == .colon else {
         // "yield" in the right context begins a yield statement.
-        if self.currentToken.isContextualKeyword("yield") {
+        if self.atContextualKeyword("yield") {
           return true
         }
         return false

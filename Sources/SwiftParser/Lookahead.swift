@@ -306,9 +306,9 @@ extension Parser.Lookahead {
 
     // If this is an operator declaration, handle it.
     if case .operatorKeyword = self.peek().tokenKind,
-        (self.currentToken.isContextualKeyword("prefix") ||
-         self.currentToken.isContextualKeyword("postfix") ||
-         self.currentToken.isContextualKeyword("infix")) {
+        (self.atContextualKeyword("prefix") ||
+         self.atContextualKeyword("postfix") ||
+         self.atContextualKeyword("infix")) {
       return true
     }
 
@@ -332,7 +332,7 @@ extension Parser.Lookahead {
       return lookahead.isStartOfDeclaration()
     }
 
-    if self.currentToken.isContextualKeyword("actor") {
+    if self.atContextualKeyword("actor") {
       if tok2.tokenKind == .identifier {
         return true
       }
@@ -386,7 +386,7 @@ extension Parser.Lookahead {
     // If we have a 'didSet' or a 'willSet' label, disambiguate immediately as
     // an accessor block.
     let nextToken = self.peek()
-    if nextToken.isContextualKeyword("didSet") || nextToken.isContextualKeyword("willSet") {
+    if nextToken.isContextualKeyword(["didSet", "willSet"]) {
       return true
     }
 
@@ -412,8 +412,7 @@ extension Parser.Lookahead {
     }
 
     // Check if we have 'didSet'/'willSet' after attributes.
-    return lookahead.currentToken.isContextualKeyword("didSet") ||
-           lookahead.currentToken.isContextualKeyword("willSet")
+    return lookahead.at(any: [], contextualKeywords: ["didSet", "willSet"])
   }
 }
 

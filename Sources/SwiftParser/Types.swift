@@ -93,7 +93,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     let someOrAny: RawTokenSyntax?
-    if self.currentToken.isContextualKeyword("some") || self.currentToken.isContextualKeyword("any") {
+    if self.atContextualKeyword("some") || self.atContextualKeyword("any") {
       someOrAny = self.consumeAnyToken()
     } else {
       someOrAny = nil
@@ -176,7 +176,7 @@ extension Parser {
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
       if self.at(any: [.period, .prefixPeriod]) {
-        if self.peek().isContextualKeyword("Type") || self.peek().isContextualKeyword("Protocol") {
+        if self.peek().isContextualKeyword(["Type", "Protocol"]) {
           let period = self.consumeAnyToken()
           let type = self.expectIdentifier()
           base = RawTypeSyntax(RawMetatypeTypeSyntax(
@@ -464,9 +464,9 @@ extension Parser.Lookahead {
     // Accept 'inout' at for better recovery.
     _ = self.consume(if: .inoutKeyword)
 
-    if self.currentToken.isContextualKeyword("some") {
+    if self.atContextualKeyword("some") {
       self.consumeAnyToken()
-    } else if self.currentToken.isContextualKeyword("any") {
+    } else if self.atContextualKeyword("any") {
       self.consumeAnyToken()
     }
 
@@ -511,11 +511,9 @@ extension Parser.Lookahead {
     // '.Type', '.Protocol', '?', and '!' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if self.at(any: [.period, .prefixPeriod]) &&
-          (self.peek().isContextualKeyword("Type")
-           || self.peek().isContextualKeyword("Protocol")) {
-        self.consumeAnyToken()
-        self.expectIdentifier()
+      if let (_, _) = self.consume(
+        if: { [.period, .prefixPeriod].contains($0.tokenKind) },
+        followedBy: { $0.isContextualKeyword(["Type", "Protocol"])}) {
         continue
       }
       if self.currentToken.isOptionalToken {
@@ -611,8 +609,7 @@ extension Parser.Lookahead {
       // Treat 'Foo.<anything>' as an attempt to write a dotted type
       // unless <anything> is 'Type' or 'Protocol'.
       if self.at(any: [.period, .prefixPeriod]) &&
-          !self.peek().isContextualKeyword("Type") &&
-          !self.peek().isContextualKeyword("Protocol") {
+          !self.peek().isContextualKeyword(["Type", "Protocol"]) {
         self.consumeAnyToken()
       } else {
         return true
@@ -751,12 +748,7 @@ extension Parser.Lookahead {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypeAttributeList() -> (RawTokenSyntax?, RawAttributeListSyntax?) {
-    let specifier = self.consume(ifAny: [.inoutKeyword, .identifier], where: { (lexeme, parser) in
-      switch lexeme.tokenKind {
-      case .identifier: return lexeme.isContextualKeyword(["__shared", "__owned"])
-      default: return true
-      }
-    })
+    let specifier = self.consume(ifAny: [.inoutKeyword], contextualKeywords: ["__shared", "__owned"])
 
     if self.at(any: [.atSign, .inoutKeyword]) {
       return (specifier, self.parseTypeAttributeListPresent())
@@ -765,8 +757,8 @@ extension Parser {
     if self.at(.identifier) {
       if self.currentToken.tokenText == "__shared"
           || self.currentToken.tokenText == "__owned"
-          || self.currentToken.isContextualKeyword("isolated")
-          || self.currentToken.isContextualKeyword("_const") {
+          || self.atContextualKeyword("isolated")
+          || self.atContextualKeyword("_const") {
         return (specifier, self.parseTypeAttributeListPresent())
 
       }

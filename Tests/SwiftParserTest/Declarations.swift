@@ -635,7 +635,7 @@ final class DeclarationTests: XCTestCase {
 
   func testDontRecoverFromUnbalancedParens() {
     AssertParse(
-      "func foo(first second #^COLON^#[third #^RSQUARE_COLON^#fourth#^EXTRANEOUS^#: Int) {}",
+      "func foo(first second #^COLON^#[third #^END_ARRAY^#fourth: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
         firstName: TokenSyntax.identifier("first"),
@@ -652,9 +652,8 @@ final class DeclarationTests: XCTestCase {
       )),
       diagnostics: [
         DiagnosticSpec(locationMarker: "COLON", message: "Expected ':' in function parameter"),
-        DiagnosticSpec(locationMarker: "RSQUARE_COLON" , message: "Expected ']' to end array type"),
-        DiagnosticSpec(locationMarker: "RSQUARE_COLON", message: "Expected ')' to end parameter clause"),
-        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous ': Int) {}' at top level")
+        DiagnosticSpec(locationMarker: "END_ARRAY" , message: "Expected ']' to end array type"),
+        DiagnosticSpec(locationMarker: "END_ARRAY", message: "Unexpected text 'fourth: Int' found in parameter clause")
       ]
     )
   }

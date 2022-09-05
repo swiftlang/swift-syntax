@@ -22,17 +22,20 @@ public enum TokenPrecedence: Comparable {
   case exprKeyword
   /// A token that starts a bracketet expression which typically occurs inside
   /// a statement.
-  /// `closingDelimiter` must have precedence `weakPunctuator` or `weakBracketed`
   case weakBracketed(closingDelimiter: RawTokenKind)
   /// A punctuator that can occur inside a statement
   case weakPunctuator
+  /// The closing delimiter of `weakBracketed`
+  case weakBracketClose
   /// Keywords that start a new statement.
   case stmtKeyword
-  /// A punctuator that is a strong indicator that it separates two distinct parts of the source code, like two statements
-  case strongPunctuator
   /// The '{' token because it typically marks the body of a declaration.
   /// `closingDelimiter` must have type `strongPunctuator`
-  case strongBracketet(closingDelimiter: RawTokenKind)
+  case strongBracketed(closingDelimiter: RawTokenKind)
+  /// A punctuator that is a strong indicator that it separates two distinct parts of the source code, like two statements
+  case strongPunctuator
+  /// The closing delimiter of `strongBracketed`
+  case strongBracketedClose
   /// Tokens that start a new declaration
   case declKeyword
 
@@ -41,7 +44,7 @@ public enum TokenPrecedence: Comparable {
     switch self {
     case .weakBracketed(closingDelimiter: let closingDelimiter):
       return closingDelimiter
-    case .strongBracketet(closingDelimiter: let closingDelimiter):
+    case .strongBracketed(closingDelimiter: let closingDelimiter):
       return closingDelimiter
     default:
       return nil
@@ -60,14 +63,18 @@ public enum TokenPrecedence: Comparable {
         return 2
       case .weakPunctuator:
         return 3
-      case .stmtKeyword:
+      case .weakBracketClose:
         return 4
-      case .strongPunctuator:
+      case .stmtKeyword:
         return 5
-      case .strongBracketet:
+      case .strongPunctuator:
         return 6
-      case .declKeyword:
+      case .strongBracketed:
         return 7
+      case .strongBracketedClose:
+        return 8
+      case .declKeyword:
+        return 9
       }
     }
 
@@ -131,10 +138,14 @@ public enum TokenPrecedence: Comparable {
       // Chaining punctuators
         .infixQuestionMark, .period, .postfixQuestionMark, .prefixPeriod,.exclamationMark,
       // Misc
-        .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand,
+        .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand:
+      self = .weakPunctuator
+
+      // MARK: Weak bracket close
+    case
       // Weak brackets
         .rightAngle, .rightParen, .rightSquareBracket:
-      self = .weakPunctuator
+      self = .weakBracketClose
 
       // MARK: Statement keyword punctuator
     case
@@ -152,9 +163,9 @@ public enum TokenPrecedence: Comparable {
 
       // MARK: Strong bracketet
     case .leftBrace:
-      self = .strongBracketet(closingDelimiter: .rightBrace)
+      self = .strongBracketed(closingDelimiter: .rightBrace)
     case .poundElseifKeyword, .poundElseKeyword, .poundIfKeyword:
-      self = .strongBracketet(closingDelimiter: .poundEndifKeyword)
+      self = .strongBracketed(closingDelimiter: .poundEndifKeyword)
 
       // MARK: Strong punctuator
     case
@@ -164,11 +175,13 @@ public enum TokenPrecedence: Comparable {
         .arrow,
       // '@' typically occurs at the start of declarations
         .atSign,
-      // Match the '}' and '#endif' as strongBracketet
-        .poundEndifKeyword, .rightBrace,
       // EOF is here because it is a very stong marker and doesn't belong anywhere else
         .eof:
       self = .strongPunctuator
+
+      // MARK: Strong bracket close
+    case .poundEndifKeyword, .rightBrace:
+      self = .strongBracketedClose
 
       // MARK: Decl keywords
     case

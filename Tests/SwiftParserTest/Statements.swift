@@ -150,16 +150,16 @@ final class StatementTests: XCTestCase {
   func testAttributesOnStatements() {
     AssertParse(
       """
-      func test1() {#^END_FUNCTION^#
-        #^EXTRANEOUS^#@s return
+      func test1() {
+        #^TEST_1^#@s return
       }
       func test2() {
-        @unknown return
+        #^TEST_2^#@unknown return
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "END_FUNCTION", message: "Expected '}' to end function"),
-        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous code at top level")
+        DiagnosticSpec(locationMarker: "TEST_1", message: "Unexpected text '@s return' found in function"),
+        DiagnosticSpec(locationMarker: "TEST_2", message: "Unexpected text '@unknown return' found in function")
       ]
     )
   }
@@ -167,40 +167,37 @@ final class StatementTests: XCTestCase {
   func testBogusSwitchStatement() {
     AssertParse(
       """
-      switch x {#^END_SWITCH^#
-        print()
+      switch x {
+        #^DIAG^#print()
       #if true
         print()
       #endif
-        #^EXTRANEOUS^#case .A, .B:
+        case .A, .B:
           break
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "END_SWITCH", message: "Expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous code at top level")
+        DiagnosticSpec(message: "Unexpected text found in 'switch' statement"),
 
       ]
     )
 
     AssertParse(
       """
-      switch x {#^END_SWITCH^#
-      print()
+      switch x {
+      #^DIAG^#print()
       #if ENABLE_C
-      #^UNEXPECTED^#case .NOT_EXIST:
+      case .NOT_EXIST:
         break
       case .C:
         break
       #endif
-      #^EXTRANEOUS^#case .A, .B:
+      case .A, .B:
         break
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "END_SWITCH", message: "Expected '}' to end 'switch' statement"),
-        DiagnosticSpec(locationMarker: "UNEXPECTED", message: "Unexpected text found in conditional compilation block"),
-        DiagnosticSpec(locationMarker: "EXTRANEOUS", message: "Extraneous code at top level")
+        DiagnosticSpec(message: "Unexpected text found in 'switch' statement")
       ]
     )
   }

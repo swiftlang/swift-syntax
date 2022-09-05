@@ -2165,8 +2165,8 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   // Consume 'async', 'throws', and 'rethrows', but in any order.
   mutating func consumeEffectsSpecifiers() {
-    while self.currentToken.isEffectsSpecifier && !self.currentToken.isAtStartOfLine {
-      self.consumeAnyToken()
+    while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), !self.currentToken.isAtStartOfLine {
+      self.eat(handle)
     }
   }
 

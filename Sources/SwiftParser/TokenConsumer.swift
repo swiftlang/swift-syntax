@@ -54,9 +54,9 @@ extension TokenConsumer {
   /// - Returns: `true` if the given `kind` matches the current token's kind.
   public func at(
     _ kind: RawTokenKind,
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true}
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
   ) -> Bool {
-    return self.currentToken.tokenKind == kind && condition(self.currentToken, self)
+    return self.currentToken.tokenKind == kind && condition(self.currentToken)
   }
 
   /// Returns whether the current token is a contextual keyword with the given `name`.
@@ -85,14 +85,14 @@ extension TokenConsumer {
   public func at(
     any kinds: [RawTokenKind],
     contextualKeywords: [SyntaxText] = [],
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true }
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Bool {
-    if kinds.contains(self.currentToken.tokenKind) && condition(self.currentToken, self) {
+    if kinds.contains(self.currentToken.tokenKind) && condition(self.currentToken) {
       return true
     }
     switch self.currentToken.tokenKind {
     case .identifier, .contextualKeyword:
-      return contextualKeywords.contains(self.currentToken.tokenText) && condition(self.currentToken, self)
+      return contextualKeywords.contains(self.currentToken.tokenText) && condition(self.currentToken)
     default:
       return false
     }
@@ -136,7 +136,7 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public mutating func consume(
     if kind: RawTokenKind,
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true}
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
   ) -> Token? {
     if self.at(kind, where: condition) {
       return self.consumeAnyToken()
@@ -175,7 +175,7 @@ extension TokenConsumer {
   public mutating func consume(
     ifAny kinds: [RawTokenKind],
     contextualKeywords: [SyntaxText] = [],
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true }
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Token? {
     if self.at(any: kinds, contextualKeywords: contextualKeywords, where: condition) {
       return self.consumeAnyToken()
@@ -227,7 +227,7 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public mutating func expectWithoutRecovery(
     _ kind: RawTokenKind,
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true }
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Token {
     if let token = self.consume(if: kind, where: condition) {
       return token
@@ -260,7 +260,7 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public mutating func expectAnyWithoutRecovery(
     _ kinds: [RawTokenKind],
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true },
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true },
     default defaultKind: RawTokenKind
   ) -> Token {
     if let token = self.consume(ifAny: kinds, where: condition) {

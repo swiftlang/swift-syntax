@@ -762,9 +762,9 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
     var elements = [RawSyntax]()
-    while let token = self.consume(ifAny: [.inoutKeyword, .identifier], where: { (lexeme, parser) in
-      if lexeme.tokenKind  == .identifier {
-        return lexeme.isContextualKeyword(["__shared", "__owned", "isolated", "_const"])
+    while let token = self.consume(ifAny: [.inoutKeyword, .identifier], where: {
+      if $0.tokenKind  == .identifier {
+        return $0.isContextualKeyword(["__shared", "__owned", "isolated", "_const"])
       } else {
         return true
       }

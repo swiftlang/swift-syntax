@@ -524,7 +524,7 @@ extension Parser {
       }
 
       // If there is an expr-call-suffix, parse it and form a call.
-      if let lparen = self.consume(if: .leftParen, where: { (lexeme, parser) in !lexeme.isAtStartOfLine }) {
+      if let lparen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine }) {
         let args = self.parseArgumentListElements()
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
@@ -552,7 +552,7 @@ extension Parser {
 
       // Check for a [expr] suffix.
       // Note that this cannot be the start of a new line.
-      if let lsquare = self.consume(if: .leftSquareBracket, where: { (lexeme, _) in !lexeme.isAtStartOfLine }) {
+      if let lsquare = self.consume(if: .leftSquareBracket, where: { !$0.isAtStartOfLine }) {
         let args = self.parseArgumentListElements()
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
 
@@ -1923,7 +1923,7 @@ extension Parser {
         specifiers.append(self.expectIdentifier())
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
-          specifiers.append(self.expectWithoutRecovery(.identifier, where: { (lexeme, parser) in lexeme.tokenText == "unsafe" }))
+          specifiers.append(self.expectContextualKeywordWithoutRecovery("unsafe"))
           specifiers.append(self.expectWithoutRecovery(.rightParen))
         }
       } else if (self.at(.identifier) || self.at(.selfKeyword)) {

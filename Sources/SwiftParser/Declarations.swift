@@ -733,7 +733,7 @@ extension Parser {
         let name = self.expectIdentifier()
 
         let associatedValue: RawParameterClauseSyntax?
-        if self.at(.leftParen, where: { (lexeme, _) in !lexeme.isAtStartOfLine }) {
+        if self.at(.leftParen, where: { !$0.isAtStartOfLine }) {
           associatedValue = self.parseParameterClause()
         } else {
           associatedValue = nil
@@ -1539,9 +1539,7 @@ extension Parser {
     }
 
     // diagnose 'throw'/'try'.
-    if let throwTry = self.consume(ifAny: [.throwKeyword, .tryKeyword], where: { (lexeme, parser) in
-      !lexeme.isAtStartOfLine
-    }) {
+    if let throwTry = self.consume(ifAny: [.throwKeyword, .tryKeyword], where: { !$0.isAtStartOfLine }) {
       return throwTry
     }
 

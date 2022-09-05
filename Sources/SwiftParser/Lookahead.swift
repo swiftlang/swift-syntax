@@ -106,9 +106,9 @@ extension Parser.Lookahead {
     }
 
     // Determine which attribute it is.
-    if let attr = Parser.TypeAttribute(rawValue: self.currentToken.tokenText) {
+    if let (attr, handle) = self.at(anyIn: Parser.TypeAttribute.self) {
       // Ok, it is a valid attribute, eat it, and then process it.
-      self.consumeAnyToken()
+      self.eat(handle)
       if case .convention = attr {
         guard
           self.consume(if: .leftParen) != nil,
@@ -121,12 +121,12 @@ extension Parser.Lookahead {
       return
     }
 
-    if Parser.DeclarationAttribute(rawValue: self.currentToken.tokenText) != nil {
+    if let (_, handle) = self.at(anyIn: Parser.DeclarationAttribute.self) {
       // This is a valid decl attribute so they should have put it on the decl
       // instead of the type.
       //
       // Recover by eating @foo(...)
-      self.consumeAnyToken()
+      self.eat(handle)
       if self.at(.leftParen) {
         var backtrack = self.lookahead()
         backtrack.skipSingle()
@@ -177,7 +177,7 @@ extension Parser.Lookahead {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  private static let declAttributeNames: Set<SyntaxText> = [
+  private static let declAttributeNames: [SyntaxText] = [
     "autoclosure",
     "convention",
     "noescape",
@@ -274,7 +274,7 @@ extension Parser.Lookahead {
     // shared by SIL, e.g 'private' in 'sil private @foo :'. We need to make sure
     // this isn't considered a valid Swift decl start.
     if self.currentToken.tokenKind.isKeyword {
-      if Self.declAttributeNames.contains(self.currentToken.tokenText) {
+      if self.at(any: [], contextualKeywords: Self.declAttributeNames) {
         var subparser = self.lookahead()
         subparser.consumeAnyToken()
 
@@ -322,7 +322,7 @@ extension Parser.Lookahead {
 
     // If this is 'unowned', check to see if it is valid.
     let tok2 = self.peek()
-    if self.currentToken.tokenText == "unowned" && tok2.tokenKind == .leftParen &&
+    if self.atContextualKeyword("unowned") && tok2.tokenKind == .leftParen &&
         self.isParenthesizedUnowned() {
       var lookahead = self.lookahead()
       lookahead.expectIdentifier()
@@ -358,7 +358,7 @@ extension Parser.Lookahead {
   }
 
   func isParenthesizedUnowned() -> Bool {
-    assert(self.currentToken.tokenText == "unowned" && self.peek().tokenKind == .leftParen,
+    assert(self.atContextualKeyword("unowned") && self.peek().tokenKind == .leftParen,
            "Invariant violated")
 
     // Look ahead to parse the parenthesized expression.
@@ -369,7 +369,7 @@ extension Parser.Lookahead {
     }
     return lookahead.at(.identifier)
         && lookahead.peek().tokenKind == .rightParen
-        && (lookahead.currentToken.tokenText == "safe" || lookahead.currentToken.tokenText == "unsafe")
+        && (lookahead.atContextualKeyword("safe") || lookahead.atContextualKeyword("unsafe"))
   }
 }
 

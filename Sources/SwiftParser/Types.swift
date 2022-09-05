@@ -755,10 +755,7 @@ extension Parser {
     }
 
     if self.at(.identifier) {
-      if self.currentToken.tokenText == "__shared"
-          || self.currentToken.tokenText == "__owned"
-          || self.atContextualKeyword("isolated")
-          || self.atContextualKeyword("_const") {
+      if self.at(any: [], contextualKeywords: ["__shared", "__owned", "isolated", "_const"]) {
         return (specifier, self.parseTypeAttributeListPresent())
 
       }

@@ -343,7 +343,7 @@ extension Parser {
       arena: self.arena)
   }
 
-  enum LayoutConstraint: SyntaxText {
+  enum LayoutConstraint: SyntaxText, ContextualKeywords {
     case trivialLayout = "_Trivial"
     case trivialAtMostLayout = "_TrivialAtMost"
     case unknownLayout = "_UnknownLayout"
@@ -417,9 +417,9 @@ extension Parser {
         case (.colon, let handle)?:
           let colon = self.eat(handle)
           // A conformance-requirement.
-          if self.at(.identifier), let layoutConstraint = LayoutConstraint(rawValue: self.currentToken.tokenText) {
+          if let (layoutConstraint, handle) = self.at(anyIn: LayoutConstraint.self) {
             // Parse a layout constraint.
-            let constraint = self.expectIdentifier()
+            let constraint = self.eat(handle)
 
             let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
             let leftParen: RawTokenSyntax?
@@ -1490,7 +1490,7 @@ extension Parser {
       arena: self.arena)
   }
 
-  enum AccessorKind: SyntaxText, Equatable {
+  enum AccessorKind: SyntaxText, ContextualKeywords, Equatable {
     case `get` = "get"
     case `set` = "set"
     case `didSet` = "didSet"
@@ -1527,15 +1527,12 @@ extension Parser {
       modifier = nil
     }
 
-    guard
-      self.at(.identifier),
-      let kind = AccessorKind(rawValue: self.currentToken.tokenText)
-    else {
+    guard let (kind, handle) = self.at(anyIn: AccessorKind.self) else {
       return AccessorIntroducer(
         attributes: attrs, modifier: modifier, introducer: nil)
     }
 
-    let introducer = self.consumeAnyToken(remapping: .contextualKeyword)
+    let introducer = self.eat(handle)
     return AccessorIntroducer(
       attributes: attrs, modifier: modifier, introducer: (kind, introducer))
   }
@@ -1638,7 +1635,7 @@ extension Parser {
         //
         //     set-name    ::= '(' identifier ')'
         let parameter: RawAccessorParameterSyntax?
-        if [ AccessorKind.set, .willSet, .didSet ].firstIndex(of: kind) != nil, let lparen = self.consume(if: .leftParen) {
+        if [ AccessorKind.set, .willSet, .didSet ].contains(kind), let lparen = self.consume(if: .leftParen) {
           let name = self.expectIdentifier()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           parameter = RawAccessorParameterSyntax(
@@ -1812,11 +1809,19 @@ extension Parser {
     let identifier = self.expectIdentifier()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
+
+    enum LabelText: SyntaxText, ContextualKeywords {
+      case associativity = "associativity"
+      case assignment = "assignment"
+      case higherThan = "higherThan"
+      case lowerThan = "lowerThan"
+    }
+
     do {
       LOOP: while !self.at(any: [.eof, .rightBrace]) {
-        switch self.currentToken.tokenText {
-        case "associativity":
-          let associativity = self.expectIdentifier()
+        switch self.at(anyIn: LabelText.self) {
+        case (.associativity, let handle)?:
+          let associativity = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let value = self.expectIdentifier()
           elements.append(RawSyntax(RawPrecedenceGroupAssociativitySyntax(
@@ -1826,8 +1831,8 @@ extension Parser {
             value: value,
             arena: self.arena
           )))
-        case "assignment":
-          let assignmentKeyword = self.expectIdentifier()
+        case (.assignment, let handle)?:
+          let assignmentKeyword = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let (unexpectedBeforeFlag, flag) = self.expectAny([.trueKeyword, .falseKeyword], default: .trueKeyword)
           elements.append(RawSyntax(RawPrecedenceGroupAssignmentSyntax(
@@ -1838,9 +1843,10 @@ extension Parser {
             flag: flag,
             arena: self.arena
           )))
-        case "higherThan", "lowerThan":
+        case (.higherThan, let handle)?,
+          (.lowerThan, let handle)?:
           // "lowerThan" and "higherThan" are contextual keywords.
-          let level = self.consumeAnyToken(remapping: .contextualKeyword)
+          let level = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           var names = [RawPrecedenceGroupNameElementSyntax]()
           do {
@@ -1859,7 +1865,7 @@ extension Parser {
             colon: colon,
             otherNames: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),
             arena: self.arena)))
-        default:
+        case nil:
           break LOOP
         }
       }

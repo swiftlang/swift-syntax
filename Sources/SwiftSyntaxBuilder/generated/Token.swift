@@ -41,7 +41,7 @@ public struct Token: SyntaxBuildable, ExpressibleAsBinaryOperatorExpr, Expressib
   }
   
   public func buildToken(format: Format) -> TokenSyntax {
-    var result = format._format(syntax: tokenSyntax)
+    var result = format.format(syntax: tokenSyntax)
     if let leadingTrivia = leadingTrivia {
       result = result.withLeadingTrivia(leadingTrivia)
     }

@@ -128,7 +128,7 @@ let tokenFile = SourceFile {
         output: "TokenSyntax"
       )
     ) {
-      VariableDecl(.var, name: "result", initializer: FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
+      VariableDecl(.var, name: "result", initializer: FunctionCallExpr(MemberAccessExpr(base: "format", name: "format")) {
         TupleExprElement(label: "syntax", expression: IdentifierExpr("tokenSyntax"))
       })
       for leadingTrailing in ["Leading", "Trailing"] {

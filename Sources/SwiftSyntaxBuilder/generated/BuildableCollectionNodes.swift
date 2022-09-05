@@ -48,7 +48,7 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildCodeBlockItemList(format: format))
@@ -109,7 +109,7 @@ public struct UnexpectedNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildUnexpectedNodes(format: format))
@@ -175,7 +175,7 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildTupleExprElementList(format: format))
@@ -241,7 +241,7 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildArrayElementList(format: format))
@@ -302,7 +302,7 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildDictionaryElementList(format: format))
@@ -368,7 +368,7 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildStringLiteralSegments(format: format))
@@ -434,7 +434,7 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildDeclNameArgumentList(format: format))
@@ -500,7 +500,7 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildExprList(format: format))
@@ -561,7 +561,7 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildClosureCaptureItemList(format: format))
@@ -627,7 +627,7 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildClosureParamList(format: format))
@@ -693,7 +693,7 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildMultipleTrailingClosureElementList(format: format))
@@ -759,7 +759,7 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildObjcName(format: format))
@@ -825,7 +825,7 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildFunctionParameterList(format: format))
@@ -891,7 +891,7 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildIfConfigClauseList(format: format))
@@ -957,7 +957,7 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildInheritedTypeList(format: format))
@@ -1023,7 +1023,7 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildMemberDeclList(format: format))
@@ -1084,7 +1084,7 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildModifierList(format: format))
@@ -1150,7 +1150,7 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildAccessPath(format: format))
@@ -1216,7 +1216,7 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildAccessorList(format: format))
@@ -1277,7 +1277,7 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildPatternBindingList(format: format))
@@ -1343,7 +1343,7 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildEnumCaseElementList(format: format))
@@ -1407,7 +1407,7 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildIdentifierList(format: format))
@@ -1473,7 +1473,7 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildPrecedenceGroupAttributeList(format: format))
@@ -1539,7 +1539,7 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildPrecedenceGroupNameList(format: format))
@@ -1603,7 +1603,7 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildTokenList(format: format))
@@ -1667,7 +1667,7 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildNonEmptyTokenList(format: format))
@@ -1733,7 +1733,7 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildAttributeList(format: format))
@@ -1799,7 +1799,7 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildSpecializeAttributeSpecList(format: format))
@@ -1865,7 +1865,7 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildObjCSelector(format: format))
@@ -1931,7 +1931,7 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildDifferentiabilityParamList(format: format))
@@ -1997,7 +1997,7 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildBackDeployVersionList(format: format))
@@ -2063,7 +2063,7 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildSwitchCaseList(format: format))
@@ -2129,7 +2129,7 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildCatchClauseList(format: format))
@@ -2195,7 +2195,7 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildCaseItemList(format: format))
@@ -2261,7 +2261,7 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildCatchItemList(format: format))
@@ -2327,7 +2327,7 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildConditionElementList(format: format))
@@ -2393,7 +2393,7 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildGenericRequirementList(format: format))
@@ -2459,7 +2459,7 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildGenericParameterList(format: format))
@@ -2525,7 +2525,7 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildPrimaryAssociatedTypeList(format: format))
@@ -2591,7 +2591,7 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildCompositionTypeElementList(format: format))
@@ -2657,7 +2657,7 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildTupleTypeElementList(format: format))
@@ -2723,7 +2723,7 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildGenericArgumentList(format: format))
@@ -2789,7 +2789,7 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildTuplePatternElementList(format: format))
@@ -2855,7 +2855,7 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
     return Syntax(buildAvailabilitySpecList(format: format))

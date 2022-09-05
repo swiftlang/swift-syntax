@@ -21,6 +21,9 @@ protocol RawTokenKindSubset: CaseIterable {
   /// Must only return a non-nil value if `rawTokenKind` is `identifier` or `contextualKeyword`.
   var contextualKeyword: SyntaxText? { get }
 
+  /// If not `nil`, the token's will be remapped to this kind when the handle is eaten.
+  var remappedKind: RawTokenKind? { get }
+
   /// Allows more flexible rejection of further token kinds based on the token's
   /// contents or lookahead. Useful to e.g. look for contextual keywords.
   func accepts(lexeme: Lexer.Lexeme) -> Bool
@@ -29,6 +32,14 @@ protocol RawTokenKindSubset: CaseIterable {
 extension RawTokenKindSubset {
   var contextualKeyword: SyntaxText? {
     return nil
+  }
+
+  var remappedKind: RawTokenKind? {
+    if self.contextualKeyword != nil {
+      return .contextualKeyword
+    } else {
+      return nil
+    }
   }
 
   func accepts(lexeme: Lexer.Lexeme) -> Bool {

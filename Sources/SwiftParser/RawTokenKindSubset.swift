@@ -38,6 +38,22 @@ extension RawTokenKindSubset {
   static var allRawTokenKinds: [RawTokenKind] {
     return self.allCases.map { $0.rawTokenKind }
   }
+
+  init?(_ lexeme: Lexer.Lexeme) {
+    for kind in Self.allCases {
+      if let contextualKeyword = kind.contextualKeyword {
+        if lexeme.isContextualKeyword(contextualKeyword) && kind.accepts(lexeme: lexeme) {
+          assert(kind.rawTokenKind == .identifier || kind.rawTokenKind == .contextualKeyword, "contextualKeyword must only return a non-nil value for tokens of identifer or contextualKeyword kind")
+          self = kind
+          return
+        }
+      } else if lexeme.tokenKind == kind.rawTokenKind && kind.accepts(lexeme: lexeme) {
+        self = kind
+        return
+      }
+    }
+    return nil
+  }
 }
 
 /// A set of contextual keywords.
@@ -56,6 +72,28 @@ extension ContextualKeywords where RawValue == SyntaxText {
 
 // MARK: - Subsets
 
+enum CanBeArgumentLabel: RawTokenKindSubset {
+  case identifier
+  case inoutKeyword
+  case wildcardKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .identifier: return .identifier
+    case .inoutKeyword: return .inoutKeyword
+    case .wildcardKeyword: return .wildcardKeyword
+    }
+  }
+
+  func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+    switch self {
+    case .identifier:
+      return lexeme.tokenText != "__shared" && lexeme.tokenText != "__owned"
+    default:
+      return true
+    }
+  }
+}
 
 enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {
   case __consuming = "__consuming"

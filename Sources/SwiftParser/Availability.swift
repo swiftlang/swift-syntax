@@ -208,7 +208,7 @@ extension Parser {
   ///     platform-name → tvOS
   mutating func parsePlatformVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
     // Register the platform name as a keyword token.
-    let plaform = self.consume(remapping: .contextualKeyword)
+    let plaform = self.consumeAnyToken(remapping: .contextualKeyword)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
       platform: plaform, version: version, arena: self.arena)

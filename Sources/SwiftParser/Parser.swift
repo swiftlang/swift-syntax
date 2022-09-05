@@ -196,7 +196,7 @@ extension Parser {
   /// - Returns: The token that was consumed with its kind re-mapped to the
   ///            given `TokenKind`.
   @_spi(RawSyntax)
-  public mutating func consume(remapping kind: RawTokenKind) -> RawTokenSyntax {
+  public mutating func consumeAnyToken(remapping kind: RawTokenKind) -> RawTokenSyntax {
     self.currentToken.tokenKind = kind
     return self.consumeAnyToken()
   }
@@ -277,7 +277,7 @@ extension Parser {
     let tokenText = current.tokenText
 
     if tokenText == prefix {
-      return self.consume(remapping: tokenKind)
+      return self.consumeAnyToken(remapping: tokenKind)
     }
     assert(tokenText.hasPrefix(prefix))
 

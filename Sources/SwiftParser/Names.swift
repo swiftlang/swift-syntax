@@ -55,9 +55,9 @@ extension Parser {
     if self.currentToken.isIdentifier || self.at(any: [.selfKeyword, .capitalSelfKeyword]) {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators) && self.currentToken.isAnyOperator {
-      ident = self.consume(remapping: .identifier)
+      ident = self.consumeAnyToken(remapping: .identifier)
     } else if flags.contains(.keywords) && self.currentToken.tokenKind.isKeyword {
-      ident = self.consume(remapping: .identifier)
+      ident = self.consumeAnyToken(remapping: .identifier)
     } else {
       ident = self.expectIdentifierWithoutRecovery()
     }

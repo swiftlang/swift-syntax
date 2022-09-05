@@ -263,7 +263,7 @@ extension Parser {
     case (.arrow, _)?, (.throwsKeyword, _)?:
       let asyncKeyword: RawTokenSyntax?
       if self.currentToken.isContextualKeyword("async") {
-        asyncKeyword = self.consume(remapping: .contextualKeyword)
+        asyncKeyword = self.consumeAnyToken(remapping: .contextualKeyword)
       } else {
         asyncKeyword = nil
       }
@@ -432,7 +432,7 @@ extension Parser {
 //          break
 //        }
 
-    let period = self.consume(remapping: .period)
+    let period = self.consumeAnyToken(remapping: .period)
     // Handle "x.42" - a tuple index.
     if self.currentToken.tokenKind == .integerLiteral {
       let name = self.consumeAnyToken()
@@ -987,7 +987,7 @@ extension Parser {
       return RawExprSyntax(self.parseClosureExpression())
     case (.period, _)?,              //=.foo
          (.prefixPeriod, _)?:      // .foo
-      let dot = self.consume(remapping: .prefixPeriod)
+      let dot = self.consumeAnyToken(remapping: .prefixPeriod)
       let (name, args) = self.parseDeclNameRef([ .keywords, .compoundNames ])
       return RawExprSyntax(RawMemberAccessExprSyntax(
         base: nil, dot: dot, name: name, declNameArguments: args,

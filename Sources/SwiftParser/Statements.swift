@@ -19,9 +19,6 @@ extension Parser {
   /// it does not deal with parsing expressions, declarations, or consuming
   /// any trailing semicolons.
   ///
-  /// - Note: This function must be kept in sync with ``Parser/Lookahead/isStartOfStatement()``
-  /// - Seealso: ``Parser/Lookahead/isStartOfStatement()``
-  ///
   /// Grammar
   /// =======
   ///
@@ -67,45 +64,44 @@ extension Parser {
     }
 
     let optLabel = self.parseOptionalStatementLabel()
-    switch self.currentToken.tokenKind {
-    case .forKeyword:
+    switch self.at(anyIn: CanBeStatementStart.self) {
+    case (.forKeyword, _)?:
       return label(self.parseForEachStatement(), with: optLabel)
-    case .whileKeyword:
+    case (.whileKeyword, _)?:
       return label(self.parseWhileStatement(), with: optLabel)
-    case .repeatKeyword:
+    case (.repeatKeyword, _)?:
       return label(self.parseRepeatWhileStatement(), with: optLabel)
 
-    case .ifKeyword:
+    case (.ifKeyword, _)?:
       return label(self.parseIfStatement(), with: optLabel)
-    case .guardKeyword:
+    case (.guardKeyword, _)?:
       return label(self.parseGuardStatement(), with: optLabel)
-    case .switchKeyword:
+    case (.switchKeyword, _)?:
       return label(self.parseSwitchStatement(), with: optLabel)
 
-    case .breakKeyword:
+    case (.breakKeyword, _)?:
       return label(self.parseBreakStatement(), with: optLabel)
-    case .continueKeyword:
+    case (.continueKeyword, _)?:
       return label(self.parseContinueStatement(), with: optLabel)
-    case .fallthroughKeyword:
+    case (.fallthroughKeyword, _)?:
       return label(self.parseFallthroughStatement(), with: optLabel)
-    case .returnKeyword:
+    case (.returnKeyword, _)?:
       return label(self.parseReturnStatement(), with: optLabel)
-    case .throwKeyword:
+    case (.throwKeyword, _)?:
       return label(self.parseThrowStatement(), with: optLabel)
-    case .deferKeyword:
+    case (.deferKeyword, _)?:
       return label(self.parseDeferStatement(), with: optLabel)
-    case .doKeyword:
+    case (.doKeyword, _)?:
       return label(self.parseDoStatement(), with: optLabel)
 
-    case .poundAssertKeyword:
+    case (.poundAssertKeyword, _)?:
       // FIXME: This drops `optLabel`.
       return RawStmtSyntax(self.parsePoundAssertStatement())
-    case _ where self.atContextualKeyword("yield"):
-      fallthrough
-    case .yield:
+    case (.yieldAsIdentifier, _)?,
+      (.yield, _)?:
       // FIXME: This drops `optLabel`.
       return RawStmtSyntax(self.parseYieldStatement())
-    default:
+    case nil:
       let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
       return label(missingStmt, with: optLabel)
     }
@@ -820,7 +816,7 @@ extension Parser {
         .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
         .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword
       ])
-        && !self.lookahead().isStartOfStatement() && !self.lookahead().isStartOfDeclaration() {
+        && self.at(anyIn: CanBeStatementStart.self) == nil && !self.lookahead().isStartOfDeclaration() {
       expr = self.parseExpression()
     } else {
       expr = nil
@@ -977,7 +973,7 @@ extension Parser {
 
     guard
       self.at(.identifier) &&
-        !self.lookahead().isStartOfStatement() &&
+        self.at(anyIn: CanBeStatementStart.self) == nil &&
         !self.lookahead().isStartOfDeclaration()
     else {
       return nil
@@ -1018,82 +1014,6 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  /// Returns `true` if the current token represents the start of a statement
-  /// item.
-  ///
-  /// - Note: This function must be kept in sync with `parseStatement()`.
-  /// - Seealso: ``Parser/parseStatement()``
-  public func isStartOfStatement() -> Bool {
-    switch self.currentToken.tokenKind {
-    case .returnKeyword,
-        .throwKeyword,
-        .deferKeyword,
-        .ifKeyword,
-        .guardKeyword,
-        .whileKeyword,
-        .doKeyword,
-        .repeatKeyword,
-        .forKeyword,
-        .breakKeyword,
-        .continueKeyword,
-        .fallthroughKeyword,
-        .switchKeyword,
-        .caseKeyword,
-        .defaultKeyword,
-        .yield,
-        .poundAssertKeyword,
-        .poundIfKeyword,
-        .poundWarningKeyword,
-        .poundErrorKeyword,
-        .poundSourceLocationKeyword:
-      return true
-
-    case .poundLineKeyword:
-      // #line at the start of a line is a directive, when within, it is an expr.
-      return self.currentToken.isAtStartOfLine
-
-    case .identifier:
-      // "identifier ':' for/while/do/switch" is a label on a loop/switch.
-      guard self.peek().tokenKind == .colon else {
-        // "yield" in the right context begins a yield statement.
-        if self.atContextualKeyword("yield") {
-          return true
-        }
-        return false
-      }
-
-      // To disambiguate other cases of "identifier :", which might be part of a
-      // question colon expression or something else, we look ahead to the second
-      // token.
-      var backtrack = self.lookahead()
-      backtrack.expectIdentifier()
-      backtrack.eat(.colon)
-
-      // We treating IDENTIFIER: { as start of statement to provide missed 'do'
-      // diagnostics. This case will be handled in parseStmt().
-      if self.at(.leftBrace) {
-        return true
-      }
-      // For better recovery, we just accept a label on any statement.  We reject
-      // putting a label on something inappropriate in parseStmt().
-      return backtrack.isStartOfStatement()
-
-    case .atSign:
-      // Might be a statement or case attribute. The only one of these we have
-      // right now is `@unknown default`, so hardcode a check for an attribute
-      // without any parens.
-      guard self.peek().tokenKind == .identifier else {
-        return false
-      }
-      var backtrack = self.lookahead()
-      backtrack.eat(.atSign)
-      backtrack.expectIdentifier()
-      return backtrack.isStartOfStatement()
-    default:
-      return false
-    }
-  }
-
   func isBooleanExpr() -> Bool {
     var lookahead = self.lookahead()
     return !lookahead.canParseTypedPattern() || !lookahead.at(.equal)

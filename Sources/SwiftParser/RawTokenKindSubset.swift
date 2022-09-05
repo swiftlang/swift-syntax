@@ -193,6 +193,53 @@ enum CanBeDeclaratinStart: RawTokenKindSubset {
   }
 }
 
+enum CanBeStatementStart: RawTokenKindSubset {
+  case breakKeyword
+  case continueKeyword
+  case deferKeyword
+  case doKeyword
+  case fallthroughKeyword
+  case forKeyword
+  case guardKeyword
+  case ifKeyword
+  case poundAssertKeyword
+  case repeatKeyword
+  case returnKeyword
+  case switchKeyword
+  case throwKeyword
+  case whileKeyword
+  case yield
+  case yieldAsIdentifier
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .breakKeyword: return .breakKeyword
+    case .continueKeyword: return .continueKeyword
+    case .deferKeyword: return .deferKeyword
+    case .doKeyword: return .doKeyword
+    case .fallthroughKeyword: return .fallthroughKeyword
+    case .forKeyword: return .forKeyword
+    case .guardKeyword: return .guardKeyword
+    case .ifKeyword: return .ifKeyword
+    case .poundAssertKeyword: return .poundAssertKeyword
+    case .repeatKeyword: return .repeatKeyword
+    case .returnKeyword: return .returnKeyword
+    case .switchKeyword: return .switchKeyword
+    case .throwKeyword: return .throwKeyword
+    case .whileKeyword: return .whileKeyword
+    case .yield: return .yield
+    case .yieldAsIdentifier: return .identifier
+    }
+  }
+
+  var contextualKeyword: SyntaxText? {
+    switch self {
+    case .yieldAsIdentifier: return "yield"
+    default: return nil
+    }
+  }
+}
+
 
 enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {
   case __consuming = "__consuming"

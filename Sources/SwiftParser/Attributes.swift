@@ -798,7 +798,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.at(.leftParen) && !self.currentToken.isAtStartOfLine && self.lookahead().isCustomAttributeArgument() {
+    if self.at(.leftParen, where: { !$0.isAtStartOfLine }) && self.lookahead().isCustomAttributeArgument() {
       self.skipSingle()
     }
 

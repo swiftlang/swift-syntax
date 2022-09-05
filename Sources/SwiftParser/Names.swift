@@ -73,7 +73,7 @@ extension Parser {
     }
 
     // Is the current token a left paren?
-    guard self.at(.leftParen) && !self.currentToken.isAtStartOfLine else {
+    guard self.at(.leftParen, where: { !$0.isAtStartOfLine }) else {
       return nil
     }
 

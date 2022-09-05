@@ -739,7 +739,7 @@ extension Parser {
         let name = self.expectIdentifierWithoutRecovery()
 
         let associatedValue: RawParameterClauseSyntax?
-        if self.at(.leftParen) && !self.currentToken.isAtStartOfLine {
+        if self.at(.leftParen, where: { !$0.isAtStartOfLine }) {
           associatedValue = self.parseParameterClause()
         } else {
           associatedValue = nil

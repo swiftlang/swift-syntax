@@ -417,7 +417,7 @@ extension Parser {
         case (.colon, let handle)?:
           let colon = self.eat(handle)
           // A conformance-requirement.
-          if self.currentToken.isIdentifier, let layoutConstraint = LayoutConstraint(rawValue: self.currentToken.tokenText) {
+          if self.at(.identifier), let layoutConstraint = LayoutConstraint(rawValue: self.currentToken.tokenText) {
             // Parse a layout constraint.
             let constraint = self.expectIdentifier()
 
@@ -1294,7 +1294,7 @@ extension Parser {
     let identifier: RawTokenSyntax
     if self.currentToken.isAnyOperator || self.at(any: [.exclamationMark, .prefixAmpersand]) {
       var name = self.currentToken.tokenText
-      if name.count > 1 && name.hasSuffix("<") && self.peek().isIdentifier {
+      if name.count > 1 && name.hasSuffix("<") && self.peek().tokenKind == .identifier {
         name = SyntaxText(rebasing: name.dropLast())
       }
       identifier = self.consumePrefix(name, as: .spacedBinaryOperator)
@@ -1528,7 +1528,7 @@ extension Parser {
     }
 
     guard
-      self.currentToken.isIdentifier,
+      self.at(.identifier),
       let kind = AccessorKind(rawValue: self.currentToken.tokenText)
     else {
       return AccessorIntroducer(

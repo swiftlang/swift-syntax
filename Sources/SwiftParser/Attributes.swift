@@ -464,7 +464,7 @@ extension Parser {
         continue
       }
 
-      if self.currentToken.isIdentifier || self.currentToken.isKeyword {
+      if self.at(.identifier) || self.currentToken.isKeyword {
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(RawObjCSelectorPieceSyntax(

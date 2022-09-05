@@ -1778,7 +1778,7 @@ extension Parser {
     // If we have a leading token that may be part of the closure signature, do a
     // speculative parse to validate it and look for 'in'.
     guard self.at(any: [.atSign, .leftParen, .leftSquareBracket, .wildcardKeyword])
-            || self.currentToken.isIdentifier else {
+            || self.at(.identifier) else {
       // No closure signature.
       return nil
     }
@@ -1858,7 +1858,7 @@ extension Parser {
           repeat {
             let unexpectedBeforeName: RawUnexpectedNodesSyntax?
             let name: RawTokenSyntax
-            if self.currentToken.isIdentifier {
+            if self.at(.identifier) {
               unexpectedBeforeName = nil
               name = self.expectIdentifier()
             } else {
@@ -1922,7 +1922,7 @@ extension Parser {
           specifiers.append(self.expectWithoutRecovery(.identifier, where: { (lexeme, parser) in lexeme.tokenText == "unsafe" }))
           specifiers.append(self.expectWithoutRecovery(.rightParen))
         }
-      } else if (self.currentToken.isIdentifier || self.at(.selfKeyword)) {
+      } else if (self.at(.identifier) || self.at(.selfKeyword)) {
         let next = self.peek()
         // "x = 42", "x," and "x]" are all strong captures of x.
         guard next.tokenKind == .equal || next.tokenKind == .comma
@@ -1934,7 +1934,7 @@ extension Parser {
         return nil
       }
 
-      guard self.currentToken.isIdentifier || self.at(.selfKeyword) else {
+      guard self.at(.identifier) || self.at(.selfKeyword) else {
         return nil
       }
     }
@@ -2162,7 +2162,7 @@ extension Parser.Lookahead {
     // Consume attributes.
     var lookahead = self.lookahead()
     while let _ = lookahead.consume(if: .atSign) {
-      guard lookahead.currentToken.isIdentifier else {
+      guard lookahead.at(.identifier) else {
         break
       }
       _ = lookahead.canParseCustomAttribute()
@@ -2201,11 +2201,11 @@ extension Parser.Lookahead {
         }
       }
       // Okay, we have a closure signature.
-    } else if lookahead.currentToken.isIdentifier || lookahead.at(.wildcardKeyword) {
+    } else if lookahead.at(.identifier) || lookahead.at(.wildcardKeyword) {
       // Parse identifier (',' identifier)*
       lookahead.consumeAnyToken()
       while lookahead.consume(if: .comma) != nil {
-        if lookahead.currentToken.isIdentifier || lookahead.at(.wildcardKeyword) {
+        if lookahead.at(.identifier) || lookahead.at(.wildcardKeyword) {
           lookahead.consumeAnyToken()
           continue
         }
@@ -2246,9 +2246,9 @@ extension Parser.Lookahead {
       return true
     }
 
-    if !self.peek().isIdentifier,
-        self.peek().tokenKind != .capitalSelfKeyword,
-        self.peek().tokenKind != .selfKeyword,
+    if self.peek().tokenKind != .identifier,
+       self.peek().tokenKind != .capitalSelfKeyword,
+       self.peek().tokenKind != .selfKeyword,
        !self.peek().tokenKind.isKeyword {
       return false
     }

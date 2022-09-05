@@ -974,7 +974,7 @@ extension Parser {
     }
 
     guard
-      self.currentToken.isIdentifier &&
+      self.at(.identifier) &&
         !self.lookahead().isStartOfStatement() &&
         !self.lookahead().isStartOfDeclaration()
     else {
@@ -1104,7 +1104,7 @@ extension Parser.Lookahead {
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
     while lookahead.at(.atSign) {
-      guard lookahead.peek().isIdentifier else {
+      guard lookahead.peek().tokenKind == .identifier else {
         return false
       }
 

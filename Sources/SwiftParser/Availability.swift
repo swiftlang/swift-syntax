@@ -34,8 +34,8 @@ extension Parser {
       repeat {
         let entry: RawSyntax
         switch source {
-        case .available where self.currentToken.isIdentifier,
-            .unavailable where self.currentToken.isIdentifier:
+        case .available where self.at(.identifier),
+            .unavailable where self.at(.identifier):
           entry = RawSyntax(self.parseAvailabilityMacro())
         default:
           entry = self.parseAvailabilitySpec()
@@ -49,7 +49,7 @@ extension Parser {
         // also in the shorthand syntax and recover from it.
         if
           keepGoing != nil,
-          self.currentToken.isIdentifier,
+          self.at(.identifier),
           AvailabilityArgumentKind(rawValue: self.currentToken.tokenText) != nil
         {
           var tokens = [RawTokenSyntax]()

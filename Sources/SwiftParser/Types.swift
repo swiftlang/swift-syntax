@@ -699,7 +699,7 @@ extension Parser.Lookahead {
 
   mutating func canParseSimpleTypeIdentifier() -> Bool {
     // Parse an identifier.
-    guard self.currentToken.isIdentifier || self.at(any: [.capitalSelfKeyword, .anyKeyword]) else {
+    guard self.at(.identifier) || self.at(any: [.capitalSelfKeyword, .anyKeyword]) else {
       return false
     }
     self.consumeAnyToken()
@@ -762,7 +762,7 @@ extension Parser {
       return (specifier, self.parseTypeAttributeListPresent())
     }
 
-    if self.currentToken.isIdentifier {
+    if self.at(.identifier) {
       if self.currentToken.tokenText == "__shared"
           || self.currentToken.tokenText == "__owned"
           || self.currentToken.isContextualKeyword("isolated")

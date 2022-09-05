@@ -682,6 +682,19 @@ final class DeclarationTests: XCTestCase {
       ]
     )
   }
+  
+  func testMalforedStruct() {
+    AssertParse(
+      """
+      struct n#^OPENINGBRACES^##if@#^ENDIF^##^CLOSINGBRACES^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "OPENINGBRACES", message: "Expected '{' to start struct"),
+        DiagnosticSpec(locationMarker: "ENDIF", message: "Expected '#endif' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "CLOSINGBRACES", message: "Expected '}' to end struct")
+      ]
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

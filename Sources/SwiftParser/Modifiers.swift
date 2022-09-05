@@ -186,43 +186,42 @@ extension Parser {
     let name = self.consumeAnyToken()
     let details: RawDeclModifierDetailSyntax?
     if let lparen = self.consume(if: .leftParen) {
-      var beforeDetail: [RawTokenSyntax] = []
+      var beforeDetail: [RawSyntax] = []
       var detail: RawTokenSyntax? = nil
-      while !atAny([.eof, .rightParen]) {
-        if currentToken.isContextualKeyword("set") {
-          detail = consume(remapping: .contextualKeyword)
-          break
+      var afterDetail: [RawSyntax] = []
+
+      let (content, rightParen) = expect(.rightParen)
+      if let content = content {
+        for element in content.elements {
+          if let _ = detail {
+            afterDetail.append(element)
+          } else if let token = element.as(RawTokenSyntax.self),
+                    [RawTokenKind.identifier, .contextualKeyword].contains(token.tokenKind),
+                    token.tokenText == "set"
+          {
+            detail = token
+          } else {
+            beforeDetail.append(element)
+          }
         }
-        beforeDetail.append(consumeAnyToken())
       }
-      var afterDetail: [RawTokenSyntax] = []
-      if let _ = detail {
-        while !atAny([.eof, .rightParen]) {
-          afterDetail.append(consumeAnyToken())
-        }
-      } else {
-        afterDetail = beforeDetail
-        beforeDetail = []
-      }
-      let rparen = consume(if: .rightParen) ??
-        RawTokenSyntax(missing: .rightParen, arena: arena)
+      
       details = RawDeclModifierDetailSyntax(
         leftParen: lparen,
         beforeDetail.isEmpty ? nil :
-        RawUnexpectedNodesSyntax(
-          elements: beforeDetail.map { RawSyntax($0) }, arena: arena
-        ),
+          RawUnexpectedNodesSyntax(
+            elements: beforeDetail, arena: arena
+          ),
         detail: detail ?? RawTokenSyntax(
           missing: .contextualKeyword,
           text: arena.intern("set"),
           arena: arena
         ),
         afterDetail.isEmpty ? nil :
-        RawUnexpectedNodesSyntax(
-          elements: afterDetail.map { RawSyntax($0) },
-          arena: arena
-        ),
-        rightParen: rparen,
+          RawUnexpectedNodesSyntax(
+            elements: afterDetail, arena: arena
+          ),
+        rightParen: rightParen,
         arena: self.arena
       )
     } else {

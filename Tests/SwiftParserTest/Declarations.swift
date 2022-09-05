@@ -225,22 +225,23 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse(
       """
-      private(#^DLEFT^#get, set#^DRIGHT^#, didSet)
+      private(#^DIAG^#get#^DTOP^#, set, didSet)
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DLEFT", message: "Unexpected text 'get,' found in modifier"),
-        DiagnosticSpec(locationMarker: "DRIGHT", message: "Unexpected text ', didSet' found in modifier")
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        DiagnosticSpec(locationMarker: "DTOP", message: "Extraneous ', set, didSet)' at top level")
       ]
     )
 
     AssertParse(
       """
-      private(#^DSET^#get, didSet#^DRPAREN^#
+      private(#^DIAG^#get#^DTOP^#, didSet
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DSET", message: "Expected 'set' in modifier"),
-        DiagnosticSpec(locationMarker: "DSET", message: "Unexpected text 'get, didSet' found in modifier"),
-        DiagnosticSpec(locationMarker: "DRPAREN", message: "Expected ')' to end modifier"),
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        DiagnosticSpec(locationMarker: "DTOP", message: "Extraneous ', didSet' at top level")
       ]
     )
   }

@@ -96,11 +96,12 @@ extension TokenConsumer {
   /// as well as a handle to consume that token.
   func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? where Subset.ParserType == Self {
     for kind in Subset.allCases {
-      if let contextualKeyword = kind.contextualKeyword, self.atContextualKeyword(contextualKeyword) {
-        assert(kind.rawTokenKind == .identifier || kind.rawTokenKind == .contextualKeyword, "contextualKeyword must only return a non-nil value for tokens of identifer or contextualKeyword kind")
-        return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind, remapToContextualKeyword: true))
-      }
-      if self.at(kind.rawTokenKind), kind.accepts(lexeme: currentToken, parser: self) {
+      if let contextualKeyword = kind.contextualKeyword {
+        if self.atContextualKeyword(contextualKeyword) && kind.accepts(lexeme: currentToken, parser: self) {
+          assert(kind.rawTokenKind == .identifier || kind.rawTokenKind == .contextualKeyword, "contextualKeyword must only return a non-nil value for tokens of identifer or contextualKeyword kind")
+          return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind, remapToContextualKeyword: true))
+        }
+      } else if self.at(kind.rawTokenKind) && kind.accepts(lexeme: currentToken, parser: self) {
         return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind, remapToContextualKeyword: false))
       }
     }

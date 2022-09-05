@@ -100,12 +100,12 @@ extension Parser {
       case deinitKeyword
       case operatorKeyword
       case precedencegroupKeyword
-      case identifier
+      case actor
 
-      func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+      var contextualKeyword: SyntaxText? {
         switch self {
-        case .identifier: return lexeme.isContextualKeyword("actor")
-        default: return true
+        case .actor: return "actor"
+        default: return nil
         }
       }
 
@@ -128,7 +128,7 @@ extension Parser {
         case .deinitKeyword: return .deinitKeyword
         case .operatorKeyword: return .operatorKeyword
         case .precedencegroupKeyword: return .precedencegroupKeyword
-        case .identifier: return .identifier
+        case .actor: return .identifier
         }
       }
     }
@@ -170,7 +170,7 @@ extension Parser {
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs))
     case (.precedencegroupKeyword, _)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs))
-    case (.identifier, _)?:
+    case (.actor, _)?:
       return RawDeclSyntax(self.parseActorDeclaration(attrs))
     case nil:
       return RawDeclSyntax(RawMissingDeclSyntax(

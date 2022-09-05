@@ -192,8 +192,6 @@ extension Parser.Lookahead {
   ///   pattern ::= 'let' pattern
   mutating func canParsePattern() -> Bool {
     enum PatternStartTokens: RawTokenKindSubset {
-      typealias ParserType = Parser.Lookahead
-
       case identifier
       case wildcardKeyword
       case letKeyword

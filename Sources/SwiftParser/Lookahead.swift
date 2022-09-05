@@ -433,7 +433,6 @@ extension Parser.Lookahead {
 
   mutating func skipSingle() {
     enum BracketedTokens: RawTokenKindSubset {
-      typealias ParserType = Parser.Lookahead
       case leftParen
       case leftBrace
       case leftSquareBracket

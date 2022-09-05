@@ -377,7 +377,7 @@ extension Parser {
           case postfixOperator
           case prefixOperator
 
-          func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
+          func accepts(lexeme: Lexer.Lexeme) -> Bool {
             switch self {
             case .colon: return true
             default: return lexeme.tokenText == "=="

@@ -174,15 +174,6 @@ extension Parser {
         default: return nil
         }
       }
-
-      func accepts(lexeme: Lexer.Lexeme, parser: Parser) -> Bool {
-        switch self {
-        case .async:
-          return parser.peek().tokenKind == .arrow || parser.peek().tokenKind == .throwsKeyword
-        default:
-          return true
-        }
-      }
     }
 
     switch self.at(anyIn: ExpectedTokenKind.self) {
@@ -257,7 +248,13 @@ extension Parser {
 
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
-    case (.async, _)?, (.arrow, _)?, (.throwsKeyword, _)?:
+    case (.async, _)?:
+      if self.peek().tokenKind == .arrow || self.peek().tokenKind == .throwsKeyword {
+        fallthrough
+      } else {
+        return nil
+      }
+    case (.arrow, _)?, (.throwsKeyword, _)?:
       let asyncKeyword: RawTokenSyntax?
       if self.atContextualKeyword("async") {
         asyncKeyword = self.consumeAnyToken(remapping: .contextualKeyword)

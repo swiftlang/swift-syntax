@@ -29,8 +29,6 @@ extension Parser {
 
 extension Parser {
   enum DeclarationAttribute: SyntaxText, ContextualKeywords {
-    typealias ParserType = Parser.Lookahead
-
     case _silgen_name = "_silgen_name"
     case available = "available"
     case final = "final"
@@ -606,8 +604,6 @@ extension Parser {
 
 extension Parser {
   enum TypeAttribute: SyntaxText, ContextualKeywords {
-    typealias ParserType = Lookahead
-
     case autoclosure = "autoclosure"
     case convention = "convention"
     case noescape = "noescape"

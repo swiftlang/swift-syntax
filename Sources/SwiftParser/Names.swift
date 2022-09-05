@@ -175,46 +175,6 @@ extension Lexer.Lexeme {
     self.tokenKind.isKeyword
   }
 
-  var isKeywordPossibleDeclStart: Bool {
-    switch self.tokenKind {
-    case .atSign,
-        .associatedtypeKeyword,
-        .caseKeyword,
-        .classKeyword,
-        .deinitKeyword,
-        .enumKeyword,
-        .extensionKeyword,
-        .fileprivateKeyword,
-        .funcKeyword,
-        .importKeyword,
-        .initKeyword,
-        .internalKeyword,
-        .letKeyword,
-        .operatorKeyword,
-        .precedencegroupKeyword,
-        .privateKeyword,
-        .protocolKeyword,
-        .publicKeyword,
-        .staticKeyword,
-        .structKeyword,
-        .subscriptKeyword,
-        .typealiasKeyword,
-        .varKeyword,
-        .poundIfKeyword,
-        .poundWarningKeyword,
-        .poundErrorKeyword,
-        .identifier,
-        .poundSourceLocationKeyword:
-      return true
-    case .poundLineKeyword:
-      // #line at the start of the line is a directive, but it's deprecated.
-      // #line within a line is an expression.
-      return self.isAtStartOfLine
-    default:
-      return false
-    }
-  }
-
   func starts(with symbol: SyntaxText) -> Bool {
     guard Operator(self) != nil || self.tokenKind.isPunctuation else {
       return false

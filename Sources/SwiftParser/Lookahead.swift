@@ -221,7 +221,7 @@ extension Parser.Lookahead {
   ]
 
   func isStartOfDeclaration() -> Bool {
-    guard self.currentToken.isKeywordPossibleDeclStart else {
+    guard self.at(anyIn: CanBeDeclaratinStart.self) != nil else {
       // If this is obviously not the start of a decl, then we're done.
       return false
     }
@@ -347,7 +347,7 @@ extension Parser.Lookahead {
     }
 
     // If the next token is obviously not the start of a decl, bail early.
-    guard tok2.isKeywordPossibleDeclStart else {
+    guard CanBeDeclaratinStart(tok2) != nil else {
       return false
     }
 

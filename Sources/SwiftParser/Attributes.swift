@@ -770,7 +770,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.at(.leftParen) && !self.currentToken.isAtStartOfLine && self.lookahead().isCustomAttributeArgument() {
+    if self.at(.leftParen, where: { (lexeme, _) in !lexeme.isAtStartOfLine }) && self.lookahead().isCustomAttributeArgument() {
       self.skipSingle()
     }
 

@@ -846,7 +846,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseYieldStatement() -> RawYieldStmtSyntax {
     assert(self.currentToken.tokenText == "yield")
-    let yield = self.consume(remapping: .yield)
+    let yield = self.consumeAnyToken(remapping: .yield)
 
     let yields: RawSyntax
     if let lparen = self.consume(if: .leftParen) {

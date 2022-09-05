@@ -287,7 +287,7 @@ extension Parser {
   public mutating func parseGenericParameters() -> RawGenericParameterClauseSyntax {
     assert(self.currentToken.starts(with: "<"))
 
-    let langle = self.consume(remapping: .leftAngle)
+    let langle = self.consumeAnyToken(remapping: .leftAngle)
     var elements = [RawGenericParameterSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -325,7 +325,7 @@ extension Parser {
 
     let rangle: RawTokenSyntax
     if self.currentToken.starts(with: ">") {
-      rangle = self.consume(remapping: .rightAngle)
+      rangle = self.consumeAnyToken(remapping: .rightAngle)
     } else {
       rangle = RawTokenSyntax(missing: .rightAngle, arena: self.arena)
     }
@@ -864,7 +864,7 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {
-    let langle = self.consume(remapping: .leftAngle)
+    let langle = self.consumeAnyToken(remapping: .leftAngle)
     var associatedTypes = [RawPrimaryAssociatedTypeSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -878,7 +878,7 @@ extension Parser {
           arena: self.arena))
       } while keepGoing != nil
     }
-    let rangle = self.consume(remapping: .rightAngle)
+    let rangle = self.consumeAnyToken(remapping: .rightAngle)
     return RawPrimaryAssociatedTypeClauseSyntax(
       leftAngleBracket: langle,
       primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
@@ -1219,7 +1219,7 @@ extension Parser {
 
         let ellipsis: RawTokenSyntax?
         if self.currentToken.isEllipsis {
-          ellipsis = self.consume(remapping: .ellipsis)
+          ellipsis = self.consumeAnyToken(remapping: .ellipsis)
         } else {
           ellipsis = nil
         }
@@ -1338,7 +1338,7 @@ extension Parser {
 
     let async: RawTokenSyntax?
     if self.currentToken.isContextualKeyword("async") {
-      async = self.consume(remapping: .contextualKeyword)
+      async = self.consumeAnyToken(remapping: .contextualKeyword)
     } else {
       async = nil
     }
@@ -1535,7 +1535,7 @@ extension Parser {
         attributes: attrs, modifier: modifier, introducer: nil)
     }
 
-    let introducer = self.consume(remapping: .contextualKeyword)
+    let introducer = self.consumeAnyToken(remapping: .contextualKeyword)
     return AccessorIntroducer(
       attributes: attrs, modifier: modifier, introducer: (kind, introducer))
   }
@@ -1544,12 +1544,12 @@ extension Parser {
   public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
     // 'async'
     if self.currentToken.isContextualKeyword("async") {
-      return self.consume(remapping: .contextualKeyword)
+      return self.consumeAnyToken(remapping: .contextualKeyword)
     }
 
     // 'reasync'
     if self.currentToken.isContextualKeyword("reasync") {
-      return self.consume(remapping: .contextualKeyword)
+      return self.consumeAnyToken(remapping: .contextualKeyword)
     }
 
     // 'throws'/'rethrows'
@@ -1840,7 +1840,7 @@ extension Parser {
           )))
         case "higherThan", "lowerThan":
           // "lowerThan" and "higherThan" are contextual keywords.
-          let level = self.consume(remapping: .contextualKeyword)
+          let level = self.consumeAnyToken(remapping: .contextualKeyword)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           var names = [RawPrecedenceGroupNameElementSyntax]()
           do {

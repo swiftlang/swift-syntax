@@ -21,7 +21,7 @@ public protocol TokenConsumer {
   /// Whether the current token matches the given kind.
   mutating func consumeAnyToken() -> Token
   /// Consume the current token and change its token kind to `remappedTokenKind`.
-  mutating func consume(remapping remappedTokenKind: RawTokenKind) -> Token
+  mutating func consumeAnyToken(remapping remappedTokenKind: RawTokenKind) -> Token
 
   /// Synthesize a missing token with `kind`.
   /// If `text` is not `nil`, use it for the token's text, otherwise use the token's default text.
@@ -111,7 +111,7 @@ extension TokenConsumer {
   mutating func eat(_ handle: TokenConsumptionHandle) -> Token {
     assert(self.at(handle.tokenKind))
     if handle.remapToContextualKeyword {
-      return consume(remapping: .contextualKeyword)
+      return consumeAnyToken(remapping: .contextualKeyword)
     } else {
       return consumeAnyToken()
     }
@@ -144,7 +144,7 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public mutating func consumeIfContextualKeyword(_ name: SyntaxText) -> Token? {
     if self.atContextualKeyword(name) {
-      return self.consume(remapping: .contextualKeyword)
+      return self.consumeAnyToken(remapping: .contextualKeyword)
     }
     return nil
   }

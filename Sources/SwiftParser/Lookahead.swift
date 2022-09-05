@@ -71,7 +71,7 @@ extension Parser.Lookahead {
     self.currentToken = self.lexemes.advance()
   }
 
-  public mutating func consume(remapping: RawTokenKind) {
+  public mutating func consumeAnyToken(remapping: RawTokenKind) {
     self.consumeAnyToken()
   }
 

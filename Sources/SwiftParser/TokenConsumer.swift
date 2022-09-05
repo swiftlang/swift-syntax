@@ -91,17 +91,6 @@ extension TokenConsumer {
     }
   }
 
-  /// Returns whether the kind of the current token is any of the given
-  /// kinds or a contextual keyword with text in `contextualKeywords`.
-  ///
-  /// - Parameter kinds: The kinds to test for.
-  /// - Parameter contextualKeywords: Contextual keywords that are also accepted.
-  /// - Returns: `true` if the current token's kind is in `kinds`.
-  @_spi(RawSyntax)
-  public func at(any kinds: RawTokenKind..., contextualKeywords: [SyntaxText] = []) -> Bool {
-    return self.at(any: kinds)
-  }
-
   /// Checks whether the parser is currently positioned at any token in `Subset`.
   /// If this is the case, return the `Subset` case that the parser is positioned in
   /// as well as a handle to consume that token.

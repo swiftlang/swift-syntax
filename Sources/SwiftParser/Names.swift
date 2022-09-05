@@ -52,7 +52,7 @@ extension Parser {
   mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
     // Consume the base name.
     let ident: RawTokenSyntax
-    if self.currentToken.isIdentifier || self.at(any: .selfKeyword, .capitalSelfKeyword) {
+    if self.currentToken.isIdentifier || self.at(any: [.selfKeyword, .capitalSelfKeyword]) {
       ident = self.expectIdentifier()
     } else if flags.contains(.operators) && self.currentToken.isAnyOperator {
       ident = self.consume(remapping: .identifier)
@@ -100,7 +100,7 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawDeclNameArgumentSyntax]()
     do {
-      while !self.at(any: .eof, .rightParen) {
+      while !self.at(any: [.eof, .rightParen]) {
         // Check to see if there is an argument label.
         assert(self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
@@ -131,7 +131,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    while !lookahead.at(any: .eof, .rightParen) {
+    while !lookahead.at(any: [.eof, .rightParen]) {
       // Check to see if there is an argument label.
       guard lookahead.currentToken.canBeArgumentLabel && lookahead.peek().tokenKind == .colon else {
         return false

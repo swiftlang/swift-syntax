@@ -137,7 +137,7 @@ extension Parser {
     var elements = [RawTuplePatternElementSyntax]()
     do {
       var keepGoing = true
-      while !self.at(any: .eof, .rightParen) && keepGoing {
+      while !self.at(any: [.eof, .rightParen]) && keepGoing {
         // If the tuple element has a label, parse it.
         let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
         let (label, colon) = (labelAndColon?.0, labelAndColon?.1)

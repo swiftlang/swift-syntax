@@ -54,7 +54,7 @@ extension Parser {
         {
           var tokens = [RawTokenSyntax]()
           tokens.append(self.consumeAnyToken())
-          while !self.at(any: .eof, .comma, .rightParen) {
+          while !self.at(any: [.eof, .comma, .rightParen]) {
             tokens.append(self.consumeAnyToken())
           }
           let syntax = RawTokenListSyntax(elements: tokens, arena: self.arena)
@@ -169,7 +169,7 @@ extension Parser {
       return RawSyntax(star)
     }
 
-    if self.at(any:.identifier, .wildcardKeyword) {
+    if self.at(any: [.identifier, .wildcardKeyword]) {
       if self.currentToken.tokenText == "swift" || self.currentToken.tokenText == "_PackageDescription" {
         return RawSyntax(self.parsePlatformAgnosticVersionConstraintSpec())
       }

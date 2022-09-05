@@ -511,7 +511,7 @@ extension Parser {
     var elements = [RawMemberDeclListItemSyntax]()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
-      while !self.at(any: .eof, .rightBrace) {
+      while !self.at(any: [.eof, .rightBrace]) {
         let decl = self.parseDeclaration()
         let semi = self.consume(if: .semicolon)
         elements.append(RawMemberDeclListItemSyntax(
@@ -1103,7 +1103,7 @@ extension Parser {
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
-    if self.at(any: .exclamationMark, .postfixQuestionMark)
+    if self.at(any: [.exclamationMark, .postfixQuestionMark])
         || (self.currentToken.isAnyOperator && self.currentToken.tokenText == "!") {
       failable = self.consumeAnyToken()
     } else {
@@ -1172,7 +1172,7 @@ extension Parser {
     let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel || currentToken.isKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
-      while !self.at(any: .eof, .rightParen) && keepGoing {
+      while !self.at(any: [.eof, .rightParen]) && keepGoing {
         // Attributes.
         let attrs = self.parseAttributeList()
 
@@ -1292,7 +1292,7 @@ extension Parser {
   public mutating func parseFuncDeclaration(_ attrs: DeclAttributes) -> RawFunctionDeclSyntax {
     let (unexpectedBeforeFuncKeyword, funcKeyword) = self.expect(.funcKeyword)
     let identifier: RawTokenSyntax
-    if self.currentToken.isAnyOperator || self.at(any: .exclamationMark, .prefixAmpersand) {
+    if self.currentToken.isAnyOperator || self.at(any: [.exclamationMark, .prefixAmpersand]) {
       var name = self.currentToken.tokenText
       if name.count > 1 && name.hasSuffix("<") && self.peek().isIdentifier {
         name = SyntaxText(rebasing: name.dropLast())
@@ -1603,7 +1603,7 @@ extension Parser {
     // Collect all explicit accessors to a list.
     var elements = [RawAccessorDeclSyntax]()
     do {
-      while !self.at(any: .eof, .rightBrace) {
+      while !self.at(any: [.eof, .rightBrace]) {
         let introducer = self.parseAccessorIntroducer()
         guard let (kind, kindToken) = introducer.introducer else {
           // There can only be an implicit getter if no other accessors were
@@ -1813,7 +1813,7 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
     do {
-      LOOP: while !self.at(any: .eof, .rightBrace) {
+      LOOP: while !self.at(any: [.eof, .rightBrace]) {
         switch self.currentToken.tokenText {
         case "associativity":
           let associativity = self.expectIdentifier()

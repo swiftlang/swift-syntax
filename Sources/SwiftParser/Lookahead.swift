@@ -101,7 +101,7 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   mutating func skipTypeAttribute() {
     // These are keywords that we accept as attribute names.
-    guard self.currentToken.isIdentifier || self.at(any: .inKeyword, .inoutKeyword) else {
+    guard self.currentToken.isIdentifier || self.at(any: [.inKeyword, .inoutKeyword]) else {
       return
     }
 
@@ -132,7 +132,7 @@ extension Parser.Lookahead {
         backtrack.skipSingle()
         // If we found '->', or 'throws' after paren, it's likely a parameter
         // of function type.
-        guard backtrack.at(any: .arrow, .throwsKeyword, .rethrowsKeyword, .throwKeyword) else {
+        guard backtrack.at(any: [.arrow, .throwsKeyword, .rethrowsKeyword, .throwKeyword]) else {
           self.skipSingle()
           return
         }
@@ -164,7 +164,7 @@ extension Parser.Lookahead {
     while let _ = self.consume(if: .atSign) {
       self.expectIdentifier()
       if self.consume(if: .leftParen) != nil {
-        while !self.at(any: .eof, .rightParen, .poundEndifKeyword) {
+        while !self.at(any: [.eof, .rightParen, .poundEndifKeyword]) {
           self.skipSingle()
         }
         self.consume(if: .rightParen)
@@ -263,7 +263,7 @@ extension Parser.Lookahead {
       _ = subparser.eatParseAttributeList()
       // If this attribute is the last element in the block,
       // consider it is a start of incomplete decl.
-      if subparser.at(any: .rightBrace, .eof, .poundEndifKeyword) {
+      if subparser.at(any: [.rightBrace, .eof, .poundEndifKeyword]) {
         return true
       }
       return subparser.isStartOfDeclaration()
@@ -280,7 +280,7 @@ extension Parser.Lookahead {
 
         // Eat paren after modifier name; e.g. private(set)
         if subparser.consume(if: .leftParen) != nil {
-          while !subparser.at(any: .eof, .rightBrace, .poundEndifKeyword) {
+          while !subparser.at(any: [.eof, .rightBrace, .poundEndifKeyword]) {
             if subparser.consume(if: .rightParen) != nil {
               break
             }
@@ -421,7 +421,7 @@ extension Parser.Lookahead {
 
 extension Parser.Lookahead {
   mutating func skipUntil(_ t1: RawTokenKind, _ t2: RawTokenKind) {
-    while !self.at(any: .eof, t1, t2, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword) {
+    while !self.at(any: [.eof, t1, t2, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword]) {
       self.skipSingle()
     }
   }
@@ -456,7 +456,7 @@ extension Parser.Lookahead {
       // skipUntil also implicitly stops at tok::pound_endif.
       self.skipUntil(.poundElseKeyword, .poundElseifKeyword)
 
-      if self.at(any: .poundElseKeyword, .poundElseifKeyword) {
+      if self.at(any: [.poundElseKeyword, .poundElseifKeyword]) {
         self.skipSingle()
       } else {
         self.consume(if: .poundElseifKeyword)

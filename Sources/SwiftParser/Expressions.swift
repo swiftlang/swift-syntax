@@ -33,7 +33,7 @@ extension Parser {
     //
     // Only do this if we're parsing a pattern, to improve QoI on malformed
     // expressions followed by (e.g.) let/var decls.
-    if self.at(any: .varKeyword, .letKeyword, .isKeyword) {
+    if self.at(any: [.varKeyword, .letKeyword, .isKeyword]) {
       let pattern = self.parseMatchingPattern()
       return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))
     }
@@ -297,7 +297,7 @@ extension Parser {
     }
 
     // Try to parse '@' sign or 'inout' as a attributed typerepr.
-    if self.at(any: .atSign, .inoutKeyword) {
+    if self.at(any: [.atSign, .inoutKeyword]) {
       var backtrack = self.lookahead()
       if backtrack.canParseType() {
         let type = self.parseType()
@@ -406,7 +406,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
-    assert(self.at(any: .period, .prefixPeriod))
+    assert(self.at(any: [.period, .prefixPeriod]))
 
       // A key path is special, because it allows .[, unlike anywhere else. The
       // period itself should be left in the token stream. (.? and .! end up
@@ -461,7 +461,7 @@ extension Parser {
 
     let config = self.parsePoundIfDirective { parser -> RawExprSyntax? in
       let head: RawExprSyntax
-      if parser.at(any: .period, .prefixPeriod) {
+      if parser.at(any: [.period, .prefixPeriod]) {
         head = parser.parseDottedExpressionSuffix(nil)
       } else if parser.at(.poundIfKeyword) {
         head = parser.parseIfConfigExpressionSuffix(nil, flavor, forDirective: forDirective)
@@ -515,7 +515,7 @@ extension Parser {
       }
 
       // Check for a .foo suffix.
-      if self.at(any: .period, .prefixPeriod) {
+      if self.at(any: [.period, .prefixPeriod]) {
         leadingExpr = self.parseDottedExpressionSuffix(leadingExpr)
         continue
       }
@@ -700,7 +700,7 @@ extension Parser {
       let dot = self.consumePrefix(".", as: .period)
       let base = RawExprSyntax(RawKeyPathBaseExprSyntax(period: dot, arena: self.arena))
       expression = self.parsePostfixExpressionSuffix(base, .basic, forDirective: forDirective)
-    } else if self.at(any: .period, .prefixPeriod) {
+    } else if self.at(any: [.period, .prefixPeriod]) {
       // Inside a keypath's path, the period always behaves normally: the key path
       // behavior is only the separation between type and path.
       let base = self.parseDottedExpressionSuffix(nil)
@@ -1348,7 +1348,7 @@ extension Parser {
           // over, eat the remaining tokens into a token list.
           var runexpectedTokens = [RawSyntax]()
           let runexpected: RawUnexpectedNodesSyntax?
-          while !subparser.at(any: .eof, .rightParen) {
+          while !subparser.at(any: [.eof, .rightParen]) {
             runexpectedTokens.append(RawSyntax(subparser.consumeAnyToken()))
           }
           if !runexpectedTokens.isEmpty {
@@ -1610,14 +1610,14 @@ extension Parser {
         }
 
         // If we found EOF or the closing square bracket, bailout.
-        if self.at(any: .rightSquareBracket, .eof) {
+        if self.at(any: [.rightSquareBracket, .eof]) {
           break
         }
 
         // If The next token is at the beginning of a new line and can never start
         // an element, break.
         if self.currentToken.isAtStartOfLine
-            && (self.at(any: .rightBrace, .poundEndifKeyword) || self.lookahead().isStartOfDeclaration() || self.lookahead().isStartOfStatement()) {
+            && (self.at(any: [.rightBrace, .poundEndifKeyword]) || self.lookahead().isStartOfDeclaration() || self.lookahead().isStartOfStatement()) {
           break
         }
       }
@@ -1777,7 +1777,7 @@ extension Parser {
   public mutating func parseClosureSignatureIfPresent() -> RawClosureSignatureSyntax? {
     // If we have a leading token that may be part of the closure signature, do a
     // speculative parse to validate it and look for 'in'.
-    guard self.at(any: .atSign, .leftParen, .leftSquareBracket, .wildcardKeyword)
+    guard self.at(any: [.atSign, .leftParen, .leftSquareBracket, .wildcardKeyword])
             || self.currentToken.isIdentifier else {
       // No closure signature.
       return nil
@@ -2114,7 +2114,7 @@ extension Parser.Lookahead {
     // consider it part of the preceding expression
     var backtrack = self.lookahead()
     backtrack.eat(.leftBrace)
-    while !backtrack.at(any: .eof, .rightBrace) {
+    while !backtrack.at(any: [.eof, .rightBrace]) {
       backtrack.consumeAnyToken()
     }
 
@@ -2170,7 +2170,7 @@ extension Parser.Lookahead {
 
     // Skip by a closure capture list if present.
     if lookahead.consume(if: .leftSquareBracket) != nil {
-      while !lookahead.at(any: .eof, .rightSquareBracket) {
+      while !lookahead.at(any: [.eof, .rightSquareBracket]) {
         lookahead.consumeAnyToken()
       }
 
@@ -2183,7 +2183,7 @@ extension Parser.Lookahead {
     if lookahead.consume(if: .leftParen) != nil {      // Consume the ')'.
 
       // While we don't have '->' or ')', eat balanced tokens.
-      while !lookahead.at(any: .eof, .rightParen) {
+      while !lookahead.at(any: [.eof, .rightParen]) {
         lookahead.skipSingle()
       }
 
@@ -2238,7 +2238,7 @@ extension Parser.Lookahead {
   // Helper function to see if we can parse member reference like suffixes
   // inside '#if'.
   fileprivate func isAtStartOfPostfixExprSuffix() -> Bool {
-    guard self.at(any: .period, .prefixPeriod) else {
+    guard self.at(any: [.period, .prefixPeriod]) else {
       return false
     }
 

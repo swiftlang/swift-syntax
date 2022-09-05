@@ -175,7 +175,7 @@ extension Parser {
     // '.Type', '.Protocol', '?', '!', and '[]' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if self.at(any: .period, .prefixPeriod) {
+      if self.at(any: [.period, .prefixPeriod]) {
         if self.peek().isContextualKeyword("Type") || self.peek().isContextualKeyword("Protocol") {
           let period = self.consumeAnyToken()
           let type = self.expectIdentifier()
@@ -366,7 +366,7 @@ extension Parser {
     var elements = [RawTupleTypeElementSyntax]()
     do {
       var keepGoing = true
-      while !self.at(any: .eof, .rightParen) && keepGoing {
+      while !self.at(any: [.eof, .rightParen]) && keepGoing {
         let first: RawTokenSyntax?
         let second: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
@@ -511,7 +511,7 @@ extension Parser.Lookahead {
     // '.Type', '.Protocol', '?', and '!' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if self.at(any: .period, .prefixPeriod) &&
+      if self.at(any: [.period, .prefixPeriod]) &&
           (self.peek().isContextualKeyword("Type")
            || self.peek().isContextualKeyword("Protocol")) {
         self.consumeAnyToken()
@@ -548,7 +548,7 @@ extension Parser.Lookahead {
 
   mutating func canParseTupleBodyType() -> Bool {
     guard
-      !self.at(any: .rightParen, .rightBrace) &&
+      !self.at(any: [.rightParen, .rightBrace]) &&
         !self.currentToken.isEllipsis &&
         !self.isStartOfDeclaration()
     else {
@@ -579,7 +579,7 @@ extension Parser.Lookahead {
         // Parse default values. This aren't actually allowed, but we recover
         // better if we skip over them.
         if self.consume(if: .equal) != nil {
-          while !self.at(any: .eof, .rightParen, .rightBrace, .comma)
+          while !self.at(any: [.eof, .rightParen, .rightBrace, .comma])
                   && !self.currentToken.isEllipsis
                   && !self.isStartOfDeclaration() {
             self.skipSingle()
@@ -610,7 +610,7 @@ extension Parser.Lookahead {
 
       // Treat 'Foo.<anything>' as an attempt to write a dotted type
       // unless <anything> is 'Type' or 'Protocol'.
-      if self.at(any: .period, .prefixPeriod) &&
+      if self.at(any: [.period, .prefixPeriod]) &&
           !self.peek().isContextualKeyword("Type") &&
           !self.peek().isContextualKeyword("Protocol") {
         self.consumeAnyToken()
@@ -699,7 +699,7 @@ extension Parser.Lookahead {
 
   mutating func canParseSimpleTypeIdentifier() -> Bool {
     // Parse an identifier.
-    guard self.currentToken.isIdentifier || self.at(any: .capitalSelfKeyword, .anyKeyword) else {
+    guard self.currentToken.isIdentifier || self.at(any: [.capitalSelfKeyword, .anyKeyword]) else {
       return false
     }
     self.consumeAnyToken()
@@ -758,7 +758,7 @@ extension Parser {
       }
     })
 
-    if self.at(any: .atSign, .inoutKeyword) {
+    if self.at(any: [.atSign, .inoutKeyword]) {
       return (specifier, self.parseTypeAttributeListPresent())
     }
 

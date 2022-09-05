@@ -215,13 +215,13 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseConditionElement() -> RawSyntax {
     // Parse a leading #available/#unavailable condition if present.
-    if self.at(any: .poundAvailableKeyword, .poundUnavailableKeyword) {
+    if self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]) {
       return self.parsePoundAvailableConditionElement()
     }
 
     // Parse the basic expression case.  If we have a leading let/var/case
     // keyword or an assignment, then we know this is a binding.
-    if !self.at(any: .letKeyword, .varKeyword, .caseKeyword) {
+    if !self.at(any: [.letKeyword, .varKeyword, .caseKeyword]) {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern
@@ -238,7 +238,7 @@ extension Parser {
     }
 
     // We're parsing a conditional binding.
-    assert(self.at(any: .letKeyword, .varKeyword, .caseKeyword))
+    assert(self.at(any: [.letKeyword, .varKeyword, .caseKeyword]))
     enum BindingKind {
       case pattern(RawTokenSyntax, RawPatternSyntax)
       case optional(RawTokenSyntax, RawPatternSyntax)
@@ -313,7 +313,7 @@ extension Parser {
   ///     availability-condition → '#unavailable' '(' availability-arguments ')'
   @_spi(RawSyntax)
   public mutating func parsePoundAvailableConditionElement() -> RawSyntax {
-    assert(self.at(any: .poundAvailableKeyword, .poundUnavailableKeyword))
+    assert(self.at(any: [.poundAvailableKeyword, .poundUnavailableKeyword]))
     let kind: AvailabilitySpecSource = self.at(.poundAvailableKeyword) ? .available : .unavailable
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
@@ -621,7 +621,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseSwitchCases() -> RawSwitchCaseListSyntax {
     var elements = [RawSyntax]()
-    while !self.at(any: .eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword) {
+    while !self.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword]) {
       if self.lookahead().isAtStartOfSwitchCase() {
         elements.append(RawSyntax(self.parseSwitchCase()))
       } else if self.at(.poundIfKeyword) {
@@ -689,7 +689,7 @@ extension Parser {
     let statements: RawCodeBlockItemListSyntax
     do {
       var items = [RawCodeBlockItemSyntax]()
-      while !self.at(any: .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
+      while !self.at(any: [.rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword])
               && !self.lookahead().isStartOfConditionalSwitchCases(),
             let newItem = self.parseCodeBlockItem() {
         items.append(newItem)
@@ -854,7 +854,7 @@ extension Parser {
       do {
         var keepGoing = true
         var elementList = [RawExprSyntax]()
-        while !self.at(any: .eof, .rightParen) && keepGoing {
+        while !self.at(any: [.eof, .rightParen]) && keepGoing {
           elementList.append(self.parseExpression())
           // FIXME: Need explicit syntax for yield lists or we'll drop this comma!
           keepGoing = self.consume(if: .comma) != nil
@@ -1112,7 +1112,7 @@ extension Parser.Lookahead {
       lookahead.expectIdentifier()
     }
 
-    return lookahead.at(any: .caseKeyword, .defaultKeyword)
+    return lookahead.at(any: [.caseKeyword, .defaultKeyword])
   }
 
   func isStartOfConditionalSwitchCases() -> Bool {
@@ -1125,7 +1125,7 @@ extension Parser.Lookahead {
       lookahead.consumeAnyToken()
       // just find the end of the line
       lookahead.skipUntilEndOfLine()
-    } while lookahead.at(any: .poundIfKeyword, .poundElseifKeyword, .poundElseKeyword)
+    } while lookahead.at(any: [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword])
     return lookahead.isAtStartOfSwitchCase()
   }
 }

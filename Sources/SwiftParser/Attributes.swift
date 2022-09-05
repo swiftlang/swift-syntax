@@ -493,9 +493,8 @@ extension Parser {
     // Parse optional "exported" and "kind" labeled parameters.
     while !self.at(.eof) && !self.at(.whereKeyword) {
       let ident = self.parseAnyIdentifier()
-      guard let knownParameter = SpecializeParameter(rawValue: ident.tokenText) else {
-        fatalError()
-      }
+      let knownParameter = SpecializeParameter(rawValue: ident.tokenText)
+
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
       switch knownParameter {
@@ -571,6 +570,15 @@ extension Parser {
           colon: colon,
           value: valueLabel,
           trailingComma: comma,
+          arena: self.arena
+        )))
+      case .none:
+        let valueLabel = self.consumeAnyToken()
+        elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(
+          label: ident,
+          colon: colon,
+          value: valueLabel,
+          trailingComma: nil,
           arena: self.arena
         )))
       }

@@ -14,8 +14,10 @@
 
 extension Parser {
   mutating func parseAnyIdentifier() -> RawTokenSyntax {
-    if self.at(.identifier) || self.currentToken.isAnyOperator {
-      return self.consumeAnyToken()
+    if let token = self.consume(if: .identifier) {
+      return token
+    } else if let (_, handle) = self.at(anyIn: Operator.self) {
+      return self.eat(handle)
     } else {
       return RawTokenSyntax(missing: .identifier, arena: arena)
     }
@@ -49,7 +51,7 @@ extension Parser {
     let ident: RawTokenSyntax
     if self.at(.identifier) || self.at(any: [.selfKeyword, .capitalSelfKeyword]) {
       ident = self.expectIdentifier()
-    } else if flags.contains(.operators) && self.currentToken.isAnyOperator {
+    } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       ident = self.consumeAnyToken(remapping: .identifier)
     } else if flags.contains(.keywords) && self.currentToken.tokenKind.isKeyword {
       ident = self.consumeAnyToken(remapping: .identifier)
@@ -147,17 +149,6 @@ extension Parser.Lookahead {
 }
 
 extension Lexer.Lexeme {
-  var isBinaryOperator: Bool {
-    return (self.tokenKind == .spacedBinaryOperator ||
-            self.tokenKind == .unspacedBinaryOperator)
-  }
-
-  var isAnyOperator: Bool {
-    return (self.isBinaryOperator ||
-            self.tokenKind == .postfixOperator ||
-            self.tokenKind == .prefixOperator)
-  }
-
   func isContextualKeyword(_ name: SyntaxText) -> Bool {
     switch self.tokenKind {
     case .identifier, .contextualKeyword:
@@ -177,7 +168,7 @@ extension Lexer.Lexeme {
   }
 
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {
-    return self.isAnyOperator && self.tokenText == name
+    return Operator(self) != nil && self.tokenText == name
   }
 
   var isKeyword: Bool {
@@ -250,7 +241,7 @@ extension Lexer.Lexeme {
   }
 
   func starts(with symbol: SyntaxText) -> Bool {
-    guard self.isAnyOperator || self.tokenKind.isPunctuation else {
+    guard Operator(self) != nil || self.tokenKind.isPunctuation else {
       return false
     }
 

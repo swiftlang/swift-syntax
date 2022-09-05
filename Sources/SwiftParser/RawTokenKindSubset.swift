@@ -72,6 +72,18 @@ extension ContextualKeywords where RawValue == SyntaxText {
 
 // MARK: - Subsets
 
+enum BinaryOperator: RawTokenKindSubset {
+  case spacedBinaryOperator
+  case unspacedBinaryOperator
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .spacedBinaryOperator: return .spacedBinaryOperator
+    case .unspacedBinaryOperator: return .unspacedBinaryOperator
+    }
+  }
+}
+
 enum CanBeArgumentLabel: RawTokenKindSubset {
   case identifier
   case inoutKeyword
@@ -136,6 +148,22 @@ enum IdentifierTokens: RawTokenKindSubset {
     case .capitalSelfKeyword: return .capitalSelfKeyword
     case .identifier: return .identifier
     case .selfKeyword: return .selfKeyword
+    }
+  }
+}
+
+enum Operator: RawTokenKindSubset {
+  case spacedBinaryOperator
+  case unspacedBinaryOperator
+  case postfixOperator
+  case prefixOperator
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .spacedBinaryOperator: return .spacedBinaryOperator
+    case .unspacedBinaryOperator: return .unspacedBinaryOperator
+    case .postfixOperator: return .postfixOperator
+    case .prefixOperator: return .prefixOperator
     }
   }
 }

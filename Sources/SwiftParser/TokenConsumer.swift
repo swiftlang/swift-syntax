@@ -41,8 +41,8 @@ public protocol TokenConsumer {
 struct TokenConsumptionHandle {
   /// The kind that is expected to be consumed if the handle is eaten.
   var tokenKind: RawTokenKind
-  /// Whether the token should be remapped to a contextual keyword when eaten
-  var remapToContextualKeyword: Bool
+  /// When not `nil`, the token's kind will be remapped to this kind when consumed.
+  var remappedKind: RawTokenKind?
 }
 
 extension TokenConsumer {
@@ -106,7 +106,7 @@ extension TokenConsumer {
     if let matchedKind = Subset(self.currentToken) {
       return (matchedKind, TokenConsumptionHandle(
         tokenKind: matchedKind.rawTokenKind,
-        remapToContextualKeyword: matchedKind.contextualKeyword != nil
+        remappedKind: matchedKind.remappedKind
       ))
     }
     return nil
@@ -115,8 +115,8 @@ extension TokenConsumer {
   /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
   mutating func eat(_ handle: TokenConsumptionHandle) -> Token {
     assert(self.at(handle.tokenKind))
-    if handle.remapToContextualKeyword {
-      return consumeAnyToken(remapping: .contextualKeyword)
+    if let remappedKind = handle.remappedKind {
+      return consumeAnyToken(remapping: remappedKind)
     } else {
       return consumeAnyToken()
     }

@@ -454,11 +454,11 @@ extension Parser {
               rightTypeIdentifier: secondType,
               arena: self.arena))
           }
-        case (.spacedBinaryOperator, _)?,
-          (.unspacedBinaryOperator, _)?,
-          (.postfixOperator, _)?,
-          (.prefixOperator, _)?:
-          let equal = self.consumeAnyToken()
+        case (.spacedBinaryOperator, let handle)?,
+          (.unspacedBinaryOperator, let handle)?,
+          (.postfixOperator, let handle)?,
+          (.prefixOperator, let handle)?:
+          let equal = self.eat(handle)
           let secondType = self.parseType()
           requirement = RawSyntax(RawSameTypeRequirementSyntax(
             leftTypeIdentifier: firstType,
@@ -1320,12 +1320,7 @@ extension Parser {
   public mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
     let input = self.parseParameterClause()
 
-    let async: RawTokenSyntax?
-    if self.atContextualKeyword("async") {
-      async = self.consumeAnyToken(remapping: .contextualKeyword)
-    } else {
-      async = nil
-    }
+    let async = self.consumeIfContextualKeyword("async")
 
     var throwsKeyword = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword])
 
@@ -1501,12 +1496,12 @@ extension Parser {
     // Parse the contextual keywords for 'mutating' and 'nonmutating' before
     // get and set.
     let modifier: RawDeclModifierSyntax?
-    if self.atContextualKeyword("mutating") ||
-        self.atContextualKeyword("nonmutating") ||
-        self.atContextualKeyword("__consuming") {
+    if let name = self.consume(ifAny: [], contextualKeywords: ["mutating", "nonmutating", "__consuming"]) {
       modifier = RawDeclModifierSyntax(
-        name: self.consumeAnyToken(), detail: nil,
-        arena: self.arena)
+        name: name,
+        detail: nil,
+        arena: self.arena
+      )
     } else {
       modifier = nil
     }
@@ -1524,13 +1519,13 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
     // 'async'
-    if self.atContextualKeyword("async") {
-      return self.consumeAnyToken(remapping: .contextualKeyword)
+    if let async = self.consumeIfContextualKeyword("async") {
+      return async
     }
 
     // 'reasync'
-    if self.atContextualKeyword("reasync") {
-      return self.consumeAnyToken(remapping: .contextualKeyword)
+    if let reasync = self.consumeIfContextualKeyword("reasync") {
+      return reasync
     }
 
     // 'throws'/'rethrows'

@@ -255,12 +255,7 @@ extension Parser {
         return nil
       }
     case (.arrow, _)?, (.throwsKeyword, _)?:
-      let asyncKeyword: RawTokenSyntax?
-      if self.atContextualKeyword("async") {
-        asyncKeyword = self.consumeAnyToken(remapping: .contextualKeyword)
-      } else {
-        asyncKeyword = nil
-      }
+      let asyncKeyword = self.consumeIfContextualKeyword("async")
 
       let throwsKeyword = self.consume(if: .throwsKeyword)
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
@@ -292,8 +287,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     forDirective: Bool = false
   ) -> RawExprSyntax {
-    if self.atContextualKeyword("await") {
-      let awaitTok = self.consumeAnyToken()
+    if let awaitTok = self.consumeIfContextualKeyword("await") {
       let sub = self.parseSequenceExpressionElement(flavor)
       return RawExprSyntax(RawAwaitExprSyntax(
         awaitKeyword: awaitTok, expression: sub,
@@ -819,6 +813,13 @@ extension Parser {
         case .leftSquareBracket: return .leftSquareBracket
         }
       }
+
+      var remappedKind: RawTokenKind? {
+        switch self {
+        case .period: return .prefixPeriod
+        default: return nil
+        }
+      }
     }
 
     switch self.at(anyIn: ExpectedTokenKind.self) {
@@ -953,9 +954,9 @@ extension Parser {
 
     case (.leftBrace, _)?:     // expr-closure
       return RawExprSyntax(self.parseClosureExpression())
-    case (.period, _)?,              //=.foo
-         (.prefixPeriod, _)?:      // .foo
-      let dot = self.consumeAnyToken(remapping: .prefixPeriod)
+    case (.period, let handle)?,              //=.foo
+         (.prefixPeriod, let handle)?:      // .foo
+      let dot = self.eat(handle)
       let (name, args) = self.parseDeclNameRef([ .keywords, .compoundNames ])
       return RawExprSyntax(RawMemberAccessExprSyntax(
         base: nil, dot: dot, name: name, declNameArguments: args,

@@ -25,18 +25,18 @@ public protocol IncrementalParseReusedNodeDelegate {
   ///   - range: The source region of the currently parsed source.
   ///   - previousNode: The node from the previous tree that is associated with
   ///                   the skipped source region.
-  func parserReusedNode(range: ByteSourceRange, previousNode: SyntaxNode)
+  func parserReusedNode(range: ByteSourceRange, previousNode: Syntax)
 }
 
 /// An implementation of `IncrementalParseReusedNodeDelegate` that just collects
 /// the range and re-used node into an array.
 public final class IncrementalParseReusedNodeCollector:
     IncrementalParseReusedNodeDelegate {
-  public var rangeAndNodes: [(ByteSourceRange, SyntaxNode)] = []
+  public var rangeAndNodes: [(ByteSourceRange, Syntax)] = []
 
   public init() {}
 
-  public func parserReusedNode(range: ByteSourceRange, previousNode: SyntaxNode) {
+  public func parserReusedNode(range: ByteSourceRange, previousNode: Syntax) {
     rangeAndNodes.append((range, previousNode))
   }
 }
@@ -226,7 +226,7 @@ public struct IncrementalParseLookup {
 
   public init(transition: IncrementalParseTransition) {
     self.transition = transition
-    self.cursor = .init(root: transition.previousTree.data.absoluteRaw)
+    self.cursor = .init(root: transition.previousTree.data)
   }
 
   fileprivate var edits: ConcurrentEdits {
@@ -246,11 +246,11 @@ public struct IncrementalParseLookup {
   /// - Parameters:
   ///   - offset: The byte offset of the source string that is currently parsed.
   ///   - kind: The `CSyntaxKind` that the parser expects at this position.
-  /// - Returns: A `SyntaxNode` node from the previous parse invocation,
+  /// - Returns: A `Syntax` node from the previous parse invocation,
   ///            representing the contents of this region, if it is still valid
   ///            to re-use. `nil` otherwise.
   @_spi(RawSyntax)
-  public mutating func lookUp(_ newOffset: Int, kind: SyntaxKind) -> SyntaxNode? {
+  public mutating func lookUp(_ newOffset: Int, kind: SyntaxKind) -> Syntax? {
     guard let prevOffset = translateToPreEditOffset(newOffset) else {
       return nil
     }
@@ -266,7 +266,7 @@ public struct IncrementalParseLookup {
 
   mutating fileprivate func cursorLookup(
     prevPosition: AbsolutePosition, kind: SyntaxKind
-  ) -> SyntaxNode? {
+  ) -> Syntax? {
     guard !cursor.finished else { return nil }
 
     while true {
@@ -348,43 +348,38 @@ public struct IncrementalParseLookup {
 /// Functions as an iterator that walks the tree looking for nodes with a
 /// certain position.
 fileprivate struct SyntaxCursor {
-  var parents: [AbsoluteRawSyntax]
-  var node: AbsoluteRawSyntax
+  var node: SyntaxData
   var finished: Bool
   let viewMode = SyntaxTreeViewMode.sourceAccurate
 
-  init(root: AbsoluteRawSyntax) {
+  init(root: SyntaxData) {
     self.node = root
-    self.parents = []
     self.finished = false
   }
 
-  var asSyntaxNode: SyntaxNode {
-    return SyntaxNode(node: node, parents: ArraySlice(parents))
+  var asSyntaxNode: Syntax {
+    return Syntax(node)
   }
 
   /// Returns the next sibling node or the parent's sibling node if this is
   /// the last child. The cursor state is unmodified.
-  /// - Returns: False if it run out of nodes to walk to.
-  var nextSibling: AbsoluteRawSyntax? {
-    var parents = ArraySlice(self.parents)
+  /// - Returns: `nil` if it run out of nodes to walk to.
+  var nextSibling: SyntaxData? {
     var node = self.node
-    while !parents.isEmpty {
-      if let sibling = node.nextSibling(parent: parents.last!, viewMode: viewMode) {
-        return sibling
+    while let parent = node.parent {
+      if let sibling = node.absoluteRaw.nextSibling(parent: parent.absoluteRaw, viewMode: viewMode) {
+        return SyntaxData(sibling, parent: Syntax(parent))
       }
-      node = parents.removeLast()
+      node = parent
     }
-
     return nil
   }
 
   /// Moves to the first child of the current node.
   /// - Returns: False if the node has no children.
   mutating func advanceToFirstChild() -> Bool {
-    guard let child = node.firstChild(viewMode: viewMode) else { return false }
-    parents.append(node)
-    node = child
+    guard let child = node.absoluteRaw.firstChild(viewMode: viewMode) else { return false }
+    node = SyntaxData(child, parent: Syntax(node))
     return true
   }
 
@@ -392,16 +387,13 @@ fileprivate struct SyntaxCursor {
   /// the last child.
   /// - Returns: False if it run out of nodes to walk to.
   mutating func advanceToNextSibling() -> Bool {
-    while !parents.isEmpty {
-      if let sibling = node.nextSibling(parent: parents.last!, viewMode: viewMode) {
-        node = sibling
-        return true
-      }
-      node = parents.removeLast()
+    guard let next = nextSibling else {
+      finished = true
+      return false
     }
 
-    finished = true
-    return false
+    self.node = next
+    return true
   }
 
   /// Moves to the next node in the tree with the provided `position`.

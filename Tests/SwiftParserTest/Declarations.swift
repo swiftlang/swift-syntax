@@ -51,6 +51,20 @@ final class DeclarationTests: XCTestCase {
       "<@NSApplicationMain T: AnyObject>",
       { $0.parseGenericParameters() }
     )
+
+    AssertParse("class T where t#^DIAG^#",
+                diagnostics: [
+                  DiagnosticSpec(message: "Expected '=' in same type requirement"),
+                  DiagnosticSpec(message: "Expected '{' to start class"),
+                  DiagnosticSpec(message: "Expected '}' to end class"),
+                ])
+    AssertParse("class B<#^DIAG_1^#where g#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '>' to end generic parameter clause"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '=' in same type requirement"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start class"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end class"),
+                ])
   }
 
   func testActorParsing() {

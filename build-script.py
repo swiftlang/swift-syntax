@@ -20,6 +20,7 @@ SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAX_DOCUMENTATION_DIR = \
         os.path.join(SWIFTSYNTAX_DIR, "Documentation.docc")
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
+SWIFTPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftParser")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
 GENERATESWIFTSYNTAXBUILDER_DIR = \
         os.path.join(SOURCES_DIR, "generate-swift-syntax-builder")
@@ -323,6 +324,7 @@ def second_stage_gyb_dir_mapping(
         SWIFTSYNTAXBUILDER_DIR,
         SWIFTSYNTAXPARSER_DIR,
         SWIFTSYNTAX_DOCUMENTATION_DIR,
+        SWIFTPARSER_DIR,
     ])
 
 

@@ -42,28 +42,8 @@ extension OperatorPrecedenceError : DiagnosticMessage {
     }
   }
 
-  /// A string representation of each case.
-  private var diagnosticCaseID: String {
-    switch self {
-    case .incomparableOperators:
-      return "incomparable_operators"
-
-    case .operatorAlreadyExists:
-      return "operator_already_exists"
-
-    case .missingOperator:
-      return "missing_operator"
-
-    case .missingGroup:
-      return "missing_group"
-
-    case .groupAlreadyExists:
-      return "group_already_exists"
-    }
-  }
-
   public var diagnosticID: MessageID {
-    MessageID(domain: "SwiftOperatorPrecedence", id: diagnosticCaseID)
+    MessageID(domain: "SwiftOperatorPrecedence", id: "\(self)")
   }
 }
 

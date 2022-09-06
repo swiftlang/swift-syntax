@@ -42,16 +42,16 @@ import SwiftSyntax
 import SwiftParser
 import SwiftOperatorPrecedence
 
-var opPrecedence = OperatorPrecedence.standardOperators // Use the Swift standard library operators
+var opPrecedence = OperatorTable.standardOperators // Use the Swift standard library operators
 let parsed = try Parser.parse(source: "x + y * z")
 dump(parsed) // contains SequenceExprSyntax(x, +, y, *, z)
 let folded = try opPrecedence.foldAll(parsed)
 dump(folded) // contains InfixOperatorExpr(x, +, InfixOperatorExpr(y, *, z))
 ```
 
-The <doc:OperatorPrecedence> type maintains the table of known operators and precedence groups, and is the primary way in which one interacts with this library. The standard operators are provided as a static variable of this type, which will work to fold most Swift code, such as in the example above that folds `x + y * z`.
+The <doc:OperatorTable> type maintains the table of known operators and precedence groups, and is the primary way in which one interacts with this library. The standard operators are provided as a static variable of this type, which will work to fold most Swift code, such as in the example above that folds `x + y * z`.
 
-If your Swift code involves operator and precedence group declarations, they can be parsed into another source file and then added to the `OperatorPrecedence` instance using `addSourceFile`:
+If your Swift code involves operator and precedence group declarations, they can be parsed into another source file and then added to the `OperatorTable` instance using `addSourceFile`:
 
 ```swift
 let moreOperators = 

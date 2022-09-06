@@ -1,8 +1,10 @@
-# ``SwiftOperatorPrecedence``
+# ``SwiftOperators``
 
 
 
-An implementation of Swift's operator precedence semantics for Swift syntax trees.
+An implementation of Swift's user-defined operator declarations and precedence 
+groups, allowing a program to reason about the relative precedence of 
+infix operations and transform syntax trees to describe the order of operations.
 
 
 
@@ -15,7 +17,7 @@ infix operator +: AdditionPrecedence
 infix operator *: MultiplicationPrecedence
 ```
 
-The define the associativity and relative precedence of these operators is defined via a [precedence group declaration](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#grammar_precedence-group-declaration). For example, the precedence groups used for `+` and `*` are defined as follows:
+The associativity and relative precedence of these operators is defined via a [precedence group declaration](https://docs.swift.org/swift-book/ReferenceManual/Declarations.html#grammar_precedence-group-declaration). For example, the precedence groups used for `+` and `*` are defined as follows:
 
 ```swift
 precedencegroup AdditionPrecedence {
@@ -29,18 +31,18 @@ precedencegroup MultiplicationPrecedence {
 
 The Swift parser itself does not reason about the semantics of operators or precedence groups. Instead, an expression such as `x + y * z` will be parsed into a `SequenceExprSyntax` node whose children are `x`, a `BinaryOperatorExprSyntax` node for `+`, `y`, a `BinaryOperatorExprSyntax` node for `*`, and `z`. This is all the structure that is possible to parse for a Swift program without semantic information about operators and precedence groups.
 
-The `SwiftOperatorPrecedence` module interprets operator and precedence group declarations to provide those semantics. Its primary operation is to "fold" a `SequenceExprSyntax` node into an equivalent syntax tree that fully expresses the order of operations: in our example case, this means that the resulting syntax node will be an `InfixOperatorExprSyntax` whose left-hand side is `x` and operator is `+`, and whose right-hand side is another `InfixOperatorExprSyntax` node representing `y * z`. The resulting syntax tree will still accurately represent the original source input, but will be completely describe the order of evaluation and be suitable for structured editing or later semantic passes, such as type checking.
+The `SwiftOperators` module interprets operator and precedence group declarations to provide those semantics. Its primary operation is to "fold" a `SequenceExprSyntax` node into an equivalent syntax tree that fully expresses the order of operations: in our example case, this means that the resulting syntax node will be an `InfixOperatorExprSyntax` whose left-hand side is `x` and operator is `+`, and whose right-hand side is another `InfixOperatorExprSyntax` node representing `y * z`. The resulting syntax tree will still accurately represent the original source input, but will be completely describe the order of evaluation and be suitable for structured editing or later semantic passes, such as type checking.
 
 
 
 ## Quickstart
 
-The `SwiftOperatorPrecedence` library is typically used to take a raw parse of Swift code and apply the operator-precedence transformation to it to replace all `SequenceExprSyntax` nodes with more structured syntax nodes. For example, we can use this library's representation of the Swift standard library operators to provide a structured syntax tree for the expression `x + y * z`:
+The `SwiftOperators` library is typically used to take a raw parse of Swift code and apply the operator-precedence transformation to it to replace all `SequenceExprSyntax` nodes with more structured syntax nodes. For example, we can use this library's representation of the Swift standard library operators to provide a structured syntax tree for the expression `x + y * z`:
 
 ```swift
 import SwiftSyntax
 import SwiftParser
-import SwiftOperatorPrecedence
+import SwiftOperators
 
 var opPrecedence = OperatorTable.standardOperators // Use the Swift standard library operators
 let parsed = try Parser.parse(source: "x + y * z")

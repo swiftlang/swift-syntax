@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>SwiftOperatorPrecedence</string>
+	<string>SwiftOperators</string>
 	<key>CFBundleDisplayName</key>
-	<string>SwiftOperatorPrecedence</string>
+	<string>SwiftOperators</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.swift-operator-precedence</string>
+	<string>com.apple.swift-operators</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleIconFile</key>
@@ -24,7 +24,7 @@
 	<string>0.1.0</string>
 	<key>CDAppleDefaultAvailability</key>
 	<dict>
-		<key>SwiftOperatorPrecedence</key>
+		<key>SwiftOperators</key>
 		<array>
 			<dict>
 				<key>name</key>

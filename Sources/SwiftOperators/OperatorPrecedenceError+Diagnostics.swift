@@ -43,7 +43,7 @@ extension OperatorPrecedenceError : DiagnosticMessage {
   }
 
   public var diagnosticID: MessageID {
-    MessageID(domain: "SwiftOperatorPrecedence", id: "\(self)")
+    MessageID(domain: "SwiftOperators", id: "\(self)")
   }
 }
 

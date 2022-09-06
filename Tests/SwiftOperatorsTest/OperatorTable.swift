@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 import SwiftParser
-@_spi(Testing) import SwiftOperatorPrecedence
+@_spi(Testing) import SwiftOperators
 import _SwiftSyntaxTestSupport
 
 /// Visitor that looks for ExprSequenceSyntax nodes.

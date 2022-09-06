@@ -45,8 +45,8 @@ let package = Package(
     .macCatalyst(.v13),
   ],
   products: [
-    .library(name: "SwiftOperatorPrecedence", type: .static,
-             targets: ["SwiftOperatorPrecedence"]),
+    .library(name: "SwiftOperators", type: .static,
+             targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", type: .static, targets: ["SwiftParser"]),
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
@@ -121,7 +121,7 @@ let package = Package(
       ]
     ),
     .target(
-      name: "SwiftOperatorPrecedence",
+      name: "SwiftOperators",
       dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"]
     ),
     .executableTarget(
@@ -180,8 +180,8 @@ let package = Package(
       dependencies: ["SwiftDiagnostics", "SwiftParser", "_SwiftSyntaxTestSupport"]
     ),
     .testTarget(
-      name: "SwiftOperatorPrecedenceTest",
-      dependencies: ["SwiftOperatorPrecedence", "_SwiftSyntaxTestSupport",
+      name: "SwiftOperatorsTest",
+      dependencies: ["SwiftOperators", "_SwiftSyntaxTestSupport",
                      "SwiftParser"]
     ),
   ]

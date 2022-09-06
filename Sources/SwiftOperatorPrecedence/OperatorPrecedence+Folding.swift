@@ -444,6 +444,11 @@ extension OperatorPrecedence {
   /// tree with structured syntax trees, by walking the tree and invoking
   /// `foldSingle` on each sequence expression it encounters. Use this to
   /// provide structure to an entire tree.
+  ///
+  /// Due to the inability to express the implementation of this rethrowing
+  /// function, a throwing error handler will end up being called twice with
+  /// the first error that causes it to be thrown. The first call will stop
+  /// the operation, then the second must also throw.
   public func foldAll<Node: SyntaxProtocol>(
     _ node: Node,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
@@ -459,6 +464,7 @@ extension OperatorPrecedence {
       // error.
       if let origFatalError = folder.firstFatalError {
         try errorHandler(origFatalError)
+        fatalError("error handler did not throw again after \(origFatalError)")
       }
 
       return result

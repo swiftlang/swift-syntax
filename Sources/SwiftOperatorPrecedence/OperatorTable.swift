@@ -21,7 +21,9 @@ import SwiftSyntax
 /// syntax tree.
 public struct OperatorTable {
   var precedenceGraph: PrecedenceGraph = .init()
-  var operators: [OperatorName : Operator] = [:]
+  var infixOperators: [OperatorName : Operator] = [:]
+  var prefixOperators: [OperatorName : Operator] = [:]
+  var postfixOperators: [OperatorName : Operator] = [:]
 
   public init() { }
 
@@ -40,19 +42,33 @@ public struct OperatorTable {
     }
   }
 
-  /// Record the operator, if it matters.
+  /// Record the operator in the given operator array.
+  private func record(
+    _ op: Operator,
+    in table: inout [OperatorName : Operator],
+    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+  ) rethrows {
+    if let existing = table[op.name] {
+      try errorHandler(.operatorAlreadyExists(existing: existing, new: op))
+    } else {
+      table[op.name] = op
+    }
+  }
+
+  /// Record the operator.
   mutating func record(
     _ op: Operator,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows {
-    // FIXME: Could do operator-already-exists checking for prefix/postfix
-    // operators as well, since we parse them.
-    if op.kind != .infix { return }
+    switch op.kind {
+    case .infix:
+      return try record(op, in: &infixOperators, errorHandler: errorHandler)
 
-    if let existing = operators[op.name] {
-      try errorHandler(.operatorAlreadyExists(existing: existing, new: op))
-    } else {
-      operators[op.name] = op
+    case .prefix:
+      return try record(op, in: &prefixOperators, errorHandler: errorHandler)
+
+    case .postfix:
+      return try record(op, in: &postfixOperators, errorHandler: errorHandler)
     }
   }
 
@@ -72,7 +88,7 @@ extension OperatorTable {
     referencedFrom syntax: Syntax?,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
-    guard let op = operators[operatorName] else {
+    guard let op = infixOperators[operatorName] else {
       try errorHandler(
         .missingOperator(operatorName, referencedFrom: syntax))
       return nil

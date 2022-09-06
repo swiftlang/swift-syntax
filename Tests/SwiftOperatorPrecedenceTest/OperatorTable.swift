@@ -220,6 +220,40 @@ public class OperatorPrecedenceTests: XCTestCase {
     _ = existingGroup
   }
 
+  func testUnaryErrors() throws {
+    let sources =
+      """
+      prefix operator +
+      prefix operator +
+
+      postfix operator -
+      prefix operator -
+
+      postfix operator*
+      postfix operator*
+      """
+
+    let parsedOperatorPrecedence = try Parser.parse(source: sources)
+
+    var opPrecedence = OperatorTable()
+    var errors: [OperatorPrecedenceError] = []
+    opPrecedence.addSourceFile(parsedOperatorPrecedence) { error in
+      errors.append(error)
+    }
+
+    XCTAssertEqual(errors.count, 2)
+    guard case let .operatorAlreadyExists(existing, new) = errors[0] else {
+      XCTFail("expected an 'operator already exists' error")
+      return
+    }
+
+    XCTAssertEqual(errors[0].message, "redefinition of prefix operator '+'")
+
+    XCTAssertEqual(errors[1].message, "redefinition of postfix operator '*'")
+    _ = existing
+    _ = new
+  }
+
   func testFoldErrors() throws {
     let parsedOperatorPrecedence = try Parser.parse(source:
       """

@@ -28,7 +28,7 @@ extension OperatorPrecedenceError : DiagnosticMessage {
       return "unknown precedence group '\(groupName)'"
 
     case .operatorAlreadyExists(let existing, _):
-      return "redefinition of infix operator '\(existing.name)'"
+      return "redefinition of \(existing.kind) operator '\(existing.name)'"
 
     case .missingOperator(let operatorName, _):
       return "unknown infix operator '\(operatorName)'"

@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 let diagnosticDomain: String = "SwiftParser"
 
@@ -119,22 +119,27 @@ public struct MissingTokenError: ParserError {
   public let missingToken: TokenSyntax
 
   public var message: String {
-    guard let parent = missingToken.parent, let parentTypeName = parent.nodeTypeNameForDiagnostics() else {
-      return "Expected '\(missingToken.text)'"
+    var message = "Expected"
+    if missingToken.text.isEmpty {
+      message += " \(missingToken.tokenKind.decomposeToRaw().rawKind.nameForDiagnostics)"
+    } else {
+      message += " '\(missingToken.text)'"
     }
-    switch missingToken.tokenKind {
-    case .leftAngle, .leftBrace, .leftParen, .leftSquareBracket:
-      if parent.children(viewMode: .fixedUp).first?.as(TokenSyntax.self) == missingToken {
-        return "Expected '\(missingToken.text)' to start \(parentTypeName)"
+    if let parent = missingToken.parent, let parentTypeName = parent.nodeTypeNameForDiagnostics() {
+      switch missingToken.tokenKind {
+      case .leftAngle, .leftBrace, .leftParen, .leftSquareBracket:
+        if parent.children(viewMode: .fixedUp).first?.as(TokenSyntax.self) == missingToken {
+          message += " to start \(parentTypeName)"
+        }
+      case .rightAngle, .rightBrace, .rightParen, .rightSquareBracket:
+        if parent.children(viewMode: .fixedUp).last?.as(TokenSyntax.self) == missingToken {
+          message += " to end \(parentTypeName)"
+        }
+      default:
+        message += " in \(parentTypeName)"
       }
-    case .rightAngle, .rightBrace, .rightParen, .rightSquareBracket:
-      if parent.children(viewMode: .fixedUp).last?.as(TokenSyntax.self) == missingToken {
-        return "Expected '\(missingToken.text)' to end \(parentTypeName)"
-      }
-    default:
-      break
     }
-    return "Expected '\(missingToken.text)' in \(parentTypeName)"
+    return message
   }
 }
 

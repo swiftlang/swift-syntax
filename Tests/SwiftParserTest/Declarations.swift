@@ -498,7 +498,7 @@ final class DeclarationTests: XCTestCase {
       """,
       // FIXME: These are simply bad diagnostics. We should be complaining that identifiers cannot start with digits.
       diagnostics: [
-        DiagnosticSpec(message: "Expected '' in class"),
+        DiagnosticSpec(message: "Expected identifier in class"),
         DiagnosticSpec(message: "Expected '{' to start class"),
         DiagnosticSpec(message: "Expected '}' to end class"),
         DiagnosticSpec(message: "Extraneous code at top level"),
@@ -623,8 +623,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "MISSING_COLON", message: "Expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "MISSING_RPAREN", message: "Expected ')' to end parameter clause"),
-        // FIXME: We should issues something like "Expected identifier in declaration"
-        DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected '' in struct"),
+        DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected identifier in struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Expected '{' to start struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Extraneous ': Int) {}' at top level"),

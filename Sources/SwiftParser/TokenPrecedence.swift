@@ -87,7 +87,8 @@ public enum TokenPrecedence: Comparable {
     return self >= .stmtKeyword
   }
 
-  init(_ tokenKind: RawTokenKind) {
+  @_spi(RawSyntax)
+  public init(_ tokenKind: RawTokenKind) {
     switch tokenKind {
       // MARK: Identifier like
     case

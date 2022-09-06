@@ -236,7 +236,7 @@ extension Parser.Lookahead {
     "_opaqueReturnTypeOf",
   ]
 
-  func isStartOfDeclaration() -> Bool {
+  func isStartOfDeclaration(isAtTopLevel: Bool = false, allowRecovery: Bool = false) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
       return true
     }
@@ -269,8 +269,17 @@ extension Parser.Lookahead {
       }
     }
 
-    switch subparser.at(anyIn: DeclarationStart.self) {
-    case (.caseKeyword, _)?, nil:
+    let declStartKeyword: DeclarationStart?
+    if allowRecovery {
+      declStartKeyword = subparser.canRecoverTo(
+        anyIn: DeclarationStart.self,
+        recoveryPrecedence: isAtTopLevel ? nil : .strongBracketedClose
+      )?.0
+    } else {
+      declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
+    }
+    switch declStartKeyword {
+    case .caseKeyword, nil:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false

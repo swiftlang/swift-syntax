@@ -24,6 +24,11 @@ protocol RawTokenKindSubset: CaseIterable {
   /// If not `nil`, the token's will be remapped to this kind when the handle is eaten.
   var remappedKind: RawTokenKind? { get }
 
+  /// The precedence of this token that determines which tokens can be skipped
+  /// trying to reach it. If this returns `nil`, the precedence of `rawTokenKind`
+  /// is used. This is mostly overwritten for contextual keywords.
+  var precedence: TokenPrecedence? { get }
+
   /// Allows more flexible rejection of further token kinds based on the token's
   /// contents or lookahead. Useful to e.g. look for contextual keywords.
   func accepts(lexeme: Lexer.Lexeme) -> Bool
@@ -40,6 +45,10 @@ extension RawTokenKindSubset {
     } else {
       return nil
     }
+  }
+
+  var precedence: TokenPrecedence? {
+    return nil
   }
 
   func accepts(lexeme: Lexer.Lexeme) -> Bool {
@@ -338,6 +347,14 @@ enum DeclarationStart: RawTokenKindSubset {
   var contextualKeyword: SyntaxText? {
     switch self {
     case .actorContextualKeyword: return "actor"
+    default: return nil
+    }
+  }
+
+  var precedence: TokenPrecedence? {
+    switch self {
+    case .actorContextualKeyword: return .declKeyword
+    case .caseKeyword: return .declKeyword
     default: return nil
     }
   }

@@ -71,7 +71,7 @@ extension Parser {
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
       modifiers: self.parseModifierList())
-    switch self.at(anyIn: DeclarationStart.self) {
+    switch self.canRecoverTo(anyIn: DeclarationStart.self) {
     case (.importKeyword, _)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs))
     case (.classKeyword, _)?:
@@ -961,8 +961,7 @@ extension Parser {
   ///     actor-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseActorDeclaration(_ attrs: DeclAttributes) -> RawActorDeclSyntax {
-    assert(self.atContextualKeyword("actor"))
-    let actorKeyword = self.expectIdentifier()
+    let (unexpectedBeforeActorKeyword, actorKeyword) = self.expectContextualKeyword("actor", precedence: .declKeyword)
     let name = self.expectIdentifier()
 
     let generics: RawGenericParameterClauseSyntax?
@@ -992,6 +991,7 @@ extension Parser {
     return RawActorDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
+      unexpectedBeforeActorKeyword,
       actorKeyword: actorKeyword,
       identifier: name,
       genericParameterClause: generics,

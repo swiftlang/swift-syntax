@@ -41,26 +41,38 @@ extension Parser {
       let arrow = self.eat(.arrow)
       let returnTy = self.parseType()
 
+      let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
       let leftParen: RawTokenSyntax
+      let unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax?
       let arguments: RawTupleTypeElementListSyntax
+      let unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax?
       let rightParen: RawTokenSyntax
       if let input = base.as(RawTupleTypeSyntax.self) {
+        unexpectedBeforeLeftParen = input.unexpectedBeforeLeftParen
         leftParen = input.leftParen
+        unexpectedBetweenLeftParenAndElements = input.unexpectedBetweenLeftParenAndElements
         arguments = input.elements
+        unexpectedBetweenElementsAndRightParen = input.unexpectedBetweenElementsAndRightParen
         rightParen = input.rightParen
       } else {
+        unexpectedBeforeLeftParen = nil
         leftParen = RawTokenSyntax(missing: .leftParen, arena: self.arena)
+        unexpectedBetweenLeftParenAndElements = nil
         arguments = RawTupleTypeElementListSyntax(elements: [
           RawTupleTypeElementSyntax(
             inOut: nil, name: nil, secondName: nil, colon: nil, type: base,
             ellipsis: nil, initializer: nil, trailingComma: nil, arena: self.arena)
         ], arena: self.arena)
+        unexpectedBetweenElementsAndRightParen = nil
         rightParen = RawTokenSyntax(missing: .rightParen, arena: self.arena)
       }
 
       base = RawTypeSyntax(RawFunctionTypeSyntax(
+        unexpectedBeforeLeftParen,
         leftParen: leftParen,
+        unexpectedBetweenLeftParenAndElements,
         arguments: arguments,
+        unexpectedBetweenElementsAndRightParen,
         rightParen: rightParen,
         asyncKeyword: firstEffect,
         throwsOrRethrowsKeyword: secondEffect,

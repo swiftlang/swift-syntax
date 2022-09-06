@@ -26,4 +26,10 @@ final class TypeTests: XCTestCase {
       { $0.parseType() }
     )
   }
+
+  func testFunctionTypes() throws {
+    AssertParse("t as(#^DIAG^#..)->", diagnostics: [
+      DiagnosticSpec(message: "Unexpected text '..' found in function type")
+    ])
+  }
 }

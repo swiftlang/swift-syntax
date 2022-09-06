@@ -708,6 +708,11 @@ final class DeclarationTests: XCTestCase {
       ]
     )
   }
+
+  func testDeinitializers() {
+    AssertParse("deinit {}", { $0.parseDeinitializerDeclaration(.empty) })
+    AssertParse("deinit", { $0.parseDeinitializerDeclaration(.empty) })
+  }
 }
 
 extension Parser.DeclAttributes {

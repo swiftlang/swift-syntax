@@ -1034,7 +1034,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseDeinitializerDeclaration(_ attrs: DeclAttributes) -> RawDeinitializerDeclSyntax {
     let deinitKeyword = self.eat(.deinitKeyword)
-    let items = self.parseCodeBlock()
+    let items = self.parseOptionalCodeBlock()
     return RawDeinitializerDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       deinitKeyword: deinitKeyword, body: items,

@@ -15172,6 +15172,78 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
     return result
   }
 }
+public struct PackExpansionType: TypeBuildable, ExpressibleAsPackExpansionType {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforePatternType: UnexpectedNodes?
+  var patternType: TypeBuildable
+  var unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodes?
+  var ellipsis: Token
+  /// Creates a `PackExpansionType` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforePatternType: 
+  ///   - patternType: 
+  ///   - unexpectedBetweenPatternTypeAndEllipsis: 
+  ///   - ellipsis: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforePatternType: ExpressibleAsUnexpectedNodes? = nil, patternType: ExpressibleAsTypeBuildable, unexpectedBetweenPatternTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token = Token.`ellipsis`) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforePatternType = unexpectedBeforePatternType?.createUnexpectedNodes()
+    self.patternType = patternType.createTypeBuildable()
+    self.unexpectedBetweenPatternTypeAndEllipsis = unexpectedBetweenPatternTypeAndEllipsis?.createUnexpectedNodes()
+    self.ellipsis = ellipsis
+    assert(ellipsis.text == #"..."#)
+  }
+  /// Builds a `PackExpansionTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PackExpansionTypeSyntax`.
+  func buildPackExpansionType(format: Format) -> PackExpansionTypeSyntax {
+    var result = PackExpansionTypeSyntax(unexpectedBeforePatternType?.buildUnexpectedNodes(format: format), patternType: patternType.buildType(format: format), unexpectedBetweenPatternTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis.buildToken(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `TypeBuildable`.
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildPackExpansionType(format: format)
+    return TypeSyntax(result)
+  }
+  /// Conformance to `ExpressibleAsPackExpansionType`.
+  public func createPackExpansionType() -> PackExpansionType {
+    return self
+  }
+  /// Conformance to `ExpressibleAsTypeBuildable`.
+  /// `PackExpansionType` may conform to `ExpressibleAsTypeBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createTypeBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createTypeBuildable() -> TypeBuildable {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `TypeBuildable` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
 public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, HasTrailingComma {
   /// The leading trivia attached to this syntax node once built.
   var leadingTrivia: Trivia

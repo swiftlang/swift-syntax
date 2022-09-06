@@ -257,6 +257,7 @@ extension SyntaxKind {
     case 153: self = .compositionTypeElement
     case 196: self = .compositionTypeElementList
     case 220: self = .compositionType
+    case 273: self = .packExpansionType
     case 154: self = .tupleTypeElement
     case 197: self = .tupleTypeElementList
     case 221: self = .tupleType

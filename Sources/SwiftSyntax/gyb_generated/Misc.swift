@@ -505,6 +505,8 @@ extension Syntax {
       return node
     case .compositionType(let node):
       return node
+    case .packExpansionType(let node):
+      return node
     case .tupleTypeElement(let node):
       return node
     case .tupleTypeElementList(let node):
@@ -802,6 +804,7 @@ extension SyntaxKind {
     case .compositionTypeElement: return CompositionTypeElementSyntax.self
     case .compositionTypeElementList: return CompositionTypeElementListSyntax.self
     case .compositionType: return CompositionTypeSyntax.self
+    case .packExpansionType: return PackExpansionTypeSyntax.self
     case .tupleTypeElement: return TupleTypeElementSyntax.self
     case .tupleTypeElementList: return TupleTypeElementListSyntax.self
     case .tupleType: return TupleTypeSyntax.self

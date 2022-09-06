@@ -1727,6 +1727,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: CompositionTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: PackExpansionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: PackExpansionTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

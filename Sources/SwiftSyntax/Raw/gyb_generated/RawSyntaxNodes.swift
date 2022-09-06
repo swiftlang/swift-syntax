@@ -119,7 +119,7 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .unknownType, .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType: return true
+    case .unknownType, .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType: return true
     default: return false
     }
   }
@@ -14265,6 +14265,59 @@ public struct RawCompositionTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   public var elements: RawCompositionTypeElementListSyntax {
     layoutView.children[1].map(RawCompositionTypeElementListSyntax.init(raw:))!
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawPackExpansionTypeSyntax: RawTypeSyntaxNodeProtocol {
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .packExpansionType
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforePatternType: RawUnexpectedNodesSyntax? = nil,
+    patternType: RawTypeSyntax,
+    _ unexpectedBetweenPatternTypeAndEllipsis: RawUnexpectedNodesSyntax? = nil,
+    ellipsis: RawTokenSyntax,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .packExpansionType, uninitializedCount: 4, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforePatternType?.raw
+      layout[1] = patternType.raw
+      layout[2] = unexpectedBetweenPatternTypeAndEllipsis?.raw
+      layout[3] = ellipsis.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforePatternType: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var patternType: RawTypeSyntax {
+    layoutView.children[1].map(RawTypeSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenPatternTypeAndEllipsis: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var ellipsis: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
 }
 

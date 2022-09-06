@@ -2421,6 +2421,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `CompositionTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CompositionTypeSyntax) {}
+  /// Visiting `PackExpansionTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackExpansionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `PackExpansionTypeSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackExpansionTypeSyntax) {}
   /// Visiting `TupleTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5368,6 +5378,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackExpansionTypeSyntax(_ data: SyntaxData) {
+      let node = PackExpansionTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleTypeElementSyntax(_ data: SyntaxData) {
       let node = TupleTypeElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6138,6 +6159,8 @@ open class SyntaxVisitor {
       visitImplCompositionTypeElementListSyntax(data)
     case .compositionType:
       visitImplCompositionTypeSyntax(data)
+    case .packExpansionType:
+      visitImplPackExpansionTypeSyntax(data)
     case .tupleTypeElement:
       visitImplTupleTypeElementSyntax(data)
     case .tupleTypeElementList:

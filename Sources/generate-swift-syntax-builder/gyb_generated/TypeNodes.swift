@@ -203,6 +203,19 @@ let TYPE_NODES: [Node] = [
                collectionElementName: "Element")
        ]),
   
+  Node(name: "PackExpansionType",
+       nameForDiagnostics: "variadic expansion",
+       kind: "Type",
+       children: [
+         Child(name: "PatternType",
+               kind: "Type"),
+         Child(name: "Ellipsis",
+               kind: "EllipsisToken",
+               tokenChoices: [
+                 "Ellipsis"
+               ])
+       ]),
+  
   Node(name: "TupleTypeElement",
        nameForDiagnostics: nil,
        kind: "Syntax",

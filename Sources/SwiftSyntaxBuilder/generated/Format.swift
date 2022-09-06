@@ -1657,6 +1657,14 @@ extension Format {
     }
     return result
   }
+  func format(syntax: PackExpansionTypeSyntax) -> PackExpansionTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
   func format(syntax: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []

@@ -18,7 +18,8 @@
 /// After calling `consume(ifAnyFrom:)` we know which token we are positioned
 /// at based on that function's return type. This handle allows consuming that
 /// token.
-struct RecoveryConsumptionHandle {
+@_spi(RawSyntax)
+public struct RecoveryConsumptionHandle {
   var unexpectedTokens: Int
   var tokenConsumptionHandle: TokenConsumptionHandle
 }
@@ -36,7 +37,9 @@ extension Parser.Lookahead {
     _ kinds: [RawTokenKind],
     contextualKeywords: [SyntaxText] = [],
     recoveryPrecedence: TokenPrecedence? = nil
-  ) -> Bool {
+  ) -> RecoveryConsumptionHandle? {
+    let initialTokensConsumed = self.tokensConsumed
+
     var precedences = kinds.map(TokenPrecedence.init)
     if !contextualKeywords.isEmpty {
       precedences += [TokenPrecedence(.identifier), TokenPrecedence(.contextualKeyword)]
@@ -49,7 +52,13 @@ extension Parser.Lookahead {
         break
       }
       if self.at(any: kinds, contextualKeywords: contextualKeywords) {
-        return true
+        return RecoveryConsumptionHandle(
+          unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
+          tokenConsumptionHandle: TokenConsumptionHandle(
+            tokenKind: self.currentToken.tokenKind,
+            remappedKind: self.at(any: [], contextualKeywords: contextualKeywords) ? .contextualKeyword : nil
+          )
+        )
       }
       let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
       if currentTokenPrecedence >= recoveryPrecedence {
@@ -57,14 +66,14 @@ extension Parser.Lookahead {
       }
       self.consumeAnyToken()
       if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
-        guard self.canRecoverTo([closingDelimiter]) else {
+        guard self.canRecoverTo([closingDelimiter]) != nil else {
           break
         }
         self.eat(closingDelimiter)
       }
     }
 
-    return false
+    return nil
   }
 
   /// Checks if we can reach a token in `subset` by skipping tokens that have
@@ -76,6 +85,8 @@ extension Parser.Lookahead {
     anyIn subset: Subset.Type,
     recoveryPrecedence: TokenPrecedence? = nil
   ) -> (Subset, RecoveryConsumptionHandle)? {
+    let initialTokensConsumed = self.tokensConsumed
+
     assert(!subset.allCases.isEmpty, "Subset must have at least one case")
     let recoveryPrecedence = recoveryPrecedence ?? subset.allCases.map({
       if let precedence = $0.precedence {
@@ -84,8 +95,6 @@ extension Parser.Lookahead {
         return TokenPrecedence($0.rawTokenKind)
       }
     }).min()!
-    let initialTokensConsumed = self.tokensConsumed
-    assert(!subset.allCases.isEmpty)
     while !self.at(.eof) {
       if !recoveryPrecedence.shouldSkipOverNewlines,
           self.currentToken.isAtStartOfLine {
@@ -103,7 +112,7 @@ extension Parser.Lookahead {
       }
       self.consumeAnyToken()
       if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
-        guard self.canRecoverTo([closingDelimiter]) else {
+        guard self.canRecoverTo([closingDelimiter]) != nil else {
           break
         }
         self.eat(closingDelimiter)

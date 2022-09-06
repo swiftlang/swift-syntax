@@ -209,9 +209,12 @@ extension Parser {
   /// Checks if it can reach a token of the given `kind` by skipping unexpected
   /// tokens that have lower ``TokenPrecedence`` than expected token.
   @_spi(RawSyntax)
-  public func canRecoverTo(_ kind: RawTokenKind) -> Bool {
+  public func canRecoverTo(_ kind: RawTokenKind) -> RecoveryConsumptionHandle? {
     if self.at(kind) {
-      return true
+      return RecoveryConsumptionHandle(
+        unexpectedTokens: 0,
+        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: kind)
+      )
     }
     var lookahead = self.lookahead()
     return lookahead.canRecoverTo([kind])
@@ -224,9 +227,15 @@ extension Parser {
   public func canRecoverToContextualKeyword(
     _ name: SyntaxText,
     precedence: TokenPrecedence = TokenPrecedence(.contextualKeyword)
-  ) -> Bool {
+  ) -> RecoveryConsumptionHandle? {
     if self.atContextualKeyword(name) {
-      return true
+      return RecoveryConsumptionHandle(
+        unexpectedTokens: 0,
+        tokenConsumptionHandle: TokenConsumptionHandle(
+          tokenKind: self.currentToken.tokenKind,
+          remappedKind: .contextualKeyword
+        )
+      )
     }
     var lookahead = self.lookahead()
     return lookahead.canRecoverTo([], contextualKeywords: [name])
@@ -238,9 +247,12 @@ extension Parser {
   @_spi(RawSyntax)
   public func canRecoverTo(
     any kinds: [RawTokenKind]
-  ) -> Bool {
+  ) -> RecoveryConsumptionHandle? {
     if self.at(any: kinds) {
-      return true
+      return RecoveryConsumptionHandle(
+        unexpectedTokens: 0,
+        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: self.currentToken.tokenKind)
+      )
     }
     var lookahead = self.lookahead()
     return lookahead.canRecoverTo(kinds)
@@ -279,20 +291,16 @@ extension Parser {
   /// Implements the paradigm shared across all `expect` methods.
   private mutating func expectImpl(
     consume: (inout Parser) -> RawTokenSyntax?,
-    canRecoverTo: (inout Lookahead) -> Bool,
+    canRecoverTo: (inout Lookahead) -> RecoveryConsumptionHandle?,
     makeMissing: (inout Parser) -> RawTokenSyntax
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     if let tok = consume(&self) {
       return (nil, tok)
     }
     var lookahead = self.lookahead()
-    if canRecoverTo(&lookahead) {
-      var unexpectedTokens = [RawSyntax]()
-      for _ in 0..<lookahead.tokensConsumed {
-        unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
-      }
-      let token = consume(&self)!
-      return (RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena), token)
+    if let handle = canRecoverTo(&lookahead) {
+      let (unexpectedTokens, token) = self.eat(handle)
+      return (unexpectedTokens, token)
     }
     return (nil, makeMissing(&self))
   }

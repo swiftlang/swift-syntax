@@ -83,7 +83,7 @@ extension Parser.Lookahead {
       return
     }
     var lookahead = self.lookahead()
-    if lookahead.canRecoverTo([kind]) {
+    if lookahead.canRecoverTo([kind]) != nil {
       for _ in 0..<lookahead.tokensConsumed {
         self.consumeAnyToken()
       }

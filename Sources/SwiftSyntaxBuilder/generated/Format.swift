@@ -35,7 +35,7 @@ extension Format {
   }
 }
 extension Format {
-  public func _format(syntax: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
+  func format(syntax: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -43,12 +43,12 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
+  func format(syntax: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
     CodeBlockItemListSyntax(syntax.map {
       $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     })
   }
-  public func _format(syntax: CodeBlockSyntax) -> CodeBlockSyntax {
+  func format(syntax: CodeBlockSyntax) -> CodeBlockSyntax {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -56,10 +56,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
+  func format(syntax: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
     syntax
   }
-  public func _format(syntax: InOutExprSyntax) -> InOutExprSyntax {
+  func format(syntax: InOutExprSyntax) -> InOutExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -67,7 +67,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundColumnExprSyntax) -> PoundColumnExprSyntax {
+  func format(syntax: PoundColumnExprSyntax) -> PoundColumnExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -75,19 +75,19 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
+  func format(syntax: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
     syntax
   }
-  public func _format(syntax: ArrayElementListSyntax) -> ArrayElementListSyntax {
+  func format(syntax: ArrayElementListSyntax) -> ArrayElementListSyntax {
     syntax
   }
-  public func _format(syntax: DictionaryElementListSyntax) -> DictionaryElementListSyntax {
+  func format(syntax: DictionaryElementListSyntax) -> DictionaryElementListSyntax {
     syntax
   }
-  public func _format(syntax: StringLiteralSegmentsSyntax) -> StringLiteralSegmentsSyntax {
+  func format(syntax: StringLiteralSegmentsSyntax) -> StringLiteralSegmentsSyntax {
     syntax
   }
-  public func _format(syntax: TryExprSyntax) -> TryExprSyntax {
+  func format(syntax: TryExprSyntax) -> TryExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -95,7 +95,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AwaitExprSyntax) -> AwaitExprSyntax {
+  func format(syntax: AwaitExprSyntax) -> AwaitExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -103,7 +103,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MoveExprSyntax) -> MoveExprSyntax {
+  func format(syntax: MoveExprSyntax) -> MoveExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -111,7 +111,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DeclNameArgumentSyntax) -> DeclNameArgumentSyntax {
+  func format(syntax: DeclNameArgumentSyntax) -> DeclNameArgumentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -119,10 +119,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DeclNameArgumentListSyntax) -> DeclNameArgumentListSyntax {
+  func format(syntax: DeclNameArgumentListSyntax) -> DeclNameArgumentListSyntax {
     syntax
   }
-  public func _format(syntax: DeclNameArgumentsSyntax) -> DeclNameArgumentsSyntax {
+  func format(syntax: DeclNameArgumentsSyntax) -> DeclNameArgumentsSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -130,7 +130,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IdentifierExprSyntax) -> IdentifierExprSyntax {
+  func format(syntax: IdentifierExprSyntax) -> IdentifierExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -138,7 +138,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SuperRefExprSyntax) -> SuperRefExprSyntax {
+  func format(syntax: SuperRefExprSyntax) -> SuperRefExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -146,7 +146,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: NilLiteralExprSyntax) -> NilLiteralExprSyntax {
+  func format(syntax: NilLiteralExprSyntax) -> NilLiteralExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -154,7 +154,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DiscardAssignmentExprSyntax) -> DiscardAssignmentExprSyntax {
+  func format(syntax: DiscardAssignmentExprSyntax) -> DiscardAssignmentExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -162,7 +162,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AssignmentExprSyntax) -> AssignmentExprSyntax {
+  func format(syntax: AssignmentExprSyntax) -> AssignmentExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -170,7 +170,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SequenceExprSyntax) -> SequenceExprSyntax {
+  func format(syntax: SequenceExprSyntax) -> SequenceExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -178,10 +178,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ExprListSyntax) -> ExprListSyntax {
+  func format(syntax: ExprListSyntax) -> ExprListSyntax {
     syntax
   }
-  public func _format(syntax: PoundLineExprSyntax) -> PoundLineExprSyntax {
+  func format(syntax: PoundLineExprSyntax) -> PoundLineExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -189,7 +189,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundFileExprSyntax) -> PoundFileExprSyntax {
+  func format(syntax: PoundFileExprSyntax) -> PoundFileExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -197,7 +197,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundFileIDExprSyntax) -> PoundFileIDExprSyntax {
+  func format(syntax: PoundFileIDExprSyntax) -> PoundFileIDExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -205,7 +205,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundFilePathExprSyntax) -> PoundFilePathExprSyntax {
+  func format(syntax: PoundFilePathExprSyntax) -> PoundFilePathExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -213,7 +213,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundFunctionExprSyntax) -> PoundFunctionExprSyntax {
+  func format(syntax: PoundFunctionExprSyntax) -> PoundFunctionExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -221,7 +221,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundDsohandleExprSyntax) -> PoundDsohandleExprSyntax {
+  func format(syntax: PoundDsohandleExprSyntax) -> PoundDsohandleExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -229,7 +229,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SymbolicReferenceExprSyntax) -> SymbolicReferenceExprSyntax {
+  func format(syntax: SymbolicReferenceExprSyntax) -> SymbolicReferenceExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -237,7 +237,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrefixOperatorExprSyntax) -> PrefixOperatorExprSyntax {
+  func format(syntax: PrefixOperatorExprSyntax) -> PrefixOperatorExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -245,7 +245,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: BinaryOperatorExprSyntax) -> BinaryOperatorExprSyntax {
+  func format(syntax: BinaryOperatorExprSyntax) -> BinaryOperatorExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -253,7 +253,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ArrowExprSyntax) -> ArrowExprSyntax {
+  func format(syntax: ArrowExprSyntax) -> ArrowExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -261,7 +261,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: InfixOperatorExprSyntax) -> InfixOperatorExprSyntax {
+  func format(syntax: InfixOperatorExprSyntax) -> InfixOperatorExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -269,7 +269,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: FloatLiteralExprSyntax) -> FloatLiteralExprSyntax {
+  func format(syntax: FloatLiteralExprSyntax) -> FloatLiteralExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -277,7 +277,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TupleExprSyntax) -> TupleExprSyntax {
+  func format(syntax: TupleExprSyntax) -> TupleExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -285,7 +285,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ArrayExprSyntax) -> ArrayExprSyntax {
+  func format(syntax: ArrayExprSyntax) -> ArrayExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -293,7 +293,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DictionaryExprSyntax) -> DictionaryExprSyntax {
+  func format(syntax: DictionaryExprSyntax) -> DictionaryExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -301,7 +301,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TupleExprElementSyntax) -> TupleExprElementSyntax {
+  func format(syntax: TupleExprElementSyntax) -> TupleExprElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -309,7 +309,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ArrayElementSyntax) -> ArrayElementSyntax {
+  func format(syntax: ArrayElementSyntax) -> ArrayElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -317,7 +317,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DictionaryElementSyntax) -> DictionaryElementSyntax {
+  func format(syntax: DictionaryElementSyntax) -> DictionaryElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -325,7 +325,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IntegerLiteralExprSyntax) -> IntegerLiteralExprSyntax {
+  func format(syntax: IntegerLiteralExprSyntax) -> IntegerLiteralExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -333,7 +333,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: BooleanLiteralExprSyntax) -> BooleanLiteralExprSyntax {
+  func format(syntax: BooleanLiteralExprSyntax) -> BooleanLiteralExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -341,7 +341,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: UnresolvedTernaryExprSyntax) -> UnresolvedTernaryExprSyntax {
+  func format(syntax: UnresolvedTernaryExprSyntax) -> UnresolvedTernaryExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -349,7 +349,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TernaryExprSyntax) -> TernaryExprSyntax {
+  func format(syntax: TernaryExprSyntax) -> TernaryExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -357,7 +357,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MemberAccessExprSyntax) -> MemberAccessExprSyntax {
+  func format(syntax: MemberAccessExprSyntax) -> MemberAccessExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -365,7 +365,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: UnresolvedIsExprSyntax) -> UnresolvedIsExprSyntax {
+  func format(syntax: UnresolvedIsExprSyntax) -> UnresolvedIsExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -373,7 +373,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IsExprSyntax) -> IsExprSyntax {
+  func format(syntax: IsExprSyntax) -> IsExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -381,7 +381,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: UnresolvedAsExprSyntax) -> UnresolvedAsExprSyntax {
+  func format(syntax: UnresolvedAsExprSyntax) -> UnresolvedAsExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -389,7 +389,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AsExprSyntax) -> AsExprSyntax {
+  func format(syntax: AsExprSyntax) -> AsExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -397,7 +397,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TypeExprSyntax) -> TypeExprSyntax {
+  func format(syntax: TypeExprSyntax) -> TypeExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -405,7 +405,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ClosureCaptureItemSyntax) -> ClosureCaptureItemSyntax {
+  func format(syntax: ClosureCaptureItemSyntax) -> ClosureCaptureItemSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -413,10 +413,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ClosureCaptureItemListSyntax) -> ClosureCaptureItemListSyntax {
+  func format(syntax: ClosureCaptureItemListSyntax) -> ClosureCaptureItemListSyntax {
     syntax
   }
-  public func _format(syntax: ClosureCaptureSignatureSyntax) -> ClosureCaptureSignatureSyntax {
+  func format(syntax: ClosureCaptureSignatureSyntax) -> ClosureCaptureSignatureSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -424,7 +424,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ClosureParamSyntax) -> ClosureParamSyntax {
+  func format(syntax: ClosureParamSyntax) -> ClosureParamSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -432,10 +432,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ClosureParamListSyntax) -> ClosureParamListSyntax {
+  func format(syntax: ClosureParamListSyntax) -> ClosureParamListSyntax {
     syntax
   }
-  public func _format(syntax: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
+  func format(syntax: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -443,7 +443,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ClosureExprSyntax) -> ClosureExprSyntax {
+  func format(syntax: ClosureExprSyntax) -> ClosureExprSyntax {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -451,7 +451,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: UnresolvedPatternExprSyntax) -> UnresolvedPatternExprSyntax {
+  func format(syntax: UnresolvedPatternExprSyntax) -> UnresolvedPatternExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -459,7 +459,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementSyntax {
+  func format(syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -467,10 +467,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MultipleTrailingClosureElementListSyntax) -> MultipleTrailingClosureElementListSyntax {
+  func format(syntax: MultipleTrailingClosureElementListSyntax) -> MultipleTrailingClosureElementListSyntax {
     syntax
   }
-  public func _format(syntax: FunctionCallExprSyntax) -> FunctionCallExprSyntax {
+  func format(syntax: FunctionCallExprSyntax) -> FunctionCallExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -478,7 +478,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SubscriptExprSyntax) -> SubscriptExprSyntax {
+  func format(syntax: SubscriptExprSyntax) -> SubscriptExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -486,7 +486,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: OptionalChainingExprSyntax) -> OptionalChainingExprSyntax {
+  func format(syntax: OptionalChainingExprSyntax) -> OptionalChainingExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -494,7 +494,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ForcedValueExprSyntax) -> ForcedValueExprSyntax {
+  func format(syntax: ForcedValueExprSyntax) -> ForcedValueExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -502,7 +502,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PostfixUnaryExprSyntax) -> PostfixUnaryExprSyntax {
+  func format(syntax: PostfixUnaryExprSyntax) -> PostfixUnaryExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -510,7 +510,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SpecializeExprSyntax) -> SpecializeExprSyntax {
+  func format(syntax: SpecializeExprSyntax) -> SpecializeExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -518,7 +518,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: StringSegmentSyntax) -> StringSegmentSyntax {
+  func format(syntax: StringSegmentSyntax) -> StringSegmentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -526,7 +526,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
+  func format(syntax: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -534,7 +534,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: StringLiteralExprSyntax) -> StringLiteralExprSyntax {
+  func format(syntax: StringLiteralExprSyntax) -> StringLiteralExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -542,7 +542,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: RegexLiteralExprSyntax) -> RegexLiteralExprSyntax {
+  func format(syntax: RegexLiteralExprSyntax) -> RegexLiteralExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -550,7 +550,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: KeyPathExprSyntax) -> KeyPathExprSyntax {
+  func format(syntax: KeyPathExprSyntax) -> KeyPathExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -558,7 +558,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: KeyPathBaseExprSyntax) -> KeyPathBaseExprSyntax {
+  func format(syntax: KeyPathBaseExprSyntax) -> KeyPathBaseExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -566,7 +566,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ObjcNamePieceSyntax) -> ObjcNamePieceSyntax {
+  func format(syntax: ObjcNamePieceSyntax) -> ObjcNamePieceSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -574,10 +574,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ObjcNameSyntax) -> ObjcNameSyntax {
+  func format(syntax: ObjcNameSyntax) -> ObjcNameSyntax {
     syntax
   }
-  public func _format(syntax: ObjcKeyPathExprSyntax) -> ObjcKeyPathExprSyntax {
+  func format(syntax: ObjcKeyPathExprSyntax) -> ObjcKeyPathExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -585,7 +585,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ObjcSelectorExprSyntax) -> ObjcSelectorExprSyntax {
+  func format(syntax: ObjcSelectorExprSyntax) -> ObjcSelectorExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -593,7 +593,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PostfixIfConfigExprSyntax) -> PostfixIfConfigExprSyntax {
+  func format(syntax: PostfixIfConfigExprSyntax) -> PostfixIfConfigExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -601,7 +601,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: EditorPlaceholderExprSyntax) -> EditorPlaceholderExprSyntax {
+  func format(syntax: EditorPlaceholderExprSyntax) -> EditorPlaceholderExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -609,7 +609,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ObjectLiteralExprSyntax) -> ObjectLiteralExprSyntax {
+  func format(syntax: ObjectLiteralExprSyntax) -> ObjectLiteralExprSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -617,7 +617,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
+  func format(syntax: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -625,7 +625,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TypealiasDeclSyntax) -> TypealiasDeclSyntax {
+  func format(syntax: TypealiasDeclSyntax) -> TypealiasDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -633,7 +633,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AssociatedtypeDeclSyntax) -> AssociatedtypeDeclSyntax {
+  func format(syntax: AssociatedtypeDeclSyntax) -> AssociatedtypeDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -641,10 +641,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: FunctionParameterListSyntax) -> FunctionParameterListSyntax {
+  func format(syntax: FunctionParameterListSyntax) -> FunctionParameterListSyntax {
     syntax
   }
-  public func _format(syntax: ParameterClauseSyntax) -> ParameterClauseSyntax {
+  func format(syntax: ParameterClauseSyntax) -> ParameterClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -652,7 +652,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ReturnClauseSyntax) -> ReturnClauseSyntax {
+  func format(syntax: ReturnClauseSyntax) -> ReturnClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -660,7 +660,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: FunctionSignatureSyntax) -> FunctionSignatureSyntax {
+  func format(syntax: FunctionSignatureSyntax) -> FunctionSignatureSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -668,7 +668,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IfConfigClauseSyntax) -> IfConfigClauseSyntax {
+  func format(syntax: IfConfigClauseSyntax) -> IfConfigClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -676,10 +676,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IfConfigClauseListSyntax) -> IfConfigClauseListSyntax {
+  func format(syntax: IfConfigClauseListSyntax) -> IfConfigClauseListSyntax {
     syntax
   }
-  public func _format(syntax: IfConfigDeclSyntax) -> IfConfigDeclSyntax {
+  func format(syntax: IfConfigDeclSyntax) -> IfConfigDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -687,7 +687,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundErrorDeclSyntax) -> PoundErrorDeclSyntax {
+  func format(syntax: PoundErrorDeclSyntax) -> PoundErrorDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -695,7 +695,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundWarningDeclSyntax) -> PoundWarningDeclSyntax {
+  func format(syntax: PoundWarningDeclSyntax) -> PoundWarningDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -703,7 +703,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundSourceLocationSyntax) -> PoundSourceLocationSyntax {
+  func format(syntax: PoundSourceLocationSyntax) -> PoundSourceLocationSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -711,7 +711,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundSourceLocationArgsSyntax) -> PoundSourceLocationArgsSyntax {
+  func format(syntax: PoundSourceLocationArgsSyntax) -> PoundSourceLocationArgsSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -719,7 +719,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DeclModifierDetailSyntax) -> DeclModifierDetailSyntax {
+  func format(syntax: DeclModifierDetailSyntax) -> DeclModifierDetailSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -727,7 +727,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DeclModifierSyntax) -> DeclModifierSyntax {
+  func format(syntax: DeclModifierSyntax) -> DeclModifierSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -735,7 +735,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: InheritedTypeSyntax) -> InheritedTypeSyntax {
+  func format(syntax: InheritedTypeSyntax) -> InheritedTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -743,10 +743,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: InheritedTypeListSyntax) -> InheritedTypeListSyntax {
+  func format(syntax: InheritedTypeListSyntax) -> InheritedTypeListSyntax {
     syntax
   }
-  public func _format(syntax: TypeInheritanceClauseSyntax) -> TypeInheritanceClauseSyntax {
+  func format(syntax: TypeInheritanceClauseSyntax) -> TypeInheritanceClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -754,7 +754,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ClassDeclSyntax) -> ClassDeclSyntax {
+  func format(syntax: ClassDeclSyntax) -> ClassDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -762,7 +762,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ActorDeclSyntax) -> ActorDeclSyntax {
+  func format(syntax: ActorDeclSyntax) -> ActorDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -770,7 +770,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: StructDeclSyntax) -> StructDeclSyntax {
+  func format(syntax: StructDeclSyntax) -> StructDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -778,7 +778,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ProtocolDeclSyntax) -> ProtocolDeclSyntax {
+  func format(syntax: ProtocolDeclSyntax) -> ProtocolDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -786,7 +786,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ExtensionDeclSyntax) -> ExtensionDeclSyntax {
+  func format(syntax: ExtensionDeclSyntax) -> ExtensionDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -794,7 +794,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+  func format(syntax: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -802,12 +802,12 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MemberDeclListSyntax) -> MemberDeclListSyntax {
+  func format(syntax: MemberDeclListSyntax) -> MemberDeclListSyntax {
     MemberDeclListSyntax(syntax.map {
       $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     })
   }
-  public func _format(syntax: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
+  func format(syntax: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -815,7 +815,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SourceFileSyntax) -> SourceFileSyntax {
+  func format(syntax: SourceFileSyntax) -> SourceFileSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -823,7 +823,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: InitializerClauseSyntax) -> InitializerClauseSyntax {
+  func format(syntax: InitializerClauseSyntax) -> InitializerClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -831,7 +831,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: FunctionParameterSyntax) -> FunctionParameterSyntax {
+  func format(syntax: FunctionParameterSyntax) -> FunctionParameterSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -839,10 +839,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ModifierListSyntax) -> ModifierListSyntax {
+  func format(syntax: ModifierListSyntax) -> ModifierListSyntax {
     syntax
   }
-  public func _format(syntax: FunctionDeclSyntax) -> FunctionDeclSyntax {
+  func format(syntax: FunctionDeclSyntax) -> FunctionDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -850,7 +850,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: InitializerDeclSyntax) -> InitializerDeclSyntax {
+  func format(syntax: InitializerDeclSyntax) -> InitializerDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -858,7 +858,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DeinitializerDeclSyntax) -> DeinitializerDeclSyntax {
+  func format(syntax: DeinitializerDeclSyntax) -> DeinitializerDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -866,7 +866,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SubscriptDeclSyntax) -> SubscriptDeclSyntax {
+  func format(syntax: SubscriptDeclSyntax) -> SubscriptDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -874,7 +874,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AccessLevelModifierSyntax) -> AccessLevelModifierSyntax {
+  func format(syntax: AccessLevelModifierSyntax) -> AccessLevelModifierSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -882,7 +882,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AccessPathComponentSyntax) -> AccessPathComponentSyntax {
+  func format(syntax: AccessPathComponentSyntax) -> AccessPathComponentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -890,10 +890,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AccessPathSyntax) -> AccessPathSyntax {
+  func format(syntax: AccessPathSyntax) -> AccessPathSyntax {
     syntax
   }
-  public func _format(syntax: ImportDeclSyntax) -> ImportDeclSyntax {
+  func format(syntax: ImportDeclSyntax) -> ImportDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -901,7 +901,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AccessorParameterSyntax) -> AccessorParameterSyntax {
+  func format(syntax: AccessorParameterSyntax) -> AccessorParameterSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -909,7 +909,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AccessorDeclSyntax) -> AccessorDeclSyntax {
+  func format(syntax: AccessorDeclSyntax) -> AccessorDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -917,10 +917,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AccessorListSyntax) -> AccessorListSyntax {
+  func format(syntax: AccessorListSyntax) -> AccessorListSyntax {
     syntax
   }
-  public func _format(syntax: AccessorBlockSyntax) -> AccessorBlockSyntax {
+  func format(syntax: AccessorBlockSyntax) -> AccessorBlockSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -928,7 +928,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PatternBindingSyntax) -> PatternBindingSyntax {
+  func format(syntax: PatternBindingSyntax) -> PatternBindingSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -936,10 +936,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PatternBindingListSyntax) -> PatternBindingListSyntax {
+  func format(syntax: PatternBindingListSyntax) -> PatternBindingListSyntax {
     syntax
   }
-  public func _format(syntax: VariableDeclSyntax) -> VariableDeclSyntax {
+  func format(syntax: VariableDeclSyntax) -> VariableDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -947,7 +947,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
+  func format(syntax: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -955,10 +955,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: EnumCaseElementListSyntax) -> EnumCaseElementListSyntax {
+  func format(syntax: EnumCaseElementListSyntax) -> EnumCaseElementListSyntax {
     syntax
   }
-  public func _format(syntax: EnumCaseDeclSyntax) -> EnumCaseDeclSyntax {
+  func format(syntax: EnumCaseDeclSyntax) -> EnumCaseDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -966,7 +966,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: EnumDeclSyntax) -> EnumDeclSyntax {
+  func format(syntax: EnumDeclSyntax) -> EnumDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -974,7 +974,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: OperatorDeclSyntax) -> OperatorDeclSyntax {
+  func format(syntax: OperatorDeclSyntax) -> OperatorDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -982,10 +982,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IdentifierListSyntax) -> IdentifierListSyntax {
+  func format(syntax: IdentifierListSyntax) -> IdentifierListSyntax {
     syntax
   }
-  public func _format(syntax: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
+  func format(syntax: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -993,7 +993,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrecedenceGroupDeclSyntax) -> PrecedenceGroupDeclSyntax {
+  func format(syntax: PrecedenceGroupDeclSyntax) -> PrecedenceGroupDeclSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1001,10 +1001,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrecedenceGroupAttributeListSyntax) -> PrecedenceGroupAttributeListSyntax {
+  func format(syntax: PrecedenceGroupAttributeListSyntax) -> PrecedenceGroupAttributeListSyntax {
     syntax
   }
-  public func _format(syntax: PrecedenceGroupRelationSyntax) -> PrecedenceGroupRelationSyntax {
+  func format(syntax: PrecedenceGroupRelationSyntax) -> PrecedenceGroupRelationSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1012,10 +1012,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrecedenceGroupNameListSyntax) -> PrecedenceGroupNameListSyntax {
+  func format(syntax: PrecedenceGroupNameListSyntax) -> PrecedenceGroupNameListSyntax {
     syntax
   }
-  public func _format(syntax: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameElementSyntax {
+  func format(syntax: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupNameElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1023,7 +1023,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrecedenceGroupAssignmentSyntax) -> PrecedenceGroupAssignmentSyntax {
+  func format(syntax: PrecedenceGroupAssignmentSyntax) -> PrecedenceGroupAssignmentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1031,7 +1031,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrecedenceGroupAssociativitySyntax) -> PrecedenceGroupAssociativitySyntax {
+  func format(syntax: PrecedenceGroupAssociativitySyntax) -> PrecedenceGroupAssociativitySyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1039,13 +1039,13 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TokenListSyntax) -> TokenListSyntax {
+  func format(syntax: TokenListSyntax) -> TokenListSyntax {
     syntax
   }
-  public func _format(syntax: NonEmptyTokenListSyntax) -> NonEmptyTokenListSyntax {
+  func format(syntax: NonEmptyTokenListSyntax) -> NonEmptyTokenListSyntax {
     syntax
   }
-  public func _format(syntax: CustomAttributeSyntax) -> CustomAttributeSyntax {
+  func format(syntax: CustomAttributeSyntax) -> CustomAttributeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1053,7 +1053,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AttributeSyntax) -> AttributeSyntax {
+  func format(syntax: AttributeSyntax) -> AttributeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1061,13 +1061,13 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AttributeListSyntax) -> AttributeListSyntax {
+  func format(syntax: AttributeListSyntax) -> AttributeListSyntax {
     syntax
   }
-  public func _format(syntax: SpecializeAttributeSpecListSyntax) -> SpecializeAttributeSpecListSyntax {
+  func format(syntax: SpecializeAttributeSpecListSyntax) -> SpecializeAttributeSpecListSyntax {
     syntax
   }
-  public func _format(syntax: AvailabilityEntrySyntax) -> AvailabilityEntrySyntax {
+  func format(syntax: AvailabilityEntrySyntax) -> AvailabilityEntrySyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1075,7 +1075,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: LabeledSpecializeEntrySyntax) -> LabeledSpecializeEntrySyntax {
+  func format(syntax: LabeledSpecializeEntrySyntax) -> LabeledSpecializeEntrySyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1083,7 +1083,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TargetFunctionEntrySyntax) -> TargetFunctionEntrySyntax {
+  func format(syntax: TargetFunctionEntrySyntax) -> TargetFunctionEntrySyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1091,7 +1091,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
+  func format(syntax: NamedAttributeStringArgumentSyntax) -> NamedAttributeStringArgumentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1099,7 +1099,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DeclNameSyntax) -> DeclNameSyntax {
+  func format(syntax: DeclNameSyntax) -> DeclNameSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1107,7 +1107,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ImplementsAttributeArgumentsSyntax) -> ImplementsAttributeArgumentsSyntax {
+  func format(syntax: ImplementsAttributeArgumentsSyntax) -> ImplementsAttributeArgumentsSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1115,7 +1115,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ObjCSelectorPieceSyntax) -> ObjCSelectorPieceSyntax {
+  func format(syntax: ObjCSelectorPieceSyntax) -> ObjCSelectorPieceSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1123,10 +1123,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ObjCSelectorSyntax) -> ObjCSelectorSyntax {
+  func format(syntax: ObjCSelectorSyntax) -> ObjCSelectorSyntax {
     syntax
   }
-  public func _format(syntax: DifferentiableAttributeArgumentsSyntax) -> DifferentiableAttributeArgumentsSyntax {
+  func format(syntax: DifferentiableAttributeArgumentsSyntax) -> DifferentiableAttributeArgumentsSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1134,7 +1134,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DifferentiabilityParamsClauseSyntax) -> DifferentiabilityParamsClauseSyntax {
+  func format(syntax: DifferentiabilityParamsClauseSyntax) -> DifferentiabilityParamsClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1142,7 +1142,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DifferentiabilityParamsSyntax) -> DifferentiabilityParamsSyntax {
+  func format(syntax: DifferentiabilityParamsSyntax) -> DifferentiabilityParamsSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1150,10 +1150,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DifferentiabilityParamListSyntax) -> DifferentiabilityParamListSyntax {
+  func format(syntax: DifferentiabilityParamListSyntax) -> DifferentiabilityParamListSyntax {
     syntax
   }
-  public func _format(syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamSyntax {
+  func format(syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1161,7 +1161,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DerivativeRegistrationAttributeArgumentsSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  func format(syntax: DerivativeRegistrationAttributeArgumentsSyntax) -> DerivativeRegistrationAttributeArgumentsSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1169,7 +1169,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: QualifiedDeclNameSyntax) -> QualifiedDeclNameSyntax {
+  func format(syntax: QualifiedDeclNameSyntax) -> QualifiedDeclNameSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1177,7 +1177,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: FunctionDeclNameSyntax) -> FunctionDeclNameSyntax {
+  func format(syntax: FunctionDeclNameSyntax) -> FunctionDeclNameSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1185,7 +1185,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
+  func format(syntax: BackDeployAttributeSpecListSyntax) -> BackDeployAttributeSpecListSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1193,10 +1193,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: BackDeployVersionListSyntax) -> BackDeployVersionListSyntax {
+  func format(syntax: BackDeployVersionListSyntax) -> BackDeployVersionListSyntax {
     syntax
   }
-  public func _format(syntax: BackDeployVersionArgumentSyntax) -> BackDeployVersionArgumentSyntax {
+  func format(syntax: BackDeployVersionArgumentSyntax) -> BackDeployVersionArgumentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1204,7 +1204,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: LabeledStmtSyntax) -> LabeledStmtSyntax {
+  func format(syntax: LabeledStmtSyntax) -> LabeledStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1212,7 +1212,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ContinueStmtSyntax) -> ContinueStmtSyntax {
+  func format(syntax: ContinueStmtSyntax) -> ContinueStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1220,7 +1220,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: WhileStmtSyntax) -> WhileStmtSyntax {
+  func format(syntax: WhileStmtSyntax) -> WhileStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1228,7 +1228,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DeferStmtSyntax) -> DeferStmtSyntax {
+  func format(syntax: DeferStmtSyntax) -> DeferStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1236,7 +1236,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ExpressionStmtSyntax) -> ExpressionStmtSyntax {
+  func format(syntax: ExpressionStmtSyntax) -> ExpressionStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1244,12 +1244,12 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
+  func format(syntax: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
     SwitchCaseListSyntax(syntax.map {
       $0.withLeadingTrivia((indentedNewline + ($0.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     })
   }
-  public func _format(syntax: RepeatWhileStmtSyntax) -> RepeatWhileStmtSyntax {
+  func format(syntax: RepeatWhileStmtSyntax) -> RepeatWhileStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1257,7 +1257,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: GuardStmtSyntax) -> GuardStmtSyntax {
+  func format(syntax: GuardStmtSyntax) -> GuardStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1265,7 +1265,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: WhereClauseSyntax) -> WhereClauseSyntax {
+  func format(syntax: WhereClauseSyntax) -> WhereClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1273,7 +1273,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ForInStmtSyntax) -> ForInStmtSyntax {
+  func format(syntax: ForInStmtSyntax) -> ForInStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1281,7 +1281,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SwitchStmtSyntax) -> SwitchStmtSyntax {
+  func format(syntax: SwitchStmtSyntax) -> SwitchStmtSyntax {
     var result = syntax.withRightBrace(syntax.rightBrace.withLeadingTrivia(indentedNewline + (syntax.rightBrace.leadingTrivia ?? [])))
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1289,10 +1289,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CatchClauseListSyntax) -> CatchClauseListSyntax {
+  func format(syntax: CatchClauseListSyntax) -> CatchClauseListSyntax {
     syntax
   }
-  public func _format(syntax: DoStmtSyntax) -> DoStmtSyntax {
+  func format(syntax: DoStmtSyntax) -> DoStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1300,7 +1300,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ReturnStmtSyntax) -> ReturnStmtSyntax {
+  func format(syntax: ReturnStmtSyntax) -> ReturnStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1308,7 +1308,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: YieldStmtSyntax) -> YieldStmtSyntax {
+  func format(syntax: YieldStmtSyntax) -> YieldStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1316,7 +1316,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: YieldListSyntax) -> YieldListSyntax {
+  func format(syntax: YieldListSyntax) -> YieldListSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1324,7 +1324,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: FallthroughStmtSyntax) -> FallthroughStmtSyntax {
+  func format(syntax: FallthroughStmtSyntax) -> FallthroughStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1332,7 +1332,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: BreakStmtSyntax) -> BreakStmtSyntax {
+  func format(syntax: BreakStmtSyntax) -> BreakStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1340,13 +1340,13 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CaseItemListSyntax) -> CaseItemListSyntax {
+  func format(syntax: CaseItemListSyntax) -> CaseItemListSyntax {
     syntax
   }
-  public func _format(syntax: CatchItemListSyntax) -> CatchItemListSyntax {
+  func format(syntax: CatchItemListSyntax) -> CatchItemListSyntax {
     syntax
   }
-  public func _format(syntax: ConditionElementSyntax) -> ConditionElementSyntax {
+  func format(syntax: ConditionElementSyntax) -> ConditionElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1354,7 +1354,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AvailabilityConditionSyntax) -> AvailabilityConditionSyntax {
+  func format(syntax: AvailabilityConditionSyntax) -> AvailabilityConditionSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1362,7 +1362,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MatchingPatternConditionSyntax) -> MatchingPatternConditionSyntax {
+  func format(syntax: MatchingPatternConditionSyntax) -> MatchingPatternConditionSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1370,7 +1370,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: OptionalBindingConditionSyntax) -> OptionalBindingConditionSyntax {
+  func format(syntax: OptionalBindingConditionSyntax) -> OptionalBindingConditionSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1378,7 +1378,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: UnavailabilityConditionSyntax) -> UnavailabilityConditionSyntax {
+  func format(syntax: UnavailabilityConditionSyntax) -> UnavailabilityConditionSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1386,10 +1386,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ConditionElementListSyntax) -> ConditionElementListSyntax {
+  func format(syntax: ConditionElementListSyntax) -> ConditionElementListSyntax {
     syntax
   }
-  public func _format(syntax: DeclarationStmtSyntax) -> DeclarationStmtSyntax {
+  func format(syntax: DeclarationStmtSyntax) -> DeclarationStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1397,7 +1397,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ThrowStmtSyntax) -> ThrowStmtSyntax {
+  func format(syntax: ThrowStmtSyntax) -> ThrowStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1405,7 +1405,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IfStmtSyntax) -> IfStmtSyntax {
+  func format(syntax: IfStmtSyntax) -> IfStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1413,7 +1413,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ElseIfContinuationSyntax) -> ElseIfContinuationSyntax {
+  func format(syntax: ElseIfContinuationSyntax) -> ElseIfContinuationSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1421,7 +1421,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ElseBlockSyntax) -> ElseBlockSyntax {
+  func format(syntax: ElseBlockSyntax) -> ElseBlockSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1429,7 +1429,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SwitchCaseSyntax) -> SwitchCaseSyntax {
+  func format(syntax: SwitchCaseSyntax) -> SwitchCaseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1437,7 +1437,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
+  func format(syntax: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1445,7 +1445,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CaseItemSyntax) -> CaseItemSyntax {
+  func format(syntax: CaseItemSyntax) -> CaseItemSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1453,7 +1453,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CatchItemSyntax) -> CatchItemSyntax {
+  func format(syntax: CatchItemSyntax) -> CatchItemSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1461,7 +1461,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
+  func format(syntax: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1469,7 +1469,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CatchClauseSyntax) -> CatchClauseSyntax {
+  func format(syntax: CatchClauseSyntax) -> CatchClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1477,7 +1477,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PoundAssertStmtSyntax) -> PoundAssertStmtSyntax {
+  func format(syntax: PoundAssertStmtSyntax) -> PoundAssertStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1485,7 +1485,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: GenericWhereClauseSyntax) -> GenericWhereClauseSyntax {
+  func format(syntax: GenericWhereClauseSyntax) -> GenericWhereClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1493,10 +1493,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: GenericRequirementListSyntax) -> GenericRequirementListSyntax {
+  func format(syntax: GenericRequirementListSyntax) -> GenericRequirementListSyntax {
     syntax
   }
-  public func _format(syntax: GenericRequirementSyntax) -> GenericRequirementSyntax {
+  func format(syntax: GenericRequirementSyntax) -> GenericRequirementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1504,7 +1504,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SameTypeRequirementSyntax) -> SameTypeRequirementSyntax {
+  func format(syntax: SameTypeRequirementSyntax) -> SameTypeRequirementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1512,7 +1512,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: LayoutRequirementSyntax) -> LayoutRequirementSyntax {
+  func format(syntax: LayoutRequirementSyntax) -> LayoutRequirementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1520,10 +1520,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: GenericParameterListSyntax) -> GenericParameterListSyntax {
+  func format(syntax: GenericParameterListSyntax) -> GenericParameterListSyntax {
     syntax
   }
-  public func _format(syntax: GenericParameterSyntax) -> GenericParameterSyntax {
+  func format(syntax: GenericParameterSyntax) -> GenericParameterSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1531,10 +1531,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeListSyntax {
+  func format(syntax: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeListSyntax {
     syntax
   }
-  public func _format(syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeSyntax {
+  func format(syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1542,7 +1542,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: GenericParameterClauseSyntax) -> GenericParameterClauseSyntax {
+  func format(syntax: GenericParameterClauseSyntax) -> GenericParameterClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1550,7 +1550,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ConformanceRequirementSyntax) -> ConformanceRequirementSyntax {
+  func format(syntax: ConformanceRequirementSyntax) -> ConformanceRequirementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1558,7 +1558,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: PrimaryAssociatedTypeClauseSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+  func format(syntax: PrimaryAssociatedTypeClauseSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1566,7 +1566,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: SimpleTypeIdentifierSyntax) -> SimpleTypeIdentifierSyntax {
+  func format(syntax: SimpleTypeIdentifierSyntax) -> SimpleTypeIdentifierSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1574,7 +1574,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MemberTypeIdentifierSyntax) -> MemberTypeIdentifierSyntax {
+  func format(syntax: MemberTypeIdentifierSyntax) -> MemberTypeIdentifierSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1582,7 +1582,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ClassRestrictionTypeSyntax) -> ClassRestrictionTypeSyntax {
+  func format(syntax: ClassRestrictionTypeSyntax) -> ClassRestrictionTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1590,7 +1590,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ArrayTypeSyntax) -> ArrayTypeSyntax {
+  func format(syntax: ArrayTypeSyntax) -> ArrayTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1598,7 +1598,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: DictionaryTypeSyntax) -> DictionaryTypeSyntax {
+  func format(syntax: DictionaryTypeSyntax) -> DictionaryTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1606,7 +1606,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: MetatypeTypeSyntax) -> MetatypeTypeSyntax {
+  func format(syntax: MetatypeTypeSyntax) -> MetatypeTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1614,7 +1614,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: OptionalTypeSyntax) -> OptionalTypeSyntax {
+  func format(syntax: OptionalTypeSyntax) -> OptionalTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1622,7 +1622,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ConstrainedSugarTypeSyntax) -> ConstrainedSugarTypeSyntax {
+  func format(syntax: ConstrainedSugarTypeSyntax) -> ConstrainedSugarTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1630,7 +1630,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ImplicitlyUnwrappedOptionalTypeSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+  func format(syntax: ImplicitlyUnwrappedOptionalTypeSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1638,7 +1638,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CompositionTypeElementSyntax) -> CompositionTypeElementSyntax {
+  func format(syntax: CompositionTypeElementSyntax) -> CompositionTypeElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1646,10 +1646,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: CompositionTypeElementListSyntax) -> CompositionTypeElementListSyntax {
+  func format(syntax: CompositionTypeElementListSyntax) -> CompositionTypeElementListSyntax {
     syntax
   }
-  public func _format(syntax: CompositionTypeSyntax) -> CompositionTypeSyntax {
+  func format(syntax: CompositionTypeSyntax) -> CompositionTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1657,7 +1657,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
+  func format(syntax: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1665,10 +1665,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TupleTypeElementListSyntax) -> TupleTypeElementListSyntax {
+  func format(syntax: TupleTypeElementListSyntax) -> TupleTypeElementListSyntax {
     syntax
   }
-  public func _format(syntax: TupleTypeSyntax) -> TupleTypeSyntax {
+  func format(syntax: TupleTypeSyntax) -> TupleTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1676,7 +1676,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: FunctionTypeSyntax) -> FunctionTypeSyntax {
+  func format(syntax: FunctionTypeSyntax) -> FunctionTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1684,7 +1684,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AttributedTypeSyntax) -> AttributedTypeSyntax {
+  func format(syntax: AttributedTypeSyntax) -> AttributedTypeSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1692,10 +1692,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: GenericArgumentListSyntax) -> GenericArgumentListSyntax {
+  func format(syntax: GenericArgumentListSyntax) -> GenericArgumentListSyntax {
     syntax
   }
-  public func _format(syntax: GenericArgumentSyntax) -> GenericArgumentSyntax {
+  func format(syntax: GenericArgumentSyntax) -> GenericArgumentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1703,7 +1703,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: GenericArgumentClauseSyntax) -> GenericArgumentClauseSyntax {
+  func format(syntax: GenericArgumentClauseSyntax) -> GenericArgumentClauseSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1711,7 +1711,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
+  func format(syntax: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1719,7 +1719,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: EnumCasePatternSyntax) -> EnumCasePatternSyntax {
+  func format(syntax: EnumCasePatternSyntax) -> EnumCasePatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1727,7 +1727,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IsTypePatternSyntax) -> IsTypePatternSyntax {
+  func format(syntax: IsTypePatternSyntax) -> IsTypePatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1735,7 +1735,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: OptionalPatternSyntax) -> OptionalPatternSyntax {
+  func format(syntax: OptionalPatternSyntax) -> OptionalPatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1743,7 +1743,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: IdentifierPatternSyntax) -> IdentifierPatternSyntax {
+  func format(syntax: IdentifierPatternSyntax) -> IdentifierPatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1751,7 +1751,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AsTypePatternSyntax) -> AsTypePatternSyntax {
+  func format(syntax: AsTypePatternSyntax) -> AsTypePatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1759,7 +1759,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TuplePatternSyntax) -> TuplePatternSyntax {
+  func format(syntax: TuplePatternSyntax) -> TuplePatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1767,7 +1767,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: WildcardPatternSyntax) -> WildcardPatternSyntax {
+  func format(syntax: WildcardPatternSyntax) -> WildcardPatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1775,7 +1775,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TuplePatternElementSyntax) -> TuplePatternElementSyntax {
+  func format(syntax: TuplePatternElementSyntax) -> TuplePatternElementSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1783,7 +1783,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: ExpressionPatternSyntax) -> ExpressionPatternSyntax {
+  func format(syntax: ExpressionPatternSyntax) -> ExpressionPatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1791,10 +1791,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TuplePatternElementListSyntax) -> TuplePatternElementListSyntax {
+  func format(syntax: TuplePatternElementListSyntax) -> TuplePatternElementListSyntax {
     syntax
   }
-  public func _format(syntax: ValueBindingPatternSyntax) -> ValueBindingPatternSyntax {
+  func format(syntax: ValueBindingPatternSyntax) -> ValueBindingPatternSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1802,10 +1802,10 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AvailabilitySpecListSyntax) -> AvailabilitySpecListSyntax {
+  func format(syntax: AvailabilitySpecListSyntax) -> AvailabilitySpecListSyntax {
     syntax
   }
-  public func _format(syntax: AvailabilityArgumentSyntax) -> AvailabilityArgumentSyntax {
+  func format(syntax: AvailabilityArgumentSyntax) -> AvailabilityArgumentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1813,7 +1813,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
+  func format(syntax: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1821,7 +1821,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: AvailabilityVersionRestrictionSyntax) -> AvailabilityVersionRestrictionSyntax {
+  func format(syntax: AvailabilityVersionRestrictionSyntax) -> AvailabilityVersionRestrictionSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1829,7 +1829,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: VersionTupleSyntax) -> VersionTupleSyntax {
+  func format(syntax: VersionTupleSyntax) -> VersionTupleSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []
     if !leadingTrivia.isEmpty {
@@ -1837,7 +1837,7 @@ extension Format {
     }
     return result
   }
-  public func _format(syntax: TokenSyntax) -> TokenSyntax {
+  func format(syntax: TokenSyntax) -> TokenSyntax {
     switch syntax.tokenKind {
     case .associatedtypeKeyword: 
       return syntax.withTrailingTrivia(.space)

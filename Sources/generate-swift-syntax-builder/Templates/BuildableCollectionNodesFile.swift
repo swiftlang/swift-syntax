@@ -224,7 +224,7 @@ private func createBuildFunction(node: Node, trivias: [String]) -> FunctionDecl 
     for trivia in trivias {
       createTriviaAttachment(varName: "result", triviaVarName: trivia, trivia: trivia)
     }
-    ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "_format")) {
+    ReturnStmt(expression: FunctionCallExpr(MemberAccessExpr(base: "format", name: "format")) {
       TupleExprElement(
         label: "syntax",
         expression: "result"

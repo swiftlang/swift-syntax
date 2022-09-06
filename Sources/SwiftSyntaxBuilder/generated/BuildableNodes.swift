@@ -57,7 +57,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -137,7 +137,7 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -202,7 +202,7 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -268,7 +268,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -347,7 +347,7 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -425,7 +425,7 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -503,7 +503,7 @@ public struct MoveExpr: ExprBuildable, ExpressibleAsMoveExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -575,7 +575,7 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -647,7 +647,7 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -711,7 +711,7 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -777,7 +777,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -843,7 +843,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -909,7 +909,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -975,7 +975,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1048,7 +1048,7 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1114,7 +1114,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1180,7 +1180,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1246,7 +1246,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1312,7 +1312,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1378,7 +1378,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1444,7 +1444,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1521,7 +1521,7 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1600,7 +1600,7 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1665,7 +1665,7 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1753,7 +1753,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1830,7 +1830,7 @@ public struct InfixOperatorExpr: ExprBuildable, ExpressibleAsInfixOperatorExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1901,7 +1901,7 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -1988,7 +1988,7 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2075,7 +2075,7 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2154,7 +2154,7 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2239,7 +2239,7 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -2310,7 +2310,7 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -2394,7 +2394,7 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -2464,7 +2464,7 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2530,7 +2530,7 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2609,7 +2609,7 @@ public struct UnresolvedTernaryExpr: ExprBuildable, ExpressibleAsUnresolvedTerna
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2700,7 +2700,7 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2784,7 +2784,7 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2850,7 +2850,7 @@ public struct UnresolvedIsExpr: ExprBuildable, ExpressibleAsUnresolvedIsExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -2928,7 +2928,7 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -3001,7 +3001,7 @@ public struct UnresolvedAsExpr: ExprBuildable, ExpressibleAsUnresolvedAsExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -3086,7 +3086,7 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -3151,7 +3151,7 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -3250,7 +3250,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -3336,7 +3336,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -3401,7 +3401,7 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -3512,7 +3512,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -3598,7 +3598,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -3663,7 +3663,7 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -3741,7 +3741,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -3839,7 +3839,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -3944,7 +3944,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4016,7 +4016,7 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4088,7 +4088,7 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4165,7 +4165,7 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4236,7 +4236,7 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4307,7 +4307,7 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -4402,7 +4402,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -4496,7 +4496,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4567,7 +4567,7 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4645,7 +4645,7 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4711,7 +4711,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4789,7 +4789,7 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -4868,7 +4868,7 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -4976,7 +4976,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -5047,7 +5047,7 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -5118,7 +5118,7 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -5212,7 +5212,7 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format) -> ExprSyntax {
@@ -5284,7 +5284,7 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -5385,7 +5385,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -5493,7 +5493,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -5580,7 +5580,7 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -5645,7 +5645,7 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -5731,7 +5731,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -5802,7 +5802,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -5867,7 +5867,7 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -5953,7 +5953,7 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -6039,7 +6039,7 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -6125,7 +6125,7 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -6237,7 +6237,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -6315,7 +6315,7 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -6380,7 +6380,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -6445,7 +6445,7 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -6524,7 +6524,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -6633,7 +6633,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -6749,7 +6749,7 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -6865,7 +6865,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -6981,7 +6981,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -7091,7 +7091,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -7178,7 +7178,7 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -7244,7 +7244,7 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -7316,7 +7316,7 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -7381,7 +7381,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -7484,7 +7484,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -7599,7 +7599,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -7716,7 +7716,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -7808,7 +7808,7 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -7916,7 +7916,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -7993,7 +7993,7 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -8064,7 +8064,7 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -8148,7 +8148,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -8233,7 +8233,7 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -8340,7 +8340,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -8419,7 +8419,7 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -8502,7 +8502,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -8593,7 +8593,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -8684,7 +8684,7 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -8776,7 +8776,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -8893,7 +8893,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -8984,7 +8984,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -9057,7 +9057,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9161,7 +9161,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format) -> DeclSyntax {
@@ -9247,7 +9247,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9318,7 +9318,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9398,7 +9398,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9478,7 +9478,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9572,7 +9572,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9664,7 +9664,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9749,7 +9749,7 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9834,7 +9834,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -9925,7 +9925,7 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10003,7 +10003,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10067,7 +10067,7 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10145,7 +10145,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10219,7 +10219,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10313,7 +10313,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10392,7 +10392,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10465,7 +10465,7 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10531,7 +10531,7 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10645,7 +10645,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10723,7 +10723,7 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10788,7 +10788,7 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10867,7 +10867,7 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -10933,7 +10933,7 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -11010,7 +11010,7 @@ public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11090,7 +11090,7 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11176,7 +11176,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11256,7 +11256,7 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11321,7 +11321,7 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11414,7 +11414,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11507,7 +11507,7 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11579,7 +11579,7 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -11706,7 +11706,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11806,7 +11806,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11892,7 +11892,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -11964,7 +11964,7 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -12036,7 +12036,7 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -12130,7 +12130,7 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -12189,7 +12189,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -12269,7 +12269,7 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -12341,7 +12341,7 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -12426,7 +12426,7 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -12503,7 +12503,7 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -12580,7 +12580,7 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -12659,7 +12659,7 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -12717,7 +12717,7 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -12789,7 +12789,7 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -12888,7 +12888,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -12953,7 +12953,7 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13026,7 +13026,7 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13104,7 +13104,7 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13170,7 +13170,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13241,7 +13241,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13318,7 +13318,7 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13404,7 +13404,7 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13483,7 +13483,7 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13583,7 +13583,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format) -> StmtSyntax {
@@ -13663,7 +13663,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13728,7 +13728,7 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13804,7 +13804,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -13918,7 +13918,7 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -14008,7 +14008,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -14085,7 +14085,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -14171,7 +14171,7 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -14242,7 +14242,7 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -14314,7 +14314,7 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -14378,7 +14378,7 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -14462,7 +14462,7 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -14528,7 +14528,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -14607,7 +14607,7 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -14699,7 +14699,7 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -14784,7 +14784,7 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -14856,7 +14856,7 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -14934,7 +14934,7 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -15006,7 +15006,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -15078,7 +15078,7 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -15136,7 +15136,7 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -15247,7 +15247,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -15325,7 +15325,7 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -15431,7 +15431,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -15509,7 +15509,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format) -> TypeSyntax {
@@ -15581,7 +15581,7 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -15667,7 +15667,7 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -15732,7 +15732,7 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -15815,7 +15815,7 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -15887,7 +15887,7 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -15959,7 +15959,7 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -16024,7 +16024,7 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -16102,7 +16102,7 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -16189,7 +16189,7 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -16261,7 +16261,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -16354,7 +16354,7 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -16418,7 +16418,7 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -16490,7 +16490,7 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format) -> PatternSyntax {
@@ -16563,7 +16563,7 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -16641,7 +16641,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -16712,7 +16712,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {
@@ -16792,7 +16792,7 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
     if !trailingTrivia.isEmpty {
       result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
     }
-    return format._format(syntax: result)
+    return format.format(syntax: result)
   }
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format) -> Syntax {

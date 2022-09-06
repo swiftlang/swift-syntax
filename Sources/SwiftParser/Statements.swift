@@ -613,21 +613,20 @@ extension Parser {
   public mutating func parseSwitchCases() -> RawSwitchCaseListSyntax {
     var elements = [RawSyntax]()
     while !self.at(any: [.eof, .rightBrace, .poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword]) {
-      if self.lookahead().isAtStartOfSwitchCase() {
+      if self.lookahead().isAtStartOfSwitchCase(allowRecovery: true) {
         elements.append(RawSyntax(self.parseSwitchCase()))
-      } else if self.at(.poundIfKeyword) {
+      } else if self.canRecoverTo(.poundIfKeyword) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.
-        elements.append(RawSyntax(self.parsePoundIfDirective {
-          $0.parseSwitchCases()
-        }
-        syntax: { parser, cases in
-          guard cases.count == 1, let firstCase = cases.first else {
-            assert(cases.isEmpty)
-            return RawSyntax(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
-          }
-          return RawSyntax(firstCase)
-        }))
+        elements.append(RawSyntax(self.parsePoundIfDirective(
+          { $0.parseSwitchCases() },
+          syntax: { parser, cases in
+            guard cases.count == 1, let firstCase = cases.first else {
+              assert(cases.isEmpty)
+              return RawSyntax(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
+            }
+            return RawSyntax(firstCase)
+          })))
       } else {
         break
       }
@@ -669,9 +668,10 @@ extension Parser {
     }
 
     let label: RawSyntax
-    if self.at(.caseKeyword) {
+    switch self.canRecoverTo(anyIn: SwitchCaseStart.self) {
+    case (.caseKeyword, _)?:
       label = RawSyntax(self.parseSwitchCaseLabel())
-    } else {
+    case (.defaultKeyword, _)?, nil:
       label = RawSyntax(self.parseSwitchDefaultLabel())
     }
 
@@ -1016,7 +1016,7 @@ extension Parser.Lookahead {
 
   /// Returns whether the parser's current position is the start of a switch case,
   /// given that we're in the middle of a switch already.
-  func isAtStartOfSwitchCase() -> Bool {
+  func isAtStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {
     // Check for and consume attributes. The only valid attribute is `@unknown`
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
@@ -1029,7 +1029,11 @@ extension Parser.Lookahead {
       lookahead.expectIdentifier()
     }
 
-    return lookahead.at(any: [.caseKeyword, .defaultKeyword])
+    if allowRecovery {
+      return lookahead.canRecoverTo(anyIn: SwitchCaseStart.self) != nil
+    } else {
+      return lookahead.at(anyIn: SwitchCaseStart.self) != nil
+    }
   }
 
   func isStartOfConditionalSwitchCases() -> Bool {

@@ -273,7 +273,7 @@ extension Parser.Lookahead {
     if allowRecovery {
       declStartKeyword = subparser.canRecoverTo(
         anyIn: DeclarationStart.self,
-        recoveryPrecedence: isAtTopLevel ? nil : .strongBracketedClose
+        recoveryPrecedence: isAtTopLevel ? nil : .closingBrace
       )?.0
     } else {
       declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0

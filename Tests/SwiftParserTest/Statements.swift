@@ -168,16 +168,17 @@ final class StatementTests: XCTestCase {
     AssertParse(
       """
       switch x {
-        #^DIAG^#print()
+        #^FOO^#foo()
       #if true
-        print()
+        #^BAR^#bar()
       #endif
         case .A, .B:
           break
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text in 'switch' statement"),
+        DiagnosticSpec(locationMarker: "FOO", message: "Unexpected text 'foo()' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "BAR", message: "Unexpected text 'bar()' in conditional compilation block"),
 
       ]
     )
@@ -197,7 +198,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text in 'switch' statement")
+        DiagnosticSpec(message: "Unexpected text 'print()' before conditional compilation clause")
       ]
     )
   }

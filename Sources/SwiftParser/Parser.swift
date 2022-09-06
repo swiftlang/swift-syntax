@@ -275,13 +275,19 @@ extension Parser {
   }
 
   /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.
-  mutating func eat(_ handle: RecoveryConsumptionHandle) -> (RawUnexpectedNodesSyntax, Token) {
-    var unexpectedTokens = [RawSyntax]()
-    for _ in 0..<handle.unexpectedTokens {
-      unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
+  mutating func eat(_ handle: RecoveryConsumptionHandle) -> (RawUnexpectedNodesSyntax?, Token) {
+    let unexpectedNodes: RawUnexpectedNodesSyntax?
+    if handle.unexpectedTokens > 0 {
+      var unexpectedTokens = [RawSyntax]()
+      for _ in 0..<handle.unexpectedTokens {
+        unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
+      }
+      unexpectedNodes = RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena)
+    } else {
+      unexpectedNodes = nil
     }
     let token = self.eat(handle.tokenConsumptionHandle)
-    return (RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena), token)
+    return (unexpectedNodes, token)
   }
 }
 

@@ -62,7 +62,7 @@ extension Parser {
   ///   - syntax: A function that aggregates the parsed conditional elements
   ///             into a syntax collection.
   @_spi(RawSyntax)
-  public mutating func parsePoundIfDirective<Element>(
+  public mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (inout Parser) -> Element?,
     syntax: (inout Parser, [Element]) -> RawSyntax
   ) -> RawIfConfigDeclSyntax {
@@ -71,17 +71,15 @@ extension Parser {
       var firstIteration = true
       var loopProgress = LoopProgressCondition()
       while loopProgress.evaluate(self.currentToken),
-              let poundIf = self.consume(ifAny: firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]) {
+            let poundIfHandle = self.canRecoverTo(any: firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]) {
+        let (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
         firstIteration = false
         // Parse the condition.
-        let unexpectedBeforePoundIf: RawUnexpectedNodesSyntax?
         let condition: RawExprSyntax?
         switch poundIf.tokenKind {
         case .poundIfKeyword, .poundElseifKeyword:
-          unexpectedBeforePoundIf = nil
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
         case .poundElseKeyword:
-          unexpectedBeforePoundIf = nil
           condition = nil
         default:
           preconditionFailure("The loop condition should guarantee that we are at one of these tokens")
@@ -90,7 +88,7 @@ extension Parser {
         var elements = [Element]()
         do {
           while !self.at(any: [.eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword]) {
-            guard let element = parseElement(&self) else {
+            guard let element = parseElement(&self), element.raw.byteLength > 0 else {
               break
             }
             elements.append(element)

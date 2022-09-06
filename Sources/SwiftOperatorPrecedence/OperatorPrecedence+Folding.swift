@@ -17,7 +17,7 @@ extension ExprSyntax {
     self.is(UnresolvedIsExprSyntax.self) || self.is(UnresolvedAsExprSyntax.self)
   }
 }
-extension OperatorPrecedence {
+extension OperatorTable {
   private struct PrecedenceBound {
     let groupName: PrecedenceGroupName?
     let isStrict: Bool
@@ -395,11 +395,11 @@ extension OperatorPrecedence {
     /// also throw.
     var firstFatalError: OperatorPrecedenceError? = nil
 
-    let opPrecedence: OperatorPrecedence
+    let opPrecedence: OperatorTable
     let errorHandler: OperatorPrecedenceErrorHandler
 
     init(
-      opPrecedence: OperatorPrecedence,
+      opPrecedence: OperatorTable,
       errorHandler: @escaping OperatorPrecedenceErrorHandler
     ) {
       self.opPrecedence = opPrecedence

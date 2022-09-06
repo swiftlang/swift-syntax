@@ -11,10 +11,15 @@
 //===----------------------------------------------------------------------===//
 import SwiftSyntax
 
-/// Maintains information about operators and their relative precedence,
-/// providing the core operations for "folding" sequence expression syntax into
-/// a structured expression syntax tree.
-public struct OperatorPrecedence {
+/// Maintains and validates information about all operators in a Swift program.
+///
+/// The operator table keep track of the various operator and precedence group
+/// declarations within a program. Its core operations involve processing the
+/// operator and precedence group declarations from a source tree into a
+/// semantic representation, validating the correctness of those declarations,
+/// and "folding" sequence expression syntax into a structured expression
+/// syntax tree.
+public struct OperatorTable {
   var precedenceGraph: PrecedenceGraph = .init()
   var operators: [OperatorName : Operator] = [:]
 
@@ -60,7 +65,7 @@ public struct OperatorPrecedence {
   }
 }
 
-extension OperatorPrecedence {
+extension OperatorTable {
   /// Look for the precedence group corresponding to the given operator.
   func lookupOperatorPrecedenceGroupName(
     _ operatorName: OperatorName,

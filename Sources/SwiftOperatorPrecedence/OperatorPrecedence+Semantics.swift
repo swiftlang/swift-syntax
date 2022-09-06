@@ -82,7 +82,7 @@ extension Operator {
   }
 }
 
-extension OperatorPrecedence {
+extension OperatorTable {
   /// Integrate the operator and precedence group declarations from the given
   /// source file into the operator precedence tables.
   public mutating func addSourceFile(
@@ -90,10 +90,10 @@ extension OperatorPrecedence {
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows {
     class OperatorAndGroupVisitor : SyntaxAnyVisitor {
-      var opPrecedence: OperatorPrecedence
+      var opPrecedence: OperatorTable
       var errors: [OperatorPrecedenceError] = []
 
-      init(opPrecedence: OperatorPrecedence) {
+      init(opPrecedence: OperatorTable) {
         self.opPrecedence = opPrecedence
         super.init(viewMode: .fixedUp)
       }

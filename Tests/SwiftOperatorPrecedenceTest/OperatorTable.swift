@@ -48,7 +48,7 @@ class ExplicitParenFolder : SyntaxRewriter {
       return ExprSyntax(node)
     }
 
-    return OperatorPrecedence.makeBinaryOperationExpr(
+    return OperatorTable.makeBinaryOperationExpr(
       lhs: visit(Syntax(leftOperand)).as(ExprSyntax.self)!,
       op: visit(Syntax(middleExpr)).as(ExprSyntax.self)!,
       rhs: visit(Syntax(rightOperand)).as(ExprSyntax.self)!
@@ -56,7 +56,7 @@ class ExplicitParenFolder : SyntaxRewriter {
   }
 }
 
-extension OperatorPrecedence {
+extension OperatorTable {
   /// Assert that parsing and folding the given "unfolded" source code
   /// produces the same syntax tree as the fully-parenthesized version of
   /// the same source.
@@ -90,7 +90,7 @@ extension OperatorPrecedence {
 
 public class OperatorPrecedenceTests: XCTestCase {
   func testLogicalExprsSingle() throws {
-    let opPrecedence = OperatorPrecedence.logicalOperators
+    let opPrecedence = OperatorTable.logicalOperators
     let parsed = try Parser.parse(source: "x && y || w && v || z")
     let sequenceExpr =
       parsed.statements.first!.item.as(SequenceExprSyntax.self)!
@@ -100,13 +100,13 @@ public class OperatorPrecedenceTests: XCTestCase {
   }
 
   func testLogicalExprs() throws {
-    let opPrecedence = OperatorPrecedence.logicalOperators
+    let opPrecedence = OperatorTable.logicalOperators
     try opPrecedence.assertExpectedFold("x && y || w", "((x && y) || w)")
     try opPrecedence.assertExpectedFold("x || y && w", "(x || (y && w))")
   }
 
   func testSwiftExprs() throws {
-    let opPrecedence = OperatorPrecedence.standardOperators
+    let opPrecedence = OperatorTable.standardOperators
     let parsed = try Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
     let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
@@ -116,7 +116,7 @@ public class OperatorPrecedenceTests: XCTestCase {
   }
 
   func testNestedSwiftExprs() throws {
-    let opPrecedence = OperatorPrecedence.standardOperators
+    let opPrecedence = OperatorTable.standardOperators
     let parsed = try Parser.parse(source: "(x + y > 17) && x && y || w && v || z")
     let foldedAll = try opPrecedence.foldAll(parsed)
     XCTAssertEqual("\(foldedAll)", "(x + y > 17) && x && y || w && v || z")
@@ -124,19 +124,19 @@ public class OperatorPrecedenceTests: XCTestCase {
   }
 
   func testAssignExprs() throws {
-    let opPrecedence = OperatorPrecedence.standardOperators
+    let opPrecedence = OperatorTable.standardOperators
     try opPrecedence.assertExpectedFold("a = b + c", "(a = (b + c))")
     try opPrecedence.assertExpectedFold("a = b = c", "(a = (b = c))")
   }
 
   func testCastExprs() throws {
-    let opPrecedence = OperatorPrecedence.standardOperators
+    let opPrecedence = OperatorTable.standardOperators
     try opPrecedence.assertExpectedFold("a is (b)", "(a is (b))")
     try opPrecedence.assertExpectedFold("a as c == nil", "((a as c) == nil)")
   }
 
   func testArrowExpr() throws {
-    let opPrecedence = OperatorPrecedence.standardOperators
+    let opPrecedence = OperatorTable.standardOperators
     try opPrecedence.assertExpectedFold(
       "a = b -> c -> d",
       "(a = (b -> (c -> d)))"
@@ -165,7 +165,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     """
 
     let parsedOperatorPrecedence = try Parser.parse(source: logicalOperatorSources)
-    var opPrecedence = OperatorPrecedence()
+    var opPrecedence = OperatorTable()
     try opPrecedence.addSourceFile(parsedOperatorPrecedence)
 
     let parsed = try Parser.parse(source: "x && y || w && v || z")
@@ -195,7 +195,7 @@ public class OperatorPrecedenceTests: XCTestCase {
 
     let parsedOperatorPrecedence = try Parser.parse(source: sources)
 
-    var opPrecedence = OperatorPrecedence()
+    var opPrecedence = OperatorTable()
     var errors: [OperatorPrecedenceError] = []
     opPrecedence.addSourceFile(parsedOperatorPrecedence) { error in
       errors.append(error)
@@ -244,7 +244,7 @@ public class OperatorPrecedenceTests: XCTestCase {
       infix operator ++: D
       """)
 
-    var opPrecedence = OperatorPrecedence()
+    var opPrecedence = OperatorTable()
     try opPrecedence.addSourceFile(parsedOperatorPrecedence)
 
     do {
@@ -331,7 +331,7 @@ public class OperatorPrecedenceTests: XCTestCase {
   }
 
   func testTernaryExpr() throws {
-    let opPrecedence = OperatorPrecedence.standardOperators
+    let opPrecedence = OperatorTable.standardOperators
     try opPrecedence.assertExpectedFold(
       "b + c ? y : z ? z2 : z3",
       "((b + c) ? y : (z ? z2 : z3))")

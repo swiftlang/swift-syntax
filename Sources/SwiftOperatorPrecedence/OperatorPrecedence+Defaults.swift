@@ -12,10 +12,10 @@
 import SwiftSyntax
 
 /// Prefabricated operator precedence graphs.
-extension OperatorPrecedence {
+extension OperatorTable {
   /// Operator precedence graph for the logical operators '&&' and '||', for
   /// example as it is used in `#if` processing.
-  public static var logicalOperators: OperatorPrecedence {
+  public static var logicalOperators: OperatorTable {
     let precedenceGroups: [PrecedenceGroup] = [
       PrecedenceGroup(name: "LogicalConjunctionPrecedence",
                       associativity: .left, assignment: false,
@@ -32,7 +32,7 @@ extension OperatorPrecedence {
                precedenceGroup: "LogicalDisjunctionPrecedence")
     ]
 
-    return try! OperatorPrecedence(
+    return try! OperatorTable(
       precedenceGroups: precedenceGroups, operators: operators)
   }
 
@@ -44,7 +44,7 @@ extension OperatorPrecedence {
   /// without requiring access to the standard library source code. However,
   /// because it does not incorporate user-defined operators, it will only
   /// ever be useful for a quick approximation.
-  public static var standardOperators: OperatorPrecedence {
+  public static var standardOperators: OperatorTable {
     let precedenceGroups: [PrecedenceGroup] = [
       PrecedenceGroup(
         name: "AssignmentPrecedence",
@@ -400,7 +400,7 @@ extension OperatorPrecedence {
       )
     ]
 
-    return try! OperatorPrecedence(
+    return try! OperatorTable(
       precedenceGroups: precedenceGroups, operators: operators)
   }
 }

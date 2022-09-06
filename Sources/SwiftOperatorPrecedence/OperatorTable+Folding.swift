@@ -17,6 +17,7 @@ extension ExprSyntax {
     self.is(UnresolvedIsExprSyntax.self) || self.is(UnresolvedAsExprSyntax.self)
   }
 }
+
 extension OperatorTable {
   private struct PrecedenceBound {
     let groupName: PrecedenceGroupName?

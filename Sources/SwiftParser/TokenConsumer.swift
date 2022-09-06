@@ -276,7 +276,7 @@ extension TokenConsumer {
 // MARK: Convenience functions
 
 extension TokenConsumer {
-  mutating func expectIdentifier() -> Token {
+  mutating func expectIdentifierWithoutRecovery() -> Token {
     return self.expectAnyWithoutRecovery(IdentifierTokens.allRawTokenKinds, default: .identifier)
   }
 }

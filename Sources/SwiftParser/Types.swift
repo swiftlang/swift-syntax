@@ -166,13 +166,12 @@ extension Parser {
     // '.Type', '.Protocol', '?', '!', and '[]' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if self.at(any: [.period, .prefixPeriod]) {
-        if self.peek().isContextualKeyword(["Type", "Protocol"]) {
-          let period = self.consumeAnyToken()
-          let type = self.expectIdentifier()
-          base = RawTypeSyntax(RawMetatypeTypeSyntax(
-            baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
-        }
+      if let (period, type) = self.consume(
+        if: { [.period, .prefixPeriod].contains($0.tokenKind) },
+        followedBy: { $0.isContextualKeyword(["Type", "Protocol"])}
+      ) {
+        base = RawTypeSyntax(RawMetatypeTypeSyntax(
+          baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
       }
 
       if !self.currentToken.isAtStartOfLine {
@@ -775,18 +774,20 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAt, at) = self.expect(.atSign)
-    let ident = self.expectIdentifier()
+    let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
     if let attr = Parser.TypeAttribute(rawValue: ident.tokenText) {
       // Ok, it is a valid attribute, eat it, and then process it.
       if case .convention = attr {
         let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-        let convention = self.expectIdentifier()
+        let (unexpectedBeforeConvention, convention) = self.expectIdentifier()
         let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
         return RawAttributeSyntax(
           atSignToken: at,
+          unexpectedBeforeIdent,
           attributeName: ident,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
+          unexpectedBeforeConvention,
           argument: RawSyntax(convention),
           unexpectedBeforeRightParen,
           rightParen: rightParen,
@@ -797,6 +798,7 @@ extension Parser {
     return RawAttributeSyntax(
       unexpectedBeforeAt,
       atSignToken: at,
+      unexpectedBeforeIdent,
       attributeName: ident,
       leftParen: nil,
       argument: nil,

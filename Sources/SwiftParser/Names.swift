@@ -50,13 +50,13 @@ extension Parser {
     // Consume the base name.
     let ident: RawTokenSyntax
     if self.at(.identifier) || self.at(any: [.selfKeyword, .capitalSelfKeyword]) {
-      ident = self.expectIdentifier()
+      ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       ident = self.consumeAnyToken(remapping: .identifier)
     } else if flags.contains(.keywords) && self.currentToken.tokenKind.isKeyword {
       ident = self.consumeAnyToken(remapping: .identifier)
     } else {
-      ident = self.expectIdentifier()
+      ident = self.expectIdentifierWithoutRecovery()
     }
 
     // Parse an argument list, if the flags allow it and it's present.

@@ -488,20 +488,13 @@ final class DeclarationTests: XCTestCase {
   func testClassWithLeadingNumber() {
     AssertParse(
       """
-      class #^DIAG^#23class {
-        // expected-error@-1 {{class name can only start with a letter or underscore, not a number}}
-        // expected-error@-2 {{'c' is not a valid digit in integer literal}}
-        func 24method() {}
-        // expected-error@-1 {{function name can only start with a letter or underscore, not a number}}
-        // expected-error@-2 {{'m' is not a valid digit in integer literal}}
+      class #^CLASS_NAME^#23class {
+        func #^FUNC_NAME^#24method() {}
       }
       """,
-      // FIXME: These are simply bad diagnostics. We should be complaining that identifiers cannot start with digits.
       diagnostics: [
-        DiagnosticSpec(message: "Expected identifier in class"),
-        DiagnosticSpec(message: "Expected '{' to start class"),
-        DiagnosticSpec(message: "Expected '}' to end class"),
-        DiagnosticSpec(message: "Extraneous code at top level"),
+        DiagnosticSpec(locationMarker: "CLASS_NAME", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(locationMarker: "FUNC_NAME", message: "identifier can only start with a letter or underscore, not a number"),
       ]
     )
   }

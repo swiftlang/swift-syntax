@@ -646,16 +646,17 @@ extension Parser {
   public mutating func parseSwitchCase() -> RawSwitchCaseSyntax {
     var unknownAttr: RawAttributeSyntax?
     if let at = self.consume(if: .atSign) {
-      let ident = self.expectIdentifier()
+      let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
 
       var tokenList = [RawTokenSyntax]()
       while let atSign = self.consume(if: .atSign) {
         tokenList.append(atSign)
-        tokenList.append(self.expectIdentifier())
+        tokenList.append(self.expectIdentifierWithoutRecovery())
       }
 
       unknownAttr = RawAttributeSyntax(
         atSignToken: at,
+        unexpectedBeforeIdent,
         attributeName: ident,
         leftParen: nil,
         argument: nil,
@@ -974,7 +975,7 @@ extension Parser {
       return nil
     }
 
-    return self.expectIdentifier()
+    return self.expectIdentifierWithoutRecovery()
   }
 }
 
@@ -1026,7 +1027,7 @@ extension Parser.Lookahead {
       }
 
       lookahead.eat(.atSign)
-      lookahead.expectIdentifier()
+      lookahead.expectIdentifierWithoutRecovery()
     }
 
     if allowRecovery {

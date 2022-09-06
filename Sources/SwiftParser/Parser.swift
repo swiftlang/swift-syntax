@@ -364,6 +364,23 @@ extension Parser {
       makeMissing: { $0.missingToken(defaultKind, text: nil) }
     )
   }
+
+  @_spi(RawSyntax)
+  public mutating func expectIdentifier() -> (RawUnexpectedNodesSyntax?, Token) {
+    if let (_, handle) = self.canRecoverTo(anyIn: IdentifierTokens.self) {
+      return self.eat(handle)
+    }
+    if let unknown = self.consume(if: .unknown) {
+      return (
+        RawUnexpectedNodesSyntax(elements: [RawSyntax(unknown)], arena: self.arena),
+        self.missingToken(.identifier, text: nil)
+      )
+    }
+    return (
+      nil,
+      self.missingToken(.identifier, text: nil)
+    )
+  }
 }
 
 // MARK: Spliting Tokens

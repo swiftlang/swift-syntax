@@ -106,6 +106,19 @@ public struct ExtaneousCodeAtTopLevel: ParserError {
   }
 }
 
+public struct InvalidIdentifierError: ParserError {
+  public let invalidIdentifier: TokenSyntax
+
+  public var message: String {
+    switch invalidIdentifier.tokenKind {
+    case .unknown(let text) where text.first?.isNumber == true:
+      return "identifier can only start with a letter or underscore, not a number"
+    default:
+      return "'\(invalidIdentifier.text)' is not a valid identifier"
+    }
+  }
+}
+
 public struct MissingAttributeArgument: ParserError {
   /// The name of the attribute that's missing the argument, without `@`.
   public let attributeName: TokenSyntax
@@ -140,6 +153,13 @@ public struct MissingTokenError: ParserError {
       }
     }
     return message
+  }
+
+  public var handledNodes: [Syntax] {
+    if let previous = missingToken.previousToken(viewMode: .all), previous.parent!.is(UnexpectedNodesSyntax.self) {
+      return [Syntax(previous.parent!)]
+    }
+    return []
   }
 }
 

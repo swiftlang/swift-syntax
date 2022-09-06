@@ -128,7 +128,7 @@ extension Parser.Lookahead {
       if case .convention = attr {
         guard
           self.consume(if: .leftParen) != nil,
-          (self.at(.identifier) ? self.expectIdentifier() : nil) != nil,
+          self.consume(if: .identifier) != nil,
           self.consume(if: .rightParen) != nil
         else {
           return
@@ -178,7 +178,7 @@ extension Parser.Lookahead {
     }
 
     while let _ = self.consume(if: .atSign) {
-      self.expectIdentifier()
+      self.expectIdentifierWithoutRecovery()
       if self.consume(if: .leftParen) != nil {
         while !self.at(any: [.eof, .rightParen, .poundEndifKeyword]) {
           self.skipSingle()
@@ -306,7 +306,7 @@ extension Parser.Lookahead {
 
     // Look ahead to parse the parenthesized expression.
     var lookahead = self.lookahead()
-    lookahead.expectIdentifier()
+    lookahead.expectIdentifierWithoutRecovery()
     guard lookahead.consume(if: .leftParen) != nil else {
       return false
     }
@@ -344,10 +344,9 @@ extension Parser.Lookahead {
 
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {
-      guard lookahead.at(.identifier) else {
+      guard lookahead.consume(if: .identifier) != nil else {
         return false
       }
-      lookahead.expectIdentifier()
       // Eat paren after attribute name; e.g. @foo(x)
       if lookahead.at(.leftParen) {
         lookahead.skipSingle()

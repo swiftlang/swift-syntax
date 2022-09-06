@@ -16,6 +16,7 @@ import SwiftSyntax
 /// token, tokens with a lower token precedence may be skipped and considered
 /// unexpected.
 public enum TokenPrecedence: Comparable {
+  case unknown
   /// Tokens that can be used similar to variable names or literals
   case identifierLike
   /// Keywords and operators that can occur in the middle of an expression
@@ -59,6 +60,8 @@ public enum TokenPrecedence: Comparable {
     func precedence(_ precedence: TokenPrecedence) -> Int {
       /// Should match the order of the cases in the enum.
       switch precedence {
+      case .unknown:
+        return -1
       case .identifierLike:
         return 0
       case .exprKeyword:
@@ -98,6 +101,8 @@ public enum TokenPrecedence: Comparable {
   @_spi(RawSyntax)
   public init(_ tokenKind: RawTokenKind) {
     switch tokenKind {
+    case .unknown:
+      self = .unknown
       // MARK: Identifier like
     case
       // Literals
@@ -111,9 +116,9 @@ public enum TokenPrecedence: Comparable {
       // '_' can occur in types to replace a type identifier
         .wildcardKeyword,
       // String segment, string interpolation anchor and pound don't really fit anywhere else
-        .pound, .stringInterpolationAnchor, .stringSegment,
-      // Give unknown tokens the lowest priority to eat it as unexpected if necessary
-        .unknown:
+        .pound, .stringInterpolationAnchor, .stringSegment:
+//      // Give unknown tokens the lowest priority to eat it as unexpected if necessary
+//        .unknown:
       self = .identifierLike
 
       // MARK: Expr keyword

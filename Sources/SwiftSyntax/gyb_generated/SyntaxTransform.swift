@@ -15,3699 +15,2647 @@
 public protocol SyntaxTransformVisitor {
   associatedtype ResultType = Void
   
-  func visit(_ token: TokenSyntax) -> [ResultType]
-  func visit(_ node: UnknownSyntax) -> [ResultType]
+  func visit(_ token: TokenSyntax) -> ResultType
+  func visit(_ node: UnknownSyntax) -> ResultType
   
   /// Visiting `UnknownDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownDeclSyntax) -> [ResultType]
+  func visit(_ node: UnknownDeclSyntax) -> ResultType
   /// Visiting `UnknownExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownExprSyntax) -> [ResultType]
+  func visit(_ node: UnknownExprSyntax) -> ResultType
   /// Visiting `UnknownStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownStmtSyntax) -> [ResultType]
+  func visit(_ node: UnknownStmtSyntax) -> ResultType
   /// Visiting `UnknownTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownTypeSyntax) -> [ResultType]
+  func visit(_ node: UnknownTypeSyntax) -> ResultType
   /// Visiting `UnknownPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnknownPatternSyntax) -> [ResultType]
+  func visit(_ node: UnknownPatternSyntax) -> ResultType
   /// Visiting `MissingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MissingSyntax) -> [ResultType]
+  func visit(_ node: MissingSyntax) -> ResultType
   /// Visiting `MissingDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MissingDeclSyntax) -> [ResultType]
+  func visit(_ node: MissingDeclSyntax) -> ResultType
   /// Visiting `MissingExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MissingExprSyntax) -> [ResultType]
+  func visit(_ node: MissingExprSyntax) -> ResultType
   /// Visiting `MissingStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MissingStmtSyntax) -> [ResultType]
+  func visit(_ node: MissingStmtSyntax) -> ResultType
   /// Visiting `MissingTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MissingTypeSyntax) -> [ResultType]
+  func visit(_ node: MissingTypeSyntax) -> ResultType
   /// Visiting `MissingPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MissingPatternSyntax) -> [ResultType]
+  func visit(_ node: MissingPatternSyntax) -> ResultType
   /// Visiting `CodeBlockItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CodeBlockItemSyntax) -> [ResultType]
+  func visit(_ node: CodeBlockItemSyntax) -> ResultType
   /// Visiting `CodeBlockItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CodeBlockItemListSyntax) -> [ResultType]
+  func visit(_ node: CodeBlockItemListSyntax) -> ResultType
   /// Visiting `CodeBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CodeBlockSyntax) -> [ResultType]
+  func visit(_ node: CodeBlockSyntax) -> ResultType
   /// Visiting `UnexpectedNodesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnexpectedNodesSyntax) -> [ResultType]
+  func visit(_ node: UnexpectedNodesSyntax) -> ResultType
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: InOutExprSyntax) -> [ResultType]
+  func visit(_ node: InOutExprSyntax) -> ResultType
   /// Visiting `PoundColumnExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundColumnExprSyntax) -> [ResultType]
+  func visit(_ node: PoundColumnExprSyntax) -> ResultType
   /// Visiting `TupleExprElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleExprElementListSyntax) -> [ResultType]
+  func visit(_ node: TupleExprElementListSyntax) -> ResultType
   /// Visiting `ArrayElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ArrayElementListSyntax) -> [ResultType]
+  func visit(_ node: ArrayElementListSyntax) -> ResultType
   /// Visiting `DictionaryElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DictionaryElementListSyntax) -> [ResultType]
+  func visit(_ node: DictionaryElementListSyntax) -> ResultType
   /// Visiting `StringLiteralSegmentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: StringLiteralSegmentsSyntax) -> [ResultType]
+  func visit(_ node: StringLiteralSegmentsSyntax) -> ResultType
   /// Visiting `TryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TryExprSyntax) -> [ResultType]
+  func visit(_ node: TryExprSyntax) -> ResultType
   /// Visiting `AwaitExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AwaitExprSyntax) -> [ResultType]
+  func visit(_ node: AwaitExprSyntax) -> ResultType
   /// Visiting `MoveExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MoveExprSyntax) -> [ResultType]
+  func visit(_ node: MoveExprSyntax) -> ResultType
   /// Visiting `DeclNameArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclNameArgumentSyntax) -> [ResultType]
+  func visit(_ node: DeclNameArgumentSyntax) -> ResultType
   /// Visiting `DeclNameArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclNameArgumentListSyntax) -> [ResultType]
+  func visit(_ node: DeclNameArgumentListSyntax) -> ResultType
   /// Visiting `DeclNameArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclNameArgumentsSyntax) -> [ResultType]
+  func visit(_ node: DeclNameArgumentsSyntax) -> ResultType
   /// Visiting `IdentifierExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IdentifierExprSyntax) -> [ResultType]
+  func visit(_ node: IdentifierExprSyntax) -> ResultType
   /// Visiting `SuperRefExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SuperRefExprSyntax) -> [ResultType]
+  func visit(_ node: SuperRefExprSyntax) -> ResultType
   /// Visiting `NilLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: NilLiteralExprSyntax) -> [ResultType]
+  func visit(_ node: NilLiteralExprSyntax) -> ResultType
   /// Visiting `DiscardAssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DiscardAssignmentExprSyntax) -> [ResultType]
+  func visit(_ node: DiscardAssignmentExprSyntax) -> ResultType
   /// Visiting `AssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AssignmentExprSyntax) -> [ResultType]
+  func visit(_ node: AssignmentExprSyntax) -> ResultType
   /// Visiting `SequenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SequenceExprSyntax) -> [ResultType]
+  func visit(_ node: SequenceExprSyntax) -> ResultType
   /// Visiting `ExprListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ExprListSyntax) -> [ResultType]
+  func visit(_ node: ExprListSyntax) -> ResultType
   /// Visiting `PoundLineExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundLineExprSyntax) -> [ResultType]
+  func visit(_ node: PoundLineExprSyntax) -> ResultType
   /// Visiting `PoundFileExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFileExprSyntax) -> [ResultType]
+  func visit(_ node: PoundFileExprSyntax) -> ResultType
   /// Visiting `PoundFileIDExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFileIDExprSyntax) -> [ResultType]
+  func visit(_ node: PoundFileIDExprSyntax) -> ResultType
   /// Visiting `PoundFilePathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFilePathExprSyntax) -> [ResultType]
+  func visit(_ node: PoundFilePathExprSyntax) -> ResultType
   /// Visiting `PoundFunctionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundFunctionExprSyntax) -> [ResultType]
+  func visit(_ node: PoundFunctionExprSyntax) -> ResultType
   /// Visiting `PoundDsohandleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundDsohandleExprSyntax) -> [ResultType]
+  func visit(_ node: PoundDsohandleExprSyntax) -> ResultType
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SymbolicReferenceExprSyntax) -> [ResultType]
+  func visit(_ node: SymbolicReferenceExprSyntax) -> ResultType
   /// Visiting `PrefixOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrefixOperatorExprSyntax) -> [ResultType]
+  func visit(_ node: PrefixOperatorExprSyntax) -> ResultType
   /// Visiting `BinaryOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BinaryOperatorExprSyntax) -> [ResultType]
+  func visit(_ node: BinaryOperatorExprSyntax) -> ResultType
   /// Visiting `ArrowExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ArrowExprSyntax) -> [ResultType]
+  func visit(_ node: ArrowExprSyntax) -> ResultType
   /// Visiting `InfixOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: InfixOperatorExprSyntax) -> [ResultType]
+  func visit(_ node: InfixOperatorExprSyntax) -> ResultType
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FloatLiteralExprSyntax) -> [ResultType]
+  func visit(_ node: FloatLiteralExprSyntax) -> ResultType
   /// Visiting `TupleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleExprSyntax) -> [ResultType]
+  func visit(_ node: TupleExprSyntax) -> ResultType
   /// Visiting `ArrayExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ArrayExprSyntax) -> [ResultType]
+  func visit(_ node: ArrayExprSyntax) -> ResultType
   /// Visiting `DictionaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DictionaryExprSyntax) -> [ResultType]
+  func visit(_ node: DictionaryExprSyntax) -> ResultType
   /// Visiting `TupleExprElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleExprElementSyntax) -> [ResultType]
+  func visit(_ node: TupleExprElementSyntax) -> ResultType
   /// Visiting `ArrayElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ArrayElementSyntax) -> [ResultType]
+  func visit(_ node: ArrayElementSyntax) -> ResultType
   /// Visiting `DictionaryElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DictionaryElementSyntax) -> [ResultType]
+  func visit(_ node: DictionaryElementSyntax) -> ResultType
   /// Visiting `IntegerLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IntegerLiteralExprSyntax) -> [ResultType]
+  func visit(_ node: IntegerLiteralExprSyntax) -> ResultType
   /// Visiting `BooleanLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BooleanLiteralExprSyntax) -> [ResultType]
+  func visit(_ node: BooleanLiteralExprSyntax) -> ResultType
   /// Visiting `UnresolvedTernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnresolvedTernaryExprSyntax) -> [ResultType]
+  func visit(_ node: UnresolvedTernaryExprSyntax) -> ResultType
   /// Visiting `TernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TernaryExprSyntax) -> [ResultType]
+  func visit(_ node: TernaryExprSyntax) -> ResultType
   /// Visiting `MemberAccessExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberAccessExprSyntax) -> [ResultType]
+  func visit(_ node: MemberAccessExprSyntax) -> ResultType
   /// Visiting `UnresolvedIsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnresolvedIsExprSyntax) -> [ResultType]
+  func visit(_ node: UnresolvedIsExprSyntax) -> ResultType
   /// Visiting `IsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IsExprSyntax) -> [ResultType]
+  func visit(_ node: IsExprSyntax) -> ResultType
   /// Visiting `UnresolvedAsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnresolvedAsExprSyntax) -> [ResultType]
+  func visit(_ node: UnresolvedAsExprSyntax) -> ResultType
   /// Visiting `AsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AsExprSyntax) -> [ResultType]
+  func visit(_ node: AsExprSyntax) -> ResultType
   /// Visiting `TypeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TypeExprSyntax) -> [ResultType]
+  func visit(_ node: TypeExprSyntax) -> ResultType
   /// Visiting `ClosureCaptureItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureCaptureItemSyntax) -> [ResultType]
+  func visit(_ node: ClosureCaptureItemSyntax) -> ResultType
   /// Visiting `ClosureCaptureItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureCaptureItemListSyntax) -> [ResultType]
+  func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType
   /// Visiting `ClosureCaptureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureCaptureSignatureSyntax) -> [ResultType]
+  func visit(_ node: ClosureCaptureSignatureSyntax) -> ResultType
   /// Visiting `ClosureParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureParamSyntax) -> [ResultType]
+  func visit(_ node: ClosureParamSyntax) -> ResultType
   /// Visiting `ClosureParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureParamListSyntax) -> [ResultType]
+  func visit(_ node: ClosureParamListSyntax) -> ResultType
   /// Visiting `ClosureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureSignatureSyntax) -> [ResultType]
+  func visit(_ node: ClosureSignatureSyntax) -> ResultType
   /// Visiting `ClosureExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureExprSyntax) -> [ResultType]
+  func visit(_ node: ClosureExprSyntax) -> ResultType
   /// Visiting `UnresolvedPatternExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnresolvedPatternExprSyntax) -> [ResultType]
+  func visit(_ node: UnresolvedPatternExprSyntax) -> ResultType
   /// Visiting `MultipleTrailingClosureElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MultipleTrailingClosureElementSyntax) -> [ResultType]
+  func visit(_ node: MultipleTrailingClosureElementSyntax) -> ResultType
   /// Visiting `MultipleTrailingClosureElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MultipleTrailingClosureElementListSyntax) -> [ResultType]
+  func visit(_ node: MultipleTrailingClosureElementListSyntax) -> ResultType
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FunctionCallExprSyntax) -> [ResultType]
+  func visit(_ node: FunctionCallExprSyntax) -> ResultType
   /// Visiting `SubscriptExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SubscriptExprSyntax) -> [ResultType]
+  func visit(_ node: SubscriptExprSyntax) -> ResultType
   /// Visiting `OptionalChainingExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OptionalChainingExprSyntax) -> [ResultType]
+  func visit(_ node: OptionalChainingExprSyntax) -> ResultType
   /// Visiting `ForcedValueExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ForcedValueExprSyntax) -> [ResultType]
+  func visit(_ node: ForcedValueExprSyntax) -> ResultType
   /// Visiting `PostfixUnaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PostfixUnaryExprSyntax) -> [ResultType]
+  func visit(_ node: PostfixUnaryExprSyntax) -> ResultType
   /// Visiting `SpecializeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SpecializeExprSyntax) -> [ResultType]
+  func visit(_ node: SpecializeExprSyntax) -> ResultType
   /// Visiting `StringSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: StringSegmentSyntax) -> [ResultType]
+  func visit(_ node: StringSegmentSyntax) -> ResultType
   /// Visiting `ExpressionSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ExpressionSegmentSyntax) -> [ResultType]
+  func visit(_ node: ExpressionSegmentSyntax) -> ResultType
   /// Visiting `StringLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: StringLiteralExprSyntax) -> [ResultType]
+  func visit(_ node: StringLiteralExprSyntax) -> ResultType
   /// Visiting `RegexLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: RegexLiteralExprSyntax) -> [ResultType]
+  func visit(_ node: RegexLiteralExprSyntax) -> ResultType
   /// Visiting `KeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: KeyPathExprSyntax) -> [ResultType]
+  func visit(_ node: KeyPathExprSyntax) -> ResultType
   /// Visiting `KeyPathBaseExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: KeyPathBaseExprSyntax) -> [ResultType]
+  func visit(_ node: KeyPathBaseExprSyntax) -> ResultType
   /// Visiting `ObjcNamePieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcNamePieceSyntax) -> [ResultType]
+  func visit(_ node: ObjcNamePieceSyntax) -> ResultType
   /// Visiting `ObjcNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcNameSyntax) -> [ResultType]
+  func visit(_ node: ObjcNameSyntax) -> ResultType
   /// Visiting `ObjcKeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcKeyPathExprSyntax) -> [ResultType]
+  func visit(_ node: ObjcKeyPathExprSyntax) -> ResultType
   /// Visiting `ObjcSelectorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjcSelectorExprSyntax) -> [ResultType]
+  func visit(_ node: ObjcSelectorExprSyntax) -> ResultType
   /// Visiting `PostfixIfConfigExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PostfixIfConfigExprSyntax) -> [ResultType]
+  func visit(_ node: PostfixIfConfigExprSyntax) -> ResultType
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EditorPlaceholderExprSyntax) -> [ResultType]
+  func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType
   /// Visiting `ObjectLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjectLiteralExprSyntax) -> [ResultType]
+  func visit(_ node: ObjectLiteralExprSyntax) -> ResultType
   /// Visiting `TypeInitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TypeInitializerClauseSyntax) -> [ResultType]
+  func visit(_ node: TypeInitializerClauseSyntax) -> ResultType
   /// Visiting `TypealiasDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TypealiasDeclSyntax) -> [ResultType]
+  func visit(_ node: TypealiasDeclSyntax) -> ResultType
   /// Visiting `AssociatedtypeDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AssociatedtypeDeclSyntax) -> [ResultType]
+  func visit(_ node: AssociatedtypeDeclSyntax) -> ResultType
   /// Visiting `FunctionParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FunctionParameterListSyntax) -> [ResultType]
+  func visit(_ node: FunctionParameterListSyntax) -> ResultType
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ParameterClauseSyntax) -> [ResultType]
+  func visit(_ node: ParameterClauseSyntax) -> ResultType
   /// Visiting `ReturnClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ReturnClauseSyntax) -> [ResultType]
+  func visit(_ node: ReturnClauseSyntax) -> ResultType
   /// Visiting `FunctionSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FunctionSignatureSyntax) -> [ResultType]
+  func visit(_ node: FunctionSignatureSyntax) -> ResultType
   /// Visiting `IfConfigClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IfConfigClauseSyntax) -> [ResultType]
+  func visit(_ node: IfConfigClauseSyntax) -> ResultType
   /// Visiting `IfConfigClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IfConfigClauseListSyntax) -> [ResultType]
+  func visit(_ node: IfConfigClauseListSyntax) -> ResultType
   /// Visiting `IfConfigDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IfConfigDeclSyntax) -> [ResultType]
+  func visit(_ node: IfConfigDeclSyntax) -> ResultType
   /// Visiting `PoundErrorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundErrorDeclSyntax) -> [ResultType]
+  func visit(_ node: PoundErrorDeclSyntax) -> ResultType
   /// Visiting `PoundWarningDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundWarningDeclSyntax) -> [ResultType]
+  func visit(_ node: PoundWarningDeclSyntax) -> ResultType
   /// Visiting `PoundSourceLocationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundSourceLocationSyntax) -> [ResultType]
+  func visit(_ node: PoundSourceLocationSyntax) -> ResultType
   /// Visiting `PoundSourceLocationArgsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundSourceLocationArgsSyntax) -> [ResultType]
+  func visit(_ node: PoundSourceLocationArgsSyntax) -> ResultType
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclModifierDetailSyntax) -> [ResultType]
+  func visit(_ node: DeclModifierDetailSyntax) -> ResultType
   /// Visiting `DeclModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclModifierSyntax) -> [ResultType]
+  func visit(_ node: DeclModifierSyntax) -> ResultType
   /// Visiting `InheritedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: InheritedTypeSyntax) -> [ResultType]
+  func visit(_ node: InheritedTypeSyntax) -> ResultType
   /// Visiting `InheritedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: InheritedTypeListSyntax) -> [ResultType]
+  func visit(_ node: InheritedTypeListSyntax) -> ResultType
   /// Visiting `TypeInheritanceClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TypeInheritanceClauseSyntax) -> [ResultType]
+  func visit(_ node: TypeInheritanceClauseSyntax) -> ResultType
   /// Visiting `ClassDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClassDeclSyntax) -> [ResultType]
+  func visit(_ node: ClassDeclSyntax) -> ResultType
   /// Visiting `ActorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ActorDeclSyntax) -> [ResultType]
+  func visit(_ node: ActorDeclSyntax) -> ResultType
   /// Visiting `StructDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: StructDeclSyntax) -> [ResultType]
+  func visit(_ node: StructDeclSyntax) -> ResultType
   /// Visiting `ProtocolDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ProtocolDeclSyntax) -> [ResultType]
+  func visit(_ node: ProtocolDeclSyntax) -> ResultType
   /// Visiting `ExtensionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ExtensionDeclSyntax) -> [ResultType]
+  func visit(_ node: ExtensionDeclSyntax) -> ResultType
   /// Visiting `MemberDeclBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberDeclBlockSyntax) -> [ResultType]
+  func visit(_ node: MemberDeclBlockSyntax) -> ResultType
   /// Visiting `MemberDeclListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberDeclListSyntax) -> [ResultType]
+  func visit(_ node: MemberDeclListSyntax) -> ResultType
   /// Visiting `MemberDeclListItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberDeclListItemSyntax) -> [ResultType]
+  func visit(_ node: MemberDeclListItemSyntax) -> ResultType
   /// Visiting `SourceFileSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SourceFileSyntax) -> [ResultType]
+  func visit(_ node: SourceFileSyntax) -> ResultType
   /// Visiting `InitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: InitializerClauseSyntax) -> [ResultType]
+  func visit(_ node: InitializerClauseSyntax) -> ResultType
   /// Visiting `FunctionParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FunctionParameterSyntax) -> [ResultType]
+  func visit(_ node: FunctionParameterSyntax) -> ResultType
   /// Visiting `ModifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ModifierListSyntax) -> [ResultType]
+  func visit(_ node: ModifierListSyntax) -> ResultType
   /// Visiting `FunctionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FunctionDeclSyntax) -> [ResultType]
+  func visit(_ node: FunctionDeclSyntax) -> ResultType
   /// Visiting `InitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: InitializerDeclSyntax) -> [ResultType]
+  func visit(_ node: InitializerDeclSyntax) -> ResultType
   /// Visiting `DeinitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeinitializerDeclSyntax) -> [ResultType]
+  func visit(_ node: DeinitializerDeclSyntax) -> ResultType
   /// Visiting `SubscriptDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SubscriptDeclSyntax) -> [ResultType]
+  func visit(_ node: SubscriptDeclSyntax) -> ResultType
   /// Visiting `AccessLevelModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessLevelModifierSyntax) -> [ResultType]
+  func visit(_ node: AccessLevelModifierSyntax) -> ResultType
   /// Visiting `AccessPathComponentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessPathComponentSyntax) -> [ResultType]
+  func visit(_ node: AccessPathComponentSyntax) -> ResultType
   /// Visiting `AccessPathSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessPathSyntax) -> [ResultType]
+  func visit(_ node: AccessPathSyntax) -> ResultType
   /// Visiting `ImportDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ImportDeclSyntax) -> [ResultType]
+  func visit(_ node: ImportDeclSyntax) -> ResultType
   /// Visiting `AccessorParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessorParameterSyntax) -> [ResultType]
+  func visit(_ node: AccessorParameterSyntax) -> ResultType
   /// Visiting `AccessorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessorDeclSyntax) -> [ResultType]
+  func visit(_ node: AccessorDeclSyntax) -> ResultType
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessorListSyntax) -> [ResultType]
+  func visit(_ node: AccessorListSyntax) -> ResultType
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessorBlockSyntax) -> [ResultType]
+  func visit(_ node: AccessorBlockSyntax) -> ResultType
   /// Visiting `PatternBindingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PatternBindingSyntax) -> [ResultType]
+  func visit(_ node: PatternBindingSyntax) -> ResultType
   /// Visiting `PatternBindingListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PatternBindingListSyntax) -> [ResultType]
+  func visit(_ node: PatternBindingListSyntax) -> ResultType
   /// Visiting `VariableDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: VariableDeclSyntax) -> [ResultType]
+  func visit(_ node: VariableDeclSyntax) -> ResultType
   /// Visiting `EnumCaseElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EnumCaseElementSyntax) -> [ResultType]
+  func visit(_ node: EnumCaseElementSyntax) -> ResultType
   /// Visiting `EnumCaseElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EnumCaseElementListSyntax) -> [ResultType]
+  func visit(_ node: EnumCaseElementListSyntax) -> ResultType
   /// Visiting `EnumCaseDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EnumCaseDeclSyntax) -> [ResultType]
+  func visit(_ node: EnumCaseDeclSyntax) -> ResultType
   /// Visiting `EnumDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EnumDeclSyntax) -> [ResultType]
+  func visit(_ node: EnumDeclSyntax) -> ResultType
   /// Visiting `OperatorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OperatorDeclSyntax) -> [ResultType]
+  func visit(_ node: OperatorDeclSyntax) -> ResultType
   /// Visiting `IdentifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IdentifierListSyntax) -> [ResultType]
+  func visit(_ node: IdentifierListSyntax) -> ResultType
   /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> [ResultType]
+  func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> ResultType
   /// Visiting `PrecedenceGroupDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupDeclSyntax) -> [ResultType]
+  func visit(_ node: PrecedenceGroupDeclSyntax) -> ResultType
   /// Visiting `PrecedenceGroupAttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupAttributeListSyntax) -> [ResultType]
+  func visit(_ node: PrecedenceGroupAttributeListSyntax) -> ResultType
   /// Visiting `PrecedenceGroupRelationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupRelationSyntax) -> [ResultType]
+  func visit(_ node: PrecedenceGroupRelationSyntax) -> ResultType
   /// Visiting `PrecedenceGroupNameListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupNameListSyntax) -> [ResultType]
+  func visit(_ node: PrecedenceGroupNameListSyntax) -> ResultType
   /// Visiting `PrecedenceGroupNameElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupNameElementSyntax) -> [ResultType]
+  func visit(_ node: PrecedenceGroupNameElementSyntax) -> ResultType
   /// Visiting `PrecedenceGroupAssignmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupAssignmentSyntax) -> [ResultType]
+  func visit(_ node: PrecedenceGroupAssignmentSyntax) -> ResultType
   /// Visiting `PrecedenceGroupAssociativitySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupAssociativitySyntax) -> [ResultType]
+  func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType
   /// Visiting `TokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TokenListSyntax) -> [ResultType]
+  func visit(_ node: TokenListSyntax) -> ResultType
   /// Visiting `NonEmptyTokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: NonEmptyTokenListSyntax) -> [ResultType]
+  func visit(_ node: NonEmptyTokenListSyntax) -> ResultType
   /// Visiting `CustomAttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CustomAttributeSyntax) -> [ResultType]
+  func visit(_ node: CustomAttributeSyntax) -> ResultType
   /// Visiting `AttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AttributeSyntax) -> [ResultType]
+  func visit(_ node: AttributeSyntax) -> ResultType
   /// Visiting `AttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AttributeListSyntax) -> [ResultType]
+  func visit(_ node: AttributeListSyntax) -> ResultType
   /// Visiting `SpecializeAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SpecializeAttributeSpecListSyntax) -> [ResultType]
+  func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType
   /// Visiting `AvailabilityEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityEntrySyntax) -> [ResultType]
+  func visit(_ node: AvailabilityEntrySyntax) -> ResultType
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: LabeledSpecializeEntrySyntax) -> [ResultType]
+  func visit(_ node: LabeledSpecializeEntrySyntax) -> ResultType
   /// Visiting `TargetFunctionEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TargetFunctionEntrySyntax) -> [ResultType]
+  func visit(_ node: TargetFunctionEntrySyntax) -> ResultType
   /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: NamedAttributeStringArgumentSyntax) -> [ResultType]
+  func visit(_ node: NamedAttributeStringArgumentSyntax) -> ResultType
   /// Visiting `DeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclNameSyntax) -> [ResultType]
+  func visit(_ node: DeclNameSyntax) -> ResultType
   /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ImplementsAttributeArgumentsSyntax) -> [ResultType]
+  func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ResultType
   /// Visiting `ObjCSelectorPieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjCSelectorPieceSyntax) -> [ResultType]
+  func visit(_ node: ObjCSelectorPieceSyntax) -> ResultType
   /// Visiting `ObjCSelectorSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjCSelectorSyntax) -> [ResultType]
+  func visit(_ node: ObjCSelectorSyntax) -> ResultType
   /// Visiting `DifferentiableAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> [ResultType]
+  func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> ResultType
   /// Visiting `DifferentiabilityParamsClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamsClauseSyntax) -> [ResultType]
+  func visit(_ node: DifferentiabilityParamsClauseSyntax) -> ResultType
   /// Visiting `DifferentiabilityParamsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamsSyntax) -> [ResultType]
+  func visit(_ node: DifferentiabilityParamsSyntax) -> ResultType
   /// Visiting `DifferentiabilityParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamListSyntax) -> [ResultType]
+  func visit(_ node: DifferentiabilityParamListSyntax) -> ResultType
   /// Visiting `DifferentiabilityParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamSyntax) -> [ResultType]
+  func visit(_ node: DifferentiabilityParamSyntax) -> ResultType
   /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> [ResultType]
+  func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType
   /// Visiting `QualifiedDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: QualifiedDeclNameSyntax) -> [ResultType]
+  func visit(_ node: QualifiedDeclNameSyntax) -> ResultType
   /// Visiting `FunctionDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FunctionDeclNameSyntax) -> [ResultType]
+  func visit(_ node: FunctionDeclNameSyntax) -> ResultType
   /// Visiting `BackDeployAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployAttributeSpecListSyntax) -> [ResultType]
+  func visit(_ node: BackDeployAttributeSpecListSyntax) -> ResultType
   /// Visiting `BackDeployVersionListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployVersionListSyntax) -> [ResultType]
+  func visit(_ node: BackDeployVersionListSyntax) -> ResultType
   /// Visiting `BackDeployVersionArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployVersionArgumentSyntax) -> [ResultType]
+  func visit(_ node: BackDeployVersionArgumentSyntax) -> ResultType
   /// Visiting `LabeledStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: LabeledStmtSyntax) -> [ResultType]
+  func visit(_ node: LabeledStmtSyntax) -> ResultType
   /// Visiting `ContinueStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ContinueStmtSyntax) -> [ResultType]
+  func visit(_ node: ContinueStmtSyntax) -> ResultType
   /// Visiting `WhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: WhileStmtSyntax) -> [ResultType]
+  func visit(_ node: WhileStmtSyntax) -> ResultType
   /// Visiting `DeferStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeferStmtSyntax) -> [ResultType]
+  func visit(_ node: DeferStmtSyntax) -> ResultType
   /// Visiting `ExpressionStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ExpressionStmtSyntax) -> [ResultType]
+  func visit(_ node: ExpressionStmtSyntax) -> ResultType
   /// Visiting `SwitchCaseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchCaseListSyntax) -> [ResultType]
+  func visit(_ node: SwitchCaseListSyntax) -> ResultType
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: RepeatWhileStmtSyntax) -> [ResultType]
+  func visit(_ node: RepeatWhileStmtSyntax) -> ResultType
   /// Visiting `GuardStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GuardStmtSyntax) -> [ResultType]
+  func visit(_ node: GuardStmtSyntax) -> ResultType
   /// Visiting `WhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: WhereClauseSyntax) -> [ResultType]
+  func visit(_ node: WhereClauseSyntax) -> ResultType
   /// Visiting `ForInStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ForInStmtSyntax) -> [ResultType]
+  func visit(_ node: ForInStmtSyntax) -> ResultType
   /// Visiting `SwitchStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchStmtSyntax) -> [ResultType]
+  func visit(_ node: SwitchStmtSyntax) -> ResultType
   /// Visiting `CatchClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CatchClauseListSyntax) -> [ResultType]
+  func visit(_ node: CatchClauseListSyntax) -> ResultType
   /// Visiting `DoStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DoStmtSyntax) -> [ResultType]
+  func visit(_ node: DoStmtSyntax) -> ResultType
   /// Visiting `ReturnStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ReturnStmtSyntax) -> [ResultType]
+  func visit(_ node: ReturnStmtSyntax) -> ResultType
   /// Visiting `YieldStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldStmtSyntax) -> [ResultType]
+  func visit(_ node: YieldStmtSyntax) -> ResultType
   /// Visiting `YieldListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldListSyntax) -> [ResultType]
+  func visit(_ node: YieldListSyntax) -> ResultType
   /// Visiting `FallthroughStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FallthroughStmtSyntax) -> [ResultType]
+  func visit(_ node: FallthroughStmtSyntax) -> ResultType
   /// Visiting `BreakStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BreakStmtSyntax) -> [ResultType]
+  func visit(_ node: BreakStmtSyntax) -> ResultType
   /// Visiting `CaseItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CaseItemListSyntax) -> [ResultType]
+  func visit(_ node: CaseItemListSyntax) -> ResultType
   /// Visiting `CatchItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CatchItemListSyntax) -> [ResultType]
+  func visit(_ node: CatchItemListSyntax) -> ResultType
   /// Visiting `ConditionElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ConditionElementSyntax) -> [ResultType]
+  func visit(_ node: ConditionElementSyntax) -> ResultType
   /// Visiting `AvailabilityConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityConditionSyntax) -> [ResultType]
+  func visit(_ node: AvailabilityConditionSyntax) -> ResultType
   /// Visiting `MatchingPatternConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MatchingPatternConditionSyntax) -> [ResultType]
+  func visit(_ node: MatchingPatternConditionSyntax) -> ResultType
   /// Visiting `OptionalBindingConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OptionalBindingConditionSyntax) -> [ResultType]
+  func visit(_ node: OptionalBindingConditionSyntax) -> ResultType
   /// Visiting `UnavailabilityConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnavailabilityConditionSyntax) -> [ResultType]
+  func visit(_ node: UnavailabilityConditionSyntax) -> ResultType
   /// Visiting `ConditionElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ConditionElementListSyntax) -> [ResultType]
+  func visit(_ node: ConditionElementListSyntax) -> ResultType
   /// Visiting `DeclarationStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclarationStmtSyntax) -> [ResultType]
+  func visit(_ node: DeclarationStmtSyntax) -> ResultType
   /// Visiting `ThrowStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ThrowStmtSyntax) -> [ResultType]
+  func visit(_ node: ThrowStmtSyntax) -> ResultType
   /// Visiting `IfStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IfStmtSyntax) -> [ResultType]
+  func visit(_ node: IfStmtSyntax) -> ResultType
   /// Visiting `ElseIfContinuationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ElseIfContinuationSyntax) -> [ResultType]
+  func visit(_ node: ElseIfContinuationSyntax) -> ResultType
   /// Visiting `ElseBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ElseBlockSyntax) -> [ResultType]
+  func visit(_ node: ElseBlockSyntax) -> ResultType
   /// Visiting `SwitchCaseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchCaseSyntax) -> [ResultType]
+  func visit(_ node: SwitchCaseSyntax) -> ResultType
   /// Visiting `SwitchDefaultLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchDefaultLabelSyntax) -> [ResultType]
+  func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType
   /// Visiting `CaseItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CaseItemSyntax) -> [ResultType]
+  func visit(_ node: CaseItemSyntax) -> ResultType
   /// Visiting `CatchItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CatchItemSyntax) -> [ResultType]
+  func visit(_ node: CatchItemSyntax) -> ResultType
   /// Visiting `SwitchCaseLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SwitchCaseLabelSyntax) -> [ResultType]
+  func visit(_ node: SwitchCaseLabelSyntax) -> ResultType
   /// Visiting `CatchClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CatchClauseSyntax) -> [ResultType]
+  func visit(_ node: CatchClauseSyntax) -> ResultType
   /// Visiting `PoundAssertStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundAssertStmtSyntax) -> [ResultType]
+  func visit(_ node: PoundAssertStmtSyntax) -> ResultType
   /// Visiting `GenericWhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericWhereClauseSyntax) -> [ResultType]
+  func visit(_ node: GenericWhereClauseSyntax) -> ResultType
   /// Visiting `GenericRequirementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericRequirementListSyntax) -> [ResultType]
+  func visit(_ node: GenericRequirementListSyntax) -> ResultType
   /// Visiting `GenericRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericRequirementSyntax) -> [ResultType]
+  func visit(_ node: GenericRequirementSyntax) -> ResultType
   /// Visiting `SameTypeRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SameTypeRequirementSyntax) -> [ResultType]
+  func visit(_ node: SameTypeRequirementSyntax) -> ResultType
   /// Visiting `LayoutRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: LayoutRequirementSyntax) -> [ResultType]
+  func visit(_ node: LayoutRequirementSyntax) -> ResultType
   /// Visiting `GenericParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericParameterListSyntax) -> [ResultType]
+  func visit(_ node: GenericParameterListSyntax) -> ResultType
   /// Visiting `GenericParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericParameterSyntax) -> [ResultType]
+  func visit(_ node: GenericParameterSyntax) -> ResultType
   /// Visiting `PrimaryAssociatedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrimaryAssociatedTypeListSyntax) -> [ResultType]
+  func visit(_ node: PrimaryAssociatedTypeListSyntax) -> ResultType
   /// Visiting `PrimaryAssociatedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrimaryAssociatedTypeSyntax) -> [ResultType]
+  func visit(_ node: PrimaryAssociatedTypeSyntax) -> ResultType
   /// Visiting `GenericParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericParameterClauseSyntax) -> [ResultType]
+  func visit(_ node: GenericParameterClauseSyntax) -> ResultType
   /// Visiting `ConformanceRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ConformanceRequirementSyntax) -> [ResultType]
+  func visit(_ node: ConformanceRequirementSyntax) -> ResultType
   /// Visiting `PrimaryAssociatedTypeClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> [ResultType]
+  func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> ResultType
   /// Visiting `SimpleTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SimpleTypeIdentifierSyntax) -> [ResultType]
+  func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType
   /// Visiting `MemberTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberTypeIdentifierSyntax) -> [ResultType]
+  func visit(_ node: MemberTypeIdentifierSyntax) -> ResultType
   /// Visiting `ClassRestrictionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClassRestrictionTypeSyntax) -> [ResultType]
+  func visit(_ node: ClassRestrictionTypeSyntax) -> ResultType
   /// Visiting `ArrayTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ArrayTypeSyntax) -> [ResultType]
+  func visit(_ node: ArrayTypeSyntax) -> ResultType
   /// Visiting `DictionaryTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DictionaryTypeSyntax) -> [ResultType]
+  func visit(_ node: DictionaryTypeSyntax) -> ResultType
   /// Visiting `MetatypeTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MetatypeTypeSyntax) -> [ResultType]
+  func visit(_ node: MetatypeTypeSyntax) -> ResultType
   /// Visiting `OptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OptionalTypeSyntax) -> [ResultType]
+  func visit(_ node: OptionalTypeSyntax) -> ResultType
   /// Visiting `ConstrainedSugarTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ConstrainedSugarTypeSyntax) -> [ResultType]
+  func visit(_ node: ConstrainedSugarTypeSyntax) -> ResultType
   /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> [ResultType]
+  func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> ResultType
   /// Visiting `CompositionTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CompositionTypeElementSyntax) -> [ResultType]
+  func visit(_ node: CompositionTypeElementSyntax) -> ResultType
   /// Visiting `CompositionTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CompositionTypeElementListSyntax) -> [ResultType]
+  func visit(_ node: CompositionTypeElementListSyntax) -> ResultType
   /// Visiting `CompositionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CompositionTypeSyntax) -> [ResultType]
+  func visit(_ node: CompositionTypeSyntax) -> ResultType
   /// Visiting `TupleTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleTypeElementSyntax) -> [ResultType]
+  func visit(_ node: TupleTypeElementSyntax) -> ResultType
   /// Visiting `TupleTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleTypeElementListSyntax) -> [ResultType]
+  func visit(_ node: TupleTypeElementListSyntax) -> ResultType
   /// Visiting `TupleTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleTypeSyntax) -> [ResultType]
+  func visit(_ node: TupleTypeSyntax) -> ResultType
   /// Visiting `FunctionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FunctionTypeSyntax) -> [ResultType]
+  func visit(_ node: FunctionTypeSyntax) -> ResultType
   /// Visiting `AttributedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AttributedTypeSyntax) -> [ResultType]
+  func visit(_ node: AttributedTypeSyntax) -> ResultType
   /// Visiting `GenericArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericArgumentListSyntax) -> [ResultType]
+  func visit(_ node: GenericArgumentListSyntax) -> ResultType
   /// Visiting `GenericArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericArgumentSyntax) -> [ResultType]
+  func visit(_ node: GenericArgumentSyntax) -> ResultType
   /// Visiting `GenericArgumentClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: GenericArgumentClauseSyntax) -> [ResultType]
+  func visit(_ node: GenericArgumentClauseSyntax) -> ResultType
   /// Visiting `TypeAnnotationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TypeAnnotationSyntax) -> [ResultType]
+  func visit(_ node: TypeAnnotationSyntax) -> ResultType
   /// Visiting `EnumCasePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EnumCasePatternSyntax) -> [ResultType]
+  func visit(_ node: EnumCasePatternSyntax) -> ResultType
   /// Visiting `IsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IsTypePatternSyntax) -> [ResultType]
+  func visit(_ node: IsTypePatternSyntax) -> ResultType
   /// Visiting `OptionalPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OptionalPatternSyntax) -> [ResultType]
+  func visit(_ node: OptionalPatternSyntax) -> ResultType
   /// Visiting `IdentifierPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IdentifierPatternSyntax) -> [ResultType]
+  func visit(_ node: IdentifierPatternSyntax) -> ResultType
   /// Visiting `AsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AsTypePatternSyntax) -> [ResultType]
+  func visit(_ node: AsTypePatternSyntax) -> ResultType
   /// Visiting `TuplePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TuplePatternSyntax) -> [ResultType]
+  func visit(_ node: TuplePatternSyntax) -> ResultType
   /// Visiting `WildcardPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: WildcardPatternSyntax) -> [ResultType]
+  func visit(_ node: WildcardPatternSyntax) -> ResultType
   /// Visiting `TuplePatternElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TuplePatternElementSyntax) -> [ResultType]
+  func visit(_ node: TuplePatternElementSyntax) -> ResultType
   /// Visiting `ExpressionPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ExpressionPatternSyntax) -> [ResultType]
+  func visit(_ node: ExpressionPatternSyntax) -> ResultType
   /// Visiting `TuplePatternElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TuplePatternElementListSyntax) -> [ResultType]
+  func visit(_ node: TuplePatternElementListSyntax) -> ResultType
   /// Visiting `ValueBindingPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ValueBindingPatternSyntax) -> [ResultType]
+  func visit(_ node: ValueBindingPatternSyntax) -> ResultType
   /// Visiting `AvailabilitySpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilitySpecListSyntax) -> [ResultType]
+  func visit(_ node: AvailabilitySpecListSyntax) -> ResultType
   /// Visiting `AvailabilityArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityArgumentSyntax) -> [ResultType]
+  func visit(_ node: AvailabilityArgumentSyntax) -> ResultType
   /// Visiting `AvailabilityLabeledArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityLabeledArgumentSyntax) -> [ResultType]
+  func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType
   /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityVersionRestrictionSyntax) -> [ResultType]
+  func visit(_ node: AvailabilityVersionRestrictionSyntax) -> ResultType
   /// Visiting `VersionTupleSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: VersionTupleSyntax) -> [ResultType]
+  func visit(_ node: VersionTupleSyntax) -> ResultType
 }
 
 extension SyntaxTransformVisitor {
-  public func visit(_ token: TokenSyntax) -> [ResultType] { [] }
-  public func visit(_ node: UnknownSyntax) -> [ResultType] { [] }
+  public func visit(_ token: TokenSyntax) -> ResultType { fatalError("Not implemented.") }
+  public func visit(_ node: UnknownSyntax) -> ResultType { fatalError("Not implemented.") }
 
   /// Visiting `UnknownDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnknownDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnknownDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnknownExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnknownExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnknownExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnknownStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnknownStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnknownStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnknownTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnknownTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnknownTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnknownPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnknownPatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnknownPatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MissingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MissingSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MissingSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MissingDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MissingDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MissingDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MissingExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MissingExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MissingExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MissingStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MissingStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MissingStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MissingTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MissingTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MissingTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MissingPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MissingPatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MissingPatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CodeBlockItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CodeBlockItemSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CodeBlockItemSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CodeBlockItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CodeBlockItemListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CodeBlockItemListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CodeBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CodeBlockSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CodeBlockSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnexpectedNodesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnexpectedNodesSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnexpectedNodesSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: InOutExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: InOutExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundColumnExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundColumnExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundColumnExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TupleExprElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TupleExprElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TupleExprElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ArrayElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ArrayElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ArrayElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DictionaryElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DictionaryElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DictionaryElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `StringLiteralSegmentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: StringLiteralSegmentsSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: StringLiteralSegmentsSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TryExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TryExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AwaitExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AwaitExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AwaitExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MoveExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MoveExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MoveExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeclNameArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeclNameArgumentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeclNameArgumentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeclNameArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeclNameArgumentListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeclNameArgumentListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeclNameArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeclNameArgumentsSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeclNameArgumentsSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IdentifierExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IdentifierExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IdentifierExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SuperRefExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SuperRefExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SuperRefExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `NilLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: NilLiteralExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: NilLiteralExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DiscardAssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DiscardAssignmentExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DiscardAssignmentExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AssignmentExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AssignmentExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SequenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SequenceExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SequenceExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ExprListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ExprListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ExprListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundLineExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundLineExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundLineExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundFileExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundFileExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundFileExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundFileIDExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundFileIDExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundFileIDExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundFilePathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundFilePathExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundFilePathExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundFunctionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundFunctionExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundFunctionExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundDsohandleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundDsohandleExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundDsohandleExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SymbolicReferenceExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SymbolicReferenceExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrefixOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrefixOperatorExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrefixOperatorExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `BinaryOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BinaryOperatorExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: BinaryOperatorExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ArrowExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ArrowExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ArrowExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `InfixOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: InfixOperatorExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: InfixOperatorExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FloatLiteralExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FloatLiteralExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TupleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TupleExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TupleExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ArrayExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ArrayExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ArrayExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DictionaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DictionaryExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DictionaryExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TupleExprElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TupleExprElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TupleExprElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ArrayElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ArrayElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ArrayElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DictionaryElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DictionaryElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DictionaryElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IntegerLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IntegerLiteralExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IntegerLiteralExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `BooleanLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BooleanLiteralExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: BooleanLiteralExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnresolvedTernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnresolvedTernaryExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnresolvedTernaryExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TernaryExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TernaryExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MemberAccessExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberAccessExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MemberAccessExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnresolvedIsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnresolvedIsExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnresolvedIsExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IsExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IsExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnresolvedAsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnresolvedAsExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnresolvedAsExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AsExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AsExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TypeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TypeExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TypeExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClosureCaptureItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureCaptureItemSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClosureCaptureItemSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClosureCaptureItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureCaptureItemListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClosureCaptureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureCaptureSignatureSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClosureCaptureSignatureSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClosureParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureParamSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClosureParamSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClosureParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureParamListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClosureParamListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClosureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureSignatureSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClosureSignatureSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClosureExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClosureExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnresolvedPatternExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnresolvedPatternExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnresolvedPatternExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MultipleTrailingClosureElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MultipleTrailingClosureElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MultipleTrailingClosureElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MultipleTrailingClosureElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MultipleTrailingClosureElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MultipleTrailingClosureElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FunctionCallExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FunctionCallExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SubscriptExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SubscriptExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SubscriptExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `OptionalChainingExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: OptionalChainingExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: OptionalChainingExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ForcedValueExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ForcedValueExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ForcedValueExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PostfixUnaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PostfixUnaryExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PostfixUnaryExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SpecializeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SpecializeExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SpecializeExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `StringSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: StringSegmentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: StringSegmentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ExpressionSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ExpressionSegmentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ExpressionSegmentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `StringLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: StringLiteralExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: StringLiteralExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `RegexLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: RegexLiteralExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: RegexLiteralExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `KeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: KeyPathExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: KeyPathExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `KeyPathBaseExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: KeyPathBaseExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: KeyPathBaseExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ObjcNamePieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ObjcNamePieceSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ObjcNamePieceSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ObjcNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ObjcNameSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ObjcNameSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ObjcKeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ObjcKeyPathExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ObjcKeyPathExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ObjcSelectorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ObjcSelectorExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ObjcSelectorExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PostfixIfConfigExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PostfixIfConfigExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PostfixIfConfigExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EditorPlaceholderExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ObjectLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ObjectLiteralExprSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ObjectLiteralExprSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TypeInitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TypeInitializerClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TypeInitializerClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TypealiasDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TypealiasDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TypealiasDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AssociatedtypeDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AssociatedtypeDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AssociatedtypeDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FunctionParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FunctionParameterListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FunctionParameterListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ParameterClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ParameterClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ReturnClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ReturnClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ReturnClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FunctionSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FunctionSignatureSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FunctionSignatureSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IfConfigClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IfConfigClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IfConfigClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IfConfigClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IfConfigClauseListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IfConfigClauseListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IfConfigDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IfConfigDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IfConfigDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundErrorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundErrorDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundErrorDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundWarningDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundWarningDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundWarningDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundSourceLocationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundSourceLocationSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundSourceLocationSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundSourceLocationArgsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundSourceLocationArgsSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundSourceLocationArgsSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeclModifierDetailSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeclModifierDetailSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeclModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeclModifierSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeclModifierSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `InheritedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: InheritedTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: InheritedTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `InheritedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: InheritedTypeListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: InheritedTypeListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TypeInheritanceClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TypeInheritanceClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TypeInheritanceClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClassDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClassDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClassDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ActorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ActorDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ActorDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `StructDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: StructDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: StructDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ProtocolDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ProtocolDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ProtocolDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ExtensionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ExtensionDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ExtensionDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MemberDeclBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberDeclBlockSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MemberDeclBlockSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MemberDeclListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberDeclListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MemberDeclListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MemberDeclListItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberDeclListItemSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MemberDeclListItemSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SourceFileSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SourceFileSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SourceFileSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `InitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: InitializerClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: InitializerClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FunctionParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FunctionParameterSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FunctionParameterSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ModifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ModifierListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ModifierListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FunctionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FunctionDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FunctionDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `InitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: InitializerDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: InitializerDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeinitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeinitializerDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeinitializerDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SubscriptDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SubscriptDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SubscriptDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AccessLevelModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessLevelModifierSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AccessLevelModifierSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AccessPathComponentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessPathComponentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AccessPathComponentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AccessPathSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessPathSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AccessPathSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ImportDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ImportDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ImportDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AccessorParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessorParameterSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AccessorParameterSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AccessorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessorDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AccessorDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessorListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AccessorListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessorBlockSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AccessorBlockSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PatternBindingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PatternBindingSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PatternBindingSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PatternBindingListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PatternBindingListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PatternBindingListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `VariableDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: VariableDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: VariableDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `EnumCaseElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EnumCaseElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: EnumCaseElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `EnumCaseElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EnumCaseElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: EnumCaseElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `EnumCaseDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EnumCaseDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: EnumCaseDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `EnumDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EnumDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: EnumDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `OperatorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: OperatorDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: OperatorDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IdentifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IdentifierListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IdentifierListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrecedenceGroupDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupDeclSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrecedenceGroupDeclSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrecedenceGroupAttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupAttributeListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrecedenceGroupAttributeListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrecedenceGroupRelationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupRelationSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrecedenceGroupRelationSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrecedenceGroupNameListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupNameListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrecedenceGroupNameListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrecedenceGroupNameElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupNameElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrecedenceGroupNameElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrecedenceGroupAssignmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupAssignmentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrecedenceGroupAssignmentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrecedenceGroupAssociativitySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupAssociativitySyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TokenListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TokenListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `NonEmptyTokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: NonEmptyTokenListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: NonEmptyTokenListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CustomAttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CustomAttributeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CustomAttributeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AttributeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AttributeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AttributeListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AttributeListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SpecializeAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SpecializeAttributeSpecListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AvailabilityEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityEntrySyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AvailabilityEntrySyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: LabeledSpecializeEntrySyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: LabeledSpecializeEntrySyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TargetFunctionEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TargetFunctionEntrySyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TargetFunctionEntrySyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: NamedAttributeStringArgumentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: NamedAttributeStringArgumentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeclNameSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeclNameSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ImplementsAttributeArgumentsSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ObjCSelectorPieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ObjCSelectorPieceSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ObjCSelectorPieceSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ObjCSelectorSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ObjCSelectorSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ObjCSelectorSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DifferentiableAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DifferentiabilityParamsClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamsClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DifferentiabilityParamsClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DifferentiabilityParamsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamsSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DifferentiabilityParamsSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DifferentiabilityParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DifferentiabilityParamListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DifferentiabilityParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DifferentiabilityParamSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `QualifiedDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: QualifiedDeclNameSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: QualifiedDeclNameSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FunctionDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FunctionDeclNameSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FunctionDeclNameSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `BackDeployAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployAttributeSpecListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: BackDeployAttributeSpecListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `BackDeployVersionListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployVersionListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: BackDeployVersionListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `BackDeployVersionArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployVersionArgumentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: BackDeployVersionArgumentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `LabeledStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: LabeledStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: LabeledStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ContinueStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ContinueStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ContinueStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `WhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: WhileStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: WhileStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeferStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeferStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeferStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ExpressionStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ExpressionStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ExpressionStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SwitchCaseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SwitchCaseListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SwitchCaseListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: RepeatWhileStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: RepeatWhileStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GuardStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GuardStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GuardStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `WhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: WhereClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: WhereClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ForInStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ForInStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ForInStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SwitchStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SwitchStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SwitchStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CatchClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CatchClauseListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CatchClauseListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DoStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DoStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DoStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ReturnStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ReturnStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ReturnStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `YieldStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: YieldStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: YieldStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `YieldListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: YieldListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: YieldListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FallthroughStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FallthroughStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FallthroughStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `BreakStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BreakStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: BreakStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CaseItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CaseItemListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CaseItemListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CatchItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CatchItemListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CatchItemListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ConditionElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ConditionElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ConditionElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AvailabilityConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityConditionSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AvailabilityConditionSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MatchingPatternConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MatchingPatternConditionSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MatchingPatternConditionSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `OptionalBindingConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: OptionalBindingConditionSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: OptionalBindingConditionSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `UnavailabilityConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: UnavailabilityConditionSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: UnavailabilityConditionSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ConditionElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ConditionElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ConditionElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DeclarationStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DeclarationStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DeclarationStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ThrowStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ThrowStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ThrowStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IfStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IfStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IfStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ElseIfContinuationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ElseIfContinuationSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ElseIfContinuationSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ElseBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ElseBlockSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ElseBlockSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SwitchCaseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SwitchCaseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SwitchCaseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SwitchDefaultLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SwitchDefaultLabelSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CaseItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CaseItemSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CaseItemSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CatchItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CatchItemSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CatchItemSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SwitchCaseLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SwitchCaseLabelSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SwitchCaseLabelSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CatchClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CatchClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CatchClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PoundAssertStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundAssertStmtSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PoundAssertStmtSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericWhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericWhereClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericWhereClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericRequirementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericRequirementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericRequirementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericRequirementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericRequirementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SameTypeRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SameTypeRequirementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SameTypeRequirementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `LayoutRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: LayoutRequirementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: LayoutRequirementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericParameterListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericParameterListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericParameterSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericParameterSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrimaryAssociatedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrimaryAssociatedTypeListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrimaryAssociatedTypeListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrimaryAssociatedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrimaryAssociatedTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrimaryAssociatedTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericParameterClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericParameterClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ConformanceRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ConformanceRequirementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ConformanceRequirementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `PrimaryAssociatedTypeClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `SimpleTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SimpleTypeIdentifierSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MemberTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberTypeIdentifierSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MemberTypeIdentifierSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ClassRestrictionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClassRestrictionTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ClassRestrictionTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ArrayTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ArrayTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ArrayTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `DictionaryTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DictionaryTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: DictionaryTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `MetatypeTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MetatypeTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: MetatypeTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `OptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: OptionalTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: OptionalTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ConstrainedSugarTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ConstrainedSugarTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ConstrainedSugarTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CompositionTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CompositionTypeElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CompositionTypeElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CompositionTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CompositionTypeElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CompositionTypeElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `CompositionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: CompositionTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: CompositionTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TupleTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TupleTypeElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TupleTypeElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TupleTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TupleTypeElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TupleTypeElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TupleTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TupleTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TupleTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `FunctionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FunctionTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: FunctionTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AttributedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AttributedTypeSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AttributedTypeSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericArgumentListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericArgumentListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericArgumentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericArgumentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `GenericArgumentClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: GenericArgumentClauseSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: GenericArgumentClauseSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TypeAnnotationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TypeAnnotationSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TypeAnnotationSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `EnumCasePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EnumCasePatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: EnumCasePatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IsTypePatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IsTypePatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `OptionalPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: OptionalPatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: OptionalPatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `IdentifierPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IdentifierPatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: IdentifierPatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AsTypePatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AsTypePatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TuplePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TuplePatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TuplePatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `WildcardPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: WildcardPatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: WildcardPatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TuplePatternElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TuplePatternElementSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TuplePatternElementSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ExpressionPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ExpressionPatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ExpressionPatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `TuplePatternElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TuplePatternElementListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: TuplePatternElementListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `ValueBindingPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ValueBindingPatternSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: ValueBindingPatternSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AvailabilitySpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilitySpecListSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AvailabilitySpecListSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AvailabilityArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityArgumentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AvailabilityArgumentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AvailabilityLabeledArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityLabeledArgumentSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityVersionRestrictionSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: AvailabilityVersionRestrictionSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
   /// Visiting `VersionTupleSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: VersionTupleSyntax) -> [ResultType] {
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
+  public func visit(_ node: VersionTupleSyntax) -> ResultType {
+    fatalError("Not implemented.")
   }
 
-  public func visit(_ data: Syntax) -> [ResultType] {
+  public func visit(_ data: Syntax) -> ResultType {
     switch data.raw.kind {
     case .token:
       let node = TokenSyntax(data)!
@@ -4511,7 +3459,7 @@ extension SyntaxTransformVisitor {
     }
   }
   
-  public func visit(_ data: ExprSyntax) -> [ResultType] {
+  public func visit(_ data: ExprSyntax) -> ResultType {
     switch data.raw.kind {
     case .unknownExpr:
       let node = data.as(UnknownExprSyntax.self)!
@@ -4683,7 +3631,7 @@ extension SyntaxTransformVisitor {
     }
   }
   
-  public func visit(_ data: PatternSyntax) -> [ResultType] {
+  public func visit(_ data: PatternSyntax) -> ResultType {
     switch data.raw.kind {
     case .unknownPattern:
       let node = data.as(UnknownPatternSyntax.self)!
@@ -4723,7 +3671,7 @@ extension SyntaxTransformVisitor {
     }
   }
   
-  public func visit(_ data: TypeSyntax) -> [ResultType] {
+  public func visit(_ data: TypeSyntax) -> ResultType {
     switch data.raw.kind {
     case .unknownType:
       let node = data.as(UnknownTypeSyntax.self)!
@@ -4777,7 +3725,7 @@ extension SyntaxTransformVisitor {
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)
-    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).flatMap { rawChild in
+    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in
       let child = Syntax(SyntaxData(rawChild, parent: syntaxNode))
       return visit(child)
     }

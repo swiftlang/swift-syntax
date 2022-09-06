@@ -20,47 +20,35 @@
 public protocol SyntaxTransformVisitor {
   associatedtype ResultType = Void
   
-  func visit(_ token: TokenSyntax) -> [ResultType]
-  func visit(_ node: UnknownSyntax) -> [ResultType]
+  func visit(_ token: TokenSyntax) -> ResultType
+  func visit(_ node: UnknownSyntax) -> ResultType
   
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   /// Visiting `${node.name}` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ${node.name}) -> [ResultType]
+  func visit(_ node: ${node.name}) -> ResultType
 %   end
 % end
 }
 
 extension SyntaxTransformVisitor {
-  public func visit(_ token: TokenSyntax) -> [ResultType] { [] }
-  public func visit(_ node: UnknownSyntax) -> [ResultType] { [] }
+  public func visit(_ token: TokenSyntax) -> ResultType { fatalError("Not implemented.") }
+  public func visit(_ node: UnknownSyntax) -> ResultType { fatalError("Not implemented.") }
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   /// Visiting `${node.name}` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ${node.name}) -> [ResultType] {
-%   if node.is_base():
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
-%   else:
-      // Avoid calling into visitChildren if possible.
-      if !node.raw.layoutView!.children.isEmpty {
-        return visitChildren(node)
-      }
-      return []
-%   end
+  public func visit(_ node: ${node.name}) -> ResultType {
+    fatalError("Not implemented.")
   }
 %   end
 % end
 
-  public func visit(_ data: Syntax) -> [ResultType] {
+  public func visit(_ data: Syntax) -> ResultType {
     switch data.raw.kind {
     case .token:
       let node = TokenSyntax(data)!
@@ -80,7 +68,7 @@ extension SyntaxTransformVisitor {
     }
   }
   
-  public func visit(_ data: ExprSyntax) -> [ResultType] {
+  public func visit(_ data: ExprSyntax) -> ResultType {
     switch data.raw.kind {
   % for node in NON_BASE_SYNTAX_NODES:
   %   if node.base_kind == "Expr":
@@ -94,7 +82,7 @@ extension SyntaxTransformVisitor {
     }
   }
   
-  public func visit(_ data: PatternSyntax) -> [ResultType] {
+  public func visit(_ data: PatternSyntax) -> ResultType {
     switch data.raw.kind {
   % for node in NON_BASE_SYNTAX_NODES:
   %   if node.base_kind == "Pattern":
@@ -108,7 +96,7 @@ extension SyntaxTransformVisitor {
     }
   }
   
-  public func visit(_ data: TypeSyntax) -> [ResultType] {
+  public func visit(_ data: TypeSyntax) -> ResultType {
     switch data.raw.kind {
   % for node in NON_BASE_SYNTAX_NODES:
   %   if node.base_kind == "Type":
@@ -124,7 +112,7 @@ extension SyntaxTransformVisitor {
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
     let syntaxNode = Syntax(node)
-    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).flatMap { rawChild in
+    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in
       let child = Syntax(SyntaxData(rawChild, parent: syntaxNode))
       return visit(child)
     }

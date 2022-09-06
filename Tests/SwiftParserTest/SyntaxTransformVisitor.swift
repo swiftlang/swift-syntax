@@ -12,8 +12,18 @@ import SwiftSyntax
 final class SyntaxTransformVisitorTest: XCTestCase {
   public func testFunctionCounter() {
     struct FuncCounter: SyntaxTransformVisitor {
-      public func visit(_ node: FunctionDeclSyntax) -> [Int] {
-        return [visitChildren(node).reduce(1, +)]
+      // Tokens are the only leaf nodes.
+      public func visit(_ token: TokenSyntax) -> Int { 0 }
+      public func visit(_ token: MissingExprSyntax) -> Int { 0 }
+      public func visit(_ node: CodeBlockItemSyntax) -> Int { visit(node.item) }
+
+      public func visit(_ node: SourceFileSyntax) -> Int {
+        assert(node.statements.count == 1)
+        return visit(node.statements.first!.item)
+      }
+        
+      public func visit(_ node: FunctionDeclSyntax) -> Int {
+        node.body!.statements.map(self.visit).reduce(1, +)
       }
     }
     XCTAssertNoThrow(try {
@@ -30,46 +40,50 @@ final class SyntaxTransformVisitorTest: XCTestCase {
           }
           """)
       let count = FuncCounter().visit(parsed)
-      XCTAssertEqual(count.first!, 4)
+      XCTAssertEqual(count, 4)
     }())
   }
   
   public func testStringify() {
     struct Stringify: SyntaxTransformVisitor {
-      public func visitType(_ paramType: TypeSyntaxProtocol) -> String? {
+      public func visitType(_ paramType: TypeSyntaxProtocol) -> String {
         if let id = SimpleTypeIdentifierSyntax(Syntax(fromProtocol: paramType)) {
-          return visit(id).first ?? "<Unknown>"
+          return visit(id)
         }
         if let arr = ArrayTypeSyntax(Syntax(fromProtocol: paramType)) {
-          return visit(arr).first ?? "<Unknown>"
+          return visit(arr)
         }
         return "<Unknown>"
       }
       
-      public func visit(_ node: FunctionDeclSyntax) -> [String] {
+      public func visit(_ node: CodeBlockItemSyntax) -> String { visit(node.item) }
+
+      public func visit(_ node: SourceFileSyntax) -> String {
+        assert(node.statements.count == 1)
+        return visit(node.statements.first!.item)
+      }
+      
+      public func visit(_ node: FunctionDeclSyntax) -> String {
         let argStrings = node.signature.input.parameterList
           .compactMap { $0.type }
           .compactMap(visitType)
         
         let resultString: String
         if let out = node.signature.output {
-          resultString = visitType(out.returnType) ?? "<Unknown>"
+          resultString = visitType(out.returnType)
         } else {
           resultString = "Void"
         }
         
-        return ["(" + argStrings.joined(separator: ", ") + ") -> " + resultString]
+        return "(" + argStrings.joined(separator: ", ") + ") -> " + resultString
       }
       
-      public func visit(_ node: SimpleTypeIdentifierSyntax) -> [String] {
-        [node.name.text]
+      public func visit(_ node: SimpleTypeIdentifierSyntax) -> String {
+        node.name.text
       }
 
-      public func visit(_ node: ArrayTypeSyntax) -> [String] {
-        if let type = visitType(node.elementType) {
-          return ["[" + type + "]"]
-        }
-        return ["[Unknown]"]
+      public func visit(_ node: ArrayTypeSyntax) -> String {
+          "[" + visitType(node.elementType) + "]"
       }
     }
     XCTAssertNoThrow(try {
@@ -78,7 +92,7 @@ final class SyntaxTransformVisitorTest: XCTestCase {
           }
           """)
       let stringified = Stringify().visit(parsed)
-      XCTAssertEqual(stringified.first!, "(Int, Foo, [Int]) -> Result")
+      XCTAssertEqual(stringified, "(Int, Foo, [Int]) -> Result")
     }())
     XCTAssertNoThrow(try {
       let parsed = try Parser.parse(source: """
@@ -86,7 +100,7 @@ final class SyntaxTransformVisitorTest: XCTestCase {
           }
           """)
       let stringified = Stringify().visit(parsed)
-      XCTAssertEqual(stringified.first!, "() -> Void")
+      XCTAssertEqual(stringified, "() -> Void")
     }())
     XCTAssertNoThrow(try {
       let parsed = try Parser.parse(source: """
@@ -94,7 +108,7 @@ final class SyntaxTransformVisitorTest: XCTestCase {
           }
           """)
       let stringified = Stringify().visit(parsed)
-      XCTAssertEqual(stringified.first!, "(Int) -> [Result]")
+      XCTAssertEqual(stringified, "(Int) -> [Result]")
     }())
   }
 }

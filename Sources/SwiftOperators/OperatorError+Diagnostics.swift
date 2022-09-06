@@ -1,4 +1,4 @@
-//===------------------ OperatorPrecedenceError.swift ---------------------===//
+//===------------------ OperatorError.swift ---------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -14,7 +14,7 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
 
-extension OperatorPrecedenceError : DiagnosticMessage {
+extension OperatorError : DiagnosticMessage {
   public var severity: DiagnosticSeverity {
     .error
   }
@@ -47,7 +47,7 @@ extension OperatorPrecedenceError : DiagnosticMessage {
   }
 }
 
-extension OperatorPrecedenceError {
+extension OperatorError {
   private func fixupDiagnosticDisplayNode<Node: SyntaxProtocol>(
     _ node: Node?
   ) -> Syntax {

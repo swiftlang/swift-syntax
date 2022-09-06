@@ -78,10 +78,10 @@ dump(folded2) // contains InfixOperatorExpr(b, **, InfixOperatorExpr(c, **, d))
 
 ## Error handling
 
-By default, any of the operations that can produce an error, whether folding a sequence or parsing a source file's operators and precedence groups into a table, will throw an instance of <doc:OperatorPrecedenceError>. However, each entry point takes an optional error handler (of type <doc:OperatorPrecedenceErrorHandler>) that will be called with each error that occurs. For example, we can capture errors like this:
+By default, any of the operations that can produce an error, whether folding a sequence or parsing a source file's operators and precedence groups into a table, will throw an instance of <doc:OperatorError>. However, each entry point takes an optional error handler (of type <doc:OperatorErrorHandler>) that will be called with each error that occurs. For example, we can capture errors like this:
 
 ```swift
-var errors: [OperatorPrecedenceError] = []
+var errors: [OperatorError] = []
 let foldedExpr2e = opPrecedence.foldSingle(sequenceExpr2) { error in 
   errors.append(error)
 }

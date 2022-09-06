@@ -196,7 +196,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     let parsedOperatorPrecedence = try Parser.parse(source: sources)
 
     var opPrecedence = OperatorTable()
-    var errors: [OperatorPrecedenceError] = []
+    var errors: [OperatorError] = []
     opPrecedence.addSourceFile(parsedOperatorPrecedence) { error in
       errors.append(error)
     }
@@ -236,7 +236,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     let parsedOperatorPrecedence = try Parser.parse(source: sources)
 
     var opPrecedence = OperatorTable()
-    var errors: [OperatorPrecedenceError] = []
+    var errors: [OperatorError] = []
     opPrecedence.addSourceFile(parsedOperatorPrecedence) { error in
       errors.append(error)
     }
@@ -282,7 +282,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     try opPrecedence.addSourceFile(parsedOperatorPrecedence)
 
     do {
-      var errors: [OperatorPrecedenceError] = []
+      var errors: [OperatorError] = []
       let parsed = try Parser.parse(source: "a + b * c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
@@ -301,7 +301,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     }
 
     do {
-      var errors: [OperatorPrecedenceError] = []
+      var errors: [OperatorError] = []
       let parsed = try Parser.parse(source: "a / c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
@@ -320,7 +320,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     }
 
     do {
-      var errors: [OperatorPrecedenceError] = []
+      var errors: [OperatorError] = []
       let parsed = try Parser.parse(source: "a + b - c")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!
@@ -342,7 +342,7 @@ public class OperatorPrecedenceTests: XCTestCase {
     }
 
     do {
-      var errors: [OperatorPrecedenceError] = []
+      var errors: [OperatorError] = []
       let parsed = try Parser.parse(source: "a ++ b - d")
       let sequenceExpr =
         parsed.statements.first!.item.as(SequenceExprSyntax.self)!

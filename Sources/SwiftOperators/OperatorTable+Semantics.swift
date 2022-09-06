@@ -87,18 +87,18 @@ extension OperatorTable {
   /// source file into the operator precedence tables.
   public mutating func addSourceFile(
     _ sourceFile: SourceFileSyntax,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
     class OperatorAndGroupVisitor : SyntaxAnyVisitor {
       var opPrecedence: OperatorTable
-      var errors: [OperatorPrecedenceError] = []
+      var errors: [OperatorError] = []
 
       init(opPrecedence: OperatorTable) {
         self.opPrecedence = opPrecedence
         super.init(viewMode: .fixedUp)
       }
 
-      private func errorHandler(error: OperatorPrecedenceError) {
+      private func errorHandler(error: OperatorError) {
         errors.append(error)
       }
 

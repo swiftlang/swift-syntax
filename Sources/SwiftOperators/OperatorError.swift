@@ -1,4 +1,4 @@
-//===------------------ OperatorPrecedenceError.swift ---------------------===//
+//===------------------ OperatorError.swift ---------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -11,8 +11,8 @@
 //===----------------------------------------------------------------------===//
 import SwiftSyntax
 
-/// Describes errors that can occur when working with operator precedence graphs.
-public enum OperatorPrecedenceError: Error {
+/// Describes errors that can occur when working with user-defined operators.
+public enum OperatorError: Error {
   /// Error produced when a given precedence group already exists in the
   /// precedence graph.
   case groupAlreadyExists(existing: PrecedenceGroup, new: PrecedenceGroup)
@@ -41,5 +41,5 @@ public enum OperatorPrecedenceError: Error {
 /// may choose to throw (in which case the error will propagate outward) or
 /// may separately record/drop the error and return without throwing (in
 /// which case the operator-precedence parser will recover).
-public typealias OperatorPrecedenceErrorHandler =
-    (OperatorPrecedenceError) throws -> Void
+public typealias OperatorErrorHandler =
+    (OperatorError) throws -> Void

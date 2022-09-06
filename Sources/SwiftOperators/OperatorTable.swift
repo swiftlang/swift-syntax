@@ -32,7 +32,7 @@ public struct OperatorTable {
   public init(
     precedenceGroups: [PrecedenceGroup],
     operators: [Operator],
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
     for group in precedenceGroups {
       try record(group, errorHandler: errorHandler)
@@ -46,7 +46,7 @@ public struct OperatorTable {
   private func record(
     _ op: Operator,
     in table: inout [OperatorName : Operator],
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
     if let existing = table[op.name] {
       try errorHandler(.operatorAlreadyExists(existing: existing, new: op))
@@ -58,7 +58,7 @@ public struct OperatorTable {
   /// Record the operator.
   mutating func record(
     _ op: Operator,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
     switch op.kind {
     case .infix:
@@ -75,7 +75,7 @@ public struct OperatorTable {
   /// Record the precedence group.
   mutating func record(
     _ group: PrecedenceGroup,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
     try precedenceGraph.add(group, errorHandler: errorHandler)
   }
@@ -86,7 +86,7 @@ extension OperatorTable {
   func lookupOperatorPrecedenceGroupName(
     _ operatorName: OperatorName,
     referencedFrom syntax: Syntax?,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
     guard let op = infixOperators[operatorName] else {
       try errorHandler(

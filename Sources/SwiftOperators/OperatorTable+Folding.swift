@@ -31,7 +31,7 @@ extension OperatorTable {
     fromGroup groupName: PrecedenceGroupName?,
     in bound: PrecedenceBound,
     operatorSyntax: Syntax,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> Bool {
     guard let boundGroupName = bound.groupName else {
       return true
@@ -55,7 +55,7 @@ extension OperatorTable {
   /// Look up the precedence group for the given expression syntax.
   private func lookupPrecedence(
     of expr: ExprSyntax,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
     // A binary operator.
     if let binaryExpr = expr.as(BinaryOperatorExprSyntax.self) {
@@ -180,7 +180,7 @@ extension OperatorTable {
     firstOperatorSyntax: Syntax?,
     secondGroup: PrecedenceGroupName?,
     secondOperatorSyntax: Syntax?,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> Associativity {
     guard let firstGroup = firstGroup, let secondGroup = secondGroup else {
       return .none
@@ -221,7 +221,7 @@ extension OperatorTable {
   private func fold(
     _ lhs: ExprSyntax, rest: inout Slice<ExprListSyntax>,
     bound: PrecedenceBound,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> ExprSyntax {
     if rest.isEmpty { return lhs }
 
@@ -378,7 +378,7 @@ extension OperatorTable {
   /// as if the expression has been parenthesized `x + (y * z)`.
   public func foldSingle(
     _ sequence: SequenceExprSyntax,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> ExprSyntax {
     let lhs = sequence.elements.first!
     var rest = sequence.elements.dropFirst()
@@ -394,14 +394,14 @@ extension OperatorTable {
   private class SequenceFolder : SyntaxRewriter {
     /// The first operator precedecence that caused the error handler to
     /// also throw.
-    var firstFatalError: OperatorPrecedenceError? = nil
+    var firstFatalError: OperatorError? = nil
 
     let opPrecedence: OperatorTable
-    let errorHandler: OperatorPrecedenceErrorHandler
+    let errorHandler: OperatorErrorHandler
 
     init(
       opPrecedence: OperatorTable,
-      errorHandler: @escaping OperatorPrecedenceErrorHandler
+      errorHandler: @escaping OperatorErrorHandler
     ) {
       self.opPrecedence = opPrecedence
       self.errorHandler = errorHandler
@@ -452,7 +452,7 @@ extension OperatorTable {
   /// the operation, then the second must also throw.
   public func foldAll<Node: SyntaxProtocol>(
     _ node: Node,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> SyntaxProtocol {
     return try withoutActuallyEscaping(errorHandler) { errorHandler in
       let folder = SequenceFolder(

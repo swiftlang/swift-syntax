@@ -40,11 +40,11 @@ struct PrecedenceGraph {
   ///   throws PrecedenceGraphError.groupAlreadyExists.
   mutating func add(
     _ group: PrecedenceGroup,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows {
     if let existing = precedenceGroups[group.name] {
       try errorHandler(
-        OperatorPrecedenceError.groupAlreadyExists(
+        OperatorError.groupAlreadyExists(
           existing: existing, new: group))
     } else {
       precedenceGroups[group.name] = group
@@ -64,7 +64,7 @@ struct PrecedenceGraph {
     initialGroupName: PrecedenceGroupName, initialSyntax: Syntax?,
     targetGroupName: PrecedenceGroupName,
     direction: PrecedenceRelation.Kind,
-    errorHandler: OperatorPrecedenceErrorHandler
+    errorHandler: OperatorErrorHandler
   ) rethrows -> Precedence? {
     // Keep track of all of the groups we have seen during our exploration of
     // the graph. This detects cycles and prevents extraneous work.
@@ -116,7 +116,7 @@ struct PrecedenceGraph {
     to endGroupName: PrecedenceGroupName,
     startSyntax: Syntax?,
     endSyntax: Syntax?,
-    errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
+    errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> Precedence {
     if startGroupName == endGroupName {
       return .unrelated

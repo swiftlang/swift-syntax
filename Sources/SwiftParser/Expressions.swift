@@ -1076,7 +1076,7 @@ extension Parser {
     case 3:
       // position == .leadingRaw implies that we saw a `#` before the quote.
       // A multiline string literal must always start its contents on a new line.
-      // Thus we are parsing somethign like #"""#, which is not a multiline string literal but a raw literal containing a single quote.
+      // Thus we are parsing something like #"""#, which is not a multiline string literal but a raw literal containing a single quote.
       if position == .leadingRaw,
          index < text.endIndex,
          text[index] == UInt8(ascii: "#")
@@ -1085,7 +1085,7 @@ extension Parser {
         index = text.index(text.startIndex, offsetBy: quoteCount)
       }
     default:
-      // Similar two the above, we are parsing somethign like #"""""#, which is not a multiline string literal but a raw literal containing three quote.
+      // Similar two the above, we are parsing something like #"""""#, which is not a multiline string literal but a raw literal containing three quote.
       if position == .leadingRaw {
         quoteCount = 1
         index = text.index(text.startIndex, offsetBy: quoteCount)

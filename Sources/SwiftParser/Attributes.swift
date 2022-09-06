@@ -491,11 +491,9 @@ extension Parser {
   mutating func parseSpecializeAttributeSpecList() -> RawSpecializeAttributeSpecListSyntax {
     var elements = [RawSyntax]()
     // Parse optional "exported" and "kind" labeled parameters.
-    while !self.at(.eof) && !self.at(.whereKeyword) {
+    while !self.at(.eof) && !self.at(.rightParen) && !self.at(.whereKeyword) {
       let ident = self.parseAnyIdentifier()
-      guard let knownParameter = SpecializeParameter(rawValue: ident.tokenText) else {
-        fatalError()
-      }
+      let knownParameter = SpecializeParameter(rawValue: ident.tokenText)
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
       switch knownParameter {
@@ -563,6 +561,17 @@ extension Parser {
           arena: self.arena
         )))
       case .spiModule, .spi:
+        let valueLabel = self.consumeAnyToken()
+        let comma = self.consume(if: .comma)
+        elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(
+          label: ident,
+          unexpectedBeforeColon,
+          colon: colon,
+          value: valueLabel,
+          trailingComma: comma,
+          arena: self.arena
+        )))
+      case nil:
         let valueLabel = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
         elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(

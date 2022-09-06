@@ -32,4 +32,29 @@ final class AttributeTests: XCTestCase {
       ]
     )
   }
+  
+  func testMissingClosingParenToAttribute() {
+    AssertParse(
+      """
+      @_specialize(e#^DIAG_1^#
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ')' to end attribute"),
+      ]
+    )
+  }
+  
+  func testMultipleInvalidSpecializeParams() {
+    AssertParse(
+      """
+      @_specialize(e#^DIAG_1^#, exported#^DIAG_2^#)
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected ':' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected ':' in attribute argument"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected 'false' in attribute argument"),
+      ]
+    )
+  }
 }

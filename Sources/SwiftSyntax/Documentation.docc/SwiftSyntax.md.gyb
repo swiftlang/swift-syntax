@@ -1,0 +1,178 @@
+%{
+  # -*- mode: Swift -*-
+  from gyb_syntax_support import *
+  from gyb_syntax_support.Traits import TRAITS
+  NODE_MAP = create_node_map()
+  # Ignore the following admonition it applies to the resulting .md file only
+}%
+# ``SwiftSyntax``
+
+@Comment {
+  Automatically Generated From SwiftSyntax.md.gyb.
+  Do Not Edit Directly!
+}
+
+A library for working with Swift code.
+
+## Overview
+
+SwiftSyntax is a source accurate tree representation of Swift source code. It 
+allows Swift tools to parse, inspect, generate, and transform Swift source code.
+
+## Topics
+
+### Articles
+
+- <doc:ChangingSwiftSyntax>
+
+### Syntax
+
+- <doc:SwiftSyntax/Syntax>
+- <doc:SwiftSyntax/SyntaxCollection>
+
+### Trivia
+
+- <doc:SwiftSyntax/Trivia>
+- <doc:SwiftSyntax/TriviaPiece>
+- <doc:SwiftSyntax/TriviaPosition>
+
+### Tokens
+
+- <doc:SwiftSyntax/TokenSyntax>
+- <doc:SwiftSyntax/TokenKind>
+- <doc:SwiftSyntax/TokenSequence>
+- <doc:SwiftSyntax/SourcePresence>
+
+### Syntax Visitors
+
+- <doc:SwiftSyntax/SyntaxVisitor>
+- <doc:SwiftSyntax/SyntaxAnyVisitor>
+- <doc:SwiftSyntax/SyntaxRewriter>
+- <doc:SwiftSyntax/SyntaxVerifier>
+- <doc:SwiftSyntax/SyntaxVerifierError>
+- <doc:SwiftSyntax/SyntaxTreeViewMode>
+- <doc:SwiftSyntax/SyntaxVisitorContinueKind>
+- <doc:SwiftSyntax/ReversedTokenSequence>
+
+### Declarations
+
+- <doc:SwiftSyntax/DeclSyntax>
+- <doc:SwiftSyntax/DeclSyntaxProtocol>
+% for node in SYNTAX_NODES:
+%   if not node.is_missing() and node.base_type == 'DeclSyntax':
+- <doc:SwiftSyntax/${node.name}>
+%   end
+% end
+
+### Statements
+
+- <doc:SwiftSyntax/StmtSyntax>
+- <doc:SwiftSyntax/StmtSyntaxProtocol>
+% for node in SYNTAX_NODES:
+%   if not node.is_missing() and node.base_type == 'StmtSyntax':
+- <doc:SwiftSyntax/${node.name}>
+%   end
+% end
+
+### Expressions
+
+- <doc:SwiftSyntax/ExprSyntax>
+- <doc:SwiftSyntax/ExprSyntaxProtocol>
+% for node in SYNTAX_NODES:
+%   if not node.is_missing() and node.base_type == 'ExprSyntax':
+- <doc:SwiftSyntax/${node.name}>
+%   end
+% end
+
+### Types
+
+- <doc:SwiftSyntax/TypeSyntax>
+- <doc:SwiftSyntax/TypeSyntaxProtocol>
+% for node in SYNTAX_NODES:
+%   if not node.is_missing() and node.base_type == 'TypeSyntax':
+- <doc:SwiftSyntax/${node.name}>
+%   end
+% end
+
+### Patterns
+
+- <doc:SwiftSyntax/PatternSyntax>
+- <doc:SwiftSyntax/PatternSyntaxProtocol>
+% for node in SYNTAX_NODES:
+%   if not node.is_missing() and node.base_type == 'PatternSyntax':
+- <doc:SwiftSyntax/${node.name}>
+%   end
+% end
+
+### Collections
+
+- <doc:SwiftSyntax/SyntaxChildren>
+% for node in SYNTAX_NODES:
+%   if node.collection_element:
+%     element_node = NODE_MAP.get(node.collection_element)
+%     if element_node:
+- <doc:SwiftSyntax/${node.name}>
+- <doc:SwiftSyntax/${element_node.name}>
+%     end
+%   end
+% end
+- <doc:SwiftSyntax/SyntaxChildrenIndex>
+- <doc:SwiftSyntax/SyntaxChildrenIndexData>
+
+### Miscellaneous Syntax
+
+% for node in SYNTAX_NODES:
+%   if not node.is_missing() and not node.is_base() and node.base_type == 'Syntax':
+- <doc:SwiftSyntax/${node.name}>
+%   end
+% end
+
+### Missing and Unknown Syntax
+
+% for node in SYNTAX_NODES:
+%   if node.is_missing():
+- <doc:SwiftSyntax/${node.name}>
+%   end
+% end
+- <doc:SwiftSyntax/UnknownSyntax>
+
+### Traits
+
+% for trait in TRAITS:
+- <doc:SwiftSyntax/${trait.trait_name}Syntax>
+% end
+
+### Syntax Position
+
+- <doc:SwiftSyntax/AbsolutePosition>
+- <doc:SwiftSyntax/ByteSourceRange>
+- <doc:SwiftSyntax/SourceLocation>
+- <doc:SwiftSyntax/SourceLocationConverter>
+- <doc:SwiftSyntax/SourceRange>
+- <doc:SwiftSyntax/SourceLength>
+
+### Classifying Syntax
+
+- <doc:SwiftSyntax/SyntaxClassification>
+- <doc:SwiftSyntax/SyntaxClassifications>
+- <doc:SwiftSyntax/SyntaxClassifiedRange>
+
+### Incremental Parsing
+
+- <doc:SwiftSyntax/IncrementalParseLookup>
+- <doc:SwiftSyntax/IncrementalParseTransition>
+- <doc:SwiftSyntax/IncrementalParseReusedNodeDelegate>
+- <doc:SwiftSyntax/IncrementalParseReusedNodeCollector>
+- <doc:SwiftSyntax/SourceEdit>
+- <doc:SwiftSyntax/ConcurrentEdits>
+
+### Internals
+
+- <doc:SwiftSyntax/SyntaxProtocol>
+- <doc:SwiftSyntax/SyntaxArena>
+- <doc:SwiftSyntax/SyntaxEnum>
+- <doc:SwiftSyntax/SyntaxFactory>
+- <doc:SwiftSyntax/SyntaxHashable>
+- <doc:SwiftSyntax/SyntaxIdentifier>
+- <doc:SwiftSyntax/RawTokenKind>
+- <doc:SwiftSyntax/SyntaxNode>

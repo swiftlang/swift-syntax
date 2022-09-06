@@ -17,6 +17,8 @@ PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.dirname(PACKAGE_DIR)
 SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
+SWIFTSYNTAX_DOCUMENTATION_DIR = \
+        os.path.join(SWIFTSYNTAX_DIR, "Documentation.docc")
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
 GENERATESWIFTSYNTAXBUILDER_DIR = \
@@ -320,6 +322,7 @@ def second_stage_gyb_dir_mapping(
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAXBUILDER_DIR,
         SWIFTSYNTAXPARSER_DIR,
+        SWIFTSYNTAX_DOCUMENTATION_DIR,
     ])
 
 

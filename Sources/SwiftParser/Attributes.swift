@@ -571,7 +571,7 @@ extension Parser {
           trailingComma: comma,
           arena: self.arena
         )))
-      case .none:
+      case nil:
         let valueLabel = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
         elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(

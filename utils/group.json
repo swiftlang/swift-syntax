@@ -38,6 +38,7 @@
     "SyntaxClassification.swift",
     "SyntaxFactory.swift",
     "SyntaxRewriter.swift",
+    "SyntaxTransform.swift",
     "SyntaxText.swift",
     "SyntaxVisitor.swift",
     "Misc.swift",

@@ -76,6 +76,7 @@ let package = Package(
         "SyntaxKind.swift.gyb",
         "SyntaxNodes.swift.gyb.template",
         "SyntaxRewriter.swift.gyb",
+        "SyntaxTransform.swift.gyb",
         "SyntaxTraits.swift.gyb",
         "SyntaxVisitor.swift.gyb",
         "TokenKind.swift.gyb",

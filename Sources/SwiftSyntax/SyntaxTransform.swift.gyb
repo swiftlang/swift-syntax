@@ -1,0 +1,132 @@
+%{
+  from gyb_syntax_support import *
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxTransform.swift.gyb.
+//// Do Not Edit Directly!
+//===------ SyntaxTransform.swift - Syntax Transform Visitor Protocol -----===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+public protocol SyntaxTransformVisitor {
+  associatedtype ResultType = Void
+  
+  func visit(_ token: TokenSyntax) -> [ResultType]
+  func visit(_ node: UnknownSyntax) -> [ResultType]
+  
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  /// Visiting `${node.name}` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ${node.name}) -> [ResultType]
+%   end
+% end
+}
+
+extension SyntaxTransformVisitor {
+  public func visit(_ token: TokenSyntax) -> [ResultType] { [] }
+  public func visit(_ node: UnknownSyntax) -> [ResultType] { [] }
+
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  /// Visiting `${node.name}` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ${node.name}) -> [ResultType] {
+%   if node.is_base():
+      // Avoid calling into visitChildren if possible.
+      if !node.raw.layoutView!.children.isEmpty {
+        return visitChildren(node)
+      }
+      return []
+%   else:
+      // Avoid calling into visitChildren if possible.
+      if !node.raw.layoutView!.children.isEmpty {
+        return visitChildren(node)
+      }
+      return []
+%   end
+  }
+%   end
+% end
+
+  public func visit(_ data: Syntax) -> [ResultType] {
+    switch data.raw.kind {
+    case .token:
+      let node = TokenSyntax(data)!
+      return visit(node)
+    case .unknown:
+      let node = UnknownSyntax(data)!
+      return visit(node)
+    // The implementation of every generated case goes into its own function. This
+    // circumvents an issue where the compiler allocates stack space for every
+    // case statement next to each other in debug builds, causing it to allocate
+    // ~50KB per call to this function. rdar://55929175
+  % for node in NON_BASE_SYNTAX_NODES:
+    case .${node.swift_syntax_kind}:
+      let node = ${node.name}(data)!
+      return visit(node)
+  % end
+    }
+  }
+  
+  public func visit(_ data: ExprSyntax) -> [ResultType] {
+    switch data.raw.kind {
+  % for node in NON_BASE_SYNTAX_NODES:
+  %   if node.base_kind == "Expr":
+    case .${node.swift_syntax_kind}:
+      let node = data.as(${node.name}.self)!
+      return visit(node)
+  %   end
+  % end
+    default:
+      fatalError("Not expression?")
+    }
+  }
+  
+  public func visit(_ data: PatternSyntax) -> [ResultType] {
+    switch data.raw.kind {
+  % for node in NON_BASE_SYNTAX_NODES:
+  %   if node.base_kind == "Pattern":
+    case .${node.swift_syntax_kind}:
+      let node = data.as(${node.name}.self)!
+      return visit(node)
+  %   end
+  % end
+    default:
+      fatalError("Not expression?")
+    }
+  }
+  
+  public func visit(_ data: TypeSyntax) -> [ResultType] {
+    switch data.raw.kind {
+  % for node in NON_BASE_SYNTAX_NODES:
+  %   if node.base_kind == "Type":
+    case .${node.swift_syntax_kind}:
+      let node = data.as(${node.name}.self)!
+      return visit(node)
+  %   end
+  % end
+    default:
+      fatalError("Not expression?")
+    }
+  }
+
+  public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
+    let syntaxNode = Syntax(node)
+    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).flatMap { rawChild in
+      let child = Syntax(SyntaxData(rawChild, parent: syntaxNode))
+      return visit(child)
+    }
+  }
+}

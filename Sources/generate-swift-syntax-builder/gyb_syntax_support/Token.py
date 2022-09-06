@@ -8,9 +8,10 @@ class Token(object):
     Represents the specification for a Token in the TokenSyntax file.
     """
 
-    def __init__(self, name, kind, serialization_code, unprefixed_kind=None,
-                 text=None, classification='None', is_keyword=False,
-                 requires_leading_space=False, requires_trailing_space=False):
+    def __init__(self, name, kind, serialization_code, name_for_diagnostics,
+                 unprefixed_kind=None, text=None, classification='None',
+                 is_keyword=False, requires_leading_space=False,
+                 requires_trailing_space=False):
         self.name = name
         self.kind = kind
         if unprefixed_kind is None:
@@ -18,6 +19,7 @@ class Token(object):
         else:
             self.unprefixed_kind = unprefixed_kind
         self.serialization_code = serialization_code
+        self.name_for_diagnostics = name_for_diagnostics
         self.text = text
         self.classification = classification_by_name(classification)
         self.is_keyword = is_keyword
@@ -39,7 +41,11 @@ class Keyword(Token):
     def __init__(self, name, text, serialization_code,
                  classification='Keyword',
                  requires_leading_space=False, requires_trailing_space=True):
-        Token.__init__(self, name, 'kw_' + text, serialization_code,
+        Token.__init__(self,
+                       name=name,
+                       kind='kw_' + text,
+                       serialization_code=serialization_code,
+                       name_for_diagnostics=text,
                        unprefixed_kind=text, text=text,
                        classification=classification, is_keyword=True,
                        requires_leading_space=requires_leading_space,
@@ -80,9 +86,15 @@ class SilKeyword(Keyword):
 
 
 class PoundKeyword(Token):
-    def __init__(self, name, kind, text, serialization_code,
+    def __init__(self, name, kind, text, serialization_code, name_for_diagnostics=None,
                  classification='Keyword'):
-        Token.__init__(self, name, 'pound_' + kind, serialization_code,
+        if name_for_diagnostics is None:
+            name_for_diagnostics = text
+        Token.__init__(self,
+                       name=name,
+                       kind='pound_' + kind,
+                       serialization_code=serialization_code,
+                       name_for_diagnostics=name_for_diagnostics,
                        unprefixed_kind=kind, text=text,
                        classification=classification, is_keyword=True,
                        requires_trailing_space=True)
@@ -92,11 +104,17 @@ class PoundKeyword(Token):
 
 
 class PoundObjectLiteral(PoundKeyword):
-    def __init__(self, name, kind, text, serialization_code, description,
+    def __init__(self, name, kind, text, serialization_code, name_for_diagnostics,
                  protocol, classification='ObjectLiteral'):
-        PoundKeyword.__init__(self, name, kind, text, serialization_code,
-                              classification)
-        self.description = description
+        PoundKeyword.__init__(
+            self,
+            name=name,
+            kind=kind,
+            text=text,
+            serialization_code=serialization_code,
+            name_for_diagnostics=name_for_diagnostics,
+            classification=classification
+        )
         self.protocol = protocol
 
     def macro_name(self):
@@ -111,8 +129,14 @@ class PoundConfig(PoundKeyword):
 class PoundDirectiveKeyword(PoundKeyword):
     def __init__(self, name, kind, text, serialization_code,
                  classification='PoundDirectiveKeyword'):
-        PoundKeyword.__init__(self, name, kind, text, serialization_code,
-                              classification)
+        PoundKeyword.__init__(
+            self,
+            name=name,
+            kind=kind,
+            text=text,
+            serialization_code=serialization_code,
+            classification=classification
+        )
 
     def macro_name(self):
         return "POUND_DIRECTIVE_KEYWORD"
@@ -121,14 +145,36 @@ class PoundDirectiveKeyword(PoundKeyword):
 class PoundConditionalDirectiveKeyword(PoundDirectiveKeyword):
     def __init__(self, name, kind, text, serialization_code,
                  classification='PoundDirectiveKeyword'):
-        PoundKeyword.__init__(self, name, kind, text, serialization_code,
-                              classification)
+        PoundKeyword.__init__(
+            self,
+            name=name,
+            kind=kind,
+            text=text,
+            serialization_code=serialization_code,
+            classification=classification
+        )
 
     def macro_name(self):
         return "POUND_COND_DIRECTIVE_KEYWORD"
 
 
 class Punctuator(Token):
+    def __init__(self, name, kind, serialization_code, text, classification='None',
+                 requires_leading_space=False, requires_trailing_space=False):
+        Token.__init__(
+            self,
+            name=name,
+            kind=kind,
+            serialization_code=serialization_code,
+            name_for_diagnostics=text,
+            unprefixed_kind=None,
+            text=text,
+            classification=classification,
+            is_keyword=False,
+            requires_leading_space=requires_leading_space,
+            requires_trailing_space=requires_trailing_space
+        )
+
     def macro_name(self):
         return "PUNCTUATOR"
 
@@ -324,46 +370,54 @@ SYNTAX_TOKENS = [
 
     PoundObjectLiteral('PoundFileLiteral', 'fileLiteral',
                        text='#fileLiteral', serialization_code=76,
-                       description='file reference',
+                       name_for_diagnostics='file reference',
                        protocol='ExpressibleByFileReferenceLiteral'),
     PoundObjectLiteral('PoundImageLiteral', 'imageLiteral',
                        text='#imageLiteral', serialization_code=77,
-                       description='image',
+                       name_for_diagnostics='image',
                        protocol='ExpressibleByImageLiteral'),
     PoundObjectLiteral('PoundColorLiteral', 'colorLiteral',
                        text='#colorLiteral', serialization_code=75,
-                       description='color',
+                       name_for_diagnostics='color',
                        protocol='ExpressibleByColorLiteral'),
 
-    Literal('IntegerLiteral', 'integer_literal',
+    Literal('IntegerLiteral', 'integer_literal', name_for_diagnostics='integer literal',
             classification='IntegerLiteral', serialization_code=111),
     Literal('FloatingLiteral', 'floating_literal',
-            classification='FloatingLiteral', serialization_code=112),
-    Literal('StringLiteral', 'string_literal',
+            name_for_diagnostics='floating literal', classification='FloatingLiteral',
+            serialization_code=112),
+    Literal('StringLiteral', 'string_literal', name_for_diagnostics='string literal',
             classification='StringLiteral', serialization_code=113),
-    Literal('RegexLiteral', 'regex_literal', serialization_code=124),
+    Literal('RegexLiteral', 'regex_literal', name_for_diagnostics='regex literal',
+            serialization_code=124),
 
-    Misc('Unknown', 'unknown', serialization_code=115),
-    Misc('Identifier', 'identifier', classification='Identifier',
-         serialization_code=105),
+    Misc('Unknown', 'unknown', name_for_diagnostics='token', serialization_code=115),
+    Misc('Identifier', 'identifier', name_for_diagnostics='identifier',
+         classification='Identifier', serialization_code=105),
     Misc('UnspacedBinaryOperator', 'oper_binary_unspaced',
-         serialization_code=107),
-    Misc('SpacedBinaryOperator', 'oper_binary_spaced', serialization_code=108,
+         name_for_diagnostics='binary operator', serialization_code=107),
+    Misc('SpacedBinaryOperator', 'oper_binary_spaced',
+         name_for_diagnostics='binary operator', serialization_code=108,
          requires_leading_space=True, requires_trailing_space=True),
-    Misc('PostfixOperator', 'oper_postfix', serialization_code=110),
-    Misc('PrefixOperator', 'oper_prefix', serialization_code=109),
-    Misc('DollarIdentifier', 'dollarident', classification='DollarIdentifier',
-         serialization_code=106),
+    Misc('PostfixOperator', 'oper_postfix', name_for_diagnostics='postfix operator',
+         serialization_code=110),
+    Misc('PrefixOperator', 'oper_prefix', name_for_diagnostics='prefix operator',
+         serialization_code=109),
+    Misc('DollarIdentifier', 'dollarident', name_for_diagnostics='dollar identifier',
+         classification='DollarIdentifier', serialization_code=106),
 
-    Misc('ContextualKeyword', 'contextual_keyword', classification='Keyword',
-         serialization_code=114),
-    Misc('RawStringDelimiter', 'raw_string_delimiter', serialization_code=119),
-    Misc('StringSegment', 'string_segment', classification='StringLiteral',
-         serialization_code=104),
+    Misc('ContextualKeyword', 'contextual_keyword', name_for_diagnostics='keyword',
+         classification='Keyword', serialization_code=114),
+    Misc('RawStringDelimiter', 'raw_string_delimiter',
+         name_for_diagnostics='raw string delimiter', serialization_code=119),
+    Misc('StringSegment', 'string_segment', name_for_diagnostics='string segment',
+         classification='StringLiteral', serialization_code=104),
     Misc('StringInterpolationAnchor', 'string_interpolation_anchor',
+         name_for_diagnostics='string interpolation anchor',
          text=')', classification='StringInterpolationAnchor',
          serialization_code=101),
-    Misc('Yield', 'kw_yield', serialization_code=116, text='yield'),
+    Misc('Yield', 'kw_yield', name_for_diagnostics='yield',
+         serialization_code=116, text='yield'),
 
 ]
 

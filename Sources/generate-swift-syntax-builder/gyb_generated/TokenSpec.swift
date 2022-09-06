@@ -17,6 +17,7 @@ class TokenSpec {
   let name: String
   let kind: String
   let serializationCode: Int
+  let nameForDiagnostics: String
   let unprefixedKind: String
   let text: String?
   let classification: String
@@ -38,6 +39,7 @@ class TokenSpec {
     name: String,
     kind: String,
     serializationCode: Int,
+    nameForDiagnostics: String,
     unprefixedKind: String? = nil,
     text: String? = nil,
     classification: String = "None",
@@ -48,6 +50,7 @@ class TokenSpec {
     self.name = name
     self.kind = kind
     self.serializationCode = serializationCode
+    self.nameForDiagnostics = nameForDiagnostics
     if let unprefixedKind = unprefixedKind {
       self.unprefixedKind = unprefixedKind
     } else {
@@ -75,6 +78,7 @@ class KeywordSpec: TokenSpec {
       name: name,
       kind: "kw_\(text)",
       serializationCode: serializationCode,
+      nameForDiagnostics: text,
       unprefixedKind: text,
       text: text,
       classification: classification,
@@ -102,6 +106,7 @@ class PoundKeywordSpec: TokenSpec {
     name: String,
     kind: String,
     serializationCode: Int,
+    nameForDiagnostics: String? = nil,
     text: String,
     classification: String = "Keyword"
   ) {
@@ -109,6 +114,7 @@ class PoundKeywordSpec: TokenSpec {
       name: name,
       kind: "pound_\(kind)",
       serializationCode: serializationCode,
+      nameForDiagnostics: nameForDiagnostics ?? text,
       unprefixedKind: kind,
       text: text,
       classification: classification,
@@ -119,7 +125,6 @@ class PoundKeywordSpec: TokenSpec {
 }
 
 class PoundObjectLiteralSpec: PoundKeywordSpec {
-  let description: String
   let `protocol`: String
 
   init(
@@ -128,15 +133,15 @@ class PoundObjectLiteralSpec: PoundKeywordSpec {
     serializationCode: Int,
     text: String,
     classification: String = "ObjectLiteral",
-    description: String,
+    nameForDiagnostics: String,
     `protocol`: String
   ) {
-    self.description = `description`
     self.`protocol` = `protocol`
     super.init(
       name: name,
       kind: kind,
       serializationCode: serializationCode,
+      nameForDiagnostics: nameForDiagnostics,
       text: text,
       classification: classification
     )
@@ -146,7 +151,7 @@ class PoundObjectLiteralSpec: PoundKeywordSpec {
 class PoundConfigSpec: PoundKeywordSpec { }
 
 class PoundDirectiveKeywordSpec: PoundKeywordSpec {
-  override init(
+  init(
     name: String,
     kind: String,
     serializationCode: Int,
@@ -181,7 +186,30 @@ class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
   }
 }
 
-class PunctuatorSpec: TokenSpec { }
+class PunctuatorSpec: TokenSpec {
+  init(
+    name: String,
+    kind: String,
+    serializationCode: Int,
+    text: String,
+    classification: String = "None",
+    requiresLeadingSpace: Bool = false,
+    requiresTrailingSpace: Bool = false
+  ) {
+    super.init(
+      name: name,
+      kind: kind,
+      serializationCode: serializationCode,
+      nameForDiagnostics: text,
+      unprefixedKind: nil,
+      text: text,
+      classification: classification,
+      isKeyword: false,
+      requiresLeadingSpace: requiresLeadingSpace,
+      requiresTrailingSpace: requiresTrailingSpace
+    )
+  }
+}
 
 class LiteralSpec: TokenSpec { }
 
@@ -293,25 +321,25 @@ let SYNTAX_TOKENS: [TokenSpec] = [
   PoundConditionalDirectiveKeywordSpec(name: "PoundEndif", kind: "pound_endif", serializationCode: 61, text: "#endif"),
   PoundConfigSpec(name: "PoundAvailable", kind: "pound_available", serializationCode: 60, text: "#available"),
   PoundConfigSpec(name: "PoundUnavailable", kind: "pound_unavailable", serializationCode: 123, text: "#unavailable"),
-  PoundObjectLiteralSpec(name: "PoundFileLiteral", kind: "pound_fileLiteral", serializationCode: 76, text: "#fileLiteral", description: "file reference", protocol: "ExpressibleByFileReferenceLiteral"),
-  PoundObjectLiteralSpec(name: "PoundImageLiteral", kind: "pound_imageLiteral", serializationCode: 77, text: "#imageLiteral", description: "image", protocol: "ExpressibleByImageLiteral"),
-  PoundObjectLiteralSpec(name: "PoundColorLiteral", kind: "pound_colorLiteral", serializationCode: 75, text: "#colorLiteral", description: "color", protocol: "ExpressibleByColorLiteral"),
-  LiteralSpec(name: "IntegerLiteral", kind: "integer_literal", serializationCode: 111),
-  LiteralSpec(name: "FloatingLiteral", kind: "floating_literal", serializationCode: 112),
-  LiteralSpec(name: "StringLiteral", kind: "string_literal", serializationCode: 113),
-  LiteralSpec(name: "RegexLiteral", kind: "regex_literal", serializationCode: 124),
-  MiscSpec(name: "Unknown", kind: "unknown", serializationCode: 115),
-  MiscSpec(name: "Identifier", kind: "identifier", serializationCode: 105),
-  MiscSpec(name: "UnspacedBinaryOperator", kind: "oper_binary_unspaced", serializationCode: 107),
-  MiscSpec(name: "SpacedBinaryOperator", kind: "oper_binary_spaced", serializationCode: 108, requiresLeadingSpace: true, requiresTrailingSpace: true),
-  MiscSpec(name: "PostfixOperator", kind: "oper_postfix", serializationCode: 110),
-  MiscSpec(name: "PrefixOperator", kind: "oper_prefix", serializationCode: 109),
-  MiscSpec(name: "DollarIdentifier", kind: "dollarident", serializationCode: 106),
-  MiscSpec(name: "ContextualKeyword", kind: "contextual_keyword", serializationCode: 114),
-  MiscSpec(name: "RawStringDelimiter", kind: "raw_string_delimiter", serializationCode: 119),
-  MiscSpec(name: "StringSegment", kind: "string_segment", serializationCode: 104),
-  MiscSpec(name: "StringInterpolationAnchor", kind: "string_interpolation_anchor", serializationCode: 101, text: ")"),
-  MiscSpec(name: "Yield", kind: "kw_yield", serializationCode: 116, text: "yield"),
+  PoundObjectLiteralSpec(name: "PoundFileLiteral", kind: "pound_fileLiteral", serializationCode: 76, text: "#fileLiteral", nameForDiagnostics: "file reference", protocol: "ExpressibleByFileReferenceLiteral"),
+  PoundObjectLiteralSpec(name: "PoundImageLiteral", kind: "pound_imageLiteral", serializationCode: 77, text: "#imageLiteral", nameForDiagnostics: "image", protocol: "ExpressibleByImageLiteral"),
+  PoundObjectLiteralSpec(name: "PoundColorLiteral", kind: "pound_colorLiteral", serializationCode: 75, text: "#colorLiteral", nameForDiagnostics: "color", protocol: "ExpressibleByColorLiteral"),
+  LiteralSpec(name: "IntegerLiteral", kind: "integer_literal", serializationCode: 111, nameForDiagnostics: "integer literal"),
+  LiteralSpec(name: "FloatingLiteral", kind: "floating_literal", serializationCode: 112, nameForDiagnostics: "floating literal"),
+  LiteralSpec(name: "StringLiteral", kind: "string_literal", serializationCode: 113, nameForDiagnostics: "string literal"),
+  LiteralSpec(name: "RegexLiteral", kind: "regex_literal", serializationCode: 124, nameForDiagnostics: "regex literal"),
+  MiscSpec(name: "Unknown", kind: "unknown", serializationCode: 115, nameForDiagnostics: "token"),
+  MiscSpec(name: "Identifier", kind: "identifier", serializationCode: 105, nameForDiagnostics: "identifier"),
+  MiscSpec(name: "UnspacedBinaryOperator", kind: "oper_binary_unspaced", serializationCode: 107, nameForDiagnostics: "binary operator"),
+  MiscSpec(name: "SpacedBinaryOperator", kind: "oper_binary_spaced", serializationCode: 108, nameForDiagnostics: "binary operator", requiresLeadingSpace: true, requiresTrailingSpace: true),
+  MiscSpec(name: "PostfixOperator", kind: "oper_postfix", serializationCode: 110, nameForDiagnostics: "postfix operator"),
+  MiscSpec(name: "PrefixOperator", kind: "oper_prefix", serializationCode: 109, nameForDiagnostics: "prefix operator"),
+  MiscSpec(name: "DollarIdentifier", kind: "dollarident", serializationCode: 106, nameForDiagnostics: "dollar identifier"),
+  MiscSpec(name: "ContextualKeyword", kind: "contextual_keyword", serializationCode: 114, nameForDiagnostics: "keyword"),
+  MiscSpec(name: "RawStringDelimiter", kind: "raw_string_delimiter", serializationCode: 119, nameForDiagnostics: "raw string delimiter"),
+  MiscSpec(name: "StringSegment", kind: "string_segment", serializationCode: 104, nameForDiagnostics: "string segment"),
+  MiscSpec(name: "StringInterpolationAnchor", kind: "string_interpolation_anchor", serializationCode: 101, nameForDiagnostics: "string interpolation anchor", text: ")"),
+  MiscSpec(name: "Yield", kind: "kw_yield", serializationCode: 116, nameForDiagnostics: "yield", text: "yield"),
 ]
 
 let SYNTAX_TOKEN_MAP = Dictionary(uniqueKeysWithValues: SYNTAX_TOKENS.map { ("\($0.name)Token", $0) })

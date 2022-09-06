@@ -23,6 +23,7 @@ class TokenSpec {
   let name: String
   let kind: String
   let serializationCode: Int
+  let nameForDiagnostics: String
   let unprefixedKind: String
   let text: String?
   let classification: String
@@ -44,6 +45,7 @@ class TokenSpec {
     name: String,
     kind: String,
     serializationCode: Int,
+    nameForDiagnostics: String,
     unprefixedKind: String? = nil,
     text: String? = nil,
     classification: String = "None",
@@ -54,6 +56,7 @@ class TokenSpec {
     self.name = name
     self.kind = kind
     self.serializationCode = serializationCode
+    self.nameForDiagnostics = nameForDiagnostics
     if let unprefixedKind = unprefixedKind {
       self.unprefixedKind = unprefixedKind
     } else {
@@ -81,6 +84,7 @@ class KeywordSpec: TokenSpec {
       name: name,
       kind: "kw_\(text)",
       serializationCode: serializationCode,
+      nameForDiagnostics: text,
       unprefixedKind: text,
       text: text,
       classification: classification,
@@ -108,6 +112,7 @@ class PoundKeywordSpec: TokenSpec {
     name: String,
     kind: String,
     serializationCode: Int,
+    nameForDiagnostics: String? = nil,
     text: String,
     classification: String = "Keyword"
   ) {
@@ -115,6 +120,7 @@ class PoundKeywordSpec: TokenSpec {
       name: name,
       kind: "pound_\(kind)",
       serializationCode: serializationCode,
+      nameForDiagnostics: nameForDiagnostics ?? text,
       unprefixedKind: kind,
       text: text,
       classification: classification,
@@ -125,7 +131,6 @@ class PoundKeywordSpec: TokenSpec {
 }
 
 class PoundObjectLiteralSpec: PoundKeywordSpec {
-  let description: String
   let `protocol`: String
 
   init(
@@ -134,15 +139,15 @@ class PoundObjectLiteralSpec: PoundKeywordSpec {
     serializationCode: Int,
     text: String,
     classification: String = "ObjectLiteral",
-    description: String,
+    nameForDiagnostics: String,
     `protocol`: String
   ) {
-    self.description = `description`
     self.`protocol` = `protocol`
     super.init(
       name: name,
       kind: kind,
       serializationCode: serializationCode,
+      nameForDiagnostics: nameForDiagnostics,
       text: text,
       classification: classification
     )
@@ -152,7 +157,7 @@ class PoundObjectLiteralSpec: PoundKeywordSpec {
 class PoundConfigSpec: PoundKeywordSpec { }
 
 class PoundDirectiveKeywordSpec: PoundKeywordSpec {
-  override init(
+  init(
     name: String,
     kind: String,
     serializationCode: Int,
@@ -187,7 +192,30 @@ class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
   }
 }
 
-class PunctuatorSpec: TokenSpec { }
+class PunctuatorSpec: TokenSpec {
+  init(
+    name: String,
+    kind: String,
+    serializationCode: Int,
+    text: String,
+    classification: String = "None",
+    requiresLeadingSpace: Bool = false,
+    requiresTrailingSpace: Bool = false
+  ) {
+    super.init(
+      name: name,
+      kind: kind,
+      serializationCode: serializationCode,
+      nameForDiagnostics: text,
+      unprefixedKind: nil,
+      text: text,
+      classification: classification,
+      isKeyword: false,
+      requiresLeadingSpace: requiresLeadingSpace,
+      requiresTrailingSpace: requiresTrailingSpace
+    )
+  }
+}
 
 class LiteralSpec: TokenSpec { }
 
@@ -203,11 +231,14 @@ let SYNTAX_TOKENS: [TokenSpec] = [
 %     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code, "text: \"%s\"" % token.text]
 %   elif class_name in ['Punctuator', 'Misc', 'Literal']:
 %     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code]
+%     if class_name != 'Punctuator':
+%       parameters += ["nameForDiagnostics: \"%s\"" % token.name_for_diagnostics]
+%     end
 %     if token.text:
 %       parameters += ["text: \"%s\"" % token.text]
 %     end
 %   elif class_name == 'PoundObjectLiteral':
-%     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code, "text: \"%s\"" % token.text, "description: \"%s\"" % token.description, "protocol: \"%s\"" % token.protocol]
+%     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code, "text: \"%s\"" % token.text, "nameForDiagnostics: \"%s\"" % token.name_for_diagnostics, "protocol: \"%s\"" % token.protocol]
 %   else:
 %     print("Unknown token `%s`", (token.name), file=sys.stderr)
 %     sys.exit(1)

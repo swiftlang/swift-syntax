@@ -79,263 +79,6 @@ fileprivate struct TokenKindAndText {
   }
 }
 
-/// Represents a syntax node along with its absolute position in the tree and
-/// an optional classification.
-fileprivate struct AbsoluteNode {
-  let raw: RawSyntax
-  let position: AbsoluteSyntaxPosition
-  /// A psir of classification and whether it is `forced`. If `forced` is true
-  /// the classification should apply unconditionally, otherwise it should apply
-  /// only for identifiers.
-  let classification: (SyntaxClassification, Bool)?
-  let viewMode = SyntaxTreeViewMode.sourceAccurate
-
-  /// Use this constructor for the root node.
-  init(
-    raw: RawSyntax,
-    position: AbsoluteSyntaxPosition,
-    contextualClassification: (SyntaxClassification, Bool)?
-  ) {
-    self.raw = raw
-    self.position = position
-    self.classification = contextualClassification
-  }
-
-  init(raw: RawSyntax, position: AbsoluteSyntaxPosition, parent: AbsoluteNode) {
-    self.raw = raw
-    self.position = position
-    // Check if this node has a classification otherwise inherit it from the parent.
-    self.classification = SyntaxClassification.classify(parentKind: parent.raw.kind,
-      indexInParent: Int(position.indexInParent), childKind: raw.kind) ?? parent.classification
-  }
-
-  var offset: Int { return Int(position.offset) }
-
-  var endOffset: Int {
-    return offset + raw.totalLength.utf8Length
-  }
-
-  var firstChild: AbsoluteNode? {
-    guard let layoutView = raw.layoutView else { return nil }
-    var curPos = position.advancedToFirstChild()
-    for childOpt in layoutView.children {
-      if let child = childOpt, viewMode.shouldTraverse(node: child) {
-        return AbsoluteNode(raw: child, position: curPos, parent: self)
-      }
-      curPos = curPos.advancedBySibling(childOpt)
-    }
-    return nil
-  }
-
-  func nextSibling(parent: AbsoluteNode) -> AbsoluteNode? {
-    var curPos = position.advancedBySibling(raw)
-    for siblingOpt in parent.raw.layoutView!.children.dropFirst(Int(position.indexInParent + 1)) {
-      if let sibling = siblingOpt, viewMode.shouldTraverse(node: sibling) {
-        return AbsoluteNode(raw: sibling, position: curPos, parent: parent)
-      }
-      curPos = curPos.advancedBySibling(siblingOpt)
-    }
-    return nil
-  }
-}
-
-/// Functions as an iterator that walks every node in the tree in sequence.
-fileprivate struct SyntaxCursor {
-  var parents: [AbsoluteNode]
-  var node: AbsoluteNode
-  let absRange: ByteSourceRange
-  var finished: Bool
-
-  init(
-    root: RawSyntax,
-    offset: Int,
-    in absRange: ByteSourceRange,
-    contextualClassification: (SyntaxClassification, Bool)?
-  ) {
-    self.absRange = absRange
-    self.node = AbsoluteNode(raw: root,
-      position: .init(offset: UInt32(truncatingIfNeeded: offset), indexInParent: 0),
-      contextualClassification: contextualClassification)
-    self.parents = []
-    self.finished = false
-  }
-
-  /// Moves to the first child of the current node.
-  /// - Returns: False if the node has no children.
-  mutating func advanceToFirstChild() -> Bool {
-    guard let child = node.firstChild else { return false }
-    parents.append(node)
-    node = child
-    return true
-  }
-
-  /// Moves to the next singling node or the parent's sibling node if this is
-  /// the last child.
-  /// - Returns: False if it run out of nodes to walk to.
-  mutating func advanceToNextSibling() -> Bool {
-    while !parents.isEmpty {
-      if let sibling = node.nextSibling(parent: parents.last!) {
-        node = sibling
-        return true
-      }
-      node = parents.removeLast()
-    }
-
-    finished = true
-    return false
-  }
-
-  /// Moves to the first token in the tree.
-  /// - Returns: True if it moved to the first token, false if there are no tokens
-  ///   in the requested range.
-  mutating func advanceToFirstToken() -> Bool {
-    guard node.offset < absRange.endOffset else {
-      finished = true
-      return false
-    }
-
-    while !node.raw.isToken || node.endOffset <= absRange.offset {
-      // if the node is out of the requested range we can skip its children.
-      if node.endOffset > absRange.offset {
-        if advanceToFirstChild() { continue }
-      }
-      if !advanceToNextSibling() { return false }
-    }
-
-    return true
-  }
-
-  /// Moves to the next token in the tree. This should be called after `advanceToFirstToken()`.
-  /// - Returns: True if it moved to a new token, false if there are no more tokens
-  ///   in the requested range.
-  mutating func advanceToNextToken() -> Bool {
-    repeat {
-      if advanceToFirstChild() { continue }
-      if !advanceToNextSibling() { return false }
-
-      guard node.offset < absRange.endOffset else {
-        finished = true
-        return false
-      }
-    } while !node.raw.isToken
-
-    return true
-  }
-}
-
-/// Sequence of tokens of a syntax node. This is more efficient than 
-/// `TokenSequence` because it avoids casts to `Syntax` protocols.
-fileprivate struct FastTokenSequence: Sequence {
-  struct Iterator: IteratorProtocol {
-    var cursor: SyntaxCursor
-
-    init(
-      root: RawSyntax,
-      offset: Int,
-      in absRange: ByteSourceRange,
-      contextualClassification: (SyntaxClassification, Bool)?
-    ) {
-      self.cursor = SyntaxCursor(root: root, offset: offset, in: absRange,
-        contextualClassification: contextualClassification)
-      _ = self.cursor.advanceToFirstToken()
-    }
-
-    mutating func next() -> AbsoluteNode? {
-      guard !cursor.finished else { return nil }
-
-      let node = cursor.node
-      _ = cursor.advanceToNextToken()
-      return node
-    }
-  }
-
-  private let root: RawSyntax
-  private let offset: Int
-  private let absRange: ByteSourceRange
-  private let contextualClassification: (SyntaxClassification, Bool)?
-
-  init(
-    _ root: RawSyntax,
-    offset: Int,
-    in absRange: ByteSourceRange,
-    contextualClassification: (SyntaxClassification, Bool)?
-  ) {
-    self.root = root
-    self.offset = offset
-    self.absRange = absRange
-    self.contextualClassification = contextualClassification
-  }
-
-  func makeIterator() -> Iterator {
-    return .init(root: root, offset: offset, in: absRange,
-      contextualClassification: contextualClassification)
-  }
-}
-
-/// Provides a sequence of `SyntaxClassifiedRange`s for a token.
-fileprivate struct TokenClassificationIterator: IteratorProtocol {
-  enum State {
-    case atLeadingTrivia([RawTriviaPiece], Int)
-    case atTokenText
-    case atTrailingTrivia([RawTriviaPiece], Int)
-  }
-
-  let token: AbsoluteNode
-  var tokenView: RawSyntaxTokenView {
-    return token.raw.tokenView!
-  }
-  var offset: Int
-  var state: State
-
-  init(_ token: AbsoluteNode) {
-    assert(token.raw.isToken)
-    self.token = token
-    self.offset = Int(token.position.offset)
-    self.state = .atLeadingTrivia(token.raw.tokenView!.leadingRawTriviaPieces, 0)
-  }
-
-  var relativeOffset: Int { return offset - Int(token.position.offset) }
-
-  mutating func next() -> SyntaxClassifiedRange? {
-    while true {
-      switch state {
-      case .atLeadingTrivia(let pieces, let index):
-        guard index < pieces.count else {
-          state = .atTokenText
-          break
-        }
-        let classifiedRange = pieces[index].classify(offset: offset)
-        state = .atLeadingTrivia(pieces, index+1)
-        offset = classifiedRange.endOffset
-        guard classifiedRange.kind != .none else { break }
-        return classifiedRange
-
-      case .atTokenText:
-        let classifiedRange = TokenKindAndText(
-          kind: tokenView.rawKind, text: tokenView.rawText)
-          .classify(offset: offset, contextualClassification: token.classification)
-
-        // Move on to trailing trivia.
-        state = .atTrailingTrivia(tokenView.trailingRawTriviaPieces, 0)
-        offset = classifiedRange.endOffset
-        guard classifiedRange.kind != .none else { break }
-        return classifiedRange
-
-      case .atTrailingTrivia(let pieces, let index):
-        guard index < pieces.count else {
-          return nil
-        }
-        let classifiedRange = pieces[index].classify(offset: offset)
-
-        state = .atTrailingTrivia(pieces, index+1)
-        offset = classifiedRange.endOffset
-        guard classifiedRange.kind != .none else { break }
-        return classifiedRange
-      }
-    }
-  }
-}
-
 /// Represents a source range that is associated with a syntax classification.
 public struct SyntaxClassifiedRange: Equatable {
   public var kind: SyntaxClassification
@@ -346,114 +89,144 @@ public struct SyntaxClassifiedRange: Equatable {
   public var endOffset: Int { return range.endOffset }
 }
 
-/// Provides a sequence of `SyntaxClassifiedRange`s for a syntax node.
-public struct SyntaxClassifications: Sequence {
-  public struct Iterator: IteratorProtocol {
-    fileprivate let absRange: ByteSourceRange
-    fileprivate var tokenIterator: FastTokenSequence.Iterator
-    fileprivate var classifyIter: TokenClassificationIterator?
-    fileprivate var pendingClassifiedRange: SyntaxClassifiedRange
-    fileprivate var curOffset: Int
-    fileprivate var curTokenEndOffset: Int
+private struct ClassificationVisitor {
+  private enum VisitResult {
+    case `continue`
+    case `break`
+  }
 
-    init(
-      root: RawSyntax,
-      offset: Int,
-      in absRange: ByteSourceRange,
-      contextualClassification: (SyntaxClassification, Bool)?
-    ) {
-      self.absRange = absRange
-      self.tokenIterator = .init(root: root, offset: offset, in: absRange,
-        contextualClassification: contextualClassification)
-      self.pendingClassifiedRange = .init(kind: .none,
-        range: ByteSourceRange(offset: absRange.offset, length: 0))
-      self.curOffset = absRange.offset
-      self.curTokenEndOffset = curOffset
+  private struct Descriptor {
+    var node: RawSyntax
+    var byteOffset: Int
+    var contextualClassification: (SyntaxClassification, Bool)?
+  }
 
-      guard let classifiedRange = nextActiveClassification() else { return }
-      self.pendingClassifiedRange = classifiedRange
-      self.curOffset = Int(classifyIter!.token.position.offset)
-    }
+  /// Only tokens within this absolute range will be classified. No
+  /// classifications will be reported for tokens out of this range.
+  private var targetRange: ByteSourceRange
 
-    /// Updates `curOffset` and returns consecutive classified ranges, excluding
-    /// ones that do not intersect with the provided range
-    public mutating func next() -> SyntaxClassifiedRange? {
-      while true {
-        guard let classifiedRange = nextClassification() else { return nil }
-        curOffset = classifiedRange.endOffset
-        guard classifiedRange.endOffset > absRange.offset else { continue }
-        guard classifiedRange.offset < absRange.endOffset else { return nil }
-        return classifiedRange
-      }
-    }
+  var classifications: [SyntaxClassifiedRange]
 
-    /// Returns consecutive classified ranges, with `none` classifications interspersed
-    /// between non-`none` ones. It also merges consecutive classified ranges of
-    /// the same kind.
-    fileprivate mutating func nextClassification() -> SyntaxClassifiedRange? {
-      func passUnclassified(_ offset: Int, _ length: Int) -> SyntaxClassifiedRange {
-        return SyntaxClassifiedRange(kind: .none,
-          range: ByteSourceRange(offset: offset, length: length))
-      }
+  /// Only classify tokens in `relativeClassificationRange`, where the start
+  /// offset is relative to `node`.
+  init(node: Syntax, relativeClassificationRange: ByteSourceRange) {
+    let range = ByteSourceRange(
+      offset: node.position.utf8Offset + relativeClassificationRange.offset,
+      length: relativeClassificationRange.length)
+    self.targetRange = range
+    self.classifications = []
 
-      while true {
-        let unclassifedLength = pendingClassifiedRange.offset - curOffset
-        if unclassifedLength > 0 {
-          return passUnclassified(curOffset, unclassifedLength)
-        }
-        guard let classifiedRange = nextActiveClassification() else {
-          if curOffset < pendingClassifiedRange.endOffset {
-            return pendingClassifiedRange
-          }
-          let unclassifedLength = curTokenEndOffset - curOffset
-          if unclassifedLength > 0 {
-            return passUnclassified(curOffset, unclassifedLength)
-          }
-          return nil
-        }
-        // Merge consecutive classified ranges of the same kind.
-        if classifiedRange.kind == pendingClassifiedRange.kind &&
-           classifiedRange.offset == pendingClassifiedRange.endOffset {
-          pendingClassifiedRange.range.length += classifiedRange.length
-          continue
-        }
-        let nextClassifiedRange = pendingClassifiedRange
-        pendingClassifiedRange = classifiedRange
-        return nextClassifiedRange
-      }
-    }
-
-    /// Returns only active (non-`none`) classified ranges. The ranges can be
-    /// non-consecutive.
-    fileprivate mutating func nextActiveClassification() -> SyntaxClassifiedRange? {
-      while true {
-        if classifyIter != nil {
-          if let nextClassify = classifyIter!.next() {
-            return nextClassify
-          }
-          classifyIter = nil
-        }
-        guard let nextToken = tokenIterator.next() else { return nil }
-        curTokenEndOffset = nextToken.endOffset
-        classifyIter = TokenClassificationIterator(nextToken)
-      }
+    // `withExtendedLifetime` to make sure `SyntaxArena` for the node alive
+    // during the visit.
+    withExtendedLifetime(node) {
+      _ = self.visit(Descriptor(
+        node: node.raw,
+        byteOffset: node.position.utf8Offset,
+        contextualClassification: node.data.contextualClassification))
     }
   }
 
-  let node: Syntax
-  let relRange: ByteSourceRange
+  private mutating func report(range: SyntaxClassifiedRange) {
+    if range.kind == .none && range.length == 0 {
+      return
+    }
+
+    // Merge consecutive classified ranges of the same kind.
+    if let last = classifications.last,
+       last.kind == range.kind,
+       last.endOffset == range.offset {
+      classifications[classifications.count - 1].range = ByteSourceRange(
+        offset: last.offset, length: last.length + range.length)
+      return
+    }
+
+    guard range.offset <= targetRange.endOffset,
+          range.endOffset >= targetRange.offset else {
+      return
+    }
+    classifications.append(range)
+  }
+
+  // Report classification ranges in `descriptor.node` that is a token.
+  private mutating func handleToken(_ descriptor: Descriptor) -> VisitResult {
+    let tokenView = descriptor.node.tokenView!
+    var byteOffset = descriptor.byteOffset
+
+    // Leading trivia.
+    for piece in tokenView.leadingRawTriviaPieces {
+      let range = piece.classify(offset: byteOffset)
+      report(range: range)
+      byteOffset += piece.byteLength
+    }
+    // Token text.
+    do {
+      let range = TokenKindAndText(kind: tokenView.rawKind, text: tokenView.rawText)
+        .classify(offset: byteOffset, contextualClassification: descriptor.contextualClassification)
+      report(range: range)
+      byteOffset += tokenView.rawText.count
+    }
+    // Trailing trivia.
+    for piece in tokenView.trailingRawTriviaPieces {
+      let range = piece.classify(offset: byteOffset)
+      report(range: range)
+      byteOffset += piece.byteLength
+    }
+
+    assert(byteOffset == descriptor.byteOffset + descriptor.node.byteLength)
+    return .continue
+  }
+
+  /// Call `visit()` on all `descriptor.node` non-nil children.
+  private mutating func handleLayout(_ descriptor: Descriptor) -> VisitResult {
+    let children = descriptor.node.layoutView!.children
+    var byteOffset = descriptor.byteOffset
+
+    for case (let index, let child?) in children.enumerated() {
+
+      let classficiation = SyntaxClassification.classify(
+        parentKind: descriptor.node.kind, indexInParent: index, childKind: child.kind)
+      let result = visit(.init(
+        node: child,
+        byteOffset: byteOffset,
+        contextualClassification: classficiation ?? descriptor.contextualClassification))
+      if result == .break {
+        return .break
+      }
+      byteOffset += child.byteLength
+    }
+    return .continue
+  }
+
+  private mutating func visit(_ descriptor: ClassificationVisitor.Descriptor) -> VisitResult {
+    guard descriptor.byteOffset < targetRange.endOffset else {
+      return .break
+    }
+    guard descriptor.byteOffset + descriptor.node.byteLength > targetRange.offset else {
+      return .continue
+    }
+    guard SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: descriptor.node) else {
+      return .continue
+    }
+    if descriptor.node.isToken {
+      return handleToken(descriptor)
+    } else {
+      return handleLayout(descriptor)
+    }
+  }
+}
+
+/// Provides a sequence of `SyntaxClassifiedRange`s for a syntax node.
+public struct SyntaxClassifications: Sequence {
+  public typealias Iterator = Array<SyntaxClassifiedRange>.Iterator
+
+  var classifications: [SyntaxClassifiedRange]
 
   public init(_ node: Syntax, in relRange: ByteSourceRange) {
-    self.node = node
-    self.relRange = relRange
+    let visitor = ClassificationVisitor(node: node, relativeClassificationRange: relRange)
+    self.classifications = visitor.classifications
   }
 
   public func makeIterator() -> Iterator {
-    // Convert the relative range to an absolute one.
-    let nodeOffset = node.position.utf8Offset
-    let absRange = ByteSourceRange(offset: nodeOffset + relRange.offset,
-      length: relRange.length)
-    return .init(root: node.raw, offset: nodeOffset, in: absRange,
-      contextualClassification: node.data.contextualClassification)
+    classifications.makeIterator()
   }
 }

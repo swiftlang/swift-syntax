@@ -46,7 +46,7 @@ extension Parser {
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(currentToken), let newElement = self.parseCodeBlockItem() {
+    while let newElement = self.parseCodeBlockItem(), loopProgress.evaluate(currentToken) {
       elements.append(newElement)
     }
     return .init(elements: elements, arena: self.arena)
@@ -74,7 +74,7 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var items = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(currentToken) && !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
+    while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem(), loopProgress.evaluate(currentToken) {
       items.append(newItem)
     }
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)

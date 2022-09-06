@@ -194,7 +194,7 @@ extension Parser {
       elements.append(RawConditionElementSyntax(
         condition: RawSyntax(condition), trailingComma: keepGoing,
         arena: self.arena))
-    } while loopProgress.evaluate(currentToken) && keepGoing != nil
+    } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
     return RawConditionElementListSyntax(elements: elements, arena: self.arena)
   }
@@ -397,7 +397,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       repeat {
         elements.append(self.parseCatchClause())
-      } while loopProgress.evaluate(currentToken) && self.at(.catchKeyword)
+      } while self.at(.catchKeyword) && loopProgress.evaluate(currentToken)
     }
 
     return RawDoStmtSyntax(
@@ -431,7 +431,7 @@ extension Parser {
         catchItems.append(RawCatchItemSyntax(
           pattern: pattern, whereClause: whereClause, trailingComma: keepGoing,
           arena: self.arena))
-      } while loopProgress.evaluate(currentToken) && keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     let body = self.parseCodeBlock()
     return RawCatchClauseSyntax(
@@ -603,12 +603,12 @@ extension Parser {
   public mutating func parseSwitchCases() -> RawSwitchCaseListSyntax {
     var elements = [RawSyntax]()
     var elementsProgress = LoopProgressCondition()
-    while elementsProgress.evaluate(currentToken)
-            && !self.at(.eof)
+    while !self.at(.eof)
             && !self.at(.rightBrace)
             && !self.at(.poundEndifKeyword)
             && !self.at(.poundElseifKeyword)
-            && !self.at(.poundElseKeyword) {
+            && !self.at(.poundElseKeyword)
+            && elementsProgress.evaluate(currentToken) {
       if self.lookahead().isAtStartOfSwitchCase() {
         elements.append(RawSyntax(self.parseSwitchCase()))
       } else if self.at(.poundIfKeyword) {
@@ -648,7 +648,7 @@ extension Parser {
 
       var tokenList = [RawTokenSyntax]()
       var loopProgress = LoopProgressCondition()
-      while loopProgress.evaluate(currentToken) && self.at(.atSign) {
+      while self.at(.atSign) && loopProgress.evaluate(currentToken) {
         tokenList.append(self.eat(.atSign))
         tokenList.append(self.consumeIdentifier())
       }
@@ -675,13 +675,13 @@ extension Parser {
     do {
       var items = [RawCodeBlockItemSyntax]()
       var loopProgress = LoopProgressCondition()
-      while loopProgress.evaluate(currentToken)
-              && !self.at(.rightBrace)
+      while !self.at(.rightBrace)
               && !self.at(.poundEndifKeyword)
               && !self.at(.poundElseifKeyword)
               && !self.at(.poundElseKeyword)
               && !self.lookahead().isStartOfConditionalSwitchCases(),
-            let newItem = self.parseCodeBlockItem() {
+            let newItem = self.parseCodeBlockItem(),
+            loopProgress.evaluate(currentToken) {
         items.append(newItem)
       }
       statements = RawCodeBlockItemListSyntax(elements: items, arena: self.arena)
@@ -712,7 +712,7 @@ extension Parser {
         caseItems.append(RawCaseItemSyntax(
           pattern: pattern, whereClause: whereClause, trailingComma: keepGoing,
           arena: self.arena))
-      } while loopProgress.evaluate(currentToken) && keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     return RawSwitchCaseLabelSyntax(
@@ -841,10 +841,10 @@ extension Parser {
         var keepGoing = true
         var elementList = [RawExprSyntax]()
         var loopProgress = LoopProgressCondition()
-        while loopProgress.evaluate(currentToken)
-                && !self.at(.eof)
+        while !self.at(.eof)
                 && !self.at(.rightParen)
-                && keepGoing {
+                && keepGoing
+                && loopProgress.evaluate(currentToken) {
           elementList.append(self.parseExpression())
           // FIXME: Need explicit syntax for yield lists or we'll drop this comma!
           keepGoing = self.consume(if: .comma) != nil
@@ -1081,7 +1081,7 @@ extension Parser.Lookahead {
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(lookahead.currentToken) && lookahead.at(.atSign) {
+    while lookahead.at(.atSign) && loopProgress.evaluate(lookahead.currentToken) {
       guard lookahead.peek().isIdentifier else {
         return false
       }
@@ -1104,11 +1104,11 @@ extension Parser.Lookahead {
       lookahead.consumeAnyToken()
       // just find the end of the line
       lookahead.skipUntilEndOfLine()
-    } while loopProgress.evaluate(lookahead.currentToken) && (
-        lookahead.at(.poundIfKeyword)
-        || lookahead.at(.poundElseifKeyword)
-        || lookahead.at(.poundElseKeyword)
-      )
+    } while (
+      lookahead.at(.poundIfKeyword)
+      || lookahead.at(.poundElseifKeyword)
+      || lookahead.at(.poundElseKeyword)
+    ) && loopProgress.evaluate(lookahead.currentToken)
     return lookahead.isAtStartOfSwitchCase()
   }
 }

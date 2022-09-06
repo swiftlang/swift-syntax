@@ -139,7 +139,7 @@ extension Parser {
         }
         elements.append(RawCompositionTypeElementSyntax(
           type: elementType, ampersand: ampersand, arena: self.arena))
-      } while loopProgress.evaluate(currentToken) && keepGoing
+      } while keepGoing && loopProgress.evaluate(currentToken)
 
       base = RawTypeSyntax(RawCompositionTypeSyntax(
         elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
@@ -266,7 +266,7 @@ extension Parser {
           name: name, genericArgumentClause: generics, arena: self.arena))
       }
       keepGoing = self.consume(if: .period) ?? self.consume(if: .prefixPeriod)
-    } while loopProgress.evaluate(currentToken) && keepGoing != nil
+    } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
     return result!
   }
@@ -324,7 +324,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         arguments.append(RawGenericArgumentSyntax(
           argumentType: type, trailingComma: keepGoing, arena: self.arena))
-      } while loopProgress.evaluate(currentToken) && keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
     let rangle: RawTokenSyntax
@@ -365,7 +365,7 @@ extension Parser {
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while loopProgress.evaluate(currentToken) && !self.at(.eof) && !self.at(.rightParen) && keepGoing {
+      while !self.at(.eof) && !self.at(.rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
         let first: RawTokenSyntax?
         let second: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
@@ -533,7 +533,7 @@ extension Parser.Lookahead {
     // Handle type-function if we have an '->' with optional
     // 'async' and/or 'throws'.
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(currentToken) && self.currentToken.isEffectsSpecifier {
+    while self.currentToken.isEffectsSpecifier && loopProgress.evaluate(currentToken) {
       self.consumeAnyToken()
     }
 
@@ -580,10 +580,10 @@ extension Parser.Lookahead {
         // better if we skip over them.
         if self.consume(if: .equal) != nil {
           var skipProgress = LoopProgressCondition()
-          while skipProgress.evaluate(currentToken)
-                  && !self.at(.eof) && !self.at(.rightParen)
+          while !self.at(.eof) && !self.at(.rightParen)
                   && !self.at(.rightBrace) && !self.currentToken.isEllipsis
-                  && !self.at(.comma) && !self.isStartOfDeclaration() {
+                  && !self.at(.comma) && !self.isStartOfDeclaration()
+                  && skipProgress.evaluate(currentToken) {
             self.skipSingle()
           }
         }
@@ -599,7 +599,7 @@ extension Parser.Lookahead {
       if self.currentToken.isEllipsis {
         self.consumeAnyToken()
       }
-    } while loopProgress.evaluate(currentToken) && self.consume(if: .comma) != nil
+    } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
     return self.consume(if: .rightParen) != nil
   }
   
@@ -689,7 +689,7 @@ extension Parser.Lookahead {
       guard self.canParseTypeIdentifier() else {
         return false;
       }
-    } while loopProgress.evaluate(currentToken) && self.consume(if: .comma) != nil
+    } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
 
     // Check for the terminating '>'.
     guard self.currentToken.starts(with: ">") else {
@@ -740,7 +740,7 @@ extension Parser.Lookahead {
         return false
       }
       // Parse the comma, if the list continues.
-    } while loopProgress.evaluate(currentToken) && self.consume(if: .comma) != nil
+    } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
 
 
     guard self.currentToken.starts(with: ">") else {
@@ -790,13 +790,12 @@ extension Parser {
   public mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
     var elements = [RawSyntax]()
     var modifiersProgress = LoopProgressCondition()
-    while modifiersProgress.evaluate(currentToken)
-            && (self.at(.inoutKeyword)
-                || self.currentToken.isContextualKeyword("__shared")
-                || self.currentToken.isContextualKeyword("__owned")
-                || self.currentToken.isContextualKeyword("isolated")
-                || self.currentToken.isContextualKeyword("_const")
-            ) {
+    while (self.at(.inoutKeyword)
+           || self.currentToken.isContextualKeyword("__shared")
+           || self.currentToken.isContextualKeyword("__owned")
+           || self.currentToken.isContextualKeyword("isolated")
+           || self.currentToken.isContextualKeyword("_const")
+    ) && modifiersProgress.evaluate(currentToken) {
       if self.at(.inoutKeyword) {
         let inoutKeyword = self.eat(.inoutKeyword)
         elements.append(RawSyntax(inoutKeyword))
@@ -807,7 +806,7 @@ extension Parser {
     }
 
     var attributeProgress = LoopProgressCondition()
-    while attributeProgress.evaluate(currentToken) && self.at(.atSign) {
+    while self.at(.atSign) && attributeProgress.evaluate(currentToken) {
       elements.append(RawSyntax(self.parseTypeAttribute()))
     }
     return RawAttributeListSyntax(elements: elements, arena: self.arena)

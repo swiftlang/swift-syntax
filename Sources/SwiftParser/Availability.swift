@@ -56,7 +56,7 @@ extension Parser {
           var tokens = [RawTokenSyntax]()
           tokens.append(self.consumeAnyToken())
           var recoveryProgress = LoopProgressCondition()
-          while recoveryProgress.evaluate(currentToken) && !self.at(.eof) && !self.at(.comma) && !self.at(.rightParen) {
+          while !self.at(.eof) && !self.at(.comma) && !self.at(.rightParen) && recoveryProgress.evaluate(currentToken) {
             tokens.append(self.consumeAnyToken())
           }
           let syntax = RawTokenListSyntax(elements: tokens, arena: self.arena)
@@ -64,7 +64,7 @@ extension Parser {
           elements.append(RawAvailabilityArgumentSyntax(
             entry: RawSyntax(syntax), trailingComma: keepGoing, arena: self.arena))
         }
-      } while availablityArgumentProgress.evaluate(currentToken) && keepGoing != nil
+      } while keepGoing != nil && availablityArgumentProgress.evaluate(currentToken)
     }
 
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
@@ -91,7 +91,7 @@ extension Parser {
 
     do {
       var loopProgressCondition = LoopProgressCondition()
-      while loopProgressCondition.evaluate(currentToken) && keepGoing != nil {
+      while keepGoing != nil && loopProgressCondition.evaluate(currentToken) {
         guard self.currentToken.tokenKind == .identifier,
               let argKind = AvailabilityArgumentKind(rawValue: self.currentToken.tokenText) else {
           // Not sure what this label is but, let's just eat it and

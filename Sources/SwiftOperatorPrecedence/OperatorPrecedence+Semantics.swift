@@ -73,9 +73,9 @@ extension Operator {
 
     name = syntax.identifier.text
 
-    if let groupSyntax = syntax.operatorPrecedenceAndTypes?
+    if let operatorSyntax = syntax.operatorPrecedenceAndTypes?
         .precedenceGroupAndDesignatedTypes {
-      precedenceGroup = groupSyntax.firstToken?.text
+      precedenceGroup = operatorSyntax.firstToken?.text
     } else {
       precedenceGroup = nil
     }

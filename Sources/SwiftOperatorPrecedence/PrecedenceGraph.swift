@@ -72,10 +72,10 @@ struct PrecedenceGraph {
 
     var stack: [(PrecedenceGroupName, Syntax?)] =
       [(initialGroupName, initialSyntax)]
-    while let (currentGroupName, currentGroupSyntax) = stack.popLast() {
+    while let (currentGroupName, currentOperatorSyntax) = stack.popLast() {
       guard let currentGroup = lookupGroup(currentGroupName) else {
         try errorHandler(
-          .missingGroup(currentGroupName, referencedFrom: currentGroupSyntax))
+          .missingGroup(currentGroupName, referencedFrom: currentOperatorSyntax))
         continue
       }
 

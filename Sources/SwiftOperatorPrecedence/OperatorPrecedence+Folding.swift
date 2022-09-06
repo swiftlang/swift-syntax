@@ -176,9 +176,9 @@ extension OperatorPrecedence {
   /// Determine the associativity between two precedence groups.
   private func associativity(
     firstGroup: PrecedenceGroupName?,
-    firstGroupSyntax: Syntax?,
+    firstOperatorSyntax: Syntax?,
     secondGroup: PrecedenceGroupName?,
-    secondGroupSyntax: Syntax?,
+    secondOperatorSyntax: Syntax?,
     errorHandler: OperatorPrecedenceErrorHandler = { throw $0 }
   ) rethrows -> Associativity {
     guard let firstGroup = firstGroup, let secondGroup = secondGroup else {
@@ -189,7 +189,7 @@ extension OperatorPrecedence {
     if firstGroup == secondGroup {
       guard let group = precedenceGraph.lookupGroup(firstGroup) else {
         try errorHandler(
-          .missingGroup(firstGroup, referencedFrom: firstGroupSyntax))
+          .missingGroup(firstGroup, referencedFrom: firstOperatorSyntax))
         return .none
       }
 
@@ -198,7 +198,7 @@ extension OperatorPrecedence {
 
     let prec = try precedenceGraph.precedence(
       relating: firstGroup, to: secondGroup,
-      startSyntax: firstGroupSyntax, endSyntax: secondGroupSyntax,
+      startSyntax: firstOperatorSyntax, endSyntax: secondOperatorSyntax,
       errorHandler: errorHandler
     )
 
@@ -288,9 +288,9 @@ extension OperatorPrecedence {
 
       let associativity = try associativity(
         firstGroup: op1Precedence,
-        firstGroupSyntax: Syntax(op1),
+        firstOperatorSyntax: Syntax(op1),
         secondGroup: op2Precedence,
-        secondGroupSyntax: Syntax(op2),
+        secondOperatorSyntax: Syntax(op2),
         errorHandler: errorHandler
       )
 

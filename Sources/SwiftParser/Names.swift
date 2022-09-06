@@ -100,7 +100,8 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawDeclNameArgumentSyntax]()
     do {
-      while !self.at(.eof) && !self.at(.rightParen) {
+      var loopProgress = LoopProgressCondition()
+      while loopProgress.evaluate(currentToken) && !self.at(.eof) && !self.at(.rightParen) {
         // Check to see if there is an argument label.
         assert(self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
@@ -126,7 +127,8 @@ extension Parser.Lookahead {
       return false
     }
 
-    while !lookahead.at(.eof) && !lookahead.at(.rightParen) {
+    var loopProgress = LoopProgressCondition()
+    while loopProgress.evaluate(lookahead.currentToken) && !lookahead.at(.eof) && !lookahead.at(.rightParen) {
       // Check to see if there is an argument label.
       guard lookahead.currentToken.canBeArgumentLabel && lookahead.peek().tokenKind == .colon else {
         return false

@@ -592,12 +592,13 @@ extension Parser {
           //   #if CONDITION_1
           //     #if CONDITION_2
           //       .someMember
+          var loopProgress = LoopProgressCondition()
           repeat {
             backtrack.eat(.poundIfKeyword)
             while !backtrack.at(.eof) && !backtrack.currentToken.isAtStartOfLine {
               backtrack.skipSingle()
             }
-          } while backtrack.at(.poundIfKeyword)
+          } while loopProgress.evaluate(backtrack.currentToken) && backtrack.at(.poundIfKeyword)
 
           guard backtrack.isAtStartOfPostfixExprSuffix() else {
             break
@@ -1191,7 +1192,8 @@ extension Parser {
           // over, eat the remaining tokens into a token list.
           var runexpectedTokens = [RawSyntax]()
           let runexpected: RawUnexpectedNodesSyntax?
-          while !subparser.at(.eof) && !subparser.at(.rightParen) {
+          var loopProgress = LoopProgressCondition()
+          while loopProgress.evaluate(subparser.currentToken) && !subparser.at(.eof) && !subparser.at(.rightParen) {
             runexpectedTokens.append(RawSyntax(subparser.consumeAnyToken()))
           }
           if !runexpectedTokens.isEmpty {
@@ -1284,6 +1286,7 @@ extension Parser {
     do {
       var flags: DeclNameOptions = .compoundNames
       var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the next name.
         let (name, _) = self.parseDeclNameRef(flags)
@@ -1295,7 +1298,7 @@ extension Parser {
         keepGoing = self.consume(if: .period)
         elements.append(RawObjcNamePieceSyntax(
           name: name, dot: keepGoing, arena: self.arena))
-      } while keepGoing != nil
+      } while loopProgress.evaluate(currentToken) && keepGoing != nil
     }
 
     // Parse the closing ')'.
@@ -1567,7 +1570,8 @@ extension Parser {
     // Parse the body.
     var elements = [RawCodeBlockItemSyntax]()
     do {
-      while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
+      var loopProgress = LoopProgressCondition()
+      while loopProgress.evaluate(currentToken) && !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
         elements.append(newItem)
       }
     }
@@ -1631,6 +1635,7 @@ extension Parser {
       var elements = [RawClosureCaptureItemSyntax]()
       do {
         var keepGoing: RawTokenSyntax? = nil
+        var loopProgress = LoopProgressCondition()
         repeat {
           // Parse any specifiers on the capture like `weak` or `unowned`
           let specifier = self.parseClosureCaptureSpecifiers()
@@ -1661,7 +1666,7 @@ extension Parser {
             expression: expression,
             trailingComma: keepGoing,
             arena: self.arena))
-        } while keepGoing != nil
+        } while loopProgress.evaluate(currentToken) && keepGoing != nil
       }
       let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
 
@@ -1684,6 +1689,7 @@ extension Parser {
         input = RawSyntax(self.parseParameterClause(isClosure: true))
       } else {
         var params = [RawClosureParamSyntax]()
+        var loopProgress = LoopProgressCondition()
         do {
           // Parse identifier (',' identifier)*
           var keepGoing: RawTokenSyntax? = nil
@@ -1697,7 +1703,7 @@ extension Parser {
             keepGoing = consume(if: .comma)
             params.append(RawClosureParamSyntax(
               name: name, trailingComma: keepGoing, arena: self.arena))
-          } while keepGoing != nil
+          } while loopProgress.evaluate(currentToken) && keepGoing != nil
         }
 
         input = RawSyntax(RawClosureParamListSyntax(elements: params, arena: self.arena))
@@ -1787,6 +1793,7 @@ extension Parser {
 
     var result = [RawTupleExprElementSyntax]()
     var keepGoing: RawTokenSyntax? = nil
+    var loopProgress = LoopProgressCondition()
     repeat {
       let label: RawTokenSyntax?
       let colon: RawTokenSyntax?
@@ -1813,7 +1820,7 @@ extension Parser {
       keepGoing = self.consume(if: .comma)
       result.append(RawTupleExprElementSyntax(
         label: label, colon: colon, expression: expr, trailingComma: keepGoing, arena: self.arena))
-    } while keepGoing != nil
+    } while loopProgress.evaluate(currentToken) && keepGoing != nil
     return result
   }
 
@@ -1859,7 +1866,8 @@ extension Parser {
 
     // Parse labeled trailing closures.
     var elements = [RawMultipleTrailingClosureElementSyntax]()
-    while self.lookahead().isStartOfLabelledTrailingClosure() {
+    var loopProgress = LoopProgressCondition()
+    while loopProgress.evaluate(currentToken) && self.lookahead().isStartOfLabelledTrailingClosure() {
       let label = self.parseArgumentLabel()
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let closure = self.parseClosureExpression()
@@ -1941,7 +1949,8 @@ extension Parser.Lookahead {
     // consider it part of the preceding expression
     var backtrack = self.lookahead()
     backtrack.eat(.leftBrace)
-    while !backtrack.at(.eof) && !backtrack.at(.rightBrace) {
+    var loopProgress = LoopProgressCondition()
+    while loopProgress.evaluate(backtrack.currentToken) && !backtrack.at(.eof) && !backtrack.at(.rightBrace) {
       backtrack.consumeAnyToken()
     }
 
@@ -1980,7 +1989,10 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   // Consume 'async', 'throws', and 'rethrows', but in any order.
   mutating func consumeEffectsSpecifiers() {
-    while self.currentToken.isEffectsSpecifier && !self.currentToken.isAtStartOfLine {
+    var loopProgress = LoopProgressCondition()
+    while loopProgress.evaluate(currentToken)
+            && self.currentToken.isEffectsSpecifier
+            && !self.currentToken.isAtStartOfLine {
       self.consumeAnyToken()
     }
   }
@@ -1988,7 +2000,8 @@ extension Parser.Lookahead {
   func canParseClosureSignature() -> Bool {
     // Consume attributes.
     var lookahead = self.lookahead()
-    while lookahead.at(.atSign) {
+    var attributesProgress = LoopProgressCondition()
+    while attributesProgress.evaluate(lookahead.currentToken) && lookahead.at(.atSign) {
       lookahead.eat(.atSign)
       guard lookahead.currentToken.isIdentifier else {
         break
@@ -1998,7 +2011,10 @@ extension Parser.Lookahead {
 
     // Skip by a closure capture list if present.
     if lookahead.consume(if: .leftSquareBracket) != nil {
-      while !lookahead.at(.eof) && !lookahead.at(.rightSquareBracket) {
+      var captureListProgress = LoopProgressCondition()
+      while captureListProgress.evaluate(lookahead.currentToken)
+              && !lookahead.at(.eof)
+              && !lookahead.at(.rightSquareBracket) {
         lookahead.consumeAnyToken()
       }
 
@@ -2011,7 +2027,8 @@ extension Parser.Lookahead {
     if lookahead.consume(if: .leftParen) != nil {      // Consume the ')'.
 
       // While we don't have '->' or ')', eat balanced tokens.
-      while !lookahead.at(.eof) && !lookahead.at(.rightParen) {
+      var skipProgress = LoopProgressCondition()
+      while skipProgress.evaluate(lookahead.currentToken) && !lookahead.at(.eof) && !lookahead.at(.rightParen) {
         lookahead.skipSingle()
       }
 
@@ -2032,7 +2049,8 @@ extension Parser.Lookahead {
     } else if lookahead.currentToken.isIdentifier || lookahead.at(.wildcardKeyword) {
       // Parse identifier (',' identifier)*
       lookahead.consumeAnyToken()
-      while lookahead.consume(if: .comma) != nil {
+      var parametersProgress = LoopProgressCondition()
+      while parametersProgress.evaluate(lookahead.currentToken) && lookahead.consume(if: .comma) != nil {
         if lookahead.currentToken.isIdentifier || lookahead.at(.wildcardKeyword) {
           lookahead.consumeAnyToken()
           continue

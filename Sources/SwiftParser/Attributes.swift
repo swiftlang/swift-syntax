@@ -19,10 +19,11 @@ extension Parser {
     }
 
     var elements = [RawSyntax]()
+    var loopProgress = LoopProgressCondition()
     repeat {
       let attribute = self.parseAttribute()
       elements.append(attribute)
-    } while self.at(.atSign)
+    } while loopProgress.evaluate(currentToken) && self.at(.atSign)
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
   }
 }
@@ -190,7 +191,8 @@ extension Parser {
     if self.at(.leftParen) {
       var args = [RawTokenSyntax]()
       leftParen = self.eat(.leftParen)
-      while !self.at(.eof), !self.at(.rightParen) {
+      var loopProgress = LoopProgressCondition()
+      while loopProgress.evaluate(currentToken) && !self.at(.eof), !self.at(.rightParen) {
         args.append(self.consumeAnyToken())
       }
       arg = RawSyntax(RawTokenListSyntax(elements: args, arena: self.arena))
@@ -355,7 +357,8 @@ extension Parser {
 
     let leftParen = self.eat(.leftParen)
     var elements = [RawDifferentiabilityParamSyntax]()
-    while !self.at(.eof) && !self.at(.rightParen) {
+    var loopProgress = LoopProgressCondition()
+    while loopProgress.evaluate(currentToken) && !self.at(.eof) && !self.at(.rightParen) {
       guard let param = self.parseDifferentiabilityParameter() else {
         break
       }
@@ -436,7 +439,8 @@ extension Parser {
 
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
-    while !self.at(.eof) && !self.at(.rightParen) {
+    var loopProgress = LoopProgressCondition()
+    while loopProgress.evaluate(currentToken) && !self.at(.eof) && !self.at(.rightParen) {
       // Empty selector piece.
       if self.at(.colon) {
         let colon = self.eat(.colon)
@@ -491,7 +495,8 @@ extension Parser {
   mutating func parseSpecializeAttributeSpecList() -> RawSpecializeAttributeSpecListSyntax {
     var elements = [RawSyntax]()
     // Parse optional "exported" and "kind" labeled parameters.
-    while !self.at(.eof) && !self.at(.rightParen) && !self.at(.whereKeyword) {
+    var loopProgress = LoopProgressCondition()
+    while loopProgress.evaluate(currentToken) && !self.at(.eof) && !self.at(.rightParen) && !self.at(.whereKeyword) {
       let ident = self.parseAnyIdentifier()
       let knownParameter = SpecializeParameter(rawValue: ident.tokenText)
       let (unexpectedBeforeColon, colon) = self.expect(.colon)

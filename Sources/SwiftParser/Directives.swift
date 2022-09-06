@@ -69,6 +69,7 @@ extension Parser {
     var clauses = [RawIfConfigClauseSyntax]()
     do {
       var poundIf = self.eat(.poundIfKeyword)
+      var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the condition.
         let condition: RawExprSyntax?
@@ -85,7 +86,12 @@ extension Parser {
 
         var elements = [Element]()
         do {
-          while !self.at(.eof) && !self.at(.poundElseKeyword) && !self.at(.poundElseifKeyword) && !self.at(.poundEndifKeyword) {
+          var elementsProgress = LoopProgressCondition()
+          while elementsProgress.evaluate(currentToken)
+                  && !self.at(.eof)
+                  && !self.at(.poundElseKeyword)
+                  && !self.at(.poundElseifKeyword)
+                  && !self.at(.poundEndifKeyword) {
             guard let element = parseElement(&self) else {
               break
             }
@@ -98,7 +104,7 @@ extension Parser {
           condition: condition,
           elements: syntax(&self, elements),
           arena: self.arena))
-      } while self.at(.poundElseifKeyword) || self.at(.poundElseKeyword)
+      } while loopProgress.evaluate(currentToken) && self.at(.poundElseifKeyword) || self.at(.poundElseKeyword)
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)

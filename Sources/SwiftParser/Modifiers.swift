@@ -181,29 +181,33 @@ extension Parser {
         .fileprivateKeyword,
         .internalKeyword,
         .publicKeyword
-      ].contains(self.currentToken.tokenKind)
+      ].contains(currentToken.tokenKind)
     )
-    let name = self.consumeAnyToken()
+    let name = consumeAnyToken()
     let details: RawDeclModifierDetailSyntax?
-    if let lparen = self.consume(if: .leftParen) {
+    if let lparen = consume(if: .leftParen) {
       var beforeDetail: [RawSyntax] = []
       var detail: RawTokenSyntax? = nil
       var afterDetail: [RawSyntax] = []
 
-      let (content, rightParen) = expect(.rightParen)
-      if let content = content {
-        for element in content.elements {
-          if let _ = detail {
-            afterDetail.append(element)
-          } else if let token = element.as(RawTokenSyntax.self),
-                    [RawTokenKind.identifier, .contextualKeyword].contains(token.tokenKind),
-                    token.tokenText == "set"
-          {
-            detail = token
-          } else {
-            beforeDetail.append(element)
-          }
+      let rightParenPrecedence = TokenPrecedence(.rightParen)
+
+      // Find `set` keyword during eat all tokens as junk
+      // until reach to right-paren or other strong token.
+      while !at(.eof),
+            TokenPrecedence(currentToken.tokenKind) < rightParenPrecedence
+      {
+        if currentToken.isContextualKeyword("set") {
+          detail = consume(remapping: .contextualKeyword)
+          break
         }
+        beforeDetail.append(RawSyntax(consumeAnyToken()))
+      }
+
+      // Eat rest of junk and right-paren
+      let (junk, rightParen) = expect(.rightParen)
+      if let junk = junk {
+        afterDetail.append(contentsOf: junk.elements)
       }
       
       details = RawDeclModifierDetailSyntax(
@@ -222,13 +226,13 @@ extension Parser {
             elements: afterDetail, arena: arena
           ),
         rightParen: rightParen,
-        arena: self.arena
+        arena: arena
       )
     } else {
       details = nil
     }
     return RawDeclModifierSyntax(
-      name: name, detail: details, arena: self.arena
+      name: name, detail: details, arena: arena
     )
   }
 }

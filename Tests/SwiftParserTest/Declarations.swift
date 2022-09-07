@@ -215,6 +215,26 @@ final class DeclarationTests: XCTestCase {
   func testAccessLevelModifier() {
     AssertParse(
       """
+      private(#^DIAG^#+
+        set
+      )
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text '+' found in modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DIAG^#get: set)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text 'get:' found in modifier")
+      ]
+    )
+
+    AssertParse(
+      """
       private(#^DIAG^#
       """,
       diagnostics: [
@@ -225,23 +245,22 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse(
       """
-      private(#^DIAG^#get#^DTOP^#, set, didSet)
+      private(#^LEFT^#get, set#^RIGHT^#, didSet)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected 'set' in modifier"),
-        DiagnosticSpec(message: "Expected ')' to end modifier"),
-        DiagnosticSpec(locationMarker: "DTOP", message: "Extraneous ', set, didSet)' at top level")
+        DiagnosticSpec(locationMarker: "LEFT", message: "Unexpected text 'get,' found in modifier"),
+        DiagnosticSpec(locationMarker: "RIGHT", message: "Unexpected text ', didSet' found in modifier")
       ]
     )
 
     AssertParse(
       """
-      private(#^DIAG^#get#^DTOP^#, didSet
+      private(#^LEFT^#get, didSet#^RIGHT^#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Expected 'set' in modifier"),
-        DiagnosticSpec(message: "Expected ')' to end modifier"),
-        DiagnosticSpec(locationMarker: "DTOP", message: "Extraneous ', didSet' at top level")
+        DiagnosticSpec(locationMarker: "LEFT", message: "Unexpected text 'get, didSet' found in modifier"),
+        DiagnosticSpec(locationMarker: "RIGHT", message: "Expected 'set' in modifier"),
+        DiagnosticSpec(locationMarker: "RIGHT", message: "Expected ')' to end modifier")
       ]
     )
   }

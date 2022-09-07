@@ -453,7 +453,7 @@ extension OperatorTable {
   public func foldAll<Node: SyntaxProtocol>(
     _ node: Node,
     errorHandler: OperatorErrorHandler = { throw $0 }
-  ) rethrows -> SyntaxProtocol {
+  ) rethrows -> Syntax {
     return try withoutActuallyEscaping(errorHandler) { errorHandler in
       let folder = SequenceFolder(
         opPrecedence: self, errorHandler: errorHandler

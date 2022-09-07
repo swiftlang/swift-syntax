@@ -67,7 +67,7 @@ func foldAllSequences(_ tree: SourceFileSyntax) -> (Syntax, [Diagnostic]) {
   var operatorTable = OperatorTable.standardOperators
   operatorTable.addSourceFile(tree, errorHandler: recordOperatorError)
   let resultTree = operatorTable.foldAll(tree, errorHandler: recordOperatorError)
-  return (Syntax(resultTree), diags)
+  return (resultTree, diags)
 }
 
 class VerifyRoundTrip: ParsableCommand {

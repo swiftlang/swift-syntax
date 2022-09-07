@@ -35,6 +35,10 @@ add_library(SwiftParser STATIC
 target_link_libraries(SwiftParser PUBLIC
   SwiftSyntax
   SwiftDiagnostics)
+  
+target_include_directories(SwiftParser PUBLIC
+         "${CMAKE_CURRENT_BINARY_DIR}/../SwiftSyntax"
+         "${CMAKE_CURRENT_BINARY_DIR}/../SwiftDiagnostics")
 
 set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftParser)
 

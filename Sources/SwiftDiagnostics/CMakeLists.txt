@@ -14,6 +14,9 @@ add_library(SwiftDiagnostics STATIC
 
 target_link_libraries(SwiftDiagnostics PUBLIC
   SwiftSyntax)
+  
+target_include_directories(SwiftDiagnostics PUBLIC
+         "${CMAKE_CURRENT_BINARY_DIR}/../SwiftSyntax")
 
 set_property(GLOBAL APPEND PROPERTY SWIFTSYNTAX_EXPORTS SwiftDiagnostics)
 

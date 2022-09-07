@@ -1991,7 +1991,6 @@ extension Parser.Lookahead {
   mutating func consumeEffectsSpecifiers() {
     var loopProgress = LoopProgressCondition()
     while self.currentToken.isEffectsSpecifier
-            && !self.currentToken.isAtStartOfLine
             && loopProgress.evaluate(currentToken) {
       self.consumeAnyToken()
     }

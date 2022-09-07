@@ -32,4 +32,12 @@ final class TypeTests: XCTestCase {
       DiagnosticSpec(message: "Unexpected text '..' found in function type")
     ])
   }
+
+  func testClosureSignatures() throws {
+    AssertParse("""
+                { ()
+                throws -> Void in }
+                """,
+                { $0.parseClosureExpression() })
+  }
 }

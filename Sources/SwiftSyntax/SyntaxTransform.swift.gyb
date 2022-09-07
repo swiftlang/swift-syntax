@@ -36,8 +36,13 @@ public protocol SyntaxTransformVisitor {
 }
 
 extension SyntaxTransformVisitor {
-  public func visit(_ token: TokenSyntax) -> ResultType { visitAny(Syntax(token)) }
-  public func visit(_ node: UnknownSyntax) -> ResultType { visitAny(Syntax(node)) }
+  public func visit(_ token: TokenSyntax) -> ResultType {
+    visitAny(Syntax(token))
+  }
+
+  public func visit(_ node: UnknownSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
@@ -45,71 +50,34 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ${node.name}) -> ResultType {
-      visitAny(Syntax(node))
+    visitAny(Syntax(node))
   }
 %   end
 % end
 
-  public func visit(_ data: Syntax) -> ResultType {
-    switch data.raw.kind {
-    case .token:
-      let node = TokenSyntax(data)!
+  public func visit(_ node: Syntax) -> ResultType {
+    switch node.as(SyntaxEnum.self) {
+    case .token(let node):
       return visit(node)
-    case .unknown:
-      let node = UnknownSyntax(data)!
+    case .unknown(let node):
       return visit(node)
-    // The implementation of every generated case goes into its own function. This
-    // circumvents an issue where the compiler allocates stack space for every
-    // case statement next to each other in debug builds, causing it to allocate
-    // ~50KB per call to this function. rdar://55929175
-  % for node in NON_BASE_SYNTAX_NODES:
-    case .${node.swift_syntax_kind}:
-      let node = ${node.name}(data)!
-      return visit(node)
-  % end
+% for node in NON_BASE_SYNTAX_NODES:
+    case .${node.swift_syntax_kind}(let derived):
+      return visit(derived)
+% end
     }
   }
   
-  public func visit(_ data: ExprSyntax) -> ResultType {
-    switch data.raw.kind {
-  % for node in NON_BASE_SYNTAX_NODES:
-  %   if node.base_kind == "Expr":
-    case .${node.swift_syntax_kind}:
-      let node = data.as(${node.name}.self)!
-      return visit(node)
-  %   end
-  % end
-    default:
-      fatalError("Not expression?")
-    }
+  public func visit(_ node: ExprSyntax) -> ResultType {
+    visit(Syntax(node))
   }
   
-  public func visit(_ data: PatternSyntax) -> ResultType {
-    switch data.raw.kind {
-  % for node in NON_BASE_SYNTAX_NODES:
-  %   if node.base_kind == "Pattern":
-    case .${node.swift_syntax_kind}:
-      let node = data.as(${node.name}.self)!
-      return visit(node)
-  %   end
-  % end
-    default:
-      fatalError("Not expression?")
-    }
+  public func visit(_ node: PatternSyntax) -> ResultType {
+    visit(Syntax(node))
   }
   
-  public func visit(_ data: TypeSyntax) -> ResultType {
-    switch data.raw.kind {
-  % for node in NON_BASE_SYNTAX_NODES:
-  %   if node.base_kind == "Type":
-    case .${node.swift_syntax_kind}:
-      let node = data.as(${node.name}.self)!
-      return visit(node)
-  %   end
-  % end
-    default:
-      fatalError("Not expression?")
-    }
+  public func visit(_ node: TypeSyntax) -> ResultType {
+    visit(Syntax(node))
   }
 
   public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {

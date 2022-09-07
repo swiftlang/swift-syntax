@@ -39,5 +39,9 @@ final class TypeTests: XCTestCase {
                 throws -> Void in }
                 """,
                 { $0.parseClosureExpression() })
+
+    AssertParse("""
+                { [weak a, unowned(safe) self, b = 3] (a: Int, b: Int, _: Int) -> Int in }
+                """)
   }
 }

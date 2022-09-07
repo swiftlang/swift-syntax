@@ -1694,15 +1694,17 @@ extension Parser {
           // Parse identifier (',' identifier)*
           var keepGoing: RawTokenSyntax? = nil
           repeat {
+            let unexpected: RawUnexpectedNodesSyntax?
             let name: RawTokenSyntax
             if self.currentToken.isIdentifier {
+              unexpected = nil
               name = self.consumeIdentifier()
             } else {
-              name = self.eat(.wildcardKeyword)
+              (unexpected, name) = self.expect(.wildcardKeyword)
             }
             keepGoing = consume(if: .comma)
             params.append(RawClosureParamSyntax(
-              name: name, trailingComma: keepGoing, arena: self.arena))
+              unexpected, name: name, trailingComma: keepGoing, arena: self.arena))
           } while keepGoing != nil && loopProgress.evaluate(currentToken)
         }
 
@@ -1751,7 +1753,11 @@ extension Parser {
         specifiers.append(self.consumeIdentifier())
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
-          specifiers.append(self.expectWithoutLookahead(.identifier, "unsafe"))
+          if self.currentToken.tokenText == "safe" {
+            specifiers.append(self.expectWithoutLookahead(.identifier, "safe"))
+          } else {
+            specifiers.append(self.expectWithoutLookahead(.identifier, "unsafe"))
+          }
           specifiers.append(self.expectWithoutLookahead(.rightParen))
         }
       } else if (self.currentToken.isIdentifier || self.at(.selfKeyword)) {

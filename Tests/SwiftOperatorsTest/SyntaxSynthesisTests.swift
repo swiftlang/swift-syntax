@@ -39,4 +39,23 @@ public class SyntaxSynthesisTests: XCTestCase {
       }
       """)
   }
+
+  func testLogicalOperatorTable() {
+    let table = OperatorTable.logicalOperators
+    XCTAssertEqual(
+      table.description,
+      """
+      precedencegroup LogicalConjunctionPrecedence {
+          associativity: left
+          higherThan: LogicalDisjunctionPrecedence
+      }
+      precedencegroup LogicalDisjunctionPrecedence {
+          associativity: left
+      }
+      infix operator &&: LogicalConjunctionPrecedence
+      infix operator ||: LogicalDisjunctionPrecedence
+
+      """
+    )
+  }
 }

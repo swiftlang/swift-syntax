@@ -118,3 +118,10 @@ public struct PrecedenceGroup {
     self.syntax = syntax
   }
 }
+
+extension PrecedenceGroup: CustomStringConvertible {
+  /// The description of a precedence group is the source code that produces it.
+  public var description: String {
+    (syntax ?? synthesizedSyntax()).description
+  }
+}

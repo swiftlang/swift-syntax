@@ -48,3 +48,10 @@ public struct Operator {
     self.syntax = syntax
   }
 }
+
+extension Operator: CustomStringConvertible {
+  /// The description of an operator is the source code that produces it.
+  public var description: String {
+    (syntax ?? synthesizedSyntax()).description
+  }
+}

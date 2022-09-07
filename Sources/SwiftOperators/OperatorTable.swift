@@ -97,3 +97,31 @@ extension OperatorTable {
     return op.precedenceGroup
   }
 }
+
+extension OperatorTable: CustomStringConvertible {
+  /// The description of an operator table is the source code that produces it.
+  public var description: String {
+    var result = ""
+
+    // Turn all of the dictionary values into their string representations.
+    func add<Key: Comparable, Value: CustomStringConvertible>(
+      _ dict: [Key : Value]
+    ) {
+      if dict.isEmpty {
+        return
+      }
+
+      result.append(contentsOf: dict.sorted { $0.key < $1.key }
+        .map { $0.value.description }
+        .joined(separator: "\n"))
+
+      result += "\n"
+    }
+
+    add(precedenceGraph.precedenceGroups)
+    add(prefixOperators)
+    add(postfixOperators)
+    add(infixOperators)
+    return result
+  }
+}

@@ -21,4 +21,22 @@ public class SyntaxSynthesisTests: XCTestCase {
     XCTAssertEqual(
       plusSyntax.description, "infix operator +: AdditivePrecedence")
   }
+
+  func testPrecedenceGroup() {
+    let group = PrecedenceGroup(
+      name: "MyGroup", associativity: .right, assignment: true,
+      relations: [ .lowerThan("BetterGroup"), .higherThan("WorseGroup")]
+    )
+    let groupSyntax = group.synthesizedSyntax()
+    XCTAssertEqual(
+      groupSyntax.description,
+      """
+      precedencegroup MyGroup {
+          associativity: right
+          assignment: true
+          lowerThan: BetterGroup
+          higherThan: WorseGroup
+      }
+      """)
+  }
 }

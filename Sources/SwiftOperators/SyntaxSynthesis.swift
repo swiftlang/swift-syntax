@@ -19,14 +19,14 @@ extension Operator {
     let modifiers = ModifierListSyntax(
       [DeclModifierSyntax(name: .identifier("\(kind)"), detail: nil)]
     )
-    let operatorKeyword = TokenSyntax.operatorKeyword(leadingTrivia: .spaces(1))
+    let operatorKeyword = TokenSyntax.operatorKeyword(leadingTrivia: .space)
     let identifierSyntax =
-      TokenSyntax.identifier(name, leadingTrivia: .spaces(1))
+      TokenSyntax.identifier(name, leadingTrivia: .space)
     let precedenceGroupSyntax = precedenceGroup.map { groupName in
       OperatorPrecedenceAndTypesSyntax(
         colon: .colonToken(),
         precedenceGroupAndDesignatedTypes: IdentifierListSyntax(
-          [.identifier(groupName, leadingTrivia: .spaces(1))]
+          [.identifier(groupName, leadingTrivia: .space)]
         )
       )
     }
@@ -35,6 +35,91 @@ extension Operator {
       attributes: nil, modifiers: modifiers, operatorKeyword: operatorKeyword,
       identifier: identifierSyntax,
       operatorPrecedenceAndTypes: precedenceGroupSyntax
+    )
+  }
+}
+
+extension PrecedenceGroup {
+  /// Synthesize a syntactic representation of this precedence group based on
+  /// its semantic definition.
+  public func synthesizedSyntax(
+    indentation: Int = 4
+  ) -> PrecedenceGroupDeclSyntax {
+    let precedencegroupKeyword = TokenSyntax.precedencegroupKeyword()
+    let identifierSyntax =
+      TokenSyntax.identifier(name, leadingTrivia: .space)
+    let leftBrace = TokenSyntax.leftBraceToken(leadingTrivia: .space)
+
+    var groupAttributes: [Syntax] = []
+
+    switch associativity {
+    case .left, .right:
+      groupAttributes.append(
+        Syntax(
+          PrecedenceGroupAssociativitySyntax(
+            associativityKeyword:
+                .identifier(
+                  "associativity",
+                  leadingTrivia: [ .newlines(1), .spaces(indentation) ]
+                ),
+            colon: .colonToken(),
+            value: .identifier("\(associativity)", leadingTrivia: .space)
+          )
+        )
+      )
+
+    case .none:
+      // None is the default associativity.
+      break
+    }
+
+    if assignment {
+      groupAttributes.append(
+        Syntax(
+          PrecedenceGroupAssignmentSyntax(
+            assignmentKeyword:
+                .identifier(
+                  "assignment",
+                  leadingTrivia: [ .newlines(1), .spaces(indentation) ]
+                ),
+            colon: .colonToken(),
+            flag: .trueKeyword(leadingTrivia: .space)
+          )
+        )
+      )
+    }
+
+    for relation in relations {
+      groupAttributes.append(
+        Syntax(
+          PrecedenceGroupRelationSyntax(
+            higherThanOrLowerThan: .contextualKeyword(
+              "\(relation.kind)",
+              leadingTrivia: [ .newlines(1), .spaces(indentation) ]
+            ),
+            colon: .colonToken(),
+            otherNames: PrecedenceGroupNameListSyntax(
+              [
+                PrecedenceGroupNameElementSyntax(
+                  name: .identifier(relation.groupName, leadingTrivia:  .space),
+                  trailingComma: nil)
+              ]
+            )
+          )
+        )
+      )
+    }
+
+    let rightBrace = TokenSyntax.rightBraceToken(
+      leadingTrivia: groupAttributes.isEmpty ? .space : .newline
+    )
+
+    return PrecedenceGroupDeclSyntax(
+      attributes: nil, modifiers: nil,
+      precedencegroupKeyword: precedencegroupKeyword,
+      identifier: identifierSyntax, leftBrace: leftBrace,
+      groupAttributes: PrecedenceGroupAttributeListSyntax(groupAttributes),
+      rightBrace: rightBrace
     )
   }
 }

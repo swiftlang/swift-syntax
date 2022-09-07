@@ -281,8 +281,7 @@ extension Parser.Lookahead {
           return true // isolated :
         }
         backtrack.consumeAnyToken()
-        backtrack.consumeAnyToken()
-        return backtrack.currentToken.canBeArgumentLabel && nextTok.tokenKind == .colon
+        return backtrack.currentToken.canBeArgumentLabel && backtrack.peek().tokenKind == .colon
       }
     }
 

@@ -732,6 +732,12 @@ final class DeclarationTests: XCTestCase {
     }
     """#)
   }
+
+  func testAnyAsParameterLabel() {
+    AssertParse(
+      "func at(any kinds: [RawTokenKind]) {}"
+    )
+  }
 }
 
 extension Parser.DeclAttributes {

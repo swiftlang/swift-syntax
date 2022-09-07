@@ -15,6 +15,8 @@
 public protocol SyntaxTransformVisitor {
   associatedtype ResultType = Void
   
+  func visitAny(_ node: Syntax) -> ResultType
+  
   func visit(_ token: TokenSyntax) -> ResultType
   func visit(_ node: UnknownSyntax) -> ResultType
   
@@ -1073,1586 +1075,1586 @@ public protocol SyntaxTransformVisitor {
 }
 
 extension SyntaxTransformVisitor {
-  public func visit(_ token: TokenSyntax) -> ResultType { fatalError("Not implemented.") }
-  public func visit(_ node: UnknownSyntax) -> ResultType { fatalError("Not implemented.") }
+  public func visit(_ token: TokenSyntax) -> ResultType { visitAny(Syntax(token)) }
+  public func visit(_ node: UnknownSyntax) -> ResultType { visitAny(Syntax(node)) }
 
   /// Visiting `UnknownDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnknownDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnknownExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnknownExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnknownStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnknownStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnknownTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnknownTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnknownPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnknownPatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MissingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MissingDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MissingExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MissingStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MissingTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MissingPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingPatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CodeBlockItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CodeBlockItemSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CodeBlockItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CodeBlockItemListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CodeBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CodeBlockSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnexpectedNodesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnexpectedNodesSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InOutExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundColumnExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundColumnExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TupleExprElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleExprElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ArrayElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DictionaryElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `StringLiteralSegmentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StringLiteralSegmentsSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TryExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AwaitExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AwaitExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MoveExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MoveExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeclNameArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameArgumentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeclNameArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameArgumentListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeclNameArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameArgumentsSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IdentifierExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IdentifierExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SuperRefExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SuperRefExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `NilLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: NilLiteralExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DiscardAssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DiscardAssignmentExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AssignmentExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SequenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SequenceExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ExprListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExprListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundLineExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundLineExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundFileExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundFileExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundFileIDExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundFileIDExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundFilePathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundFilePathExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundFunctionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundFunctionExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundDsohandleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundDsohandleExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SymbolicReferenceExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrefixOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrefixOperatorExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `BinaryOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BinaryOperatorExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ArrowExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrowExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `InfixOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InfixOperatorExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FloatLiteralExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TupleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ArrayExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DictionaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TupleExprElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleExprElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ArrayElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DictionaryElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IntegerLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IntegerLiteralExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `BooleanLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BooleanLiteralExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnresolvedTernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedTernaryExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TernaryExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MemberAccessExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberAccessExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnresolvedIsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedIsExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IsExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnresolvedAsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedAsExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AsExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TypeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClosureCaptureItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureItemSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClosureCaptureItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClosureCaptureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureSignatureSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClosureParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParamSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClosureParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParamListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClosureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureSignatureSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClosureExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnresolvedPatternExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedPatternExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MultipleTrailingClosureElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MultipleTrailingClosureElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MultipleTrailingClosureElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MultipleTrailingClosureElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionCallExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SubscriptExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SubscriptExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `OptionalChainingExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OptionalChainingExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ForcedValueExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ForcedValueExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PostfixUnaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PostfixUnaryExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SpecializeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SpecializeExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `StringSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StringSegmentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ExpressionSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExpressionSegmentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `StringLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StringLiteralExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `RegexLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: RegexLiteralExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `KeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `KeyPathBaseExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathBaseExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ObjcNamePieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjcNamePieceSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ObjcNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjcNameSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ObjcKeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjcKeyPathExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ObjcSelectorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjcSelectorExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PostfixIfConfigExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PostfixIfConfigExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ObjectLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjectLiteralExprSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TypeInitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeInitializerClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TypealiasDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypealiasDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AssociatedtypeDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AssociatedtypeDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FunctionParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionParameterListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ParameterClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ReturnClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ReturnClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FunctionSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionSignatureSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IfConfigClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfConfigClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IfConfigClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfConfigClauseListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IfConfigDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfConfigDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundErrorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundErrorDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundWarningDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundWarningDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundSourceLocationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundSourceLocationSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundSourceLocationArgsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundSourceLocationArgsSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclModifierDetailSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeclModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclModifierSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `InheritedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InheritedTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `InheritedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InheritedTypeListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TypeInheritanceClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeInheritanceClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClassDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClassDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ActorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ActorDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `StructDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StructDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ProtocolDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ProtocolDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ExtensionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExtensionDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MemberDeclBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberDeclBlockSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MemberDeclListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberDeclListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MemberDeclListItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberDeclListItemSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SourceFileSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SourceFileSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `InitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InitializerClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FunctionParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionParameterSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ModifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ModifierListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FunctionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `InitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InitializerDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeinitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeinitializerDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SubscriptDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SubscriptDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AccessLevelModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessLevelModifierSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AccessPathComponentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessPathComponentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AccessPathSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessPathSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ImportDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImportDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AccessorParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorParameterSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AccessorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorBlockSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PatternBindingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PatternBindingSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PatternBindingListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PatternBindingListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `VariableDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: VariableDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `EnumCaseElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `EnumCaseElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `EnumCaseDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `EnumDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `OperatorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OperatorDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IdentifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IdentifierListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrecedenceGroupDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupDeclSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrecedenceGroupAttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupAttributeListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrecedenceGroupRelationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupRelationSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrecedenceGroupNameListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupNameListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrecedenceGroupNameElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupNameElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrecedenceGroupAssignmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupAssignmentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrecedenceGroupAssociativitySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TokenListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `NonEmptyTokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: NonEmptyTokenListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CustomAttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CustomAttributeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AttributeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AttributeListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SpecializeAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AvailabilityEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityEntrySyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: LabeledSpecializeEntrySyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TargetFunctionEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TargetFunctionEntrySyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: NamedAttributeStringArgumentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ObjCSelectorPieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjCSelectorPieceSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ObjCSelectorSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjCSelectorSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DifferentiableAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DifferentiabilityParamsClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamsClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DifferentiabilityParamsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamsSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DifferentiabilityParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DifferentiabilityParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `QualifiedDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: QualifiedDeclNameSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FunctionDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionDeclNameSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `BackDeployAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BackDeployAttributeSpecListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `BackDeployVersionListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BackDeployVersionListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `BackDeployVersionArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BackDeployVersionArgumentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `LabeledStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: LabeledStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ContinueStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ContinueStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `WhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: WhileStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeferStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeferStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ExpressionStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExpressionStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SwitchCaseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchCaseListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: RepeatWhileStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GuardStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GuardStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `WhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: WhereClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ForInStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ForInStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SwitchStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CatchClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchClauseListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DoStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DoStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ReturnStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ReturnStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `YieldStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: YieldStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `YieldListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: YieldListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FallthroughStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FallthroughStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `BreakStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BreakStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CaseItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CaseItemListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CatchItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchItemListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ConditionElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConditionElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AvailabilityConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityConditionSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MatchingPatternConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MatchingPatternConditionSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `OptionalBindingConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OptionalBindingConditionSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `UnavailabilityConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnavailabilityConditionSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ConditionElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConditionElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DeclarationStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclarationStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ThrowStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ThrowStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IfStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ElseIfContinuationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ElseIfContinuationSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ElseBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ElseBlockSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SwitchCaseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchCaseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SwitchDefaultLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CaseItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CaseItemSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CatchItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchItemSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SwitchCaseLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchCaseLabelSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CatchClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PoundAssertStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundAssertStmtSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericWhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericWhereClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericRequirementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericRequirementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericRequirementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SameTypeRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SameTypeRequirementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `LayoutRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: LayoutRequirementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericParameterListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericParameterSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrimaryAssociatedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrimaryAssociatedTypeListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrimaryAssociatedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrimaryAssociatedTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericParameterClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ConformanceRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConformanceRequirementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `PrimaryAssociatedTypeClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `SimpleTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MemberTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberTypeIdentifierSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ClassRestrictionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClassRestrictionTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ArrayTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `DictionaryTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `MetatypeTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MetatypeTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `OptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OptionalTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ConstrainedSugarTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConstrainedSugarTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CompositionTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CompositionTypeElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CompositionTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CompositionTypeElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `CompositionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CompositionTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TupleTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleTypeElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TupleTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleTypeElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TupleTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `FunctionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AttributedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AttributedTypeSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericArgumentListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericArgumentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `GenericArgumentClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericArgumentClauseSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TypeAnnotationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeAnnotationSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `EnumCasePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCasePatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IsTypePatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `OptionalPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OptionalPatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `IdentifierPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IdentifierPatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AsTypePatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TuplePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TuplePatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `WildcardPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: WildcardPatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TuplePatternElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TuplePatternElementSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ExpressionPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExpressionPatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `TuplePatternElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TuplePatternElementListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `ValueBindingPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ValueBindingPatternSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AvailabilitySpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilitySpecListSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AvailabilityArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityArgumentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AvailabilityLabeledArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityVersionRestrictionSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
   /// Visiting `VersionTupleSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: VersionTupleSyntax) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
 
   public func visit(_ data: Syntax) -> ResultType {

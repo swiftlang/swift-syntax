@@ -12,18 +12,12 @@ import SwiftSyntax
 final class SyntaxTransformVisitorTest: XCTestCase {
   public func testFunctionCounter() {
     struct FuncCounter: SyntaxTransformVisitor {
-      // Tokens are the only leaf nodes.
-      public func visit(_ token: TokenSyntax) -> Int { 0 }
-      public func visit(_ token: MissingExprSyntax) -> Int { 0 }
-      public func visit(_ node: CodeBlockItemSyntax) -> Int { visit(node.item) }
-
-      public func visit(_ node: SourceFileSyntax) -> Int {
-        assert(node.statements.count == 1)
-        return visit(node.statements.first!.item)
+      public func visitAny(_ node: Syntax) -> Int {
+        visitChildren(node).reduce(0, +)
       }
-        
+ 
       public func visit(_ node: FunctionDeclSyntax) -> Int {
-        node.body!.statements.map(self.visit).reduce(1, +)
+        visitChildren(node).reduce(1, +)
       }
     }
     XCTAssertNoThrow(try {
@@ -46,6 +40,10 @@ final class SyntaxTransformVisitorTest: XCTestCase {
   
   public func testStringify() {
     struct Stringify: SyntaxTransformVisitor {
+      func visitAny(_ node: SwiftSyntax.Syntax) -> String {
+        fatalError("Not implemented")
+      }
+      
       public func visitType(_ paramType: TypeSyntaxProtocol) -> String {
         if let id = SimpleTypeIdentifierSyntax(Syntax(fromProtocol: paramType)) {
           return visit(id)

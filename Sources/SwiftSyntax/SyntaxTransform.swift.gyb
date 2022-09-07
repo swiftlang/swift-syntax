@@ -20,6 +20,8 @@
 public protocol SyntaxTransformVisitor {
   associatedtype ResultType = Void
   
+  func visitAny(_ node: Syntax) -> ResultType
+  
   func visit(_ token: TokenSyntax) -> ResultType
   func visit(_ node: UnknownSyntax) -> ResultType
   
@@ -34,8 +36,8 @@ public protocol SyntaxTransformVisitor {
 }
 
 extension SyntaxTransformVisitor {
-  public func visit(_ token: TokenSyntax) -> ResultType { fatalError("Not implemented.") }
-  public func visit(_ node: UnknownSyntax) -> ResultType { fatalError("Not implemented.") }
+  public func visit(_ token: TokenSyntax) -> ResultType { visitAny(Syntax(token)) }
+  public func visit(_ node: UnknownSyntax) -> ResultType { visitAny(Syntax(node)) }
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
@@ -43,7 +45,7 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ${node.name}) -> ResultType {
-    fatalError("Not implemented.")
+      visitAny(Syntax(node))
   }
 %   end
 % end

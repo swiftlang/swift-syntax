@@ -113,7 +113,11 @@ extension Parser {
     var elements = [RawTuplePatternElementSyntax]()
     do {
       var keepGoing = true
-      while !self.at(.eof) && !self.at(.rightParen) && keepGoing {
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.eof)
+              && !self.at(.rightParen)
+              && keepGoing
+              && loopProgress.evaluate(currentToken) {
         // If the tuple element has a label, parse it.
         let label: RawTokenSyntax?
         let colon: RawTokenSyntax?
@@ -194,11 +198,12 @@ extension Parser.Lookahead {
     }
 
     if !self.at(.rightParen) {
+      var loopProgress = LoopProgressCondition()
       repeat {
         guard self.canParsePattern() else {
           return false
         }
-      } while self.consume(if: .comma) != nil
+      } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
     }
 
     return self.consume(if: .rightParen) != nil

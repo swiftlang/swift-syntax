@@ -159,12 +159,13 @@ extension Parser {
   public mutating func parseImportAccessPath() -> RawAccessPathSyntax {
     var elements = [RawAccessPathComponentSyntax]()
     var keepGoing: RawTokenSyntax? = nil
+    var loopProgress = LoopProgressCondition()
     repeat {
       let name = self.parseAnyIdentifier()
       keepGoing = self.consume(if: .period)
       elements.append(RawAccessPathComponentSyntax(
         name: name, trailingDot: keepGoing, arena: self.arena))
-    } while keepGoing != nil
+    } while keepGoing != nil && loopProgress.evaluate(currentToken)
     return RawAccessPathSyntax(elements: elements, arena: self.arena)
   }
 }
@@ -218,6 +219,7 @@ extension Parser {
     var elements = [RawGenericParameterSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
       repeat {
         let attributes = self.parseAttributeList()
 
@@ -247,7 +249,7 @@ extension Parser {
           inheritedType: inherited,
           trailingComma: keepGoing,
           arena: self.arena))
-      } while keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
     let rangle: RawTokenSyntax
@@ -302,6 +304,7 @@ extension Parser {
     var elements = [RawGenericRequirementSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
       repeat {
         let firstType = self.parseType()
         guard !firstType.is(RawMissingTypeSyntax.self) else {
@@ -391,7 +394,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         elements.append(RawGenericRequirementSyntax(
           body: requirement, trailingComma: keepGoing, arena: self.arena))
-      } while keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
     return RawGenericWhereClauseSyntax(
@@ -407,7 +410,8 @@ extension Parser {
     var elements = [RawMemberDeclListItemSyntax]()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
-      while !self.at(.eof) && !self.at(.rightBrace) {
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.eof) && !self.at(.rightBrace) && loopProgress.evaluate(currentToken) {
         let decl = self.parseDeclaration()
         let semi = self.consume(if: .semicolon)
         elements.append(RawMemberDeclListItemSyntax(
@@ -520,6 +524,7 @@ extension Parser {
     var elements = [RawInheritedTypeSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
       repeat {
         let type: RawTypeSyntax
         if self.at(.classKeyword) {
@@ -534,7 +539,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         elements.append(RawInheritedTypeSyntax(
           typeName: type, trailingComma: keepGoing, arena: self.arena))
-      } while keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     return RawTypeInheritanceClauseSyntax(
       colon: colon,
@@ -638,6 +643,7 @@ extension Parser {
     var elements = [RawEnumCaseElementSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
       repeat {
         let name = self.consumeIdentifier()
 
@@ -666,7 +672,7 @@ extension Parser {
           rawValue: rawValue,
           trailingComma: keepGoing,
           arena: self.arena))
-      } while keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
     return RawEnumCaseDeclSyntax(
@@ -755,6 +761,7 @@ extension Parser {
     var associatedTypes = [RawPrimaryAssociatedTypeSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the name of the parameter.
         let name = self.consumeIdentifier()
@@ -763,7 +770,7 @@ extension Parser {
           name: name,
           trailingComma: keepGoing,
           arena: self.arena))
-      } while keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
     let rangle = self.consume(remapping: .rightAngle)
     return RawPrimaryAssociatedTypeClauseSyntax(
@@ -1051,7 +1058,10 @@ extension Parser {
     let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel || currentToken.isKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
-      while !self.at(.eof) && !self.at(.rightParen) && keepGoing {
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.eof) && !self.at(.rightParen)
+              && keepGoing
+              && loopProgress.evaluate(currentToken) {
         // Attributes.
         let attrs = self.parseAttributeList()
 
@@ -1331,6 +1341,7 @@ extension Parser {
     var elements = [RawPatternBindingSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
       repeat {
 
         let (pattern, type) = self.parseTypedPattern()
@@ -1362,7 +1373,7 @@ extension Parser {
           accessor: accessor,
           trailingComma: keepGoing,
           arena: self.arena))
-      } while keepGoing != nil
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
     return RawVariableDeclSyntax(
@@ -1451,7 +1462,8 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEffectsSpecifiers() -> [RawTokenSyntax] {
     var specifiers = [RawTokenSyntax]()
-    while let specifier = self.parseEffectsSpecifier() {
+    var loopProgress = LoopProgressCondition()
+    while let specifier = self.parseEffectsSpecifier(), loopProgress.evaluate(currentToken) {
       specifiers.append(specifier)
     }
     return specifiers
@@ -1484,7 +1496,8 @@ extension Parser {
     // Collect all explicit accessors to a list.
     var elements = [RawAccessorDeclSyntax]()
     do {
-      while !self.at(.eof) && !self.at(.rightBrace) {
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.eof) && !self.at(.rightBrace) && loopProgress.evaluate(currentToken) {
         let introducer = self.parseAccessorIntroducer()
         guard let (kind, kindToken) = introducer.introducer else {
           // There can only be an implicit getter if no other accessors were
@@ -1500,7 +1513,10 @@ extension Parser {
           }
 
           var body = [RawCodeBlockItemSyntax]()
-          while !self.at(.rightBrace), let newItem = self.parseCodeBlockItem() {
+          var codeBlockProgress = LoopProgressCondition()
+          while !self.at(.rightBrace),
+                  let newItem = self.parseCodeBlockItem(),
+                  codeBlockProgress.evaluate(currentToken) {
             body.append(newItem)
           }
           let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -1689,7 +1705,8 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
     do {
-      LOOP: while !self.at(.eof) && !self.at(.rightBrace) {
+      var attributesProgress = LoopProgressCondition()
+      LOOP: while !self.at(.eof) && !self.at(.rightBrace) && attributesProgress.evaluate(currentToken) {
         switch self.currentToken.tokenText {
         case "associativity":
           let associativity = self.consumeIdentifier()
@@ -1727,13 +1744,14 @@ extension Parser {
           var names = [RawPrecedenceGroupNameElementSyntax]()
           do {
             var keepGoing: RawTokenSyntax? = nil
+            var namesProgress = LoopProgressCondition()
             repeat {
               let name = self.consumeIdentifier()
               keepGoing = self.consume(if: .comma)
               names.append(RawPrecedenceGroupNameElementSyntax(
                 name: name, trailingComma: keepGoing,
                 arena: self.arena))
-            } while keepGoing != nil
+            } while keepGoing != nil && namesProgress.evaluate(currentToken)
           }
           elements.append(RawSyntax(RawPrecedenceGroupRelationSyntax(
             higherThanOrLowerThan: level,

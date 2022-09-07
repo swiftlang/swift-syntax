@@ -39,6 +39,31 @@ extension Operator {
   }
 }
 
+extension PrecedenceRelation {
+  /// Synthesize a syntactic representation of this precedence relation based on
+  /// its semantic definition.
+  ///
+  /// We only use this internally to synthesize syntactic locations.
+  func synthesizedSyntax(
+    indentation: Int = 4
+  ) -> PrecedenceGroupRelationSyntax {
+    PrecedenceGroupRelationSyntax(
+      higherThanOrLowerThan: .contextualKeyword(
+        "\(kind)",
+        leadingTrivia: [ .newlines(1), .spaces(indentation) ]
+      ),
+      colon: .colonToken(),
+      otherNames: PrecedenceGroupNameListSyntax(
+        [
+          PrecedenceGroupNameElementSyntax(
+            name: .identifier(groupName, leadingTrivia:  .space),
+            trailingComma: nil)
+        ]
+      )
+    )
+  }
+}
+
 extension PrecedenceGroup {
   /// Synthesize a syntactic representation of this precedence group based on
   /// its semantic definition.
@@ -92,20 +117,7 @@ extension PrecedenceGroup {
     for relation in relations {
       groupAttributes.append(
         Syntax(
-          PrecedenceGroupRelationSyntax(
-            higherThanOrLowerThan: .contextualKeyword(
-              "\(relation.kind)",
-              leadingTrivia: [ .newlines(1), .spaces(indentation) ]
-            ),
-            colon: .colonToken(),
-            otherNames: PrecedenceGroupNameListSyntax(
-              [
-                PrecedenceGroupNameElementSyntax(
-                  name: .identifier(relation.groupName, leadingTrivia:  .space),
-                  trailingComma: nil)
-              ]
-            )
-          )
+          relation.synthesizedSyntax()
         )
       )
     }

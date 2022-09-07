@@ -85,7 +85,7 @@ extension OperatorTable {
   /// Look for the precedence group corresponding to the given operator.
   func lookupOperatorPrecedenceGroupName(
     _ operatorName: OperatorName,
-    referencedFrom syntax: Syntax?,
+    referencedFrom syntax: Syntax,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
     guard let op = infixOperators[operatorName] else {

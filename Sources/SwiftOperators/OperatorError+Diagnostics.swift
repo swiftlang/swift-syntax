@@ -48,16 +48,6 @@ extension OperatorError : DiagnosticMessage {
 }
 
 extension OperatorError {
-  private func fixupDiagnosticDisplayNode<Node: SyntaxProtocol>(
-    _ node: Node?
-  ) -> Syntax {
-    if let node = node {
-      return Syntax(node)
-    }
-
-    return Syntax(MissingDeclSyntax(attributes: nil, modifiers: nil))
-  }
-
   /// Produce the syntax node at which a diagnostic should be displayed.
   var diagnosticDisplayNode: Syntax {
     switch self {
@@ -65,16 +55,16 @@ extension OperatorError {
       return Syntax(leftOperator)
 
     case .missingOperator(_, let node):
-      return fixupDiagnosticDisplayNode(node)
+      return node
 
     case .operatorAlreadyExists(_, let newOperator):
-      return fixupDiagnosticDisplayNode(newOperator.syntax)
+      return Syntax(newOperator.syntax ?? newOperator.synthesizedSyntax())
 
     case .missingGroup(_, let node):
-      return fixupDiagnosticDisplayNode(node)
+      return node
 
     case .groupAlreadyExists(_, let newGroup):
-      return fixupDiagnosticDisplayNode(newGroup.syntax)
+      return Syntax(newGroup.syntax ?? newGroup.synthesizedSyntax())
     }
   }
 

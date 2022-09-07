@@ -61,7 +61,7 @@ struct PrecedenceGraph {
   /// (fromGroup, fromSyntax) and following precedence groups in the
   /// specified direction.
   private func searchRelationships(
-    initialGroupName: PrecedenceGroupName, initialSyntax: Syntax?,
+    initialGroupName: PrecedenceGroupName, initialSyntax: Syntax,
     targetGroupName: PrecedenceGroupName,
     direction: PrecedenceRelation.Kind,
     errorHandler: OperatorErrorHandler
@@ -70,7 +70,7 @@ struct PrecedenceGraph {
     // the graph. This detects cycles and prevents extraneous work.
     var groupsSeen: Set<PrecedenceGroupName> = []
 
-    var stack: [(PrecedenceGroupName, Syntax?)] =
+    var stack: [(PrecedenceGroupName, Syntax)] =
       [(initialGroupName, initialSyntax)]
     while let (currentGroupName, currentOperatorSyntax) = stack.popLast() {
       guard let currentGroup = lookupGroup(currentGroupName) else {
@@ -94,7 +94,14 @@ struct PrecedenceGraph {
           }
 
           if groupsSeen.insert(otherGroupName).inserted {
-            stack.append((otherGroupName, relation.syntax.map { Syntax($0) }))
+            let relationSyntax: Syntax
+            if let knownSyntax = relation.syntax {
+              relationSyntax = Syntax(knownSyntax)
+            } else {
+              relationSyntax =
+                Syntax(relation.synthesizedSyntax().otherNames.first!.name)
+            }
+            stack.append((otherGroupName, relationSyntax))
           }
         }
       }
@@ -114,8 +121,8 @@ struct PrecedenceGraph {
   func precedence(
     relating startGroupName: PrecedenceGroupName,
     to endGroupName: PrecedenceGroupName,
-    startSyntax: Syntax?,
-    endSyntax: Syntax?,
+    startSyntax: Syntax,
+    endSyntax: Syntax,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> Precedence {
     if startGroupName == endGroupName {

@@ -47,7 +47,7 @@ extension OperatorTable {
 
     return try precedenceGraph.precedence(
       relating: groupName, to: boundGroupName,
-      startSyntax: operatorSyntax, endSyntax: bound.syntax,
+      startSyntax: operatorSyntax, endSyntax: bound.syntax!,
       errorHandler: errorHandler
     ) != .lowerThan
   }
@@ -177,9 +177,9 @@ extension OperatorTable {
   /// Determine the associativity between two precedence groups.
   private func associativity(
     firstGroup: PrecedenceGroupName?,
-    firstOperatorSyntax: Syntax?,
+    firstOperatorSyntax: Syntax,
     secondGroup: PrecedenceGroupName?,
-    secondOperatorSyntax: Syntax?,
+    secondOperatorSyntax: Syntax,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> Associativity {
     guard let firstGroup = firstGroup, let secondGroup = secondGroup else {

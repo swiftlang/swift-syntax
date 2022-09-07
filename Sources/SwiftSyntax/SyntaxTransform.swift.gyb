@@ -1,0 +1,90 @@
+%{
+  from gyb_syntax_support import *
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxTransform.swift.gyb.
+//// Do Not Edit Directly!
+//===------ SyntaxTransform.swift - Syntax Transform Visitor Protocol -----===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+public protocol SyntaxTransformVisitor {
+  associatedtype ResultType = Void
+  
+  func visitAny(_ node: Syntax) -> ResultType
+  
+  func visit(_ token: TokenSyntax) -> ResultType
+  func visit(_ node: UnknownSyntax) -> ResultType
+  
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  /// Visiting `${node.name}` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ${node.name}) -> ResultType
+%   end
+% end
+}
+
+extension SyntaxTransformVisitor {
+  public func visit(_ token: TokenSyntax) -> ResultType {
+    visitAny(Syntax(token))
+  }
+
+  public func visit(_ node: UnknownSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  /// Visiting `${node.name}` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ${node.name}) -> ResultType {
+    visitAny(Syntax(node))
+  }
+%   end
+% end
+
+  public func visit(_ node: Syntax) -> ResultType {
+    switch node.as(SyntaxEnum.self) {
+    case .token(let node):
+      return visit(node)
+    case .unknown(let node):
+      return visit(node)
+% for node in NON_BASE_SYNTAX_NODES:
+    case .${node.swift_syntax_kind}(let derived):
+      return visit(derived)
+% end
+    }
+  }
+  
+  public func visit(_ node: ExprSyntax) -> ResultType {
+    visit(Syntax(node))
+  }
+  
+  public func visit(_ node: PatternSyntax) -> ResultType {
+    visit(Syntax(node))
+  }
+  
+  public func visit(_ node: TypeSyntax) -> ResultType {
+    visit(Syntax(node))
+  }
+
+  public func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> [ResultType] {
+    let syntaxNode = Syntax(node)
+    return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in
+      let child = Syntax(SyntaxData(rawChild, parent: syntaxNode))
+      return visit(child)
+    }
+  }
+}

@@ -42,6 +42,7 @@ add_library(SwiftSyntax STATIC
   gyb_generated/SyntaxKind.swift
   gyb_generated/SyntaxRewriter.swift
   gyb_generated/SyntaxTraits.swift
+  gyb_generated/SyntaxTransform.swift
   gyb_generated/SyntaxVisitor.swift
   gyb_generated/TokenKind.swift
   gyb_generated/Tokens.swift

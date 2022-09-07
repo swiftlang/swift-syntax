@@ -110,10 +110,10 @@ let formatFile = SourceFile {
 
   ExtensionDecl(extendedType: "Format") {
     for node in SYNTAX_NODES {
-      if node.isBuildable {
-        createBuildableNodeFormatFunction(node: node)
-      } else if node.isSyntaxCollection {
-        createBuildableCollectionNodeFormatFunction(node: node)
+      var x: ExpressibleAsMemberDeclListItem? = node.isBuildable ? createBuildableNodeFormatFunction(node: node) :
+      node.isSyntaxCollection ? createBuildableCollectionNodeFormatFunction(node: node) : nil
+      if let a = x {
+        a
       }
     }
     createTokenFormatFunction()

@@ -116,6 +116,13 @@ TYPE_NODES = [
                    collection_element_name='Element'),
          ]),
 
+    # pack-expansion-type -> type '...'
+    Node('PackExpansionType', name_for_diagnostics='variadic expansion', kind='Type',
+         children=[
+             Child('PatternType', kind='Type'),
+             Child('Ellipsis', kind='EllipsisToken')
+         ]),
+
     # tuple-type-element -> identifier? ':'? type-annotation ','?
     Node('TupleTypeElement', name_for_diagnostics=None, kind='Syntax',
          traits=['WithTrailingComma'],

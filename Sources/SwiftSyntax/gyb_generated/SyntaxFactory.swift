@@ -6408,6 +6408,31 @@ public enum SyntaxFactory {
     ], arena: .default))
     return CompositionTypeSyntax(data)
   }
+  @available(*, deprecated, message: "Use initializer on PackExpansionTypeSyntax")
+  public static func makePackExpansionType(_ unexpectedBeforePatternType: UnexpectedNodesSyntax? = nil, patternType: TypeSyntax, _ unexpectedBetweenPatternTypeAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax) -> PackExpansionTypeSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforePatternType?.raw,
+      patternType.raw,
+      unexpectedBetweenPatternTypeAndEllipsis?.raw,
+      ellipsis.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.packExpansionType,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return PackExpansionTypeSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on PackExpansionTypeSyntax")
+  public static func makeBlankPackExpansionType(presence: SourcePresence = .present) -> PackExpansionTypeSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .packExpansionType,
+      from: [
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.ellipsis, arena: .default),
+    ], arena: .default))
+    return PackExpansionTypeSyntax(data)
+  }
   @available(*, deprecated, message: "Use initializer on TupleTypeElementSyntax")
   public static func makeTupleTypeElement(_ unexpectedBeforeInOut: UnexpectedNodesSyntax? = nil, inOut: TokenSyntax?, _ unexpectedBetweenInOutAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax?, _ unexpectedBetweenNameAndSecondName: UnexpectedNodesSyntax? = nil, secondName: TokenSyntax?, _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax, _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax?, _ unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? = nil, initializer: InitializerClauseSyntax?, _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleTypeElementSyntax {
     let layout: [RawSyntax?] = [

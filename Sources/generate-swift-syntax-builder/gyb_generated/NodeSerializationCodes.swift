@@ -283,4 +283,5 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "UnresolvedTernaryExpr": 270,
   "UnresolvedIsExpr": 271,
   "UnresolvedAsExpr": 272,
+  "PackExpansionType": 273,
 ]

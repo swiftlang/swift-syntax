@@ -2042,6 +2042,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawCompositionTypeElementListSyntax.self)
     break
+  case .packExpansionType:
+    assert(layout.count == 4)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTypeSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTokenSyntax.self)
+    break
   case .tupleTypeElement:
     assert(layout.count == 16)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)

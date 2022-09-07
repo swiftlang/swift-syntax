@@ -1888,6 +1888,14 @@ public extension ExpressibleAsCompositionType {
     return createCompositionType()
   }
 }
+public protocol ExpressibleAsPackExpansionType: ExpressibleAsTypeBuildable {
+  func createPackExpansionType() -> PackExpansionType
+}
+public extension ExpressibleAsPackExpansionType {
+  func createTypeBuildable() -> TypeBuildable {
+    return createPackExpansionType()
+  }
+}
 public protocol ExpressibleAsTupleTypeElement: ExpressibleAsTupleTypeElementList, ExpressibleAsSyntaxBuildable {
   func createTupleTypeElement() -> TupleTypeElement
 }

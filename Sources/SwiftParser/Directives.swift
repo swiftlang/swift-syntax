@@ -68,22 +68,23 @@ extension Parser {
   ) -> RawIfConfigDeclSyntax {
     var clauses = [RawIfConfigClauseSyntax]()
     do {
-      var (unexpectedBeforePoundIf, poundIf) = self.expect(.poundIfKeyword)
+      var firstIteration = true
       var loopProgress = LoopProgressCondition()
-      repeat {
+      while let poundIf = self.consume(ifAny: firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]),
+            loopProgress.evaluate(self.currentToken) {
+        firstIteration = false
         // Parse the condition.
+        let unexpectedBeforePoundIf: RawUnexpectedNodesSyntax?
         let condition: RawExprSyntax?
-        if let parsedElse = self.consume(if: .poundElseKeyword) {
+        switch poundIf.tokenKind {
+        case .poundIfKeyword, .poundElseifKeyword:
           unexpectedBeforePoundIf = nil
-          poundIf = parsedElse
+          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+        case .poundElseKeyword:
+          unexpectedBeforePoundIf = nil
           condition = nil
-        } else if let poundElseif = self.consume(if: .poundElseifKeyword) {
-          unexpectedBeforePoundIf = nil
-          poundIf = poundElseif
-          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
-        } else {
-          assert(poundIf.tokenKind == .poundIfKeyword)
-          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+        default:
+          preconditionFailure("The loop condition should guarantee that we are at one of these tokens")
         }
 
         var elements = [Element]()
@@ -104,7 +105,7 @@ extension Parser {
           condition: condition,
           elements: syntax(&self, elements),
           arena: self.arena))
-      } while self.at(any: [.poundElseifKeyword, .poundElseKeyword]) && loopProgress.evaluate(currentToken)
+      }
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)

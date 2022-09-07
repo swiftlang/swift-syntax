@@ -442,4 +442,15 @@ final class ExpressionTests: XCTestCase {
       """
     )
   }
+  
+  func testClouserExpression() {
+    AssertParse(
+      """
+      let :(#^DIAG_1^#..)->
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '..' found in function type"),
+      ]
+    )
+  }
 }

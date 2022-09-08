@@ -152,7 +152,7 @@ extension TokenConsumer {
   ///
   /// - Parameter kind: The kind of token to consume.
   /// - Returns: A token of the given kind.
-  public mutating func expectWithoutLookahead(
+  public mutating func expectWithoutRecovery(
     _ kind: RawTokenKind,
     where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Token {

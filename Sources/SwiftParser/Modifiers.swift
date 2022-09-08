@@ -76,7 +76,7 @@ extension Parser {
         let name = self.eat(handle)
         let details: RawDeclModifierDetailSyntax?
         if let lparen = self.consume(if: .leftParen) {
-          assert(self.currentToken.isContextualKeyword("set"))
+          assert(self.atContextualKeyword("set"))
           let detail = self.expectIdentifierWithoutRecovery()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           details = RawDeclModifierDetailSyntax(
@@ -106,7 +106,7 @@ extension Parser {
         // treat 'class' as a modifier in the case of a following CC
         // token, we cannot be sure there is no intention to override
         // or witness something static.
-        if lookahead.isStartOfDeclaration() || lookahead.currentToken.isContextualKeyword("override") {
+        if lookahead.isStartOfDeclaration() || lookahead.atContextualKeyword("override") {
           let classKeyword = self.eat(handle)
           elements.append(RawDeclModifierSyntax(
             name: classKeyword,

@@ -1033,7 +1033,7 @@ extension Parser {
   ///     actor-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseActorDeclaration(_ attrs: DeclAttributes) -> RawActorDeclSyntax {
-    assert(self.currentToken.isContextualKeyword("actor"))
+    assert(self.atContextualKeyword("actor"))
     let actorKeyword = self.expectIdentifierWithoutRecovery()
     let name = self.expectIdentifierWithoutRecovery()
 
@@ -1331,7 +1331,7 @@ extension Parser {
     let input = self.parseParameterClause()
 
     let async: RawTokenSyntax?
-    if self.currentToken.isContextualKeyword("async") {
+    if self.atContextualKeyword("async") {
       async = self.consumeAnyToken(remapping: .contextualKeyword)
     } else {
       async = nil
@@ -1512,9 +1512,9 @@ extension Parser {
     // Parse the contextual keywords for 'mutating' and 'nonmutating' before
     // get and set.
     let modifier: RawDeclModifierSyntax?
-    if self.currentToken.isContextualKeyword("mutating") ||
-        self.currentToken.isContextualKeyword("nonmutating") ||
-        self.currentToken.isContextualKeyword("__consuming") {
+    if self.atContextualKeyword("mutating") ||
+        self.atContextualKeyword("nonmutating") ||
+        self.atContextualKeyword("__consuming") {
       modifier = RawDeclModifierSyntax(
         name: self.consumeAnyToken(), detail: nil,
         arena: self.arena)
@@ -1535,12 +1535,12 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEffectsSpecifier() -> RawTokenSyntax? {
     // 'async'
-    if self.currentToken.isContextualKeyword("async") {
+    if self.atContextualKeyword("async") {
       return self.consumeAnyToken(remapping: .contextualKeyword)
     }
 
     // 'reasync'
-    if self.currentToken.isContextualKeyword("reasync") {
+    if self.atContextualKeyword("reasync") {
       return self.consumeAnyToken(remapping: .contextualKeyword)
     }
 

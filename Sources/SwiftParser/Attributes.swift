@@ -784,9 +784,9 @@ extension Parser.Lookahead {
         .rightSquareBracket,
         .rightAngle:
       return false
-    case _ where lookahead.currentToken.isContextualKeyword("async"):
+    case _ where lookahead.atContextualKeyword("async"):
       return false
-    case _ where lookahead.currentToken.isContextualKeyword("reasync"):
+    case _ where lookahead.atContextualKeyword("reasync"):
       return false
     default:
       return true

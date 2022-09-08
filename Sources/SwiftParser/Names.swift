@@ -211,9 +211,8 @@ extension Lexer.Lexeme {
     // NOTE: If this returns 'true', that token must be handled in
     //       'parseEffectsSpecifiers()'.
 
-    if (self.isContextualKeyword("async") ||
-        (self.isContextualKeyword("await") && !self.isAtStartOfLine) ||
-        self.isContextualKeyword("reasync")) {
+    if self.isContextualKeyword(["async", "reasync"]) ||
+        (self.isContextualKeyword("await") && !self.isAtStartOfLine) {
       return true
     }
 

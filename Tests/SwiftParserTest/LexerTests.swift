@@ -483,6 +483,31 @@ public class LexerTests: XCTestCase {
       ])
     }
   }
+
+  func testNotARegex() {
+    var data =
+    """
+    min(reduced.count / 2, chunkSize / 2)
+    """
+    let lexemes = data.withUTF8 { buf in
+      Lexer.lex(buf)
+    }
+    AssertEqualTokens(lexemes, [
+      lexeme(.identifier, "min"),
+      lexeme(.leftParen, "("),
+      lexeme(.identifier, "reduced"),
+      lexeme(.period, "."),
+      lexeme(.identifier, "count ", trailing: 1),
+      lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
+      lexeme(.integerLiteral, "2"),
+      lexeme(.comma, ", ", trailing: 1),
+      lexeme(.identifier, "chunkSize ", trailing: 1),
+      lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
+      lexeme(.integerLiteral, "2"),
+      lexeme(.rightParen, ")"),
+      lexeme(.eof, ""),
+    ])
+  }
 }
 
 extension Lexer {

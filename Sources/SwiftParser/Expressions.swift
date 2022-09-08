@@ -1668,12 +1668,18 @@ extension Parser {
             arena: self.arena))
         } while keepGoing != nil && loopProgress.evaluate(currentToken)
       }
+      // We were promised a right square bracket, so we're going to get it.
+      var unexpectedNodes = [RawSyntax]()
+      while !self.at(.eof) && !self.at(.rightSquareBracket) && !self.at(.inKeyword) {
+        unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
+      }
       let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
+      unexpectedNodes.append(contentsOf: unexpectedBeforeRSquare?.elements ?? [])
 
       captures = RawClosureCaptureSignatureSyntax(
         leftSquare: lsquare,
         items: elements.isEmpty ? nil : RawClosureCaptureItemListSyntax(elements: elements, arena: self.arena),
-        unexpectedBeforeRSquare,
+        unexpectedNodes.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena),
         rightSquare: rsquare, arena: self.arena)
     } else {
       captures = nil
@@ -1760,7 +1766,7 @@ extension Parser {
           }
           specifiers.append(self.expectWithoutLookahead(.rightParen))
         }
-      } else if (self.currentToken.isIdentifier || self.at(.selfKeyword)) {
+      } else if self.currentToken.isIdentifier || self.at(.selfKeyword) {
         let next = self.peek()
         // "x = 42", "x," and "x]" are all strong captures of x.
         guard next.tokenKind == .equal || next.tokenKind == .comma

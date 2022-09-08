@@ -57,4 +57,13 @@ final class AttributeTests: XCTestCase {
       ]
     )
   }
+
+  func testObjCAttribute() {
+    AssertParse(
+      """
+      @objc(zeroArg)
+      class A { }
+      """
+    )
+  }
 }

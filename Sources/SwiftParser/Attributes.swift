@@ -191,7 +191,7 @@ extension Parser {
     if leftParen != nil {
       var args = [RawTokenSyntax]()
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof), !self.at(.rightParen) && loopProgress.evaluate(currentToken) {
+      while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
         args.append(self.consumeAnyToken())
       }
       arg = RawSyntax(RawTokenListSyntax(elements: args, arena: self.arena))
@@ -360,7 +360,7 @@ extension Parser {
 
     var elements = [RawDifferentiabilityParamSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.eof) && !self.at(.rightParen) && loopProgress.evaluate(currentToken) {
+    while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
       guard let param = self.parseDifferentiabilityParameter() else {
         break
       }
@@ -459,7 +459,7 @@ extension Parser {
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.eof) && !self.at(.rightParen) && loopProgress.evaluate(currentToken) {
+    while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
       // Empty selector piece.
       if let colon = self.consume(if: .colon) {
         elements.append(RawObjCSelectorPieceSyntax(
@@ -528,7 +528,7 @@ extension Parser {
     var elements = [RawSyntax]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
-    while !self.at(.eof) && !self.at(.rightParen) && !self.at(.whereKeyword) && loopProgress.evaluate(currentToken) {
+    while !self.at(any: [.eof, .rightParen, .whereKeyword]) && loopProgress.evaluate(currentToken) {
       let ident = self.parseAnyIdentifier()
       let knownParameter = SpecializeParameter(rawValue: ident.tokenText)
       let (unexpectedBeforeColon, colon) = self.expect(.colon)

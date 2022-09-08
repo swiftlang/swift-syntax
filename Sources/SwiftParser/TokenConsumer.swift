@@ -42,8 +42,8 @@ extension TokenConsumer {
   ///
   /// - Parameter kinds: The kinds to test for.
   /// - Returns: `true` if the current token's kind is in `kinds`.
-  public func atAny(_ kind: [RawTokenKind]) -> Bool {
-    return kind.contains(self.currentToken.tokenKind)
+  public func at(any kinds: [RawTokenKind]) -> Bool {
+    return kinds.contains(self.currentToken.tokenKind)
   }
 
   /// Checks whether the parser is currently positioned at any token in `Subset`.

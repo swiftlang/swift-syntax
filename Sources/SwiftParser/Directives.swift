@@ -89,10 +89,7 @@ extension Parser {
         var elements = [Element]()
         do {
           var elementsProgress = LoopProgressCondition()
-          while !self.at(.eof)
-                  && !self.at(.poundElseKeyword)
-                  && !self.at(.poundElseifKeyword)
-                  && !self.at(.poundEndifKeyword)
+          while !self.at(any: [.eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword])
                   && elementsProgress.evaluate(currentToken) {
             guard let element = parseElement(&self) else {
               break
@@ -107,7 +104,7 @@ extension Parser {
           condition: condition,
           elements: syntax(&self, elements),
           arena: self.arena))
-      } while (self.at(.poundElseifKeyword) || self.at(.poundElseKeyword)) && loopProgress.evaluate(currentToken)
+      } while self.at(any: [.poundElseifKeyword, .poundElseKeyword]) && loopProgress.evaluate(currentToken)
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)

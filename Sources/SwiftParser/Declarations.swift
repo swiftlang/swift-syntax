@@ -61,7 +61,7 @@ extension Parser {
       syntax: { parser, elements in
         return RawSyntax(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
       })
-    } else if self.at(.poundWarningKeyword) || self.at(.poundErrorKeyword) {
+    } else if self.at(any: [.poundWarningKeyword, .poundErrorKeyword]) {
       return self.parsePoundDiagnosticDeclaration()
     }
 
@@ -337,7 +337,7 @@ extension Parser {
             let rightParen: RawTokenSyntax?
             // Unlike the other layout constraints, _Trivial's argument list
             // is optional.
-            if layoutConstraint.hasArguments && !(layoutConstraint == .trivialLayout && !self.at(.leftParen)) {
+            if layoutConstraint.hasArguments && (layoutConstraint != .trivialLayout || self.at(.leftParen)) {
               (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
               size = self.consumeInteger()
               comma = self.consume(if: .comma)
@@ -416,7 +416,7 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof) && !self.at(.rightBrace) && loopProgress.evaluate(currentToken) {
+      while !self.at(any: [.eof, .rightBrace]) && loopProgress.evaluate(currentToken) {
         let decl = self.parseDeclaration()
         let semi = self.consume(if: .semicolon)
         elements.append(RawMemberDeclListItemSyntax(
@@ -1011,9 +1011,8 @@ extension Parser {
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
-    if self.at(.exclamationMark)
-        || (self.currentToken.isAnyOperator && self.currentToken.tokenText == "!")
-        || self.at(.postfixQuestionMark) {
+    if self.at(any: [.exclamationMark, .postfixQuestionMark])
+        || (self.currentToken.isAnyOperator && self.currentToken.tokenText == "!") {
       failable = self.consumeAnyToken()
     } else {
       failable = nil
@@ -1082,7 +1081,7 @@ extension Parser {
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof) && !self.at(.rightParen)
+      while !self.at(any: [.eof, .rightParen])
               && keepGoing
               && loopProgress.evaluate(currentToken) {
         // Attributes.
@@ -1204,7 +1203,7 @@ extension Parser {
   public mutating func parseFuncDeclaration(_ attrs: DeclAttributes) -> RawFunctionDeclSyntax {
     let (unexpectedBeforeFuncKeyword, funcKeyword) = self.expect(.funcKeyword)
     let identifier: RawTokenSyntax
-    if self.currentToken.isAnyOperator || self.at(.exclamationMark) || self.at(.prefixAmpersand) {
+    if self.currentToken.isAnyOperator || self.at(any: [.exclamationMark, .prefixAmpersand]) {
       var name = self.currentToken.tokenText
       if name.count > 1 && name.hasSuffix("<") && self.peek().isIdentifier {
         name = SyntaxText(rebasing: name.dropLast())
@@ -1255,12 +1254,7 @@ extension Parser {
       async = nil
     }
 
-    var throwsKeyword: RawTokenSyntax?
-    if self.at(.throwsKeyword) || self.at(.rethrowsKeyword) {
-      throwsKeyword = self.consumeAnyToken()
-    } else {
-      throwsKeyword = nil
-    }
+    var throwsKeyword = self.consume(ifAny: .throwsKeyword, .rethrowsKeyword)
 
     let output: RawReturnClauseSyntax?
     if self.at(.arrow) {
@@ -1471,14 +1465,13 @@ extension Parser {
     }
 
     // 'throws'/'rethrows'
-    if self.at(.throwsKeyword) || self.at(.rethrowsKeyword) {
-      return self.consumeAnyToken()
+    if let throwsRethrows = self.consume(ifAny: .throwsKeyword, .rethrowsKeyword) {
+      return throwsRethrows
     }
 
     // diagnose 'throw'/'try'.
-    if (self.at(.throwKeyword) || self.at(.tryKeyword))
-        && !self.currentToken.isAtStartOfLine {
-      return self.consumeAnyToken()
+    if let throwTry = self.consume(ifAny: .throwKeyword, .tryKeyword, where: { !$0.isAtStartOfLine }) {
+      return throwTry
     }
 
     return nil
@@ -1522,7 +1515,7 @@ extension Parser {
     var elements = [RawAccessorDeclSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof) && !self.at(.rightBrace) && loopProgress.evaluate(currentToken) {
+      while !self.at(any: [.eof, .rightBrace]) && loopProgress.evaluate(currentToken) {
         let introducer = self.parseAccessorIntroducer()
         guard let (kind, kindToken) = introducer.introducer else {
           // There can only be an implicit getter if no other accessors were
@@ -1736,7 +1729,7 @@ extension Parser {
     var elements = [RawSyntax]()
     do {
       var attributesProgress = LoopProgressCondition()
-      LOOP: while !self.at(.eof) && !self.at(.rightBrace) && attributesProgress.evaluate(currentToken) {
+      LOOP: while !self.at(any: [.eof, .rightBrace]) && attributesProgress.evaluate(currentToken) {
         switch self.currentToken.tokenText {
         case "associativity":
           let associativity = self.consumeIdentifier()
@@ -1811,7 +1804,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parsePoundDiagnosticDeclaration() -> RawDeclSyntax {
-    assert(self.at(.poundErrorKeyword) || self.at(.poundWarningKeyword))
+    assert(self.at(any: [.poundErrorKeyword, .poundWarningKeyword]))
 
     let directive: PoundDiagnosticKind
     if let poundError = self.consume(if: .poundErrorKeyword) {

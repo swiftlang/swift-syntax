@@ -24,7 +24,7 @@ extension TokenConsumer {
     var attributeProgress = LoopProgressCondition()
     while attributeProgress.evaluate(subparser.currentToken) && subparser.at(.atSign) {
       hasAttribute = true
-      _ = subparser.eatParseAttributeList()
+      _ = subparser.consumeAttributeList()
     }
 
     var modifierProgress = LoopProgressCondition()

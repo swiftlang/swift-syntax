@@ -171,8 +171,10 @@ extension Parser.Lookahead {
   public mutating func eat(_ kind: RawTokenKind) -> Token {
     return self.consume(if: kind)!
   }
+}
 
-  mutating func eatParseAttributeList() -> Bool {
+extension Parser.Lookahead {
+  mutating func consumeAttributeList() -> Bool {
     guard self.at(.atSign) else {
       return false
     }

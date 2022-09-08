@@ -712,7 +712,7 @@ extension Parser.Lookahead {
     self.consumeAnyToken()
 
     // Parse an optional generic argument list.
-    if self.currentToken.starts(with: "<") && !self.canParseGenericArguments() {
+    if self.currentToken.starts(with: "<") && !self.consumeGenericArguments() {
       return false
     }
 
@@ -725,13 +725,13 @@ extension Parser.Lookahead {
     }
 
     var lookahead = self.lookahead()
-    guard lookahead.canParseGenericArguments() else {
+    guard lookahead.consumeGenericArguments() else {
       return false
     }
     return lookahead.currentToken.isGenericTypeDisambiguatingToken
   }
 
-  mutating func canParseGenericArguments() -> Bool {
+  mutating func consumeGenericArguments() -> Bool {
     // Parse the opening '<'.
     guard self.currentToken.starts(with: "<") else {
       return false

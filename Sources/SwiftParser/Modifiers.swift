@@ -175,14 +175,7 @@ extension Parser {
   }
 
   mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
-    assert(
-      [
-        RawTokenKind.privateKeyword,
-        .fileprivateKeyword,
-        .internalKeyword,
-        .publicKeyword
-      ].contains(currentToken.tokenKind)
-    )
+    assert(atAny([.privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword]))
     let name = consumeAnyToken()
     let details: RawDeclModifierDetailSyntax?
     if let lparen = consume(if: .leftParen) {
@@ -190,26 +183,22 @@ extension Parser {
       var detail: RawTokenSyntax? = nil
       var afterDetail: [RawSyntax] = []
 
-      let rightParenPrecedence = TokenPrecedence(.rightParen)
-
-      // Find `set` keyword during eat all tokens as junk
-      // until reach to right-paren or other strong token.
-      while !at(.eof),
-            TokenPrecedence(currentToken.tokenKind) < rightParenPrecedence
-      {
-        if currentToken.isContextualKeyword("set") {
-          detail = consume(remapping: .contextualKeyword)
-          break
+      let (content, rightParen) = expect(.rightParen)
+      if let content = content {
+        for element in content.elements {
+          if let _ = detail {
+            afterDetail.append(element)
+          } else if var token = element.as(RawTokenSyntax.self),
+             token.isContextualKeyword("set")
+          {
+            token.tokenKind = .contextualKeyword
+            detail = token
+          } else {
+            beforeDetail.append(element)
+          }
         }
-        beforeDetail.append(RawSyntax(consumeAnyToken()))
       }
 
-      // Eat rest of junk and right-paren
-      let (junk, rightParen) = expect(.rightParen)
-      if let junk = junk {
-        afterDetail.append(contentsOf: junk.elements)
-      }
-      
       details = RawDeclModifierDetailSyntax(
         leftParen: lparen,
         beforeDetail.isEmpty ? nil :

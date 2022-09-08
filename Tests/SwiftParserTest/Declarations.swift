@@ -219,8 +219,11 @@ final class DeclarationTests: XCTestCase {
         set
       )
       """,
+      // FIXME: It should be single: "Unexpected text '+' found in modifier"
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '+' found in modifier")
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        DiagnosticSpec(message: "Extraneous code at top level")
       ]
     )
 
@@ -255,12 +258,15 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse(
       """
-      private(#^LEFT^#get, didSet#^RIGHT^#
+      private(#^DIAG^#get#^TOP^#, didSet
       """,
+      // FIXME: Consuming `get` as top level token is undesirable.
       diagnostics: [
-        DiagnosticSpec(locationMarker: "LEFT", message: "Unexpected text 'get, didSet' found in modifier"),
-        DiagnosticSpec(locationMarker: "RIGHT", message: "Expected 'set' in modifier"),
-        DiagnosticSpec(locationMarker: "RIGHT", message: "Expected ')' to end modifier")
+        // FIXME: It should be located at right of didSet
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        // FIXME: It should be from modifier, not top level
+        DiagnosticSpec(locationMarker: "TOP", message: "Extraneous ', didSet' at top level")
       ]
     )
   }

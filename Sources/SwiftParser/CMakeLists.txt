@@ -7,26 +7,27 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_library(SwiftParser STATIC
-  Names.swift
-  Lexer.swift
-  Declarations.swift
-  Directives.swift
+  Attributes.swift
+  Availability.swift
   CharacterInfo.swift
   CompilerSupport.swift
-  Attributes.swift
-  Lookahead.swift
+  Declarations.swift
+  Directives.swift
   Expressions.swift
+  Lexer.swift
+  Lookahead.swift
   LoopProgressCondition.swift
-  Statements.swift
-  TokenPrecedence.swift
   Modifiers.swift
-  Patterns.swift
-  Availability.swift
-  TriviaParser.swift
-  TokenConsumer.swift
+  Names.swift
   Parser.swift
+  Patterns.swift
+  RawTokenKindSubset.swift
   Recovery.swift
+  Statements.swift
+  TokenConsumer.swift
+  TokenPrecedence.swift
   TopLevel.swift
+  TriviaParser.swift
   Types.swift
 
   Diagnostics/ParserDiagnosticMessages.swift

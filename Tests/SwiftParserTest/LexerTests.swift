@@ -347,6 +347,13 @@ public class LexerTests: XCTestCase {
         lexeme(.pound, "#"),
         lexeme(.eof, ""),
       ]),
+      ("/a)/", [
+        lexeme(.prefixOperator, "/"),
+        lexeme(.identifier, "a"),
+        lexeme(.rightParen, ")"),
+        lexeme(.postfixOperator, "/"),
+        lexeme(.eof, ""),
+      ]),
     ]
     for (fixture, expectation) in fixtures {
       var fixture = fixture

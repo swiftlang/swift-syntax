@@ -30,7 +30,9 @@ public protocol TokenConsumer {
   mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) -> Token
 
   /// Return the lexeme that will be parsed next.
-  mutating func peek() -> Lexer.Lexeme
+  func peek() -> Lexer.Lexeme
+
+  func lookahead() -> Parser.Lookahead
 }
 
 // MARK: Checking if we are at one specific token (`at`)

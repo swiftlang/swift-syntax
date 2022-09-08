@@ -138,7 +138,7 @@ extension Parser {
       return RawSyntax(self.parsePoundSourceLocationDirective())
     } else if self.lookahead().isStartOfDeclaration() {
       return RawSyntax(self.parseDeclaration())
-    } else if self.lookahead().isStartOfStatement() {
+    } else if self.atStartOfStatement() {
       return RawSyntax(self.parseStatement())
     } else {
       return RawSyntax(self.parseExpression())

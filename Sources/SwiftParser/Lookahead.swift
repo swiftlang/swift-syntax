@@ -42,7 +42,7 @@ extension Parser {
 
     /// Initiates a lookahead session from the current point in this
     /// lookahead session.
-    func lookahead() -> Lookahead {
+    public func lookahead() -> Lookahead {
       return Lookahead(lexemes: self.lexemes, currentToken: self.currentToken)
     }
   }

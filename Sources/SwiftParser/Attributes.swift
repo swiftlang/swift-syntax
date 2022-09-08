@@ -183,7 +183,7 @@ extension Parser {
 
 
     let atSign = self.eat(.atSign)
-    let ident = self.consumeIdentifier()
+    let ident = self.consumeIdentifierOrRethrows()
     let leftParen: RawTokenSyntax?
     let arg: RawSyntax?
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
@@ -458,7 +458,7 @@ extension Parser {
             name: name,
             colon: nil,
             arena: self.arena))
-          continue
+          break
         }
 
         let (unexpectedBeforeColon, colon) = self.expect(.colon)

@@ -130,6 +130,7 @@ public class LexerTests: XCTestCase {
     0xff.0p2
     -0xff.0p2
     +0xff.0p2
+    0x1.921fb4p1
     """
     data.withUTF8 { buf in
       let lexemes = Lexer.lex(buf)
@@ -146,6 +147,7 @@ public class LexerTests: XCTestCase {
         lexeme(.floatingLiteral, "0xff.0p2"),
         lexeme(.prefixOperator, "\n+", leading: 1),
         lexeme(.floatingLiteral, "0xff.0p2"),
+        lexeme(.floatingLiteral, "\n0x1.921fb4p1", leading: 1),
         lexeme(.eof, ""),
       ])
     }
@@ -345,6 +347,13 @@ public class LexerTests: XCTestCase {
         lexeme(.identifier, "abc"),
         lexeme(.prefixOperator, "\r/", leading: 1),
         lexeme(.pound, "#"),
+        lexeme(.eof, ""),
+      ]),
+      ("/a)/", [
+        lexeme(.prefixOperator, "/"),
+        lexeme(.identifier, "a"),
+        lexeme(.rightParen, ")"),
+        lexeme(.postfixOperator, "/"),
         lexeme(.eof, ""),
       ]),
     ]

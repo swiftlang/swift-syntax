@@ -146,7 +146,7 @@ extension Parser.Lookahead {
 
     repeat {
       self.eat(.atSign)
-      self.consumeIdentifier()
+      self.consumeIdentifierOrRethrows()
       if self.consume(if: .leftParen) != nil {
         while !self.at(.eof), !self.at(.rightParen), !self.at(.poundEndifKeyword) {
           self.skipSingle()

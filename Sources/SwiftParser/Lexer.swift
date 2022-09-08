@@ -1439,7 +1439,7 @@ extension Lexer.Cursor {
         return .integerLiteral
       }
 
-      self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
+      self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
 
       if !self.isAtEndOfFile, self.peek() != UInt8(ascii: "p") && self.peek() != UInt8(ascii: "P") {
         if !Unicode.Scalar(PtrOnDot!.peek(at: 1)).isDigit {
@@ -2007,6 +2007,8 @@ extension Lexer.Cursor {
   ) -> RawTokenKind? {
     var Tmp = TokStart
     var poundCount = 0
+    var parenCount = 0
+
     while Tmp.advance(matching: UInt8(ascii: "#")) != nil {
       poundCount += 1
     }
@@ -2071,6 +2073,15 @@ extension Lexer.Cursor {
 //        // TODO: Ideally we would recover and continue to lex until the ending
 //        // delimiter.
 //        throw DelimiterLexError(.unprintableASCII, resumeAt: cursor.successor())
+
+      case UInt8(ascii: "("):
+        parenCount += 1
+
+      case UInt8(ascii: ")"):
+        if parenCount == 0 {
+          return nil
+        }
+        parenCount -= 1
 
       default:
         continue DELIMITLOOP

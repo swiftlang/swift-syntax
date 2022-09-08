@@ -63,6 +63,36 @@ final class AttributeTests: XCTestCase {
       """
       @objc(zeroArg)
       class A { }
+
+      @objc(:::::)
+      func f(_: Int, _: Int, _: Int, _: Int, _: Int) { }
+      """
+    )
+  }
+
+  func testRethrowsAttribute() {
+    AssertParse(
+      """
+      @rethrows
+      protocol P { }
+      """
+    )
+  }
+
+  func testAutoclosureAttribute() {
+    AssertParse(
+      """
+      func f(in: @autoclosure () -> Int) { }
+      func g(in: @autoclosure @escaping () -> Int) { }
+      """
+    )
+  }
+
+  func testDifferentiableAttribute() {
+    AssertParse(
+      """
+      func f(in: @differentiable(reverse) (Int) -> Int) { }
+      func f(in: @differentiable(reverse, wrt: a) (Int) -> Int) { }
       """
     )
   }

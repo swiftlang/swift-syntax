@@ -131,7 +131,7 @@ func AssertDiagnostic<T: SyntaxProtocol>(
        let expectedLine = expectedLocation.line,
        let expectedColumn = expectedLocation.column {
       if actualLine != expectedLine || actualColumn != expectedColumn {
-        XCTFail("Expected diagnostic on \(expectedLine):\(expectedColumn) but got \(actualLine):\(actualColumn)",
+        XCTFail("Expected diagnostic with message '\(spec.message ?? "<nil>")' on \(expectedLine):\(expectedColumn) but got \(actualLine):\(actualColumn)",
                 file: file, line: line
         )
       }

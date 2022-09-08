@@ -162,7 +162,7 @@ extension Parser {
   /// for-in loops and guard clauses.
   mutating func parseMatchingPattern() -> RawPatternSyntax {
     // Parse productions that can only be patterns.
-    if let letOrVar = self.consume(ifAny: .varKeyword, .letKeyword) {
+    if let letOrVar = self.consume(ifAny: [.varKeyword, .letKeyword]) {
       let value = self.parseMatchingPattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
         letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))

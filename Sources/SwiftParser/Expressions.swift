@@ -241,7 +241,7 @@ extension Parser {
 
     case (.asKeyword, let handle)?:
       let asKeyword = self.eat(handle)
-      let failable = self.consume(ifAny: .postfixQuestionMark, .exclamationMark)
+      let failable = self.consume(ifAny: [.postfixQuestionMark, .exclamationMark])
       let op = RawUnresolvedAsExprSyntax(
         asTok: asKeyword,
         questionOrExclamationMark: failable,
@@ -324,7 +324,7 @@ extension Parser {
                                        inVarOrLet: inVarOrLet)
     }
 
-    let mark = self.consume(ifAny: .exclamationMark, .postfixQuestionMark)
+    let mark = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark])
 
     let expression = self.parseSequenceExpressionElement(flavor,
                                                          inVarOrLet: inVarOrLet)

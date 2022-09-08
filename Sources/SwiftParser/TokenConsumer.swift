@@ -79,7 +79,7 @@ extension TokenConsumer {
   ///
   /// - Parameter kind: The kind of token to consume.
   /// - Returns: A token of the given kind.
-  public mutating func eat(_ kind: RawTokenKind) -> Token {
+  public mutating func eatWithoutRecovery(_ kind: RawTokenKind) -> Token {
     return self.consume(if: kind)!
   }
 }

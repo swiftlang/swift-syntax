@@ -31,7 +31,7 @@ extension Parser {
       extraneousTokens.append(RawSyntax(consumeAnyToken()))
     }
     let unexpectedBeforeEof = extraneousTokens.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: extraneousTokens, arena: self.arena)
-    let eof = self.eat(.eof)
+    let eof = self.eatWithoutRecovery(.eof)
     return .init(statements: items, unexpectedBeforeEof, eofToken: eof, arena: self.arena)
   }
 }

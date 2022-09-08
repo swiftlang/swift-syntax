@@ -51,11 +51,12 @@ extension Parser {
         let name = self.consumeAnyToken()
         let details: RawDeclModifierDetailSyntax?
         if self.at(.leftParen) {
-          let lparen = self.eat(.leftParen)
+          let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
           assert(self.currentToken.isContextualKeyword("set"))
           let detail = self.consumeIdentifier()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           details = RawDeclModifierDetailSyntax(
+            unexpectedBeforeLParen,
             leftParen: lparen,
             detail: detail,
             unexpectedBeforeRParen,
@@ -69,15 +70,19 @@ extension Parser {
         elements.append(RawDeclModifierSyntax(
           name: name, detail: details, arena: self.arena))
       case .staticKeyword:
-        let staticKeyword = self.eat(.staticKeyword)
+        let (unexpectedBeforeStaticKeyword, staticKeyword) = self.eat(.staticKeyword)
         elements.append(RawDeclModifierSyntax(
-          name: staticKeyword, detail: nil, arena: self.arena))
+          unexpectedBeforeStaticKeyword,
+          name: staticKeyword,
+          detail: nil,
+          arena: self.arena
+        ))
       case .classKeyword:
         // If 'class' is a modifier on another decl kind, like var or func,
         // then treat it as a modifier.
         do {
           var lookahead = self.lookahead()
-          lookahead.eat(.classKeyword)
+          lookahead.eatWithoutRecovery(.classKeyword)
           // When followed by an 'override' or CC token inside a class,
           // treat 'class' as a modifier in the case of a following CC
           // token, we cannot be sure there is no intention to override
@@ -87,9 +92,13 @@ extension Parser {
             break MODIFIER_LOOP
           }
         }
-        let classKeyword = self.eat(.classKeyword)
+        let (unexpectedBeforeClassKeyword, classKeyword) = self.eat(.classKeyword)
         elements.append(RawDeclModifierSyntax(
-          name: classKeyword, detail: nil, arena: self.arena))
+          unexpectedBeforeClassKeyword,
+          name: classKeyword,
+          detail: nil,
+          arena: self.arena
+        ))
         continue
       case .identifier:
         // Context sensitive keywords.
@@ -140,12 +149,17 @@ extension Parser {
   }
 
   mutating func parseModifierDetail() -> RawDeclModifierDetailSyntax {
-    let leftParen = self.eat(.leftParen)
+    let (unexpectedBeforeLeftParen, leftParen) = self.eat(.leftParen)
     let detailToken = self.consumeAnyToken()
-    let rightParen = self.eat(.rightParen)
+    let (unexpectedBeforeRightParen, rightParen) = self.eat(.rightParen)
     return RawDeclModifierDetailSyntax(
-      leftParen: leftParen, detail: detailToken, rightParen: rightParen,
-      arena: self.arena)
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      detail: detailToken,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
   }
 
   mutating func parseSingleArgumentModifier() -> RawDeclModifierSyntax {

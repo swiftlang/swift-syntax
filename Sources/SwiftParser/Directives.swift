@@ -68,15 +68,17 @@ extension Parser {
   ) -> RawIfConfigDeclSyntax {
     var clauses = [RawIfConfigClauseSyntax]()
     do {
-      var poundIf = self.eat(.poundIfKeyword)
+      var (unexpectedBeforePoundIf, poundIf) = self.eat(.poundIfKeyword)
       var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the condition.
         let condition: RawExprSyntax?
         if self.at(.poundElseKeyword) {
+          unexpectedBeforePoundIf = nil
           poundIf = self.consumeAnyToken()
           condition = nil
         } else if self.at(.poundElseifKeyword)  {
+          unexpectedBeforePoundIf = nil
           poundIf = self.consumeAnyToken()
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
         } else {
@@ -100,6 +102,7 @@ extension Parser {
         }
 
         clauses.append(RawIfConfigClauseSyntax(
+          unexpectedBeforePoundIf,
           poundKeyword: poundIf,
           condition: condition,
           elements: syntax(&self, elements),
@@ -125,8 +128,12 @@ extension Parser {
   ///     literal-expression → '#line'
   @_spi(RawSyntax)
   public mutating func parsePoundLineDirective() -> RawPoundLineExprSyntax {
-    let token = self.eat(.poundLineKeyword)
-    return RawPoundLineExprSyntax(poundLine: token, arena: self.arena)
+    let (unexpectedBeforeToken, token) = self.eat(.poundLineKeyword)
+    return RawPoundLineExprSyntax(
+      unexpectedBeforeToken,
+      poundLine: token,
+      arena: self.arena
+    )
   }
 
   /// Parse a line control directive.

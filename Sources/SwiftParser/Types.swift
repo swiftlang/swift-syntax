@@ -38,7 +38,7 @@ extension Parser {
     if self.lookahead().isAtFunctionTypeArrow() {
       let firstEffect = self.parseEffectsSpecifier()
       let secondEffect = self.parseEffectsSpecifier()
-      let arrow = self.eat(.arrow)
+      let (unexpectedBeforeArrow, arrow) = self.eat(.arrow)
       let returnTy = self.parseType()
 
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
@@ -76,6 +76,7 @@ extension Parser {
         rightParen: rightParen,
         asyncKeyword: firstEffect,
         throwsOrRethrowsKeyword: secondEffect,
+        unexpectedBeforeArrow,
         arrow: arrow,
         returnType: returnTy,
         arena: self.arena))
@@ -219,9 +220,13 @@ extension Parser {
   ///     optional-type → type '?'
   @_spi(RawSyntax)
   public mutating func parseOptionalType(_ base: RawTypeSyntax) -> RawOptionalTypeSyntax {
-    let mark = self.eat(.postfixQuestionMark)
+    let (unexpectedBeforeMark, mark) = self.eat(.postfixQuestionMark)
     return RawOptionalTypeSyntax(
-      wrappedType: base, questionMark: mark, arena: self.arena)
+      wrappedType: base,
+      unexpectedBeforeMark,
+      questionMark: mark,
+      arena: self.arena
+    )
   }
 
   /// Parse an optional type.
@@ -232,9 +237,13 @@ extension Parser {
   ///     implicitly-unwrapped-optional-type → type '!'
   @_spi(RawSyntax)
   public mutating func parseImplicitlyUnwrappedOptionalType(_ base: RawTypeSyntax) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
-    let mark = self.eat(.exclamationMark)
+    let (unexpectedBeforeMark, mark) = self.eat(.exclamationMark)
     return RawImplicitlyUnwrappedOptionalTypeSyntax(
-      wrappedType: base, exclamationMark: mark, arena: self.arena)
+      wrappedType: base,
+      unexpectedBeforeMark,
+      exclamationMark: mark,
+      arena: self.arena
+    )
   }
 
   @_spi(RawSyntax)
@@ -279,9 +288,13 @@ extension Parser {
   ///     any-type → Any
   @_spi(RawSyntax)
   public mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
-    let name = self.eat(.anyKeyword)
+    let (unexpectedBeforeName, name) = self.eat(.anyKeyword)
     return RawSimpleTypeIdentifierSyntax(
-      name: name, genericArgumentClause: nil, arena: self.arena)
+      unexpectedBeforeName,
+      name: name,
+      genericArgumentClause: nil,
+      arena: self.arena
+    )
   }
 
   /// Parse a type placeholder.
@@ -292,10 +305,14 @@ extension Parser {
   ///     placeholder-type → wildcard
   @_spi(RawSyntax)
   public mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
-    let name = self.eat(.wildcardKeyword)
+    let (unexpectedBeforeName, name) = self.eat(.wildcardKeyword)
     // FIXME: Need a better syntax node than this
     return RawSimpleTypeIdentifierSyntax(
-      name: name, genericArgumentClause: nil, arena: self.arena)
+      unexpectedBeforeName,
+      name: name,
+      genericArgumentClause: nil,
+      arena: self.arena
+    )
   }
 }
 
@@ -360,7 +377,7 @@ extension Parser {
   ///     element-name → identifier
   @_spi(RawSyntax)
   public mutating func parseTupleTypeBody() -> RawTupleTypeSyntax {
-    let lparen = self.eat(.leftParen)
+    let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
     var elements = [RawTupleTypeElementSyntax]()
     do {
       var keepGoing = true
@@ -409,6 +426,7 @@ extension Parser {
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawTupleTypeSyntax(
+      unexpectedBeforeLParen,
       leftParen: lparen,
       elements: RawTupleTypeElementListSyntax(elements: elements, arena: self.arena),
       unexpectedBeforeRParen,
@@ -428,15 +446,17 @@ extension Parser {
   ///     dictionary-type → '[' type ':' type ']'
   @_spi(RawSyntax)
   public mutating func parseCollectionType() -> RawTypeSyntax {
-    let lsquare = self.eat(.leftSquareBracket)
+    let (unexpectedBeforeLSquare, lsquare) = self.eat(.leftSquareBracket)
     let firstType = self.parseType()
     if self.at(.colon) {
-      let colon = self.eat(.colon)
+      let (unexpectedBeforeColon, colon) = self.eat(.colon)
       let secondType = self.parseType()
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
       return RawTypeSyntax(RawDictionaryTypeSyntax(
+        unexpectedBeforeLSquare,
         leftSquareBracket: lsquare,
         keyType: firstType,
+        unexpectedBeforeColon,
         colon: colon,
         valueType: secondType,
         unexpectedBeforeRSquareBracket,
@@ -446,6 +466,7 @@ extension Parser {
     } else {
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
       return RawTypeSyntax(RawArrayTypeSyntax(
+        unexpectedBeforeLSquare,
         leftSquareBracket: lsquare,
         elementType: firstType,
         unexpectedBeforeRSquareBracket,
@@ -569,7 +590,7 @@ extension Parser.Lookahead {
             return false
           }
         }
-        self.eat(.colon)
+        self.eatWithoutRecovery(.colon)
 
         // Parse a type.
         guard self.canParseType() else {
@@ -668,7 +689,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseOldStyleProtocolComposition() -> Bool {
-    self.eat(.protocolKeyword)
+    self.eatWithoutRecovery(.protocolKeyword)
 
     // Check for the starting '<'.
     guard self.currentToken.starts(with: "<") else {
@@ -757,7 +778,7 @@ extension Parser {
   public mutating func parseTypeAttributeList() -> (RawTokenSyntax?, RawAttributeListSyntax?) {
     let specifier: RawTokenSyntax?
     if self.at(.inoutKeyword) {
-      specifier = self.eat(.inoutKeyword)
+      specifier = self.eatWithoutRecovery(.inoutKeyword)
     } else if self.currentToken.isIdentifier {
       if self.currentToken.tokenText == "__shared" {
         specifier = self.consumeAnyToken()
@@ -797,7 +818,7 @@ extension Parser {
            || self.currentToken.isContextualKeyword("_const")
     ) && modifiersProgress.evaluate(currentToken) {
       if self.at(.inoutKeyword) {
-        let inoutKeyword = self.eat(.inoutKeyword)
+        let inoutKeyword = self.eatWithoutRecovery(.inoutKeyword)
         elements.append(RawSyntax(inoutKeyword))
       } else {
         let ident = self.consumeIdentifier()
@@ -823,7 +844,7 @@ extension Parser {
       return RawSyntax(self.parseDifferentiableAttribute())
 
     case .convention:
-      let at = self.eat(.atSign)
+      let (unexpectedBeforeAt, at) = self.eat(.atSign)
       let ident = self.consumeIdentifier()
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let argument = self.consumeIdentifier()
@@ -831,6 +852,7 @@ extension Parser {
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return RawSyntax(
         RawAttributeSyntax(
+          unexpectedBeforeAt,
           atSignToken: at,
           attributeName: ident,
           unexpectedBeforeLeftParen,
@@ -844,10 +866,11 @@ extension Parser {
       )
 
     default:
-      let at = self.eat(.atSign)
+      let (unexpectedBeforeAt, at) = self.eat(.atSign)
       let ident = self.consumeIdentifier()
       return RawSyntax(
         RawAttributeSyntax(
+          unexpectedBeforeAt,
           atSignToken: at,
           attributeName: ident,
           leftParen: nil,

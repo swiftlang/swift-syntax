@@ -54,7 +54,7 @@ extension Parser.Lookahead {
         guard self.canRecoverTo(closingDelimiter) else {
           break
         }
-        self.eat(closingDelimiter)
+        self.eatWithoutRecovery(closingDelimiter)
       }
     }
 

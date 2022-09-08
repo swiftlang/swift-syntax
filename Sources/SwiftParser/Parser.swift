@@ -203,6 +203,76 @@ extension Parser {
 
 }
 
+// MARK: Check if we can recover to a token
+
+extension Parser {
+  /// Checks if it can reach a token of the given `kind` by skipping unexpected
+  /// tokens that have lower ``TokenPrecedence`` than expected token.
+  @_spi(RawSyntax)
+  public func canRecoverTo(_ kind: RawTokenKind) -> Bool {
+    if self.at(kind) {
+      return true
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo([kind])
+  }
+
+  /// Checks if it can reach a contextual keyword with the given `name` by
+  /// skipping unexpected tokens that have lower ``TokenPrecedence`` than
+  /// `precedence`.
+  @_spi(RawSyntax)
+  public func canRecoverToContextualKeyword(
+    _ name: SyntaxText,
+    precedence: TokenPrecedence = TokenPrecedence(.contextualKeyword)
+  ) -> Bool {
+    if self.atContextualKeyword(name) {
+      return true
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo([], contextualKeywords: [name])
+  }
+
+
+  /// Checks if it can reach a token whose kind is in `kinds` by skipping
+  /// unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
+  @_spi(RawSyntax)
+  public func canRecoverTo(
+    any kinds: [RawTokenKind]
+  ) -> Bool {
+    if self.at(any: kinds) {
+      return true
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo(kinds)
+  }
+
+
+  /// Checks if we can reach a token in `subset` by skipping tokens that have
+  /// a precedence that have a lower ``TokenPrecedence`` than the minimum
+  /// precedence of a token in that subset.
+  /// If so, return the token that we can recover to and a handle that can be
+  /// used to consume the unexpected tokens and the token we recovered to.
+  func canRecoverTo<Subset: RawTokenKindSubset>(
+    anyIn subset: Subset.Type
+  ) -> (Subset, RecoveryConsumptionHandle)? {
+    if let (kind, handle) = self.at(anyIn: subset) {
+      return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo(anyIn: subset)
+  }
+
+  /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.
+  mutating func eat(_ handle: RecoveryConsumptionHandle) -> (RawUnexpectedNodesSyntax, Token) {
+    var unexpectedTokens = [RawSyntax]()
+    for _ in 0..<handle.unexpectedTokens {
+      unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
+    }
+    let token = self.eat(handle.tokenConsumptionHandle)
+    return (RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena), token)
+  }
+}
+
 // MARK: Expecting Tokens with Recovery
 
 extension Parser {
@@ -229,7 +299,7 @@ extension Parser {
 
   /// Attempts to consume a token of the given kind.
   /// If it cannot be found, the parser tries
-  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
   ///     expected token and see if the token occurs after that unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
@@ -246,24 +316,24 @@ extension Parser {
 
   /// Attempts to consume a contextual keyword whose text is `name`.
   /// If it cannot be found, the parser tries
-  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
-  ///     expected token and see if the token occurs after that unexpected.
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
   @_spi(RawSyntax)
   public mutating func expectContextualKeyword(
-    _ name: SyntaxText
+    _ name: SyntaxText,
+    precedence: TokenPrecedence = TokenPrecedence(.contextualKeyword)
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
       consume: { $0.consumeIfContextualKeyword(name) },
-      canRecoverTo: { $0.canRecoverTo([], contextualKeywords: [name]) },
+      canRecoverTo: { $0.canRecoverTo([], contextualKeywords: [name], recoveryPrecedence: precedence) },
       makeMissing: { $0.missingToken(.contextualKeyword, text: name) }
     )
   }
 
   /// Attempts to consume a token whose kind is in `kinds`.
   /// If it cannot be found, the parser tries
-  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
   ///     lowest precedence of the expected token kinds and see if a token of
   ///     the requested kinds occurs after the unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes

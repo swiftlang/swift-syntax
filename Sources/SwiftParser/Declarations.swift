@@ -13,7 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension TokenConsumer {
-  func atStartOfDeclaration() -> Bool {
+  func atStartOfDeclaration(isAtTopLevel: Bool = false, allowRecovery: Bool = false) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
       return true
     }
@@ -44,8 +44,17 @@ extension TokenConsumer {
       }
     }
 
-    switch subparser.at(anyIn: DeclarationStart.self) {
-    case (.caseKeyword, _)?, nil:
+    let declStartKeyword: DeclarationStart?
+    if allowRecovery {
+      declStartKeyword = subparser.canRecoverTo(
+        anyIn: DeclarationStart.self,
+        recoveryPrecedence: isAtTopLevel ? nil : .strongBracketedClose
+      )?.0
+    } else {
+      declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
+    }
+    switch declStartKeyword {
+    case .caseKeyword, nil:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
@@ -113,7 +122,7 @@ extension Parser {
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
       modifiers: self.parseModifierList())
-    switch self.at(anyIn: DeclarationStart.self) {
+    switch self.canRecoverTo(anyIn: DeclarationStart.self) {
     case (.importKeyword, _)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs))
     case (.classKeyword, _)?:
@@ -1010,8 +1019,7 @@ extension Parser {
   ///     actor-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseActorDeclaration(_ attrs: DeclAttributes) -> RawActorDeclSyntax {
-    assert(self.atContextualKeyword("actor"))
-    let actorKeyword = self.expectIdentifierWithoutRecovery()
+    let (unexpectedBeforeActorKeyword, actorKeyword) = self.expectContextualKeyword("actor", precedence: .declKeyword)
     let name = self.expectIdentifierWithoutRecovery()
 
     let generics: RawGenericParameterClauseSyntax?
@@ -1041,6 +1049,7 @@ extension Parser {
     return RawActorDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
+      unexpectedBeforeActorKeyword,
       actorKeyword: actorKeyword,
       identifier: name,
       genericParameterClause: generics,

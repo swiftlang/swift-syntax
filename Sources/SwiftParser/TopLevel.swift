@@ -46,7 +46,7 @@ extension Parser {
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while let newElement = self.parseCodeBlockItem(), loopProgress.evaluate(currentToken) {
+    while let newElement = self.parseCodeBlockItem(isAtTopLevel: true), loopProgress.evaluate(currentToken) {
       elements.append(newElement)
     }
     return .init(elements: elements, arena: self.arena)
@@ -113,10 +113,10 @@ extension Parser {
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
   @_spi(RawSyntax)
-  public mutating func parseCodeBlockItem() -> RawCodeBlockItemSyntax? {
+  public mutating func parseCodeBlockItem(isAtTopLevel: Bool = false) -> RawCodeBlockItemSyntax? {
     // FIXME: It is unfortunate that the Swift book refers to these as
     // "statements" and not "items".
-    let item = self.parseItem()
+    let item = self.parseItem(isAtTopLevel: isAtTopLevel)
     let semi = self.consume(if: .semicolon)
 
     if item.raw.byteLength == 0 && semi == nil {
@@ -125,7 +125,12 @@ extension Parser {
     return .init(item: item, semicolon: semi, errorTokens: nil, arena: self.arena)
   }
 
-  private mutating func parseItem() -> RawSyntax {
+  /// `isAtTopLevel` determins whether this is trying to parse an item that's at
+  /// the top level of the source file. If this is the case, we allow skipping
+  /// closing braces while trying to recover to the next item.
+  /// If we are not at the top level, such a closing brace should close the
+  /// wrapping declaration instead of being consumed by lookeahead.
+  private mutating func parseItem(isAtTopLevel: Bool = false) -> RawSyntax {
     if self.at(.poundIfKeyword) {
       return RawSyntax(self.parsePoundIfDirective {
         $0.parseCodeBlockItem()
@@ -142,6 +147,8 @@ extension Parser {
       return RawSyntax(self.parseStatement())
     } else if self.atStartOfExpression() {
       return RawSyntax(self.parseExpression())
+    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowRecovery: true) {
+      return RawSyntax(self.parseDeclaration())
     } else {
       return RawSyntax(RawMissingExprSyntax(arena: self.arena))
     }

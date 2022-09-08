@@ -14,6 +14,15 @@
 
 // MARK: Lookahead
 
+
+/// After calling `consume(ifAnyFrom:)` we know which token we are positioned
+/// at based on that function's return type. This handle allows consuming that
+/// token.
+struct RecoveryConsumptionHandle {
+  var unexpectedTokens: Int
+  var tokenConsumptionHandle: TokenConsumptionHandle
+}
+
 extension Parser.Lookahead {
   /// Tries eating tokens until it finds a token whose kind is in `kinds` or a
   /// contextual keyword with a text in `contextualKeywords` without skipping
@@ -25,13 +34,15 @@ extension Parser.Lookahead {
   /// `lookahead.tokensConsumed` as unexpected.
   mutating func canRecoverTo(
     _ kinds: [RawTokenKind],
-    contextualKeywords: [SyntaxText] = []
+    contextualKeywords: [SyntaxText] = [],
+    recoveryPrecedence: TokenPrecedence? = nil
   ) -> Bool {
-    assert(!kinds.isEmpty)
-    var recoveryPrecedence = kinds.map(TokenPrecedence.init).min()!
+    var precedences = kinds.map(TokenPrecedence.init)
     if !contextualKeywords.isEmpty {
-      recoveryPrecedence = min(recoveryPrecedence, TokenPrecedence(.identifier), TokenPrecedence(.contextualKeyword))
+      precedences += [TokenPrecedence(.identifier), TokenPrecedence(.contextualKeyword)]
     }
+    let recoveryPrecedence = recoveryPrecedence ?? precedences.min()!
+
     while !self.at(.eof) {
       if !recoveryPrecedence.shouldSkipOverNewlines,
           self.currentToken.isAtStartOfLine {
@@ -54,6 +65,52 @@ extension Parser.Lookahead {
     }
 
     return false
+  }
+
+  /// Checks if we can reach a token in `subset` by skipping tokens that have
+  /// a precedence that have a lower ``TokenPrecedence`` than the minimum
+  /// precedence of a token in that subset.
+  /// If so, return the token that we can recover to and a handle that can be
+  /// used to consume the unexpected tokens and the token we recovered to.
+  mutating func canRecoverTo<Subset: RawTokenKindSubset>(
+    anyIn subset: Subset.Type,
+    recoveryPrecedence: TokenPrecedence? = nil
+  ) -> (Subset, RecoveryConsumptionHandle)? {
+    assert(!subset.allCases.isEmpty, "Subset must have at least one case")
+    let recoveryPrecedence = recoveryPrecedence ?? subset.allCases.map({
+      if let precedence = $0.precedence {
+        return precedence
+      } else {
+        return TokenPrecedence($0.rawTokenKind)
+      }
+    }).min()!
+    let initialTokensConsumed = self.tokensConsumed
+    assert(!subset.allCases.isEmpty)
+    while !self.at(.eof) {
+      if !recoveryPrecedence.shouldSkipOverNewlines,
+          self.currentToken.isAtStartOfLine {
+        break
+      }
+      if let (kind, handle) = self.at(anyIn: subset) {
+        return (kind, RecoveryConsumptionHandle(
+          unexpectedTokens: self.tokensConsumed - initialTokensConsumed,
+          tokenConsumptionHandle: handle
+        ))
+      }
+      let currentTokenPrecedence = TokenPrecedence(self.currentToken.tokenKind)
+      if currentTokenPrecedence >= recoveryPrecedence {
+        break
+      }
+      self.consumeAnyToken()
+      if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
+        guard self.canRecoverTo([closingDelimiter]) else {
+          break
+        }
+        self.eat(closingDelimiter)
+      }
+    }
+
+    return nil
   }
 }
 

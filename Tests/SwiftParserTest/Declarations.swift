@@ -44,6 +44,18 @@ final class DeclarationTests: XCTestCase {
                 ])
   }
 
+  func testFuncAfterUnbalancedClosingBrace() {
+    AssertParse(
+      """
+      #^DIAG^#}
+      func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text '}' found in function")
+      ]
+    )
+  }
+
   func testClassParsing() {
     AssertParse("class Foo {}")
 
@@ -95,6 +107,20 @@ final class DeclarationTests: XCTestCase {
       """
     )
   }
+
+  func testActorAfterUnbalancedClosingBrace() {
+    AssertParse(
+      """
+      #^DIAG^#}
+      actor Foo {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text '}' found in actor")
+      ]
+    )
+  }
+
+
 
   func testProtocolParsing() {
     AssertParse("protocol Foo {}")
@@ -741,6 +767,19 @@ final class DeclarationTests: XCTestCase {
 
   func testPublicClass() {
     AssertParse("public class Foo: Superclass {}")
+  }
+
+  func testReturnAsyncContextualKeyword() {
+    AssertParse(
+      ##"""
+      if let async = self.consumeIfContextualKeyword("async") {
+        return async
+      }
+
+      if let reasync = self.consumeIfContextualKeyword("reasync") {
+        return reasync
+      }
+      """##)
   }
 }
 

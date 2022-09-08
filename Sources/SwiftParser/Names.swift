@@ -330,6 +330,19 @@ extension TokenConsumer {
     }
   }
 
+  mutating func consumeIdentifierOrRethrows() -> Token {
+    switch self.currentToken.tokenKind {
+    case .selfKeyword,
+        .capitalSelfKeyword,
+        .anyKeyword,
+        .identifier,
+        .rethrowsKeyword:
+      return self.consumeAnyToken()
+    default:
+      return self.missingToken(.identifier)
+    }
+  }
+
   mutating func consumeInteger() -> Token {
     switch self.currentToken.tokenKind {
     case .integerLiteral:

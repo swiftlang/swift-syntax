@@ -66,4 +66,13 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testRethrowsAttribute() {
+    AssertParse(
+      """
+      @rethrows
+      protocol P { }
+      """
+    )
+  }
 }

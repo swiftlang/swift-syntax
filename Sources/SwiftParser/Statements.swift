@@ -664,7 +664,7 @@ extension Parser {
   public mutating func parseSwitchCase() -> RawSwitchCaseSyntax {
     var unknownAttr: RawAttributeSyntax?
     if let at = self.consume(if: .atSign) {
-      let ident = self.expectIdentifierWithoutRecovery()
+      let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
 
       var tokenList = [RawTokenSyntax]()
       var loopProgress = LoopProgressCondition()
@@ -675,6 +675,7 @@ extension Parser {
 
       unknownAttr = RawAttributeSyntax(
         atSignToken: at,
+        unexpectedBeforeIdent,
         attributeName: ident,
         leftParen: nil,
         argument: nil,

@@ -469,6 +469,24 @@ enum IdentifierTokens: RawTokenKindSubset {
   }
 }
 
+enum IdentifierOrRethrowsTokens: RawTokenKindSubset {
+  case anyKeyword
+  case capitalSelfKeyword
+  case identifier
+  case selfKeyword
+  case rethrowsKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .anyKeyword: return .anyKeyword
+    case .capitalSelfKeyword: return .capitalSelfKeyword
+    case .identifier: return .identifier
+    case .selfKeyword: return .selfKeyword
+    case .rethrowsKeyword: return .rethrowsKeyword
+    }
+  }
+}
+
 enum Operator: RawTokenKindSubset {
   case spacedBinaryOperator
   case unspacedBinaryOperator

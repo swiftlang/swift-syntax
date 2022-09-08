@@ -179,14 +179,13 @@ extension Parser {
     // '.Type', '.Protocol', '?', '!', and '[]' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if self.at(any: [.period, .prefixPeriod]) {
-        if self.peek().isContextualKeyword(["Type", "Protocol"]) {
-          let period = self.consumeAnyToken()
-          let type = self.expectIdentifierWithoutRecovery()
-          base = RawTypeSyntax(RawMetatypeTypeSyntax(
-            baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
-        }
-      }
+      if let (period, type) = self.consume(
+        if: { [.period, .prefixPeriod].contains($0.tokenKind) },
+        followedBy: { $0.isContextualKeyword(["Type", "Protocol"])}
+      ) {
+        base = RawTypeSyntax(RawMetatypeTypeSyntax(
+          baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
+       }
 
       if !self.currentToken.isAtStartOfLine {
         if self.currentToken.isOptionalToken {
@@ -801,18 +800,20 @@ extension Parser {
 
     case .convention:
       let (unexpectedBeforeAt, at) = self.expect(.atSign)
-      let ident = self.expectIdentifierWithoutRecovery()
+      let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-      let argument = self.expectIdentifierWithoutRecovery()
+      let (unexpectedBeforeArgument, argument) = self.expectIdentifier()
 
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return RawSyntax(
         RawAttributeSyntax(
           unexpectedBeforeAt,
           atSignToken: at,
+          unexpectedBeforeIdent,
           attributeName: ident,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
+          unexpectedBeforeArgument,
           argument: RawSyntax(argument),
           unexpectedBeforeRightParen,
           rightParen: rightParen,

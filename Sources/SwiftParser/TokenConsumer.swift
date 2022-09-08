@@ -282,15 +282,6 @@ extension TokenConsumer {
   }
 
   mutating func expectIdentifierOrRethrowsWithoutRecovery() -> Token {
-    switch self.currentToken.tokenKind {
-    case .selfKeyword,
-        .capitalSelfKeyword,
-        .anyKeyword,
-        .identifier,
-        .rethrowsKeyword:
-      return self.consumeAnyToken()
-    default:
-      return self.missingToken(.identifier, text: nil)
-    }
+    return self.expectAnyWithoutRecovery(IdentifierOrRethrowsTokens.allRawTokenKinds, default: .identifier)
   }
 }

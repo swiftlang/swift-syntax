@@ -266,8 +266,8 @@ extension Parser {
       repeat {
         let attributes = self.parseAttributeList()
 
-        let name = self.expectIdentifierWithoutRecovery()
-        if name.isMissing && elements.isEmpty {
+        let (unexpectedBeforeName, name) = self.expectIdentifier()
+        if unexpectedBeforeName == nil && name.isMissing && elements.isEmpty {
           break
         }
 
@@ -530,13 +530,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseClassDeclaration(_ attrs: DeclAttributes) -> RawClassDeclSyntax {
     let (unexpectedBeforeClassKeyword, classKeyword) = self.expect(.classKeyword)
-    let name = self.expectIdentifierWithoutRecovery()
-    if name.isMissing {
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    if unexpectedBeforeName == nil && name.isMissing {
       return RawClassDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
         unexpectedBeforeClassKeyword,
         classKeyword: classKeyword,
+        unexpectedBeforeName,
         identifier: name,
         genericParameterClause: nil,
         inheritanceClause: nil,
@@ -577,6 +578,7 @@ extension Parser {
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       classKeyword: classKeyword,
+      unexpectedBeforeName,
       identifier: name,
       genericParameterClause: generics,
       inheritanceClause: inheritance,
@@ -646,13 +648,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEnumDeclaration(_ attrs: DeclAttributes) -> RawEnumDeclSyntax {
     let (unexpectedBeforeEnumKeyword, enumKeyword) = self.expect(.enumKeyword)
-    let name = self.expectIdentifierWithoutRecovery()
-    if name.isMissing {
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    if unexpectedBeforeName == nil, name.isMissing {
       return RawEnumDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
         unexpectedBeforeEnumKeyword,
         enumKeyword: enumKeyword,
+        unexpectedBeforeName,
         identifier: name,
         genericParameters: nil,
         inheritanceClause: nil,
@@ -692,6 +695,7 @@ extension Parser {
     return RawEnumDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       enumKeyword: enumKeyword,
+      unexpectedBeforeName,
       identifier: name,
       genericParameters: generics,
       inheritanceClause: inheritance,
@@ -722,7 +726,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let name = self.expectIdentifierWithoutRecovery()
+        let (unexpectedBeforeName, name) = self.expectIdentifier()
 
         let associatedValue: RawParameterClauseSyntax?
         if self.at(.leftParen, where: { !$0.isAtStartOfLine }) {
@@ -747,6 +751,7 @@ extension Parser {
         // Continue through the comma-separated list.
         keepGoing = self.consume(if: .comma)
         elements.append(RawEnumCaseElementSyntax(
+          unexpectedBeforeName,
           identifier: name,
           associatedValue: associatedValue,
           rawValue: rawValue,
@@ -781,8 +786,8 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseStructDeclaration(_ attrs: DeclAttributes) -> RawStructDeclSyntax {
     let (unexpectedBeforeStructKeyword, structKeyword) = self.expect(.structKeyword)
-    let name = self.expectIdentifierWithoutRecovery()
-    if name.isMissing {
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    if unexpectedBeforeName == nil && name.isMissing {
       return RawStructDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
@@ -846,9 +851,10 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the name of the parameter.
-        let name = self.expectIdentifierWithoutRecovery()
+        let (unexpectedBeforeName, name) = self.expectIdentifier()
         keepGoing = self.consume(if: .comma)
         associatedTypes.append(RawPrimaryAssociatedTypeSyntax(
+          unexpectedBeforeName,
           name: name,
           trailingComma: keepGoing,
           arena: self.arena))
@@ -884,8 +890,8 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseProtocolDeclaration(_ attrs: DeclAttributes) -> RawProtocolDeclSyntax {
     let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.expect(.protocolKeyword)
-    let name = self.expectIdentifierWithoutRecovery()
-    if name.isMissing {
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    if unexpectedBeforeName == nil && name.isMissing {
       return RawProtocolDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
@@ -952,8 +958,8 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseAssociatedTypeDeclaration(_ attrs: DeclAttributes) -> RawAssociatedtypeDeclSyntax {
     let (unexpectedBeforeAssocKeyword, assocKeyword) = self.expect(.associatedtypeKeyword)
-    let name = self.expectIdentifierWithoutRecovery()
-    if name.isMissing {
+    let (unexpecedBeforeName, name) = self.expectIdentifier()
+    if unexpecedBeforeName == nil && name.isMissing {
       return RawAssociatedtypeDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
@@ -1020,7 +1026,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseActorDeclaration(_ attrs: DeclAttributes) -> RawActorDeclSyntax {
     let (unexpectedBeforeActorKeyword, actorKeyword) = self.expectContextualKeyword("actor", precedence: .declKeyword)
-    let name = self.expectIdentifierWithoutRecovery()
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
 
     let generics: RawGenericParameterClauseSyntax?
     if self.currentToken.starts(with: "<") {
@@ -1051,6 +1057,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeActorKeyword,
       actorKeyword: actorKeyword,
+      unexpectedBeforeName,
       identifier: name,
       genericParameterClause: generics,
       inheritanceClause: inheritance,
@@ -1271,15 +1278,17 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseFuncDeclaration(_ attrs: DeclAttributes) -> RawFunctionDeclSyntax {
     let (unexpectedBeforeFuncKeyword, funcKeyword) = self.expect(.funcKeyword)
+    let unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?
     let identifier: RawTokenSyntax
     if self.at(anyIn: Operator.self) != nil || self.at(any: [.exclamationMark, .prefixAmpersand]) {
       var name = self.currentToken.tokenText
       if name.count > 1 && name.hasSuffix("<") && self.peek().tokenKind == .identifier {
         name = SyntaxText(rebasing: name.dropLast())
       }
+      unexpectedBeforeIdentifier = nil
       identifier = self.consumePrefix(name, as: .spacedBinaryOperator)
     } else {
-      identifier = self.expectIdentifierWithoutRecovery()
+      (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
     }
 
     let genericParams: RawGenericParameterClauseSyntax?
@@ -1304,6 +1313,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeFuncKeyword,
       funcKeyword: funcKeyword,
+      unexpectedBeforeIdentifier,
       identifier: identifier,
       genericParameterClause: genericParams,
       signature: signature,
@@ -1615,10 +1625,11 @@ extension Parser {
         //     set-name    ::= '(' identifier ')'
         let parameter: RawAccessorParameterSyntax?
         if [ AccessorKind.set, .willSet, .didSet ].contains(kind), let lparen = self.consume(if: .leftParen) {
-          let name = self.expectIdentifierWithoutRecovery()
+          let (unexpectedBeforeName, name) = self.expectIdentifier()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           parameter = RawAccessorParameterSyntax(
             leftParen: lparen,
+            unexpectedBeforeName,
             name: name,
             unexpectedBeforeRParen,
             rightParen: rparen,
@@ -1677,7 +1688,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypealiasDeclaration(_ attrs: DeclAttributes) -> RawTypealiasDeclSyntax {
     let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.expect(.typealiasKeyword)
-    let name = self.expectIdentifierWithoutRecovery()
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
 
     // Parse a generic parameter list if it is present.
     let generics: RawGenericParameterClauseSyntax?
@@ -1710,6 +1721,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeTypealiasKeyword,
       typealiasKeyword: typealiasKeyword,
+      unexpectedBeforeName,
       identifier: name,
       genericParameterClause: generics,
       initializer: initializer,
@@ -1785,7 +1797,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parsePrecedenceGroupDeclaration(_ attrs: DeclAttributes) -> RawPrecedenceGroupDeclSyntax {
     let (unexpectedBeforeGroup, group) = self.expect(.precedencegroupKeyword)
-    let identifier = self.expectIdentifierWithoutRecovery()
+    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
 
@@ -1803,11 +1815,12 @@ extension Parser {
         case (.associativity, let handle)?:
           let associativity = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let value = self.expectIdentifierWithoutRecovery()
+          let (unexpectedBeforeValue, value) = self.expectIdentifier()
           elements.append(RawSyntax(RawPrecedenceGroupAssociativitySyntax(
             associativityKeyword: associativity,
             unexpectedBeforeColon,
             colon: colon,
+            unexpectedBeforeValue,
             value: value,
             arena: self.arena
           )))
@@ -1833,11 +1846,14 @@ extension Parser {
             var keepGoing: RawTokenSyntax? = nil
             var namesProgress = LoopProgressCondition()
             repeat {
-              let name = self.expectIdentifierWithoutRecovery()
+              let (unexpectedBeforeName, name) = self.expectIdentifier()
               keepGoing = self.consume(if: .comma)
               names.append(RawPrecedenceGroupNameElementSyntax(
-                name: name, trailingComma: keepGoing,
-                arena: self.arena))
+                unexpectedBeforeName,
+                name: name,
+                trailingComma: keepGoing,
+                arena: self.arena
+              ))
             } while keepGoing != nil && namesProgress.evaluate(currentToken)
           }
           elements.append(RawSyntax(RawPrecedenceGroupRelationSyntax(
@@ -1856,6 +1872,7 @@ extension Parser {
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       unexpectedBeforeGroup,
       precedencegroupKeyword: group,
+      unexpectedBeforeIdentifier,
       identifier: identifier,
       unexpectedBeforeLBrace,
       leftBrace: lbrace,

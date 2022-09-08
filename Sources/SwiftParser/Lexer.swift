@@ -1439,7 +1439,7 @@ extension Lexer.Cursor {
         return .integerLiteral
       }
 
-      self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
+      self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
 
       if !self.isAtEndOfFile, self.peek() != UInt8(ascii: "p") && self.peek() != UInt8(ascii: "P") {
         if !Unicode.Scalar(PtrOnDot!.peek(at: 1)).isDigit {

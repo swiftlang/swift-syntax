@@ -63,6 +63,9 @@ final class AttributeTests: XCTestCase {
       """
       @objc(zeroArg)
       class A { }
+
+      @objc(:::::)
+      func f(_: Int, _: Int, _: Int, _: Int, _: Int) { }
       """
     )
   }

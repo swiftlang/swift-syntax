@@ -458,7 +458,7 @@ extension Parser {
             name: name,
             colon: nil,
             arena: self.arena))
-          continue
+          break
         }
 
         let (unexpectedBeforeColon, colon) = self.expect(.colon)

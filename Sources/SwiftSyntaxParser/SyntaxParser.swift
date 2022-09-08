@@ -142,6 +142,7 @@ public enum SyntaxParser {
     let arena = SyntaxArena()
     let sourceBuffer = source.withUTF8 { arena.internSourceBuffer($0) }
 
+#if compiler(>=5.7)
     if let languageVersion = languageVersion {
       languageVersion.withCString { languageVersionCString in
         swiftparse_parser_set_language_version(c_parser, languageVersionCString)
@@ -150,6 +151,7 @@ public enum SyntaxParser {
     if let enableBareSlashRegexLiteral = enableBareSlashRegexLiteral {
       swiftparse_parser_set_enable_bare_slash_regex_literal(c_parser, enableBareSlashRegexLiteral)
     }
+#endif
 
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
       RawSyntax.getOpaqueFromCNode(cnode, in: sourceBuffer, arena: arena)
@@ -205,7 +207,9 @@ public enum SyntaxParser {
       swiftparse_parser_set_diagnostic_handler(c_parser, diagHandler)
     }
 
-    let c_top = swiftparse_parse_string(c_parser, sourceBuffer.baseAddress, sourceBuffer.count)
+    let c_top = sourceBuffer.withMemoryRebound(to: CChar.self) { sourceBuffer in
+      return swiftparse_parse_string(c_parser, sourceBuffer.baseAddress, sourceBuffer.count)
+    }
     let base = Syntax(raw: RawSyntax.fromOpaque(c_top!))
     guard let file = base.as(SourceFileSyntax.self) else {
       throw ParserError.invalidSyntaxData

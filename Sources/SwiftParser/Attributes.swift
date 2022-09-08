@@ -31,7 +31,7 @@ extension Parser {
 extension Parser {
   // FIXME: This should be gyb'ed. Go refactor include/AST/Attr.def to use
   // swift-syntax's definition of these attributes instead.
-  enum DeclarationAttribute: SyntaxText {
+  enum DeclarationAttribute: SyntaxText, ContextualKeywords {
     case _silgen_name = "_silgen_name"
     case available = "available"
     case final = "final"
@@ -243,8 +243,7 @@ extension Parser {
 extension Parser {
   mutating func parseAvailabilityAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    assert(self.currentToken.tokenText == "available")
-    let available = self.consumeAnyToken()
+    let (unexpectedBeforeAvailable, available) = self.expectContextualKeyword("available")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument: RawSyntax
@@ -262,6 +261,7 @@ extension Parser {
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforeAvailable,
       attributeName: available,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
@@ -276,8 +276,7 @@ extension Parser {
 extension Parser {
   mutating func parseDifferentiableAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    assert(self.currentToken.tokenText == "differentiable")
-    let differentiable = self.consumeAnyToken()
+    let (unexpectedBeforeDifferentiable, differentiable) = self.expectContextualKeyword("differentiable")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument = self.parseDifferentiableAttributeArguments()
@@ -286,6 +285,7 @@ extension Parser {
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforeDifferentiable,
       attributeName: differentiable,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
@@ -296,7 +296,7 @@ extension Parser {
       arena: self.arena)
   }
 
-  enum DifferentiabilityKind: SyntaxText {
+  enum DifferentiabilityKind: SyntaxText, ContextualKeywords {
     case reverse = "reverse"
     case linear = "_linear"
     case forward = "_forward"
@@ -305,11 +305,8 @@ extension Parser {
   mutating func parseDifferentiableAttributeArguments() -> RawDifferentiableAttributeArgumentsSyntax {
     let diffKind: RawTokenSyntax?
     let diffKindComma: RawTokenSyntax?
-    if
-      .identifier == self.currentToken.tokenKind,
-      DifferentiabilityKind(rawValue: self.currentToken.tokenText) != nil
-    {
-      diffKind = self.expectIdentifierWithoutRecovery()
+    if let (_, handle) = self.at(anyIn: DifferentiabilityKind.self) {
+      diffKind = self.eat(handle)
       diffKindComma = self.consume(if: .comma)
     } else {
       diffKind = nil
@@ -318,7 +315,7 @@ extension Parser {
 
     let diffParams: RawDifferentiabilityParamsClauseSyntax?
     let diffParamsComma: RawTokenSyntax?
-    if self.currentToken.tokenText == "wrt" {
+    if self.atContextualKeyword("wrt") {
       diffParams = self.parseDifferentiabilityParameters()
       diffParamsComma = self.consume(if: .comma)
     } else {
@@ -428,8 +425,7 @@ extension Parser {
 extension Parser {
   mutating func parseObjectiveCAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    assert(self.currentToken.tokenText == "objc")
-    let objc = self.consumeAnyToken()
+    let (unexpectedBeforeObjc, objc) = self.expectContextualKeyword("objc")
 
     let leftParen = self.consume(if: .leftParen)
     let argument: RawObjCSelectorSyntax?
@@ -447,6 +443,7 @@ extension Parser {
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforeObjc,
       attributeName: objc,
       leftParen: leftParen,
       argument: argument.map(RawSyntax.init),
@@ -497,14 +494,14 @@ extension Parser {
 extension Parser {
   mutating func parseSpecializeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    assert(self.currentToken.tokenText == "_specialize")
-    let specializeToken = self.consumeAnyToken()
+    let (unexpectedBeforeSpecialize, specializeToken) = self.expectContextualKeyword("_specialize")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let argument = self.parseSpecializeAttributeSpecList()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforeSpecialize,
       attributeName: specializeToken,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
@@ -634,7 +631,7 @@ extension Parser {
 extension Parser {
   // FIXME: This should be gyb'ed. Go refactor include/AST/Attr.def to use
   // swift-syntax's infrastructure.
-  enum TypeAttribute: SyntaxText {
+  enum TypeAttribute: SyntaxText, ContextualKeywords {
     case autoclosure = "autoclosure"
     case convention = "convention"
     case noescape = "noescape"
@@ -682,8 +679,7 @@ extension Parser {
 extension Parser {
   mutating func parsePrivateImportAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    assert(self.currentToken.tokenText == "_private")
-    let privateToken = self.consumeAnyToken()
+    let (unexpectedBeforePrivateToken, privateToken) = self.expectContextualKeyword("_private")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let label = self.expectIdentifierWithoutRecovery()
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -692,6 +688,7 @@ extension Parser {
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforePrivateToken,
       attributeName: privateToken,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
@@ -712,15 +709,9 @@ extension Parser {
 extension Parser {
   mutating func parseDynamicReplacementAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    assert(self.currentToken.tokenText == "_dynamicReplacement")
-    let dynamicReplacementToken = self.consumeAnyToken()
+    let (unexpectedBeforeDynamicReplacementToken, dynamicReplacementToken) = self.expectContextualKeyword("_dynamicReplacement")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let label: RawTokenSyntax
-    if self.currentToken.tokenText == "for" {
-      label = self.consumeAnyToken()
-    } else {
-      label = RawTokenSyntax(missing: .forKeyword, arena: self.arena)
-    }
+    let (unexpectedBeforeLabel, label) = self.expect(.forKeyword)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let (base, args) = self.parseDeclNameRef([
       .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
@@ -730,10 +721,12 @@ extension Parser {
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforeDynamicReplacementToken,
       attributeName: dynamicReplacementToken,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       argument: RawSyntax(RawNamedAttributeStringArgumentSyntax(
+        unexpectedBeforeLabel,
         nameTok: label,
         unexpectedBeforeColon,
         colon: colon,
@@ -750,14 +743,14 @@ extension Parser {
 extension Parser {
   mutating func parseSPIAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    assert(self.currentToken.tokenText == "_spi")
-    let spiToken = self.consumeAnyToken()
+    let (unexpectedBeforeSpiToken, spiToken) = self.expectContextualKeyword("_spi")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let label = self.consumeAnyToken()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforeSpiToken,
       attributeName: spiToken,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,

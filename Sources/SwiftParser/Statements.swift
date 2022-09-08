@@ -854,8 +854,7 @@ extension Parser {
   ///     yield-statement → 'yield' '('? expr-list? ')'?
   @_spi(RawSyntax)
   public mutating func parseYieldStatement() -> RawYieldStmtSyntax {
-    assert(self.currentToken.tokenText == "yield")
-    let yield = self.consumeAnyToken(remapping: .yield)
+    let (unexpectedBeforeYield, yield) = self.expectContextualKeyword("yield")
 
     let yields: RawSyntax
     if let lparen = self.consume(if: .leftParen) {
@@ -883,8 +882,11 @@ extension Parser {
     }
 
     return RawYieldStmtSyntax(
-      yieldKeyword: yield, yields: yields,
-      arena: self.arena)
+      unexpectedBeforeYield,
+      yieldKeyword: yield,
+      yields: yields,
+      arena: self.arena
+    )
   }
 }
 

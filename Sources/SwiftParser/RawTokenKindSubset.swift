@@ -40,6 +40,20 @@ extension RawTokenKindSubset {
   }
 }
 
+/// A set of contextual keywords.
+/// This should be an enum that has `SyntaxText` as its underlying value.
+protocol ContextualKeywords: RawRepresentable, RawTokenKindSubset {}
+
+extension ContextualKeywords where RawValue == SyntaxText {
+  var rawTokenKind: RawTokenKind {
+    return .identifier
+  }
+
+  var contextualKeyword: SyntaxText? {
+    return self.rawValue
+  }
+}
+
 // MARK: - Subsets
 
 enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {

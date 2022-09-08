@@ -13,7 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum DeclModifier: SyntaxText {
+  enum DeclModifier: SyntaxText, ContextualKeywords {
     case unowned = "unowned"
 
     case final = "final"
@@ -120,34 +120,34 @@ extension Parser {
       case (.identifier, _)?:
         // Context sensitive keywords.
         // FIXME: Sink this into the GYB
-        switch DeclModifier(rawValue: self.currentToken.tokenText) {
-        case .unowned:
+        switch self.at(anyIn: DeclModifier.self) {
+        case (.unowned, _)?:
           elements.append(self.parseUnownedModifier())
-        case .final,
-            .required,
-            .optional,
-            .lazy,
-            .dynamic,
-            .infix,
-            .prefix,
-            .postfix,
-            .compilerInitialized,
-            .consuming,
-            .mutating,
-            .nonmutating,
-            .convenience,
-            .override,
-            .open,
-            .weak,
-            .indirect,
-            .isolated,
-            .async,
-            .nonisolated,
-            .distributed,
-            .const,
-            .local:
+        case (.final, _)?,
+            (.required, _)?,
+            (.optional, _)?,
+            (.lazy, _)?,
+            (.dynamic, _)?,
+            (.infix, _)?,
+            (.prefix, _)?,
+            (.postfix, _)?,
+            (.compilerInitialized, _)?,
+            (.consuming, _)?,
+            (.mutating, _)?,
+            (.nonmutating, _)?,
+            (.convenience, _)?,
+            (.override, _)?,
+            (.open, _)?,
+            (.weak, _)?,
+            (.indirect, _)?,
+            (.isolated, _)?,
+            (.async, _)?,
+            (.nonisolated, _)?,
+            (.distributed, _)?,
+            (.const, _)?,
+            (.local, _)?:
           elements.append(self.parseSimpleModifier())
-        default:
+        case nil:
           break MODIFIER_LOOP
         }
 
@@ -186,8 +186,7 @@ extension Parser {
   }
 
   mutating func parseUnownedModifier() -> RawDeclModifierSyntax {
-    assert(self.currentToken.tokenText == "unowned")
-    let keyword = self.consumeAnyToken(remapping: .contextualKeyword)
+    let (unexpectedBeforeKeyword, keyword) = self.expectContextualKeyword("unowned")
 
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {
@@ -196,6 +195,11 @@ extension Parser {
       detail = nil
     }
 
-    return RawDeclModifierSyntax(name: keyword, detail: detail, arena: self.arena)
+    return RawDeclModifierSyntax(
+      unexpectedBeforeKeyword,
+      name: keyword,
+      detail: detail,
+      arena: self.arena
+    )
   }
 }

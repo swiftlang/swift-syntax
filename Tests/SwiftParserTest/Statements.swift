@@ -30,7 +30,7 @@ final class StatementTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "Expected '=' in pattern matching"),
-        DiagnosticSpec(message: "Unexpected text '* ! = x' found in 'if' statement"),
+        DiagnosticSpec(message: "Unexpected text '* ! = x' in 'if' statement"),
       ]
     )
   }
@@ -174,8 +174,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "TEST_1", message: "Unexpected text '@s return' found in function"),
-        DiagnosticSpec(locationMarker: "TEST_2", message: "Unexpected text '@unknown return' found in function")
+        DiagnosticSpec(locationMarker: "TEST_1", message: "Unexpected text '@s return' in function"),
+        DiagnosticSpec(locationMarker: "TEST_2", message: "Unexpected text '@unknown return' in function")
       ]
     )
   }
@@ -193,8 +193,8 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "FOO", message: "Unexpected text 'foo()' found in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "BAR", message: "Unexpected text 'bar()' found in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "FOO", message: "Unexpected text 'foo()' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "BAR", message: "Unexpected text 'bar()' in conditional compilation block"),
       ]
     )
 
@@ -213,7 +213,7 @@ final class StatementTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text 'print()' found in conditional compilation clause")
+        DiagnosticSpec(message: "Unexpected text 'print()' before conditional compilation clause")
       ]
     )
   }

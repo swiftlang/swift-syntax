@@ -92,8 +92,8 @@ final class DirectiveTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' found in conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Unexpected text '}' found in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Unexpected text '}' in conditional compilation block"),
       ]
     )
   }

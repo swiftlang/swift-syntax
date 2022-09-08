@@ -29,7 +29,7 @@ final class TypeTests: XCTestCase {
 
   func testFunctionTypes() throws {
     AssertParse("t as(#^DIAG^#..)->", diagnostics: [
-      DiagnosticSpec(message: "Unexpected text '..' found in function type")
+      DiagnosticSpec(message: "Unexpected text '..' in function type")
     ])
   }
 
@@ -49,14 +49,14 @@ final class TypeTests: XCTestCase {
                 { $0.parseClosureExpression() },
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '' in closure capture item"),
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text 'class' found in closure capture signature"),
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text 'class' in closure capture signature"),
                   DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end closure"),
                 ])
 
     AssertParse("{[n#^DIAG^#`]in}",
                 { $0.parseClosureExpression() },
                 diagnostics: [
-                  DiagnosticSpec(message: "Unexpected text '`' found in closure capture signature")
+                  DiagnosticSpec(message: "Unexpected text '`' in closure capture signature")
                 ])
   }
 }

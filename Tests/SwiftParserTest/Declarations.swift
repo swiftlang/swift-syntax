@@ -51,7 +51,7 @@ final class DeclarationTests: XCTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '}' found in function")
+        DiagnosticSpec(message: "Unexpected text '}' before function")
       ]
     )
   }
@@ -115,7 +115,7 @@ final class DeclarationTests: XCTestCase {
       actor Foo {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '}' found in actor")
+        DiagnosticSpec(message: "Unexpected text '}' before actor")
       ]
     )
   }
@@ -417,7 +417,7 @@ final class DeclarationTests: XCTestCase {
       "(first second #^DIAG^#third fourth: Int)",
       { $0.parseFunctionSignature() },
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text 'third fourth' found in function parameter")
+        DiagnosticSpec(message: "Unexpected text 'third fourth' in function parameter")
       ]
     )
   }
@@ -559,7 +559,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: """
-            Unexpected text '/ ###line 25 "line-directive.swift"' found in struct
+            Unexpected text '/ ###line 25 "line-directive.swift"' in struct
             """
         )
       ]
@@ -574,7 +574,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text 'bogus rethrows set' found in variable")
+        DiagnosticSpec(message: "Unexpected text 'bogus rethrows set' in variable")
       ]
     )
   }
@@ -606,7 +606,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text 'third' found in function parameter")
+        DiagnosticSpec(message: "Unexpected text 'third' in function parameter")
       ]
     )
   }
@@ -627,7 +627,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text 'third fourth' found in function parameter")
+        DiagnosticSpec(message: "Unexpected text 'third fourth' in function parameter")
       ]
     )
   }
@@ -678,7 +678,7 @@ final class DeclarationTests: XCTestCase {
         trailingComma: nil
       )),
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '[third fourth]' found in function parameter")
+        DiagnosticSpec(message: "Unexpected text '[third fourth]' in function parameter")
       ]
     )
   }
@@ -703,7 +703,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "COLON", message: "Expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "END_ARRAY" , message: "Expected ']' to end array type"),
-        DiagnosticSpec(locationMarker: "END_ARRAY", message: "Unexpected text 'fourth: Int' found in parameter clause")
+        DiagnosticSpec(locationMarker: "END_ARRAY", message: "Unexpected text 'fourth: Int' in parameter clause")
       ]
     )
   }

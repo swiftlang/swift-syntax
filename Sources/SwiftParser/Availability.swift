@@ -35,8 +35,8 @@ extension Parser {
       repeat {
         let entry: RawSyntax
         switch source {
-        case .available where self.currentToken.isIdentifier,
-            .unavailable where self.currentToken.isIdentifier:
+        case .available where self.at(.identifier),
+            .unavailable where self.at(.identifier):
           entry = RawSyntax(self.parseAvailabilityMacro())
         default:
           entry = self.parseAvailabilitySpec()
@@ -48,15 +48,12 @@ extension Parser {
 
         // Before continuing to parse the next specification, we check that it's
         // also in the shorthand syntax and recover from it.
-        if
-          keepGoing != nil,
-          self.currentToken.isIdentifier,
-          AvailabilityArgumentKind(rawValue: self.currentToken.tokenText) != nil
-        {
+        if keepGoing != nil,
+           let (_, handle) = self.at(anyIn: AvailabilityArgumentKind.self) {
           var tokens = [RawTokenSyntax]()
-          tokens.append(self.consumeAnyToken())
+          tokens.append(self.eat(handle))
           var recoveryProgress = LoopProgressCondition()
-          while !self.at(.eof) && !self.at(.comma) && !self.at(.rightParen) && recoveryProgress.evaluate(currentToken) {
+          while !self.at(any: [.eof, .comma, .rightParen]) && recoveryProgress.evaluate(currentToken) {
             tokens.append(self.consumeAnyToken())
           }
           let syntax = RawTokenListSyntax(elements: tokens, arena: self.arena)
@@ -70,7 +67,7 @@ extension Parser {
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
   }
 
-  enum AvailabilityArgumentKind: SyntaxText {
+  enum AvailabilityArgumentKind: SyntaxText, ContextualKeywords {
     case message
     case renamed
     case introduced
@@ -92,21 +89,11 @@ extension Parser {
     do {
       var loopProgressCondition = LoopProgressCondition()
       while keepGoing != nil && loopProgressCondition.evaluate(currentToken) {
-        guard self.currentToken.tokenKind == .identifier,
-              let argKind = AvailabilityArgumentKind(rawValue: self.currentToken.tokenText) else {
-          // Not sure what this label is but, let's just eat it and
-          // keep going.
-          let arg = self.consumeAnyToken()
-          keepGoing = self.consume(if: .comma)
-          elements.append(RawAvailabilityArgumentSyntax(
-            entry: RawSyntax(arg), trailingComma: keepGoing, arena: self.arena))
-          continue
-        }
-
         let entry: RawSyntax
-        switch argKind {
-        case .message, .renamed:
-          let argumentLabel = self.consumeAnyToken()
+        switch self.at(anyIn: AvailabilityArgumentKind.self) {
+        case (.message, let handle)?,
+            (.renamed, let handle)?:
+          let argumentLabel = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           // FIXME: Make sure this is a string literal with no interpolation.
           let stringValue = self.consumeAnyToken()
@@ -118,8 +105,9 @@ extension Parser {
             value: RawSyntax(stringValue),
             arena: self.arena
           ))
-        case .introduced, .obsoleted:
-          let argumentLabel = self.consumeAnyToken()
+        case (.introduced, let handle)?,
+            (.obsoleted, let handle)?:
+          let argumentLabel = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let version = self.parseVersionTuple()
           entry = RawSyntax(RawAvailabilityLabeledArgumentSyntax(
@@ -129,21 +117,29 @@ extension Parser {
             value: RawSyntax(version),
             arena: self.arena
           ))
-        case .deprecated:
-          let argumentLabel = self.consumeAnyToken()
-          if self.at(.colon) {
-            let colon = self.eat(.colon)
+        case (.deprecated, let handle)?:
+          let argumentLabel = self.eat(handle)
+          if let colon = self.consume(if: .colon) {
             let version = self.parseVersionTuple()
             entry = RawSyntax(RawAvailabilityLabeledArgumentSyntax(
-              label: argumentLabel, colon: colon, value: RawSyntax(version), arena: self.arena))
+              label: argumentLabel,
+              colon: colon,
+              value: RawSyntax(version),
+              arena: self.arena
+            ))
           } else {
             entry = RawSyntax(argumentLabel)
           }
-        case .unavailable, .noasync:
-          let argument = self.consumeAnyToken()
+        case (.unavailable, let handle)?,
+            (.noasync, let handle)?:
+          let argument = self.eat(handle)
           // FIXME: Can we model this in SwiftSyntax by making the
           // 'labeled' argument part optional?
           entry = RawSyntax(argument)
+        case nil:
+          // Not sure what this label is but, let's just eat it and
+          // keep going.
+          entry = RawSyntax(self.consumeAnyToken())
         }
 
         keepGoing = self.consume(if: .comma)
@@ -162,15 +158,14 @@ extension Parser {
   ///     availability-argument → platform-name platform-version
   ///     availability-argument → *
   mutating func parseAvailabilitySpec() -> RawSyntax {
-    if self.currentToken.isBinaryOperator && self.currentToken.tokenText == "*" {
-      let star = self.consumeAnyToken()
+    if let star = self.consumeIfContextualPunctuator("*") {
       // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
       // doesn't expect it.
       return RawSyntax(star)
     }
 
-    if self.currentToken.isIdentifier || self.at(.wildcardKeyword) {
-      if self.currentToken.tokenText == "swift" || self.currentToken.tokenText == "_PackageDescription" {
+    if self.at(any: [.identifier, .wildcardKeyword]) {
+      if self.atContextualKeyword("swift") || self.atContextualKeyword("_PackageDescription") {
         return RawSyntax(self.parsePlatformAgnosticVersionConstraintSpec())
       }
     }
@@ -179,11 +174,14 @@ extension Parser {
   }
 
   mutating func parsePlatformAgnosticVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
-    assert(self.currentToken.isIdentifier || self.at(.wildcardKeyword))
-    let platform = self.consumeAnyToken()
+    let (unexpectedBeforePlatform, platform) = self.expectAny([.identifier, .wildcardKeyword], default: .identifier)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
-      platform: platform, version: version, arena: self.arena)
+      unexpectedBeforePlatform,
+      platform: platform,
+      version: version,
+      arena: self.arena
+    )
   }
 
   /// Parse a platform-specific version constraint.
@@ -202,7 +200,7 @@ extension Parser {
   ///     platform-name → tvOS
   mutating func parsePlatformVersionConstraintSpec() -> RawAvailabilityVersionRestrictionSyntax {
     // Register the platform name as a keyword token.
-    let plaform = self.consume(remapping: .contextualKeyword)
+    let plaform = self.consumeAnyToken(remapping: .contextualKeyword)
     let version = self.parseVersionTuple()
     return RawAvailabilityVersionRestrictionSyntax(
       platform: plaform, version: version, arena: self.arena)
@@ -220,9 +218,9 @@ extension Parser {
     let platform = self.consumeAnyToken()
 
     let version: RawVersionTupleSyntax?
-    if case .integerLiteral = self.currentToken.tokenKind {
+    if self.at(.integerLiteral) {
       version = self.parseVersionTuple()
-    } else if case .floatingLiteral = self.currentToken.tokenKind {
+    } else if self.at(.floatingLiteral) {
       version = self.parseVersionTuple()
     } else {
       version = nil
@@ -241,7 +239,7 @@ extension Parser {
   ///     platform-version → decimal-digits '.' decimal-digits
   ///     platform-version → decimal-digits '.' decimal-digits '.' decimal-digits
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
-    if self.currentToken.tokenKind == .integerLiteral {
+    if self.at(.integerLiteral) {
       let majorMinor = self.consumeAnyToken()
       return RawVersionTupleSyntax(
         majorMinor: RawSyntax(majorMinor), patchPeriod: nil, patchVersion: nil,

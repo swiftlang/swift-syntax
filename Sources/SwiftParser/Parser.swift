@@ -153,25 +153,12 @@ public struct Parser: TokenConsumer {
     self.lexemes = Lexer.tokenize(sourceBuffer)
     self.currentToken = self.lexemes.advance()
   }
-}
 
-// MARK: Inspecting Tokens
-
-extension Parser {
-  /// Retrieves the token following the current token without consuming it.
   @_spi(RawSyntax)
-  public func peek() -> Lexer.Lexeme {
-    return self.lexemes.peek()
+  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) -> RawTokenSyntax {
+    return RawTokenSyntax(missing: kind, text: text, arena: self.arena)
   }
-}
 
-// MARK: Consuming Tokens
-
-extension Parser {
-  @_spi(RawSyntax)
-  public mutating func missingToken(_ kind: RawTokenKind) -> RawTokenSyntax {
-    return RawTokenSyntax(missing: kind, arena: arena)
-  }
   /// Consumes the current token and advances the lexer to the next token.
   ///
   /// - Returns: The token that was consumed.
@@ -187,7 +174,21 @@ extension Parser {
       arena: arena
     )
   }
+}
 
+// MARK: Inspecting Tokens
+
+extension Parser {
+  /// Retrieves the token following the current token without consuming it.
+  @_spi(RawSyntax)
+  public func peek() -> Lexer.Lexeme {
+    return self.lexemes.peek()
+  }
+}
+
+// MARK: Consuming Tokens
+
+extension Parser {
   /// Consumes the current token and sets its kind to the given `TokenKind`,
   /// then advances the lexer to the next token.
   ///
@@ -195,37 +196,158 @@ extension Parser {
   /// - Returns: The token that was consumed with its kind re-mapped to the
   ///            given `TokenKind`.
   @_spi(RawSyntax)
-  public mutating func consume(remapping kind: RawTokenKind) -> RawTokenSyntax {
+  public mutating func consumeAnyToken(remapping kind: RawTokenKind) -> RawTokenSyntax {
     self.currentToken.tokenKind = kind
     return self.consumeAnyToken()
   }
 
+}
+
+// MARK: Check if we can recover to a token
+
+extension Parser {
+  /// Checks if it can reach a token of the given `kind` by skipping unexpected
+  /// tokens that have lower ``TokenPrecedence`` than expected token.
+  @_spi(RawSyntax)
+  public func canRecoverTo(_ kind: RawTokenKind) -> RecoveryConsumptionHandle? {
+    if self.at(kind) {
+      return RecoveryConsumptionHandle(
+        unexpectedTokens: 0,
+        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: kind)
+      )
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo([kind])
+  }
+
+  /// Checks if it can reach a contextual keyword with the given `name` by
+  /// skipping unexpected tokens that have lower ``TokenPrecedence`` than
+  /// `precedence`.
+  @_spi(RawSyntax)
+  public func canRecoverToContextualKeyword(
+    _ name: SyntaxText,
+    precedence: TokenPrecedence = TokenPrecedence(.contextualKeyword)
+  ) -> RecoveryConsumptionHandle? {
+    if self.atContextualKeyword(name) {
+      return RecoveryConsumptionHandle(
+        unexpectedTokens: 0,
+        tokenConsumptionHandle: TokenConsumptionHandle(
+          tokenKind: self.currentToken.tokenKind,
+          remappedKind: .contextualKeyword
+        )
+      )
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo([], contextualKeywords: [name])
+  }
+
+
+  /// Checks if it can reach a token whose kind is in `kinds` by skipping
+  /// unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
+  @_spi(RawSyntax)
+  public func canRecoverTo(
+    any kinds: [RawTokenKind]
+  ) -> RecoveryConsumptionHandle? {
+    if self.at(any: kinds) {
+      return RecoveryConsumptionHandle(
+        unexpectedTokens: 0,
+        tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: self.currentToken.tokenKind)
+      )
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo(kinds)
+  }
+
+
+  /// Checks if we can reach a token in `subset` by skipping tokens that have
+  /// a precedence that have a lower ``TokenPrecedence`` than the minimum
+  /// precedence of a token in that subset.
+  /// If so, return the token that we can recover to and a handle that can be
+  /// used to consume the unexpected tokens and the token we recovered to.
+  func canRecoverTo<Subset: RawTokenKindSubset>(
+    anyIn subset: Subset.Type
+  ) -> (Subset, RecoveryConsumptionHandle)? {
+    if let (kind, handle) = self.at(anyIn: subset) {
+      return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
+    }
+    var lookahead = self.lookahead()
+    return lookahead.canRecoverTo(anyIn: subset)
+  }
+
+  /// Eat a token that we know we are currently positioned at, based on `canRecoverTo(anyIn:)`.
+  mutating func eat(_ handle: RecoveryConsumptionHandle) -> (RawUnexpectedNodesSyntax?, Token) {
+    let unexpectedNodes: RawUnexpectedNodesSyntax?
+    if handle.unexpectedTokens > 0 {
+      var unexpectedTokens = [RawSyntax]()
+      for _ in 0..<handle.unexpectedTokens {
+        unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
+      }
+      unexpectedNodes = RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena)
+    } else {
+      unexpectedNodes = nil
+    }
+    let token = self.eat(handle.tokenConsumptionHandle)
+    return (unexpectedNodes, token)
+  }
+}
+
+// MARK: Expecting Tokens with Recovery
+
+extension Parser {
+  /// Implements the paradigm shared across all `expect` methods.
+  private mutating func expectImpl(
+    consume: (inout Parser) -> RawTokenSyntax?,
+    canRecoverTo: (inout Lookahead) -> RecoveryConsumptionHandle?,
+    makeMissing: (inout Parser) -> RawTokenSyntax
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    if let tok = consume(&self) {
+      return (nil, tok)
+    }
+    var lookahead = self.lookahead()
+    if let handle = canRecoverTo(&lookahead) {
+      let (unexpectedTokens, token) = self.eat(handle)
+      return (unexpectedTokens, token)
+    }
+    return (nil, makeMissing(&self))
+  }
+
   /// Attempts to consume a token of the given kind.
   /// If it cannot be found, the parser tries
-  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
   ///     expected token and see if the token occurs after that unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
   @_spi(RawSyntax)
-  public mutating func expect(_ kind: RawTokenKind) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    if let tok = self.consume(if: kind) {
-      return (nil, tok)
-    }
-    var lookahead = self.lookahead()
-    if lookahead.canRecoverTo(kind) {
-      var unexpectedNodes = [RawSyntax]()
-      for _ in 0..<lookahead.tokensConsumed {
-        unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
-      }
-      let token = eat(kind)
-      return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
-    }
-    return (nil, RawTokenSyntax(missing: kind, arena: self.arena))
+  public mutating func expect(
+    _ kind: RawTokenKind
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    return expectImpl(
+      consume: { $0.consume(if: kind) },
+      canRecoverTo: { $0.canRecoverTo([kind]) },
+      makeMissing: { $0.missingToken(kind, text: nil) }
+    )
+  }
+
+  /// Attempts to consume a contextual keyword whose text is `name`.
+  /// If it cannot be found, the parser tries
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than `precedence`.
+  ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
+  ///     a missing token of the requested kind.
+  @_spi(RawSyntax)
+  public mutating func expectContextualKeyword(
+    _ name: SyntaxText,
+    precedence: TokenPrecedence = TokenPrecedence(.contextualKeyword)
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    return expectImpl(
+      consume: { $0.consumeIfContextualKeyword(name) },
+      canRecoverTo: { $0.canRecoverTo([], contextualKeywords: [name], recoveryPrecedence: precedence) },
+      makeMissing: { $0.missingToken(.contextualKeyword, text: name) }
+    )
   }
 
   /// Attempts to consume a token whose kind is in `kinds`.
   /// If it cannot be found, the parser tries
-  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
   ///     lowest precedence of the expected token kinds and see if a token of
   ///     the requested kinds occurs after the unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
@@ -233,46 +355,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func expectAny(
     _ kinds: [RawTokenKind],
+    contextualKeywords: [SyntaxText] = [],
     default defaultKind: RawTokenKind
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    for kind in kinds {
-      if let tok = self.consume(if: kind) {
-        return (nil, tok)
-      }
-    }
-    var lookahead = self.lookahead()
-    if lookahead.canRecoverTo(kinds) {
-      var unexpectedNodes = [RawSyntax]()
-      for _ in 0..<lookahead.tokensConsumed {
-        unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
-      }
-      let token = consumeAnyToken()
-      assert(kinds.contains(token.tokenKind))
-      return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
-    }
-    return (nil, RawTokenSyntax(missing: defaultKind, arena: self.arena))
-  }
-
-  /// Attempts to consume a token of the given kind, synthesizing a missing
-  /// token if the current token's kind does not match.
-  ///
-  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
-  /// In general, `expect` or `expectAny` should be preferred.
-  ///
-  /// - Parameter kind: The kind of token to consume.
-  /// - Returns: A token of the given kind.
-  @_spi(RawSyntax)
-  public mutating func expectWithoutLookahead(_ kind: RawTokenKind, _ text: SyntaxText? = nil) -> RawTokenSyntax {
-    if self.currentToken.tokenKind == kind {
-      if let text = text {
-        if self.currentToken.tokenText == text {
-          return self.consumeAnyToken()
-        }
-      } else {
-        return self.consumeAnyToken()
-      }
-    }
-    return RawTokenSyntax(missing: kind, arena: self.arena)
+    return expectImpl(
+      consume: { $0.consume(ifAny: kinds, contextualKeywords: contextualKeywords) },
+      canRecoverTo: { $0.canRecoverTo(kinds, contextualKeywords: contextualKeywords) },
+      makeMissing: { $0.missingToken(defaultKind, text: nil) }
+    )
   }
 }
 
@@ -293,7 +383,7 @@ extension Parser {
     let tokenText = current.tokenText
 
     if tokenText == prefix {
-      return self.consume(remapping: tokenKind)
+      return self.consumeAnyToken(remapping: tokenKind)
     }
     assert(tokenText.hasPrefix(prefix))
 

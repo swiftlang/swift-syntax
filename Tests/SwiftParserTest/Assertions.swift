@@ -204,13 +204,15 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
   _ markedSource: String,
   _ parseSyntax: (inout Parser) -> Node,
   substructure expectedSubstructure: Syntax? = nil,
+  substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   fixedSource expectedFixedSource: String? = nil,
   file: StaticString = #file,
   line: UInt = #line
 ) {
   // Verify the parser can round-trip the source
-  let (markerLocations, source) = extractMarkers(markedSource)
+  var (markerLocations, source) = extractMarkers(markedSource)
+  markerLocations["START"] = 0
   var src = source
   src.withUTF8 { buf in
     var parser = Parser(buf)
@@ -227,9 +229,9 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
 
       // Substructure
       if let expectedSubstructure = expectedSubstructure {
-        let subtreeMatcher = SubtreeMatcher(Syntax(tree), markers: [:])
+        let subtreeMatcher = SubtreeMatcher(Syntax(tree), markers: markerLocations)
         do {
-          try subtreeMatcher.assertSameStructure(Syntax(expectedSubstructure), file: file, line: line)
+          try subtreeMatcher.assertSameStructure(afterMarker: substructureAfterMarker, Syntax(expectedSubstructure), file: file, line: line)
         } catch {
           XCTFail("Matching for a subtree failed with error: \(error)", file: file, line: line)
         }

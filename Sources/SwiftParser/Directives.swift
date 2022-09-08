@@ -62,37 +62,34 @@ extension Parser {
   ///   - syntax: A function that aggregates the parsed conditional elements
   ///             into a syntax collection.
   @_spi(RawSyntax)
-  public mutating func parsePoundIfDirective<Element>(
+  public mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (inout Parser) -> Element?,
     syntax: (inout Parser, [Element]) -> RawSyntax
   ) -> RawIfConfigDeclSyntax {
     var clauses = [RawIfConfigClauseSyntax]()
     do {
-      var poundIf = self.eat(.poundIfKeyword)
+      var firstIteration = true
       var loopProgress = LoopProgressCondition()
-      repeat {
+      while let poundIfHandle = self.canRecoverTo(any: firstIteration ? [.poundIfKeyword] : [.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword]),
+            loopProgress.evaluate(self.currentToken) {
+        let (unexpectedBeforePoundIf, poundIf) = self.eat(poundIfHandle)
+        firstIteration = false
         // Parse the condition.
         let condition: RawExprSyntax?
-        if self.at(.poundElseKeyword) {
-          poundIf = self.consumeAnyToken()
+        switch poundIf.tokenKind {
+        case .poundIfKeyword, .poundElseifKeyword:
+          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+        case .poundElseKeyword:
           condition = nil
-        } else if self.at(.poundElseifKeyword)  {
-          poundIf = self.consumeAnyToken()
-          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
-        } else {
-          assert(poundIf.tokenKind == .poundIfKeyword)
-          condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+        default:
+          preconditionFailure("The loop condition should guarantee that we are at one of these tokens")
         }
 
         var elements = [Element]()
         do {
           var elementsProgress = LoopProgressCondition()
-          while !self.at(.eof)
-                  && !self.at(.poundElseKeyword)
-                  && !self.at(.poundElseifKeyword)
-                  && !self.at(.poundEndifKeyword)
-                  && elementsProgress.evaluate(currentToken) {
-            guard let element = parseElement(&self) else {
+          while !self.at(any: [.eof, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword]) && elementsProgress.evaluate(currentToken) {
+            guard let element = parseElement(&self), element.raw.byteLength > 0 else {
               break
             }
             elements.append(element)
@@ -100,11 +97,12 @@ extension Parser {
         }
 
         clauses.append(RawIfConfigClauseSyntax(
+          unexpectedBeforePoundIf,
           poundKeyword: poundIf,
           condition: condition,
           elements: syntax(&self, elements),
           arena: self.arena))
-      } while (self.at(.poundElseifKeyword) || self.at(.poundElseKeyword)) && loopProgress.evaluate(currentToken)
+      }
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)
@@ -125,8 +123,12 @@ extension Parser {
   ///     literal-expression → '#line'
   @_spi(RawSyntax)
   public mutating func parsePoundLineDirective() -> RawPoundLineExprSyntax {
-    let token = self.eat(.poundLineKeyword)
-    return RawPoundLineExprSyntax(poundLine: token, arena: self.arena)
+    let (unexpectedBeforeToken, token) = self.expect(.poundLineKeyword)
+    return RawPoundLineExprSyntax(
+      unexpectedBeforeToken,
+      poundLine: token,
+      arena: self.arena
+    )
   }
 
   /// Parse a line control directive.
@@ -144,14 +146,14 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let args: RawPoundSourceLocationArgsSyntax?
     if !self.at(.rightParen) {
-      let file = self.consumeIdentifier()
+      let file = self.expectIdentifierWithoutRecovery()
       let (unexpectedBeforeFileColon, fileColon) = self.expect(.colon)
       let (unexpectedBeforeFileName, fileName) = self.expect(.stringLiteral)
       let (unexpectedBeforeComma, comma) = self.expect(.comma)
 
-      let line = self.consumeIdentifier()
+      let line = self.expectIdentifierWithoutRecovery()
       let (unexpectedBeforeLineColon, lineColon) = self.expect(.colon)
-      let lineNumber = self.consumeInteger()
+      let lineNumber = self.expectWithoutRecovery(.integerLiteral)
 
       args = RawPoundSourceLocationArgsSyntax(
         fileArgLabel: file,

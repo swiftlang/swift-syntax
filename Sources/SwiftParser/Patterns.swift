@@ -45,9 +45,28 @@ extension Parser {
   ///
   ///     expression-pattern → expression
   mutating func parsePattern() -> RawPatternSyntax {
-    switch self.currentToken.tokenKind {
-    case .leftParen:
-      let lparen = self.eat(.leftParen)
+    enum ExpectedTokens: RawTokenKindSubset {
+      case leftParen
+      case wildcardKeyword
+      case identifier
+      case letKeyword
+      case varKeyword
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .leftParen: return .leftParen
+        case .wildcardKeyword: return .wildcardKeyword
+        case .identifier: return .identifier
+        case .letKeyword: return .letKeyword
+        case .varKeyword: return .varKeyword
+        }
+      }
+
+    }
+
+    switch self.at(anyIn: ExpectedTokens.self) {
+    case (.leftParen, let handle)?:
+      let lparen = self.eat(handle)
       let elements = self.parsePatternTupleElements()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       return RawPatternSyntax(RawTuplePatternSyntax(
@@ -57,26 +76,29 @@ extension Parser {
         rightParen: rparen,
         arena: self.arena
       ))
-    case .wildcardKeyword:
-      let wildcard = self.eat(.wildcardKeyword)
+    case (.wildcardKeyword, let handle)?:
+      let wildcard = self.eat(handle)
       return RawPatternSyntax(RawWildcardPatternSyntax(
-        wildcard: wildcard, typeAnnotation: nil, arena: self.arena))
-    case .identifier:
-      let identifier = self.eat(self.currentToken.tokenKind)
+        wildcard: wildcard,
+        typeAnnotation: nil,
+        arena: self.arena
+      ))
+    case (.identifier, let handle)?:
+      let identifier = self.eat(handle)
       return RawPatternSyntax(RawIdentifierPatternSyntax(
-        identifier: identifier, arena: self.arena))
-    case .letKeyword, .varKeyword:
-      let letOrVar: RawTokenSyntax
-      if self.at(.letKeyword) {
-        letOrVar = self.eat(.letKeyword)
-      } else {
-        assert(self.at(.varKeyword))
-        letOrVar = self.eat(.varKeyword)
-      }
+        identifier: identifier,
+        arena: self.arena
+      ))
+    case (.letKeyword, let handle)?,
+      (.varKeyword, let handle)?:
+      let letOrVar = self.eat(handle)
       let value = self.parsePattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
-        letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
-    default:
+        letOrVarKeyword: letOrVar,
+        valuePattern: value,
+        arena: self.arena
+      ))
+    case nil:
       return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
     }
   }
@@ -91,14 +113,16 @@ extension Parser {
     let pattern = self.parsePattern()
 
     // Now parse an optional type annotation.
-    guard self.at(.colon) else {
+    guard let colon = self.consume(if: .colon) else {
       return (pattern, nil)
     }
 
-    let colon = self.eat(.colon)
     let result = self.parseType()
     let type = RawTypeAnnotationSyntax(
-      colon: colon, type: result, arena: self.arena)
+      colon: colon,
+      type: result,
+      arena: self.arena
+    )
     return (pattern, type)
   }
 
@@ -114,20 +138,10 @@ extension Parser {
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof)
-              && !self.at(.rightParen)
-              && keepGoing
-              && loopProgress.evaluate(currentToken) {
-        // If the tuple element has a label, parse it.
-        let label: RawTokenSyntax?
-        let colon: RawTokenSyntax?
-        if self.currentToken.tokenKind == .identifier, self.peek().tokenKind == .colon {
-          label = self.consumeAnyToken()
-          colon = self.eat(.colon)
-        } else {
-          label = nil
-          colon = nil
-        }
+      while !self.at(any: [.eof, .rightParen]) && keepGoing && loopProgress.evaluate(currentToken) {
+         // If the tuple element has a label, parse it.
+        let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
+        let (label, colon) = (labelAndColon?.0, labelAndColon?.1)
         let pattern = self.parsePattern()
         let trailingComma = self.consume(if: .comma)
         keepGoing = trailingComma != nil
@@ -148,18 +162,22 @@ extension Parser {
   /// for-in loops and guard clauses.
   mutating func parseMatchingPattern() -> RawPatternSyntax {
     // Parse productions that can only be patterns.
-    if self.at(.varKeyword) || self.at(.letKeyword) {
-      let letOrVar = self.consumeAnyToken()
+    switch self.at(anyIn: MatchingPatternStart.self) {
+    case (.varKeyword, let handle)?,
+      (.letKeyword, let handle)?:
+      let letOrVar = self.eat(handle)
       let value = self.parseMatchingPattern()
       return RawPatternSyntax(RawValueBindingPatternSyntax(
         letOrVarKeyword: letOrVar, valuePattern: value, arena: self.arena))
-    } else if self.at(.isKeyword) {
-      // matching-pattern ::= 'is' type
-      let isKeyword = self.eat(.isKeyword)
+    case (.isKeyword, let handle)?:
+      let isKeyword = self.eat(handle)
       let type = self.parseType()
       return RawPatternSyntax(RawIsTypePatternSyntax(
-        isKeyword: isKeyword, type: type, arena: self.arena))
-    } else {
+        isKeyword: isKeyword,
+        type: type,
+        arena: self.arena
+      ))
+    case nil:
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will
       // disambiguate.
@@ -188,16 +206,36 @@ extension Parser.Lookahead {
   ///   pattern ::= 'var' pattern
   ///   pattern ::= 'let' pattern
   mutating func canParsePattern() -> Bool {
-    switch self.currentToken.tokenKind {
-    case .identifier, .wildcardKeyword:
-      self.consumeAnyToken()
+    enum PatternStartTokens: RawTokenKindSubset {
+      case identifier
+      case wildcardKeyword
+      case letKeyword
+      case varKeyword
+      case leftParen
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .identifier: return .identifier
+        case .wildcardKeyword: return .wildcardKeyword
+        case .letKeyword: return .letKeyword
+        case .varKeyword: return .varKeyword
+        case .leftParen: return .leftParen
+        }
+      }
+    }
+
+    switch self.at(anyIn: PatternStartTokens.self) {
+    case (.identifier, let handle)?,
+        (.wildcardKeyword, let handle)?:
+      self.eat(handle)
       return true
-    case .letKeyword, .varKeyword:
-      self.consumeAnyToken()
+    case (.letKeyword, let handle)?,
+      (.varKeyword, let handle)?:
+      self.eat(handle)
       return self.canParsePattern()
-    case .leftParen:
+    case (.leftParen, _)?:
       return self.canParsePatternTuple()
-    default:
+    case nil:
       return false
     }
   }
@@ -248,9 +286,9 @@ extension Parser.Lookahead {
     // If the next token can be an argument label, we might have a name.
     if nextTok.canBeArgumentLabel {
       // If the first name wasn't "isolated", we're done.
-      if !self.currentToken.isContextualKeyword("isolated") &&
-          !self.currentToken.isContextualKeyword("some") &&
-          !self.currentToken.isContextualKeyword("any") {
+      if !self.atContextualKeyword("isolated") &&
+          !self.atContextualKeyword("some") &&
+          !self.atContextualKeyword("any") {
         return true
       }
 
@@ -263,8 +301,7 @@ extension Parser.Lookahead {
           return true // isolated :
         }
         backtrack.consumeAnyToken()
-        backtrack.consumeAnyToken()
-        return backtrack.currentToken.canBeArgumentLabel && nextTok.tokenKind == .colon
+        return backtrack.currentToken.canBeArgumentLabel && backtrack.peek().tokenKind == .colon
       }
     }
 

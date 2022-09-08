@@ -14,8 +14,10 @@
 
 extension Parser {
   mutating func parseAnyIdentifier() -> RawTokenSyntax {
-    if self.currentToken.isIdentifier || self.currentToken.isAnyOperator {
-      return self.consumeAnyToken()
+    if let token = self.consume(if: .identifier) {
+      return token
+    } else if let (_, handle) = self.at(anyIn: Operator.self) {
+      return self.eat(handle)
     } else {
       return RawTokenSyntax(missing: .identifier, arena: arena)
     }
@@ -52,14 +54,14 @@ extension Parser {
   mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
     // Consume the base name.
     let ident: RawTokenSyntax
-    if self.currentToken.isIdentifier || self.at(.selfKeyword) || self.at(.capitalSelfKeyword) {
-      ident = self.consumeIdentifier()
-    } else if flags.contains(.operators) && self.currentToken.isAnyOperator {
-      ident = self.consume(remapping: .identifier)
+    if self.at(.identifier) || self.at(any: [.selfKeyword, .capitalSelfKeyword]) {
+      ident = self.expectIdentifierWithoutRecovery()
+    } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
+      ident = self.consumeAnyToken(remapping: .identifier)
     } else if flags.contains(.keywords) && self.currentToken.tokenKind.isKeyword {
-      ident = self.consume(remapping: .identifier)
+      ident = self.consumeAnyToken(remapping: .identifier)
     } else {
-      ident = self.consumeIdentifier()
+      ident = self.expectIdentifierWithoutRecovery()
     }
 
     // Parse an argument list, if the flags allow it and it's present.
@@ -73,7 +75,7 @@ extension Parser {
     }
 
     // Is the current token a left paren?
-    guard self.at(.leftParen) && !self.currentToken.isAtStartOfLine else {
+    guard self.at(.leftParen, where: { !$0.isAtStartOfLine }) else {
       return nil
     }
 
@@ -101,20 +103,25 @@ extension Parser {
     var elements = [RawDeclNameArgumentSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof) && !self.at(.rightParen) && loopProgress.evaluate(currentToken) {
+      while !self.at(any: [.eof, .rightParen]) && loopProgress.evaluate(currentToken) {
         // Check to see if there is an argument label.
         assert(self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
-        let colon = self.eat(.colon)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(RawDeclNameArgumentSyntax(
-          name: name, colon: colon, arena: arena))
+          name: name,
+          unexpectedBeforeColon,
+          colon: colon,
+          arena: arena
+        ))
       }
     }
-    let rparen = self.eat(.rightParen)
+    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawDeclNameArgumentsSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
       arguments: RawDeclNameArgumentListSyntax(elements: elements, arena: self.arena),
+      unexpectedBeforeRParen,
       rightParen: rparen,
       arena: arena)
   }
@@ -128,7 +135,7 @@ extension Parser.Lookahead {
     }
 
     var loopProgress = LoopProgressCondition()
-    while !lookahead.at(.eof) && !lookahead.at(.rightParen) && loopProgress.evaluate(lookahead.currentToken) {
+    while !lookahead.at(any: [.eof, .rightParen]) && loopProgress.evaluate(lookahead.currentToken) {
       // Check to see if there is an argument label.
       guard lookahead.currentToken.canBeArgumentLabel && lookahead.peek().tokenKind == .colon else {
         return false
@@ -165,17 +172,6 @@ extension Lexer.Lexeme {
     }
   }
 
-  var isBinaryOperator: Bool {
-    return (self.tokenKind == .spacedBinaryOperator ||
-            self.tokenKind == .unspacedBinaryOperator)
-  }
-
-  var isAnyOperator: Bool {
-    return (self.isBinaryOperator ||
-            self.tokenKind == .postfixOperator ||
-            self.tokenKind == .prefixOperator)
-  }
-
   func isContextualKeyword(_ name: SyntaxText) -> Bool {
     switch self.tokenKind {
     case .identifier, .contextualKeyword:
@@ -185,131 +181,25 @@ extension Lexer.Lexeme {
     }
   }
 
-  func isContextualDeclKeyword() -> Bool {
-    guard self.isIdentifier else {
-      return false
-    }
-    switch self.tokenText {
-    case "final",
-      "required",
-      "optional",
-      "lazy",
-      "dynamic",
-      "infix",
-      "prefix",
-      "postfix",
-      "_compilerInitialized",
-      "__consuming",
-      "mutating",
-      "nonmutating",
-      "convenience",
-      "override",
-      "open",
-      "weak",
-      "unowned",
-      "indirect",
-      "actor",
-      "isolated",
-      "async",
-      "nonisolated",
-      "distributed",
-      "_const",
-      "_local":
-      return true
+  func isContextualKeyword(_ names: [SyntaxText]) -> Bool {
+    switch self.tokenKind {
+    case .identifier, .contextualKeyword:
+      return names.contains(self.tokenText)
     default:
       return false
     }
   }
 
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {
-    return self.isAnyOperator && self.tokenText == name
+    return Operator(self) != nil && self.tokenText == name
   }
 
   var isKeyword: Bool {
     self.tokenKind.isKeyword
   }
 
-  var isPunctuation: Bool {
-    self.tokenKind.isPunctuation
-  }
-
-  var isIdentifier: Bool {
-    return self.tokenKind == .identifier
-  }
-
-  var isEllipsis: Bool {
-    return self.isAnyOperator && self.tokenText == "..."
-  }
-
-
-  var isEffectsSpecifier: Bool {
-    // NOTE: If this returns 'true', that token must be handled in
-    //       'parseEffectsSpecifiers()'.
-
-    if (self.isContextualKeyword("async") ||
-        (self.isContextualKeyword("await") && !self.isAtStartOfLine) ||
-        self.isContextualKeyword("reasync")) {
-      return true
-    }
-
-    // 'throws' and 'rethrows' are always valid effects specifiers.
-    if self.tokenKind == .throwsKeyword || self.tokenKind == .rethrowsKeyword {
-      return true
-    }
-
-    // We'll take 'throw' and 'try' too but they have to be on the same
-    // line as the declaration they're modifying.
-    if (self.tokenKind == .throwKeyword
-        || self.tokenKind == .tryKeyword)
-        && !self.isAtStartOfLine {
-      return true
-    }
-
-    return false;
-  }
-
-  var isKeywordPossibleDeclStart: Bool {
-    switch self.tokenKind {
-    case .atSign,
-        .associatedtypeKeyword,
-        .caseKeyword,
-        .classKeyword,
-        .deinitKeyword,
-        .enumKeyword,
-        .extensionKeyword,
-        .fileprivateKeyword,
-        .funcKeyword,
-        .importKeyword,
-        .initKeyword,
-        .internalKeyword,
-        .letKeyword,
-        .operatorKeyword,
-        .precedencegroupKeyword,
-        .privateKeyword,
-        .protocolKeyword,
-        .publicKeyword,
-        .staticKeyword,
-        .structKeyword,
-        .subscriptKeyword,
-        .typealiasKeyword,
-        .varKeyword,
-        .poundIfKeyword,
-        .poundWarningKeyword,
-        .poundErrorKeyword,
-        .identifier,
-        .poundSourceLocationKeyword:
-      return true
-    case .poundLineKeyword:
-      // #line at the start of the line is a directive, but it's deprecated.
-      // #line within a line is an expression.
-      return self.isAtStartOfLine
-    default:
-      return false
-    }
-  }
-
   func starts(with symbol: SyntaxText) -> Bool {
-    guard self.isAnyOperator || self.isPunctuation else {
+    guard Operator(self) != nil || self.tokenKind.isPunctuation else {
       return false
     }
 
@@ -317,38 +207,3 @@ extension Lexer.Lexeme {
   }
 }
 
-extension TokenConsumer {
-  mutating func consumeIdentifier() -> Token {
-    switch self.currentToken.tokenKind {
-    case .selfKeyword,
-        .capitalSelfKeyword,
-        .anyKeyword,
-        .identifier:
-      return self.consumeAnyToken()
-    default:
-      return self.missingToken(.identifier)
-    }
-  }
-
-  mutating func consumeIdentifierOrRethrows() -> Token {
-    switch self.currentToken.tokenKind {
-    case .selfKeyword,
-        .capitalSelfKeyword,
-        .anyKeyword,
-        .identifier,
-        .rethrowsKeyword:
-      return self.consumeAnyToken()
-    default:
-      return self.missingToken(.identifier)
-    }
-  }
-
-  mutating func consumeInteger() -> Token {
-    switch self.currentToken.tokenKind {
-    case .integerLiteral:
-      return self.consumeAnyToken()
-    default:
-      return self.missingToken(.integerLiteral)
-    }
-  }
-}

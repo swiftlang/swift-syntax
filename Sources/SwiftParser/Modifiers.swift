@@ -13,7 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum DeclModifier: SyntaxText {
+  enum DeclModifier: SyntaxText, ContextualKeywords {
     case unowned = "unowned"
 
     case final = "final"
@@ -46,14 +46,16 @@ extension Parser {
     var elements = [RawDeclModifierSyntax]()
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
-      switch self.currentToken.tokenKind {
-      case .privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword:
-        let name = self.consumeAnyToken()
+      switch self.at(anyIn: DeclarationModifier.self) {
+      case (.privateKeyword, let handle)?,
+          (.fileprivateKeyword, let handle)?,
+          (.internalKeyword, let handle)?,
+          (.publicKeyword, let handle)?:
+        let name = self.eat(handle)
         let details: RawDeclModifierDetailSyntax?
-        if self.at(.leftParen) {
-          let lparen = self.eat(.leftParen)
-          assert(self.currentToken.isContextualKeyword("set"))
-          let detail = self.consumeIdentifier()
+        if let lparen = self.consume(if: .leftParen) {
+          assert(self.atContextualKeyword("set"))
+          let detail = self.expectIdentifierWithoutRecovery()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           details = RawDeclModifierDetailSyntax(
             leftParen: lparen,
@@ -68,62 +70,57 @@ extension Parser {
 
         elements.append(RawDeclModifierSyntax(
           name: name, detail: details, arena: self.arena))
-      case .staticKeyword:
-        let staticKeyword = self.eat(.staticKeyword)
+      case (.staticKeyword, let handle)?:
+        let staticKeyword = self.eat(handle)
         elements.append(RawDeclModifierSyntax(
-          name: staticKeyword, detail: nil, arena: self.arena))
-      case .classKeyword:
-        // If 'class' is a modifier on another decl kind, like var or func,
-        // then treat it as a modifier.
-        do {
-          var lookahead = self.lookahead()
-          lookahead.eat(.classKeyword)
-          // When followed by an 'override' or CC token inside a class,
-          // treat 'class' as a modifier in the case of a following CC
-          // token, we cannot be sure there is no intention to override
-          // or witness something static.
-          guard lookahead.isStartOfDeclaration() || lookahead.currentToken.isContextualKeyword("override") else {
-            // This 'class' is a real ClassDecl introducer.
-            break MODIFIER_LOOP
-          }
-        }
-        let classKeyword = self.eat(.classKeyword)
-        elements.append(RawDeclModifierSyntax(
-          name: classKeyword, detail: nil, arena: self.arena))
-        continue
-      case .identifier:
-        // Context sensitive keywords.
-        // FIXME: Sink this into the GYB
-        switch DeclModifier(rawValue: self.currentToken.tokenText) {
-        case .unowned:
-          elements.append(self.parseUnownedModifier())
-        case .final,
-            .required,
-            .optional,
-            .lazy,
-            .dynamic,
-            .infix,
-            .prefix,
-            .postfix,
-            .compilerInitialized,
-            .consuming,
-            .mutating,
-            .nonmutating,
-            .convenience,
-            .override,
-            .open,
-            .weak,
-            .indirect,
-            .isolated,
-            .async,
-            .nonisolated,
-            .distributed,
-            .const,
-            .local:
-          elements.append(self.parseSimpleModifier())
-        default:
+          name: staticKeyword,
+          detail: nil,
+          arena: self.arena
+        ))
+      case (.classKeyword, let handle)?:
+        var lookahead = self.lookahead()
+        lookahead.eat(.classKeyword)
+        // When followed by an 'override' or CC token inside a class,
+        // treat 'class' as a modifier in the case of a following CC
+        // token, we cannot be sure there is no intention to override
+        // or witness something static.
+        if lookahead.atStartOfDeclaration() || lookahead.atContextualKeyword("override") {
+          let classKeyword = self.eat(handle)
+          elements.append(RawDeclModifierSyntax(
+            name: classKeyword,
+            detail: nil,
+            arena: self.arena
+          ))
+          continue
+        } else {
           break MODIFIER_LOOP
         }
+      case (.unowned, _)?:
+        elements.append(self.parseUnownedModifier())
+      case (.final, _)?,
+        (.required, _)?,
+        (.optional, _)?,
+        (.lazy, _)?,
+        (.dynamic, _)?,
+        (.infix, _)?,
+        (.prefix, _)?,
+        (.postfix, _)?,
+        (.compilerInitialized, _)?,
+        (.consuming, _)?,
+        (.mutating, _)?,
+        (.nonmutating, _)?,
+        (.convenience, _)?,
+        (.override, _)?,
+        (.open, _)?,
+        (.weak, _)?,
+        (.indirect, _)?,
+        (.isolated, _)?,
+        (.async, _)?,
+        (.nonisolated, _)?,
+        (.distributed, _)?,
+        (.const, _)?,
+        (.local, _)?:
+        elements.append(self.parseSimpleModifier())
 
       default:
         break MODIFIER_LOOP
@@ -135,28 +132,32 @@ extension Parser {
 
 extension Parser {
   mutating func parseSimpleModifier() -> RawDeclModifierSyntax {
-    let keyword = self.consume(remapping: .contextualKeyword)
+    let keyword = self.consumeAnyToken(remapping: .contextualKeyword)
     return RawDeclModifierSyntax(name: keyword, detail: nil, arena: self.arena)
   }
 
   mutating func parseModifierDetail() -> RawDeclModifierDetailSyntax {
-    let leftParen = self.eat(.leftParen)
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let detailToken = self.consumeAnyToken()
-    let rightParen = self.eat(.rightParen)
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawDeclModifierDetailSyntax(
-      leftParen: leftParen, detail: detailToken, rightParen: rightParen,
-      arena: self.arena)
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      detail: detailToken,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
   }
 
   mutating func parseSingleArgumentModifier() -> RawDeclModifierSyntax {
-    let keyword = self.consume(remapping: .contextualKeyword)
+    let keyword = self.consumeAnyToken(remapping: .contextualKeyword)
     let detail = self.parseModifierDetail()
     return RawDeclModifierSyntax(name: keyword, detail: detail, arena: self.arena)
   }
 
   mutating func parseUnownedModifier() -> RawDeclModifierSyntax {
-    assert(self.currentToken.tokenText == "unowned")
-    let keyword = self.consume(remapping: .contextualKeyword)
+    let (unexpectedBeforeKeyword, keyword) = self.expectContextualKeyword("unowned")
 
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {
@@ -165,6 +166,11 @@ extension Parser {
       detail = nil
     }
 
-    return RawDeclModifierSyntax(name: keyword, detail: detail, arena: self.arena)
+    return RawDeclModifierSyntax(
+      unexpectedBeforeKeyword,
+      name: keyword,
+      detail: detail,
+      arena: self.arena
+    )
   }
 }

@@ -424,10 +424,6 @@ extension RawSyntax {
     presence: SourcePresence,
     arena: SyntaxArena
   ) -> RawSyntax {
-    assert(arena.contains(text: text) || kind.defaultText?.baseAddress == text.baseAddress,
-           "token text must be managed by the arena, or known default text for the token")
-    assert(triviaPieces.allSatisfy({$0.storedText.map({arena.contains(text: $0)}) ?? true}),
-           "trivia text must be managed by the arena")
     let payload = RawSyntaxData.MaterializedToken(
       tokenKind: kind,
       tokenText: text,

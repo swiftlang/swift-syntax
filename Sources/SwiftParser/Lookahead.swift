@@ -42,7 +42,7 @@ extension Parser {
 
     /// Initiates a lookahead session from the current point in this
     /// lookahead session.
-    func lookahead() -> Lookahead {
+    public func lookahead() -> Lookahead {
       return Lookahead(lexemes: self.lexemes, currentToken: self.currentToken)
     }
   }
@@ -61,13 +61,34 @@ extension Parser.Lookahead {
 }
 
 extension Parser.Lookahead {
-  public mutating func missingToken(_ kind: RawTokenKind) {
+  @_spi(RawSyntax)
+  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) {
     // do nothing
   }
 
   public mutating func consumeAnyToken() {
     tokensConsumed += 1
     self.currentToken = self.lexemes.advance()
+  }
+
+  public mutating func consumeAnyToken(remapping: RawTokenKind) {
+    self.consumeAnyToken()
+  }
+
+  /// Consume tokens of lower precedence than `kind` until reaching a token of that kind.
+  /// The token of `kind` is also consumed.
+  @_spi(RawSyntax)
+  public mutating func consume(to kind: RawTokenKind) {
+    if self.consume(if: kind) != nil {
+      return
+    }
+    var lookahead = self.lookahead()
+    if lookahead.canRecoverTo([kind]) != nil {
+      for _ in 0..<lookahead.tokensConsumed {
+        self.consumeAnyToken()
+      }
+      self.consumeAnyToken()
+    }
   }
 
   /// Consumes a given token, or splits the current token into a leading token
@@ -96,18 +117,18 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   mutating func skipTypeAttribute() {
     // These are keywords that we accept as attribute names.
-    guard self.currentToken.isIdentifier || self.at(.inKeyword) || self.at(.inoutKeyword) else {
+    guard self.at(.identifier) || self.at(any: [.inKeyword, .inoutKeyword]) else {
       return
     }
 
     // Determine which attribute it is.
-    if let attr = Parser.TypeAttribute(rawValue: self.currentToken.tokenText) {
+    if let (attr, handle) = self.at(anyIn: Parser.TypeAttribute.self) {
       // Ok, it is a valid attribute, eat it, and then process it.
-      self.consumeAnyToken()
+      self.eat(handle)
       if case .convention = attr {
         guard
           self.consume(if: .leftParen) != nil,
-          (self.currentToken.isIdentifier ? self.consumeIdentifier() : nil) != nil,
+          (self.at(.identifier) ? self.expectIdentifierWithoutRecovery() : nil) != nil,
           self.consume(if: .rightParen) != nil
         else {
           return
@@ -116,18 +137,18 @@ extension Parser.Lookahead {
       return
     }
 
-    if Parser.DeclarationAttribute(rawValue: self.currentToken.tokenText) != nil {
+    if let (_, handle) = self.at(anyIn: Parser.DeclarationAttribute.self) {
       // This is a valid decl attribute so they should have put it on the decl
       // instead of the type.
       //
       // Recover by eating @foo(...)
-      self.consumeAnyToken()
+      self.eat(handle)
       if self.at(.leftParen) {
         var backtrack = self.lookahead()
         backtrack.skipSingle()
         // If we found '->', or 'throws' after paren, it's likely a parameter
         // of function type.
-        guard backtrack.at(.arrow) || backtrack.at(.throwsKeyword) || backtrack.at(.rethrowsKeyword) || backtrack.at(.throwKeyword) else {
+        guard backtrack.at(any: [.arrow, .throwsKeyword, .rethrowsKeyword, .throwKeyword]) else {
           self.skipSingle()
           return
         }
@@ -139,21 +160,32 @@ extension Parser.Lookahead {
     return
   }
 
+  /// Consumes the current token, and asserts that the kind of token that was
+  /// consumed matches the given kind.
+  ///
+  /// If the token kind did not match, this function will abort. It is useful
+  /// to insert structural invariants during parsing.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Returns: A token of the given kind.
+  public mutating func eat(_ kind: RawTokenKind) -> Token {
+    return self.consume(if: kind)!
+  }
+
   mutating func eatParseAttributeList() -> Bool {
     guard self.at(.atSign) else {
       return false
     }
 
-    repeat {
-      self.eat(.atSign)
-      self.consumeIdentifierOrRethrows()
+    while let _ = self.consume(if: .atSign) {
+      self.expectIdentifierOrRethrowsWithoutRecovery()
       if self.consume(if: .leftParen) != nil {
-        while !self.at(.eof), !self.at(.rightParen), !self.at(.poundEndifKeyword) {
+        while !self.at(any: [.eof, .rightParen, .poundEndifKeyword]) {
           self.skipSingle()
         }
         self.consume(if: .rightParen)
       }
-    } while self.at(.atSign)
+    }
     return true
   }
 }
@@ -161,7 +193,7 @@ extension Parser.Lookahead {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  private static let declAttributeNames: Set<SyntaxText> = [
+  private static let declAttributeNames: [SyntaxText] = [
     "autoclosure",
     "convention",
     "noescape",
@@ -204,156 +236,19 @@ extension Parser.Lookahead {
     "_opaqueReturnTypeOf",
   ]
 
-  func isStartOfDeclaration() -> Bool {
-    guard self.currentToken.isKeywordPossibleDeclStart else {
-      // If this is obviously not the start of a decl, then we're done.
-      return false
-    }
-
-    /*
-     // When 'init' appears inside another 'init', it's likely the user wants to
-     // invoke an initializer but forgets to prefix it with 'self.' or 'super.'
-     // Otherwise, expect 'init' to be the start of a declaration (and complain
-     // when the expectation is not fulfilled).
-     if (Tok.is(tok::kw_init)) {
-       return !isa<ConstructorDecl>(CurDeclContext);
-     }
-     */
-
-    // Similarly, when 'case' appears inside a function, it's probably a switch
-    // case, not an enum case declaration.
-    if self.at(.caseKeyword) {
-      return false
-    }
-
-    /*
-     // The protocol keyword needs more checking to reject "protocol<Int>".
-     if (Tok.is(tok::kw_protocol)) {
-       const Token &Tok2 = peekToken();
-       return !Tok2.isAnyOperator() || !Tok2.getText().equals("<");
-     }
-
-     // The 'try' case is only for simple local recovery, so we only bother to
-     // check 'let' and 'var' right now.
-     if (Tok.is(tok::kw_try))
-       return peekToken().isAny(tok::kw_let, tok::kw_var);
-     */
-
-    // Skip an attribute, since it might be a type attribute.  This can't
-    // happen at the top level of a scope, but we do use isStartOfSwiftDecl()
-    // in positions like generic argument lists.
-    if self.at(.atSign) {
-      var subparser = self.lookahead()
-      _ = subparser.eatParseAttributeList()
-      // If this attribute is the last element in the block,
-      // consider it is a start of incomplete decl.
-      if subparser.at(.rightBrace) || subparser.at(.eof) || subparser.at(.poundEndifKeyword) {
-        return true
-      }
-      return subparser.isStartOfDeclaration()
-    }
-
-    // If we have a decl modifying keyword, check if the next token is a valid
-    // decl start. This is necessary to correctly handle Swift keywords that are
-    // shared by SIL, e.g 'private' in 'sil private @foo :'. We need to make sure
-    // this isn't considered a valid Swift decl start.
-    if self.currentToken.tokenKind.isKeyword {
-      if Self.declAttributeNames.contains(self.currentToken.tokenText) {
-        var subparser = self.lookahead()
-        subparser.consumeAnyToken()
-
-        // Eat paren after modifier name; e.g. private(set)
-        if subparser.consume(if: .leftParen) != nil {
-          while !subparser.at(.eof) && !subparser.at(.rightBrace) && !subparser.at(.poundEndifKeyword) {
-            if subparser.consume(if: .rightParen) != nil {
-              break
-            }
-
-            // If we found the start of a decl while trying to skip over the
-            // paren, then we have something incomplete like 'private('. Return
-            // true for better recovery.
-            if subparser.isStartOfDeclaration() {
-              return true
-            }
-
-            subparser.consumeAnyToken()
-          }
-        }
-        return subparser.isStartOfDeclaration()
-      }
-    }
-
-    // Otherwise, the only hard case left is the identifier case.
-    guard self.currentToken.isIdentifier else {
-      return true
-    }
-
-    // If this is an operator declaration, handle it.
-    if case .operatorKeyword = self.peek().tokenKind,
-        (self.currentToken.isContextualKeyword("prefix") ||
-         self.currentToken.isContextualKeyword("postfix") ||
-         self.currentToken.isContextualKeyword("infix")) {
-      return true
-    }
-
-    // If this can't possibly be a contextual keyword, then this identifier is
-    // not interesting.  Bail out.
-    guard self.currentToken.isContextualDeclKeyword() else {
-      return false
-    }
-
-    // If it might be, we do some more digging.
-
-    // If this is 'unowned', check to see if it is valid.
-    let tok2 = self.peek()
-    if self.currentToken.tokenText == "unowned" && tok2.tokenKind == .leftParen &&
-        self.isParenthesizedUnowned() {
-      var lookahead = self.lookahead()
-      lookahead.consumeIdentifier()
-      lookahead.eat(.leftParen)
-      lookahead.consumeIdentifier()
-      lookahead.eat(.rightParen)
-      return lookahead.isStartOfDeclaration()
-    }
-
-    if self.currentToken.isContextualKeyword("actor") {
-      if tok2.isIdentifier {
-        return true
-      }
-      // actor may be somewhere in the modifier list. Eat the tokens until we get
-      // to something that isn't the start of a decl. If that is an identifier,
-      // it's an actor declaration, otherwise, it isn't.
-      var lookahead = self.lookahead()
-      repeat {
-        lookahead.consumeAnyToken()
-      } while lookahead.isStartOfDeclaration()
-      return lookahead.currentToken.isIdentifier
-    }
-
-    // If the next token is obviously not the start of a decl, bail early.
-    guard tok2.isKeywordPossibleDeclStart else {
-      return false
-    }
-
-    // Otherwise, do a recursive parse.
-    var next = self.lookahead()
-    next.consumeIdentifier()
-    return next.isStartOfDeclaration()
-  }
-
   func isParenthesizedUnowned() -> Bool {
-    assert(self.currentToken.tokenText == "unowned" && self.peek().tokenKind == .leftParen,
+    assert(self.atContextualKeyword("unowned") && self.peek().tokenKind == .leftParen,
            "Invariant violated")
 
     // Look ahead to parse the parenthesized expression.
     var lookahead = self.lookahead()
-    lookahead.consumeIdentifier()
+    lookahead.expectIdentifierWithoutRecovery()
     guard lookahead.consume(if: .leftParen) != nil else {
       return false
     }
-    return lookahead.currentToken.isIdentifier
+    return lookahead.at(.identifier)
         && lookahead.peek().tokenKind == .rightParen
-        && (lookahead.currentToken.tokenText == "safe" || lookahead.currentToken.tokenText == "unsafe")
+        && (lookahead.atContextualKeyword("safe") || lookahead.atContextualKeyword("unsafe"))
   }
 }
 
@@ -370,7 +265,7 @@ extension Parser.Lookahead {
     // If we have a 'didSet' or a 'willSet' label, disambiguate immediately as
     // an accessor block.
     let nextToken = self.peek()
-    if nextToken.isContextualKeyword("didSet") || nextToken.isContextualKeyword("willSet") {
+    if nextToken.isContextualKeyword(["didSet", "willSet"]) {
       return true
     }
 
@@ -385,10 +280,10 @@ extension Parser.Lookahead {
 
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {
-      guard lookahead.currentToken.isIdentifier else {
+      guard lookahead.at(.identifier) else {
         return false
       }
-      lookahead.consumeIdentifier()
+      lookahead.expectIdentifierWithoutRecovery()
       // Eat paren after attribute name; e.g. @foo(x)
       if lookahead.at(.leftParen) {
         lookahead.skipSingle()
@@ -396,8 +291,7 @@ extension Parser.Lookahead {
     }
 
     // Check if we have 'didSet'/'willSet' after attributes.
-    return lookahead.currentToken.isContextualKeyword("didSet") ||
-           lookahead.currentToken.isContextualKeyword("willSet")
+    return lookahead.at(any: [], contextualKeywords: ["didSet", "willSet"])
   }
 }
 
@@ -405,8 +299,7 @@ extension Parser.Lookahead {
 
 extension Parser.Lookahead {
   mutating func skipUntil(_ t1: RawTokenKind, _ t2: RawTokenKind) {
-    while !self.at(.eof) && !self.at(t1) && !self.at(t2)
-            && !self.at(.poundEndifKeyword) && !self.at(.poundElseKeyword) && !self.at(.poundElseifKeyword) {
+    while !self.at(any: [.eof, t1, t2, .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword]) {
       self.skipSingle()
     }
   }
@@ -418,36 +311,56 @@ extension Parser.Lookahead {
   }
 
   mutating func skipSingle() {
-    switch self.currentToken.tokenKind {
-    case .leftParen:
-      self.consumeAnyToken()
+    enum BracketedTokens: RawTokenKindSubset {
+      case leftParen
+      case leftBrace
+      case leftSquareBracket
+      case poundIfKeyword
+      case poundElseKeyword
+      case poundElseifKeyword
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .leftParen: return .leftParen
+        case .leftBrace: return .leftBrace
+        case .leftSquareBracket: return .leftSquareBracket
+        case .poundIfKeyword: return .poundIfKeyword
+        case .poundElseKeyword: return .poundElseKeyword
+        case .poundElseifKeyword: return .poundElseifKeyword
+        }
+      }
+    }
+
+    switch self.at(anyIn: BracketedTokens.self) {
+    case (.leftParen, let handle)?:
+      self.eat(handle)
       self.skipUntil(.rightParen, .rightBrace)
       self.consume(if: .rightParen)
       return
-    case .leftBrace:
-      self.consumeAnyToken()
+    case (.leftBrace, let handle)?:
+      self.eat(handle)
       self.skipUntil(.rightBrace, .rightBrace)
       self.consume(if: .rightBrace)
       return
-    case .leftSquareBracket:
-      self.consumeAnyToken()
+    case (.leftSquareBracket, let handle)?:
+      self.eat(handle)
       self.skipUntil(.rightSquareBracket, .rightSquareBracket)
       self.consume(if: .rightSquareBracket)
       return
-    case .poundIfKeyword,
-        .poundElseKeyword,
-        .poundElseifKeyword:
-      self.consumeAnyToken()
+    case (.poundIfKeyword, let handle)?,
+        (.poundElseKeyword, let handle)?,
+        (.poundElseifKeyword, let handle)?:
+      self.eat(handle)
       // skipUntil also implicitly stops at tok::pound_endif.
       self.skipUntil(.poundElseKeyword, .poundElseifKeyword)
 
-      if self.at(.poundElseKeyword) || self.at(.poundElseifKeyword) {
+      if self.at(any: [.poundElseKeyword, .poundElseifKeyword]) {
         self.skipSingle()
       } else {
         self.consume(if: .poundElseifKeyword)
       }
       return
-    default:
+    case nil:
       self.consumeAnyToken()
       return
     }

@@ -711,7 +711,7 @@ extension Parser {
     }
 
     let expression: RawExprSyntax
-    if (self.currentToken.isAnyOperator && self.currentToken.tokenText.count != 1) || self.peek().tokenKind == .leftSquareBracket {
+    if (self.at(anyIn: Operator.self) != nil && self.currentToken.tokenText.count != 1) || self.peek().tokenKind == .leftSquareBracket {
       let dot = self.consumePrefix(".", as: .period)
       let base = RawExprSyntax(RawKeyPathBaseExprSyntax(period: dot, arena: self.arena))
       expression = self.parsePostfixExpressionSuffix(base, .basic, forDirective: forDirective)
@@ -2035,7 +2035,7 @@ extension Parser {
       // this case lexes as a binary operator because it neither leads nor
       // follows a proper subexpression.
       let expr: RawExprSyntax
-      if self.currentToken.isBinaryOperator
+      if self.at(anyIn: BinaryOperator.self) != nil
           && (self.peek().tokenKind == .comma || self.peek().tokenKind == .rightParen || self.peek().tokenKind == .rightSquareBracket) {
         let (ident, args) = self.parseDeclNameRef(.operators)
         expr = RawExprSyntax(RawIdentifierExprSyntax(

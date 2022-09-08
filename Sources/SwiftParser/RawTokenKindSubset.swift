@@ -499,6 +499,18 @@ enum PoundDeclarationStart: RawTokenKindSubset {
   }
 }
 
+enum SwitchCaseStart: RawTokenKindSubset {
+  case caseKeyword
+  case defaultKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .caseKeyword: return .caseKeyword
+    case .defaultKeyword: return .defaultKeyword
+    }
+  }
+}
+
 // MARK: Expression start
 
 enum AwaitTry: RawTokenKindSubset {

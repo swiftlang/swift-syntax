@@ -31,21 +31,25 @@ public enum TokenPrecedence: Comparable {
   case stmtKeyword
   /// The '{' token because it typically marks the body of a declaration.
   /// `closingDelimiter` must have type `strongPunctuator`
-  case strongBracketed(closingDelimiter: RawTokenKind)
+  case openingBrace(closingDelimiter: RawTokenKind)
   /// A punctuator that is a strong indicator that it separates two distinct parts of the source code, like two statements
   case strongPunctuator
   /// The closing delimiter of `strongBracketed`
-  case strongBracketedClose
+  case closingBrace
   /// Tokens that start a new declaration
   case declKeyword
+  case openingPoundIf
+  case closingPoundIf
 
   /// If the precedence is `weakBracketed` or `strongBracketed`, the closing delimeter of the bracketed group.
   var closingTokenKind: RawTokenKind? {
     switch self {
     case .weakBracketed(closingDelimiter: let closingDelimiter):
       return closingDelimiter
-    case .strongBracketed(closingDelimiter: let closingDelimiter):
+    case .openingBrace(closingDelimiter: let closingDelimiter):
       return closingDelimiter
+    case .openingPoundIf:
+      return .poundEndifKeyword
     default:
       return nil
     }
@@ -69,12 +73,16 @@ public enum TokenPrecedence: Comparable {
         return 5
       case .strongPunctuator:
         return 6
-      case .strongBracketed:
+      case .openingBrace:
         return 7
-      case .strongBracketedClose:
+      case .closingBrace:
         return 8
       case .declKeyword:
         return 9
+      case .openingPoundIf:
+        return 10
+      case .closingPoundIf:
+        return 11
       }
     }
 
@@ -162,9 +170,9 @@ public enum TokenPrecedence: Comparable {
 
       // MARK: Strong bracketet
     case .leftBrace:
-      self = .strongBracketed(closingDelimiter: .rightBrace)
+      self = .openingBrace(closingDelimiter: .rightBrace)
     case .poundElseifKeyword, .poundElseKeyword, .poundIfKeyword:
-      self = .strongBracketed(closingDelimiter: .poundEndifKeyword)
+      self = .openingPoundIf
 
       // MARK: Strong punctuator
     case
@@ -179,8 +187,10 @@ public enum TokenPrecedence: Comparable {
       self = .strongPunctuator
 
       // MARK: Strong bracket close
-    case .poundEndifKeyword, .rightBrace:
-      self = .strongBracketedClose
+    case .rightBrace:
+      self = .closingBrace
+    case  .poundEndifKeyword:
+      self = .closingPoundIf
 
       // MARK: Decl keywords
     case

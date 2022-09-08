@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// A type that consumes  instances of `TokenSyntax`.
 public protocol TokenConsumer {
@@ -20,30 +20,76 @@ public protocol TokenConsumer {
   var currentToken: Lexer.Lexeme { get }
   /// Whether the current token matches the given kind.
   mutating func consumeAnyToken() -> Token
-  mutating func missingToken(_ kind: RawTokenKind) -> Token
-  /// Retrieves the token following the current token without consuming it.
+
+  /// Consume the current token and change its token kind to `remappedTokenKind`.
+  mutating func consumeAnyToken(remapping remappedTokenKind: RawTokenKind) -> Token
+
+  /// Synthesize a missing token with `kind`.
+  /// If `text` is not `nil`, use it for the token's text, otherwise use the token's default text.
+  @_spi(RawSyntax)
+  mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) -> Token
+
+  /// Return the lexeme that will be parsed next.
   mutating func peek() -> Lexer.Lexeme
 }
 
-// MARK: Checking if we are at one specific token
+// MARK: Checking if we are at one specific token (`at`)
+
+/// After calling `consume(ifAnyFrom:)` we know which token we are positioned
+/// at based on that function's return type. This handle allows consuming that
+/// token.
+struct TokenConsumptionHandle {
+  /// The kind that is expected to be consumed if the handle is eaten.
+  var tokenKind: RawTokenKind
+  /// Whether the token should be remapped to a contextual keyword when eaten
+  var remapToContextualKeyword: Bool
+}
 
 extension TokenConsumer {
-  /// Returns whether the kind of the current token matches the given
-  /// kind without consuming the current token.
+  /// Returns whether the the current token is of kind `kind` and satisfies
+  /// `condition`.
   ///
   /// - Parameter kind: The kind to test for.
+  /// - Parameter condition: An additional condition that must be satisfied for
+  ///                        this function to return `true`.
   /// - Returns: `true` if the given `kind` matches the current token's kind.
-  public func at(_ kind: RawTokenKind) -> Bool {
-    return self.currentToken.tokenKind == kind
+  public func at(
+    _ kind: RawTokenKind,
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
+  ) -> Bool {
+    return self.currentToken.tokenKind == kind && condition(self.currentToken)
+  }
+
+  /// Returns whether the current token is a contextual keyword with the given `name`.
+  @_spi(RawSyntax)
+  public func atContextualKeyword(_ name: SyntaxText) -> Bool {
+    return self.currentToken.isContextualKeyword(name)
   }
 
   /// Returns whether the kind of the current token is any of the given
-  /// kinds without consuming the current token.
+  /// kinds or a contextual keyword with text in `contextualKeywords` and
+  /// additionally satisfies `condition`.
   ///
   /// - Parameter kinds: The kinds to test for.
+  /// - Parameter contextualKeywords: Contextual keywords that are also accepted.
+  /// - Parameter condition: An additional condition that must be satisfied for
+  ///                        this function to return `true`.
   /// - Returns: `true` if the current token's kind is in `kinds`.
-  public func at(any kinds: [RawTokenKind]) -> Bool {
-    return kinds.contains(self.currentToken.tokenKind)
+  @_spi(RawSyntax)
+  public func at(
+    any kinds: [RawTokenKind],
+    contextualKeywords: [SyntaxText] = [],
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
+  ) -> Bool {
+    if kinds.contains(self.currentToken.tokenKind) && condition(self.currentToken) {
+      return true
+    }
+    switch self.currentToken.tokenKind {
+    case .identifier, .contextualKeyword:
+      return contextualKeywords.contains(self.currentToken.tokenText) && condition(self.currentToken)
+    default:
+      return false
+    }
   }
 
   /// Checks whether the parser is currently positioned at any token in `Subset`.
@@ -51,8 +97,13 @@ extension TokenConsumer {
   /// as well as a handle to consume that token.
   func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
     for kind in Subset.allCases {
-      if self.at(kind.rawTokenKind) && kind.accepts(lexeme: currentToken) {
-        return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind))
+      if let contextualKeyword = kind.contextualKeyword {
+        if self.atContextualKeyword(contextualKeyword) && kind.accepts(lexeme: currentToken) {
+          assert(kind.rawTokenKind == .identifier || kind.rawTokenKind == .contextualKeyword, "contextualKeyword must only return a non-nil value for tokens of identifer or contextualKeyword kind")
+          return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind, remapToContextualKeyword: true))
+        }
+      } else if self.at(kind.rawTokenKind) && kind.accepts(lexeme: currentToken) {
+        return (kind, TokenConsumptionHandle(tokenKind: kind.rawTokenKind, remapToContextualKeyword: false))
       }
     }
     return nil
@@ -60,15 +111,69 @@ extension TokenConsumer {
 
   /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
   mutating func eat(_ handle: TokenConsumptionHandle) -> Token {
-    return consume(if: handle.tokenKind)!
+    assert(self.at(handle.tokenKind))
+    if handle.remapToContextualKeyword {
+      return consumeAnyToken(remapping: .contextualKeyword)
+    } else {
+      return consumeAnyToken()
+    }
   }
 }
 
-// MARK: Consuming Tokens with Lookahead
+// MARK: Consuming tokens (`consume`)
 
 extension TokenConsumer {
-  /// If the current token has `kind1` and is followed by `kind2` consume both tokens and return them.
-  /// Otherwise, return `nil`.
+  /// Examines the current token and consumes it if its kind matches the
+  /// given `TokenKind` and additionally satisfies `condition`. If a token was
+  /// consumed, the result is that token, else the result is `nil`.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Parameter condition: An additional condition that must be satisfied for
+  ///                        the token to be consumed.
+  /// - Returns: A token of the given kind if one was consumed, else `nil`.
+  @_spi(RawSyntax)
+  public mutating func consume(
+    if kind: RawTokenKind,
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
+  ) -> Token? {
+    if self.at(kind, where: condition) {
+      return self.consumeAnyToken()
+    }
+    return nil
+  }
+
+  /// Consumes and returns the current token is a contextual keyword with the given `name`.
+  @_spi(RawSyntax)
+  public mutating func consumeIfContextualKeyword(_ name: SyntaxText) -> Token? {
+    if self.atContextualKeyword(name) {
+      return self.consumeAnyToken(remapping: .contextualKeyword)
+    }
+    return nil
+  }
+
+  /// Examines the current token and consumes it if is any of the given
+  /// kinds or a contextual keyword with text in `contextualKeywords` and
+  /// additionally satisfies `condition`.
+  ///
+  /// - Parameter kind: The kinds of token to consume.
+  /// - Parameter contextualKeywords: Contextual keywords that are also accepted.
+  /// - Parameter condition: An additional condition that must be satisfied for
+  ///                        the token to be consumed.
+  /// - Returns: A token of the given kind if one was consumed, else `nil`.
+  @_spi(RawSyntax)
+  public mutating func consume(
+    ifAny kinds: [RawTokenKind],
+    contextualKeywords: [SyntaxText] = [],
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
+  ) -> Token? {
+    if self.at(any: kinds, contextualKeywords: contextualKeywords, where: condition) {
+      return self.consumeAnyToken()
+    }
+    return nil
+  }
+
+  /// If the current token has `kind1` and is followed by `kind2` consume both
+  /// tokens and return them. Otherwise, return `nil`.
   @_spi(RawSyntax)
   public mutating func consume(if kind1: RawTokenKind, followedBy kind2: RawTokenKind) -> (Token, Token)? {
     if self.at(kind1) && self.peek().tokenKind == kind2 {
@@ -94,76 +199,44 @@ extension TokenConsumer {
   }
 }
 
-// MARK: Consuming tokens
-
-/// After calling `consume(ifAnyFrom:)` we know which token we are positioned
-/// at based on that function's return type. This handle allows consuming that
-/// token.
-struct TokenConsumptionHandle {
-  /// The kind that is expected to be consumed if the handle is eaten.
-  var tokenKind: RawTokenKind
-}
+// MARK: Expecting Tokens (`expect`)
 
 extension TokenConsumer {
-  /// Examines the current token and consumes it if its kind matches the
-  /// given `TokenKind` and additionally satisfies `condition`. If a token was
-  /// consumed, the result is that token, else the result is `nil`.
-  ///
-  /// - Parameter kind: The kind of token to consume.
-  /// - Returns: A token of the given kind if one was consumed, else `nil`.
-  @_spi(RawSyntax)
-  public mutating func consume(
-    if kind: RawTokenKind,
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
-  ) -> Token? {
-    if self.at(kind) && condition(self.currentToken) {
-      return self.consumeAnyToken()
-    }
-    return nil
-  }
-
-  /// Examines the current token and consumes it if its kind is in `kinds` and
-  /// additionally satisfies `condition`. If a token was consumed, the result is
-  /// that token, else the result is `nil`.
-  ///
-  /// - Parameter kind: The kinds of token to consume.
-  /// - Returns: A token of the given kind if one was consumed, else `nil`.
-  public mutating func consume(
-    ifAny kinds: [RawTokenKind],
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
-  ) -> Token? {
-    for kind in kinds {
-      if let consumed = self.consume(if: kind, where: condition) {
-        return consumed
-      }
-    }
-    return nil
-  }
-}
-
-// MARK: Expecting Tokens
-
-extension TokenConsumer {
-  /// Attempts to consume a token of the given kind, synthesizing a missing
-  /// token if the current token's kind does not match.
+  /// If the current token matches the given `kind` and additionally satisfies
+  /// `condition`, consume it. Othwerise, synthesize a missing token of the
+  /// given `kind`.
   ///
   /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
-  /// In general, `expect` or `expectAny` should be preferred.
+  /// In the parser, `expect` should be preferred.
   ///
   /// - Parameter kind: The kind of token to consume.
+  /// - Parameter condition: An additional condition that must be satisfied for
+  ///                        the token to be consumed.
   /// - Returns: A token of the given kind.
   public mutating func expectWithoutRecovery(
     _ kind: RawTokenKind,
     where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Token {
-    if self.currentToken.tokenKind == kind {
-      if condition(self.currentToken) {
-        return self.consumeAnyToken()
-      } else {
-        return self.consumeAnyToken()
-      }
+    if let token = self.consume(if: kind, where: condition) {
+      return token
+    } else {
+      return missingToken(kind, text: nil)
     }
-    return missingToken(kind)
+  }
+
+  /// If the current token is a contextual keyword with the given `name`,
+  /// consume it. Othwerise, synthesize a missing contextual keyword with that
+  /// `name`.
+  ///
+  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
+  /// In the parser, `expect` should be preferred.
+  @_spi(RawSyntax)
+  public mutating func expectContextualKeywordWithoutRecovery(_ name: SyntaxText) -> Token {
+    if let token = self.consumeIfContextualKeyword(name) {
+      return token
+    } else {
+      return missingToken(.contextualKeyword, text: name)
+    }
   }
 
   /// If the current token is any of the given `kinds` or a contextual keyword
@@ -181,7 +254,7 @@ extension TokenConsumer {
     if let token = self.consume(ifAny: kinds, where: condition) {
       return token
     } else {
-      return missingToken(defaultKind)
+      return missingToken(defaultKind, text: nil)
     }
   }
 }
@@ -203,7 +276,7 @@ extension TokenConsumer {
         .rethrowsKeyword:
       return self.consumeAnyToken()
     default:
-      return self.missingToken(.identifier)
+      return self.missingToken(.identifier, text: nil)
     }
   }
 }

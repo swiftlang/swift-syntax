@@ -61,13 +61,18 @@ extension Parser.Lookahead {
 }
 
 extension Parser.Lookahead {
-  public mutating func missingToken(_ kind: RawTokenKind) {
+  @_spi(RawSyntax)
+  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) {
     // do nothing
   }
 
   public mutating func consumeAnyToken() {
     tokensConsumed += 1
     self.currentToken = self.lexemes.advance()
+  }
+
+  public mutating func consumeAnyToken(remapping: RawTokenKind) {
+    self.consumeAnyToken()
   }
 
   /// Consumes a given token, or splits the current token into a leading token

@@ -17,12 +17,20 @@
 protocol RawTokenKindSubset: CaseIterable {
   var rawTokenKind: RawTokenKind { get }
 
+  /// If this returns a non-nil value, only tokens with this token text are matched.
+  /// Must only return a non-nil value if `rawTokenKind` is `identifier` or `contextualKeyword`.
+  var contextualKeyword: SyntaxText? { get }
+
   /// Allows more flexible rejection of further token kinds based on the token's
   /// contents. Useful to e.g. look for contextual keywords.
   func accepts(lexeme: Lexer.Lexeme) -> Bool
 }
 
 extension RawTokenKindSubset {
+  var contextualKeyword: SyntaxText? {
+    return nil
+  }
+
   func accepts(lexeme: Lexer.Lexeme) -> Bool {
     return true
   }

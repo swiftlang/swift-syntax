@@ -155,8 +155,8 @@ public struct Parser: TokenConsumer {
   }
 
   @_spi(RawSyntax)
-  public mutating func missingToken(_ kind: RawTokenKind) -> RawTokenSyntax {
-    return RawTokenSyntax(missing: kind, arena: arena)
+  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) -> RawTokenSyntax {
+    return RawTokenSyntax(missing: kind, text: text, arena: self.arena)
   }
 
   /// Consumes the current token and advances the lexer to the next token.
@@ -206,6 +206,27 @@ extension Parser {
 // MARK: Expecting Tokens with Recovery
 
 extension Parser {
+  /// Implements the paradigm shared across all `expect` methods.
+  private mutating func expectImpl(
+    consume: (inout Parser) -> RawTokenSyntax?,
+    canRecoverTo: (inout Lookahead) -> Bool,
+    makeMissing: (inout Parser) -> RawTokenSyntax
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    if let tok = consume(&self) {
+      return (nil, tok)
+    }
+    var lookahead = self.lookahead()
+    if canRecoverTo(&lookahead) {
+      var unexpectedTokens = [RawSyntax]()
+      for _ in 0..<lookahead.tokensConsumed {
+        unexpectedTokens.append(RawSyntax(self.consumeAnyToken()))
+      }
+      let token = consume(&self)!
+      return (RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena), token)
+    }
+    return (nil, makeMissing(&self))
+  }
+
   /// Attempts to consume a token of the given kind.
   /// If it cannot be found, the parser tries
   ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
@@ -213,20 +234,31 @@ extension Parser {
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
   @_spi(RawSyntax)
-  public mutating func expect(_ kind: RawTokenKind) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    if let tok = self.consume(if: kind) {
-      return (nil, tok)
-    }
-    var lookahead = self.lookahead()
-    if lookahead.canRecoverTo(kind) {
-      var unexpectedNodes = [RawSyntax]()
-      for _ in 0..<lookahead.tokensConsumed {
-        unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
-      }
-      let token = self.consume(if: kind)!
-      return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
-    }
-    return (nil, RawTokenSyntax(missing: kind, arena: self.arena))
+  public mutating func expect(
+    _ kind: RawTokenKind
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    return expectImpl(
+      consume: { $0.consume(if: kind) },
+      canRecoverTo: { $0.canRecoverTo([kind]) },
+      makeMissing: { $0.missingToken(kind, text: nil) }
+    )
+  }
+
+  /// Attempts to consume a contextual keyword whose text is `name`.
+  /// If it cannot be found, the parser tries
+  ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///     expected token and see if the token occurs after that unexpected.
+  ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
+  ///     a missing token of the requested kind.
+  @_spi(RawSyntax)
+  public mutating func expectContextualKeyword(
+    _ name: SyntaxText
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    return expectImpl(
+      consume: { $0.consumeIfContextualKeyword(name) },
+      canRecoverTo: { $0.canRecoverTo([], contextualKeywords: [name]) },
+      makeMissing: { $0.missingToken(.contextualKeyword, text: name) }
+    )
   }
 
   /// Attempts to consume a token whose kind is in `kinds`.
@@ -239,24 +271,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func expectAny(
     _ kinds: [RawTokenKind],
+    contextualKeywords: [SyntaxText] = [],
     default defaultKind: RawTokenKind
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    for kind in kinds {
-      if let tok = self.consume(if: kind) {
-        return (nil, tok)
-      }
-    }
-    var lookahead = self.lookahead()
-    if lookahead.canRecoverTo(kinds) {
-      var unexpectedNodes = [RawSyntax]()
-      for _ in 0..<lookahead.tokensConsumed {
-        unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
-      }
-      let token = consumeAnyToken()
-      assert(kinds.contains(token.tokenKind))
-      return (RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena), token)
-    }
-    return (nil, RawTokenSyntax(missing: defaultKind, arena: self.arena))
+    return expectImpl(
+      consume: { $0.consume(ifAny: kinds, contextualKeywords: contextualKeywords) },
+      canRecoverTo: { $0.canRecoverTo(kinds, contextualKeywords: contextualKeywords) },
+      makeMissing: { $0.missingToken(defaultKind, text: nil) }
+    )
   }
 }
 

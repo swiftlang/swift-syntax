@@ -154,7 +154,7 @@ extension Parser {
       case equal
       case isKeyword
       case asKeyword
-      case identifier
+      case async
       case arrow
       case throwsKeyword
 
@@ -166,18 +166,16 @@ extension Parser {
         case .equal: return .equal
         case .isKeyword: return .isKeyword
         case .asKeyword: return .asKeyword
-        case .identifier: return .identifier
+        case .async: return .identifier
         case .arrow: return .arrow
         case .throwsKeyword: return .throwsKeyword
         }
       }
 
-      func accepts(lexeme: Lexer.Lexeme) -> Bool {
+      var contextualKeyword: SyntaxText? {
         switch self {
-        case .identifier:
-          return lexeme.isContextualKeyword("async")
-        default:
-          return true
+        case .async: return "async"
+        default: return nil
         }
       }
     }
@@ -254,7 +252,7 @@ extension Parser {
 
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
-    case (.identifier, _)?:
+    case (.async, _)?:
       if self.peek().tokenKind == .arrow || self.peek().tokenKind == .throwsKeyword {
         fallthrough
       } else {

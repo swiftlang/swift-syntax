@@ -165,4 +165,45 @@ extension TokenConsumer {
     }
     return missingToken(kind)
   }
+
+  /// If the current token is any of the given `kinds` or a contextual keyword
+  /// with text in `contextualKeywords` and additionally satisfies `condition`,
+  /// consume it. Otherwise synthesize a missing token with `defaultKind`.
+
+  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
+  /// In the parser, `expect` should be preferred.
+  @_spi(RawSyntax)
+  public mutating func expectAnyWithoutRecovery(
+    _ kinds: [RawTokenKind],
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true },
+    default defaultKind: RawTokenKind
+  ) -> Token {
+    if let token = self.consume(ifAny: kinds, where: condition) {
+      return token
+    } else {
+      return missingToken(defaultKind)
+    }
+  }
+}
+
+
+// MARK: Convenience functions
+
+extension TokenConsumer {
+  mutating func expectIdentifierWithoutRecovery() -> Token {
+    return self.expectAnyWithoutRecovery(IdentifierTokens.allRawTokenKinds, default: .identifier)
+  }
+
+  mutating func expectIdentifierOrRethrowsWithoutRecovery() -> Token {
+    switch self.currentToken.tokenKind {
+    case .selfKeyword,
+        .capitalSelfKeyword,
+        .anyKeyword,
+        .identifier,
+        .rethrowsKeyword:
+      return self.consumeAnyToken()
+    default:
+      return self.missingToken(.identifier)
+    }
+  }
 }

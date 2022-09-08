@@ -183,7 +183,7 @@ extension Parser {
 
 
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let ident = self.consumeIdentifierOrRethrows()
+    let ident = self.expectIdentifierOrRethrowsWithoutRecovery()
     let leftParen = self.consume(if: .leftParen)
     let arg: RawSyntax?
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
@@ -309,7 +309,7 @@ extension Parser {
       .identifier == self.currentToken.tokenKind,
       DifferentiabilityKind(rawValue: self.currentToken.tokenText) != nil
     {
-      diffKind = self.consumeIdentifier()
+      diffKind = self.expectIdentifierWithoutRecovery()
       diffKindComma = self.consume(if: .comma)
     } else {
       diffKind = nil
@@ -342,7 +342,7 @@ extension Parser {
   }
 
   mutating func parseDifferentiabilityParameters() -> RawDifferentiabilityParamsClauseSyntax {
-    let wrt = self.consumeIdentifier()
+    let wrt = self.expectIdentifierWithoutRecovery()
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
     guard let leftParen = self.consume(if: .leftParen) else {
@@ -685,7 +685,7 @@ extension Parser {
     assert(self.currentToken.tokenText == "_private")
     let privateToken = self.consumeAnyToken()
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let label = self.consumeIdentifier()
+    let label = self.expectIdentifierWithoutRecovery()
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let filename = self.consumeAnyToken()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)

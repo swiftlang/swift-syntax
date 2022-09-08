@@ -191,7 +191,7 @@ extension Parser {
       if self.at(any: [.period, .prefixPeriod]) {
         if self.peek().isContextualKeyword("Type") || self.peek().isContextualKeyword("Protocol") {
           let period = self.consumeAnyToken()
-          let type = self.consumeIdentifier()
+          let type = self.expectIdentifierWithoutRecovery()
           base = RawTypeSyntax(RawMetatypeTypeSyntax(
             baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
         }
@@ -531,7 +531,7 @@ extension Parser.Lookahead {
           (self.peek().isContextualKeyword("Type")
            || self.peek().isContextualKeyword("Protocol")) {
         self.consumeAnyToken()
-        self.consumeIdentifier()
+        self.expectIdentifierWithoutRecovery()
         continue
       }
       if self.currentToken.isOptionalToken {
@@ -829,9 +829,9 @@ extension Parser {
 
     case .convention:
       let (unexpectedBeforeAt, at) = self.expect(.atSign)
-      let ident = self.consumeIdentifier()
+      let ident = self.expectIdentifierWithoutRecovery()
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-      let argument = self.consumeIdentifier()
+      let argument = self.expectIdentifierWithoutRecovery()
 
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return RawSyntax(
@@ -851,7 +851,7 @@ extension Parser {
 
     default:
       let (unexpectedBeforeAt, at) = self.expect(.atSign)
-      let ident = self.consumeIdentifier()
+      let ident = self.expectIdentifierWithoutRecovery()
       return RawSyntax(
         RawAttributeSyntax(
           unexpectedBeforeAt,

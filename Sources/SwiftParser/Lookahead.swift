@@ -107,7 +107,7 @@ extension Parser.Lookahead {
       if case .convention = attr {
         guard
           self.consume(if: .leftParen) != nil,
-          (self.currentToken.isIdentifier ? self.consumeIdentifier() : nil) != nil,
+          (self.currentToken.isIdentifier ? self.expectIdentifierWithoutRecovery() : nil) != nil,
           self.consume(if: .rightParen) != nil
         else {
           return
@@ -157,7 +157,7 @@ extension Parser.Lookahead {
     }
 
     while let _ = self.consume(if: .atSign) {
-      self.consumeIdentifierOrRethrows()
+      self.expectIdentifierOrRethrowsWithoutRecovery()
       if self.consume(if: .leftParen) != nil {
         while !self.at(any: [.eof, .rightParen, .poundEndifKeyword]) {
           self.skipSingle()
@@ -320,9 +320,9 @@ extension Parser.Lookahead {
     if self.currentToken.tokenText == "unowned" && tok2.tokenKind == .leftParen &&
         self.isParenthesizedUnowned() {
       var lookahead = self.lookahead()
-      lookahead.consumeIdentifier()
+      lookahead.expectIdentifierWithoutRecovery()
       lookahead.eat(.leftParen)
-      lookahead.consumeIdentifier()
+      lookahead.expectIdentifierWithoutRecovery()
       lookahead.eat(.rightParen)
       return lookahead.isStartOfDeclaration()
     }
@@ -348,7 +348,7 @@ extension Parser.Lookahead {
 
     // Otherwise, do a recursive parse.
     var next = self.lookahead()
-    next.consumeIdentifier()
+    next.expectIdentifierWithoutRecovery()
     return next.isStartOfDeclaration()
   }
 
@@ -358,7 +358,7 @@ extension Parser.Lookahead {
 
     // Look ahead to parse the parenthesized expression.
     var lookahead = self.lookahead()
-    lookahead.consumeIdentifier()
+    lookahead.expectIdentifierWithoutRecovery()
     guard lookahead.consume(if: .leftParen) != nil else {
       return false
     }
@@ -399,7 +399,7 @@ extension Parser.Lookahead {
       guard lookahead.currentToken.isIdentifier else {
         return false
       }
-      lookahead.consumeIdentifier()
+      lookahead.expectIdentifierWithoutRecovery()
       // Eat paren after attribute name; e.g. @foo(x)
       if lookahead.at(.leftParen) {
         lookahead.skipSingle()

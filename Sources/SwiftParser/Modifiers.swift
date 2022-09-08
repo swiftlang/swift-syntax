@@ -77,7 +77,7 @@ extension Parser {
         let details: RawDeclModifierDetailSyntax?
         if let lparen = self.consume(if: .leftParen) {
           assert(self.currentToken.isContextualKeyword("set"))
-          let detail = self.consumeIdentifier()
+          let detail = self.expectIdentifierWithoutRecovery()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           details = RawDeclModifierDetailSyntax(
             leftParen: lparen,

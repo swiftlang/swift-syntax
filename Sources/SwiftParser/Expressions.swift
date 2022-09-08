@@ -1868,7 +1868,7 @@ extension Parser {
           let expression: RawExprSyntax
           if self.peek().tokenKind == .equal {
             // The name is a new declaration.
-            name = self.consumeIdentifier()
+            name = self.expectIdentifierWithoutRecovery()
             (unexpectedBeforeAssignToken, assignToken) = self.expect(.equal)
             expression = self.parseExpression()
           } else {
@@ -1927,7 +1927,7 @@ extension Parser {
             let name: RawTokenSyntax
             if self.currentToken.isIdentifier {
               unexpected = nil
-              name = self.consumeIdentifier()
+              name = self.expectIdentifierWithoutRecovery()
             } else {
               (unexpected, name) = self.expect(.wildcardKeyword)
             }
@@ -1977,9 +1977,9 @@ extension Parser {
       // Check for the strength specifier: "weak", "unowned", or
       // "unowned(safe/unsafe)".
       if self.currentToken.isContextualKeyword("weak") {
-        specifiers.append(self.consumeIdentifier())
+        specifiers.append(self.expectIdentifierWithoutRecovery())
       } else if self.currentToken.isContextualKeyword("unowned") {
-        specifiers.append(self.consumeIdentifier())
+        specifiers.append(self.expectIdentifierWithoutRecovery())
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
           if self.currentToken.tokenText == "safe" {

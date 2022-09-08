@@ -227,7 +227,7 @@ extension Parser {
       repeat {
         let attributes = self.parseAttributeList()
 
-        let name = self.consumeIdentifier()
+        let name = self.expectIdentifierWithoutRecovery()
         if name.isMissing && elements.isEmpty {
           break
         }
@@ -326,7 +326,7 @@ extension Parser {
           // A conformance-requirement.
           if self.currentToken.isIdentifier, let layoutConstraint = LayoutConstraint(rawValue: self.currentToken.tokenText) {
             // Parse a layout constraint.
-            let constraint = self.consumeIdentifier()
+            let constraint = self.expectIdentifierWithoutRecovery()
 
             let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
             let leftParen: RawTokenSyntax?
@@ -462,7 +462,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseClassDeclaration(_ attrs: DeclAttributes) -> RawClassDeclSyntax {
     let (unexpectedBeforeClassKeyword, classKeyword) = self.expect(.classKeyword)
-    let name = self.consumeIdentifier()
+    let name = self.expectIdentifierWithoutRecovery()
     if name.isMissing {
       return RawClassDeclSyntax(
         attributes: attrs.attributes,
@@ -578,7 +578,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseEnumDeclaration(_ attrs: DeclAttributes) -> RawEnumDeclSyntax {
     let (unexpectedBeforeEnumKeyword, enumKeyword) = self.expect(.enumKeyword)
-    let name = self.consumeIdentifier()
+    let name = self.expectIdentifierWithoutRecovery()
     if name.isMissing {
       return RawEnumDeclSyntax(
         attributes: attrs.attributes,
@@ -654,7 +654,7 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let name = self.consumeIdentifier()
+        let name = self.expectIdentifierWithoutRecovery()
 
         let associatedValue: RawParameterClauseSyntax?
         if self.at(.leftParen) && !self.currentToken.isAtStartOfLine {
@@ -713,7 +713,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseStructDeclaration(_ attrs: DeclAttributes) -> RawStructDeclSyntax {
     let (unexpectedBeforeStructKeyword, structKeyword) = self.expect(.structKeyword)
-    let name = self.consumeIdentifier()
+    let name = self.expectIdentifierWithoutRecovery()
     if name.isMissing {
       return RawStructDeclSyntax(
         attributes: attrs.attributes,
@@ -778,7 +778,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the name of the parameter.
-        let name = self.consumeIdentifier()
+        let name = self.expectIdentifierWithoutRecovery()
         keepGoing = self.consume(if: .comma)
         associatedTypes.append(RawPrimaryAssociatedTypeSyntax(
           name: name,
@@ -816,7 +816,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseProtocolDeclaration(_ attrs: DeclAttributes) -> RawProtocolDeclSyntax {
     let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.expect(.protocolKeyword)
-    let name = self.consumeIdentifier()
+    let name = self.expectIdentifierWithoutRecovery()
     if name.isMissing {
       return RawProtocolDeclSyntax(
         attributes: attrs.attributes,
@@ -884,7 +884,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseAssociatedTypeDeclaration(_ attrs: DeclAttributes) -> RawAssociatedtypeDeclSyntax {
     let (unexpectedBeforeAssocKeyword, assocKeyword) = self.expect(.associatedtypeKeyword)
-    let name = self.consumeIdentifier()
+    let name = self.expectIdentifierWithoutRecovery()
     if name.isMissing {
       return RawAssociatedtypeDeclSyntax(
         attributes: attrs.attributes,
@@ -952,8 +952,8 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseActorDeclaration(_ attrs: DeclAttributes) -> RawActorDeclSyntax {
     assert(self.currentToken.isContextualKeyword("actor"))
-    let actorKeyword = self.consumeIdentifier()
-    let name = self.consumeIdentifier()
+    let actorKeyword = self.expectIdentifierWithoutRecovery()
+    let name = self.expectIdentifierWithoutRecovery()
 
     let generics: RawGenericParameterClauseSyntax?
     if self.currentToken.starts(with: "<") {
@@ -1210,7 +1210,7 @@ extension Parser {
       }
       identifier = self.consumePrefix(name, as: .spacedBinaryOperator)
     } else {
-      identifier = self.consumeIdentifier()
+      identifier = self.expectIdentifierWithoutRecovery()
     }
 
     let genericParams: RawGenericParameterClauseSyntax?
@@ -1554,7 +1554,7 @@ extension Parser {
         //     set-name    ::= '(' identifier ')'
         let parameter: RawAccessorParameterSyntax?
         if [ AccessorKind.set, .willSet, .didSet ].firstIndex(of: kind) != nil, let lparen = self.consume(if: .leftParen) {
-          let name = self.consumeIdentifier()
+          let name = self.expectIdentifierWithoutRecovery()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           parameter = RawAccessorParameterSyntax(
             leftParen: lparen,
@@ -1616,7 +1616,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypealiasDeclaration(_ attrs: DeclAttributes) -> RawTypealiasDeclSyntax {
     let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.expect(.typealiasKeyword)
-    let name = self.consumeIdentifier()
+    let name = self.expectIdentifierWithoutRecovery()
 
     // Parse a generic parameter list if it is present.
     let generics: RawGenericParameterClauseSyntax?
@@ -1679,7 +1679,7 @@ extension Parser {
     // checking.
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
-      let identifier = self.consumeIdentifier()
+      let identifier = self.expectIdentifierWithoutRecovery()
       precedenceAndTypes = RawOperatorPrecedenceAndTypesSyntax(
         colon: colon,
         precedenceGroupAndDesignatedTypes: RawIdentifierListSyntax(elements: [ identifier ], arena: self.arena),
@@ -1724,7 +1724,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parsePrecedenceGroupDeclaration(_ attrs: DeclAttributes) -> RawPrecedenceGroupDeclSyntax {
     let (unexpectedBeforeGroup, group) = self.expect(.precedencegroupKeyword)
-    let identifier = self.consumeIdentifier()
+    let identifier = self.expectIdentifierWithoutRecovery()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
     do {
@@ -1732,9 +1732,9 @@ extension Parser {
       LOOP: while !self.at(any: [.eof, .rightBrace]) && attributesProgress.evaluate(currentToken) {
         switch self.currentToken.tokenText {
         case "associativity":
-          let associativity = self.consumeIdentifier()
+          let associativity = self.expectIdentifierWithoutRecovery()
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let value = self.consumeIdentifier()
+          let value = self.expectIdentifierWithoutRecovery()
           elements.append(RawSyntax(RawPrecedenceGroupAssociativitySyntax(
             associativityKeyword: associativity,
             unexpectedBeforeColon,
@@ -1743,7 +1743,7 @@ extension Parser {
             arena: self.arena
           )))
         case "assignment":
-          let assignmentKeyword = self.consumeIdentifier()
+          let assignmentKeyword = self.expectIdentifierWithoutRecovery()
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
           let (unexpectedBeforeFlag, flag) = self.expectAny([.trueKeyword, .falseKeyword], default: .trueKeyword)
           elements.append(RawSyntax(RawPrecedenceGroupAssignmentSyntax(
@@ -1763,7 +1763,7 @@ extension Parser {
             var keepGoing: RawTokenSyntax? = nil
             var namesProgress = LoopProgressCondition()
             repeat {
-              let name = self.consumeIdentifier()
+              let name = self.expectIdentifierWithoutRecovery()
               keepGoing = self.consume(if: .comma)
               names.append(RawPrecedenceGroupNameElementSyntax(
                 name: name, trailingComma: keepGoing,

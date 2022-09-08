@@ -661,13 +661,13 @@ extension Parser {
   public mutating func parseSwitchCase() -> RawSwitchCaseSyntax {
     var unknownAttr: RawAttributeSyntax?
     if let at = self.consume(if: .atSign) {
-      let ident = self.consumeIdentifier()
+      let ident = self.expectIdentifierWithoutRecovery()
 
       var tokenList = [RawTokenSyntax]()
       var loopProgress = LoopProgressCondition()
       while let atSign = self.consume(if: .atSign), loopProgress.evaluate(currentToken) {
         tokenList.append(atSign)
-        tokenList.append(self.consumeIdentifier())
+        tokenList.append(self.expectIdentifierWithoutRecovery())
       }
 
       unknownAttr = RawAttributeSyntax(
@@ -991,7 +991,7 @@ extension Parser {
       return nil
     }
 
-    return self.consumeIdentifier()
+    return self.expectIdentifierWithoutRecovery()
   }
 }
 
@@ -1074,7 +1074,7 @@ extension Parser.Lookahead {
       // question colon expression or something else, we look ahead to the second
       // token.
       var backtrack = self.lookahead()
-      backtrack.consumeIdentifier()
+      backtrack.expectIdentifierWithoutRecovery()
       backtrack.eat(.colon)
 
       // We treating IDENTIFIER: { as start of statement to provide missed 'do'
@@ -1095,7 +1095,7 @@ extension Parser.Lookahead {
       }
       var backtrack = self.lookahead()
       backtrack.eat(.atSign)
-      backtrack.consumeIdentifier()
+      backtrack.expectIdentifierWithoutRecovery()
       return backtrack.isStartOfStatement()
     default:
       return false
@@ -1120,7 +1120,7 @@ extension Parser.Lookahead {
       }
 
       lookahead.eat(.atSign)
-      lookahead.consumeIdentifier()
+      lookahead.expectIdentifierWithoutRecovery()
     }
 
     return lookahead.at(any: [.caseKeyword, .defaultKeyword])

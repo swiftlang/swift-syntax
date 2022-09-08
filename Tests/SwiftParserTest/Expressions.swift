@@ -449,7 +449,7 @@ final class ExpressionTests: XCTestCase {
       """
     )
   }
-  
+
   func testClosureExpression() {
     AssertParse(
       """
@@ -458,6 +458,15 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '..' found in function type"),
       ]
+    )
+  }
+
+  func testParseArrowExpr() {
+    AssertParse(
+      "Foo #^ASYNC^#async ->",
+      { $0.parseSequenceExpression(.basic, forDirective: false) },
+      substructure: Syntax(TokenSyntax.contextualKeyword("async")),
+      substructureAfterMarker: "ASYNC"
     )
   }
 }

@@ -123,7 +123,7 @@ extension Parser {
   ///     import-path → identifier | identifier '.' import-path
   @_spi(RawSyntax)
   public mutating func parseImportDeclaration(_ attrs: DeclAttributes) -> RawImportDeclSyntax {
-    let (unexpectedBeforeImportKeyword, importKeyword) = self.eat(.importKeyword)
+    let (unexpectedBeforeImportKeyword, importKeyword) = self.expect(.importKeyword)
     let kind = self.parseImportKind()
     let path = self.parseImportAccessPath()
     return RawImportDeclSyntax(
@@ -184,7 +184,7 @@ extension Parser {
   ///     extension-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseExtensionDeclaration(_ attrs: DeclAttributes) -> RawExtensionDeclSyntax {
-    let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.eat(.extensionKeyword)
+    let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.expect(.extensionKeyword)
     let type = self.parseType()
 
     let inheritance: RawTypeInheritanceClauseSyntax?
@@ -303,7 +303,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
-    let (unexpectedBeforeWhereKeyword, whereKeyword) = self.eat(.whereKeyword)
+    let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.whereKeyword)
 
     var elements = [RawGenericRequirementSyntax]()
     do {
@@ -322,9 +322,8 @@ extension Parser {
         }
 
         let requirement: RawSyntax
-        if self.at(.colon) {
+        if let colon = self.consume(if: .colon) {
           // A conformance-requirement.
-          let (unexpectedBeforeColon, colon) = self.eat(.colon)
           if self.currentToken.isIdentifier, let layoutConstraint = LayoutConstraint(rawValue: self.currentToken.tokenText) {
             // Parse a layout constraint.
             let constraint = self.consumeIdentifier()
@@ -360,7 +359,6 @@ extension Parser {
 
             requirement = RawSyntax(RawLayoutRequirementSyntax(
               typeIdentifier: firstType,
-              unexpectedBeforeColon,
               colon: colon,
               layoutConstraint: constraint,
               unexpectedBeforeLeftParen,
@@ -376,7 +374,6 @@ extension Parser {
             let secondType = self.parseType()
             requirement = RawSyntax(RawConformanceRequirementSyntax(
               leftTypeIdentifier: firstType,
-              unexpectedBeforeColon,
               colon: colon,
               rightTypeIdentifier: secondType,
               arena: self.arena))
@@ -464,7 +461,7 @@ extension Parser {
   ///     class-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseClassDeclaration(_ attrs: DeclAttributes) -> RawClassDeclSyntax {
-    let (unexpectedBeforeClassKeyword, classKeyword) = self.eat(.classKeyword)
+    let (unexpectedBeforeClassKeyword, classKeyword) = self.expect(.classKeyword)
     let name = self.consumeIdentifier()
     if name.isMissing {
       return RawClassDeclSyntax(
@@ -529,17 +526,15 @@ extension Parser {
   ///     type-inheritance-list → attributes? type-identifier | attributes? type-identifier ',' type-inheritance-list
   @_spi(RawSyntax)
   public mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
-    let (unexpectedBeforeColon, colon) = self.eat(.colon)
+    let (unexpectedBeforeColon, colon) = self.expect(.colon)
     var elements = [RawInheritedTypeSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
         let type: RawTypeSyntax
-        if self.at(.classKeyword) {
-          let (unexpectedBeforeClassKeyword, classKeyword) = self.eat(.classKeyword)
+        if let classKeyword = self.consume(if: .classKeyword) {
           type = RawTypeSyntax(RawClassRestrictionTypeSyntax(
-            unexpectedBeforeClassKeyword,
             classKeyword: classKeyword,
             arena: self.arena
           ))
@@ -582,7 +577,7 @@ extension Parser {
   ///     raw-value-style-enum-member → declaration | raw-value-style-enum-case-clause | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseEnumDeclaration(_ attrs: DeclAttributes) -> RawEnumDeclSyntax {
-    let (unexpectedBeforeEnumKeyword, enumKeyword) = self.eat(.enumKeyword)
+    let (unexpectedBeforeEnumKeyword, enumKeyword) = self.expect(.enumKeyword)
     let name = self.consumeIdentifier()
     if name.isMissing {
       return RawEnumDeclSyntax(
@@ -653,7 +648,7 @@ extension Parser {
   ///     raw-value-literal → numeric-literal | static-string-literal | boolean-literal
   @_spi(RawSyntax)
   public mutating func parseDeclEnumCase(_ attrs: DeclAttributes) -> RawEnumCaseDeclSyntax {
-    let (unexpectedBeforeCaseKeyword, caseKeyword) = self.eat(.caseKeyword)
+    let (unexpectedBeforeCaseKeyword, caseKeyword) = self.expect(.caseKeyword)
     var elements = [RawEnumCaseElementSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -670,11 +665,9 @@ extension Parser {
 
         // See if there's a raw value expression.
         let rawValue: RawInitializerClauseSyntax?
-        if self.at(.equal) {
-          let (unexpectedBeforeEq, eq) = self.eat(.equal)
+        if let eq = self.consume(if: .equal) {
           let value = self.parseExpression()
           rawValue = RawInitializerClauseSyntax(
-            unexpectedBeforeEq,
             equal: eq,
             value: value,
             arena: self.arena
@@ -719,7 +712,7 @@ extension Parser {
   ///     struct-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
   public mutating func parseStructDeclaration(_ attrs: DeclAttributes) -> RawStructDeclSyntax {
-    let (unexpectedBeforeStructKeyword, structKeyword) = self.eat(.structKeyword)
+    let (unexpectedBeforeStructKeyword, structKeyword) = self.expect(.structKeyword)
     let name = self.consumeIdentifier()
     if name.isMissing {
       return RawStructDeclSyntax(
@@ -822,7 +815,7 @@ extension Parser {
   ///     protocol-member-declaration → typealias-declaration
   @_spi(RawSyntax)
   public mutating func parseProtocolDeclaration(_ attrs: DeclAttributes) -> RawProtocolDeclSyntax {
-    let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.eat(.protocolKeyword)
+    let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.expect(.protocolKeyword)
     let name = self.consumeIdentifier()
     if name.isMissing {
       return RawProtocolDeclSyntax(
@@ -890,7 +883,7 @@ extension Parser {
   ///     protocol-associated-type-declaration → attributes? access-level-modifier? 'associatedtype' typealias-name type-inheritance-clause? typealias-assignment? generic-where-clause?
   @_spi(RawSyntax)
   public mutating func parseAssociatedTypeDeclaration(_ attrs: DeclAttributes) -> RawAssociatedtypeDeclSyntax {
-    let (unexpectedBeforeAssocKeyword, assocKeyword) = self.eat(.associatedtypeKeyword)
+    let (unexpectedBeforeAssocKeyword, assocKeyword) = self.expect(.associatedtypeKeyword)
     let name = self.consumeIdentifier()
     if name.isMissing {
       return RawAssociatedtypeDeclSyntax(
@@ -915,11 +908,9 @@ extension Parser {
 
     // Parse default type, if any.
     let defaultType: RawTypeInitializerClauseSyntax?
-    if self.at(.equal) {
-      let (unexpectedBeforeEqual, equal) = self.eat(.equal)
+    if let equal = self.consume(if: .equal) {
       let type = self.parseType()
       defaultType = RawTypeInitializerClauseSyntax(
-        unexpectedBeforeEqual,
         equal: equal,
         value: type,
         arena: self.arena
@@ -1016,8 +1007,7 @@ extension Parser {
   ///     initializer-body → code-block
   @_spi(RawSyntax)
   public mutating func parseInitializerDeclaration(_ attrs: DeclAttributes) -> RawInitializerDeclSyntax {
-    assert(self.at(.initKeyword))
-    let (unexpectedBeforeInitKeyword, initKeyword) = self.eat(.initKeyword)
+    let (unexpectedBeforeInitKeyword, initKeyword) = self.expect(.initKeyword)
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
@@ -1069,7 +1059,7 @@ extension Parser {
   /// deinitializer-declaration → attributes? 'deinit' code-block
   @_spi(RawSyntax)
   public mutating func parseDeinitializerDeclaration(_ attrs: DeclAttributes) -> RawDeinitializerDeclSyntax {
-    let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(.deinitKeyword)
+    let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.expect(.deinitKeyword)
     let items = self.parseOptionalCodeBlock()
     return RawDeinitializerDeclSyntax(
       attributes: attrs.attributes,
@@ -1189,7 +1179,7 @@ extension Parser {
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
   @_spi(RawSyntax)
   public mutating func parseFunctionReturnClause() -> (returnClause: RawReturnClauseSyntax, misplacedThrowsKeyword: RawTokenSyntax?) {
-    let (unexpectedBeforeArrow, arrow) = self.eat(.arrow)
+    let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     var misplacedThrowsKeyword: RawTokenSyntax? = nil
     let unexpectedBeforeReturnType: RawUnexpectedNodesSyntax?
     if let throwsKeyword = self.consume(ifAny: .rethrowsKeyword, .throwsKeyword) {
@@ -1212,7 +1202,7 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseFuncDeclaration(_ attrs: DeclAttributes) -> RawFunctionDeclSyntax {
-    let (unexpectedBeforeFuncKeyword, funcKeyword) = self.eat(.funcKeyword)
+    let (unexpectedBeforeFuncKeyword, funcKeyword) = self.expect(.funcKeyword)
     let identifier: RawTokenSyntax
     if self.currentToken.isAnyOperator || self.at(.exclamationMark) || self.at(.prefixAmpersand) {
       var name = self.currentToken.tokenText
@@ -1305,7 +1295,7 @@ extension Parser {
   ///     subscript-result → '->' attributes? type
   @_spi(RawSyntax)
   public mutating func parseSubscriptDeclaration(_ attrs: DeclAttributes) -> RawSubscriptDeclSyntax {
-    let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.eat(.subscriptKeyword)
+    let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.expect(.subscriptKeyword)
     let genericParameterClause: RawGenericParameterClauseSyntax?
     if self.currentToken.starts(with: "<") {
       genericParameterClause = self.parseGenericParameters()
@@ -1368,15 +1358,8 @@ extension Parser {
   ///     initializer → = expression
   @_spi(RawSyntax)
   public mutating func parseLetOrVarDeclaration(_ attrs: DeclAttributes) -> RawVariableDeclSyntax {
-    let unexpectedBeforeIntroducer: RawUnexpectedNodesSyntax?
-    let introducer: RawTokenSyntax
-    if self.at(.letKeyword) {
-      (unexpectedBeforeIntroducer, introducer) = self.eat(.letKeyword)
-    } else {
-      assert(self.at(.varKeyword))
-      (unexpectedBeforeIntroducer, introducer) = self.eat(.varKeyword)
-    }
-
+    let (unexpectedBeforeIntroducer, introducer) = self.expectAny([.letKeyword, .varKeyword], default: .varKeyword)
+    
     var elements = [RawPatternBindingSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -1387,11 +1370,9 @@ extension Parser {
 
         // Parse an initializer if present.
         let initializer: RawInitializerClauseSyntax?
-        if self.at(.equal) {
-          let (unexpectedBeforeEqual, equal) = self.eat(.equal)
+        if let equal = self.consume(if: .equal) {
           let value = self.parseExpression()
           initializer = RawInitializerClauseSyntax(
-            unexpectedBeforeEqual,
             equal: equal,
             value: value,
             arena: self.arena
@@ -1536,7 +1517,7 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseGetSet() -> RawSyntax {
     // Parse getter and setter.
-    let (unexpectedBeforeLBrace, lbrace) = self.eat(.leftBrace)
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     // Collect all explicit accessors to a list.
     var elements = [RawAccessorDeclSyntax]()
     do {
@@ -1579,12 +1560,10 @@ extension Parser {
         //
         //     set-name    ::= '(' identifier ')'
         let parameter: RawAccessorParameterSyntax?
-        if self.at(.leftParen) && [ AccessorKind.set, .willSet, .didSet ].firstIndex(of: kind) != nil {
-          let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
+        if [ AccessorKind.set, .willSet, .didSet ].firstIndex(of: kind) != nil, let lparen = self.consume(if: .leftParen) {
           let name = self.consumeIdentifier()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           parameter = RawAccessorParameterSyntax(
-            unexpectedBeforeLParen,
             leftParen: lparen,
             name: name,
             unexpectedBeforeRParen,
@@ -1643,7 +1622,7 @@ extension Parser {
   ///     typealias-assignment → '=' type
   @_spi(RawSyntax)
   public mutating func parseTypealiasDeclaration(_ attrs: DeclAttributes) -> RawTypealiasDeclSyntax {
-    let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.eat(.typealiasKeyword)
+    let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.expect(.typealiasKeyword)
     let name = self.consumeIdentifier()
 
     // Parse a generic parameter list if it is present.
@@ -1698,7 +1677,7 @@ extension Parser {
   ///     infix-operator-group → ':' precedence-group-name
   @_spi(RawSyntax)
   public mutating func parseOperatorDeclaration(_ attrs: DeclAttributes) -> RawOperatorDeclSyntax {
-    let (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.eat(.operatorKeyword)
+    let (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.expect(.operatorKeyword)
     let identifier = self.consumeAnyToken()
 
     // Parse (or diagnose) a specified precedence group and/or
@@ -1706,11 +1685,9 @@ extension Parser {
     // parse them both as identifiers here and sort it out in type
     // checking.
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
-    if self.at(.colon) {
-      let (unexpectedBeforeColon, colon) = self.eat(.colon)
+    if let colon = self.consume(if: .colon) {
       let identifier = self.consumeIdentifier()
       precedenceAndTypes = RawOperatorPrecedenceAndTypesSyntax(
-        unexpectedBeforeColon,
         colon: colon,
         precedenceGroupAndDesignatedTypes: RawIdentifierListSyntax(elements: [ identifier ], arena: self.arena),
         arena: self.arena)
@@ -1753,7 +1730,7 @@ extension Parser {
   ///     precedence-group-name → identifier
   @_spi(RawSyntax)
   public mutating func parsePrecedenceGroupDeclaration(_ attrs: DeclAttributes) -> RawPrecedenceGroupDeclSyntax {
-    let (unexpectedBeforeGroup, group) = self.eat(.precedencegroupKeyword)
+    let (unexpectedBeforeGroup, group) = self.expect(.precedencegroupKeyword)
     let identifier = self.consumeIdentifier()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()
@@ -1775,16 +1752,7 @@ extension Parser {
         case "assignment":
           let assignmentKeyword = self.consumeIdentifier()
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let unexpectedBeforeFlag: RawUnexpectedNodesSyntax?
-          let flag: RawTokenSyntax
-          if self.at(.trueKeyword) {
-            (unexpectedBeforeFlag, flag) = self.eat(.trueKeyword)
-          } else if self.at(.falseKeyword) {
-            (unexpectedBeforeFlag, flag) = self.eat(.falseKeyword)
-          } else {
-            unexpectedBeforeFlag = nil
-            flag = RawTokenSyntax(missing: .trueKeyword, arena: self.arena)
-          }
+          let (unexpectedBeforeFlag, flag) = self.expectAny([.trueKeyword, .falseKeyword], default: .trueKeyword)
           elements.append(RawSyntax(RawPrecedenceGroupAssignmentSyntax(
             assignmentKeyword: assignmentKeyword,
             unexpectedBeforeColon,
@@ -1837,8 +1805,8 @@ extension Parser {
 
 extension Parser {
   enum PoundDiagnosticKind {
-    case error(unexpectedBeforePoundError: RawUnexpectedNodesSyntax?, poundError: RawTokenSyntax)
-    case warning(unexpectedBeforePoundWarning: RawUnexpectedNodesSyntax?, poundWarning: RawTokenSyntax)
+    case error(poundError: RawTokenSyntax)
+    case warning(poundWarning: RawTokenSyntax)
   }
 
   @_spi(RawSyntax)
@@ -1846,12 +1814,13 @@ extension Parser {
     assert(self.at(.poundErrorKeyword) || self.at(.poundWarningKeyword))
 
     let directive: PoundDiagnosticKind
-    if self.at(.poundErrorKeyword) {
-      let (unexpected, token) = self.eat(.poundErrorKeyword)
-      directive = .error(unexpectedBeforePoundError: unexpected, poundError: token)
+    if let poundError = self.consume(if: .poundErrorKeyword) {
+      directive = .error(poundError: poundError)
+    } else if let poundWarning = self.consume(if: .poundWarningKeyword) {
+      directive = .warning(poundWarning: poundWarning)
     } else {
-      let (unexpected, token) = self.eat(.poundWarningKeyword)
-      directive = .warning(unexpectedBeforePoundWarning: unexpected, poundWarning: token)
+      assert(false, "Should not happen based on assertion at start of function")
+      directive = .error(poundError: RawTokenSyntax(missing: .poundErrorKeyword, arena: self.arena))
     }
 
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
@@ -1871,9 +1840,8 @@ extension Parser {
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
     switch directive {
-    case .error(let unexpectedBeforeTok, let tok):
+    case .error(let tok):
       return RawDeclSyntax(RawPoundErrorDeclSyntax(
-        unexpectedBeforeTok,
         poundError: tok,
         unexpectedBeforeLeftParen,
         leftParen: leftParen,
@@ -1881,9 +1849,8 @@ extension Parser {
         unexpectedBeforeRightParen,
         rightParen: rightParen,
         arena: self.arena))
-    case .warning(let unexpectedBeforeTok, let tok):
+    case .warning(let tok):
       return RawDeclSyntax(RawPoundWarningDeclSyntax(
-        unexpectedBeforeTok,
         poundWarning: tok,
         unexpectedBeforeLeftParen,
         leftParen: leftParen,

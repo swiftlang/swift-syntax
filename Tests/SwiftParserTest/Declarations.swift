@@ -723,6 +723,15 @@ final class DeclarationTests: XCTestCase {
     AssertParse("deinit {}", { $0.parseDeinitializerDeclaration(.empty) })
     AssertParse("deinit", { $0.parseDeinitializerDeclaration(.empty) })
   }
+
+  func testAttributedMember() {
+    AssertParse(#"""
+    struct Foo {
+      @Argument(help: "xxx")
+      var generatedPath: String
+    }
+    """#)
+  }
 }
 
 extension Parser.DeclAttributes {

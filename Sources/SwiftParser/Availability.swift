@@ -131,12 +131,10 @@ extension Parser {
           ))
         case .deprecated:
           let argumentLabel = self.consumeAnyToken()
-          if self.at(.colon) {
-            let (unexpectedBeforeColon, colon) = self.eat(.colon)
+          if let colon = self.consume(if: .colon) {
             let version = self.parseVersionTuple()
             entry = RawSyntax(RawAvailabilityLabeledArgumentSyntax(
               label: argumentLabel,
-              unexpectedBeforeColon,
               colon: colon,
               value: RawSyntax(version),
               arena: self.arena

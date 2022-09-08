@@ -105,7 +105,7 @@ extension Parser {
         // Check to see if there is an argument label.
         assert(self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon)
         let name = self.consumeAnyToken()
-        let (unexpectedBeforeColon, colon) = self.eat(.colon)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(RawDeclNameArgumentSyntax(
           name: name,
           unexpectedBeforeColon,
@@ -114,7 +114,7 @@ extension Parser {
         ))
       }
     }
-    let (unexpectedBeforeRParen, rparen) = self.eat(.rightParen)
+    let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawDeclNameArgumentsSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
@@ -185,6 +185,15 @@ extension Lexer.Lexeme {
     switch self.tokenKind {
     case .identifier, .contextualKeyword:
       return self.tokenText == name
+    default:
+      return false
+    }
+  }
+
+  func isContextualKeyword(_ names: [SyntaxText]) -> Bool {
+    switch self.tokenKind {
+    case .identifier, .contextualKeyword:
+      return names.contains(self.tokenText)
     default:
       return false
     }

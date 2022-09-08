@@ -38,7 +38,7 @@ extension Parser {
     if self.lookahead().isAtFunctionTypeArrow() {
       let firstEffect = self.parseEffectsSpecifier()
       let secondEffect = self.parseEffectsSpecifier()
-      let (unexpectedBeforeArrow, arrow) = self.eat(.arrow)
+      let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
       let returnTy = self.parseType()
 
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
@@ -220,7 +220,7 @@ extension Parser {
   ///     optional-type → type '?'
   @_spi(RawSyntax)
   public mutating func parseOptionalType(_ base: RawTypeSyntax) -> RawOptionalTypeSyntax {
-    let (unexpectedBeforeMark, mark) = self.eat(.postfixQuestionMark)
+    let (unexpectedBeforeMark, mark) = self.expect(.postfixQuestionMark)
     return RawOptionalTypeSyntax(
       wrappedType: base,
       unexpectedBeforeMark,
@@ -237,7 +237,7 @@ extension Parser {
   ///     implicitly-unwrapped-optional-type → type '!'
   @_spi(RawSyntax)
   public mutating func parseImplicitlyUnwrappedOptionalType(_ base: RawTypeSyntax) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
-    let (unexpectedBeforeMark, mark) = self.eat(.exclamationMark)
+    let (unexpectedBeforeMark, mark) = self.expect(.exclamationMark)
     return RawImplicitlyUnwrappedOptionalTypeSyntax(
       wrappedType: base,
       unexpectedBeforeMark,
@@ -288,7 +288,7 @@ extension Parser {
   ///     any-type → Any
   @_spi(RawSyntax)
   public mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
-    let (unexpectedBeforeName, name) = self.eat(.anyKeyword)
+    let (unexpectedBeforeName, name) = self.expect(.anyKeyword)
     return RawSimpleTypeIdentifierSyntax(
       unexpectedBeforeName,
       name: name,
@@ -305,7 +305,7 @@ extension Parser {
   ///     placeholder-type → wildcard
   @_spi(RawSyntax)
   public mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
-    let (unexpectedBeforeName, name) = self.eat(.wildcardKeyword)
+    let (unexpectedBeforeName, name) = self.expect(.wildcardKeyword)
     // FIXME: Need a better syntax node than this
     return RawSimpleTypeIdentifierSyntax(
       unexpectedBeforeName,
@@ -377,7 +377,7 @@ extension Parser {
   ///     element-name → identifier
   @_spi(RawSyntax)
   public mutating func parseTupleTypeBody() -> RawTupleTypeSyntax {
-    let (unexpectedBeforeLParen, lparen) = self.eat(.leftParen)
+    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawTupleTypeElementSyntax]()
     do {
       var keepGoing = true
@@ -446,17 +446,15 @@ extension Parser {
   ///     dictionary-type → '[' type ':' type ']'
   @_spi(RawSyntax)
   public mutating func parseCollectionType() -> RawTypeSyntax {
-    let (unexpectedBeforeLSquare, lsquare) = self.eat(.leftSquareBracket)
+    let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquareBracket)
     let firstType = self.parseType()
-    if self.at(.colon) {
-      let (unexpectedBeforeColon, colon) = self.eat(.colon)
+    if let colon = self.consume(if: .colon) {
       let secondType = self.parseType()
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
       return RawTypeSyntax(RawDictionaryTypeSyntax(
         unexpectedBeforeLSquare,
         leftSquareBracket: lsquare,
         keyType: firstType,
-        unexpectedBeforeColon,
         colon: colon,
         valueType: secondType,
         unexpectedBeforeRSquareBracket,
@@ -590,7 +588,7 @@ extension Parser.Lookahead {
             return false
           }
         }
-        self.eatWithoutRecovery(.colon)
+        self.eat(.colon)
 
         // Parse a type.
         guard self.canParseType() else {
@@ -689,7 +687,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseOldStyleProtocolComposition() -> Bool {
-    self.eatWithoutRecovery(.protocolKeyword)
+    self.eat(.protocolKeyword)
 
     // Check for the starting '<'.
     guard self.currentToken.starts(with: "<") else {
@@ -776,20 +774,12 @@ extension Parser.Lookahead {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseTypeAttributeList() -> (RawTokenSyntax?, RawAttributeListSyntax?) {
-    let specifier: RawTokenSyntax?
-    if self.at(.inoutKeyword) {
-      specifier = self.eatWithoutRecovery(.inoutKeyword)
-    } else if self.currentToken.isIdentifier {
-      if self.currentToken.tokenText == "__shared" {
-        specifier = self.consumeAnyToken()
-      } else if self.currentToken.tokenText == "__owned" {
-        specifier = self.consumeAnyToken()
-      } else {
-        specifier = nil
+    let specifier = self.consume(ifAny: .inoutKeyword, .identifier, where: { (lexeme, parser) in
+      switch lexeme.tokenKind {
+      case .identifier: return lexeme.isContextualKeyword(["__shared", "__owned"])
+      default: return true
       }
-    } else {
-      specifier = nil
-    }
+    })
 
     if self.at(.atSign) || self.at(.inoutKeyword) {
       return (specifier, self.parseTypeAttributeListPresent())
@@ -811,19 +801,14 @@ extension Parser {
   public mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
     var elements = [RawSyntax]()
     var modifiersProgress = LoopProgressCondition()
-    while (self.at(.inoutKeyword)
-           || self.currentToken.isContextualKeyword("__shared")
-           || self.currentToken.isContextualKeyword("__owned")
-           || self.currentToken.isContextualKeyword("isolated")
-           || self.currentToken.isContextualKeyword("_const")
-    ) && modifiersProgress.evaluate(currentToken) {
-      if self.at(.inoutKeyword) {
-        let inoutKeyword = self.eatWithoutRecovery(.inoutKeyword)
-        elements.append(RawSyntax(inoutKeyword))
+    while let token = self.consume(ifAny: .inoutKeyword, .identifier, where: { (lexeme, parser) in
+      if lexeme.tokenKind  == .identifier {
+        return lexeme.isContextualKeyword(["__shared", "__owned", "isolated", "_const"])
       } else {
-        let ident = self.consumeIdentifier()
-        elements.append(RawSyntax(ident))
+        return true
       }
+    }), modifiersProgress.evaluate(currentToken) {
+      elements.append(RawSyntax(token))
     }
 
     var attributeProgress = LoopProgressCondition()
@@ -844,7 +829,7 @@ extension Parser {
       return RawSyntax(self.parseDifferentiableAttribute())
 
     case .convention:
-      let (unexpectedBeforeAt, at) = self.eat(.atSign)
+      let (unexpectedBeforeAt, at) = self.expect(.atSign)
       let ident = self.consumeIdentifier()
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let argument = self.consumeIdentifier()
@@ -866,7 +851,7 @@ extension Parser {
       )
 
     default:
-      let (unexpectedBeforeAt, at) = self.eat(.atSign)
+      let (unexpectedBeforeAt, at) = self.expect(.atSign)
       let ident = self.consumeIdentifier()
       return RawSyntax(
         RawAttributeSyntax(

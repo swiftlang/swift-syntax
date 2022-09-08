@@ -139,13 +139,24 @@ extension Parser.Lookahead {
     return
   }
 
+  /// Consumes the current token, and asserts that the kind of token that was
+  /// consumed matches the given kind.
+  ///
+  /// If the token kind did not match, this function will abort. It is useful
+  /// to insert structural invariants during parsing.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Returns: A token of the given kind.
+  public mutating func eat(_ kind: RawTokenKind) -> Token {
+    return self.consume(if: kind)!
+  }
+
   mutating func eatParseAttributeList() -> Bool {
     guard self.at(.atSign) else {
       return false
     }
 
-    repeat {
-      self.eatWithoutRecovery(.atSign)
+    while let _ = self.consume(if: .atSign) {
       self.consumeIdentifierOrRethrows()
       if self.consume(if: .leftParen) != nil {
         while !self.at(.eof), !self.at(.rightParen), !self.at(.poundEndifKeyword) {
@@ -153,7 +164,7 @@ extension Parser.Lookahead {
         }
         self.consume(if: .rightParen)
       }
-    } while self.at(.atSign)
+    }
     return true
   }
 }
@@ -310,9 +321,9 @@ extension Parser.Lookahead {
         self.isParenthesizedUnowned() {
       var lookahead = self.lookahead()
       lookahead.consumeIdentifier()
-      lookahead.eatWithoutRecovery(.leftParen)
+      lookahead.eat(.leftParen)
       lookahead.consumeIdentifier()
-      lookahead.eatWithoutRecovery(.rightParen)
+      lookahead.eat(.rightParen)
       return lookahead.isStartOfDeclaration()
     }
 
@@ -381,7 +392,7 @@ extension Parser.Lookahead {
 
     // Eat the "{".
     var lookahead = self.lookahead()
-    lookahead.eatWithoutRecovery(.leftBrace)
+    lookahead.eat(.leftBrace)
 
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {

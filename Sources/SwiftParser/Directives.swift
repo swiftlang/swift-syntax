@@ -68,7 +68,7 @@ extension Parser {
   ) -> RawIfConfigDeclSyntax {
     var clauses = [RawIfConfigClauseSyntax]()
     do {
-      var (unexpectedBeforePoundIf, poundIf) = self.eat(.poundIfKeyword)
+      var (unexpectedBeforePoundIf, poundIf) = self.expect(.poundIfKeyword)
       var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the condition.
@@ -128,7 +128,7 @@ extension Parser {
   ///     literal-expression → '#line'
   @_spi(RawSyntax)
   public mutating func parsePoundLineDirective() -> RawPoundLineExprSyntax {
-    let (unexpectedBeforeToken, token) = self.eat(.poundLineKeyword)
+    let (unexpectedBeforeToken, token) = self.expect(.poundLineKeyword)
     return RawPoundLineExprSyntax(
       unexpectedBeforeToken,
       poundLine: token,

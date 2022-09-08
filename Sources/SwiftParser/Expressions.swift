@@ -432,8 +432,7 @@ extension Parser {
 
     let period = self.consumeAnyToken(remapping: .period)
     // Handle "x.42" - a tuple index.
-    if self.currentToken.tokenKind == .integerLiteral {
-      let name = self.consumeAnyToken()
+    if let name = self.consume(if: .integerLiteral) {
       return RawExprSyntax(RawMemberAccessExprSyntax(
         base: start, dot: period, name: name, declNameArguments: nil,
         arena: self.arena))
@@ -1720,12 +1719,13 @@ extension Parser {
 extension Parser {
   @_spi(RawSyntax)
   public mutating func parseAnonymousClosureArgument() -> RawIdentifierExprSyntax {
-    guard self.currentToken.tokenKind == .dollarIdentifier else {
-      fatalError("Production invoked with non-dollar token!")
-    }
-    let ident = self.consumeAnyToken()
+    let (unexpectedBeforeIdent, ident) = self.expect(.dollarIdentifier)
     return RawIdentifierExprSyntax(
-      identifier: ident, declNameArguments: nil, arena: self.arena)
+      unexpectedBeforeIdent,
+      identifier: ident,
+      declNameArguments: nil,
+      arena: self.arena
+    )
   }
 }
 
@@ -2317,7 +2317,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if case .integerLiteral = self.currentToken.tokenKind {
+    if self.at(.integerLiteral) {
       return true
     }
 

@@ -248,7 +248,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseTypeIdentifier() -> RawTypeSyntax {
-    if self.currentToken.tokenKind == .anyKeyword {
+    if self.at(.anyKeyword) {
       return RawTypeSyntax(self.parseAnyType())
     }
 
@@ -389,9 +389,10 @@ extension Parser {
         let colon: RawTokenSyntax?
         if self.lookahead().startsParameterName(false) {
           first = self.parseArgumentLabel()
-          if self.currentToken.tokenKind == .colon {
-            (unexpectedBeforeColon, colon) = self.expect(.colon)
+          if let parsedColon = self.consume(if: .colon) {
             second = nil
+            unexpectedBeforeColon = nil
+            colon = parsedColon
           } else if self.currentToken.canBeArgumentLabel && self.peek().tokenKind == .colon {
             second = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)

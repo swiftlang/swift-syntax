@@ -219,9 +219,9 @@ extension Parser {
     let platform = self.consumeAnyToken()
 
     let version: RawVersionTupleSyntax?
-    if case .integerLiteral = self.currentToken.tokenKind {
+    if self.at(.integerLiteral) {
       version = self.parseVersionTuple()
-    } else if case .floatingLiteral = self.currentToken.tokenKind {
+    } else if self.at(.floatingLiteral) {
       version = self.parseVersionTuple()
     } else {
       version = nil
@@ -240,7 +240,7 @@ extension Parser {
   ///     platform-version → decimal-digits '.' decimal-digits
   ///     platform-version → decimal-digits '.' decimal-digits '.' decimal-digits
   mutating func parseVersionTuple() -> RawVersionTupleSyntax {
-    if self.currentToken.tokenKind == .integerLiteral {
+    if self.at(.integerLiteral) {
       let majorMinor = self.consumeAnyToken()
       return RawVersionTupleSyntax(
         majorMinor: RawSyntax(majorMinor), patchPeriod: nil, patchVersion: nil,

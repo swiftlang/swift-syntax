@@ -433,26 +433,46 @@ extension Parser.Lookahead {
   }
 
   mutating func skipSingle() {
-    switch self.currentToken.tokenKind {
-    case .leftParen:
-      self.consumeAnyToken()
+    enum BracketedTokens: RawTokenKindSubset {
+      case leftParen
+      case leftBrace
+      case leftSquareBracket
+      case poundIfKeyword
+      case poundElseKeyword
+      case poundElseifKeyword
+
+      var rawTokenKind: RawTokenKind {
+        switch self {
+        case .leftParen: return .leftParen
+        case .leftBrace: return .leftBrace
+        case .leftSquareBracket: return .leftSquareBracket
+        case .poundIfKeyword: return .poundIfKeyword
+        case .poundElseKeyword: return .poundElseKeyword
+        case .poundElseifKeyword: return .poundElseifKeyword
+        }
+      }
+    }
+
+    switch self.at(anyIn: BracketedTokens.self) {
+    case (.leftParen, let handle)?:
+      self.eat(handle)
       self.skipUntil(.rightParen, .rightBrace)
       self.consume(if: .rightParen)
       return
-    case .leftBrace:
-      self.consumeAnyToken()
+    case (.leftBrace, let handle)?:
+      self.eat(handle)
       self.skipUntil(.rightBrace, .rightBrace)
       self.consume(if: .rightBrace)
       return
-    case .leftSquareBracket:
-      self.consumeAnyToken()
+    case (.leftSquareBracket, let handle)?:
+      self.eat(handle)
       self.skipUntil(.rightSquareBracket, .rightSquareBracket)
       self.consume(if: .rightSquareBracket)
       return
-    case .poundIfKeyword,
-        .poundElseKeyword,
-        .poundElseifKeyword:
-      self.consumeAnyToken()
+    case (.poundIfKeyword, let handle)?,
+        (.poundElseKeyword, let handle)?,
+        (.poundElseifKeyword, let handle)?:
+      self.eat(handle)
       // skipUntil also implicitly stops at tok::pound_endif.
       self.skipUntil(.poundElseKeyword, .poundElseifKeyword)
 
@@ -462,7 +482,7 @@ extension Parser.Lookahead {
         self.consume(if: .poundElseifKeyword)
       }
       return
-    default:
+    case nil:
       self.consumeAnyToken()
       return
     }

@@ -27,7 +27,7 @@ extension Parser {
   public mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
     var extraneousTokens = [RawSyntax]()
-    while currentToken.tokenKind != .eof {
+    while !self.at(.eof) {
       extraneousTokens.append(RawSyntax(consumeAnyToken()))
     }
     let unexpectedBeforeEof = extraneousTokens.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: extraneousTokens, arena: self.arena)

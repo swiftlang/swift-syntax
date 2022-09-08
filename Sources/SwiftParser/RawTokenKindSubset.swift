@@ -38,6 +38,22 @@ extension RawTokenKindSubset {
   static var allRawTokenKinds: [RawTokenKind] {
     return self.allCases.map { $0.rawTokenKind }
   }
+
+  init?(_ lexeme: Lexer.Lexeme) {
+    for kind in Self.allCases {
+      if let contextualKeyword = kind.contextualKeyword {
+        if lexeme.isContextualKeyword(contextualKeyword) && kind.accepts(lexeme: lexeme) {
+          assert(kind.rawTokenKind == .identifier || kind.rawTokenKind == .contextualKeyword, "contextualKeyword must only return a non-nil value for tokens of identifer or contextualKeyword kind")
+          self = kind
+          return
+        }
+      } else if lexeme.tokenKind == kind.rawTokenKind && kind.accepts(lexeme: lexeme) {
+        self = kind
+        return
+      }
+    }
+    return nil
+  }
 }
 
 /// A set of contextual keywords.

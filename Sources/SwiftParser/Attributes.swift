@@ -773,6 +773,22 @@ extension Parser {
   }
 }
 
+extension Parser {
+  mutating func parseOpaqueReturnTypeOfAttributeArguments() -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let (unexpectedBeforeString, mangledName) = self.expect(.stringLiteral)
+    let (unexpectedBeforeComma, comma) = self.expect(.comma)
+    let (unexpectedBeforeOrdinal, ordinal) = self.expect(.integerLiteral)
+    return RawOpaqueReturnTypeOfAttributeArgumentsSyntax(
+      unexpectedBeforeString,
+      mangledName: mangledName,
+      unexpectedBeforeComma,
+      comma: comma,
+      unexpectedBeforeOrdinal,
+      ordinal: ordinal,
+      arena: self.arena)
+  }
+}
+
 // MARK: Lookahead
 
 extension Parser.Lookahead {

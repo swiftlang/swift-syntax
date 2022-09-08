@@ -59,4 +59,11 @@ final class TypeTests: XCTestCase {
                   DiagnosticSpec(message: "Unexpected text '`' found in closure capture signature")
                 ])
   }
+
+  func testOpaqueReturnTypes() throws {
+    AssertParse("""
+                public typealias Body = @_opaqueReturnTypeOf("$s6CatKit10pspspspspsV5cmereV6lilguyQrvp", 0) __
+                """)
+  }
 }
+

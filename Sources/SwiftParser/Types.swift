@@ -820,6 +820,26 @@ extension Parser {
           arena: self.arena
         )
       )
+    case ._opaqueReturnTypeOf:
+      let (unexpectedBeforeAt, at) = self.expect(.atSign)
+      let ident = self.expectIdentifierWithoutRecovery()
+      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      let argument = self.parseOpaqueReturnTypeOfAttributeArguments()
+      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+      return RawSyntax(
+        RawAttributeSyntax(
+          unexpectedBeforeAt,
+          atSignToken: at,
+          attributeName: ident,
+          unexpectedBeforeLeftParen,
+          leftParen: leftParen,
+          argument: RawSyntax(argument),
+          unexpectedBeforeRightParen,
+          rightParen: rightParen,
+          tokenList: nil,
+          arena: self.arena
+        )
+      )
 
     default:
       let (unexpectedBeforeAt, at) = self.expect(.atSign)

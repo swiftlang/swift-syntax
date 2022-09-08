@@ -93,7 +93,6 @@ extension Unicode.Scalar {
   }
 }
 
-#if swift(<5.7)
 extension UnsafeRawBufferPointer {
   /// Returns a typed buffer to the memory referenced by this buffer,
   /// assuming that the memory is already bound to the specified type.
@@ -122,7 +121,6 @@ extension UnsafeRawBufferPointer {
     return .init(start: s.assumingMemoryBound(to: T.self), count: n)
   }
 }
-#endif
 
 private var InfoTable: CharacterInfoTable = (
   // 0 NUL        1 SOH         2 STX         3 ETX

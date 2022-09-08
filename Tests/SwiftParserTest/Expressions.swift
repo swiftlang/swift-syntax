@@ -412,6 +412,12 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: "Expected '}' to end function"),
       ]
     )
+
+    AssertParse("#keyPath(#^DIAG^#(b:)",
+                diagnostics: [
+                  DiagnosticSpec(message: "Expected '' in '#keyPath' expression"),
+                  DiagnosticSpec(message: "Expected ')' to end '#keyPath' expression"),
+                ])
   }
 
   func testMissingArrowInArrowExpr() {

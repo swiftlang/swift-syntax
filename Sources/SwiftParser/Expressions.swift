@@ -1828,7 +1828,7 @@ extension Parser {
     if !self.at(.inKeyword) {
       if self.at(.leftParen) {
         // Parse the closure arguments.
-        input = RawSyntax(self.parseParameterClause(isClosure: true))
+        input = RawSyntax(self.parseParameterClause(for: .closure))
       } else {
         var params = [RawClosureParamSyntax]()
         var loopProgress = LoopProgressCondition()

@@ -130,7 +130,7 @@ extension Parser {
     case (.enumKeyword, _)?:
       return RawDeclSyntax(self.parseEnumDeclaration(attrs))
     case (.caseKeyword, _)?:
-      return RawDeclSyntax(self.parseDeclEnumCase(attrs))
+      return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs))
     case (.structKeyword, _)?:
       return RawDeclSyntax(self.parseStructDeclaration(attrs))
     case (.protocolKeyword, _)?:
@@ -715,7 +715,7 @@ extension Parser {
   ///     raw-value-assignment → = raw-value-literal
   ///     raw-value-literal → numeric-literal | static-string-literal | boolean-literal
   @_spi(RawSyntax)
-  public mutating func parseDeclEnumCase(_ attrs: DeclAttributes) -> RawEnumCaseDeclSyntax {
+  public mutating func parseEnumCaseDeclaration(_ attrs: DeclAttributes) -> RawEnumCaseDeclSyntax {
     let (unexpectedBeforeCaseKeyword, caseKeyword) = self.expect(.caseKeyword)
     var elements = [RawEnumCaseElementSyntax]()
     do {
@@ -726,7 +726,7 @@ extension Parser {
 
         let associatedValue: RawParameterClauseSyntax?
         if self.at(.leftParen, where: { !$0.isAtStartOfLine }) {
-          associatedValue = self.parseParameterClause()
+          associatedValue = self.parseParameterClause(for: .enumCase)
         } else {
           associatedValue = nil
         }
@@ -1142,10 +1142,28 @@ extension Parser {
 
 extension Parser {
   @_spi(RawSyntax)
-  public mutating func parseParameterClause(isClosure: Bool = false) -> RawParameterClauseSyntax {
+  public enum ParameterSubject {
+    case closure
+    case enumCase
+    case functionParameters
+    case indices
+
+    var isClosure: Bool {
+      switch self {
+      case .closure: return true
+      case .enumCase: return false
+      case .functionParameters: return false
+      case .indices: return false
+      }
+    }
+  }
+
+  @_spi(RawSyntax)
+  public mutating func parseParameterClause(for subject: ParameterSubject) -> RawParameterClauseSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     var elements = [RawFunctionParameterSyntax]()
-    // If we are missing the left parenthesis and the next token doesn't appear to be an argument label, don't parse any parameters.
+    // If we are missing the left parenthesis and the next token doesn't appear
+    // to be an argument label, don't parse any parameters.
     let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel || currentToken.isKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
@@ -1153,8 +1171,15 @@ extension Parser {
       while !self.at(any: [.eof, .rightParen])
               && keepGoing
               && loopProgress.evaluate(currentToken) {
-        // Attributes.
-        let attrs = self.parseAttributeList()
+        // Parse any declaration attributes. The exception here is enum cases
+        // which only allow types, so we do not consume attributes to allow the
+        // type attribute grammar a chance to examine them.
+        let attrs: RawAttributeListSyntax?
+        if case .enumCase = subject {
+          attrs = nil
+        } else {
+          attrs = self.parseAttributeList()
+        }
 
         let firstName: RawTokenSyntax?
         let secondName: RawTokenSyntax?
@@ -1162,7 +1187,7 @@ extension Parser {
         let colon: RawTokenSyntax?
         let shouldParseType: Bool
 
-        if self.lookahead().startsParameterName(isClosure) {
+        if self.lookahead().startsParameterName(subject.isClosure) {
           if self.currentToken.canBeArgumentLabel {
             firstName = self.parseArgumentLabel()
           } else {
@@ -1174,7 +1199,7 @@ extension Parser {
           } else {
             secondName = nil
           }
-          if isClosure {
+          if subject.isClosure {
             unexpectedBeforeColon = nil
             colon = self.consume(if: .colon)
             shouldParseType = (colon != nil)
@@ -1314,7 +1339,7 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
-    let input = self.parseParameterClause()
+    let input = self.parseParameterClause(for: .functionParameters)
 
     let async = self.consumeIfContextualKeyword("async")
 
@@ -1361,7 +1386,7 @@ extension Parser {
       genericParameterClause = nil
     }
 
-    let indices = self.parseParameterClause()
+    let indices = self.parseParameterClause(for: .indices)
 
     let result: RawReturnClauseSyntax
     if self.at(.arrow) {

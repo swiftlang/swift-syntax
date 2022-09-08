@@ -383,6 +383,14 @@ final class DeclarationTests: XCTestCase {
   func testEnumParsing() {
     AssertParse(
       """
+      enum Foo {
+        @preconcurrency case custom(@Sendable () throws -> Void)
+      }
+      """
+    )
+
+    AssertParse(
+      """
       enum Content {
         case keyPath(KeyPath<FocusedValues, Value?>)
         case keyPath(KeyPath<FocusedValues, Binding<Value>?>)

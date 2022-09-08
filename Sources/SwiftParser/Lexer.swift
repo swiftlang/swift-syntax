@@ -2015,6 +2015,20 @@ extension Lexer.Cursor {
       return nil
     }
 
+    // For `/.../` regex literals, we need to ban space and tab at the start of
+    // a regex to avoid ambiguity with operator chains, e.g:
+    //
+    // Builder {
+    //   0
+    //   / 1 /
+    //   2
+    // }
+    //
+    if poundCount == 0 && !Tmp.isAtEndOfFile &&
+        (Tmp.peek() == UInt8(ascii: " ") || Tmp.peek() == UInt8(ascii: "\t")) {
+      return nil
+    }
+
     var isMultiline = false
     while !Tmp.isAtEndOfFile {
       switch Tmp.peek() {

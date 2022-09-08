@@ -84,6 +84,81 @@ enum BinaryOperator: RawTokenKindSubset {
   }
 }
 
+enum CanBeDeclaratinStart: RawTokenKindSubset {
+  case associatedtypeKeyword
+  case atSign
+  case caseKeyword
+  case classKeyword
+  case deinitKeyword
+  case enumKeyword
+  case extensionKeyword
+  case fileprivateKeyword
+  case funcKeyword
+  case identifier
+  case importKeyword
+  case initKeyword
+  case internalKeyword
+  case letKeyword
+  case operatorKeyword
+  case poundErrorKeyword
+  case poundIfKeyword
+  case poundLineKeyword
+  case poundSourceLocationKeyword
+  case poundWarningKeyword
+  case precedencegroupKeyword
+  case privateKeyword
+  case protocolKeyword
+  case publicKeyword
+  case staticKeyword
+  case structKeyword
+  case subscriptKeyword
+  case typealiasKeyword
+  case varKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .associatedtypeKeyword: return .associatedtypeKeyword
+    case .atSign: return .atSign
+    case .caseKeyword: return .caseKeyword
+    case .classKeyword: return .classKeyword
+    case .deinitKeyword: return .deinitKeyword
+    case .enumKeyword: return .enumKeyword
+    case .extensionKeyword: return .extensionKeyword
+    case .fileprivateKeyword: return .fileprivateKeyword
+    case .funcKeyword: return .funcKeyword
+    case .identifier: return .identifier
+    case .importKeyword: return .importKeyword
+    case .initKeyword: return .initKeyword
+    case .internalKeyword: return .internalKeyword
+    case .letKeyword: return .letKeyword
+    case .operatorKeyword: return .operatorKeyword
+    case .poundErrorKeyword: return .poundErrorKeyword
+    case .poundIfKeyword: return .poundIfKeyword
+    case .poundLineKeyword: return .poundLineKeyword
+    case .poundSourceLocationKeyword: return .poundSourceLocationKeyword
+    case .poundWarningKeyword: return .poundWarningKeyword
+    case .precedencegroupKeyword: return .precedencegroupKeyword
+    case .privateKeyword: return .privateKeyword
+    case .protocolKeyword: return .protocolKeyword
+    case .publicKeyword: return .publicKeyword
+    case .staticKeyword: return .staticKeyword
+    case .structKeyword: return .structKeyword
+    case .subscriptKeyword: return .subscriptKeyword
+    case .typealiasKeyword: return .typealiasKeyword
+    case .varKeyword: return .varKeyword
+    }
+  }
+
+  func accepts(lexeme: Lexer.Lexeme) -> Bool {
+    switch self {
+    case .poundLineKeyword:
+      return lexeme.isAtStartOfLine
+    default:
+      return true
+    }
+  }
+}
+
 enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {
   case __consuming = "__consuming"
   case _compilerInitialized = "_compilerInitialized"

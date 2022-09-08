@@ -198,31 +198,6 @@ extension Lexer.Lexeme {
     self.tokenKind.isKeyword
   }
 
-  var isEffectsSpecifier: Bool {
-    // NOTE: If this returns 'true', that token must be handled in
-    //       'parseEffectsSpecifiers()'.
-
-    if self.isContextualKeyword(["async", "reasync"]) ||
-        (self.isContextualKeyword("await") && !self.isAtStartOfLine) {
-      return true
-    }
-
-    // 'throws' and 'rethrows' are always valid effects specifiers.
-    if self.tokenKind == .throwsKeyword || self.tokenKind == .rethrowsKeyword {
-      return true
-    }
-
-    // We'll take 'throw' and 'try' too but they have to be on the same
-    // line as the declaration they're modifying.
-    if (self.tokenKind == .throwKeyword
-        || self.tokenKind == .tryKeyword)
-        && !self.isAtStartOfLine {
-      return true
-    }
-
-    return false;
-  }
-
   var isKeywordPossibleDeclStart: Bool {
     switch self.tokenKind {
     case .atSign,

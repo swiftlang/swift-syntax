@@ -547,8 +547,8 @@ extension Parser.Lookahead {
     // Handle type-function if we have an '->' with optional
     // 'async' and/or 'throws'.
     var loopProgress = LoopProgressCondition()
-    while self.currentToken.isEffectsSpecifier && loopProgress.evaluate(currentToken) {
-      self.consumeAnyToken()
+    while let (_, handle) = self.at(anyIn: EffectsSpecifier.self), loopProgress.evaluate(currentToken) {
+      self.eat(handle)
     }
 
     guard self.consume(if: .arrow) != nil else {
@@ -638,12 +638,12 @@ extension Parser.Lookahead {
       return true
     }
 
-    if self.currentToken.isEffectsSpecifier {
+    if self.at(anyIn: EffectsSpecifier.self) != nil {
       if self.peek().tokenKind == .arrow {
         return true
       }
 
-      if self.peek().isEffectsSpecifier {
+      if EffectsSpecifier(self.peek()) != nil {
         var backtrack = self.lookahead()
         backtrack.consumeAnyToken()
         backtrack.consumeAnyToken()

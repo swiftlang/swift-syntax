@@ -112,6 +112,47 @@ enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {
   case weak = "weak"
 }
 
+enum EffectsSpecifier: RawTokenKindSubset {
+  case asyncContextualKeyword
+  case awaitContextualKeyword
+  case reasyncContextualKeyword
+  case rethrowsKeyword
+  case throwKeyword
+  case throwsKeyword
+  case tryKeyword
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+    case .asyncContextualKeyword: return .identifier
+    case .awaitContextualKeyword: return .identifier
+    case .reasyncContextualKeyword: return .identifier
+    case .rethrowsKeyword: return .rethrowsKeyword
+    case .throwKeyword: return .throwKeyword
+    case .throwsKeyword: return .throwsKeyword
+    case .tryKeyword: return .tryKeyword
+    }
+  }
+
+  var contextualKeyword: SyntaxText? {
+    switch self {
+    case .asyncContextualKeyword: return "async"
+    case .reasyncContextualKeyword: return "reasync"
+    case .awaitContextualKeyword: return "await"
+    default: return nil
+    }
+  }
+
+  func accepts(lexeme: Lexer.Lexeme) -> Bool {
+    switch self {
+    // We'll take 'throw' and 'try' too for recovery but they have to be on the
+    // same line as the declaration they're modifying.
+    case .awaitContextualKeyword, .throwKeyword, .tryKeyword:
+      return !lexeme.isAtStartOfLine
+    default:
+      return true
+    }
+  }
+}
 
 enum IdentifierTokens: RawTokenKindSubset {
   case anyKeyword

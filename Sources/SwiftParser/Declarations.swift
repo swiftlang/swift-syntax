@@ -1651,7 +1651,7 @@ extension Parser {
         // on 'get' accessors, we also emit diagnostics if they show up on others.
         let asyncKeyword: RawTokenSyntax?
         let throwsKeyword: RawTokenSyntax?
-        if self.currentToken.isEffectsSpecifier {
+        if self.at(anyIn: EffectsSpecifier.self) != nil {
           asyncKeyword = self.parseEffectsSpecifier()
           throwsKeyword = self.parseEffectsSpecifier()
         } else {

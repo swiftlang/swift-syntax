@@ -451,6 +451,16 @@ extension Parser {
 
       if self.currentToken.isIdentifier || self.currentToken.isKeyword {
         let name = self.consumeAnyToken()
+
+        // If we hit a ')' we may have a zero-argument selector.
+        if self.at(.rightParen) && elements.isEmpty {
+          elements.append(RawObjCSelectorPieceSyntax(
+            name: name,
+            colon: nil,
+            arena: self.arena))
+          continue
+        }
+
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(RawObjCSelectorPieceSyntax(
           name: name,

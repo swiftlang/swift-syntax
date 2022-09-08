@@ -1993,9 +1993,9 @@ extension Parser {
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
           if self.currentToken.tokenText == "safe" {
-            specifiers.append(self.expectWithoutLookahead(.identifier, "safe"))
+            specifiers.append(self.expectWithoutLookahead(.identifier, where: { $0.tokenText == "safe" }))
           } else {
-            specifiers.append(self.expectWithoutLookahead(.identifier, "unsafe"))
+            specifiers.append(self.expectWithoutLookahead(.identifier, where: { $0.tokenText == "unsafe" }))
           }
           specifiers.append(self.expectWithoutLookahead(.rightParen))
         }

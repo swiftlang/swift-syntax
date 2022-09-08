@@ -203,61 +203,9 @@ extension Parser {
 
 }
 
-// MARK: Consuming Tokens with Lookahead
+// MARK: Expecting Tokens with Recovery
 
 extension Parser {
-  /// If the current token has `kind1` and is followed by `kind2` consume both tokens and return them.
-  /// Otherwise, return `nil`.
-  @_spi(RawSyntax)
-  public mutating func consume(if kind1: RawTokenKind, followedBy kind2: RawTokenKind) -> (Token, Token)? {
-    if self.at(kind1) && self.peek().tokenKind == kind2 {
-      return (consumeAnyToken(), consumeAnyToken())
-    } else {
-      return nil
-    }
-  }
-
-  /// If the current token satisfies `condition1` and the next token satisfies
-  /// `condition2` consume both tokens and return them.
-  /// Otherwise, return `nil`.
-  @_spi(RawSyntax)
-  public mutating func consume(
-    if condition1: (Lexer.Lexeme) -> Bool,
-    followedBy condition2: (Lexer.Lexeme) -> Bool
-  ) -> (Token, Token)? {
-    if condition1(self.currentToken) && condition2(self.peek()) {
-      return (consumeAnyToken(), consumeAnyToken())
-    } else {
-      return nil
-    }
-  }
-}
-
-// MARK: Expecting Tokens
-
-extension Parser {
-  /// Attempts to consume a token of the given kind, synthesizing a missing
-  /// token if the current token's kind does not match.
-  ///
-  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
-  /// In general, `expect` or `expectAny` should be preferred.
-  ///
-  /// - Parameter kind: The kind of token to consume.
-  /// - Returns: A token of the given kind.
-  @_spi(RawSyntax)
-  public mutating func expectWithoutLookahead(_ kind: RawTokenKind, _ text: SyntaxText? = nil) -> RawTokenSyntax {
-    if self.currentToken.tokenKind == kind {
-      if let text = text {
-        if self.currentToken.tokenText == text {
-          return self.consumeAnyToken()
-        }
-      } else {
-        return self.consumeAnyToken()
-      }
-    }
-    return RawTokenSyntax(missing: kind, arena: self.arena)
-  }
-
   /// Attempts to consume a token of the given kind.
   /// If it cannot be found, the parser tries
   ///  1. To each unexpected tokens that have lower ``TokenPrecedence`` than the

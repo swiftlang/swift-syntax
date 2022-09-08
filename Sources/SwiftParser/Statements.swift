@@ -217,7 +217,7 @@ extension Parser {
 
     // Parse the basic expression case.  If we have a leading let/var/case
     // keyword or an assignment, then we know this is a binding.
-    if !self.at(.letKeyword) && !self.at(.varKeyword) && !self.at(.caseKeyword) {
+    guard self.at(.letKeyword) || self.at(.varKeyword) || self.at(.caseKeyword) else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern

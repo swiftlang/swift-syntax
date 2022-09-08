@@ -1518,6 +1518,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawTokenSyntax?.self)
     break
+  case .opaqueReturnTypeOfAttributeArguments:
+    assert(layout.count == 6)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTokenSyntax.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawTokenSyntax.self)
+    break
   case .labeledStmt:
     assert(layout.count == 6)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)

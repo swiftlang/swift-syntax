@@ -1393,6 +1393,14 @@ public extension ExpressibleAsBackDeployVersionArgument {
     return createBackDeployVersionArgument()
   }
 }
+public protocol ExpressibleAsOpaqueReturnTypeOfAttributeArguments: ExpressibleAsSyntaxBuildable {
+  func createOpaqueReturnTypeOfAttributeArguments() -> OpaqueReturnTypeOfAttributeArguments
+}
+public extension ExpressibleAsOpaqueReturnTypeOfAttributeArguments {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createOpaqueReturnTypeOfAttributeArguments()
+  }
+}
 public protocol ExpressibleAsLabeledStmt: ExpressibleAsStmtBuildable {
   func createLabeledStmt() -> LabeledStmt
 }

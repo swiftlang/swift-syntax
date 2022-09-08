@@ -381,6 +381,8 @@ extension Syntax {
       return node
     case .backDeployVersionArgument(let node):
       return node
+    case .opaqueReturnTypeOfAttributeArguments(let node):
+      return node
     case .labeledStmt(let node):
       return node
     case .continueStmt(let node):
@@ -742,6 +744,7 @@ extension SyntaxKind {
     case .backDeployAttributeSpecList: return BackDeployAttributeSpecListSyntax.self
     case .backDeployVersionList: return BackDeployVersionListSyntax.self
     case .backDeployVersionArgument: return BackDeployVersionArgumentSyntax.self
+    case .opaqueReturnTypeOfAttributeArguments: return OpaqueReturnTypeOfAttributeArgumentsSyntax.self
     case .labeledStmt: return LabeledStmtSyntax.self
     case .continueStmt: return ContinueStmtSyntax.self
     case .whileStmt: return WhileStmtSyntax.self

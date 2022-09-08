@@ -476,5 +476,18 @@ ATTRIBUTE_NODES = [
                    argument
                    '''),
          ]),
-
+    # opaque-return-type-of-arguments -> string-literal ',' integer-literal
+    Node('OpaqueReturnTypeOfAttributeArguments',
+         name_for_diagnostics='opaque return type arguments',
+         kind='Syntax',
+         description='''
+         The arguments for the '@_opaqueReturnTypeOf()'.
+         ''',
+         children=[
+             Child('MangledName', kind='StringLiteralToken',
+                   description='The mangled name of a declaration.'),
+             Child('Comma', kind='CommaToken'),
+             Child('Ordinal', kind='IntegerLiteralToken',
+                   description="The ordinal corresponding to the 'some' keyword that introduced this opaque type."),
+        ]),
 ]

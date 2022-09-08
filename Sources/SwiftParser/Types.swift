@@ -711,7 +711,7 @@ extension Parser.Lookahead {
     self.consumeAnyToken()
 
     // Parse an optional generic argument list.
-    if self.currentToken.starts(with: "<") && !self.canParseGenericArguments() {
+    if self.currentToken.starts(with: "<") && !self.consumeGenericArguments() {
       return false
     }
 
@@ -724,13 +724,13 @@ extension Parser.Lookahead {
     }
 
     var lookahead = self.lookahead()
-    guard lookahead.canParseGenericArguments() else {
+    guard lookahead.consumeGenericArguments() else {
       return false
     }
     return lookahead.currentToken.isGenericTypeDisambiguatingToken
   }
 
-  mutating func canParseGenericArguments() -> Bool {
+  mutating func consumeGenericArguments() -> Bool {
     // Parse the opening '<'.
     guard self.currentToken.starts(with: "<") else {
       return false
@@ -814,6 +814,26 @@ extension Parser {
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
           unexpectedBeforeArgument,
+          argument: RawSyntax(argument),
+          unexpectedBeforeRightParen,
+          rightParen: rightParen,
+          tokenList: nil,
+          arena: self.arena
+        )
+      )
+    case ._opaqueReturnTypeOf:
+      let (unexpectedBeforeAt, at) = self.expect(.atSign)
+      let ident = self.expectIdentifierWithoutRecovery()
+      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      let argument = self.parseOpaqueReturnTypeOfAttributeArguments()
+      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+      return RawSyntax(
+        RawAttributeSyntax(
+          unexpectedBeforeAt,
+          atSignToken: at,
+          attributeName: ident,
+          unexpectedBeforeLeftParen,
+          leftParen: leftParen,
           argument: RawSyntax(argument),
           unexpectedBeforeRightParen,
           rightParen: rightParen,

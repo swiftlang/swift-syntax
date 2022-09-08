@@ -641,4 +641,28 @@ let ATTRIBUTE_NODES: [Node] = [
                ])
        ]),
 
+  Node(name: "OpaqueReturnTypeOfAttributeArguments",
+       nameForDiagnostics: "opaque return type arguments",
+       description: "The arguments for the '@_opaqueReturnTypeOf()'.",
+       kind: "Syntax",
+       children: [
+         Child(name: "MangledName",
+               kind: "StringLiteralToken",
+               description: "The mangled name of a declaration.",
+               tokenChoices: [
+                 "StringLiteral"
+               ]),
+         Child(name: "Comma",
+               kind: "CommaToken",
+               tokenChoices: [
+                 "Comma"
+               ]),
+         Child(name: "Ordinal",
+               kind: "IntegerLiteralToken",
+               description: "The ordinal corresponding to the 'some' keyword that introduced this opaque type.",
+               tokenChoices: [
+                 "IntegerLiteral"
+               ])
+       ]),
+
 ]

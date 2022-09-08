@@ -32,6 +32,16 @@ final class DeclarationTests: XCTestCase {
       }
       """
     )
+
+    AssertParse("""
+                func #^DIAG1^#where
+                r#^DIAG2^#
+                """,
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG1", message: "Expected '' in function"),
+                  DiagnosticSpec(locationMarker: "DIAG1", message: "Expected argument list in function declaration"),
+                  DiagnosticSpec(locationMarker: "DIAG2", message: "Expected '=' in same type requirement"),
+                ])
   }
 
   func testClassParsing() {

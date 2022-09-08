@@ -43,32 +43,10 @@ extension Parser {
 
   @_spi(RawSyntax)
   public mutating func parseModifierList() -> RawModifierListSyntax? {
-    enum ExpectedTokenKind: RawTokenKindSubset {
-      case privateKeyword
-      case fileprivateKeyword
-      case internalKeyword
-      case publicKeyword
-      case staticKeyword
-      case classKeyword
-      case identifier
-
-      var rawTokenKind: RawTokenKind {
-        switch self {
-        case .privateKeyword: return .privateKeyword
-        case .fileprivateKeyword: return .fileprivateKeyword
-        case .internalKeyword: return .internalKeyword
-        case .publicKeyword: return .publicKeyword
-        case .staticKeyword: return .staticKeyword
-        case .classKeyword: return .classKeyword
-        case .identifier: return .identifier
-        }
-      }
-    }
-
     var elements = [RawDeclModifierSyntax]()
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
-      switch self.at(anyIn: ExpectedTokenKind.self) {
+      switch self.at(anyIn: DeclarationModifier.self) {
       case (.privateKeyword, let handle)?,
           (.fileprivateKeyword, let handle)?,
           (.internalKeyword, let handle)?,
@@ -106,7 +84,7 @@ extension Parser {
         // treat 'class' as a modifier in the case of a following CC
         // token, we cannot be sure there is no intention to override
         // or witness something static.
-        if lookahead.isStartOfDeclaration() || lookahead.atContextualKeyword("override") {
+        if lookahead.atStartOfDeclaration() || lookahead.atContextualKeyword("override") {
           let classKeyword = self.eat(handle)
           elements.append(RawDeclModifierSyntax(
             name: classKeyword,
@@ -117,39 +95,32 @@ extension Parser {
         } else {
           break MODIFIER_LOOP
         }
-      case (.identifier, _)?:
-        // Context sensitive keywords.
-        // FIXME: Sink this into the GYB
-        switch self.at(anyIn: DeclModifier.self) {
-        case (.unowned, _)?:
-          elements.append(self.parseUnownedModifier())
-        case (.final, _)?,
-            (.required, _)?,
-            (.optional, _)?,
-            (.lazy, _)?,
-            (.dynamic, _)?,
-            (.infix, _)?,
-            (.prefix, _)?,
-            (.postfix, _)?,
-            (.compilerInitialized, _)?,
-            (.consuming, _)?,
-            (.mutating, _)?,
-            (.nonmutating, _)?,
-            (.convenience, _)?,
-            (.override, _)?,
-            (.open, _)?,
-            (.weak, _)?,
-            (.indirect, _)?,
-            (.isolated, _)?,
-            (.async, _)?,
-            (.nonisolated, _)?,
-            (.distributed, _)?,
-            (.const, _)?,
-            (.local, _)?:
-          elements.append(self.parseSimpleModifier())
-        case nil:
-          break MODIFIER_LOOP
-        }
+      case (.unowned, _)?:
+        elements.append(self.parseUnownedModifier())
+      case (.final, _)?,
+        (.required, _)?,
+        (.optional, _)?,
+        (.lazy, _)?,
+        (.dynamic, _)?,
+        (.infix, _)?,
+        (.prefix, _)?,
+        (.postfix, _)?,
+        (.compilerInitialized, _)?,
+        (.consuming, _)?,
+        (.mutating, _)?,
+        (.nonmutating, _)?,
+        (.convenience, _)?,
+        (.override, _)?,
+        (.open, _)?,
+        (.weak, _)?,
+        (.indirect, _)?,
+        (.isolated, _)?,
+        (.async, _)?,
+        (.nonisolated, _)?,
+        (.distributed, _)?,
+        (.const, _)?,
+        (.local, _)?:
+        elements.append(self.parseSimpleModifier())
 
       default:
         break MODIFIER_LOOP

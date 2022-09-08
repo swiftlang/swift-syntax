@@ -556,7 +556,7 @@ extension Parser.Lookahead {
     guard
       !self.at(any: [.rightParen, .rightBrace]) &&
         !self.atContextualPunctuator("...") &&
-        !self.isStartOfDeclaration()
+        !self.atStartOfDeclaration()
     else {
       return self.consume(if: .rightParen) != nil
     }
@@ -589,7 +589,7 @@ extension Parser.Lookahead {
           var skipProgress = LoopProgressCondition()
           while !self.at(any: [.eof, .rightParen, .rightBrace, .comma])
                   && !self.atContextualPunctuator("...")
-                  && !self.isStartOfDeclaration()
+                  && !self.atStartOfDeclaration()
                   && skipProgress.evaluate(currentToken) {
             self.skipSingle()
           }

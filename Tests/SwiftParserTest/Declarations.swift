@@ -738,6 +738,10 @@ final class DeclarationTests: XCTestCase {
       "func at(any kinds: [RawTokenKind]) {}"
     )
   }
+
+  func testPublicClass() {
+    AssertParse("public class Foo: Superclass {}")
+  }
 }
 
 extension Parser.DeclAttributes {

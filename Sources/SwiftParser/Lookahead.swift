@@ -75,6 +75,22 @@ extension Parser.Lookahead {
     self.consumeAnyToken()
   }
 
+  /// Consume tokens of lower precedence than `kind` until reaching a token of that kind.
+  /// The token of `kind` is also consumed.
+  @_spi(RawSyntax)
+  public mutating func consume(to kind: RawTokenKind) {
+    if self.consume(if: kind) != nil {
+      return
+    }
+    var lookahead = self.lookahead()
+    if lookahead.canRecoverTo([kind]) {
+      for _ in 0..<lookahead.tokensConsumed {
+        self.consumeAnyToken()
+      }
+      self.consumeAnyToken()
+    }
+  }
+
   /// Consumes a given token, or splits the current token into a leading token
   /// matching the given token and a trailing token and consumes the leading
   /// token.
@@ -219,143 +235,6 @@ extension Parser.Lookahead {
     "thick",
     "_opaqueReturnTypeOf",
   ]
-
-  func isStartOfDeclaration() -> Bool {
-    guard self.at(anyIn: CanBeDeclaratinStart.self) != nil else {
-      // If this is obviously not the start of a decl, then we're done.
-      return false
-    }
-
-    /*
-     // When 'init' appears inside another 'init', it's likely the user wants to
-     // invoke an initializer but forgets to prefix it with 'self.' or 'super.'
-     // Otherwise, expect 'init' to be the start of a declaration (and complain
-     // when the expectation is not fulfilled).
-     if (Tok.is(tok::kw_init)) {
-       return !isa<ConstructorDecl>(CurDeclContext);
-     }
-     */
-
-    // Similarly, when 'case' appears inside a function, it's probably a switch
-    // case, not an enum case declaration.
-    if self.at(.caseKeyword) {
-      return false
-    }
-
-    /*
-     // The protocol keyword needs more checking to reject "protocol<Int>".
-     if (Tok.is(tok::kw_protocol)) {
-       const Token &Tok2 = peekToken();
-       return !Tok2.isAnyOperator() || !Tok2.getText().equals("<");
-     }
-
-     // The 'try' case is only for simple local recovery, so we only bother to
-     // check 'let' and 'var' right now.
-     if (Tok.is(tok::kw_try))
-       return peekToken().isAny(tok::kw_let, tok::kw_var);
-     */
-
-    // Skip an attribute, since it might be a type attribute.  This can't
-    // happen at the top level of a scope, but we do use isStartOfSwiftDecl()
-    // in positions like generic argument lists.
-    if self.at(.atSign) {
-      var subparser = self.lookahead()
-      _ = subparser.eatParseAttributeList()
-      // If this attribute is the last element in the block,
-      // consider it is a start of incomplete decl.
-      if subparser.at(any: [.rightBrace, .eof, .poundEndifKeyword]) {
-        return true
-      }
-      return subparser.isStartOfDeclaration()
-    }
-
-    // If we have a decl modifying keyword, check if the next token is a valid
-    // decl start. This is necessary to correctly handle Swift keywords that are
-    // shared by SIL, e.g 'private' in 'sil private @foo :'. We need to make sure
-    // this isn't considered a valid Swift decl start.
-    if self.currentToken.tokenKind.isKeyword {
-      if self.at(any: [], contextualKeywords: Self.declAttributeNames) {
-        var subparser = self.lookahead()
-        subparser.consumeAnyToken()
-
-        // Eat paren after modifier name; e.g. private(set)
-        if subparser.consume(if: .leftParen) != nil {
-          while !subparser.at(any: [.eof, .rightBrace, .poundEndifKeyword]) {
-            if subparser.consume(if: .rightParen) != nil {
-              break
-            }
-
-            // If we found the start of a decl while trying to skip over the
-            // paren, then we have something incomplete like 'private('. Return
-            // true for better recovery.
-            if subparser.isStartOfDeclaration() {
-              return true
-            }
-
-            subparser.consumeAnyToken()
-          }
-        }
-        return subparser.isStartOfDeclaration()
-      }
-    }
-
-    // Otherwise, the only hard case left is the identifier case.
-    guard self.at(.identifier) else {
-      return true
-    }
-
-    // If this is an operator declaration, handle it.
-    if case .operatorKeyword = self.peek().tokenKind,
-        (self.atContextualKeyword("prefix") ||
-         self.atContextualKeyword("postfix") ||
-         self.atContextualKeyword("infix")) {
-      return true
-    }
-
-    // If this can't possibly be a contextual keyword, then this identifier is
-    // not interesting.  Bail out.
-    guard self.at(anyIn: ContextualDeclKeyword.self) != nil else {
-      return false
-    }
-
-    // If it might be, we do some more digging.
-
-    // If this is 'unowned', check to see if it is valid.
-    let tok2 = self.peek()
-    if self.atContextualKeyword("unowned") && tok2.tokenKind == .leftParen &&
-        self.isParenthesizedUnowned() {
-      var lookahead = self.lookahead()
-      lookahead.expectIdentifierWithoutRecovery()
-      lookahead.eat(.leftParen)
-      lookahead.expectIdentifierWithoutRecovery()
-      lookahead.eat(.rightParen)
-      return lookahead.isStartOfDeclaration()
-    }
-
-    if self.atContextualKeyword("actor") {
-      if tok2.tokenKind == .identifier {
-        return true
-      }
-      // actor may be somewhere in the modifier list. Eat the tokens until we get
-      // to something that isn't the start of a decl. If that is an identifier,
-      // it's an actor declaration, otherwise, it isn't.
-      var lookahead = self.lookahead()
-      repeat {
-        lookahead.consumeAnyToken()
-      } while lookahead.isStartOfDeclaration()
-      return lookahead.at(.identifier)
-    }
-
-    // If the next token is obviously not the start of a decl, bail early.
-    guard CanBeDeclaratinStart(tok2) != nil else {
-      return false
-    }
-
-    // Otherwise, do a recursive parse.
-    var next = self.lookahead()
-    next.expectIdentifierWithoutRecovery()
-    return next.isStartOfDeclaration()
-  }
 
   func isParenthesizedUnowned() -> Bool {
     assert(self.atContextualKeyword("unowned") && self.peek().tokenKind == .leftParen,

@@ -833,7 +833,7 @@ extension Parser {
         .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
         .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword
       ])
-        && !self.atStartOfStatement() && !self.lookahead().isStartOfDeclaration() {
+        && !self.atStartOfStatement() && !self.atStartOfDeclaration() {
       expr = self.parseExpression()
     } else {
       expr = nil
@@ -992,7 +992,7 @@ extension Parser {
     guard
       self.at(.identifier) &&
         !self.atStartOfStatement() &&
-        !self.lookahead().isStartOfDeclaration()
+        !self.atStartOfDeclaration()
     else {
       return nil
     }

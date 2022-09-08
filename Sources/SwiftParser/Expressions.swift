@@ -1673,7 +1673,7 @@ extension Parser {
         // If The next token is at the beginning of a new line and can never start
         // an element, break.
         if self.currentToken.isAtStartOfLine
-            && (self.at(any: [.rightBrace, .poundEndifKeyword]) || self.lookahead().isStartOfDeclaration() || self.atStartOfStatement()) {
+            && (self.at(any: [.rightBrace, .poundEndifKeyword]) || self.atStartOfDeclaration() || self.atStartOfStatement()) {
           break
         }
       }

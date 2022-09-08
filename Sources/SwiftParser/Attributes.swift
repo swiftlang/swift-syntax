@@ -219,9 +219,8 @@ extension Parser {
 
     // Custom attributes are stricter than normal attributes about their
     // argument lists "immediately" following the attribute name.
-    guard let leftParen = self.consume(if: .leftParen, where: { (lexeme, parser) in
-      !lexeme.isAtStartOfLine && parser.lookahead().isCustomAttributeArgument()
-    }) else {
+    guard self.lookahead().isCustomAttributeArgument(),
+            let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine }) else {
       return RawCustomAttributeSyntax(
         atSignToken: atSign, attributeName: attrName,
         leftParen: nil, argumentList: nil, rightParen: nil,

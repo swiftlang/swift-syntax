@@ -82,9 +82,9 @@ extension TokenConsumer {
   @_spi(RawSyntax)
   public mutating func consume(
     if kind: RawTokenKind,
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true}
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true}
   ) -> Token? {
-    if self.at(kind) && condition(self.currentToken, self) {
+    if self.at(kind) && condition(self.currentToken) {
       return self.consumeAnyToken()
     }
     return nil
@@ -98,7 +98,7 @@ extension TokenConsumer {
   /// - Returns: A token of the given kind if one was consumed, else `nil`.
   public mutating func consume(
     ifAny kinds: RawTokenKind...,
-    where condition: (Lexer.Lexeme, Self) -> Bool = { (_, _) in true }
+    where condition: (Lexer.Lexeme) -> Bool = { _ in true }
   ) -> Token? {
     for kind in kinds {
       if let consumed = self.consume(if: kind, where: condition) {

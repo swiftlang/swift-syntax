@@ -1981,9 +1981,9 @@ extension Parser {
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
           if self.currentToken.tokenText == "safe" {
-            specifiers.append(self.expectWithoutRecovery(.identifier, where: { $0.tokenText == "safe" }))
+            specifiers.append(self.expectContextualKeywordWithoutRecovery("safe"))
           } else {
-            specifiers.append(self.expectWithoutRecovery(.identifier, where: { $0.tokenText == "unsafe" }))
+            specifiers.append(self.expectContextualKeywordWithoutRecovery("unsafe"))
           }
           specifiers.append(self.expectWithoutRecovery(.rightParen))
         }

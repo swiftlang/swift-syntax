@@ -1775,18 +1775,20 @@ extension Parser {
 
           // The thing being capture specified is an identifier, or as an identifier
           // followed by an expression.
+          let unexpectedBeforeName: RawUnexpectedNodesSyntax?
           let name: RawTokenSyntax?
           let unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax?
           let assignToken: RawTokenSyntax?
           let expression: RawExprSyntax
           if self.peek().tokenKind == .equal {
             // The name is a new declaration.
-            name = self.expectIdentifierWithoutRecovery()
+            (unexpectedBeforeName, name) = self.expectIdentifier()
             (unexpectedBeforeAssignToken, assignToken) = self.expect(.equal)
             expression = self.parseExpression()
           } else {
             // This is the simple case - the identifier is both the name and
             // the expression to capture.
+            unexpectedBeforeName = nil
             name = nil
             unexpectedBeforeAssignToken = nil
             assignToken = nil
@@ -1796,6 +1798,7 @@ extension Parser {
           keepGoing = self.consume(if: .comma)
           elements.append(RawClosureCaptureItemSyntax(
             specifier: specifier,
+            unexpectedBeforeName,
             name: name,
             unexpectedBeforeAssignToken,
             assignToken: assignToken,
@@ -1838,9 +1841,9 @@ extension Parser {
           repeat {
             let unexpected: RawUnexpectedNodesSyntax?
             let name: RawTokenSyntax
-            if self.at(.identifier) {
+            if let identifier = self.consume(if: .identifier) {
               unexpected = nil
-              name = self.expectIdentifierWithoutRecovery()
+              name = identifier
             } else {
               (unexpected, name) = self.expect(.wildcardKeyword)
             }
@@ -1889,10 +1892,10 @@ extension Parser {
     do {
       // Check for the strength specifier: "weak", "unowned", or
       // "unowned(safe/unsafe)".
-      if self.atContextualKeyword("weak") {
-        specifiers.append(self.expectIdentifierWithoutRecovery())
-      } else if self.atContextualKeyword("unowned") {
-        specifiers.append(self.expectIdentifierWithoutRecovery())
+      if let weakContextualKeyword = self.consumeIfContextualKeyword("weak") {
+        specifiers.append(weakContextualKeyword)
+      } else if let unownedContextualKeyword = self.consumeIfContextualKeyword("unowned") {
+        specifiers.append(unownedContextualKeyword)
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
           if self.currentToken.tokenText == "safe" {

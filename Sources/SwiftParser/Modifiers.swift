@@ -54,11 +54,11 @@ extension Parser {
         let name = self.eat(handle)
         let details: RawDeclModifierDetailSyntax?
         if let lparen = self.consume(if: .leftParen) {
-          assert(self.atContextualKeyword("set"))
-          let detail = self.expectIdentifierWithoutRecovery()
+          let (unexpectedBeforeDetail, detail) = self.expectContextualKeyword("set")
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           details = RawDeclModifierDetailSyntax(
             leftParen: lparen,
+            unexpectedBeforeDetail,
             detail: detail,
             unexpectedBeforeRParen,
             rightParen: rparen,

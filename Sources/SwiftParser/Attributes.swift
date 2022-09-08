@@ -183,7 +183,7 @@ extension Parser {
 
 
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let ident = self.expectIdentifierOrRethrowsWithoutRecovery()
+    let (unexpectedBeforeIdent, ident) = self.expectIdentifierOrRethrows()
     let leftParen = self.consume(if: .leftParen)
     let arg: RawSyntax?
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
@@ -204,6 +204,7 @@ extension Parser {
     return RawSyntax(RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSignToken: atSign,
+      unexpectedBeforeIdent,
       attributeName: ident,
       leftParen: leftParen,
       argument: arg,
@@ -339,7 +340,7 @@ extension Parser {
   }
 
   mutating func parseDifferentiabilityParameters() -> RawDifferentiabilityParamsClauseSyntax {
-    let wrt = self.expectIdentifierWithoutRecovery()
+    let (unexpectedBeforeWrt, wrt) = self.expectIdentifier()
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
     guard let leftParen = self.consume(if: .leftParen) else {
@@ -347,6 +348,7 @@ extension Parser {
       let param = self.parseDifferentiabilityParameter().map(RawSyntax.init(_:))
                   ?? RawSyntax(RawMissingSyntax(arena: self.arena))
       return RawDifferentiabilityParamsClauseSyntax(
+        unexpectedBeforeWrt,
         wrtLabel: wrt,
         unexpectedBeforeColon,
         colon: colon,
@@ -692,7 +694,7 @@ extension Parser {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforePrivateToken, privateToken) = self.expectContextualKeyword("_private")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let label = self.expectIdentifierWithoutRecovery()
+    let (unexpectedBeforeLabel, label) = self.expectIdentifier()
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let filename = self.consumeAnyToken()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -704,6 +706,7 @@ extension Parser {
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       argument: RawSyntax(RawNamedAttributeStringArgumentSyntax(
+        unexpectedBeforeLabel,
         nameTok: label,
         unexpectedBeforeColon,
         colon: colon,

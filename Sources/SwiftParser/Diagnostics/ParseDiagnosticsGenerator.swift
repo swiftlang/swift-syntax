@@ -67,18 +67,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   // MARK: - Private helper functions
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: DiagnosticMessage, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+    diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
     diagnostics.append(Diagnostic(node: Syntax(node), message: message, highlights: highlights, fixIts: fixIts))
+    self.handledNodes.append(contentsOf: handledNodes)
   }
 
   /// Produce a diagnostic.
-  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = []) {
-    addDiagnostic(node, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts)
-  }
-
-  /// If a diagnostic is generated that covers multiple syntax nodes, mark them as handles so they don't produce the generic diagnostics anymore.
-  private func markNodesAsHandled(_ nodes: SyntaxIdentifier...) {
-    handledNodes.append(contentsOf: nodes)
+  private func addDiagnostic<T: SyntaxProtocol>(_ node: T, _ message: StaticParserError, highlights: [Syntax] = [], fixIts: [FixIt] = [], handledNodes: [SyntaxIdentifier] = []) {
+    addDiagnostic(node, message as DiagnosticMessage, highlights: highlights, fixIts: fixIts, handledNodes: handledNodes)
   }
 
   /// Whether the node should be skipped for diagnostic emission.
@@ -109,7 +106,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.presence == .missing {
-      addDiagnostic(node, MissingTokenError(missingToken: node))
+      // If there is an unexpected token in front of the identifier, we assume
+      // that this unexpected token was intended to be the identifier we are missing.
+      if let invalidIdentifier = node.previousToken(viewMode: .all),
+          let previousParent = invalidIdentifier.parent?.as(UnexpectedNodesSyntax.self) {
+        addDiagnostic(invalidIdentifier, InvalidIdentifierError(invalidIdentifier: invalidIdentifier), handledNodes: [previousParent.id])
+      } else {
+        addDiagnostic(node, MissingTokenError(missingToken: node))
+      }
     }
     return .skipChildren
   }
@@ -125,20 +129,24 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
        unexpectedCondition.tokens(withKind: .semicolon).count == 2 {
       // FIXME: This is aweful. We should have a way to either get all children between two cursors in a syntax node or highlight a range from one node to another.
-      addDiagnostic(node, .cStyleForLoop, highlights: ([
-        Syntax(node.pattern),
-        Syntax(node.unexpectedBetweenPatternAndTypeAnnotation),
-        Syntax(node.typeAnnotation),
-        Syntax(node.unexpectedBetweenTypeAnnotationAndInKeyword),
-        Syntax(node.inKeyword),
-        Syntax(node.unexpectedBetweenInKeywordAndSequenceExpr),
-        Syntax(node.sequenceExpr),
-        Syntax(node.unexpectedBetweenSequenceExprAndWhereClause),
-        Syntax(node.whereClause),
-        Syntax(node.unexpectedBetweenWhereClauseAndBody),
-        Syntax(unexpectedCondition)
-      ] as [Syntax?]).compactMap({ $0 }))
-      markNodesAsHandled(node.inKeyword.id, unexpectedCondition.id)
+      addDiagnostic(
+        node,
+        .cStyleForLoop,
+        highlights: ([
+          Syntax(node.pattern),
+          Syntax(node.unexpectedBetweenPatternAndTypeAnnotation),
+          Syntax(node.typeAnnotation),
+          Syntax(node.unexpectedBetweenTypeAnnotationAndInKeyword),
+          Syntax(node.inKeyword),
+          Syntax(node.unexpectedBetweenInKeywordAndSequenceExpr),
+          Syntax(node.sequenceExpr),
+          Syntax(node.unexpectedBetweenSequenceExprAndWhereClause),
+          Syntax(node.whereClause),
+          Syntax(node.unexpectedBetweenWhereClauseAndBody),
+          Syntax(unexpectedCondition)
+        ] as [Syntax?]).compactMap({ $0 }),
+        handledNodes: [node.inKeyword.id, unexpectedCondition.id]
+      )
     }
     return .visitChildren
   }
@@ -157,8 +165,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           .makeMissing(node: throwsInReturnPosition),
           .makePresent(node: missingThrowsKeyword, trailingTrivia: .space),
         ])
-      ])
-      markNodesAsHandled(unexpectedBeforeReturnType.id, missingThrowsKeyword.id, throwsInReturnPosition.id)
+      ], handledNodes: [unexpectedBeforeReturnType.id, missingThrowsKeyword.id, throwsInReturnPosition.id])
       return .visitChildren
     }
     return .visitChildren
@@ -169,8 +176,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.leftParen.presence == .missing && node.parameterList.isEmpty && node.rightParen.presence == .missing {
-      addDiagnostic(node, .missingFunctionParameterClause)
-      markNodesAsHandled(node.leftParen.id, node.parameterList.id, node.rightParen.id)
+      addDiagnostic(node, .missingFunctionParameterClause, handledNodes: [node.leftParen.id, node.parameterList.id, node.rightParen.id])
     }
     return .visitChildren
   }
@@ -180,8 +186,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let extraneous = node.unexpectedBetweenStatementsAndEOFToken, !extraneous.isEmpty {
-      addDiagnostic(extraneous, ExtaneousCodeAtTopLevel(extraneousCode: extraneous))
-      markNodesAsHandled(extraneous.id)
+      addDiagnostic(extraneous, ExtaneousCodeAtTopLevel(extraneousCode: extraneous), handledNodes: [extraneous.id])
     }
     return .visitChildren
   }
@@ -191,8 +196,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.colonMark.presence == .missing {
-      addDiagnostic(node.colonMark, .missingColonInTernaryExprDiagnostic)
-      markNodesAsHandled(node.colonMark.id)
+      addDiagnostic(node.colonMark, .missingColonInTernaryExprDiagnostic, handledNodes: [node.colonMark.id])
     }
     return .visitChildren
   }

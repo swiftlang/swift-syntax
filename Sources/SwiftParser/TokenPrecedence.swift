@@ -16,6 +16,8 @@ import SwiftSyntax
 /// token, tokens with a lower token precedence may be skipped and considered
 /// unexpected.
 public enum TokenPrecedence: Comparable {
+  /// An unknown token. This is known garbage and should always be allowed to be skipped.
+  case unknownToken
   /// Tokens that can be used similar to variable names or literals
   case identifierLike
   /// Keywords and operators that can occur in the middle of an expression
@@ -59,30 +61,32 @@ public enum TokenPrecedence: Comparable {
     func precedence(_ precedence: TokenPrecedence) -> Int {
       /// Should match the order of the cases in the enum.
       switch precedence {
-      case .identifierLike:
+      case .unknownToken:
         return 0
-      case .exprKeyword:
+      case .identifierLike:
         return 1
-      case .weakBracketed:
+      case .exprKeyword:
         return 2
-      case .weakPunctuator:
+      case .weakBracketed:
         return 3
-      case .weakBracketClose:
+      case .weakPunctuator:
         return 4
-      case .stmtKeyword:
+      case .weakBracketClose:
         return 5
-      case .strongPunctuator:
+      case .stmtKeyword:
         return 6
-      case .openingBrace:
+      case .strongPunctuator:
         return 7
-      case .closingBrace:
+      case .openingBrace:
         return 8
-      case .declKeyword:
+      case .closingBrace:
         return 9
-      case .openingPoundIf:
+      case .declKeyword:
         return 10
-      case .closingPoundIf:
+      case .openingPoundIf:
         return 11
+      case .closingPoundIf:
+        return 12
       }
     }
 
@@ -98,6 +102,8 @@ public enum TokenPrecedence: Comparable {
   @_spi(RawSyntax)
   public init(_ tokenKind: RawTokenKind) {
     switch tokenKind {
+    case .unknown:
+      self = .unknownToken
       // MARK: Identifier like
     case
       // Literals
@@ -111,9 +117,7 @@ public enum TokenPrecedence: Comparable {
       // '_' can occur in types to replace a type identifier
         .wildcardKeyword,
       // String segment, string interpolation anchor and pound don't really fit anywhere else
-        .pound, .stringInterpolationAnchor, .stringSegment,
-      // Give unknown tokens the lowest priority to eat it as unexpected if necessary
-        .unknown:
+        .pound, .stringInterpolationAnchor, .stringSegment:
       self = .identifierLike
 
       // MARK: Expr keyword

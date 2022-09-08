@@ -128,7 +128,7 @@ extension Parser.Lookahead {
       if case .convention = attr {
         guard
           self.consume(if: .leftParen) != nil,
-          (self.at(.identifier) ? self.expectIdentifierWithoutRecovery() : nil) != nil,
+          self.consume(if: .identifier) != nil,
           self.consume(if: .rightParen) != nil
         else {
           return
@@ -280,10 +280,9 @@ extension Parser.Lookahead {
 
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {
-      guard lookahead.at(.identifier) else {
+      guard lookahead.consume(if: .identifier) != nil else {
         return false
       }
-      lookahead.expectIdentifierWithoutRecovery()
       // Eat paren after attribute name; e.g. @foo(x)
       if lookahead.at(.leftParen) {
         lookahead.skipSingle()

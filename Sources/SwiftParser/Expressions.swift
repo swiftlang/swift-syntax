@@ -12,6 +12,21 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+extension TokenConsumer {
+  func atStartOfExpression() -> Bool {
+    if self.at(anyIn: ExpressionStart.self) != nil {
+      return true
+    }
+    if self.at(.atSign) || self.at(.inoutKeyword) {
+      var backtrack = self.lookahead()
+      if backtrack.canParseType() {
+        return true
+      }
+    }
+    return false
+  }
+}
+
 extension Parser {
   public enum ExprFlavor {
     case basic
@@ -33,7 +48,7 @@ extension Parser {
     //
     // Only do this if we're parsing a pattern, to improve QoI on malformed
     // expressions followed by (e.g.) let/var decls.
-    if self.at(any: [.varKeyword, .letKeyword, .isKeyword]) {
+    if self.at(anyIn: MatchingPatternStart.self) != nil {
       let pattern = self.parseMatchingPattern()
       return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))
     }
@@ -292,14 +307,6 @@ extension Parser {
     forDirective: Bool = false,
     inVarOrLet: Bool = false
   ) -> RawExprSyntax {
-    if let awaitTok = self.consumeIfContextualKeyword("await") {
-      let sub = self.parseSequenceExpressionElement(flavor,
-                                                    inVarOrLet: inVarOrLet)
-      return RawExprSyntax(RawAwaitExprSyntax(
-        awaitKeyword: awaitTok, expression: sub,
-        arena: self.arena))
-    }
-
     // Try to parse '@' sign or 'inout' as a attributed typerepr.
     if self.at(any: [.atSign, .inoutKeyword]) {
       var backtrack = self.lookahead()
@@ -310,21 +317,29 @@ extension Parser {
       }
     }
 
-    guard let tryKeyword = self.consume(if: .tryKeyword) else {
-      return self.parseUnaryExpression(flavor,
-                                       forDirective: forDirective,
-                                       inVarOrLet: inVarOrLet)
+    switch self.at(anyIn: AwaitTry.self) {
+    case (.awaitContextualKeyword, let handle)?:
+      let awaitTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(flavor, inVarOrLet: inVarOrLet)
+      return RawExprSyntax(RawAwaitExprSyntax(
+        awaitKeyword: awaitTok,
+        expression: sub,
+        arena: self.arena
+      ))
+    case (.tryKeyword, let handle)?:
+      let tryKeyword = self.eat(handle)
+      let mark = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark])
+
+      let expression = self.parseSequenceExpressionElement(flavor, inVarOrLet: inVarOrLet)
+      return RawExprSyntax(RawTryExprSyntax(
+        tryKeyword: tryKeyword,
+        questionOrExclamationMark: mark,
+        expression: expression,
+        arena: self.arena
+      ))
+    case nil:
+      return self.parseUnaryExpression(flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
     }
-
-    let mark = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark])
-
-    let expression = self.parseSequenceExpressionElement(flavor,
-                                                         inVarOrLet: inVarOrLet)
-    return RawExprSyntax(RawTryExprSyntax(
-      tryKeyword: tryKeyword,
-      questionOrExclamationMark: mark,
-      expression: expression,
-      arena: self.arena))
   }
 
   /// Parse an optional prefix operator followed by an expression.
@@ -342,23 +357,9 @@ extension Parser {
     forDirective: Bool = false,
     inVarOrLet: Bool = false
   ) -> RawExprSyntax {
-    enum ExpectedTokenKind: RawTokenKindSubset {
-      case prefixAmpersand
-      case backslash
-      case prefixOperator
-
-      var rawTokenKind: RawTokenKind {
-        switch self {
-        case .prefixAmpersand: return .prefixAmpersand
-        case .backslash: return .backslash
-        case .prefixOperator: return .prefixOperator
-        }
-      }
-    }
-
     // First check to see if we have the start of a regex literal `/.../`.
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
-    switch self.at(anyIn: ExpectedTokenKind.self) {
+    switch self.at(anyIn: ExpressionPrefixOperator.self) {
     case (.prefixAmpersand, let handle)?:
       let amp = self.eat(handle)
       let expr = self.parseUnaryExpression(flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
@@ -748,94 +749,7 @@ extension Parser {
   ///     primary-expression → key-path-string-expression
   @_spi(RawSyntax)
   public mutating func parsePrimaryExpression(inVarOrLet: Bool) -> RawExprSyntax {
-    enum ExpectedTokenKind: RawTokenKindSubset {
-      case integerLiteral
-      case floatingLiteral
-      case stringLiteral
-      case regexLiteral
-      case nilKeyword
-      case trueKeyword
-      case falseKeyword
-      case __file__Keyword
-      case poundFileIDKeyword
-      case poundFileKeyword
-      case poundFilePathKeyword
-      case poundFunctionKeyword
-      case __function__Keyword
-      case poundLineKeyword
-      case __line__Keyword
-      case poundColumnKeyword
-      case __column__Keyword
-      case poundDsohandleKeyword
-      case __dso_handle__Keyword
-      case identifier
-      case selfKeyword
-      case capitalSelfKeyword
-      case anyKeyword
-      case dollarIdentifier
-      case wildcardKeyword
-      case poundSelectorKeyword
-      case poundKeyPathKeyword
-      case poundColorLiteralKeyword
-      case poundImageLiteralKeyword
-      case poundFileLiteralKeyword
-      case leftBrace
-      case period
-      case prefixPeriod
-      case superKeyword
-      case leftParen
-      case leftSquareBracket
-
-      var rawTokenKind: SwiftSyntax.RawTokenKind {
-        switch self {
-        case .integerLiteral: return .integerLiteral
-        case .floatingLiteral: return .floatingLiteral
-        case .stringLiteral: return .stringLiteral
-        case .regexLiteral: return .regexLiteral
-        case .nilKeyword: return .nilKeyword
-        case .trueKeyword: return .trueKeyword
-        case .falseKeyword: return .falseKeyword
-        case .__file__Keyword: return .__file__Keyword
-        case .poundFileIDKeyword: return .poundFileIDKeyword
-        case .poundFileKeyword: return .poundFileKeyword
-        case .poundFilePathKeyword: return .poundFilePathKeyword
-        case .poundFunctionKeyword: return .poundFunctionKeyword
-        case .__function__Keyword: return .__function__Keyword
-        case .poundLineKeyword: return .poundLineKeyword
-        case .__line__Keyword: return .__line__Keyword
-        case .poundColumnKeyword: return .poundColumnKeyword
-        case .__column__Keyword: return .__column__Keyword
-        case .poundDsohandleKeyword: return .poundDsohandleKeyword
-        case .__dso_handle__Keyword: return .__dso_handle__Keyword
-        case .identifier: return .identifier
-        case .selfKeyword: return .selfKeyword
-        case .capitalSelfKeyword: return .capitalSelfKeyword
-        case .anyKeyword: return .anyKeyword
-        case .dollarIdentifier: return .dollarIdentifier
-        case .wildcardKeyword: return .wildcardKeyword
-        case .poundSelectorKeyword: return .poundSelectorKeyword
-        case .poundKeyPathKeyword: return .poundKeyPathKeyword
-        case .poundColorLiteralKeyword: return .poundColorLiteralKeyword
-        case .poundImageLiteralKeyword: return .poundImageLiteralKeyword
-        case .poundFileLiteralKeyword: return .poundFileLiteralKeyword
-        case .leftBrace: return .leftBrace
-        case .period: return .period
-        case .prefixPeriod: return .prefixPeriod
-        case .superKeyword: return .superKeyword
-        case .leftParen: return .leftParen
-        case .leftSquareBracket: return .leftSquareBracket
-        }
-      }
-
-      var remappedKind: RawTokenKind? {
-        switch self {
-        case .period: return .prefixPeriod
-        default: return nil
-        }
-      }
-    }
-
-    switch self.at(anyIn: ExpectedTokenKind.self) {
+    switch self.at(anyIn: PrimaryExpressionStart.self) {
     case (.integerLiteral, let handle)?:
       let digits = self.eat(handle)
       return RawExprSyntax(RawIntegerLiteralExprSyntax(

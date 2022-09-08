@@ -64,13 +64,25 @@ struct DiagnosticSpec {
   /// If not `nil`, assert that the diagnostic contains fix-its with these messages.
   /// Use the `fixedSource` parameter on `AssertParse` to check that applying the Fix-It yields the expected result.
   let fixIts: [String]?
+  let file: StaticString
+  let line: UInt
 
-  init(locationMarker: String = "DIAG", id: MessageID? = nil, message: String?, highlight: String? = nil, fixIts: [String]? = nil) {
+  init(
+    locationMarker: String = "DIAG",
+    id: MessageID? = nil,
+    message: String?,
+    highlight: String? = nil,
+    fixIts: [String]? = nil,
+    file: StaticString = #file,
+    line: UInt = #line
+  ) {
     self.locationMarker = locationMarker
     self.id = id
     self.message = message
     self.highlight = highlight
     self.fixIts = fixIts
+    self.file = file
+    self.line = line
   }
 }
 
@@ -232,7 +244,7 @@ func AssertParse<Node: RawSyntaxNodeProtocol>(
         """, file: file, line: line)
       }
       for (diag, expectedDiag) in zip(diags, expectedDiagnostics) {
-        AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: file, line: line)
+        AssertDiagnostic(diag, in: tree, markerLocations: markerLocations, expected: expectedDiag, file: expectedDiag.file, line: expectedDiag.line)
       }
 
       // Applying Fix-Its

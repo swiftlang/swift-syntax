@@ -1668,12 +1668,18 @@ extension Parser {
             arena: self.arena))
         } while keepGoing != nil && loopProgress.evaluate(currentToken)
       }
+      // We were promised a right square bracket, so we're going to get it.
+      var unexpectedNodes = [RawSyntax]()
+      while !self.at(.eof) && !self.at(.rightSquareBracket) && !self.at(.inKeyword) {
+        unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
+      }
       let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
+      unexpectedNodes.append(contentsOf: unexpectedBeforeRSquare?.elements ?? [])
 
       captures = RawClosureCaptureSignatureSyntax(
         leftSquare: lsquare,
         items: elements.isEmpty ? nil : RawClosureCaptureItemListSyntax(elements: elements, arena: self.arena),
-        unexpectedBeforeRSquare,
+        unexpectedNodes.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: unexpectedNodes, arena: self.arena),
         rightSquare: rsquare, arena: self.arena)
     } else {
       captures = nil
@@ -1694,15 +1700,17 @@ extension Parser {
           // Parse identifier (',' identifier)*
           var keepGoing: RawTokenSyntax? = nil
           repeat {
+            let unexpected: RawUnexpectedNodesSyntax?
             let name: RawTokenSyntax
             if self.currentToken.isIdentifier {
+              unexpected = nil
               name = self.consumeIdentifier()
             } else {
-              name = self.eat(.wildcardKeyword)
+              (unexpected, name) = self.expect(.wildcardKeyword)
             }
             keepGoing = consume(if: .comma)
             params.append(RawClosureParamSyntax(
-              name: name, trailingComma: keepGoing, arena: self.arena))
+              unexpected, name: name, trailingComma: keepGoing, arena: self.arena))
           } while keepGoing != nil && loopProgress.evaluate(currentToken)
         }
 
@@ -1751,10 +1759,14 @@ extension Parser {
         specifiers.append(self.consumeIdentifier())
         if let lparen = self.consume(if: .leftParen) {
           specifiers.append(lparen)
-          specifiers.append(self.expectWithoutLookahead(.identifier, "unsafe"))
+          if self.currentToken.tokenText == "safe" {
+            specifiers.append(self.expectWithoutLookahead(.identifier, "safe"))
+          } else {
+            specifiers.append(self.expectWithoutLookahead(.identifier, "unsafe"))
+          }
           specifiers.append(self.expectWithoutLookahead(.rightParen))
         }
-      } else if (self.currentToken.isIdentifier || self.at(.selfKeyword)) {
+      } else if self.currentToken.isIdentifier || self.at(.selfKeyword) {
         let next = self.peek()
         // "x = 42", "x," and "x]" are all strong captures of x.
         guard next.tokenKind == .equal || next.tokenKind == .comma
@@ -1991,7 +2003,6 @@ extension Parser.Lookahead {
   mutating func consumeEffectsSpecifiers() {
     var loopProgress = LoopProgressCondition()
     while self.currentToken.isEffectsSpecifier
-            && !self.currentToken.isAtStartOfLine
             && loopProgress.evaluate(currentToken) {
       self.consumeAnyToken()
     }

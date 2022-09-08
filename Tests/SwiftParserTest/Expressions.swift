@@ -443,7 +443,7 @@ final class ExpressionTests: XCTestCase {
     )
   }
   
-  func testClouserExpression() {
+  func testClosureExpression() {
     AssertParse(
       """
       let :(#^DIAG_1^#..)->

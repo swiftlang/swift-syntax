@@ -4,6 +4,22 @@ import XCTest
 
 final class StatementTests: XCTestCase {
   func testIf() {
+    AssertParse("""
+                if let baz {}
+                """,
+                substructure: Syntax(IfStmtSyntax(ifKeyword: .ifKeyword(),
+                                                  conditions: ConditionElementListSyntax([
+                                                    ConditionElementSyntax(condition: Syntax(OptionalBindingConditionSyntax(
+                                                      letOrVarKeyword: .letKeyword(),
+                                                      pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("baz"))),
+                                                      typeAnnotation: nil,
+                                                      initializer: nil)), trailingComma: nil)
+                                                  ]),
+                                                  body: .init(leftBrace: .leftBraceToken(),
+                                                              statements: .init([]),
+                                                              rightBrace: .rightBraceToken()),
+                                                  elseKeyword: nil, elseBody: nil)))
+
     AssertParse("if let x { }")
 
     AssertParse(

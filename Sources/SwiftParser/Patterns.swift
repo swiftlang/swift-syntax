@@ -163,7 +163,17 @@ extension Parser {
       // matching-pattern ::= expr
       // Fall back to expression parsing for ambiguous forms. Name lookup will
       // disambiguate.
-      let expr = RawExprSyntax(self.parseSequenceExpression(.basic, inVarOrLet: true))
+      let patternSyntax = self.parseSequenceExpression(.basic, inVarOrLet: true)
+      if let pat = patternSyntax.as(RawUnresolvedPatternExprSyntax.self) {
+        // The most common case here is to parse something that was a lexically
+        // obvious pattern, which will come back wrapped in an immediate
+        // RawUnresolvedPatternExprSyntax.
+        //
+        // FIXME: This is pretty gross. Let's find a way to disambiguate let
+        // binding patterns much earlier.
+        return RawPatternSyntax(pat.pattern)
+      }
+      let expr = RawExprSyntax(patternSyntax)
       return RawPatternSyntax(RawExpressionPatternSyntax(expression: expr, arena: self.arena))
     }
   }

@@ -66,6 +66,13 @@ extension TokenConsumer {
     return self.currentToken.isContextualKeyword(name)
   }
 
+  /// Returns whether the current token is an operator with the given `name`.
+  @_spi(RawSyntax)
+  public func atContextualPunctuator(_ name: SyntaxText) -> Bool {
+    return self.currentToken.isContextualPunctuator(name)
+  }
+
+
   /// Returns whether the kind of the current token is any of the given
   /// kinds or a contextual keyword with text in `contextualKeywords` and
   /// additionally satisfies `condition`.
@@ -147,6 +154,15 @@ extension TokenConsumer {
   public mutating func consumeIfContextualKeyword(_ name: SyntaxText) -> Token? {
     if self.atContextualKeyword(name) {
       return self.consumeAnyToken(remapping: .contextualKeyword)
+    }
+    return nil
+  }
+
+  /// Consumes and returns the current token is an operator with the given `name`.
+  @_spi(RawSyntax)
+  public mutating func consumeIfContextualPunctuator(_ name: SyntaxText) -> Token? {
+    if self.atContextualPunctuator(name) {
+      return self.consumeAnyToken()
     }
     return nil
   }

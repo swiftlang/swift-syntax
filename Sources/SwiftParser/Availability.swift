@@ -158,8 +158,7 @@ extension Parser {
   ///     availability-argument → platform-name platform-version
   ///     availability-argument → *
   mutating func parseAvailabilitySpec() -> RawSyntax {
-    if self.currentToken.isBinaryOperator && self.currentToken.tokenText == "*" {
-      let star = self.consumeAnyToken()
+    if let star = self.consumeIfContextualPunctuator("*") {
       // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
       // doesn't expect it.
       return RawSyntax(star)

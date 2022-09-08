@@ -207,15 +207,6 @@ extension Lexer.Lexeme {
     self.tokenKind.isKeyword
   }
 
-  var isPunctuation: Bool {
-    self.tokenKind.isPunctuation
-  }
-
-  var isEllipsis: Bool {
-    return self.isAnyOperator && self.tokenText == "..."
-  }
-
-
   var isEffectsSpecifier: Bool {
     // NOTE: If this returns 'true', that token must be handled in
     //       'parseEffectsSpecifiers()'.
@@ -283,7 +274,7 @@ extension Lexer.Lexeme {
   }
 
   func starts(with symbol: SyntaxText) -> Bool {
-    guard self.isAnyOperator || self.isPunctuation else {
+    guard self.isAnyOperator || self.tokenKind.isPunctuation else {
       return false
     }
 

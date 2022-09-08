@@ -112,7 +112,7 @@ extension Parser {
     }
 
     var base = self.parseSimpleType()
-    guard self.currentToken.isContextualPunctuator("&") else {
+    guard self.atContextualPunctuator("&") else {
       if let someOrAny = someOrAny {
         return RawTypeSyntax(RawConstrainedSugarTypeSyntax(
           someOrAnySpecifier: someOrAny, baseType: base, arena: self.arena))
@@ -122,25 +122,21 @@ extension Parser {
     }
 
     var elements = [RawCompositionTypeElementSyntax]()
-    if self.currentToken.isContextualPunctuator("&") {
-      let firstAmpersand = self.consumeAnyToken()
+    if let firstAmpersand = self.consumeIfContextualPunctuator("&") {
       elements.append(RawCompositionTypeElementSyntax(
         type: base, ampersand: firstAmpersand, arena: self.arena))
 
-      var keepGoing = false
+      var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
         let elementType = self.parseSimpleType()
-        keepGoing = self.currentToken.isContextualPunctuator("&")
-        let ampersand: RawTokenSyntax?
-        if keepGoing {
-          ampersand = self.consumeAnyToken()
-        } else {
-          ampersand = nil
-        }
+        keepGoing = self.consumeIfContextualPunctuator("&")
         elements.append(RawCompositionTypeElementSyntax(
-          type: elementType, ampersand: ampersand, arena: self.arena))
-      } while keepGoing && loopProgress.evaluate(currentToken)
+          type: elementType,
+          ampersand: keepGoing,
+          arena: self.arena
+        ))
+      } while keepGoing != nil && loopProgress.evaluate(currentToken)
 
       base = RawTypeSyntax(RawCompositionTypeSyntax(
         elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
@@ -258,7 +254,7 @@ extension Parser {
     repeat {
       let (name, _) = self.parseDeclNameRef()
       let generics: RawGenericArgumentClauseSyntax?
-      if self.currentToken.isAnyOperator && self.currentToken.tokenText == "<" {
+      if self.atContextualPunctuator("<") {
         generics = self.parseGenericArguments()
       } else {
         generics = nil
@@ -528,11 +524,9 @@ extension Parser.Lookahead {
     // '.Type', '.Protocol', '?', and '!' still leave us with type-simple.
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(currentToken) {
-      if self.at(any: [.period, .prefixPeriod]) &&
-          (self.peek().isContextualKeyword("Type")
-           || self.peek().isContextualKeyword("Protocol")) {
-        self.consumeAnyToken()
-        self.expectIdentifierWithoutRecovery()
+      if let (_, _) = self.consume(
+        if: { [.period, .prefixPeriod].contains($0.tokenKind) },
+        followedBy: { $0.isContextualKeyword(["Type", "Protocol"])}) {
         continue
       }
       if self.currentToken.isOptionalToken {
@@ -567,7 +561,7 @@ extension Parser.Lookahead {
   mutating func canParseTupleBodyType() -> Bool {
     guard
       !self.at(any: [.rightParen, .rightBrace]) &&
-        !self.currentToken.isEllipsis &&
+        !self.atContextualPunctuator("...") &&
         !self.isStartOfDeclaration()
     else {
       return self.consume(if: .rightParen) != nil
@@ -600,7 +594,7 @@ extension Parser.Lookahead {
         if self.consume(if: .equal) != nil {
           var skipProgress = LoopProgressCondition()
           while !self.at(any: [.eof, .rightParen, .rightBrace, .comma])
-                  && !self.currentToken.isEllipsis
+                  && !self.atContextualPunctuator("...")
                   && !self.isStartOfDeclaration()
                   && skipProgress.evaluate(currentToken) {
             self.skipSingle()
@@ -615,9 +609,7 @@ extension Parser.Lookahead {
         return false
       }
 
-      if self.currentToken.isEllipsis {
-        self.consumeAnyToken()
-      }
+      self.consumeIfContextualPunctuator("...")
     } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
     return self.consume(if: .rightParen) != nil
   }
@@ -676,7 +668,7 @@ extension Parser.Lookahead {
         return false
       }
 
-      if self.currentToken.isContextualPunctuator("&") {
+      if self.atContextualPunctuator("&") {
         self.consumeAnyToken()
         continue
       } else {
@@ -735,7 +727,7 @@ extension Parser.Lookahead {
   }
 
   func canParseAsGenericArgumentList() -> Bool {
-    guard self.currentToken.isAnyOperator && self.currentToken.tokenText == "<" else {
+    guard self.atContextualPunctuator("<") else {
       return false
     }
 

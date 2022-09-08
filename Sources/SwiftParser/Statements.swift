@@ -984,7 +984,7 @@ extension Parser {
     }
 
     guard
-      self.currentToken.isIdentifier &&
+      self.at(.identifier) &&
         !self.lookahead().isStartOfStatement() &&
         !self.lookahead().isStartOfDeclaration()
     else {
@@ -1115,7 +1115,7 @@ extension Parser.Lookahead {
     var lookahead = self.lookahead()
     var loopProgress = LoopProgressCondition()
     while lookahead.at(.atSign) && loopProgress.evaluate(lookahead.currentToken) {
-      guard lookahead.peek().isIdentifier else {
+      guard lookahead.peek().tokenKind == .identifier else {
         return false
       }
 

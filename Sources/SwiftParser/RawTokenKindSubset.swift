@@ -40,6 +40,37 @@ extension RawTokenKindSubset {
   }
 }
 
+// MARK: - Subsets
+
+enum ContextualDeclKeyword: SyntaxText, ContextualKeywords {
+  case __consuming = "__consuming"
+  case _compilerInitialized = "_compilerInitialized"
+  case _const = "_const"
+  case _local = "_local"
+  case actor = "actor"
+  case async = "async"
+  case convenience = "convenience"
+  case distributed = "distributed"
+  case dynamic = "dynamic"
+  case final = "final"
+  case indirect = "indirect"
+  case infix = "infix"
+  case isolated = "isolated"
+  case lazy = "lazy"
+  case mutating = "mutating"
+  case nonisolated = "nonisolated"
+  case nonmutating = "nonmutating"
+  case open = "open"
+  case optional = "optional"
+  case override = "override"
+  case postfix = "postfix"
+  case prefix = "prefix"
+  case required = "required"
+  case unowned = "unowned"
+  case weak = "weak"
+}
+
+
 enum IdentifierTokens: RawTokenKindSubset {
   case anyKeyword
   case capitalSelfKeyword

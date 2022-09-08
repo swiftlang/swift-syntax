@@ -14,7 +14,7 @@
 
 extension Parser {
   mutating func parseAnyIdentifier() -> RawTokenSyntax {
-    if self.currentToken.isIdentifier || self.currentToken.isAnyOperator {
+    if self.at(.identifier) || self.currentToken.isAnyOperator {
       return self.consumeAnyToken()
     } else {
       return RawTokenSyntax(missing: .identifier, arena: arena)
@@ -52,7 +52,7 @@ extension Parser {
   mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
     // Consume the base name.
     let ident: RawTokenSyntax
-    if self.currentToken.isIdentifier || self.at(any: [.selfKeyword, .capitalSelfKeyword]) {
+    if self.at(.identifier) || self.at(any: [.selfKeyword, .capitalSelfKeyword]) {
       ident = self.expectIdentifierWithoutRecovery()
     } else if flags.contains(.operators) && self.currentToken.isAnyOperator {
       ident = self.consumeAnyToken(remapping: .identifier)
@@ -199,42 +199,6 @@ extension Lexer.Lexeme {
     }
   }
 
-  func isContextualDeclKeyword() -> Bool {
-    guard self.isIdentifier else {
-      return false
-    }
-    switch self.tokenText {
-    case "final",
-      "required",
-      "optional",
-      "lazy",
-      "dynamic",
-      "infix",
-      "prefix",
-      "postfix",
-      "_compilerInitialized",
-      "__consuming",
-      "mutating",
-      "nonmutating",
-      "convenience",
-      "override",
-      "open",
-      "weak",
-      "unowned",
-      "indirect",
-      "actor",
-      "isolated",
-      "async",
-      "nonisolated",
-      "distributed",
-      "_const",
-      "_local":
-      return true
-    default:
-      return false
-    }
-  }
-
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {
     return self.isAnyOperator && self.tokenText == name
   }
@@ -245,10 +209,6 @@ extension Lexer.Lexeme {
 
   var isPunctuation: Bool {
     self.tokenKind.isPunctuation
-  }
-
-  var isIdentifier: Bool {
-    return self.tokenKind == .identifier
   }
 
   var isEllipsis: Bool {

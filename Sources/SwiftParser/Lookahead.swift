@@ -101,7 +101,7 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   mutating func skipTypeAttribute() {
     // These are keywords that we accept as attribute names.
-    guard self.currentToken.isIdentifier || self.at(any: [.inKeyword, .inoutKeyword]) else {
+    guard self.at(.identifier) || self.at(any: [.inKeyword, .inoutKeyword]) else {
       return
     }
 
@@ -112,7 +112,7 @@ extension Parser.Lookahead {
       if case .convention = attr {
         guard
           self.consume(if: .leftParen) != nil,
-          (self.currentToken.isIdentifier ? self.expectIdentifierWithoutRecovery() : nil) != nil,
+          (self.at(.identifier) ? self.expectIdentifierWithoutRecovery() : nil) != nil,
           self.consume(if: .rightParen) != nil
         else {
           return
@@ -300,7 +300,7 @@ extension Parser.Lookahead {
     }
 
     // Otherwise, the only hard case left is the identifier case.
-    guard self.currentToken.isIdentifier else {
+    guard self.at(.identifier) else {
       return true
     }
 
@@ -314,7 +314,7 @@ extension Parser.Lookahead {
 
     // If this can't possibly be a contextual keyword, then this identifier is
     // not interesting.  Bail out.
-    guard self.currentToken.isContextualDeclKeyword() else {
+    guard self.at(anyIn: ContextualDeclKeyword.self) != nil else {
       return false
     }
 
@@ -333,7 +333,7 @@ extension Parser.Lookahead {
     }
 
     if self.currentToken.isContextualKeyword("actor") {
-      if tok2.isIdentifier {
+      if tok2.tokenKind == .identifier {
         return true
       }
       // actor may be somewhere in the modifier list. Eat the tokens until we get
@@ -343,7 +343,7 @@ extension Parser.Lookahead {
       repeat {
         lookahead.consumeAnyToken()
       } while lookahead.isStartOfDeclaration()
-      return lookahead.currentToken.isIdentifier
+      return lookahead.at(.identifier)
     }
 
     // If the next token is obviously not the start of a decl, bail early.
@@ -367,7 +367,7 @@ extension Parser.Lookahead {
     guard lookahead.consume(if: .leftParen) != nil else {
       return false
     }
-    return lookahead.currentToken.isIdentifier
+    return lookahead.at(.identifier)
         && lookahead.peek().tokenKind == .rightParen
         && (lookahead.currentToken.tokenText == "safe" || lookahead.currentToken.tokenText == "unsafe")
   }
@@ -401,7 +401,7 @@ extension Parser.Lookahead {
 
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {
-      guard lookahead.currentToken.isIdentifier else {
+      guard lookahead.at(.identifier) else {
         return false
       }
       lookahead.expectIdentifierWithoutRecovery()

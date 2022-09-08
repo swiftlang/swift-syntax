@@ -10962,6 +10962,84 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
     return result
   }
 }
+/// The arguments for the '@_opaqueReturnTypeOf()'.
+public struct OpaqueReturnTypeOfAttributeArguments: SyntaxBuildable, ExpressibleAsOpaqueReturnTypeOfAttributeArguments {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforeMangledName: UnexpectedNodes?
+  var mangledName: Token
+  var unexpectedBetweenMangledNameAndComma: UnexpectedNodes?
+  var comma: Token
+  var unexpectedBetweenCommaAndOrdinal: UnexpectedNodes?
+  var ordinal: Token
+  /// Creates a `OpaqueReturnTypeOfAttributeArguments` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeMangledName: 
+  ///   - mangledName: The mangled name of a declaration.
+  ///   - unexpectedBetweenMangledNameAndComma: 
+  ///   - comma: 
+  ///   - unexpectedBetweenCommaAndOrdinal: 
+  ///   - ordinal: The ordinal corresponding to the 'some' keyword that introduced this opaque type.
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeMangledName: ExpressibleAsUnexpectedNodes? = nil, mangledName: Token, unexpectedBetweenMangledNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndOrdinal: ExpressibleAsUnexpectedNodes? = nil, ordinal: Token) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforeMangledName = unexpectedBeforeMangledName?.createUnexpectedNodes()
+    self.mangledName = mangledName
+    self.unexpectedBetweenMangledNameAndComma = unexpectedBetweenMangledNameAndComma?.createUnexpectedNodes()
+    self.comma = comma
+    assert(comma.text == #","#)
+    self.unexpectedBetweenCommaAndOrdinal = unexpectedBetweenCommaAndOrdinal?.createUnexpectedNodes()
+    self.ordinal = ordinal
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeMangledName: ExpressibleAsUnexpectedNodes? = nil, mangledName: String, unexpectedBetweenMangledNameAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndOrdinal: ExpressibleAsUnexpectedNodes? = nil, ordinal: String) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeMangledName: unexpectedBeforeMangledName, mangledName: Token.`stringLiteral`(mangledName), unexpectedBetweenMangledNameAndComma: unexpectedBetweenMangledNameAndComma, comma: comma, unexpectedBetweenCommaAndOrdinal: unexpectedBetweenCommaAndOrdinal, ordinal: Token.`integerLiteral`(ordinal))
+  }
+  /// Builds a `OpaqueReturnTypeOfAttributeArgumentsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OpaqueReturnTypeOfAttributeArgumentsSyntax`.
+  func buildOpaqueReturnTypeOfAttributeArguments(format: Format) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    var result = OpaqueReturnTypeOfAttributeArgumentsSyntax(unexpectedBeforeMangledName?.buildUnexpectedNodes(format: format), mangledName: mangledName.buildToken(format: format), unexpectedBetweenMangledNameAndComma?.buildUnexpectedNodes(format: format), comma: comma.buildToken(format: format), unexpectedBetweenCommaAndOrdinal?.buildUnexpectedNodes(format: format), ordinal: ordinal.buildToken(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildOpaqueReturnTypeOfAttributeArguments(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsOpaqueReturnTypeOfAttributeArguments`.
+  public func createOpaqueReturnTypeOfAttributeArguments() -> OpaqueReturnTypeOfAttributeArguments {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `OpaqueReturnTypeOfAttributeArguments` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
 public struct LabeledStmt: StmtBuildable, ExpressibleAsLabeledStmt {
   /// The leading trivia attached to this syntax node once built.
   var leadingTrivia: Trivia

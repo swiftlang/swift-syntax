@@ -193,6 +193,7 @@ public enum SyntaxKind {
   case backDeployAttributeSpecList
   case backDeployVersionList
   case backDeployVersionArgument
+  case opaqueReturnTypeOfAttributeArguments
   case labeledStmt
   case continueStmt
   case whileStmt

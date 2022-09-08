@@ -724,6 +724,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BackDeployVersionArgumentSyntax) -> ResultType
+  /// Visiting `OpaqueReturnTypeOfAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> ResultType
   /// Visiting `LabeledStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2143,6 +2147,12 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: BackDeployVersionArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
+  /// Visiting `OpaqueReturnTypeOfAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
   /// Visiting `LabeledStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3029,6 +3039,8 @@ extension SyntaxTransformVisitor {
     case .backDeployVersionList(let derived):
       return visit(derived)
     case .backDeployVersionArgument(let derived):
+      return visit(derived)
+    case .opaqueReturnTypeOfAttributeArguments(let derived):
       return visit(derived)
     case .labeledStmt(let derived):
       return visit(derived)

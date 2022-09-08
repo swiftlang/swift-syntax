@@ -12009,6 +12009,190 @@ extension BackDeployVersionArgumentSyntax: CustomReflectable {
   }
 }
 
+// MARK: - OpaqueReturnTypeOfAttributeArgumentsSyntax
+
+/// 
+/// The arguments for the '@_opaqueReturnTypeOf()'.
+/// 
+public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `OpaqueReturnTypeOfAttributeArgumentsSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .opaqueReturnTypeOfAttributeArguments else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OpaqueReturnTypeOfAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .opaqueReturnTypeOfAttributeArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeMangledName: UnexpectedNodesSyntax? = nil,
+    mangledName: TokenSyntax,
+    _ unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax,
+    _ unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? = nil,
+    ordinal: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeMangledName?.raw,
+      mangledName.raw,
+      unexpectedBetweenMangledNameAndComma?.raw,
+      comma.raw,
+      unexpectedBetweenCommaAndOrdinal?.raw,
+      ordinal.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.opaqueReturnTypeOfAttributeArguments,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeMangledName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeMangledName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeMangledName` replaced.
+  /// - param newChild: The new `unexpectedBeforeMangledName` to replace the node's
+  ///                   current `unexpectedBeforeMangledName`, if present.
+  public func withUnexpectedBeforeMangledName(
+    _ newChild: UnexpectedNodesSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
+  }
+
+  /// The mangled name of a declaration.
+  public var mangledName: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMangledName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `mangledName` replaced.
+  /// - param newChild: The new `mangledName` to replace the node's
+  ///                   current `mangledName`, if present.
+  public func withMangledName(
+    _ newChild: TokenSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.stringLiteral(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenMangledNameAndComma: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenMangledNameAndComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenMangledNameAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenMangledNameAndComma` to replace the node's
+  ///                   current `unexpectedBetweenMangledNameAndComma`, if present.
+  public func withUnexpectedBetweenMangledNameAndComma(
+    _ newChild: UnexpectedNodesSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
+  }
+
+  public var comma: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `comma` replaced.
+  /// - param newChild: The new `comma` to replace the node's
+  ///                   current `comma`, if present.
+  public func withComma(
+    _ newChild: TokenSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenCommaAndOrdinal: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenCommaAndOrdinal(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndOrdinal` replaced.
+  /// - param newChild: The new `unexpectedBetweenCommaAndOrdinal` to replace the node's
+  ///                   current `unexpectedBetweenCommaAndOrdinal`, if present.
+  public func withUnexpectedBetweenCommaAndOrdinal(
+    _ newChild: UnexpectedNodesSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
+  }
+
+  /// The ordinal corresponding to the 'some' keyword that introduced this opaque type.
+  public var ordinal: TokenSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOrdinal(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `ordinal` replaced.
+  /// - param newChild: The new `ordinal` to replace the node's
+  ///                   current `ordinal`, if present.
+  public func withOrdinal(
+    _ newChild: TokenSyntax?) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 5)
+    return OpaqueReturnTypeOfAttributeArgumentsSyntax(newData)
+  }
+}
+
+extension OpaqueReturnTypeOfAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeMangledName": unexpectedBeforeMangledName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "mangledName": Syntax(mangledName).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenMangledNameAndComma": unexpectedBetweenMangledNameAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "comma": Syntax(comma).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenCommaAndOrdinal": unexpectedBetweenCommaAndOrdinal.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "ordinal": Syntax(ordinal).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - WhereClauseSyntax
 
 public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {

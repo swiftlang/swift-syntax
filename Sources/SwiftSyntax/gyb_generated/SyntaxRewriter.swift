@@ -1255,6 +1255,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `OpaqueReturnTypeOfAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `LabeledStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3723,6 +3730,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+      let node = OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplLabeledStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = LabeledStmtSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5006,6 +5023,8 @@ open class SyntaxRewriter {
       return visitImplBackDeployVersionListSyntax
     case .backDeployVersionArgument:
       return visitImplBackDeployVersionArgumentSyntax
+    case .opaqueReturnTypeOfAttributeArguments:
+      return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax
     case .labeledStmt:
       return visitImplLabeledStmtSyntax
     case .continueStmt:
@@ -5549,6 +5568,8 @@ open class SyntaxRewriter {
       return visitImplBackDeployVersionListSyntax(data)
     case .backDeployVersionArgument:
       return visitImplBackDeployVersionArgumentSyntax(data)
+    case .opaqueReturnTypeOfAttributeArguments:
+      return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
     case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
     case .continueStmt:

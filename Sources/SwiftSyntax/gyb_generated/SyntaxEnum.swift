@@ -192,6 +192,7 @@ public enum SyntaxEnum {
   case backDeployAttributeSpecList(BackDeployAttributeSpecListSyntax)
   case backDeployVersionList(BackDeployVersionListSyntax)
   case backDeployVersionArgument(BackDeployVersionArgumentSyntax)
+  case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
   case labeledStmt(LabeledStmtSyntax)
   case continueStmt(ContinueStmtSyntax)
   case whileStmt(WhileStmtSyntax)
@@ -639,6 +640,8 @@ public enum SyntaxEnum {
       return "version list"
     case .backDeployVersionArgument:
       return "version"
+    case .opaqueReturnTypeOfAttributeArguments:
+      return "opaque return type arguments"
     case .labeledStmt:
       return "labeled statement"
     case .continueStmt:
@@ -1179,6 +1182,8 @@ public extension Syntax {
       return .backDeployVersionList(BackDeployVersionListSyntax(self)!)
     case .backDeployVersionArgument:
       return .backDeployVersionArgument(BackDeployVersionArgumentSyntax(self)!)
+    case .opaqueReturnTypeOfAttributeArguments:
+      return .opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax(self)!)
     case .labeledStmt:
       return .labeledStmt(LabeledStmtSyntax(self)!)
     case .continueStmt:

@@ -73,13 +73,13 @@ extension Parser {
       repeat {
         // Parse the condition.
         let condition: RawExprSyntax?
-        if self.at(.poundElseKeyword) {
+        if let parsedElse = self.consume(if: .poundElseKeyword) {
           unexpectedBeforePoundIf = nil
-          poundIf = self.consumeAnyToken()
+          poundIf = parsedElse
           condition = nil
-        } else if self.at(.poundElseifKeyword)  {
+        } else if let poundElseif = self.consume(if: .poundElseifKeyword) {
           unexpectedBeforePoundIf = nil
-          poundIf = self.consumeAnyToken()
+          poundIf = poundElseif
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
         } else {
           assert(poundIf.tokenKind == .poundIfKeyword)

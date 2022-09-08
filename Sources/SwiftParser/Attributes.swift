@@ -512,7 +512,7 @@ extension Parser {
       arena: self.arena)
   }
 
-  enum SpecializeParameter: SyntaxText {
+  enum SpecializeParameter: SyntaxText, ContextualKeywords {
     case target
     case availability
     case exported
@@ -526,12 +526,10 @@ extension Parser {
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
     while !self.at(any: [.eof, .rightParen, .whereKeyword]) && loopProgress.evaluate(currentToken) {
-      let ident = self.parseAnyIdentifier()
-      let knownParameter = SpecializeParameter(rawValue: ident.tokenText)
-      let (unexpectedBeforeColon, colon) = self.expect(.colon)
-
-      switch knownParameter {
-      case .target:
+      switch self.at(anyIn: SpecializeParameter.self) {
+      case (.target, let handle)?:
+        let ident = self.eat(handle)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (targetFunction, args) = self.parseDeclNameRef([ .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators ])
         let declName = RawDeclNameSyntax(
           declBaseName: RawSyntax(targetFunction),
@@ -546,7 +544,9 @@ extension Parser {
           trailingComma: comma,
           arena: self.arena
         )))
-      case .availability:
+      case (.availability, let handle)?:
+        let ident = self.eat(handle)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let availability = self.parseAvailabilitySpecList(from: .available)
         // FIXME: This is modeled incorrectly in libSyntax.
         let semi = RawTokenSyntax(missing: .semicolon, arena: self.arena)
@@ -558,7 +558,9 @@ extension Parser {
           semicolon: semi,
           arena: self.arena
         )))
-      case .available:
+      case (.available, let handle)?:
+        let ident = self.eat(handle)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         // FIXME: I have no idea what this is supposed to be, but the Syntax
         // tree only allows us to insert a token so we'll take anything.
         let available = self.consumeAnyToken()
@@ -571,7 +573,9 @@ extension Parser {
           trailingComma: comma,
           arena: self.arena
         )))
-      case .exported:
+      case (.exported, let handle)?:
+        let ident = self.eat(handle)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (unexpectedBeforeValue, value) = self.expectAny([.trueKeyword, .falseKeyword], default: .falseKeyword)
         let comma = self.consume(if: .comma)
         elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(
@@ -583,7 +587,9 @@ extension Parser {
           trailingComma: comma,
           arena: self.arena
         )))
-      case .kind:
+      case (.kind, let handle)?:
+        let ident = self.eat(handle)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.parseAnyIdentifier()
         let comma = self.consume(if: .comma)
         elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(
@@ -594,7 +600,10 @@ extension Parser {
           trailingComma: comma,
           arena: self.arena
         )))
-      case .spiModule, .spi:
+      case (.spiModule, let handle)?,
+          (.spi, let handle)?:
+        let ident = self.eat(handle)
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
         elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(
@@ -606,6 +615,8 @@ extension Parser {
           arena: self.arena
         )))
       case nil:
+        let ident = self.consumeAnyToken()
+        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
         elements.append(RawSyntax(RawLabeledSpecializeEntrySyntax(

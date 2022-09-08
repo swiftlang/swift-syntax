@@ -104,12 +104,7 @@ extension Parser {
   ///     protocol-composition-continuation → type-identifier | protocol-composition-type
   @_spi(RawSyntax)
   public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
-    let someOrAny: RawTokenSyntax?
-    if self.atContextualKeyword("some") || self.atContextualKeyword("any") {
-      someOrAny = self.consumeAnyToken()
-    } else {
-      someOrAny = nil
-    }
+    let someOrAny = self.consume(ifAny: [], contextualKeywords: ["some", "any"])
 
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
@@ -477,10 +472,9 @@ extension Parser.Lookahead {
     // Accept 'inout' at for better recovery.
     _ = self.consume(if: .inoutKeyword)
 
-    if self.atContextualKeyword("some") {
-      self.consumeAnyToken()
-    } else if self.atContextualKeyword("any") {
-      self.consumeAnyToken()
+    if self.consumeIfContextualKeyword("some") != nil {
+    } else {
+      self.consumeIfContextualKeyword("any")
     }
 
     switch self.currentToken.tokenKind {

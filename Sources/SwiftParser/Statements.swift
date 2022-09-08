@@ -517,12 +517,7 @@ extension Parser {
     let (unexpectedBeforeForKeyword, forKeyword) = self.expect(.forKeyword)
     let tryKeyword = self.consume(if: .tryKeyword)
 
-    let awaitKeyword: RawTokenSyntax?
-    if self.atContextualKeyword("await") {
-      awaitKeyword = self.consumeAnyToken()
-    } else {
-      awaitKeyword = nil
-    }
+    let awaitKeyword = self.consumeIfContextualKeyword("await")
 
     // Parse the pattern.  This is either 'case <refutable pattern>' or just a
     // normal pattern.

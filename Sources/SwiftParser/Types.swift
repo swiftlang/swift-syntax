@@ -784,13 +784,7 @@ extension Parser {
   public mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
     var elements = [RawSyntax]()
     var modifiersProgress = LoopProgressCondition()
-    while let token = self.consume(ifAny: [.inoutKeyword, .identifier], where: {
-      if $0.tokenKind  == .identifier {
-        return $0.isContextualKeyword(["__shared", "__owned", "isolated", "_const"])
-      } else {
-        return true
-      }
-    }), modifiersProgress.evaluate(currentToken) {
+    while let token = self.consume(ifAny: [.inoutKeyword], contextualKeywords: ["__shared", "__owned", "isolated", "_const"]), modifiersProgress.evaluate(currentToken) {
       elements.append(RawSyntax(token))
     }
 

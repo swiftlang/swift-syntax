@@ -9,6 +9,18 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+@_spi(RawSyntax) import SwiftSyntax
+
+extension Syntax {
+  /// Whether this syntax node is or is enclosed within a #if.
+  fileprivate var isInIfConfig: Bool {
+    if self.is(IfConfigDeclSyntax.self) {
+      return true
+    }
+
+    return parent?.isInIfConfig ?? false
+  }
+}
 
 /// Entry point for the Swift compiler to use for consistency checking.
 ///
@@ -18,6 +30,7 @@
 ///   - filename: The name of the source file, which is used only for diagnostics
 ///   - flags: Flags that indicate what checks should be performed.
 ///       0x01: Perform round-trip checking.
+///       0x02: Check for parser diagnostics.
 /// - Returns: 0 if all requested consistency checks passed, nonzero otherwise.
 @_cdecl("swift_parser_consistencyCheck")
 @_spi(SwiftCompiler)
@@ -30,15 +43,40 @@ public func _parserConsistencyCheck(
   var parser = Parser(buffer)
   return withExtendedLifetime(parser) { () -> CInt in
     // Parse the source file
-    let sourceFile = parser.parseSourceFile()
+    let rawSourceFile = parser.parseSourceFile()
 
     // Round-trip test.
     if flags & 0x01 != 0 {
       var bufferArray = [UInt8](buffer)
       bufferArray.append(0)
-      if "\(sourceFile)" != String(cString: bufferArray) {
+      if "\(rawSourceFile)" != String(cString: bufferArray) {
         print(
           "\(String(cString: filename)): error: file failed to round-trip")
+        return 1
+      }
+    }
+
+    // Diagnostics test.
+    if flags & 0x02 != 0 {
+      var anyDiags = false
+
+      let sourceFile = Syntax(raw: rawSourceFile.raw).as(SourceFileSyntax.self)!
+
+      let diags = ParseDiagnosticsGenerator.diagnostics(
+        for: sourceFile)
+      for diag in diags {
+        // Skip over diagnostics within #if, because we don't know whether
+        // we are in an active region or not.
+        // FIXME: This heuristic could be improved.
+        if diag.node.isInIfConfig {
+          continue
+        }
+
+        print("\(diag.debugDescription)")
+        anyDiags = true
+      }
+
+      if anyDiags {
         return 1
       }
     }

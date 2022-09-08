@@ -21,7 +21,10 @@ extern "C" {
 enum SwiftParserConsistencyCheckFlags {
   /// Ensure that the syntax tree produced by the parser fully reproduces the
   /// input source.
-  SPCC_RoundTrip = 0x01
+  SPCC_RoundTrip = 0x01,
+
+  /// Check for the presence of parsing diagnostics.
+  SPCC_ParseDiagnostics = 0x02
 };
 
 /// Entry point for the Swift compiler to use for consistency checking.

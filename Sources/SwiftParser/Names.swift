@@ -331,13 +331,3 @@ extension Lexer.Lexeme {
   }
 }
 
-extension TokenConsumer {
-  mutating func consumeInteger() -> Token {
-    switch self.currentToken.tokenKind {
-    case .integerLiteral:
-      return self.consumeAnyToken()
-    default:
-      return self.missingToken(.integerLiteral)
-    }
-  }
-}

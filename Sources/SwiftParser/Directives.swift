@@ -155,7 +155,7 @@ extension Parser {
 
       let line = self.expectIdentifierWithoutRecovery()
       let (unexpectedBeforeLineColon, lineColon) = self.expect(.colon)
-      let lineNumber = self.consumeInteger()
+      let lineNumber = self.expectWithoutRecovery(.integerLiteral)
 
       args = RawPoundSourceLocationArgsSyntax(
         fileArgLabel: file,

@@ -339,10 +339,10 @@ extension Parser {
             // is optional.
             if layoutConstraint.hasArguments && (layoutConstraint != .trivialLayout || self.at(.leftParen)) {
               (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-              size = self.consumeInteger()
+              size = self.expectWithoutRecovery(.integerLiteral)
               comma = self.consume(if: .comma)
               if comma != nil {
-                alignment = self.consumeInteger()
+                alignment = self.expectWithoutRecovery(.integerLiteral)
               } else {
                 alignment = nil
               }

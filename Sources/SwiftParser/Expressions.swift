@@ -1284,12 +1284,13 @@ extension Parser {
     // Parse the sequence of unqualified-names.
     var elements = [RawObjcNamePieceSyntax]()
     do {
-      var flags: DeclNameOptions = .compoundNames
+      var flags: DeclNameOptions = []
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
         // Parse the next name.
-        let (name, _) = self.parseDeclNameRef(flags)
+        let (name, args) = self.parseDeclNameRef(flags)
+        assert(args == nil, "Found arguments but did not pass argument flag?")
 
         // After the first component, we can start parsing keywords.
         flags.formUnion(.keywords)

@@ -96,4 +96,11 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testQualifiedAttribute() {
+    AssertParse(
+      """
+      @_Concurrency.MainActor(unsafe) public struct Image : SwiftUI.View {}
+      """)
+  }
 }

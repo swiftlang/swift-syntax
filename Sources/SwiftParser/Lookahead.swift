@@ -178,7 +178,14 @@ extension Parser.Lookahead {
     }
 
     while let _ = self.consume(if: .atSign) {
-      self.expectIdentifierOrRethrowsWithoutRecovery()
+      // Consume qualified names that may or may not involve generic arguments.
+      repeat {
+        self.expectIdentifierOrRethrowsWithoutRecovery()
+        // We don't care whether this succeeds or fails to eat generic
+        // parameters.
+        _ = self.consumeGenericArguments()
+      } while self.consume(if: .period) != nil
+
       if self.consume(if: .leftParen) != nil {
         while !self.at(any: [.eof, .rightParen, .poundEndifKeyword]) {
           self.skipSingle()

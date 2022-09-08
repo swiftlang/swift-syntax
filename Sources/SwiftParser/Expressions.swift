@@ -721,6 +721,9 @@ extension Parser {
     case .__file__Keyword:
       let tok = self.eat(.__file__Keyword)
       return RawExprSyntax(RawPoundFileExprSyntax(poundFile: tok, arena: self.arena))
+    case .poundFileIDKeyword:
+      let tok = self.eat(.poundFileIDKeyword)
+      return RawExprSyntax(RawPoundFileIDExprSyntax(poundFileID: tok, arena: self.arena))
     case .poundFileKeyword:
       let tok = self.eat(.poundFileKeyword)
       return RawExprSyntax(RawPoundFileExprSyntax(poundFile: tok, arena: self.arena))

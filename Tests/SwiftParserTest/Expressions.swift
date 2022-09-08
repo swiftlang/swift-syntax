@@ -86,6 +86,7 @@ final class ExpressionTests: XCTestCase {
     AssertParse(
       """
       #file
+      #fileID
       (#line)
       #column
       #function

@@ -75,4 +75,22 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testAutoclosureAttribute() {
+    AssertParse(
+      """
+      func f(in: @autoclosure () -> Int) { }
+      func g(in: @autoclosure @escaping () -> Int) { }
+      """
+    )
+  }
+
+  func testDifferentiableAttribute() {
+    AssertParse(
+      """
+      func f(in: @differentiable(reverse) (Int) -> Int) { }
+      func f(in: @differentiable(reverse, wrt: a) (Int) -> Int) { }
+      """
+    )
+  }
 }

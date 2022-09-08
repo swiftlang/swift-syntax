@@ -807,41 +807,57 @@ extension Parser {
 
     var attributeProgress = LoopProgressCondition()
     while self.at(.atSign) && attributeProgress.evaluate(currentToken) {
-      elements.append(RawSyntax(self.parseTypeAttribute()))
+      elements.append(self.parseTypeAttribute())
     }
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
   }
 
   @_spi(RawSyntax)
-  public mutating func parseTypeAttribute() -> RawAttributeSyntax {
-    let at = self.eat(.atSign)
-    let ident = self.consumeIdentifier()
-    if let attr = Parser.TypeAttribute(rawValue: ident.tokenText) {
-      // Ok, it is a valid attribute, eat it, and then process it.
-      if case .convention = attr {
-        let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-        let convention = self.consumeIdentifier()
-        let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-        return RawAttributeSyntax(
+  public mutating func parseTypeAttribute() -> RawSyntax {
+    guard let typeAttr = Parser.TypeAttribute(rawValue: self.peek().tokenText) else {
+      return RawSyntax(self.parseCustomAttribute())
+    }
+
+    switch typeAttr {
+    case .differentiable:
+      return RawSyntax(self.parseDifferentiableAttribute())
+
+    case .convention:
+      let at = self.eat(.atSign)
+      let ident = self.consumeIdentifier()
+      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      let argument = self.consumeIdentifier()
+
+      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+      return RawSyntax(
+        RawAttributeSyntax(
           atSignToken: at,
           attributeName: ident,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
-          argument: RawSyntax(convention),
+          argument: RawSyntax(argument),
           unexpectedBeforeRightParen,
           rightParen: rightParen,
           tokenList: nil,
-          arena: self.arena)
-      }
+          arena: self.arena
+        )
+      )
+
+    default:
+      let at = self.eat(.atSign)
+      let ident = self.consumeIdentifier()
+      return RawSyntax(
+        RawAttributeSyntax(
+          atSignToken: at,
+          attributeName: ident,
+          leftParen: nil,
+          argument: nil,
+          rightParen: nil,
+          tokenList: nil,
+          arena: self.arena
+        )
+      )
     }
-    return RawAttributeSyntax(
-      atSignToken: at,
-      attributeName: ident,
-      leftParen: nil,
-      argument: nil,
-      rightParen: nil,
-      tokenList: nil,
-      arena: self.arena)
   }
 }
 

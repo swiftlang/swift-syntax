@@ -16,12 +16,20 @@ import SwiftSyntax
 let diagnosticDomain: String = "SwiftParser"
 
 extension SyntaxProtocol {
-  var nodeTypeNameForDiagnostics: String? {
+  /// Return a name of this syntax node that can be used to describe it in
+  /// diagnostics.
+  /// Nodes that mostly exist for the syntax tree's structure and don't have a
+  /// correspondence in the source code that's meeingful to the user by default
+  /// use the name of the parent node that encloses it. Pass `false` to `inherit`
+  /// to prevent this name inheritance.
+  func nodeTypeNameForDiagnostics(inherit: Bool = true) -> String? {
     if let name = Syntax(self).as(SyntaxEnum.self).nameForDiagnostics {
       return name
     }
-    if let parent = self.parent {
-      return parent.nodeTypeNameForDiagnostics
+    if inherit {
+      if let parent = self.parent {
+        return parent.nodeTypeNameForDiagnostics(inherit: inherit)
+      }
     }
     return nil
   }
@@ -118,7 +126,7 @@ public struct MissingTokenError: ParserError {
   public let missingToken: TokenSyntax
 
   public var message: String {
-    guard let parent = missingToken.parent, let parentTypeName = parent.nodeTypeNameForDiagnostics else {
+    guard let parent = missingToken.parent, let parentTypeName = parent.nodeTypeNameForDiagnostics() else {
       return "Expected '\(missingToken.text)'"
     }
     switch missingToken.tokenKind {
@@ -141,17 +149,17 @@ public struct UnexpectedNodesError: ParserError {
   public let unexpectedNodes: UnexpectedNodesSyntax
 
   public var message: String {
-    let parentTypeName = unexpectedNodes.parent?.nodeTypeNameForDiagnostics
-    let shortContent = unexpectedNodes.contentForDiagnosticsIfShortSingleLine
-    switch (parentTypeName, shortContent) {
-    case (let parentTypeName?, let shortContent?):
-      return "Unexpected text '\(shortContent)' found in \(parentTypeName)"
-    case (let parentTypeName?, nil):
-      return "Unexpected text found in \(parentTypeName)"
-    case (nil, let shortContent?):
-      return "Unexpected text '\(shortContent)'"
-    case (nil, nil):
-      return "Unexpected text"
+    var message = "Unexpected text"
+    if let shortContent = unexpectedNodes.contentForDiagnosticsIfShortSingleLine {
+      message += " '\(shortContent)'"
     }
+    if let parent = unexpectedNodes.parent {
+      if let parentTypeName = parent.nodeTypeNameForDiagnostics(inherit: false), parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id {
+        message += " before \(parentTypeName)"
+      } else if let parentTypeName = parent.nodeTypeNameForDiagnostics() {
+        message += " in \(parentTypeName)"
+      }
+    }
+    return message
   }
 }

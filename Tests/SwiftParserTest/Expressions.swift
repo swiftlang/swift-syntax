@@ -203,7 +203,7 @@ final class ExpressionTests: XCTestCase {
       " >> \( abc #^DIAG^#} ) << "
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "Unexpected text '}' found in string literal")
+        DiagnosticSpec(message: "Unexpected text '}' in string literal")
       ]
     )
 
@@ -426,7 +426,7 @@ final class ExpressionTests: XCTestCase {
       "[(Int) -> #^DIAG^#throws Int]()",
       diagnostics: [
         // FIXME: We should suggest to move 'throws' in front of '->'
-        DiagnosticSpec(message: "Unexpected text 'throws Int' found in array")
+        DiagnosticSpec(message: "Unexpected text 'throws Int' in array")
       ]
     )
 
@@ -456,7 +456,7 @@ final class ExpressionTests: XCTestCase {
       let :(#^DIAG_1^#..)->
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '..' found in function type"),
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '..' in function type"),
       ]
     )
   }

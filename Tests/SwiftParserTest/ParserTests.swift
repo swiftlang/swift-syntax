@@ -6,9 +6,13 @@ import SwiftParser
 public class ParserTests: XCTestCase {
   /// Run a single parse test.
   func runParseTest(fileURL: URL, checkDiagnostics: Bool) throws {
-    let fileContents = try String(contentsOf: fileURL)
-    let parsed = try Parser.parse(source: fileContents)
-    AssertStringsEqualWithDiff("\(parsed)", fileContents,
+    let fileContents = try Data(contentsOf: fileURL)
+    let parsed = try fileContents.withUnsafeBytes({ buffer in
+      try Parser.parse(source: buffer.bindMemory(to: UInt8.self))
+    })
+    // FIXME: This should compare binaries for handling invalid UTF-8 sequences.
+    AssertStringsEqualWithDiff("\(parsed)",
+                               String(decoding: fileContents, as: UTF8.self),
                                additionalInfo: "Failed in file \(fileURL)")
 
     if !checkDiagnostics {

@@ -95,7 +95,7 @@ public class SyntaxCreationTests: XCTestCase {
     let string = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([.init(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -119,7 +119,7 @@ public class SyntaxCreationTests: XCTestCase {
     let emptyString = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment(" ")))]),
+      segments: StringLiteralSegmentsSyntax([.init(StringSegmentSyntax(content: .stringSegment(" ")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -145,7 +145,7 @@ public class SyntaxCreationTests: XCTestCase {
     let string = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([StringLiteralSegmentsSyntax.Element(StringSegmentSyntax(content: .stringSegment("Hello, world!")))!]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -187,7 +187,7 @@ public class SyntaxCreationTests: XCTestCase {
     let expr = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([.init(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -203,7 +203,7 @@ public class SyntaxCreationTests: XCTestCase {
     let expr = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(leadingTrivia: [.lineComment("// hello"), .newlines(1)]),
-      segments: StringLiteralSegmentsSyntax([Syntax(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentsSyntax([.init(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )

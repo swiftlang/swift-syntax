@@ -68,12 +68,12 @@ public class AbsolutePositionTests: XCTestCase {
     let idx = 2000
     for _ in 0...idx {
       l.append(CodeBlockItemSyntax(
-        item: Syntax(
+        item: CodeBlockItemSyntax.Item(
           ReturnStmtSyntax(
             returnKeyword: .returnKeyword(trailingTrivia: .newline),
             expression: nil
           )
-        ),
+        )!,
         semicolon: nil, 
         errorTokens: nil)
       )
@@ -100,13 +100,13 @@ public class AbsolutePositionTests: XCTestCase {
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
     let items : [CodeBlockItemSyntax] =
     [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax(
-      item: Syntax(ReturnStmtSyntax(
+      item: CodeBlockItemSyntax.Item(ReturnStmtSyntax(
         returnKeyword: .returnKeyword(
           leadingTrivia: AbsolutePositionTests.leadingTrivia,
           trailingTrivia: AbsolutePositionTests.trailingTrivia
         ),
         expression: nil
-      )),
+      ))!,
       semicolon: nil,
       errorTokens: nil
     ), count: count)
@@ -170,11 +170,11 @@ public class AbsolutePositionTests: XCTestCase {
 
   public func testWithoutSourceFileRoot() {
     let item = CodeBlockItemSyntax(
-      item: Syntax(
+      item: CodeBlockItemSyntax.Item(
         ReturnStmtSyntax(
           returnKeyword: .returnKeyword(leadingTrivia: .newline, trailingTrivia: .newline),
           expression: nil)
-      ),
+      )!,
       semicolon: nil,
       errorTokens: nil)
      XCTAssertEqual(0, item.position.utf8Offset)

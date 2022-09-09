@@ -3029,6 +3029,35 @@ extension ArrayExprSyntax: CustomReflectable {
 // MARK: - DictionaryExprSyntax
 
 public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public enum Content: SyntaxProtocol {
+    case `colon`(TokenSyntax)
+    case `elements`(DictionaryElementListSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .colon(let node): return node._syntaxNode
+      case .elements(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: DictionaryElementListSyntax) {
+      self = .elements(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .colon: self = .colon(tok)
+        default: return nil
+        }
+        return
+      }
+      if let node = syntaxNode.as(DictionaryElementListSyntax.self) {
+        self = .elements(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DictionaryExprSyntax` if possible. Returns
@@ -3050,7 +3079,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
     leftSquare: TokenSyntax,
     _ unexpectedBetweenLeftSquareAndContent: UnexpectedNodesSyntax? = nil,
-    content: Syntax,
+    content: Content,
     _ unexpectedBetweenContentAndRightSquare: UnexpectedNodesSyntax? = nil,
     rightSquare: TokenSyntax
   ) {
@@ -3130,10 +3159,10 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return DictionaryExprSyntax(newData)
   }
 
-  public var content: Syntax {
+  public var content: Content {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
-      return Syntax(childData!)
+      return Content(childData!)
     }
     set(value) {
       self = withContent(value)
@@ -3144,7 +3173,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `content` to replace the node's
   ///                   current `content`, if present.
   public func withContent(
-    _ newChild: Syntax?) -> DictionaryExprSyntax {
+    _ newChild: Content?) -> DictionaryExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return DictionaryExprSyntax(newData)
@@ -6721,6 +6750,44 @@ extension RegexLiteralExprSyntax: CustomReflectable {
 // MARK: - KeyPathExprSyntax
 
 public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public enum RootExpr: SyntaxProtocol {
+    case `identifierExpr`(IdentifierExprSyntax)
+    case `specializeExpr`(SpecializeExprSyntax)
+    case `optionalChainingExpr`(OptionalChainingExprSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .identifierExpr(let node): return node._syntaxNode
+      case .specializeExpr(let node): return node._syntaxNode
+      case .optionalChainingExpr(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: IdentifierExprSyntax) {
+      self = .identifierExpr(node)
+    }
+    public init(_ node: SpecializeExprSyntax) {
+      self = .specializeExpr(node)
+    }
+    public init(_ node: OptionalChainingExprSyntax) {
+      self = .optionalChainingExpr(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(IdentifierExprSyntax.self) {
+        self = .identifierExpr(node)
+        return
+      }
+      if let node = syntaxNode.as(SpecializeExprSyntax.self) {
+        self = .specializeExpr(node)
+        return
+      }
+      if let node = syntaxNode.as(OptionalChainingExprSyntax.self) {
+        self = .optionalChainingExpr(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `KeyPathExprSyntax` if possible. Returns
@@ -6742,7 +6809,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil,
     backslash: TokenSyntax,
     _ unexpectedBetweenBackslashAndRootExpr: UnexpectedNodesSyntax? = nil,
-    rootExpr: ExprSyntax?,
+    rootExpr: RootExpr?,
     _ unexpectedBetweenRootExprAndExpression: UnexpectedNodesSyntax? = nil,
     expression: ExprSyntax
   ) {
@@ -6822,11 +6889,11 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return KeyPathExprSyntax(newData)
   }
 
-  public var rootExpr: ExprSyntax? {
+  public var rootExpr: RootExpr? {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
       if childData == nil { return nil }
-      return ExprSyntax(childData!)
+      return RootExpr(childData!)
     }
     set(value) {
       self = withRootExpr(value)
@@ -6837,7 +6904,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `rootExpr` to replace the node's
   ///                   current `rootExpr`, if present.
   public func withRootExpr(
-    _ newChild: ExprSyntax?) -> KeyPathExprSyntax {
+    _ newChild: RootExpr?) -> KeyPathExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 3)
     return KeyPathExprSyntax(newData)

@@ -2423,6 +2423,35 @@ extension ReturnStmtSyntax: CustomReflectable {
 // MARK: - YieldStmtSyntax
 
 public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+  public enum Yields: SyntaxProtocol {
+    case `yieldList`(YieldListSyntax)
+    case `simpleYield`(ExprSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .yieldList(let node): return node._syntaxNode
+      case .simpleYield(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: YieldListSyntax) {
+      self = .yieldList(node)
+    }
+    public init<Node: ExprSyntaxProtocol>(_ node: Node) {
+      self = .simpleYield(ExprSyntax(node))
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(YieldListSyntax.self) {
+        self = .yieldList(node)
+        return
+      }
+      if let node = syntaxNode.as(ExprSyntax.self) {
+        self = .simpleYield(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `YieldStmtSyntax` if possible. Returns
@@ -2444,7 +2473,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil,
     yieldKeyword: TokenSyntax,
     _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil,
-    yields: Syntax
+    yields: Yields
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeYieldKeyword?.raw,
@@ -2520,10 +2549,10 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return YieldStmtSyntax(newData)
   }
 
-  public var yields: Syntax {
+  public var yields: Yields {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
-      return Syntax(childData!)
+      return Yields(childData!)
     }
     set(value) {
       self = withYields(value)
@@ -2534,7 +2563,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `yields` to replace the node's
   ///                   current `yields`, if present.
   public func withYields(
-    _ newChild: Syntax?) -> YieldStmtSyntax {
+    _ newChild: Yields?) -> YieldStmtSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return YieldStmtSyntax(newData)
@@ -2990,6 +3019,35 @@ extension ThrowStmtSyntax: CustomReflectable {
 // MARK: - IfStmtSyntax
 
 public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+  public enum ElseBody: SyntaxProtocol {
+    case `ifStmt`(IfStmtSyntax)
+    case `codeBlock`(CodeBlockSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .ifStmt(let node): return node._syntaxNode
+      case .codeBlock(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: IfStmtSyntax) {
+      self = .ifStmt(node)
+    }
+    public init(_ node: CodeBlockSyntax) {
+      self = .codeBlock(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(IfStmtSyntax.self) {
+        self = .ifStmt(node)
+        return
+      }
+      if let node = syntaxNode.as(CodeBlockSyntax.self) {
+        self = .codeBlock(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `IfStmtSyntax` if possible. Returns
@@ -3017,7 +3075,7 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenBodyAndElseKeyword: UnexpectedNodesSyntax? = nil,
     elseKeyword: TokenSyntax?,
     _ unexpectedBetweenElseKeywordAndElseBody: UnexpectedNodesSyntax? = nil,
-    elseBody: Syntax?
+    elseBody: ElseBody?
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeIfKeyword?.raw,
@@ -3241,11 +3299,11 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     return IfStmtSyntax(newData)
   }
 
-  public var elseBody: Syntax? {
+  public var elseBody: ElseBody? {
     get {
       let childData = data.child(at: 9, parent: Syntax(self))
       if childData == nil { return nil }
-      return Syntax(childData!)
+      return ElseBody(childData!)
     }
     set(value) {
       self = withElseBody(value)
@@ -3256,7 +3314,7 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `elseBody` to replace the node's
   ///                   current `elseBody`, if present.
   public func withElseBody(
-    _ newChild: Syntax?) -> IfStmtSyntax {
+    _ newChild: ElseBody?) -> IfStmtSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 9)
     return IfStmtSyntax(newData)

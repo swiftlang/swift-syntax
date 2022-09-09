@@ -59,13 +59,13 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // Casting functions to specialized syntax nodes.
-extension Syntax {
+extension SyntaxProtocol {
   public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
 
   public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(self)
+    return S.init(self._syntaxNode)
   }
 }
 

@@ -58,6 +58,62 @@ extension MissingSyntax: CustomReflectable {
 /// a CodeBlock.
 /// 
 public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Item: SyntaxProtocol {
+    case `decl`(DeclSyntax)
+    case `stmt`(StmtSyntax)
+    case `expr`(ExprSyntax)
+    case `tokenList`(TokenListSyntax)
+    case `nonEmptyTokenList`(NonEmptyTokenListSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .decl(let node): return node._syntaxNode
+      case .stmt(let node): return node._syntaxNode
+      case .expr(let node): return node._syntaxNode
+      case .tokenList(let node): return node._syntaxNode
+      case .nonEmptyTokenList(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init<Node: DeclSyntaxProtocol>(_ node: Node) {
+      self = .decl(DeclSyntax(node))
+    }
+    public init<Node: StmtSyntaxProtocol>(_ node: Node) {
+      self = .stmt(StmtSyntax(node))
+    }
+    public init<Node: ExprSyntaxProtocol>(_ node: Node) {
+      self = .expr(ExprSyntax(node))
+    }
+    public init(_ node: TokenListSyntax) {
+      self = .tokenList(node)
+    }
+    public init(_ node: NonEmptyTokenListSyntax) {
+      self = .nonEmptyTokenList(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(DeclSyntax.self) {
+        self = .decl(node)
+        return
+      }
+      if let node = syntaxNode.as(StmtSyntax.self) {
+        self = .stmt(node)
+        return
+      }
+      if let node = syntaxNode.as(ExprSyntax.self) {
+        self = .expr(node)
+        return
+      }
+      if let node = syntaxNode.as(TokenListSyntax.self) {
+        self = .tokenList(node)
+        return
+      }
+      if let node = syntaxNode.as(NonEmptyTokenListSyntax.self) {
+        self = .nonEmptyTokenList(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `CodeBlockItemSyntax` if possible. Returns
@@ -77,7 +133,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil,
-    item: Syntax,
+    item: Item,
     _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
     semicolon: TokenSyntax?,
     _ unexpectedBetweenSemicolonAndErrorTokens: UnexpectedNodesSyntax? = nil,
@@ -119,10 +175,10 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// The underlying node inside the code block.
-  public var item: Syntax {
+  public var item: Item {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return Item(childData!)
     }
     set(value) {
       self = withItem(value)
@@ -133,7 +189,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `item` to replace the node's
   ///                   current `item`, if present.
   public func withItem(
-    _ newChild: Syntax?) -> CodeBlockItemSyntax {
+    _ newChild: Item?) -> CodeBlockItemSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return CodeBlockItemSyntax(newData)
@@ -1984,6 +2040,35 @@ extension ClosureParamSyntax: CustomReflectable {
 // MARK: - ClosureSignatureSyntax
 
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Input: SyntaxProtocol {
+    case `simpleInput`(ClosureParamListSyntax)
+    case `input`(ParameterClauseSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .simpleInput(let node): return node._syntaxNode
+      case .input(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: ClosureParamListSyntax) {
+      self = .simpleInput(node)
+    }
+    public init(_ node: ParameterClauseSyntax) {
+      self = .input(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(ClosureParamListSyntax.self) {
+        self = .simpleInput(node)
+        return
+      }
+      if let node = syntaxNode.as(ParameterClauseSyntax.self) {
+        self = .input(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ClosureSignatureSyntax` if possible. Returns
@@ -2007,7 +2092,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
     capture: ClosureCaptureSignatureSyntax?,
     _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil,
-    input: Syntax?,
+    input: Input?,
     _ unexpectedBetweenInputAndAsyncKeyword: UnexpectedNodesSyntax? = nil,
     asyncKeyword: TokenSyntax?,
     _ unexpectedBetweenAsyncKeywordAndThrowsTok: UnexpectedNodesSyntax? = nil,
@@ -2162,11 +2247,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureSignatureSyntax(newData)
   }
 
-  public var input: Syntax? {
+  public var input: Input? {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
       if childData == nil { return nil }
-      return Syntax(childData!)
+      return Input(childData!)
     }
     set(value) {
       self = withInput(value)
@@ -2177,7 +2262,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `input` to replace the node's
   ///                   current `input`, if present.
   public func withInput(
-    _ newChild: Syntax?) -> ClosureSignatureSyntax {
+    _ newChild: Input?) -> ClosureSignatureSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 5)
     return ClosureSignatureSyntax(newData)
@@ -3754,6 +3839,53 @@ extension FunctionSignatureSyntax: CustomReflectable {
 // MARK: - IfConfigClauseSyntax
 
 public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Elements: SyntaxProtocol {
+    case `statements`(CodeBlockItemListSyntax)
+    case `switchCases`(SwitchCaseListSyntax)
+    case `decls`(MemberDeclListSyntax)
+    case `postfixExpression`(ExprSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .statements(let node): return node._syntaxNode
+      case .switchCases(let node): return node._syntaxNode
+      case .decls(let node): return node._syntaxNode
+      case .postfixExpression(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: CodeBlockItemListSyntax) {
+      self = .statements(node)
+    }
+    public init(_ node: SwitchCaseListSyntax) {
+      self = .switchCases(node)
+    }
+    public init(_ node: MemberDeclListSyntax) {
+      self = .decls(node)
+    }
+    public init<Node: ExprSyntaxProtocol>(_ node: Node) {
+      self = .postfixExpression(ExprSyntax(node))
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(CodeBlockItemListSyntax.self) {
+        self = .statements(node)
+        return
+      }
+      if let node = syntaxNode.as(SwitchCaseListSyntax.self) {
+        self = .switchCases(node)
+        return
+      }
+      if let node = syntaxNode.as(MemberDeclListSyntax.self) {
+        self = .decls(node)
+        return
+      }
+      if let node = syntaxNode.as(ExprSyntax.self) {
+        self = .postfixExpression(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `IfConfigClauseSyntax` if possible. Returns
@@ -3777,7 +3909,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenPoundKeywordAndCondition: UnexpectedNodesSyntax? = nil,
     condition: ExprSyntax?,
     _ unexpectedBetweenConditionAndElements: UnexpectedNodesSyntax? = nil,
-    elements: Syntax
+    elements: Elements
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforePoundKeyword?.raw,
@@ -3897,10 +4029,10 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return IfConfigClauseSyntax(newData)
   }
 
-  public var elements: Syntax {
+  public var elements: Elements {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return Syntax(childData!)
+      return Elements(childData!)
     }
     set(value) {
       self = withElements(value)
@@ -3911,7 +4043,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `elements` to replace the node's
   ///                   current `elements`, if present.
   public func withElements(
-    _ newChild: Syntax?) -> IfConfigClauseSyntax {
+    _ newChild: Elements?) -> IfConfigClauseSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return IfConfigClauseSyntax(newData)
@@ -6692,6 +6824,35 @@ extension AccessorBlockSyntax: CustomReflectable {
 // MARK: - PatternBindingSyntax
 
 public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Accessor: SyntaxProtocol {
+    case `accessors`(AccessorBlockSyntax)
+    case `getter`(CodeBlockSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .accessors(let node): return node._syntaxNode
+      case .getter(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: AccessorBlockSyntax) {
+      self = .accessors(node)
+    }
+    public init(_ node: CodeBlockSyntax) {
+      self = .getter(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(AccessorBlockSyntax.self) {
+        self = .accessors(node)
+        return
+      }
+      if let node = syntaxNode.as(CodeBlockSyntax.self) {
+        self = .getter(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PatternBindingSyntax` if possible. Returns
@@ -6717,7 +6878,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
     initializer: InitializerClauseSyntax?,
     _ unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? = nil,
-    accessor: Syntax?,
+    accessor: Accessor?,
     _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
@@ -6885,11 +7046,11 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     return PatternBindingSyntax(newData)
   }
 
-  public var accessor: Syntax? {
+  public var accessor: Accessor? {
     get {
       let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
-      return Syntax(childData!)
+      return Accessor(childData!)
     }
     set(value) {
       self = withAccessor(value)
@@ -6900,7 +7061,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `accessor` to replace the node's
   ///                   current `accessor`, if present.
   public func withAccessor(
-    _ newChild: Syntax?) -> PatternBindingSyntax {
+    _ newChild: Accessor?) -> PatternBindingSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 7)
     return PatternBindingSyntax(newData)
@@ -8571,6 +8732,131 @@ extension CustomAttributeSyntax: CustomReflectable {
 /// An `@` attribute.
 /// 
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Argument: SyntaxProtocol {
+    case `identifier`(TokenSyntax)
+    case `string`(TokenSyntax)
+    case `integer`(TokenSyntax)
+    case `availability`(AvailabilitySpecListSyntax)
+    case `specializeArguments`(SpecializeAttributeSpecListSyntax)
+    case `objCName`(ObjCSelectorSyntax)
+    case `implementsArguments`(ImplementsAttributeArgumentsSyntax)
+    case `differentiableArguments`(DifferentiableAttributeArgumentsSyntax)
+    case `derivativeRegistrationArguments`(DerivativeRegistrationAttributeArgumentsSyntax)
+    case `namedAttributeString`(NamedAttributeStringArgumentSyntax)
+    case `backDeployArguments`(BackDeployAttributeSpecListSyntax)
+    case `conventionArguments`(ConventionAttributeArgumentsSyntax)
+    case `conventionWitnessMethodArguments`(ConventionWitnessMethodAttributeArgumentsSyntax)
+    case `tokenList`(TokenListSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .identifier(let node): return node._syntaxNode
+      case .string(let node): return node._syntaxNode
+      case .integer(let node): return node._syntaxNode
+      case .availability(let node): return node._syntaxNode
+      case .specializeArguments(let node): return node._syntaxNode
+      case .objCName(let node): return node._syntaxNode
+      case .implementsArguments(let node): return node._syntaxNode
+      case .differentiableArguments(let node): return node._syntaxNode
+      case .derivativeRegistrationArguments(let node): return node._syntaxNode
+      case .namedAttributeString(let node): return node._syntaxNode
+      case .backDeployArguments(let node): return node._syntaxNode
+      case .conventionArguments(let node): return node._syntaxNode
+      case .conventionWitnessMethodArguments(let node): return node._syntaxNode
+      case .tokenList(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: AvailabilitySpecListSyntax) {
+      self = .availability(node)
+    }
+    public init(_ node: SpecializeAttributeSpecListSyntax) {
+      self = .specializeArguments(node)
+    }
+    public init(_ node: ObjCSelectorSyntax) {
+      self = .objCName(node)
+    }
+    public init(_ node: ImplementsAttributeArgumentsSyntax) {
+      self = .implementsArguments(node)
+    }
+    public init(_ node: DifferentiableAttributeArgumentsSyntax) {
+      self = .differentiableArguments(node)
+    }
+    public init(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
+      self = .derivativeRegistrationArguments(node)
+    }
+    public init(_ node: NamedAttributeStringArgumentSyntax) {
+      self = .namedAttributeString(node)
+    }
+    public init(_ node: BackDeployAttributeSpecListSyntax) {
+      self = .backDeployArguments(node)
+    }
+    public init(_ node: ConventionAttributeArgumentsSyntax) {
+      self = .conventionArguments(node)
+    }
+    public init(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
+      self = .conventionWitnessMethodArguments(node)
+    }
+    public init(_ node: TokenListSyntax) {
+      self = .tokenList(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .identifier: self = .identifier(tok)
+        case .stringLiteral: self = .string(tok)
+        case .integerLiteral: self = .integer(tok)
+        default: return nil
+        }
+        return
+      }
+      if let node = syntaxNode.as(AvailabilitySpecListSyntax.self) {
+        self = .availability(node)
+        return
+      }
+      if let node = syntaxNode.as(SpecializeAttributeSpecListSyntax.self) {
+        self = .specializeArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(ObjCSelectorSyntax.self) {
+        self = .objCName(node)
+        return
+      }
+      if let node = syntaxNode.as(ImplementsAttributeArgumentsSyntax.self) {
+        self = .implementsArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(DifferentiableAttributeArgumentsSyntax.self) {
+        self = .differentiableArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(DerivativeRegistrationAttributeArgumentsSyntax.self) {
+        self = .derivativeRegistrationArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(NamedAttributeStringArgumentSyntax.self) {
+        self = .namedAttributeString(node)
+        return
+      }
+      if let node = syntaxNode.as(BackDeployAttributeSpecListSyntax.self) {
+        self = .backDeployArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(ConventionAttributeArgumentsSyntax.self) {
+        self = .conventionArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(ConventionWitnessMethodAttributeArgumentsSyntax.self) {
+        self = .conventionWitnessMethodArguments(node)
+        return
+      }
+      if let node = syntaxNode.as(TokenListSyntax.self) {
+        self = .tokenList(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AttributeSyntax` if possible. Returns
@@ -8596,7 +8882,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax?,
     _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil,
-    argument: Syntax?,
+    argument: Argument?,
     _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil,
     rightParen: TokenSyntax?,
     _ unexpectedBetweenRightParenAndTokenList: UnexpectedNodesSyntax? = nil,
@@ -8777,11 +9063,11 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   /// takes multiple arguments, they are gather in the
   /// appropriate takes first.
   /// 
-  public var argument: Syntax? {
+  public var argument: Argument? {
     get {
       let childData = data.child(at: 7, parent: Syntax(self))
       if childData == nil { return nil }
-      return Syntax(childData!)
+      return Argument(childData!)
     }
     set(value) {
       self = withArgument(value)
@@ -8792,7 +9078,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `argument` to replace the node's
   ///                   current `argument`, if present.
   public func withArgument(
-    _ newChild: Syntax?) -> AttributeSyntax {
+    _ newChild: Argument?) -> AttributeSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 7)
     return AttributeSyntax(newData)
@@ -9655,6 +9941,35 @@ extension TargetFunctionEntrySyntax: CustomReflectable {
 /// "Src.swift"`
 /// 
 public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum StringOrDeclname: SyntaxProtocol {
+    case `string`(TokenSyntax)
+    case `declname`(DeclNameSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .string(let node): return node._syntaxNode
+      case .declname(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: DeclNameSyntax) {
+      self = .declname(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .stringLiteral: self = .string(tok)
+        default: return nil
+        }
+        return
+      }
+      if let node = syntaxNode.as(DeclNameSyntax.self) {
+        self = .declname(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `NamedAttributeStringArgumentSyntax` if possible. Returns
@@ -9678,7 +9993,7 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
     _ unexpectedBetweenNameTokAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
     _ unexpectedBetweenColonAndStringOrDeclname: UnexpectedNodesSyntax? = nil,
-    stringOrDeclname: Syntax
+    stringOrDeclname: StringOrDeclname
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeNameTok?.raw,
@@ -9799,10 +10114,10 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
     return NamedAttributeStringArgumentSyntax(newData)
   }
 
-  public var stringOrDeclname: Syntax {
+  public var stringOrDeclname: StringOrDeclname {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return Syntax(childData!)
+      return StringOrDeclname(childData!)
     }
     set(value) {
       self = withStringOrDeclname(value)
@@ -9813,7 +10128,7 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
   /// - param newChild: The new `stringOrDeclname` to replace the node's
   ///                   current `stringOrDeclname`, if present.
   public func withStringOrDeclname(
-    _ newChild: Syntax?) -> NamedAttributeStringArgumentSyntax {
+    _ newChild: StringOrDeclname?) -> NamedAttributeStringArgumentSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return NamedAttributeStringArgumentSyntax(newData)
@@ -9836,6 +10151,29 @@ extension NamedAttributeStringArgumentSyntax: CustomReflectable {
 // MARK: - DeclNameSyntax
 
 public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum DeclBaseName: SyntaxProtocol {
+    case `identifier`(TokenSyntax)
+    case `operator`(TokenSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .identifier(let node): return node._syntaxNode
+      case .operator(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .identifier: self = .identifier(tok)
+        case .prefixOperator: self = .operator(tok)
+        default: return nil
+        }
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DeclNameSyntax` if possible. Returns
@@ -9855,7 +10193,7 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil,
-    declBaseName: Syntax,
+    declBaseName: DeclBaseName,
     _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
     declNameArguments: DeclNameArgumentsSyntax?
   ) {
@@ -9895,10 +10233,10 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// 
   /// The base name of the protocol's requirement.
   /// 
-  public var declBaseName: Syntax {
+  public var declBaseName: DeclBaseName {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return DeclBaseName(childData!)
     }
     set(value) {
       self = withDeclBaseName(value)
@@ -9909,7 +10247,7 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `declBaseName` to replace the node's
   ///                   current `declBaseName`, if present.
   public func withDeclBaseName(
-    _ newChild: Syntax?) -> DeclNameSyntax {
+    _ newChild: DeclBaseName?) -> DeclNameSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return DeclNameSyntax(newData)
@@ -10651,6 +10989,35 @@ extension DifferentiableAttributeArgumentsSyntax: CustomReflectable {
 
 /// A clause containing differentiability parameters.
 public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Parameters: SyntaxProtocol {
+    case `parameter`(DifferentiabilityParamSyntax)
+    case `parameterList`(DifferentiabilityParamsSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .parameter(let node): return node._syntaxNode
+      case .parameterList(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: DifferentiabilityParamSyntax) {
+      self = .parameter(node)
+    }
+    public init(_ node: DifferentiabilityParamsSyntax) {
+      self = .parameterList(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(DifferentiabilityParamSyntax.self) {
+        self = .parameter(node)
+        return
+      }
+      if let node = syntaxNode.as(DifferentiabilityParamsSyntax.self) {
+        self = .parameterList(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DifferentiabilityParamsClauseSyntax` if possible. Returns
@@ -10674,7 +11041,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
     _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil,
-    parameters: Syntax
+    parameters: Parameters
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeWrtLabel?.raw,
@@ -10797,10 +11164,10 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     return DifferentiabilityParamsClauseSyntax(newData)
   }
 
-  public var parameters: Syntax {
+  public var parameters: Parameters {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return Syntax(childData!)
+      return Parameters(childData!)
     }
     set(value) {
       self = withParameters(value)
@@ -10811,7 +11178,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
   /// - param newChild: The new `parameters` to replace the node's
   ///                   current `parameters`, if present.
   public func withParameters(
-    _ newChild: Syntax?) -> DifferentiabilityParamsClauseSyntax {
+    _ newChild: Parameters?) -> DifferentiabilityParamsClauseSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return DifferentiabilityParamsClauseSyntax(newData)
@@ -11037,6 +11404,32 @@ extension DifferentiabilityParamsSyntax: CustomReflectable {
 /// parameter name, or a function parameter index.
 /// 
 public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Parameter: SyntaxProtocol {
+    case `self`(TokenSyntax)
+    case `name`(TokenSyntax)
+    case `index`(TokenSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .self(let node): return node._syntaxNode
+      case .name(let node): return node._syntaxNode
+      case .index(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .selfKeyword: self = .self(tok)
+        case .identifier: self = .name(tok)
+        case .integerLiteral: self = .index(tok)
+        default: return nil
+        }
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DifferentiabilityParamSyntax` if possible. Returns
@@ -11056,7 +11449,7 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil,
-    parameter: Syntax,
+    parameter: Parameter,
     _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
@@ -11093,10 +11486,10 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
     return DifferentiabilityParamSyntax(newData)
   }
 
-  public var parameter: Syntax {
+  public var parameter: Parameter {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return Parameter(childData!)
     }
     set(value) {
       self = withParameter(value)
@@ -11107,7 +11500,7 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `parameter` to replace the node's
   ///                   current `parameter`, if present.
   public func withParameter(
-    _ newChild: Syntax?) -> DifferentiabilityParamSyntax {
+    _ newChild: Parameter?) -> DifferentiabilityParamSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return DifferentiabilityParamSyntax(newData)
@@ -11801,6 +12194,32 @@ extension QualifiedDeclNameSyntax: CustomReflectable {
 
 /// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Name: SyntaxProtocol {
+    case `identifier`(TokenSyntax)
+    case `prefixOperator`(TokenSyntax)
+    case `spacedBinaryOperator`(TokenSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .identifier(let node): return node._syntaxNode
+      case .prefixOperator(let node): return node._syntaxNode
+      case .spacedBinaryOperator(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .identifier: self = .identifier(tok)
+        case .prefixOperator: self = .prefixOperator(tok)
+        case .spacedBinaryOperator: self = .spacedBinaryOperator(tok)
+        default: return nil
+        }
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `FunctionDeclNameSyntax` if possible. Returns
@@ -11820,7 +12239,7 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
-    name: Syntax,
+    name: Name,
     _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
     arguments: DeclNameArgumentsSyntax?
   ) {
@@ -11860,10 +12279,10 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// 
   /// The base name of the referenced function.
   /// 
-  public var name: Syntax {
+  public var name: Name {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return Name(childData!)
     }
     set(value) {
       self = withName(value)
@@ -11874,7 +12293,7 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `name` to replace the node's
   ///                   current `name`, if present.
   public func withName(
-    _ newChild: Syntax?) -> FunctionDeclNameSyntax {
+    _ newChild: Name?) -> FunctionDeclNameSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return FunctionDeclNameSyntax(newData)
@@ -13314,6 +13733,71 @@ extension YieldListSyntax: CustomReflectable {
 // MARK: - ConditionElementSyntax
 
 public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Condition: SyntaxProtocol {
+    case `expression`(ExprSyntax)
+    case `availability`(AvailabilityConditionSyntax)
+    case `unavailability`(UnavailabilityConditionSyntax)
+    case `matchingPattern`(MatchingPatternConditionSyntax)
+    case `optionalBinding`(OptionalBindingConditionSyntax)
+    case `hasSymbol`(HasSymbolConditionSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .expression(let node): return node._syntaxNode
+      case .availability(let node): return node._syntaxNode
+      case .unavailability(let node): return node._syntaxNode
+      case .matchingPattern(let node): return node._syntaxNode
+      case .optionalBinding(let node): return node._syntaxNode
+      case .hasSymbol(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init<Node: ExprSyntaxProtocol>(_ node: Node) {
+      self = .expression(ExprSyntax(node))
+    }
+    public init(_ node: AvailabilityConditionSyntax) {
+      self = .availability(node)
+    }
+    public init(_ node: UnavailabilityConditionSyntax) {
+      self = .unavailability(node)
+    }
+    public init(_ node: MatchingPatternConditionSyntax) {
+      self = .matchingPattern(node)
+    }
+    public init(_ node: OptionalBindingConditionSyntax) {
+      self = .optionalBinding(node)
+    }
+    public init(_ node: HasSymbolConditionSyntax) {
+      self = .hasSymbol(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(ExprSyntax.self) {
+        self = .expression(node)
+        return
+      }
+      if let node = syntaxNode.as(AvailabilityConditionSyntax.self) {
+        self = .availability(node)
+        return
+      }
+      if let node = syntaxNode.as(UnavailabilityConditionSyntax.self) {
+        self = .unavailability(node)
+        return
+      }
+      if let node = syntaxNode.as(MatchingPatternConditionSyntax.self) {
+        self = .matchingPattern(node)
+        return
+      }
+      if let node = syntaxNode.as(OptionalBindingConditionSyntax.self) {
+        self = .optionalBinding(node)
+        return
+      }
+      if let node = syntaxNode.as(HasSymbolConditionSyntax.self) {
+        self = .hasSymbol(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ConditionElementSyntax` if possible. Returns
@@ -13333,7 +13817,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeCondition: UnexpectedNodesSyntax? = nil,
-    condition: Syntax,
+    condition: Condition,
     _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
@@ -13370,10 +13854,10 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     return ConditionElementSyntax(newData)
   }
 
-  public var condition: Syntax {
+  public var condition: Condition {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return Condition(childData!)
     }
     set(value) {
       self = withCondition(value)
@@ -13384,7 +13868,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `condition` to replace the node's
   ///                   current `condition`, if present.
   public func withCondition(
-    _ newChild: Syntax?) -> ConditionElementSyntax {
+    _ newChild: Condition?) -> ConditionElementSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return ConditionElementSyntax(newData)
@@ -14833,6 +15317,35 @@ extension ElseBlockSyntax: CustomReflectable {
 // MARK: - SwitchCaseSyntax
 
 public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Label: SyntaxProtocol {
+    case `default`(SwitchDefaultLabelSyntax)
+    case `case`(SwitchCaseLabelSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .default(let node): return node._syntaxNode
+      case .case(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: SwitchDefaultLabelSyntax) {
+      self = .default(node)
+    }
+    public init(_ node: SwitchCaseLabelSyntax) {
+      self = .case(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(SwitchDefaultLabelSyntax.self) {
+        self = .default(node)
+        return
+      }
+      if let node = syntaxNode.as(SwitchCaseLabelSyntax.self) {
+        self = .case(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `SwitchCaseSyntax` if possible. Returns
@@ -14854,7 +15367,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     _ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil,
     unknownAttr: AttributeSyntax?,
     _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil,
-    label: Syntax,
+    label: Label,
     _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
     statements: CodeBlockItemListSyntax
   ) {
@@ -14935,10 +15448,10 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     return SwitchCaseSyntax(newData)
   }
 
-  public var label: Syntax {
+  public var label: Label {
     get {
       let childData = data.child(at: 3, parent: Syntax(self))
-      return Syntax(childData!)
+      return Label(childData!)
     }
     set(value) {
       self = withLabel(value)
@@ -14949,7 +15462,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `label` to replace the node's
   ///                   current `label`, if present.
   public func withLabel(
-    _ newChild: Syntax?) -> SwitchCaseSyntax {
+    _ newChild: Label?) -> SwitchCaseSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 3)
     return SwitchCaseSyntax(newData)
@@ -16071,6 +16584,44 @@ extension GenericWhereClauseSyntax: CustomReflectable {
 // MARK: - GenericRequirementSyntax
 
 public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Body: SyntaxProtocol {
+    case `sameTypeRequirement`(SameTypeRequirementSyntax)
+    case `conformanceRequirement`(ConformanceRequirementSyntax)
+    case `layoutRequirement`(LayoutRequirementSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .sameTypeRequirement(let node): return node._syntaxNode
+      case .conformanceRequirement(let node): return node._syntaxNode
+      case .layoutRequirement(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: SameTypeRequirementSyntax) {
+      self = .sameTypeRequirement(node)
+    }
+    public init(_ node: ConformanceRequirementSyntax) {
+      self = .conformanceRequirement(node)
+    }
+    public init(_ node: LayoutRequirementSyntax) {
+      self = .layoutRequirement(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let node = syntaxNode.as(SameTypeRequirementSyntax.self) {
+        self = .sameTypeRequirement(node)
+        return
+      }
+      if let node = syntaxNode.as(ConformanceRequirementSyntax.self) {
+        self = .conformanceRequirement(node)
+        return
+      }
+      if let node = syntaxNode.as(LayoutRequirementSyntax.self) {
+        self = .layoutRequirement(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `GenericRequirementSyntax` if possible. Returns
@@ -16090,7 +16641,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeBody: UnexpectedNodesSyntax? = nil,
-    body: Syntax,
+    body: Body,
     _ unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
@@ -16127,10 +16678,10 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericRequirementSyntax(newData)
   }
 
-  public var body: Syntax {
+  public var body: Body {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return Body(childData!)
     }
     set(value) {
       self = withBody(value)
@@ -16141,7 +16692,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `body` to replace the node's
   ///                   current `body`, if present.
   public func withBody(
-    _ newChild: Syntax?) -> GenericRequirementSyntax {
+    _ newChild: Body?) -> GenericRequirementSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return GenericRequirementSyntax(newData)
@@ -19100,6 +19651,47 @@ extension TuplePatternElementSyntax: CustomReflectable {
 /// or `message: "This has been deprecated"`.
 /// 
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Entry: SyntaxProtocol {
+    case `star`(TokenSyntax)
+    case `identifierRestriction`(TokenSyntax)
+    case `availabilityVersionRestriction`(AvailabilityVersionRestrictionSyntax)
+    case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .star(let node): return node._syntaxNode
+      case .identifierRestriction(let node): return node._syntaxNode
+      case .availabilityVersionRestriction(let node): return node._syntaxNode
+      case .availabilityLabeledArgument(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: AvailabilityVersionRestrictionSyntax) {
+      self = .availabilityVersionRestriction(node)
+    }
+    public init(_ node: AvailabilityLabeledArgumentSyntax) {
+      self = .availabilityLabeledArgument(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .spacedBinaryOperator: self = .star(tok)
+        case .identifier: self = .identifierRestriction(tok)
+        default: return nil
+        }
+        return
+      }
+      if let node = syntaxNode.as(AvailabilityVersionRestrictionSyntax.self) {
+        self = .availabilityVersionRestriction(node)
+        return
+      }
+      if let node = syntaxNode.as(AvailabilityLabeledArgumentSyntax.self) {
+        self = .availabilityLabeledArgument(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AvailabilityArgumentSyntax` if possible. Returns
@@ -19119,7 +19711,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeEntry: UnexpectedNodesSyntax? = nil,
-    entry: Syntax,
+    entry: Entry,
     _ unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax?
   ) {
@@ -19157,10 +19749,10 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// The actual argument
-  public var entry: Syntax {
+  public var entry: Entry {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return Entry(childData!)
     }
     set(value) {
       self = withEntry(value)
@@ -19171,7 +19763,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `entry` to replace the node's
   ///                   current `entry`, if present.
   public func withEntry(
-    _ newChild: Syntax?) -> AvailabilityArgumentSyntax {
+    _ newChild: Entry?) -> AvailabilityArgumentSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return AvailabilityArgumentSyntax(newData)
@@ -19242,6 +19834,35 @@ extension AvailabilityArgumentSyntax: CustomReflectable {
 /// a value, e.g. `message: "This has been deprecated"`.
 /// 
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Value: SyntaxProtocol {
+    case `string`(TokenSyntax)
+    case `version`(VersionTupleSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .string(let node): return node._syntaxNode
+      case .version(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init(_ node: VersionTupleSyntax) {
+      self = .version(node)
+    }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .stringLiteral: self = .string(tok)
+        default: return nil
+        }
+        return
+      }
+      if let node = syntaxNode.as(VersionTupleSyntax.self) {
+        self = .version(node)
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AvailabilityLabeledArgumentSyntax` if possible. Returns
@@ -19265,7 +19886,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
     colon: TokenSyntax,
     _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
-    value: Syntax
+    value: Value
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLabel?.raw,
@@ -19387,10 +20008,10 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   }
 
   /// The value of this labeled argument
-  public var value: Syntax {
+  public var value: Value {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return Syntax(childData!)
+      return Value(childData!)
     }
     set(value) {
       self = withValue(value)
@@ -19401,7 +20022,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   /// - param newChild: The new `value` to replace the node's
   ///                   current `value`, if present.
   public func withValue(
-    _ newChild: Syntax?) -> AvailabilityLabeledArgumentSyntax {
+    _ newChild: Value?) -> AvailabilityLabeledArgumentSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return AvailabilityLabeledArgumentSyntax(newData)
@@ -19570,6 +20191,29 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
 /// and patch part may be omitted.
 /// 
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum MajorMinor: SyntaxProtocol {
+    case `major`(TokenSyntax)
+    case `majorMinor`(TokenSyntax)
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .major(let node): return node._syntaxNode
+      case .majorMinor(let node): return node._syntaxNode
+      }
+    }
+    init(_ data: SyntaxData) { self.init(Syntax(data))! }
+    public init?<Node: SyntaxProtocol>(_ syntaxNode: Node) {
+      if let tok = syntaxNode.as(TokenSyntax.self) {
+        switch tok.rawTokenKind {
+        case .integerLiteral: self = .major(tok)
+        case .floatingLiteral: self = .majorMinor(tok)
+        default: return nil
+        }
+        return
+      }
+      return nil
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `VersionTupleSyntax` if possible. Returns
@@ -19589,7 +20233,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 
   public init(
     _ unexpectedBeforeMajorMinor: UnexpectedNodesSyntax? = nil,
-    majorMinor: Syntax,
+    majorMinor: MajorMinor,
     _ unexpectedBetweenMajorMinorAndPatchPeriod: UnexpectedNodesSyntax? = nil,
     patchPeriod: TokenSyntax?,
     _ unexpectedBetweenPatchPeriodAndPatchVersion: UnexpectedNodesSyntax? = nil,
@@ -19637,10 +20281,10 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   /// floating literal in which the decimal part is interpreted
   /// as the minor version.
   /// 
-  public var majorMinor: Syntax {
+  public var majorMinor: MajorMinor {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return Syntax(childData!)
+      return MajorMinor(childData!)
     }
     set(value) {
       self = withMajorMinor(value)
@@ -19651,7 +20295,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `majorMinor` to replace the node's
   ///                   current `majorMinor`, if present.
   public func withMajorMinor(
-    _ newChild: Syntax?) -> VersionTupleSyntax {
+    _ newChild: MajorMinor?) -> VersionTupleSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return VersionTupleSyntax(newData)

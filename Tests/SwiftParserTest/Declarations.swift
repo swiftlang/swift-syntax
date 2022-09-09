@@ -38,7 +38,7 @@ final class DeclarationTests: XCTestCase {
                 r#^DIAG2^#
                 """,
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG1", message: "Expected '' in function"),
+                  DiagnosticSpec(locationMarker: "DIAG1", message: "Expected identifier in function"),
                   DiagnosticSpec(locationMarker: "DIAG1", message: "Expected argument list in function declaration"),
                   DiagnosticSpec(locationMarker: "DIAG2", message: "Expected '=' in same type requirement"),
                 ])
@@ -142,7 +142,7 @@ final class DeclarationTests: XCTestCase {
       "protocol P{#^DIAG_1^#{}case#^DIAG_2^#",
       diagnostics: [
         DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '{}' before enum case"),
-        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '' in enum case"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected identifier in enum case"),
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end protocol"),
       ])
   }
@@ -795,8 +795,7 @@ final class DeclarationTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "MISSING_COLON", message: "Expected ':' in function parameter"),
         DiagnosticSpec(locationMarker: "MISSING_RPAREN", message: "Expected ')' to end parameter clause"),
-        // FIXME: We should issues something like "Expected identifier in declaration"
-        DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected '' in struct"),
+        DiagnosticSpec(locationMarker: "MISSING_IDENTIFIER", message: "Expected identifier in struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Expected '{' to start struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Expected '}' to end struct"),
         DiagnosticSpec(locationMarker: "BRACES", message: "Extraneous ': Int) {}' at top level"),

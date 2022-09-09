@@ -299,6 +299,16 @@ extension RawSyntax {
       }
     }
   }
+
+  /// Retrieve the syntax text as an array of bytes that models the input
+  /// source even in the presence of invalid UTF-8.
+  public var syntaxTextBytes: [UInt8] {
+    var result: [UInt8] = []
+    withEachSyntaxText { syntaxText in
+      result.append(contentsOf: syntaxText)
+    }
+    return result
+  }
 }
 
 extension RawSyntax: TextOutputStreamable, CustomStringConvertible {

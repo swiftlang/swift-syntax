@@ -188,6 +188,28 @@ final class DeclarationTests: XCTestCase {
       async let theVeryLastPhotoWeWant = fetch("4.jpg")
       """
     )
+    
+    AssertParse(
+      """
+      var foo: Int {
+        @available(swift 5.0)
+        func myFun() -> Int {
+          return 42
+        }
+        return myFun()
+      }
+      """
+    )
+    
+    AssertParse(
+      """
+      var foo: Int {
+        mutating set {
+          test += 1
+        }
+      }
+      """
+    )
   }
 
   func testTypealias() {

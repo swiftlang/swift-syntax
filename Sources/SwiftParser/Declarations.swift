@@ -1519,18 +1519,27 @@ extension Parser {
   struct AccessorIntroducer {
     var attributes: RawAttributeListSyntax?
     var modifier: RawDeclModifierSyntax?
-    var introducer: (AccessorKind, RawTokenSyntax)?
+    var kind: AccessorKind
+    var token: RawTokenSyntax
   }
 
-  mutating func parseAccessorIntroducer() -> AccessorIntroducer {
+  mutating func parseAccessorIntroducer() -> AccessorIntroducer? {
+    // Check there is an identifier before consuming
+    var look = self.lookahead()
+    let _ = look.consumeAttributeList()
+    let hasModifier = look.consume(ifAny: [], contextualKeywords: ["mutating", "nonmutating", "__consuming"]) != nil
+    guard let (kind, handle) = look.at(anyIn: AccessorKind.self) else {
+      return nil
+    }
+    
     let attrs = self.parseAttributeList()
 
     // Parse the contextual keywords for 'mutating' and 'nonmutating' before
     // get and set.
     let modifier: RawDeclModifierSyntax?
-    if let name = self.consume(ifAny: [], contextualKeywords: ["mutating", "nonmutating", "__consuming"]) {
+    if hasModifier {
       modifier = RawDeclModifierSyntax(
-        name: name,
+        name: self.consumeAnyToken(),
         detail: nil,
         arena: self.arena
       )
@@ -1538,14 +1547,9 @@ extension Parser {
       modifier = nil
     }
 
-    guard let (kind, handle) = self.at(anyIn: AccessorKind.self) else {
-      return AccessorIntroducer(
-        attributes: attrs, modifier: modifier, introducer: nil)
-    }
-
     let introducer = self.eat(handle)
     return AccessorIntroducer(
-      attributes: attrs, modifier: modifier, introducer: (kind, introducer))
+      attributes: attrs, modifier: modifier, kind: kind, token: introducer)
   }
 
   @_spi(RawSyntax)
@@ -1612,8 +1616,7 @@ extension Parser {
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightBrace]) && loopProgress.evaluate(currentToken) {
-        let introducer = self.parseAccessorIntroducer()
-        guard let (kind, kindToken) = introducer.introducer else {
+        guard let introducer = self.parseAccessorIntroducer() else {
           // There can only be an implicit getter if no other accessors were
           // seen before this one.
           guard elements.isEmpty else {
@@ -1649,7 +1652,7 @@ extension Parser {
         //
         //     set-name    ::= '(' identifier ')'
         let parameter: RawAccessorParameterSyntax?
-        if [ AccessorKind.set, .willSet, .didSet ].contains(kind), let lparen = self.consume(if: .leftParen) {
+        if [ AccessorKind.set, .willSet, .didSet ].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
           let (unexpectedBeforeName, name) = self.expectIdentifier()
           let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
           parameter = RawAccessorParameterSyntax(
@@ -1681,7 +1684,7 @@ extension Parser {
         elements.append(RawAccessorDeclSyntax(
           attributes: introducer.attributes,
           modifier: introducer.modifier,
-          accessorKind: kindToken,
+          accessorKind: introducer.token,
           parameter: parameter,
           asyncKeyword: asyncKeyword,
           throwsKeyword: throwsKeyword,

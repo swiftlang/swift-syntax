@@ -707,7 +707,12 @@ extension Parser {
 
     let expression: RawExprSyntax
     if (self.at(anyIn: Operator.self) != nil && self.currentToken.tokenText.count != 1) || self.peek().tokenKind == .leftSquareBracket {
-      let dot = self.consumePrefix(".", as: .period)
+      let dot: RawTokenSyntax
+      if self.currentToken.starts(with: ".") {
+        dot = self.consumePrefix(".", as: .period)
+      } else {
+        dot = self.consumeAnyToken()
+      }
       let base = RawExprSyntax(RawKeyPathBaseExprSyntax(period: dot, arena: self.arena))
       expression = self.parsePostfixExpressionSuffix(base, .basic, forDirective: forDirective)
     } else if self.at(any: [.period, .prefixPeriod]) {

@@ -422,21 +422,6 @@ public enum RawTriviaPiece: Equatable {
   }
 }
 
-extension RawTriviaPiece {
-  func withSyntaxText(body: (SyntaxText) throws -> Void) rethrows {
-    if let syntaxText = storedText {
-      try body(syntaxText)
-      return
-    }
-
-    var description = ""
-    write(to: &description)
-    try description.withUTF8 { buffer in
-      try body(SyntaxText(baseAddress: buffer.baseAddress, count: buffer.count))
-    }
-  }
-}
-
 extension RawTriviaPiece: TextOutputStreamable {
   public func write<Target: TextOutputStream>(to target: inout Target) {
     TriviaPiece(raw: self).write(to: &target)

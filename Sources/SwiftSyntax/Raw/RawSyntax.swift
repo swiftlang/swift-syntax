@@ -267,6 +267,21 @@ extension RawSyntax {
   }
 }
 
+extension RawTriviaPiece {
+  func withSyntaxText(body: (SyntaxText) throws -> Void) rethrows {
+    if let syntaxText = storedText {
+      try body(syntaxText)
+      return
+    }
+
+    var description = ""
+    write(to: &description)
+    try description.withUTF8 { buffer in
+      try body(SyntaxText(baseAddress: buffer.baseAddress, count: buffer.count))
+    }
+  }
+}
+
 extension RawSyntax {
   /// Enumerate all of the syntax text present in this node, and all
   /// of its children, to give a source-accurate view of the bytes.

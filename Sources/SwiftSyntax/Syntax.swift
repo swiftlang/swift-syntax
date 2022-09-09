@@ -81,6 +81,32 @@ extension Syntax: Identifiable {
   public typealias ID = SyntaxIdentifier
 }
 
+extension Syntax {
+  /// Enumerate all of the syntax text present in this node, and all
+  /// of its children, to give a source-accurate view of the bytes.
+  ///
+  /// Unlike `description`, this provides a source-accurate representation
+  /// even in the presence of malformed UTF-8 in the input source.
+  ///
+  /// The `SyntaxText` arguments passed to the visitor are only guaranteed
+  /// to be valid within that call. It is unsafe to escape the `SyntaxValue`
+  /// values outside of the closure.
+  @_spi(RawSyntax)
+  public func withEachSyntaxText(body: (SyntaxText) throws -> Void) rethrows {
+    try raw.withEachSyntaxText(body: body)
+  }
+
+  /// Retrieve the syntax text as an array of bytes that models the input
+  /// source even in the presence of invalid UTF-8.
+  public var syntaxTextBytes: [UInt8] {
+    var result: [UInt8] = []
+    withEachSyntaxText { syntaxText in
+      result.append(contentsOf: syntaxText)
+    }
+    return result
+  }
+}
+
 /// Protocol that provides a common Hashable implementation for all syntax nodes
 public protocol SyntaxHashable: Hashable {
   var _syntaxNode: Syntax { get }
@@ -462,6 +488,11 @@ public extension SyntaxProtocol {
 /// Provides the source-accurate text for a node
 public extension SyntaxProtocol {
   /// A source-accurate description of this node.
+  ///
+  /// Note that the resulting String cannot represent invalid UTF-8 that
+  /// occurs within the syntax nodes. Use `syntaxTextBytes` for a
+  /// byte-accurate representation of this node in the presence of
+  /// invalid UTF-8.
   var description: String {
     return data.raw.description
   }

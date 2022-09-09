@@ -47,9 +47,7 @@ public func _parserConsistencyCheck(
 
     // Round-trip test.
     if flags & 0x01 != 0 {
-      var bufferArray = [UInt8](buffer)
-      bufferArray.append(0)
-      if "\(rawSourceFile)" != String(cString: bufferArray) {
+      if Syntax(raw: rawSourceFile.raw).syntaxTextBytes != [UInt8](buffer) {
         print(
           "\(String(cString: filename)): error: file failed to round-trip")
         return 1

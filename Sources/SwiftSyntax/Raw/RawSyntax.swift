@@ -267,6 +267,40 @@ extension RawSyntax {
   }
 }
 
+extension RawSyntax {
+  /// Enumerate all of the syntax text present in this node, and all
+  /// of its children, to give a source-accurate view of the bytes.
+  ///
+  /// Unlike `description`, this provides a source-accurate representation
+  /// even in the presence of malformed UTF-8 in the input source.
+  ///
+  /// The `SyntaxText` arguments passed to the visitor are only guaranteed
+  /// to be valid within that call. It is unsafe to escape the `SyntaxValue`
+  /// values outside of the closure.
+  public func withEachSyntaxText(body: (SyntaxText) throws -> Void) rethrows {
+    switch rawData.payload {
+    case .parsedToken(let dat):
+      if dat.presence == .present {
+        try body(dat.wholeText)
+      }
+    case .materializedToken(let dat):
+      if dat.presence == .present {
+        for p in dat.leadingTrivia {
+          try p.withSyntaxText(body: body)
+        }
+        try body(dat.tokenText)
+        for p in dat.trailingTrivia {
+          try p.withSyntaxText(body: body)
+        }
+      }
+    case .layout(let dat):
+      for case let child? in dat.layout {
+        try child.withEachSyntaxText(body: body)
+      }
+    }
+  }
+}
+
 extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   /// Prints the RawSyntax node, and all of its children, to the provided
   /// stream. This implementation must be source-accurate.

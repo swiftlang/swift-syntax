@@ -80,6 +80,16 @@ final class ExpressionTests: XCTestCase {
       children.filter(\.type.defaultInitialization.isEmpty)
       """#
     )
+
+    AssertParse(
+      #"""
+      \a
+      c[#^DIAG^#
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected ']' to end subscript")
+      ]
+    )
   }
 
   func testBasicLiterals() {

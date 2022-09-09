@@ -22,19 +22,6 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
   swiftSyntaxSwiftSettings = []
 }
 
-/// If the `lib_InternalSwiftSyntaxParser.dylib` is not in the standard search
-/// paths (which is the standard case on macOS),
-/// `SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH` can be used to add a rpath at which
-/// the parser lib should be searched.
-let swiftSyntaxParserLinkerSettings: [LinkerSetting]
-if let parserLibSearchPath = ProcessInfo.processInfo.environment["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] {
-  swiftSyntaxParserLinkerSettings = [.unsafeFlags([
-    "-Xlinker", "-rpath", "-Xlinker", parserLibSearchPath
-  ])]
-} else {
-  swiftSyntaxParserLinkerSettings = []
-}
-
 let package = Package(
   name: "SwiftSyntax",
   platforms: [
@@ -95,12 +82,7 @@ let package = Package(
     ),
     .target(
       name: "SwiftSyntaxParser",
-      dependencies: ["SwiftSyntax"],
-      exclude: [
-        "NodeDeclarationHash.swift.gyb",
-        "Serialization.swift.gyb",
-      ],
-      linkerSettings: swiftSyntaxParserLinkerSettings
+      dependencies: ["SwiftSyntax", "SwiftParser"]
     ),
     .target(
       name: "_SwiftSyntaxTestSupport",

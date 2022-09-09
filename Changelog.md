@@ -4,6 +4,10 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 
 ## `main`
 
+* With the introduction of the new `SwiftParser`, the existing `SwiftSyntaxParser` is deprecated and will be removed. The module and it's API surface still exists as a thin wrapper over `SwiftParser`, which no longer requires a matching toolchain or `_InternalSwiftSyntaxParser` shared library to work.
+
+## Swift 5.6
+
 * To clarify that the edits passed to `IncrementalParseTransition` are applied concurrently, introduce a new `ConcurrentEdit` type that provides the guarantee and allows translation of sequentially applied edits to the expected concurrent form.
 * The `SwiftSyntaxParser` type and a few related types now live in their own module (also named `SwiftSyntaxParser`). This allows using `SwiftSyntax` for code generation purposes without having a compatible `_InternalSwiftSyntaxParser.dylib` around. 
 
@@ -86,7 +90,7 @@ Note: This is in reverse chronological order, so newer entries are added to the 
     /* ... */
   }
   ```
- 
+
 
 ### Modelling syntax nodes as structs
 

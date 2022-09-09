@@ -8,7 +8,8 @@ public class ParserTests: XCTestCase {
   func runParseTest(fileURL: URL, checkDiagnostics: Bool) throws {
     let fileContents = try String(contentsOf: fileURL)
     let parsed = try Parser.parse(source: fileContents)
-    AssertStringsEqualWithDiff("\(parsed)", fileContents)
+    AssertStringsEqualWithDiff("\(parsed)", fileContents,
+                               additionalInfo: "Failed in file \(fileURL)")
 
     if !checkDiagnostics {
       return
@@ -31,18 +32,30 @@ public class ParserTests: XCTestCase {
   }
 
   /// Run parsr tests on all of the Swift files in the
-  func runParserTests(name: String, path: URL, checkDiagnostics: Bool) {
+  func runParserTests(
+    name: String, path: URL, checkDiagnostics: Bool,
+    shouldExclude: (URL) -> Bool = { _ in false }
+  ) {
     let fileURLs = FileManager.default
       .enumerator(at: path, includingPropertiesForKeys: nil)!
       .compactMap({ $0 as? URL })
-      .filter({$0.pathExtension == "swift"})
+      .filter {
+        $0.pathExtension == "swift"
+        || $0.pathExtension == "sil"
+        || $0.pathExtension == "swiftinterface"
+      }
 
+    print("\(name) - processing \(fileURLs.count) source files")
     DispatchQueue.concurrentPerform(iterations: fileURLs.count) { fileURLIndex in
       let fileURL = fileURLs[fileURLIndex]
+      if shouldExclude(fileURL) {
+        return
+      }
+
       do {
         try runParseTest(fileURL: fileURL, checkDiagnostics: checkDiagnostics)
       } catch {
-        XCTFail("Test of \(fileURL) failed due to \(error)")
+        XCTFail("\(name): \(fileURL) failed due to \(error)")
       }
     }
   }
@@ -58,6 +71,97 @@ public class ParserTests: XCTestCase {
       .appendingPathComponent("Sources")
     runParserTests(
       name: "Self-parse tests", path: currentDir, checkDiagnostics: true
+    )
+  }
+
+  func testSwiftTestsuite() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
+    let testDir = URL(fileURLWithPath: #file)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appendingPathComponent("swift")
+      .appendingPathComponent("test")
+    runParserTests(
+      name: "Swift tests", path: testDir, checkDiagnostics: false,
+      shouldExclude: { fileURL in
+        false
+
+        // These tests overflow the parser.
+        || fileURL.absoluteString.contains("_overflow")
+        || fileURL.absoluteString.contains("parser-cutoff.swift")
+
+        // This test causes an assertion in the string literal lexer
+        || fileURL.absoluteString.contains("string_literal_eof3.swift")
+
+        // These tests have invalid UTF-8 in the source files and are not
+        // properly checked.
+        || fileURL.absoluteString.contains("invalid-utf8.swift")
+        || fileURL.absoluteString.contains("utf16_bom.swift")
+
+        // This test causes a round-trip failure that has yet to be diagnosed.
+        || fileURL.absoluteString.contains("complete_in_closures.swift")
+      }
+    )
+  }
+
+  func testSwiftValidationTestsuite() throws {
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
+    let testDir = URL(fileURLWithPath: #file)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appendingPathComponent("swift")
+      .appendingPathComponent("validation-test")
+    runParserTests(
+      name: "Swift validation tests", path: testDir, checkDiagnostics: false,
+      shouldExclude: { fileURL in
+        false
+
+        // These tests have invalid UTF-8 and we should be able to handle them.
+        || fileURL.absoluteString.contains("033-swift-identifier-isoperatorslow.swift")
+        || fileURL.absoluteString.contains("28668-activediagnostic-already-have-an-active-diagnostic.swift")
+
+        // Loop fails to make progress.
+        || fileURL.absoluteString.contains("01701-swift-constraints-constraintsystem-getfixedtyperecursive.swift")
+        || fileURL.absoluteString.contains("28328-swift-typebase-getdesugaredtype.swift")
+        || fileURL.absoluteString.contains("01899-swift-declcontext-lookupqualified.swift")
+        || fileURL.absoluteString.contains("28340-swift-type-getstring.swift")
+        || fileURL.absoluteString.contains("01480-swift-typebase-getcanonicaltype.swift")
+        || fileURL.absoluteString.contains("01480-swift-typebase-getcanonicaltype-edited.swift")
+        || fileURL.absoluteString.contains("sr8456.swift")
+
+        // Crashes due to deep recursion in the parser.
+        || fileURL.absoluteString.contains("swift-lexer-leximpl.swift")
+        || fileURL.absoluteString.contains("swift-inflightdiagnostic.swift")
+        || fileURL.absoluteString.contains("swift-lexer-kindofidentifier.swift")
+        || fileURL.absoluteString.contains("swift-lexer-lexidentifier.swift")
+        || fileURL.absoluteString.contains("swift-parser-skipsingle.swift")
+        || fileURL.absoluteString.contains("swift-lexer-kindofidentifier.swift")
+        || fileURL.absoluteString.contains("swift-lexer-lexstringliteral.swift")
+        || fileURL.absoluteString.contains("swift-lexer-lexoperatoridentifier.swift")
+        || fileURL.absoluteString.contains("26089-swift-constraints-constraintsystem-getconstraintlocator.swift")
+        || fileURL.absoluteString.contains("28616-swift-parser-parseexprsequence-swift-diag-bool-bool.swift")
+        || fileURL.absoluteString.contains("26205-swift-lexer-leximpl.swift")
+        || fileURL.absoluteString.contains("28686-swift-typebase-getcanonicaltype.swift")
+        || fileURL.absoluteString.contains(
+          "28591-swift-constraints-constraintsystem-solvesimplified-llvm-smallvectorimpl-swift-co.swift")
+        || fileURL.absoluteString.contains("28678-result-case-not-implemented.swift")
+        || fileURL.absoluteString.contains("28685-unreachable-executed-at-swift-lib-ast-type-cpp-1344.swift")
+        || fileURL.absoluteString.contains(
+          "28651-swift-cleanupillformedexpressionraii-doit-swift-expr-swift-astcontext-cleanupill.swift")
+        || fileURL.absoluteString.contains("28681-swift-typebase-getcanonicaltype.swift")
+        || fileURL.absoluteString.contains(
+          "28684-isactuallycanonicalornull-forming-a-cantype-out-of-a-non-canonical-type.swift")
+        || fileURL.absoluteString.contains("26659-swift-genericsignature-getcanonicalmanglingsignature.swift")
+        || fileURL.absoluteString.contains("26162-swift-constraints-constraintsystem-getconstraintlocator.swift")
+        || fileURL.absoluteString.contains("26161-swift-patternbindingdecl-setpattern.swift")
+        || fileURL.absoluteString.contains("26101-swift-parser-parsenewdeclattribute.swift")
+        || fileURL.absoluteString.contains("26773-swift-diagnosticengine-diagnose.swift")
+        || fileURL.absoluteString.contains("parser-cutoff.swift")
+      }
     )
   }
 }

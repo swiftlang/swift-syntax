@@ -277,6 +277,57 @@ func AssertStringsEqualWithDiff(
   file: StaticString = #file,
   line: UInt = #line
 ) {
+  if actual == expected {
+    return
+  }
+  FailStringsEqualWithDiff(
+    actual, expected, message,
+    additionalInfo: additionalInfo(),
+    file: file, line: line)
+}
+
+/// Asserts that the two data are equal, providing Unix `diff`-style output if they are not.
+///
+/// - Parameters:
+///   - actual: The actual string.
+///   - expected: The expected string.
+///   - message: An optional description of the failure.
+///   - additionalInfo: Additional information about the failed test case that will be printed after the diff
+///   - file: The file in which failure occurred. Defaults to the file name of the test case in
+///     which this function was called.
+///   - line: The line number on which failure occurred. Defaults to the line number on which this
+///     function was called.
+func AssertDataEqualWithDiff(
+  _ actual: Data,
+  _ expected: Data,
+  _ message: String = "",
+  additionalInfo: @autoclosure () -> String? = nil,
+  file: StaticString = #file,
+  line: UInt = #line
+) {
+  if actual == expected {
+    return
+  }
+
+  // NOTE: Converting to `Stirng` here looses invalid UTF8 sequence difference,
+  // but at least we can see something is different.
+  FailStringsEqualWithDiff(
+    String(decoding: actual, as: UTF8.self),
+    String(decoding: expected, as: UTF8.self),
+    message,
+    additionalInfo: additionalInfo(),
+    file: file, line: line)
+}
+
+/// `XCTFail` with `diff`-style output.
+private func FailStringsEqualWithDiff(
+  _ actual: String,
+  _ expected: String,
+  _ message: String = "",
+  additionalInfo: @autoclosure () -> String? = nil,
+  file: StaticString = #file,
+  line: UInt = #line
+) {
   // Use `CollectionDifference` on supported platforms to get `diff`-like line-based output. On
   // older platforms, fall back to simple string comparison.
   if #available(macOS 10.15, *) {
@@ -284,7 +335,6 @@ func AssertStringsEqualWithDiff(
     let expectedLines = expected.components(separatedBy: .newlines)
 
     let difference = actualLines.difference(from: expectedLines)
-    if difference.isEmpty { return }
 
     var result = ""
 
@@ -327,9 +377,9 @@ func AssertStringsEqualWithDiff(
     }
     XCTFail(fullMessage, file: file, line: line)
   } else {
-    // Fall back to simple string comparison on platforms that don't support CollectionDifference.
+    // Fall back to simple message on platforms that don't support CollectionDifference.
     let failureMessage = "Actual output differed from expected output:"
     let fullMessage = message.isEmpty ? failureMessage : "\(message) - \(failureMessage)"
-    XCTAssertEqual(actual, expected, fullMessage, file: file, line: line)
+    XCTFail(fullMessage, file: file, line: line)
   }
 }

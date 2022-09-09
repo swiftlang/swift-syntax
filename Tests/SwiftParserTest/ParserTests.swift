@@ -10,10 +10,8 @@ public class ParserTests: XCTestCase {
     let parsed = try fileContents.withUnsafeBytes({ buffer in
       try Parser.parse(source: buffer.bindMemory(to: UInt8.self))
     })
-    // FIXME: This should compare binaries for handling invalid UTF-8 sequences.
-    AssertStringsEqualWithDiff("\(parsed)",
-                               String(decoding: fileContents, as: UTF8.self),
-                               additionalInfo: "Failed in file \(fileURL)")
+    AssertDataEqualWithDiff(Data(parsed.syntaxTextBytes), fileContents,
+                            additionalInfo: "Failed in file \(fileURL)")
 
     if !checkDiagnostics {
       return

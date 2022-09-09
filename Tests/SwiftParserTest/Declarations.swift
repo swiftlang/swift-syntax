@@ -804,6 +804,55 @@ final class DeclarationTests: XCTestCase {
       }
       """##)
   }
+
+  func testLeadingUnexpectedTokens() {
+    AssertParse("#^DIAG_1^#}class C#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before class"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start class"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end class"),
+                ])
+    AssertParse("#^DIAG_1^#}enum C#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before enum"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start enum"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end enum"),
+                ])
+    AssertParse("#^DIAG_1^#}protocol C#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before protocol"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start protocol"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end protocol"),
+                ])
+    AssertParse("#^DIAG_1^#}actor C#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before actor"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start actor"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end actor"),
+                ])
+    AssertParse("#^DIAG_1^#}struct C#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before struct"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start struct"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end struct"),
+                ])
+    AssertParse("#^DIAG_1^#}func C#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before function"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected argument list in function declaration"),
+                ])
+    AssertParse("#^DIAG_1^#}init#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before initializer"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected argument list in function declaration"),
+                ])
+    AssertParse("#^DIAG_1^#}subscript#^DIAG_2^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '}' before subscript"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected argument list in function declaration"),
+                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '->' in return clause"),
+                ])
+  }
 }
 
 extension Parser.DeclAttributes {

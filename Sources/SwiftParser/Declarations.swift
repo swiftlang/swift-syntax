@@ -577,6 +577,7 @@ extension Parser {
     return RawClassDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
+      unexpectedBeforeClassKeyword,
       classKeyword: classKeyword,
       unexpectedBeforeName,
       identifier: name,
@@ -694,6 +695,7 @@ extension Parser {
     let members = self.parseMemberDeclList()
     return RawEnumDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
+      unexpectedBeforeEnumKeyword,
       enumKeyword: enumKeyword,
       unexpectedBeforeName,
       identifier: name,
@@ -831,6 +833,7 @@ extension Parser {
     let members = self.parseMemberDeclList()
     return RawStructDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
+      unexpectedBeforeStructKeyword,
       structKeyword: structKeyword,
       identifier: name,
       genericParameterClause: generics,
@@ -938,6 +941,7 @@ extension Parser {
 
     return RawProtocolDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
+      unexpectedBeforeProtocolKeyword,
       protocolKeyword: protocolKeyword,
       identifier: name,
       primaryAssociatedTypeClause: primaries,
@@ -1003,6 +1007,7 @@ extension Parser {
 
     return RawAssociatedtypeDeclSyntax(
       attributes: attrs.attributes, modifiers: attrs.modifiers,
+      unexpectedBeforeAssocKeyword,
       associatedtypeKeyword: assocKeyword,
       identifier: name,
       inheritanceClause: inheritance,

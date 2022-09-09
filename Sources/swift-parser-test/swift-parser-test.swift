@@ -20,38 +20,25 @@ import ArgumentParser
 import WinSDK
 #endif
 
-enum CommonError: Swift.Error {
-  case readingSourceFileFailed(URL)
-
-  public var description: String {
-    switch self {
-    case .readingSourceFileFailed(let url):
-      return "Reading the source file at \(url) failed"
-    }
-  }
-}
-
 /// Print the given message to stderr
 func printerr(_ message: String, terminator: String = "\n") {
   FileHandle.standardError.write((message + terminator).data(using: .utf8)!)
 }
 
-private func withTemporaryFile<T>(contents: String, body: (URL) throws -> T) throws -> T {
+private func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T) throws -> T {
   var tempFileURL = FileManager.default.temporaryDirectory
   tempFileURL.appendPathComponent("swift-parser-test-\(UUID().uuidString).swift")
-  try contents.write(to: tempFileURL, atomically: false, encoding: .utf8)
+  try Data(contents).write(to: tempFileURL)
   defer {
     try? FileManager.default.removeItem(at: tempFileURL)
   }
   return try body(tempFileURL)
 }
 
-private func getContentsOfSourceFile(at path: String) throws -> String {
+private func getContentsOfSourceFile(at path: String) throws -> [UInt8] {
   let sourceURL = URL(fileURLWithPath: path)
-  guard let source = try String(data: Data(contentsOf: sourceURL), encoding: .utf8) else {
-    throw CommonError.readingSourceFileFailed(sourceURL)
-  }
-  return source
+  let source = try Data(contentsOf: sourceURL)
+  return [UInt8](source)
 }
 
 @main
@@ -96,16 +83,24 @@ class VerifyRoundTrip: ParsableCommand {
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    try Self.run(source: source, swiftVersion: swiftVersion, enableBareSlashRegex: enableBareSlashRegex)
+    try source.withUnsafeBufferPointer { sourceBuffer in
+      try Self.run(
+        source: sourceBuffer, swiftVersion: swiftVersion,
+        enableBareSlashRegex: enableBareSlashRegex
+      )
+    }
   }
 
-  static func run(source: String, swiftVersion: String?, enableBareSlashRegex: Bool?) throws {
+  static func run(
+    source: UnsafeBufferPointer<UInt8>, swiftVersion: String?,
+    enableBareSlashRegex: Bool?
+  ) throws {
     let tree = try Parser.parse(
       source: source,
       languageVersion: swiftVersion,
       enableBareSlashRegexLiteral: enableBareSlashRegex
     )
-    if tree.description != source {
+    if tree.syntaxTextBytes != [UInt8](source) {
       throw Error.roundTripFailed
     }
   }
@@ -126,17 +121,19 @@ class PrintDiags: ParsableCommand {
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    let tree = try Parser.parse(
-      source: source,
-      languageVersion: swiftVersion,
-      enableBareSlashRegexLiteral: enableBareSlashRegex
-    )
-    let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-    if diags.isEmpty {
-      print("No diagnostics produced")
-    }
-    for diag in diags {
-      print("\(diag.debugDescription)")
+    try source.withUnsafeBufferPointer { sourceBuffer in
+      let tree = try Parser.parse(
+        source: sourceBuffer,
+        languageVersion: swiftVersion,
+        enableBareSlashRegexLiteral: enableBareSlashRegex
+      )
+      let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
+      if diags.isEmpty {
+        print("No diagnostics produced")
+      }
+      for diag in diags {
+        print("\(diag.debugDescription)")
+      }
     }
   }
 }
@@ -156,12 +153,14 @@ class DumpTree: ParsableCommand {
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    let tree = try Parser.parse(
-      source: source,
-      languageVersion: swiftVersion,
-      enableBareSlashRegexLiteral: enableBareSlashRegex
-    )
-    print(tree.recursiveDescription)
+    try source.withUnsafeBufferPointer { sourceBuffer in
+      let tree = try Parser.parse(
+        source: sourceBuffer,
+        languageVersion: swiftVersion,
+        enableBareSlashRegexLiteral: enableBareSlashRegex
+      )
+      print(tree.recursiveDescription)
+    }
   }
 }
 
@@ -204,7 +203,7 @@ class Reduce: ParsableCommand {
 
   /// Invoke `swift-parser-test verify-round-trip` with the same arguments as this `reduce` subcommand.
   /// Returns the exit code of the invocation.
-  private func runVerifyRoundTripInSeparateProcess(source: String) throws -> ProcessExit {
+  private func runVerifyRoundTripInSeparateProcess(source: [UInt8]) throws -> ProcessExit {
     return try withTemporaryFile(contents: source) { tempFileURL in
       let process = Process()
       process.executableURL = URL(fileURLWithPath: ProcessInfo.processInfo.arguments[0])
@@ -250,16 +249,18 @@ class Reduce: ParsableCommand {
 
   /// Runs the `verify-round-trip` subcommand in process.
   /// Returns `true` if `source` round-tripped successfully, `false` otherwise.
-  private func runVerifyRoundTripInCurrentProcess(source: String) throws -> Bool {
+  private func runVerifyRoundTripInCurrentProcess(source: [UInt8]) throws -> Bool {
     do {
-      try VerifyRoundTrip.run(source: source, swiftVersion: self.swiftVersion, enableBareSlashRegex: self.enableBareSlashRegex)
+      try source.withUnsafeBufferPointer { sourceBuffer in
+        try VerifyRoundTrip.run(source: sourceBuffer, swiftVersion: self.swiftVersion, enableBareSlashRegex: self.enableBareSlashRegex)
+      }
     } catch {
       return false
     }
     return true
   }
 
-  private func reduce(source: String, testPasses: (String) throws -> Bool) throws -> String {
+  private func reduce(source: [UInt8], testPasses: ([UInt8]) throws -> Bool) throws -> [UInt8] {
     var reduced = source
     var chunkSize = source.count / 4
     while chunkSize > 0 {
@@ -280,17 +281,17 @@ class Reduce: ParsableCommand {
   }
 
   /// Reduces a test case with `source` by iteratively attempting to remove `chunkSize` characters - ie. removing the chunk if `testPasses` returns `false`.
-  private func reduceImpl(source: String, chunkSize: Int, testPasses: (String) throws -> Bool) rethrows -> String {
-    var reduced = ""
+  private func reduceImpl(source: [UInt8], chunkSize: Int, testPasses: ([UInt8]) throws -> Bool) rethrows -> [UInt8] {
+    var reduced: [UInt8] = []
     // Characters that stil need to be checked whether they can be removed.
     var remaining = source
     while !remaining.isEmpty {
       let index = remaining.index(remaining.startIndex, offsetBy: chunkSize, limitedBy: remaining.endIndex) ?? remaining.endIndex
-      let testChunk = String(remaining[..<index])
-      remaining = String(remaining[index...])
+      let testChunk = [UInt8](remaining[..<index])
+      remaining = [UInt8](remaining[index...])
       if try testPasses(reduced + remaining) {
         // The test doesn't fail anymore if we remove testChunk. Add it again.
-        reduced.append(testChunk)
+        reduced.append(contentsOf: testChunk)
       }
     }
     return reduced
@@ -299,7 +300,7 @@ class Reduce: ParsableCommand {
   func run() throws {
     let source = try getContentsOfSourceFile(at: sourceFile)
 
-    let testPasses: (String) throws -> Bool
+    let testPasses: ([UInt8]) throws -> Bool
     switch try runVerifyRoundTripInSeparateProcess(source: source) {
     case .success:
       throw Error.testDoesNotFail

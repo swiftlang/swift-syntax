@@ -321,7 +321,6 @@ def second_stage_gyb_dir_mapping(
         SWIFTSYNTAX_DIR,
         os.path.join(SWIFTSYNTAX_DIR, "Raw"),
         SWIFTSYNTAXBUILDER_DIR,
-        SWIFTSYNTAXPARSER_DIR,
         SWIFTSYNTAX_DOCUMENTATION_DIR,
     ])
 

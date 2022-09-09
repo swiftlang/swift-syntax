@@ -3,17 +3,10 @@ import SwiftSyntax
 import SwiftParser
 
 public class ParserTests: XCTestCase {
-  func testSelfParse() throws {
-    // Allow skipping the self parse test in local development environments
-    // because it takes very long compared to all the other tests.
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
-    let currentDir = URL(fileURLWithPath: #file)
-      .deletingLastPathComponent()
-      .deletingLastPathComponent()
-      .deletingLastPathComponent()
-      .appendingPathComponent("Sources")
+  /// Run parsr tests on all of the Swift files in the
+  func runParserTests(path: URL, checkDiagnostics: Bool) {
     let fileURLs = FileManager.default
-      .enumerator(at: currentDir, includingPropertiesForKeys: nil)!
+      .enumerator(at: path, includingPropertiesForKeys: nil)!
       .compactMap({ $0 as? URL })
       .filter({$0.pathExtension == "swift"})
     for fileURL in fileURLs {
@@ -21,6 +14,11 @@ public class ParserTests: XCTestCase {
         let fileContents = try String(contentsOf: fileURL)
         let parsed = try Parser.parse(source: fileContents)
         AssertStringsEqualWithDiff("\(parsed)", fileContents)
+
+        if !checkDiagnostics {
+          return
+        }
+
         let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: parsed)
         if !diagnostics.isEmpty {
           var locationAndDiagnostics: [String] = []
@@ -37,5 +35,17 @@ public class ParserTests: XCTestCase {
         }
       }())
     }
+  }
+
+  func testSelfParse() throws {
+    // Allow skipping the self parse test in local development environments
+    // because it takes very long compared to all the other tests.
+    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_SELF_PARSE"] == "1")
+    let currentDir = URL(fileURLWithPath: #file)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appendingPathComponent("Sources")
+    runParserTests(path: currentDir, checkDiagnostics: true)
   }
 }

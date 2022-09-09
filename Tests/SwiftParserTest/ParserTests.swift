@@ -39,7 +39,11 @@ public class ParserTests: XCTestCase {
     let fileURLs = FileManager.default
       .enumerator(at: path, includingPropertiesForKeys: nil)!
       .compactMap({ $0 as? URL })
-      .filter({$0.pathExtension == "swift"})
+      .filter {
+        $0.pathExtension == "swift"
+        || $0.pathExtension == "sil"
+        || $0.pathExtension == "swiftinterface"
+      }
 
     print("\(name) - processing \(fileURLs.count) source files")
     DispatchQueue.concurrentPerform(iterations: fileURLs.count) { fileURLIndex in

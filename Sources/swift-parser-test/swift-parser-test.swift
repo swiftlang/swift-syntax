@@ -20,17 +20,6 @@ import ArgumentParser
 import WinSDK
 #endif
 
-enum CommonError: Swift.Error {
-  case readingSourceFileFailed(URL)
-
-  public var description: String {
-    switch self {
-    case .readingSourceFileFailed(let url):
-      return "Reading the source file at \(url) failed"
-    }
-  }
-}
-
 /// Print the given message to stderr
 func printerr(_ message: String, terminator: String = "\n") {
   FileHandle.standardError.write((message + terminator).data(using: .utf8)!)

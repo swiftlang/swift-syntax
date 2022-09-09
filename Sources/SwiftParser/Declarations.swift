@@ -967,13 +967,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseAssociatedTypeDeclaration(_ attrs: DeclAttributes) -> RawAssociatedtypeDeclSyntax {
     let (unexpectedBeforeAssocKeyword, assocKeyword) = self.expect(.associatedtypeKeyword)
-    let (unexpecedBeforeName, name) = self.expectIdentifier()
-    if unexpecedBeforeName == nil && name.isMissing {
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    if unexpectedBeforeName == nil && name.isMissing {
       return RawAssociatedtypeDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
         unexpectedBeforeAssocKeyword,
         associatedtypeKeyword: assocKeyword,
+        unexpectedBeforeName,
         identifier: name,
         inheritanceClause: nil,
         initializer: nil,
@@ -1014,6 +1015,7 @@ extension Parser {
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       unexpectedBeforeAssocKeyword,
       associatedtypeKeyword: assocKeyword,
+      unexpectedBeforeName,
       identifier: name,
       inheritanceClause: inheritance,
       initializer: defaultType,

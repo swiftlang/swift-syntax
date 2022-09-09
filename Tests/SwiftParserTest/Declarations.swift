@@ -853,6 +853,33 @@ final class DeclarationTests: XCTestCase {
                   DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '->' in return clause"),
                 ])
   }
+
+  func testBogusNominalName() {
+    AssertParse("struct #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start struct"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end struct")
+                ])
+    AssertParse("class #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start class"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end class")
+                ])
+    AssertParse("enum #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start enum"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end enum")
+                ])
+    AssertParse("actor #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
+                diagnostics: [
+                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start actor"),
+                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end actor")
+                ])
+  }
 }
 
 extension Parser.DeclAttributes {

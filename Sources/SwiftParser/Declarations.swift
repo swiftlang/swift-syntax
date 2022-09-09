@@ -286,6 +286,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         elements.append(RawGenericParameterSyntax(
           attributes: attributes,
+          unexpectedBeforeName,
           name: name,
           colon: colon,
           inheritedType: inherited,
@@ -795,6 +796,7 @@ extension Parser {
         modifiers: attrs.modifiers,
         unexpectedBeforeStructKeyword,
         structKeyword: structKeyword,
+        unexpectedBeforeName,
         identifier: name,
         genericParameterClause: nil,
         inheritanceClause: nil,
@@ -835,6 +837,7 @@ extension Parser {
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       unexpectedBeforeStructKeyword,
       structKeyword: structKeyword,
+      unexpectedBeforeName,
       identifier: name,
       genericParameterClause: generics,
       inheritanceClause: inheritance,
@@ -900,6 +903,7 @@ extension Parser {
         modifiers: attrs.modifiers,
         unexpectedBeforeProtocolKeyword,
         protocolKeyword: protocolKeyword,
+        unexpectedBeforeName,
         identifier: name,
         primaryAssociatedTypeClause: nil,
         inheritanceClause: nil,
@@ -943,6 +947,7 @@ extension Parser {
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       unexpectedBeforeProtocolKeyword,
       protocolKeyword: protocolKeyword,
+      unexpectedBeforeName,
       identifier: name,
       primaryAssociatedTypeClause: primaries,
       inheritanceClause: inheritance,
@@ -962,13 +967,14 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseAssociatedTypeDeclaration(_ attrs: DeclAttributes) -> RawAssociatedtypeDeclSyntax {
     let (unexpectedBeforeAssocKeyword, assocKeyword) = self.expect(.associatedtypeKeyword)
-    let (unexpecedBeforeName, name) = self.expectIdentifier()
-    if unexpecedBeforeName == nil && name.isMissing {
+    let (unexpectedBeforeName, name) = self.expectIdentifier()
+    if unexpectedBeforeName == nil && name.isMissing {
       return RawAssociatedtypeDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
         unexpectedBeforeAssocKeyword,
         associatedtypeKeyword: assocKeyword,
+        unexpectedBeforeName,
         identifier: name,
         inheritanceClause: nil,
         initializer: nil,
@@ -1009,6 +1015,7 @@ extension Parser {
       attributes: attrs.attributes, modifiers: attrs.modifiers,
       unexpectedBeforeAssocKeyword,
       associatedtypeKeyword: assocKeyword,
+      unexpectedBeforeName,
       identifier: name,
       inheritanceClause: inheritance,
       initializer: defaultType,

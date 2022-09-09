@@ -320,6 +320,7 @@ class Reduce: ParsableCommand {
     if verbose {
       printerr("Reduced from \(source.count) to \(reduced.count) characters in \(checks) iterations")
     }
-    print(reduced)
+    let reducedString = String(decoding: reduced, as: UTF8.self)
+    print(reducedString)
   }
 }

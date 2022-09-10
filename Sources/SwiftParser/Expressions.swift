@@ -1921,10 +1921,6 @@ extension Parser {
       } else {
         return nil
       }
-
-      guard self.at(.identifier) || self.at(.selfKeyword) else {
-        return nil
-      }
     }
     // Squash all tokens, if any, as the specifier of the captured item.
     return RawTokenListSyntax(elements: specifiers, arena: self.arena)

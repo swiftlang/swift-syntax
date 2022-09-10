@@ -58,6 +58,13 @@ final class TypeTests: XCTestCase {
                 diagnostics: [
                   DiagnosticSpec(message: "Unexpected text '`' in closure capture signature")
                 ])
+
+    AssertParse("{[weak#^DIAG^#^]in}",
+                { $0.parseClosureExpression() },
+                diagnostics: [
+                  DiagnosticSpec(message: "Expected '' in closure capture item"),
+                  DiagnosticSpec(message: "Unexpected text '^' in closure capture signature"),
+                ])
   }
 
   func testOpaqueReturnTypes() throws {

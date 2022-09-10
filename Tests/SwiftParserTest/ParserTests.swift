@@ -6,10 +6,12 @@ import SwiftParser
 public class ParserTests: XCTestCase {
   /// Run a single parse test.
   func runParseTest(fileURL: URL, checkDiagnostics: Bool) throws {
-    let fileContents = try String(contentsOf: fileURL)
-    let parsed = try Parser.parse(source: fileContents)
-    AssertStringsEqualWithDiff("\(parsed)", fileContents,
-                               additionalInfo: "Failed in file \(fileURL)")
+    let fileContents = try Data(contentsOf: fileURL)
+    let parsed = try fileContents.withUnsafeBytes({ buffer in
+      try Parser.parse(source: buffer.bindMemory(to: UInt8.self))
+    })
+    AssertDataEqualWithDiff(Data(parsed.syntaxTextBytes), fileContents,
+                            additionalInfo: "Failed in file \(fileURL)")
 
     if !checkDiagnostics {
       return
@@ -95,11 +97,6 @@ public class ParserTests: XCTestCase {
         // This test causes an assertion in the string literal lexer
         || fileURL.absoluteString.contains("string_literal_eof3.swift")
 
-        // These tests have invalid UTF-8 in the source files and are not
-        // properly checked.
-        || fileURL.absoluteString.contains("invalid-utf8.swift")
-        || fileURL.absoluteString.contains("utf16_bom.swift")
-
         // This test causes a round-trip failure that has yet to be diagnosed.
         || fileURL.absoluteString.contains("complete_in_closures.swift")
       }
@@ -119,10 +116,6 @@ public class ParserTests: XCTestCase {
       name: "Swift validation tests", path: testDir, checkDiagnostics: false,
       shouldExclude: { fileURL in
         false
-
-        // These tests have invalid UTF-8 and we should be able to handle them.
-        || fileURL.absoluteString.contains("033-swift-identifier-isoperatorslow.swift")
-        || fileURL.absoluteString.contains("28668-activediagnostic-already-have-an-active-diagnostic.swift")
 
         // Loop fails to make progress.
         || fileURL.absoluteString.contains("01701-swift-constraints-constraintsystem-getfixedtyperecursive.swift")

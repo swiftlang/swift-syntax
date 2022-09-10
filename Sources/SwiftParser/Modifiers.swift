@@ -159,7 +159,7 @@ extension Parser {
   mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
     let (unexpectedBeforeName, name) = expectAny(
       [.privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword],
-      default: .privateKeyword
+      default: .internalKeyword
     )
     let details: RawDeclModifierDetailSyntax?
     if let leftParen = consume(if: .leftParen) {

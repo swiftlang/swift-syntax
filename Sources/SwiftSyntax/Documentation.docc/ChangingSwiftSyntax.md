@@ -109,6 +109,57 @@ field. This is because it is defining a syntax collection with the type
 - Warning: Always remember to run `build-script.py` to regenerate files after
            you make changes to the syntax nodes.
 
+
+## Adding and Removing Attributes
+
+The file that defines all of the attributes respected by the Swift compiler 
+is available under the [gyb_syntax_support][gyb_syntax_support] directory
+in AttributedKinds.py. 
+
+### Type Attributes
+
+To define a new attribute that applies to types, add a new `TypeAttribute` to
+the `TYPE_ATTR_KINDS` list with the name of the attribute spelled without the
+leading '@' sign.
+
+```python
+TypeAttribute('_myAttribute'), # Becomes @_myAttribute in the compiler
+```
+
+### Declaration Attributes
+
+To define a new attribute that applies to declarations, add a new 
+`DeclAttribute` to the `DECL_ATTR_KINDS` list. Declaration attributes are
+richer than type attributes, and require a bit more metadata to define them.
+A `DeclAttribute` consists of the attribute's name, the name of the 
+corresponding C++ class, a series of metadata tags, and a stable serialization
+code.
+
+To add an attribute, identify an unused serialization code and place the
+attribute in the correct position in the `DECL_ATTR_KINDS` list. Then,
+fill out the corresponding metadata and tags. At a minimum, every attribute
+should come with ABI and API stability tags. But there are also tags that
+alter the behavior of the AST printer and the parser that may be desirable.
+
+The definition of the `_silgen_name` declaration attribute is reproduced below
+as it provides a good example of many of these tags:
+
+```python
+DeclAttribute('_silgen_name', 'SILGenName', # Spelled @_silgen_name, becomes SILGenNameAttr in C++
+              OnAbstractFunction, # Only applies to functions - parser will diagnose other usages automatically
+              LongAttribute,  UserInaccessible, # Attribute should be printed on its own line since it's long.
+              ABIStableToAdd,  ABIStableToRemove, APIStableToAdd,  APIStableToRemove, # Stability tags
+              code=0), # Serialization code
+```
+
+Once a new attribute has been added, you will need to regenerate SwiftSyntax to
+account for it. If the attribute includes a non-trivial set of arguments, 
+consider adding a dedicated syntax node for it as well. To use the new attribute
+with the Swift compiler, ensure that swift-syntax and swift are checked out
+alongside each other and invoke the appropriate build tool to rebuild the Swift
+compiler. The compiler's build system automatically detects changes to the 
+Attr.def.gyb gyb file and the python defined here. 
+
 ## Committing Changes
 
 When it is time to commit changes to the Swift Syntax repository, most cases

@@ -94,9 +94,6 @@ public class ParserTests: XCTestCase {
         || fileURL.absoluteString.contains("_overflow")
         || fileURL.absoluteString.contains("parser-cutoff.swift")
 
-        // This test causes an assertion in the string literal lexer
-        || fileURL.absoluteString.contains("string_literal_eof3.swift")
-
         // This test causes a round-trip failure that has yet to be diagnosed.
         || fileURL.absoluteString.contains("complete_in_closures.swift")
       }

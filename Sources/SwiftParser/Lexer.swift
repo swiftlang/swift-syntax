@@ -1028,6 +1028,7 @@ extension Lexer.Cursor {
         break DELIMITLOOP
       }
       if !self.isAtEndOfFile, self.peek() == UInt8(ascii: "\\") &&
+          !TmpPtr.isAtEndOfFile &&
            TmpPtr.delimiterMatches(customDelimiterLength) &&
             TmpPtr.peek() == UInt8(ascii: "(") {
         // Consume tokens until we hit the corresponding ')'.

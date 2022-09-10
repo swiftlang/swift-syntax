@@ -47,29 +47,11 @@ extension Parser {
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
       switch self.at(anyIn: DeclarationModifier.self) {
-      case (.privateKeyword, let handle)?,
-          (.fileprivateKeyword, let handle)?,
-          (.internalKeyword, let handle)?,
-          (.publicKeyword, let handle)?:
-        let name = self.eat(handle)
-        let details: RawDeclModifierDetailSyntax?
-        if let lparen = self.consume(if: .leftParen) {
-          let (unexpectedBeforeDetail, detail) = self.expectContextualKeyword("set")
-          let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-          details = RawDeclModifierDetailSyntax(
-            leftParen: lparen,
-            unexpectedBeforeDetail,
-            detail: detail,
-            unexpectedBeforeRParen,
-            rightParen: rparen,
-            arena: self.arena
-          )
-        } else {
-          details = nil
-        }
-
-        elements.append(RawDeclModifierSyntax(
-          name: name, detail: details, arena: self.arena))
+      case (.privateKeyword, _)?,
+          (.fileprivateKeyword, _)?,
+          (.internalKeyword, _)?,
+          (.publicKeyword, _)?:
+        elements.append(parseAccessLevelModifier())
       case (.staticKeyword, let handle)?:
         let staticKeyword = self.eat(handle)
         elements.append(RawDeclModifierSyntax(
@@ -175,45 +157,31 @@ extension Parser {
   }
 
   mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
-    assert(atAny([.privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword]))
-    let name = consumeAnyToken()
+    let (unexpectedBeforeName, name) = expectAny(
+      [.privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword],
+      default: .privateKeyword
+    )
     let details: RawDeclModifierDetailSyntax?
-    if let lparen = consume(if: .leftParen) {
-      var beforeDetail: [RawSyntax] = []
-      var detail: RawTokenSyntax? = nil
-      var afterDetail: [RawSyntax] = []
-
-      let (content, rightParen) = expect(.rightParen)
-      if let content = content {
-        for element in content.elements {
-          if let _ = detail {
-            afterDetail.append(element)
-          } else if var token = element.as(RawTokenSyntax.self),
-             token.isContextualKeyword("set")
-          {
-            token.tokenKind = .contextualKeyword
-            detail = token
-          } else {
-            beforeDetail.append(element)
-          }
-        }
+    if let leftParen = consume(if: .leftParen) {
+      let unexpectedBeforeDetail: RawUnexpectedNodesSyntax?
+      let detail: RawTokenSyntax
+      if let setHandle = canRecoverToContextualKeyword("set", precedence: .weakBracketClose) {
+        (unexpectedBeforeDetail, detail) = eat(setHandle)
+      } else {
+        unexpectedBeforeDetail = nil
+        detail = RawTokenSyntax(
+          missing: .contextualKeyword,
+          text: "set",
+          arena: arena
+        )
       }
+      let (unexpectedBeforeRightParen, rightParen) = expect(.rightParen)
 
       details = RawDeclModifierDetailSyntax(
-        leftParen: lparen,
-        beforeDetail.isEmpty ? nil :
-          RawUnexpectedNodesSyntax(
-            elements: beforeDetail, arena: arena
-          ),
-        detail: detail ?? RawTokenSyntax(
-          missing: .contextualKeyword,
-          text: arena.intern("set"),
-          arena: arena
-        ),
-        afterDetail.isEmpty ? nil :
-          RawUnexpectedNodesSyntax(
-            elements: afterDetail, arena: arena
-          ),
+        leftParen: leftParen,
+        unexpectedBeforeDetail,
+        detail: detail,
+        unexpectedBeforeRightParen,
         rightParen: rightParen,
         arena: arena
       )
@@ -221,7 +189,10 @@ extension Parser {
       details = nil
     }
     return RawDeclModifierSyntax(
-      name: name, detail: details, arena: arena
+      unexpectedBeforeName,
+      name: name,
+      detail: details,
+      arena: arena
     )
   }
 }

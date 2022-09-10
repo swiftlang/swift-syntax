@@ -83,19 +83,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
   }
 
   public var tokenKind: RawTokenKind {
-    get {
-      return tokenView.rawKind
-    }
-    set {
-      self = RawTokenSyntax(
-        kind: newValue,
-        text: tokenText,
-        leadingTriviaPieces: leadingTriviaPieces,
-        trailingTriviaPieces: trailingTriviaPieces,
-        presence: presence,
-        arena: raw.arena
-      )
-    }
+    return tokenView.rawKind
   }
 
   public var tokenText: SyntaxText {
@@ -183,15 +171,6 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
       presence: .missing,
       arena: arena
     )
-  }
-
-  public func isContextualKeyword(_ name: SyntaxText) -> Bool {
-    switch tokenKind {
-    case .identifier, .contextualKeyword:
-      return tokenText == name
-    default:
-      return false
-    }
   }
 }
 

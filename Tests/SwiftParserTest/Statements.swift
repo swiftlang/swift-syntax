@@ -20,6 +20,22 @@ final class StatementTests: XCTestCase {
                                                               rightBrace: .rightBraceToken()),
                                                   elseKeyword: nil, elseBody: nil)))
 
+    AssertParse("""
+                if let self = self {}
+                """,
+                substructure: Syntax(IfStmtSyntax(ifKeyword: .ifKeyword(),
+                                                  conditions: ConditionElementListSyntax([
+                                                    ConditionElementSyntax(condition: Syntax(OptionalBindingConditionSyntax(
+                                                      letOrVarKeyword: .letKeyword(),
+                                                      pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .selfKeyword())),
+                                                      typeAnnotation: nil,
+                                                      initializer: InitializerClauseSyntax(equal: .equalToken(), value: ExprSyntax(IdentifierExprSyntax(identifier: .selfKeyword(), declNameArguments: nil))))), trailingComma: nil)
+                                                  ]),
+                                                  body: .init(leftBrace: .leftBraceToken(),
+                                                              statements: .init([]),
+                                                              rightBrace: .rightBraceToken()),
+                                                  elseKeyword: nil, elseBody: nil)))
+
     AssertParse("if let x { }")
 
     AssertParse(

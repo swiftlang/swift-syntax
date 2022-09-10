@@ -689,10 +689,12 @@ extension Parser {
 
     let label: RawSyntax
     switch self.canRecoverTo(anyIn: SwitchCaseStart.self) {
-    case (.caseKeyword, _)?:
-      label = RawSyntax(self.parseSwitchCaseLabel())
-    case (.defaultKeyword, _)?, nil:
-      label = RawSyntax(self.parseSwitchDefaultLabel())
+    case (.caseKeyword, let handle)?:
+      label = RawSyntax(self.parseSwitchCaseLabel(handle))
+    case (.defaultKeyword, let handle)?:
+      label = RawSyntax(self.parseSwitchDefaultLabel(handle))
+    case nil:
+      label = RawSyntax(RawMissingSyntax(arena: self.arena))
     }
 
 
@@ -723,8 +725,10 @@ extension Parser {
   ///     case-label → attributes? case case-item-list ':'
   ///     case-item-list → pattern where-clause? | pattern where-clause? ',' case-item-list
   @_spi(RawSyntax)
-  public mutating func parseSwitchCaseLabel() -> RawSwitchCaseLabelSyntax {
-    let (unexpectedBeforeCaseKeyword, caseKeyword) = self.expect(.caseKeyword)
+  public mutating func parseSwitchCaseLabel(
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawSwitchCaseLabelSyntax {
+    let (unexpectedBeforeCaseKeyword, caseKeyword) = self.eat(handle)
     var caseItems = [RawCaseItemSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -754,8 +758,10 @@ extension Parser {
   ///
   ///     default-label → attributes? 'default' ':'
   @_spi(RawSyntax)
-  public mutating func parseSwitchDefaultLabel() -> RawSwitchDefaultLabelSyntax {
-    let (unexpectedBeforeDefaultKeyword, defaultKeyword) = self.expect(.defaultKeyword)
+  public mutating func parseSwitchDefaultLabel(
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawSwitchDefaultLabelSyntax {
+    let (unexpectedBeforeDefaultKeyword, defaultKeyword) = self.eat(handle)
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     return RawSwitchDefaultLabelSyntax(
       unexpectedBeforeDefaultKeyword,

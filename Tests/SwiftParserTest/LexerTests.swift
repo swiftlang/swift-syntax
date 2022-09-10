@@ -509,21 +509,39 @@ public class LexerTests: XCTestCase {
     ])
   }
 
-  func testBrokenType() {
-    var data =
-    """
-    () -> (\u{feff})
-    """
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(lexemes, [
-        lexeme(.leftParen, "("),
-        lexeme(.rightParen, ") ", trailing: 1),
-        lexeme(.arrow, "-> ", trailing: 1),
-        lexeme(.leftParen, "(\u{feff}", trailing: 3),
-        lexeme(.rightParen, ")"),
-        lexeme(.eof, ""),
-      ])
+  func testUnicodeReplcementsInStream() {
+    do {
+      var data =
+      """
+      () -> (\u{feff})
+      """
+      data.withUTF8 { buf in
+        let lexemes = Lexer.lex(buf)
+        AssertEqualTokens(lexemes, [
+          lexeme(.leftParen, "("),
+          lexeme(.rightParen, ") ", trailing: 1),
+          lexeme(.arrow, "-> ", trailing: 1),
+          lexeme(.leftParen, "(\u{feff}", trailing: 3),
+          lexeme(.rightParen, ")"),
+          lexeme(.eof, ""),
+        ])
+      }
+    }
+
+    do {
+      var data =
+      """
+      y\u{fffe} + z
+      """
+      data.withUTF8 { buf in
+        let lexemes = Lexer.lex(buf)
+        AssertEqualTokens(lexemes, [
+          lexeme(.identifier, "y\u{fffe} ", trailing: 4),
+          lexeme(.spacedBinaryOperator, "+ ", trailing: 1),
+          lexeme(.identifier, "z"),
+          lexeme(.eof, ""),
+        ])
+      }
     }
   }
 }

@@ -508,6 +508,24 @@ public class LexerTests: XCTestCase {
       lexeme(.eof, ""),
     ])
   }
+
+  func testBrokenType() {
+    var data =
+    """
+    () -> (\u{feff})
+    """
+    data.withUTF8 { buf in
+      let lexemes = Lexer.lex(buf)
+      AssertEqualTokens(lexemes, [
+        lexeme(.leftParen, "("),
+        lexeme(.rightParen, ") ", trailing: 1),
+        lexeme(.arrow, "-> ", trailing: 1),
+        lexeme(.leftParen, "(\u{feff}", trailing: 3),
+        lexeme(.rightParen, ")"),
+        lexeme(.eof, ""),
+      ])
+    }
+  }
 }
 
 extension Lexer {

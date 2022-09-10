@@ -13,6 +13,8 @@ final class TypeTests: XCTestCase {
       "@MainActor (a, b) async throws -> c",
       { $0.parseType() }
     )
+
+    AssertParse("() -> (\u{feff})")
   }
 
   func testGenericTypeWithTrivia() throws {

@@ -75,6 +75,12 @@ final class StatementTests: XCTestCase {
   }
 
   func testReturn() {
+    AssertParse("{ #^ASYNC^#return 0 }",
+                { $0.parseClosureExpression() },
+                substructure: Syntax(ReturnStmtSyntax(returnKeyword: .returnKeyword(),
+                                                      expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("0"))))),
+                substructureAfterMarker: "ASYNC")
+
     AssertParse("return")
 
     AssertParse(

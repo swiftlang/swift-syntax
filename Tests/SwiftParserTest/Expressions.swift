@@ -351,6 +351,13 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: #"Expected '#' in string literal"#)
       ]
     )
+
+    AssertParse(
+      ###"#^DIAG^#"\"###,
+      diagnostics: [
+        DiagnosticSpec(message: "Extraneous '\"\\' at top level")
+      ]
+    )
   }
 
   func testSingleQuoteStringLiteral() {

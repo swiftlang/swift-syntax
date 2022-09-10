@@ -22,6 +22,13 @@
 public struct RecoveryConsumptionHandle {
   var unexpectedTokens: Int
   var tokenConsumptionHandle: TokenConsumptionHandle
+
+  @_spi(RawSyntax)
+  public static func constant(_ token: RawTokenKind) -> RecoveryConsumptionHandle {
+    return RecoveryConsumptionHandle(
+      unexpectedTokens: 0,
+      tokenConsumptionHandle: TokenConsumptionHandle(tokenKind: token))
+  }
 }
 
 extension Parser.Lookahead {

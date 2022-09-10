@@ -829,7 +829,7 @@ extension Parser {
     // followed by a '}', '', statement or decl start keyword sequence.
     let expr: RawExprSyntax?
     if
-      self.at(any: [
+      !self.at(any: [
         RawTokenKind.rightBrace, .semicolon, .eof,
         .poundIfKeyword, .poundErrorKeyword, .poundWarningKeyword,
         .poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword

@@ -123,41 +123,40 @@ extension Parser {
       attributes: self.parseAttributeList(),
       modifiers: self.parseModifierList())
     switch self.canRecoverTo(anyIn: DeclarationStart.self) {
-    case (.importKeyword, _)?:
-      return RawDeclSyntax(self.parseImportDeclaration(attrs))
-    case (.classKeyword, _)?:
-      return RawDeclSyntax(self.parseClassDeclaration(attrs))
-    case (.enumKeyword, _)?:
-      return RawDeclSyntax(self.parseEnumDeclaration(attrs))
-    case (.caseKeyword, _)?:
-      return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs))
-    case (.structKeyword, _)?:
-      return RawDeclSyntax(self.parseStructDeclaration(attrs))
-    case (.protocolKeyword, _)?:
-      return RawDeclSyntax(self.parseProtocolDeclaration(attrs))
-    case (.associatedtypeKeyword, _)?:
-      return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs))
-    case (.typealiasKeyword, _)?:
-      return RawDeclSyntax(self.parseTypealiasDeclaration(attrs))
-    case (.extensionKeyword, _)?:
-      return RawDeclSyntax(self.parseExtensionDeclaration(attrs))
-    case (.funcKeyword, _)?:
-      return RawDeclSyntax(self.parseFuncDeclaration(attrs))
-    case (.subscriptKeyword, _)?:
-      return RawDeclSyntax(self.parseSubscriptDeclaration(attrs))
-    case (.letKeyword, _)?,
-      (.varKeyword, _)?:
-      return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs))
-    case (.initKeyword, _)?:
-      return RawDeclSyntax(self.parseInitializerDeclaration(attrs))
-    case (.deinitKeyword, _)?:
-      return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs))
-    case (.operatorKeyword, _)?:
-      return RawDeclSyntax(self.parseOperatorDeclaration(attrs))
-    case (.precedencegroupKeyword, _)?:
-      return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs))
-    case (.actorContextualKeyword, _)?:
-      return RawDeclSyntax(self.parseActorDeclaration(attrs))
+    case (.importKeyword, let handle)?:
+      return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
+    case (.classKeyword, let handle)?:
+      return RawDeclSyntax(self.parseClassDeclaration(attrs, handle))
+    case (.enumKeyword, let handle)?:
+      return RawDeclSyntax(self.parseEnumDeclaration(attrs, handle))
+    case (.caseKeyword, let handle)?:
+      return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
+    case (.structKeyword, let handle)?:
+      return RawDeclSyntax(self.parseStructDeclaration(attrs, handle))
+    case (.protocolKeyword, let handle)?:
+      return RawDeclSyntax(self.parseProtocolDeclaration(attrs, handle))
+    case (.associatedtypeKeyword, let handle)?:
+      return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
+    case (.typealiasKeyword, let handle)?:
+      return RawDeclSyntax(self.parseTypealiasDeclaration(attrs, handle))
+    case (.extensionKeyword, let handle)?:
+      return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle))
+    case (.funcKeyword, let handle)?:
+      return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
+    case (.subscriptKeyword, let handle)?:
+      return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
+    case (.letKeyword, let handle)?, (.varKeyword, let handle)?:
+      return RawDeclSyntax(self.parseLetOrVarDeclaration(attrs, handle))
+    case (.initKeyword, let handle)?:
+      return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
+    case (.deinitKeyword, let handle)?:
+      return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs, handle))
+    case (.operatorKeyword, let handle)?:
+      return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
+    case (.precedencegroupKeyword, let handle)?:
+      return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
+    case (.actorContextualKeyword, let handle)?:
+      return RawDeclSyntax(self.parseActorDeclaration(attrs, handle))
     case nil:
       return RawDeclSyntax(RawMissingDeclSyntax(
         attributes: attrs.attributes,
@@ -177,8 +176,11 @@ extension Parser {
   ///     import-kind → 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'let' | 'var' | 'func'
   ///     import-path → identifier | identifier '.' import-path
   @_spi(RawSyntax)
-  public mutating func parseImportDeclaration(_ attrs: DeclAttributes) -> RawImportDeclSyntax {
-    let (unexpectedBeforeImportKeyword, importKeyword) = self.expect(.importKeyword)
+  public mutating func parseImportDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawImportDeclSyntax {
+    let (unexpectedBeforeImportKeyword, importKeyword) = self.eat(handle)
     let kind = self.parseImportKind()
     let path = self.parseImportAccessPath()
     return RawImportDeclSyntax(
@@ -222,8 +224,11 @@ extension Parser {
   ///     extension-members → extension-member extension-members?
   ///     extension-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
-  public mutating func parseExtensionDeclaration(_ attrs: DeclAttributes) -> RawExtensionDeclSyntax {
-    let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.expect(.extensionKeyword)
+  public mutating func parseExtensionDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawExtensionDeclSyntax {
+    let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.eat(handle)
     let type = self.parseType()
 
     let inheritance: RawTypeInheritanceClauseSyntax?
@@ -529,8 +534,11 @@ extension Parser {
   ///     class-members → class-member class-members?
   ///     class-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
-  public mutating func parseClassDeclaration(_ attrs: DeclAttributes) -> RawClassDeclSyntax {
-    let (unexpectedBeforeClassKeyword, classKeyword) = self.expect(.classKeyword)
+  public mutating func parseClassDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawClassDeclSyntax {
+    let (unexpectedBeforeClassKeyword, classKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier()
     if unexpectedBeforeName == nil && name.isMissing {
       return RawClassDeclSyntax(
@@ -648,8 +656,11 @@ extension Parser {
   ///     raw-value-style-enum-members → raw-value-style-enum-member raw-value-style-enum-members?
   ///     raw-value-style-enum-member → declaration | raw-value-style-enum-case-clause | compiler-control-statement
   @_spi(RawSyntax)
-  public mutating func parseEnumDeclaration(_ attrs: DeclAttributes) -> RawEnumDeclSyntax {
-    let (unexpectedBeforeEnumKeyword, enumKeyword) = self.expect(.enumKeyword)
+  public mutating func parseEnumDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawEnumDeclSyntax {
+    let (unexpectedBeforeEnumKeyword, enumKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier()
     if unexpectedBeforeName == nil, name.isMissing {
       return RawEnumDeclSyntax(
@@ -722,8 +733,11 @@ extension Parser {
   ///     raw-value-assignment → = raw-value-literal
   ///     raw-value-literal → numeric-literal | static-string-literal | boolean-literal
   @_spi(RawSyntax)
-  public mutating func parseEnumCaseDeclaration(_ attrs: DeclAttributes) -> RawEnumCaseDeclSyntax {
-    let (unexpectedBeforeCaseKeyword, caseKeyword) = self.expect(.caseKeyword)
+  public mutating func parseEnumCaseDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawEnumCaseDeclSyntax {
+    let (unexpectedBeforeCaseKeyword, caseKeyword) = self.eat(handle)
     var elements = [RawEnumCaseElementSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -787,8 +801,11 @@ extension Parser {
   ///     struct-members → struct-member struct-members?
   ///     struct-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
-  public mutating func parseStructDeclaration(_ attrs: DeclAttributes) -> RawStructDeclSyntax {
-    let (unexpectedBeforeStructKeyword, structKeyword) = self.expect(.structKeyword)
+  public mutating func parseStructDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawStructDeclSyntax {
+    let (unexpectedBeforeStructKeyword, structKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier()
     if unexpectedBeforeName == nil && name.isMissing {
       return RawStructDeclSyntax(
@@ -894,8 +911,11 @@ extension Parser {
   ///     protocol-member-declaration → protocol-associated-type-declaration
   ///     protocol-member-declaration → typealias-declaration
   @_spi(RawSyntax)
-  public mutating func parseProtocolDeclaration(_ attrs: DeclAttributes) -> RawProtocolDeclSyntax {
-    let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.expect(.protocolKeyword)
+  public mutating func parseProtocolDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawProtocolDeclSyntax {
+    let (unexpectedBeforeProtocolKeyword, protocolKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier()
     if unexpectedBeforeName == nil && name.isMissing {
       return RawProtocolDeclSyntax(
@@ -965,8 +985,11 @@ extension Parser {
   ///
   ///     protocol-associated-type-declaration → attributes? access-level-modifier? 'associatedtype' typealias-name type-inheritance-clause? typealias-assignment? generic-where-clause?
   @_spi(RawSyntax)
-  public mutating func parseAssociatedTypeDeclaration(_ attrs: DeclAttributes) -> RawAssociatedtypeDeclSyntax {
-    let (unexpectedBeforeAssocKeyword, assocKeyword) = self.expect(.associatedtypeKeyword)
+  public mutating func parseAssociatedTypeDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawAssociatedtypeDeclSyntax {
+    let (unexpectedBeforeAssocKeyword, assocKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier()
     if unexpectedBeforeName == nil && name.isMissing {
       return RawAssociatedtypeDeclSyntax(
@@ -1036,8 +1059,11 @@ extension Parser {
   ///     actor-members → actor-member actor-members?
   ///     actor-member → declaration | compiler-control-statement
   @_spi(RawSyntax)
-  public mutating func parseActorDeclaration(_ attrs: DeclAttributes) -> RawActorDeclSyntax {
-    let (unexpectedBeforeActorKeyword, actorKeyword) = self.expectContextualKeyword("actor", precedence: .declKeyword)
+  public mutating func parseActorDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawActorDeclSyntax {
+    let (unexpectedBeforeActorKeyword, actorKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier()
 
     let generics: RawGenericParameterClauseSyntax?
@@ -1093,8 +1119,11 @@ extension Parser {
   ///     initializer-head → attributes? declaration-modifiers? 'init' '!'
   ///     initializer-body → code-block
   @_spi(RawSyntax)
-  public mutating func parseInitializerDeclaration(_ attrs: DeclAttributes) -> RawInitializerDeclSyntax {
-    let (unexpectedBeforeInitKeyword, initKeyword) = self.expect(.initKeyword)
+  public mutating func parseInitializerDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawInitializerDeclSyntax {
+    let (unexpectedBeforeInitKeyword, initKeyword) = self.eat(handle)
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
@@ -1145,8 +1174,11 @@ extension Parser {
   ///
   /// deinitializer-declaration → attributes? 'deinit' code-block
   @_spi(RawSyntax)
-  public mutating func parseDeinitializerDeclaration(_ attrs: DeclAttributes) -> RawDeinitializerDeclSyntax {
-    let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.expect(.deinitKeyword)
+  public mutating func parseDeinitializerDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawDeinitializerDeclSyntax {
+    let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(handle)
     let items = self.parseOptionalCodeBlock()
     return RawDeinitializerDeclSyntax(
       attributes: attrs.attributes,
@@ -1313,8 +1345,11 @@ extension Parser {
 
 extension Parser {
   @_spi(RawSyntax)
-  public mutating func parseFuncDeclaration(_ attrs: DeclAttributes) -> RawFunctionDeclSyntax {
-    let (unexpectedBeforeFuncKeyword, funcKeyword) = self.expect(.funcKeyword)
+  public mutating func parseFuncDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawFunctionDeclSyntax {
+    let (unexpectedBeforeFuncKeyword, funcKeyword) = self.eat(handle)
     let unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?
     let identifier: RawTokenSyntax
     if self.at(anyIn: Operator.self) != nil || self.at(any: [.exclamationMark, .prefixAmpersand]) {
@@ -1399,8 +1434,11 @@ extension Parser {
   ///     subscript-head → attributes? declaration-modifiers? 'subscript' generic-parameter-clause? parameter-clause
   ///     subscript-result → '->' attributes? type
   @_spi(RawSyntax)
-  public mutating func parseSubscriptDeclaration(_ attrs: DeclAttributes) -> RawSubscriptDeclSyntax {
-    let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.expect(.subscriptKeyword)
+  public mutating func parseSubscriptDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawSubscriptDeclSyntax {
+    let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.eat(handle)
     let genericParameterClause: RawGenericParameterClauseSyntax?
     if self.currentToken.starts(with: "<") {
       genericParameterClause = self.parseGenericParameters()
@@ -1462,8 +1500,11 @@ extension Parser {
   ///     pattern-initializer → pattern initializer?
   ///     initializer → = expression
   @_spi(RawSyntax)
-  public mutating func parseLetOrVarDeclaration(_ attrs: DeclAttributes) -> RawVariableDeclSyntax {
-    let (unexpectedBeforeIntroducer, introducer) = self.expectAny([.letKeyword, .varKeyword], default: .varKeyword)
+  public mutating func parseLetOrVarDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawVariableDeclSyntax {
+    let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
     
     var elements = [RawPatternBindingSyntax]()
     do {
@@ -1726,8 +1767,11 @@ extension Parser {
   ///     typealias-name → identifier
   ///     typealias-assignment → '=' type
   @_spi(RawSyntax)
-  public mutating func parseTypealiasDeclaration(_ attrs: DeclAttributes) -> RawTypealiasDeclSyntax {
-    let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.expect(.typealiasKeyword)
+  public mutating func parseTypealiasDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawTypealiasDeclSyntax {
+    let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier()
 
     // Parse a generic parameter list if it is present.
@@ -1782,8 +1826,11 @@ extension Parser {
   ///     infix-operator-declaration → 'infix' 'operator' operator infix-operator-group?
   ///     infix-operator-group → ':' precedence-group-name
   @_spi(RawSyntax)
-  public mutating func parseOperatorDeclaration(_ attrs: DeclAttributes) -> RawOperatorDeclSyntax {
-    let (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.expect(.operatorKeyword)
+  public mutating func parseOperatorDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawOperatorDeclSyntax {
+    let (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.eat(handle)
     let identifier = self.consumeAnyToken()
 
     // Parse (or diagnose) a specified precedence group and/or
@@ -1835,8 +1882,11 @@ extension Parser {
   ///     precedence-group-names → precedence-group-name | precedence-group-name ',' precedence-group-names
   ///     precedence-group-name → identifier
   @_spi(RawSyntax)
-  public mutating func parsePrecedenceGroupDeclaration(_ attrs: DeclAttributes) -> RawPrecedenceGroupDeclSyntax {
-    let (unexpectedBeforeGroup, group) = self.expect(.precedencegroupKeyword)
+  public mutating func parsePrecedenceGroupDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawPrecedenceGroupDeclSyntax {
+    let (unexpectedBeforeGroup, group) = self.eat(handle)
     let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     var elements = [RawSyntax]()

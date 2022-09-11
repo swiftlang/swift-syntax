@@ -137,6 +137,14 @@ final class DeclarationTests: XCTestCase {
       }
       """
     )
+
+    AssertParse(
+      "protocol P{#^DIAG_1^#{}case#^DIAG_2^#",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "DIAG_1", message: "Unexpected text '{}' before enum case"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '' in enum case"),
+        DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end protocol"),
+      ])
   }
 
   func testVariableDeclarations() {
@@ -769,8 +777,8 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testDeinitializers() {
-    AssertParse("deinit {}", { $0.parseDeinitializerDeclaration(.empty) })
-    AssertParse("deinit", { $0.parseDeinitializerDeclaration(.empty) })
+    AssertParse("deinit {}", { $0.parseDeinitializerDeclaration(.empty, .constant(.deinitKeyword)) })
+    AssertParse("deinit", { $0.parseDeinitializerDeclaration(.empty, .constant(.deinitKeyword)) })
   }
 
   func testAttributedMember() {

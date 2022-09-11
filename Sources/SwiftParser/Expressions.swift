@@ -856,12 +856,12 @@ extension Parser {
         poundDsohandle: tok,
         arena: self.arena
       ))
-    case (.identifier, _)?, (.selfKeyword, _)?:
+    case (.identifier, let handle)?, (.selfKeyword, let handle)?:
       // If we have "case let x." or "case let x(", we parse x as a normal
       // name, not a binding, because it is the start of an enum pattern or
       // call pattern.
       if inVarOrLet && !self.lookahead().isNextTokenCallPattern() {
-        let identifier = self.parseAnyIdentifier()
+        let identifier = self.eat(handle)
         let pattern = RawPatternSyntax(RawIdentifierPatternSyntax(
           identifier: identifier, arena: self.arena))
         return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))

@@ -23,7 +23,7 @@ final class AvailabilityTests: XCTestCase {
         public convenience init() {}
       }
       """,
-      { $0.parseClassDeclaration(.empty) }
+      { $0.parseClassDeclaration(.empty, .constant(.classKeyword)) }
     )
 
     AssertParse(

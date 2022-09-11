@@ -93,9 +93,6 @@ public class ParserTests: XCTestCase {
         // These tests overflow the parser.
         || fileURL.absoluteString.contains("_overflow")
         || fileURL.absoluteString.contains("parser-cutoff.swift")
-
-        // This test causes a round-trip failure that has yet to be diagnosed.
-        || fileURL.absoluteString.contains("complete_in_closures.swift")
       }
     )
   }
@@ -113,15 +110,6 @@ public class ParserTests: XCTestCase {
       name: "Swift validation tests", path: testDir, checkDiagnostics: false,
       shouldExclude: { fileURL in
         false
-
-        // Loop fails to make progress.
-        || fileURL.absoluteString.contains("01701-swift-constraints-constraintsystem-getfixedtyperecursive.swift")
-        || fileURL.absoluteString.contains("28328-swift-typebase-getdesugaredtype.swift")
-        || fileURL.absoluteString.contains("01899-swift-declcontext-lookupqualified.swift")
-        || fileURL.absoluteString.contains("28340-swift-type-getstring.swift")
-        || fileURL.absoluteString.contains("01480-swift-typebase-getcanonicaltype.swift")
-        || fileURL.absoluteString.contains("01480-swift-typebase-getcanonicaltype-edited.swift")
-        || fileURL.absoluteString.contains("sr8456.swift")
 
         // Crashes due to deep recursion in the parser.
         || fileURL.absoluteString.contains("swift-lexer-leximpl.swift")

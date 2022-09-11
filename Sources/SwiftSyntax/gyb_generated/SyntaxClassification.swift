@@ -67,6 +67,8 @@ extension SyntaxClassification {
       switch (parentKind, indexInParent) {
       case (.expressionSegment, 5):
         return (.stringInterpolationAnchor, true)
+      case (.expressionSegment, 9):
+        return (.stringInterpolationAnchor, true)
       case (.ifConfigClause, 1):
         return (.buildConfigId, false)
       case (.ifConfigDecl, 3):

@@ -581,7 +581,9 @@ EXPR_NODES = [
                    force_classification=True),
              Child('Expressions', kind='TupleExprElementList',
                    collection_element_name='Expression'),
-             Child('RightParen', kind='StringInterpolationAnchorToken'),
+             Child('RightParen', kind='StringInterpolationAnchorToken',
+                   classification='StringInterpolationAnchor',
+                   force_classification=True),
          ]),
 
     # e.g. "abc \(foo()) def"

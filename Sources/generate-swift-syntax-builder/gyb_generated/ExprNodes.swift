@@ -1015,7 +1015,9 @@ let EXPR_NODES: [Node] = [
                kind: "StringInterpolationAnchorToken",
                tokenChoices: [
                  "StringInterpolationAnchor"
-               ])
+               ],
+               classification: "StringInterpolationAnchor",
+               forceClassification: true)
        ]),
 
   Node(name: "StringLiteralExpr",

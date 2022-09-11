@@ -99,6 +99,8 @@ extension SyntaxClassification {
         return (.attribute, false)
       case (.customAttribute, 3):
         return (.attribute, false)
+      case (.backDeployVersionArgument, 1):
+        return (.keyword, false)
       default: return nil
       }
     }

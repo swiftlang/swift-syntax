@@ -631,7 +631,8 @@ let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "AvailabilityVersionRestriction",
-               kind: "AvailabilityVersionRestriction"),
+               kind: "AvailabilityVersionRestriction",
+               classification: "Keyword"),
          Child(name: "TrailingComma",
                kind: "CommaToken",
                description: "A trailing comma if the argument is followed by anotherargument",

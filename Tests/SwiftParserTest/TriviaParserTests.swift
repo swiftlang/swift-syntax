@@ -39,7 +39,9 @@ final class TriviaParserTests: XCTestCase {
         #!/bin/env swift
         """, position: .trailing),
       [
-        .unexpectedText("#!/bin/env swift"),
+        .unexpectedText("#!/bin/env"),
+        .spaces(1),
+        .unexpectedText("swift"),
       ])
 
     XCTAssertEqual(
@@ -151,16 +153,24 @@ final class TriviaParserTests: XCTestCase {
 
   }
 
-
   func testSyntaxLazyTrivia() throws {
     let source = """
       /* comment only */
 
       """
-    let sourceFileSyntax = try! Parser.parse(source: source)
+    let sourceFileSyntax = try Parser.parse(source: source)
     XCTAssertEqual(sourceFileSyntax.leadingTrivia, [
       .blockComment("/* comment only */"),
       .newlines(1)
     ])
+  }
+
+  func testUnexpectedSplitting() throws {
+    XCTAssertEqual(
+      TriviaParser.parseTrivia("\u{fffe} ", position: .trailing),
+      [
+        .unexpectedText("\u{fffe}"),
+        .spaces(1),
+      ])
   }
 }

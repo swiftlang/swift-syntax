@@ -109,7 +109,7 @@ public struct TriviaParser {
       // piece start.
       cursor.advance(while: { char in
         switch char {
-        case "\n", "\r", "\t", "\u{000B}", "\u{000C}", "/", "#", "<", ">":
+        case " ", "\n", "\r", "\t", "\u{000B}", "\u{000C}", "/", "#", "<", ">":
           return false
         default:
           return true

@@ -238,7 +238,11 @@ extension Parser {
       )
     }
     var lookahead = self.lookahead()
-    return lookahead.canRecoverTo([], contextualKeywords: [name])
+    return lookahead.canRecoverTo(
+        [],
+        contextualKeywords: [name],
+        recoveryPrecedence: precedence
+    )
   }
 
 

@@ -47,29 +47,11 @@ extension Parser {
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
       switch self.at(anyIn: DeclarationModifier.self) {
-      case (.privateKeyword, let handle)?,
-          (.fileprivateKeyword, let handle)?,
-          (.internalKeyword, let handle)?,
-          (.publicKeyword, let handle)?:
-        let name = self.eat(handle)
-        let details: RawDeclModifierDetailSyntax?
-        if let lparen = self.consume(if: .leftParen) {
-          let (unexpectedBeforeDetail, detail) = self.expectContextualKeyword("set")
-          let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-          details = RawDeclModifierDetailSyntax(
-            leftParen: lparen,
-            unexpectedBeforeDetail,
-            detail: detail,
-            unexpectedBeforeRParen,
-            rightParen: rparen,
-            arena: self.arena
-          )
-        } else {
-          details = nil
-        }
-
-        elements.append(RawDeclModifierSyntax(
-          name: name, detail: details, arena: self.arena))
+      case (.privateKeyword, _)?,
+          (.fileprivateKeyword, _)?,
+          (.internalKeyword, _)?,
+          (.publicKeyword, _)?:
+        elements.append(parseAccessLevelModifier())
       case (.staticKeyword, let handle)?:
         let staticKeyword = self.eat(handle)
         elements.append(RawDeclModifierSyntax(
@@ -171,6 +153,46 @@ extension Parser {
       name: keyword,
       detail: detail,
       arena: self.arena
+    )
+  }
+
+  mutating func parseAccessLevelModifier() -> RawDeclModifierSyntax {
+    let (unexpectedBeforeName, name) = expectAny(
+      [.privateKeyword, .fileprivateKeyword, .internalKeyword, .publicKeyword],
+      default: .internalKeyword
+    )
+    let details: RawDeclModifierDetailSyntax?
+    if let leftParen = consume(if: .leftParen) {
+      let unexpectedBeforeDetail: RawUnexpectedNodesSyntax?
+      let detail: RawTokenSyntax
+      if let setHandle = canRecoverToContextualKeyword("set", precedence: .weakBracketClose) {
+        (unexpectedBeforeDetail, detail) = eat(setHandle)
+      } else {
+        unexpectedBeforeDetail = nil
+        detail = RawTokenSyntax(
+          missing: .contextualKeyword,
+          text: "set",
+          arena: arena
+        )
+      }
+      let (unexpectedBeforeRightParen, rightParen) = expect(.rightParen)
+
+      details = RawDeclModifierDetailSyntax(
+        leftParen: leftParen,
+        unexpectedBeforeDetail,
+        detail: detail,
+        unexpectedBeforeRightParen,
+        rightParen: rightParen,
+        arena: arena
+      )
+    } else {
+      details = nil
+    }
+    return RawDeclModifierSyntax(
+      unexpectedBeforeName,
+      name: name,
+      detail: details,
+      arena: arena
     )
   }
 }

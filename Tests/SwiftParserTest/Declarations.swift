@@ -220,6 +220,96 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testAccessLevelModifier() {
+    AssertParse(
+      """
+      private(set) var a = 0
+      """
+    )
+
+    AssertParse(
+      """
+      private(#^DIAG^#get) var a = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Unexpected text 'get' in modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DIAG^#+
+        set
+      ) var a = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        // FIXME: It should print `+` as detail of text.
+        DiagnosticSpec(message: "Unexpected text in variable")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DIAG^#get, set) var a = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text 'get,' in modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DIAG^#get: set) var a = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Unexpected text 'get:' in modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      #^DIAG^#private(
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Extraneous 'private(' at top level")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DIAG^#var a = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^LEFT^#get, set#^RIGHT^#, didSet) var a = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "LEFT", message: "Unexpected text 'get,' in modifier"),
+        DiagnosticSpec(locationMarker: "RIGHT", message: "Unexpected text ', didSet' in modifier")
+      ]
+    )
+
+    AssertParse(
+      """
+      private(#^DIAG^#get, didSet var a = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "Expected 'set' in modifier"),
+        DiagnosticSpec(message: "Expected ')' to end modifier"),
+        DiagnosticSpec(message: "Unexpected text 'get, didSet' in variable")
+      ]
+    )
+  }
+
   func testTypealias() {
     AssertParse("typealias Foo = Int")
 

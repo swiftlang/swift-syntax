@@ -192,8 +192,8 @@ protocol Prot2 : Prot {}
 // CHECK: <kw>class</kw> <id>SubCls</id> : <type>MyCls</type>, <type>Prot</type> {}
 class SubCls : MyCls, Prot {}
 
-// CHECK: <kw>func</kw> <id>genFn</id><<id>T</id> : <type>Prot</type> <kw>where</kw> <type>T</type>.<type>Blarg</type> : <type>Prot2</type>>(<kw>_</kw>: <type>T</type>) -> <type>Int</type> {}{{$}}
-func genFn<T : Prot where T.Blarg : Prot2>(_: T) -> Int {}
+// CHECK: <kw>func</kw> <id>genFn</id><<id>T</id> : <type>Prot</type>>(<kw>_</kw>: <type>T</type>) -> <type>Int</type> <kw>where</kw> <type>T</type>.<type>Blarg</type> : <type>Prot2</type> {}{{$}}
+func genFn<T : Prot>(_: T) -> Int where T.Blarg : Prot2 {}
 
 func f(x: Int) -> Int {
   // CHECK: <str>"This is string </str>\<anchor>(</anchor><id>genFn</id>({(<id>a</id>:<type>Int</type> -> <type>Int</type>) <kw>in</kw> <id>a</id>})<anchor>)</anchor><str> interpolation"</str>

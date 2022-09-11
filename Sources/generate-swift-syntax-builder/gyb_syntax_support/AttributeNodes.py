@@ -469,7 +469,8 @@ ATTRIBUTE_NODES = [
          ''',
          children=[
              Child('AvailabilityVersionRestriction',
-                   kind='AvailabilityVersionRestriction'),
+                   kind='AvailabilityVersionRestriction',
+                   classification='Keyword'),
              Child('TrailingComma', kind='CommaToken', is_optional=True,
                    description='''
                    A trailing comma if the argument is followed by another

@@ -337,8 +337,8 @@ func foo() {
   if #available (OSX 10.10, iOS 8.01, *) {let _ = "iOS"}
 }
 
-// CHECK: <kw>func</kw> <id>test4</id>(<kw>inout</kw> <id>a</id>: <type>Int</type>) {{{$}}
-func test4(inout a: Int) {
+// CHECK: <kw>func</kw> <id>test4</id>(<id>a</id>: <kw>inout</kw> <type>Int</type>) {{{$}}
+func test4(a: inout Int) {
   // CHECK-OLD: <kw>if</kw> <kw>#available</kw> (<kw>OSX</kw> >= <float>10.10</float>, <kw>iOS</kw> >= <float>8.01</float>) {<kw>let</kw> OSX = <str>"iOS"</str>}}{{$}}
   // CHECK-NEW: <kw>if</kw> <kw>#available</kw> (OSX >= <float>10.10</float>, iOS >= <float>8.01</float>) {<kw>let</kw> OSX = <str>"iOS"</str>}}{{$}}
   if #available (OSX >= 10.10, iOS >= 8.01) {let OSX = "iOS"}}

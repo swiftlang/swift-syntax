@@ -221,6 +221,7 @@ extension SyntaxKind {
     case 139: self = .matchingPatternCondition
     case 140: self = .optionalBindingCondition
     case 251: self = .unavailabilityCondition
+    case 275: self = .hasSymbolCondition
     case 193: self = .conditionElementList
     case 84: self = .declarationStmt
     case 85: self = .throwStmt
@@ -402,6 +403,7 @@ extension RawTokenKind {
     case 76: self = .poundFileLiteralKeyword
     case 77: self = .poundImageLiteralKeyword
     case 75: self = .poundColorLiteralKeyword
+    case 125: self = .poundHasSymbolKeyword
     case 111: self = .integerLiteral
     case 112: self = .floatingLiteral
     case 113: self = .stringLiteral

@@ -1318,6 +1318,18 @@ extension TokenSyntax {
       presence: presence
     )
   }
+  public static func poundHasSymbolKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .poundHasSymbolKeyword,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
   public static func integerLiteral(
     _ text: String,
     leadingTrivia: Trivia = [],

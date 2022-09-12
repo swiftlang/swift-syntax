@@ -2061,6 +2061,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `UnavailabilityConditionSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnavailabilityConditionSyntax) {}
+  /// Visiting `HasSymbolConditionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: HasSymbolConditionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `HasSymbolConditionSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: HasSymbolConditionSyntax) {}
   /// Visiting `ConditionElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4992,6 +5002,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplHasSymbolConditionSyntax(_ data: SyntaxData) {
+      let node = HasSymbolConditionSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConditionElementListSyntax(_ data: SyntaxData) {
       let node = ConditionElementListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6108,6 +6129,8 @@ open class SyntaxVisitor {
       visitImplOptionalBindingConditionSyntax(data)
     case .unavailabilityCondition:
       visitImplUnavailabilityConditionSyntax(data)
+    case .hasSymbolCondition:
+      visitImplHasSymbolConditionSyntax(data)
     case .conditionElementList:
       visitImplConditionElementListSyntax(data)
     case .declarationStmt:

@@ -285,4 +285,5 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "UnresolvedAsExpr": 272,
   "PackExpansionType": 273,
   "OpaqueReturnTypeOfAttributeArguments": 274,
+  "HasSymbolCondition": 275,
 ]

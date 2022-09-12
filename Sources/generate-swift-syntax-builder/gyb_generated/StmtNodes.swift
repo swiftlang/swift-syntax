@@ -382,7 +382,9 @@ let STMT_NODES: [Node] = [
                  Child(name: "MatchingPattern",
                        kind: "MatchingPatternCondition"),
                  Child(name: "OptionalBinding",
-                       kind: "OptionalBindingCondition")
+                       kind: "OptionalBindingCondition"),
+                 Child(name: "HasSymbol",
+                       kind: "HasSymbolCondition")
                ]),
          Child(name: "TrailingComma",
                kind: "CommaToken",
@@ -471,6 +473,26 @@ let STMT_NODES: [Node] = [
          Child(name: "AvailabilitySpec",
                kind: "AvailabilitySpecList",
                collectionElementName: "AvailabilityArgument"),
+         Child(name: "RightParen",
+               kind: "RightParenToken",
+               tokenChoices: [
+                 "RightParen"
+               ])
+       ]),
+
+  Node(name: "HasSymbolCondition",
+       nameForDiagnostics: "'#_hasSymbol' condition",
+       kind: "Syntax",
+       children: [
+         Child(name: "HasSymbolKeyword",
+               kind: "HasSymbolToken"),
+         Child(name: "LeftParen",
+               kind: "LeftParenToken",
+               tokenChoices: [
+                 "LeftParen"
+               ]),
+         Child(name: "Expression",
+               kind: "Expr"),
          Child(name: "RightParen",
                kind: "RightParenToken",
                tokenChoices: [

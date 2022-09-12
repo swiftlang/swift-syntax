@@ -433,6 +433,8 @@ extension Syntax {
       return node
     case .unavailabilityCondition(let node):
       return node
+    case .hasSymbolCondition(let node):
+      return node
     case .conditionElementList(let node):
       return node
     case .declarationStmt(let node):
@@ -770,6 +772,7 @@ extension SyntaxKind {
     case .matchingPatternCondition: return MatchingPatternConditionSyntax.self
     case .optionalBindingCondition: return OptionalBindingConditionSyntax.self
     case .unavailabilityCondition: return UnavailabilityConditionSyntax.self
+    case .hasSymbolCondition: return HasSymbolConditionSyntax.self
     case .conditionElementList: return ConditionElementListSyntax.self
     case .declarationStmt: return DeclarationStmtSyntax.self
     case .throwStmt: return ThrowStmtSyntax.self

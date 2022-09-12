@@ -828,6 +828,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnavailabilityConditionSyntax) -> ResultType
+  /// Visiting `HasSymbolConditionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: HasSymbolConditionSyntax) -> ResultType
   /// Visiting `ConditionElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2303,6 +2307,12 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: UnavailabilityConditionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
+  /// Visiting `HasSymbolConditionSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: HasSymbolConditionSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
   /// Visiting `ConditionElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3091,6 +3101,8 @@ extension SyntaxTransformVisitor {
     case .optionalBindingCondition(let derived):
       return visit(derived)
     case .unavailabilityCondition(let derived):
+      return visit(derived)
+    case .hasSymbolCondition(let derived):
       return visit(derived)
     case .conditionElementList(let derived):
       return visit(derived)

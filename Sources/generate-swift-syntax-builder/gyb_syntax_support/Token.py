@@ -335,6 +335,9 @@ SYNTAX_TOKENS = [
                        description='color',
                        protocol='ExpressibleByColorLiteral'),
 
+    PoundConfig('PoundHasSymbol', '_hasSymbol', text='#_hasSymbol',
+                 serialization_code=125),
+
     Literal('IntegerLiteral', 'integer_literal',
             classification='IntegerLiteral', serialization_code=111),
     Literal('FloatingLiteral', 'floating_literal',

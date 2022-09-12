@@ -193,6 +193,7 @@ STMT_NODES = [
                              kind='MatchingPatternCondition'),
                        Child('OptionalBinding',
                              kind='OptionalBindingCondition'),
+                       Child('HasSymbol', kind='HasSymbolCondition'),
                    ]),
              Child('TrailingComma', kind='CommaToken',
                    is_optional=True),
@@ -242,6 +243,16 @@ STMT_NODES = [
              Child('RightParen', kind='RightParenToken'),
          ]),
 
+    # has-symbol-condition -> '#_hasSymbol' '(' expression ')'
+    Node('HasSymbolCondition', name_for_diagnostics="'#_hasSymbol' condition",
+         kind='Syntax',
+         children=[
+             Child('HasSymbolKeyword', kind='HasSymbolToken'),
+             Child('LeftParen', kind='LeftParenToken'),
+             Child('Expression', kind='Expr'),
+             Child('RightParen', kind='RightParenToken'),
+         ]),
+          
     # condition-list -> condition
     #                 | condition ','? condition-list
     Node('ConditionElementList', name_for_diagnostics=None, kind='SyntaxCollection',

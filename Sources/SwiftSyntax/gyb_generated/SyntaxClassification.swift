@@ -328,6 +328,8 @@ extension RawTokenKind {
       return .objectLiteral
     case .poundColorLiteralKeyword:
       return .objectLiteral
+    case .poundHasSymbolKeyword:
+      return .keyword
     case .integerLiteral:
       return .integerLiteral
     case .floatingLiteral:

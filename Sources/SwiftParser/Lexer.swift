@@ -237,7 +237,7 @@ extension Lexer.Cursor {
     }
 
     switch self.peek() {
-    case UInt8(ascii: " "), UInt8(ascii: #"""#), UInt8(ascii: "\n"), UInt8(ascii: "\t"), // whitespace
+    case UInt8(ascii: " "), UInt8(ascii: "\r"), UInt8(ascii: "\n"), UInt8(ascii: "\t"), // whitespace
       UInt8(ascii: ")"), UInt8(ascii: "]"), UInt8(ascii: "}"),              // closing delimiters
       UInt8(ascii: ","), UInt8(ascii: ";"), UInt8(ascii: ":"):              // expression separators
       return false
@@ -1617,7 +1617,7 @@ extension Lexer.Cursor {
 //      }
     } while self.advance(if: { $0.isOperatorContinuationCodePoint })
 
-    if (self.input.baseAddress!-TokStart.input.baseAddress! > 2) {
+    if self.input.baseAddress!-TokStart.input.baseAddress! > 2 {
       // If there is a "//" or "/*" in the middle of an identifier token,
       // it starts a comment.
       var Ptr = TokStart
@@ -1638,8 +1638,8 @@ extension Lexer.Cursor {
     let rightBound = self.isRightBound(leftBound)
 
     // Match various reserved words.
-    if (self.input.baseAddress! - TokStart.input.baseAddress! == 1) {
-      switch (TokStart.peek()) {
+    if self.input.baseAddress! - TokStart.input.baseAddress! == 1 {
+      switch TokStart.peek() {
       case UInt8(ascii: "="):
         // Refrain from emitting this message in operator name position.
 //        if (NextToken.isNot(tok::kw_operator) && leftBound != rightBound) {
@@ -1652,7 +1652,7 @@ extension Lexer.Cursor {
         // always emit 'tok::equal' to avoid trickle down parse errors
         return .equal
       case UInt8(ascii: "&"):
-        if (leftBound == rightBound || leftBound) {
+        if leftBound == rightBound || leftBound {
           break
         }
         return .prefixAmpersand
@@ -1661,7 +1661,7 @@ extension Lexer.Cursor {
           return .period
         }
 
-        if (rightBound) {
+        if rightBound {
           return .prefixPeriod
         }
 

@@ -544,6 +544,22 @@ public class LexerTests: XCTestCase {
       }
     }
   }
+
+  func testOperators() {
+    var data =
+    """
+    myString==""
+    """
+    data.withUTF8 { buf in
+      let lexemes = Lexer.lex(buf)
+      AssertEqualTokens(lexemes, [
+        lexeme(.identifier, "myString"),
+        lexeme(.unspacedBinaryOperator, "=="),
+        lexeme(.stringLiteral, #""""#),
+        lexeme(.eof, ""),
+      ])
+    }
+  }
 }
 
 extension Lexer {

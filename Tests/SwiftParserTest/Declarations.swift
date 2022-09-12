@@ -148,6 +148,15 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testVariableDeclarations() {
+    AssertParse(
+      """
+      async let a = fetch("1.jpg")
+      async let b: Image = fetch("2.jpg")
+      async let secondPhotoToFetch = fetch("3.jpg")
+      async let theVeryLastPhotoWeWant = fetch("4.jpg")
+      """
+    )
+
     AssertParse("private unowned(unsafe) var foo: Int")
 
     AssertParse("_ = foo?.description")
@@ -185,15 +194,6 @@ final class DeclarationTests: XCTestCase {
           yield &someLongVariable
         }
       }
-      """
-    )
-
-    AssertParse(
-      """
-      async let a = fetch("1.jpg")
-      async let b: Image = fetch("2.jpg")
-      async let secondPhotoToFetch = fetch("3.jpg")
-      async let theVeryLastPhotoWeWant = fetch("4.jpg")
       """
     )
     
@@ -953,24 +953,6 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testBogusTypeDeclName() {
-    AssertParse("struct #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start struct"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end struct")
-                ])
-    AssertParse("class #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start class"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end class")
-                ])
-    AssertParse("enum #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start enum"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end enum")
-                ])
     AssertParse("actor #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),

@@ -74,7 +74,6 @@ extension Parser {
         (._const, _)?,
         (._local, _)?,
         (.__setter_access, _)?,
-        (.actor, _)?,
         (.reasync, _)?:
         elements.append(self.parseSimpleModifier())
       case (.rethrows, _)?:

@@ -40,7 +40,6 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
   case unowned = "unowned"
   case `rethrows` = "rethrows"
   case indirect = "indirect"
-  case actor = "actor"
   case isolated = "isolated"
   case async = "async"
   case reasync = "reasync"
@@ -76,7 +75,6 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
     case .unowned: return .identifier
     case .`rethrows`: return .identifier
     case .indirect: return .identifier
-    case .actor: return .identifier
     case .isolated: return .identifier
     case .async: return .identifier
     case .reasync: return .identifier
@@ -108,7 +106,6 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
     case .unowned: return "unowned"
     case .`rethrows`: return "rethrows"
     case .indirect: return "indirect"
-    case .actor: return "actor"
     case .isolated: return "isolated"
     case .async: return "async"
     case .reasync: return "reasync"

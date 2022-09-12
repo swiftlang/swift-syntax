@@ -819,17 +819,10 @@ DECL_MODIFIER_KINDS = [
                         code=57,
                         swift_name='`rethrows`'),
                         
-    # TODO: Remove this once we don't need to support 'actor' as a modifier
     ContextualSimpleDeclAttribute('indirect', 'Indirect',  DeclModifier,
-                              OnEnum,  OnEnumElement,
-                              ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
-                              code=60),
-
-    ContextualSimpleDeclAttribute('actor', 'Actor',
-                                  DeclModifier,  OnClass,  ConcurrencyOnly,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,
-                                  APIBreakingToAdd,  APIBreakingToRemove,
-                                  code=102),
+                                  OnEnum,  OnEnumElement,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=60),
 
     ContextualSimpleDeclAttribute('isolated', 'Isolated',
                                   DeclModifier,  OnParam,
@@ -874,3 +867,20 @@ DECL_MODIFIER_KINDS = [
                                   code=130),
 ]
 
+DEPRECATED_MODIFIER_KINDS = [
+    # TODO: Remove this once we don't need to support 'actor' as a modifier
+    ContextualSimpleDeclAttribute('actor', 'Actor',
+                                  DeclModifier,  OnClass,  ConcurrencyOnly,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,
+                                  APIBreakingToAdd,  APIBreakingToRemove,
+                                  code=102),
+]
+
+def verify_attribute_serialization_codes(nodes):
+    # Verify that no serialization code is used twice
+    used_codes = set()
+    for node in nodes:
+        if isinstance(node, DeclAttribute):
+            if node.code in used_codes:
+                error("Serialization code %d used twice" % node.code)
+            used_codes.add(node.code)

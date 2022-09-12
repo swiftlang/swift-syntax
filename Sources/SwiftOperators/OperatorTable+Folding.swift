@@ -94,6 +94,34 @@ extension OperatorTable {
   public static func makeBinaryOperationExpr(
     lhs: ExprSyntax, op: ExprSyntax, rhs: ExprSyntax
   ) -> ExprSyntax {
+    // If the left-hand side is a "try" or "await", hoist it up to encompass
+    // the right-hand side as well.
+    if let tryExpr = lhs.as(TryExprSyntax.self) {
+      return ExprSyntax(
+        TryExprSyntax(
+          tryExpr.unexpectedBeforeTryKeyword,
+          tryKeyword: tryExpr.tryKeyword,
+          tryExpr.unexpectedBetweenTryKeywordAndQuestionOrExclamationMark,
+          questionOrExclamationMark: tryExpr.questionOrExclamationMark,
+          tryExpr.unexpectedBetweenQuestionOrExclamationMarkAndExpression,
+          expression: makeBinaryOperationExpr(
+            lhs: tryExpr.expression, op: op, rhs: rhs)
+        )
+      )
+    }
+
+    if let awaitExpr = lhs.as(AwaitExprSyntax.self) {
+      return ExprSyntax(
+        AwaitExprSyntax(
+          awaitExpr.unexpectedBeforeAwaitKeyword,
+          awaitKeyword: awaitExpr.awaitKeyword,
+          awaitExpr.unexpectedBetweenAwaitKeywordAndExpression,
+          expression: makeBinaryOperationExpr(
+            lhs: awaitExpr.expression, op: op, rhs: rhs)
+        )
+      )
+    }
+
     // The form of the binary operation depends on the operator itself,
     // which will be one of the unresolved infix operators.
 

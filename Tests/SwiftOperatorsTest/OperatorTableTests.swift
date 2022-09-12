@@ -381,4 +381,11 @@ public class OperatorPrecedenceTests: XCTestCase {
       "b + c ? y : z ? z2 : z3",
       "((b + c) ? y : (z ? z2 : z3))")
   }
+
+  func testTryAwait() throws {
+    let opPrecedence = OperatorTable.standardOperators
+    try opPrecedence.assertExpectedFold("try x + y", "try (x + y)")
+    try opPrecedence.assertExpectedFold(
+      "await x + y + z", "await ((x + y) + z)")
+  }
 }

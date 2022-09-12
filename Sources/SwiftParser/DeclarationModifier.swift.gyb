@@ -4,7 +4,7 @@
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
-//// Automatically Generated From DeclarationAttribute.swift.gyb.
+//// Automatically Generated From DeclarationModifier.swift.gyb.
 //// Do Not Edit Directly!
 //===----------------------------------------------------------------------===//
 //
@@ -20,10 +20,31 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-extension Parser {
-  enum DeclarationAttribute: SyntaxText, ContextualKeywords {
-% for attr in DECL_ATTR_KINDS:
-    case ${attr.swift_name} = "${attr.name}"
+enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
+% for attr in DECL_MODIFIER_KINDS:
+  case ${attr.swift_name} = "${attr.name}"
 % end
+
+  var rawTokenKind: RawTokenKind {
+    switch self {
+% for attr in DECL_MODIFIER_KINDS:
+%   if attr.swift_name.endswith('Keyword'):
+    case .${attr.swift_name}: return .${attr.swift_name}
+%   else:
+    case .${attr.swift_name}: return .identifier
+%   end
+% end
+    }
+  }
+
+  var contextualKeyword: SyntaxText? {
+    switch self {
+% for attr in DECL_MODIFIER_KINDS:
+%   if not attr.swift_name.endswith('Keyword'):
+    case .${attr.swift_name}: return "${attr.name}"
+%   end
+% end
+    default: return nil
+    }
   }
 }

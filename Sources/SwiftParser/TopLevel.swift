@@ -125,7 +125,7 @@ extension Parser {
     return .init(item: item, semicolon: semi, errorTokens: nil, arena: self.arena)
   }
 
-  /// `isAtTopLevel` determins whether this is trying to parse an item that's at
+  /// `isAtTopLevel` determines whether this is trying to parse an item that's at
   /// the top level of the source file. If this is the case, we allow skipping
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the

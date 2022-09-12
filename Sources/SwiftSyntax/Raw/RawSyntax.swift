@@ -441,7 +441,7 @@ extension RawSyntax {
   ///   - wholeText: Whole text of this token including trailing/leading trivia.
   ///   - textRange: Range of the token text in `wholeText`.
   ///   - presence: Whether the token appeared in the source code or if it was synthesized.
-  ///   - arena: SyntaxArea to the result node data resides.
+  ///   - arena: SyntaxArena to the result node data resides.
   internal static func parsedToken(
     kind: RawTokenKind,
     wholeText: SyntaxText,
@@ -473,7 +473,7 @@ extension RawSyntax {
   ///   - numLeadingTrivia: Number of leading trivia pieces in `triviaPieces`.
   ///   - byteLength: Byte length of this token including trivia.
   ///   - presence: Whether the token appeared in the source code or if it was synthesized.
-  ///   - arena: SyntaxArea to the result node data resides.
+  ///   - arena: SyntaxArena to the result node data resides.
   internal static func materializedToken(
     kind: RawTokenKind,
     text: SyntaxText,
@@ -502,7 +502,7 @@ extension RawSyntax {
   ///   - leadingTriviaPieceCount: Number of leading trivia pieces.
   ///   - trailingTriviaPieceCount: Number of trailing trivia pieces.
   ///   - presence: Whether the token appeared in the source code or if it was synthesized.
-  ///   - arena: SyntaxArea to the result node data resides.
+  ///   - arena: SyntaxArena to the result node data resides.
   ///   - initializingLeadingTriviaWith: A closure that initializes leading trivia pieces.
   ///   - initializingTrailingTriviaWith: A closure that initializes trailing trivia pieces.
   public static func makeMaterializedToken(
@@ -535,7 +535,7 @@ extension RawSyntax {
   /// Factory method to create a materialized token node.
   ///
   /// - Parameters:
-  ///   - arena: SyntaxArea to the result node data resides.
+  ///   - arena: SyntaxArena to the result node data resides.
   ///   - kind: Token kind.
   ///   - text: Token text.
   ///   - leadingTrivia: Leading trivia.
@@ -597,7 +597,7 @@ extension RawSyntax {
   /// `makeEmptyLayout(arena:kind:)` instead.
   ///
   /// - Parameters:
-  ///   - arena: SyntaxArea to the result node data resides.
+  ///   - arena: SyntaxArena to the result node data resides.
   ///   - kind: Syntax kind. This should not be `.token`.
   ///   - layout: Layout buffer of the children.
   ///   - byteLength: Computed total byte length of this node.
@@ -620,7 +620,7 @@ extension RawSyntax {
   /// Factory method to create a layout node.
   ///
   /// - Parameters:
-  ///   - arena: SyntaxArea to the result node data resides.
+  ///   - arena: SyntaxArena to the result node data resides.
   ///   - kind: Syntax kind.
   ///   - count: Number of children.
   ///   - initializer: A closure that initializes elements.

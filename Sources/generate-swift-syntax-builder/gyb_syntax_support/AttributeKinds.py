@@ -597,7 +597,7 @@ DECL_ATTR_KINDS = [
                         OnFunc,  OnParam,  OnVar,  OnNominalType,
                         code=117),
 
-    SimpleDeclAttribute('_lexical', 'Lexical',
+    SimpleDeclAttribute('_noEagerMove', 'NoEagerMove',
                         UserInaccessible,
                         ABIStableToAdd,  ABIStableToRemove,
                         APIStableToAdd,  APIStableToRemove,
@@ -685,6 +685,11 @@ DECL_ATTR_KINDS = [
                   OnAnyDecl, UserInaccessible,
                   APIBreakingToAdd, APIStableToRemove, ABIStableToAdd, ABIStableToRemove,
                   code=136),
+
+    SimpleDeclAttribute('typeWrapperIgnored', 'TypeWrapperIgnored',
+                        OnVar,
+                        ABIStableToAdd, ABIStableToRemove, APIStableToAdd, APIStableToRemove,
+                        code=137),
 ]
 
 # Schema for declaration modifiers:

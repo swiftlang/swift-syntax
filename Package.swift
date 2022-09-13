@@ -112,7 +112,10 @@ let package = Package(
       exclude: [
         "CMakeLists.txt",
         "README.md",
-        "SwiftParserCompilerSupport.h"
+        "SwiftParserCompilerSupport.h",
+        "TypeAttribute.swift.gyb",
+        "DeclarationModifier.swift.gyb",
+        "DeclarationAttribute.swift.gyb",
       ]
     ),
     .executableTarget(

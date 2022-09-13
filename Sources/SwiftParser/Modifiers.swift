@@ -13,34 +13,6 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  enum DeclModifier: SyntaxText, ContextualKeywords {
-    case unowned = "unowned"
-
-    case final = "final"
-    case required = "required"
-    case optional = "optional"
-    case lazy = "lazy"
-    case dynamic = "dynamic"
-    case infix = "infix"
-    case prefix = "prefix"
-    case postfix = "postfix"
-    case compilerInitialized = "_compilerInitialized"
-    case consuming = "__consuming"
-    case mutating = "mutating"
-    case nonmutating = "nonmutating"
-    case convenience = "convenience"
-    case override = "override"
-    case open = "open"
-    case weak = "weak"
-    case indirect = "indirect"
-    case isolated = "isolated"
-    case async = "async"
-    case nonisolated = "nonisolated"
-    case distributed = "distributed"
-    case const = "_const"
-    case local = "_local"
-  }
-
   @_spi(RawSyntax)
   public mutating func parseModifierList() -> RawModifierListSyntax? {
     var elements = [RawDeclModifierSyntax]()
@@ -87,8 +59,7 @@ extension Parser {
         (.infix, _)?,
         (.prefix, _)?,
         (.postfix, _)?,
-        (.compilerInitialized, _)?,
-        (.consuming, _)?,
+        (.__consuming, _)?,
         (.mutating, _)?,
         (.nonmutating, _)?,
         (.convenience, _)?,
@@ -100,11 +71,14 @@ extension Parser {
         (.async, _)?,
         (.nonisolated, _)?,
         (.distributed, _)?,
-        (.const, _)?,
-        (.local, _)?:
+        (._const, _)?,
+        (._local, _)?,
+        (.__setter_access, _)?,
+        (.reasync, _)?:
         elements.append(self.parseSimpleModifier())
-
-      default:
+      case (.rethrows, _)?:
+        fallthrough
+      case nil:
         break MODIFIER_LOOP
       }
     }

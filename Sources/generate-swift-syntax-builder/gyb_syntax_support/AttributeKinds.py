@@ -1,5 +1,6 @@
 from .Child import Child
 from .Node import Node  # noqa: I201
+from .Utils import error
 
 class Attribute(object):
     def __init__(self, name, swift_name=None):
@@ -30,13 +31,17 @@ class ContextualSimpleDeclAttribute(SimpleDeclAttribute):
         super().__init__(name, class_name, *options, code=code)
 
 class DeclAttributeAlias(Attribute):
-    def __init__(self, name, class_name):
-        super().__init__(name, '`' + name + '`')
+    def __init__(self, name, class_name, swift_name=None):
+        super().__init__(name, swift_name)
         self.class_name = class_name
 
 class ContextualDeclAttributeAlias(DeclAttributeAlias):
-    def __init__(self, name, class_name):
-        super().__init__(name, class_name)
+    def __init__(self, name, class_name, swift_name=None):
+        super().__init__(name, class_name, swift_name)
+
+class BuiltinDeclModifier(Attribute):
+    def __init__(self, name, swift_name=None):
+        super().__init__(name, swift_name)
 
 # Abstract class aggregations for use in Attr.def.
 OnValue = 'OnValue'
@@ -131,7 +136,6 @@ TYPE_ATTR_KINDS = [
     TypeAttribute('unchecked'),
     TypeAttribute('_typeSequence'),
     TypeAttribute('_local'),
-    TypeAttribute('tuple'),
 
     # Generated interface attributes
     TypeAttribute('_opaqueReturnTypeOf'),
@@ -144,7 +148,6 @@ TYPE_ATTR_KINDS = [
 # - Options for the attribute, including:
 #    * the declarations the attribute can appear on
 #    * whether duplicates are allowed
-#    * whether the attribute is considered a decl modifier or not (no '@')
 # - Unique attribute identifier used for serialization. This
 #   can never be changed.
 #
@@ -157,6 +160,9 @@ TYPE_ATTR_KINDS = [
 # - Please place the unique code number on the last line.
 # - Please sort attributes by serialization number.
 # - Please create a "NOTE" comment if a unique number is skipped.
+#
+# If you're adding a new kind of "attribute" that is spelled without a leading
+# '@' symbol, add an entry to the `DECL_MODIFIER_KINDS` array instead.
 #
 # If you're adding a new underscored attribute here, please document it in
 # docs/ReferenceGuides/UnderscoredAttributes.md.
@@ -171,26 +177,11 @@ DECL_ATTR_KINDS = [
                   OnExtension,  AllowMultipleAttributes,  LongAttribute,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=1),
-    ContextualSimpleDeclAttribute('final', 'Final',
-                                  OnClass,  OnFunc,  OnAccessor,  OnVar,  OnSubscript,
-                                  DeclModifier,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=2),
     DeclAttribute('objc', 'ObjC',
                   OnAbstractFunction,  OnClass,  OnProtocol,  OnExtension,  OnVar,
                   OnSubscript,  OnEnum,  OnEnumElement,
                   ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=3),
-    ContextualSimpleDeclAttribute('required', 'Required',
-                                  OnConstructor,
-                                  DeclModifier,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=4),
-    ContextualSimpleDeclAttribute('optional', 'Optional',
-                                  OnConstructor,  OnFunc,  OnAccessor,  OnVar,  OnSubscript,
-                                  DeclModifier,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=5),
     SimpleDeclAttribute('dynamicCallable', 'DynamicCallable',
                         OnNominalType,
                         ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
@@ -232,10 +223,6 @@ DECL_ATTR_KINDS = [
                         OnVar,  OnFunc,  OnAccessor,
                         ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                         code=15),
-    ContextualSimpleDeclAttribute('lazy', 'Lazy',  DeclModifier,
-                                  OnVar,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=16),
     SimpleDeclAttribute('LLDBDebuggerFunction', 'LLDBDebuggerFunction',
                         OnFunc,
                         UserInaccessible,
@@ -259,26 +246,6 @@ DECL_ATTR_KINDS = [
                   AllowMultipleAttributes,  UserInaccessible,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=21),
-    ContextualSimpleDeclAttribute('dynamic', 'Dynamic',
-                                  OnFunc,  OnAccessor,  OnVar,  OnSubscript,  OnConstructor,
-                                  DeclModifier,  ABIBreakingToAdd,  ABIBreakingToRemove,
-                                  APIStableToAdd,  APIStableToRemove,
-                                  code=22),
-    ContextualSimpleDeclAttribute('infix', 'Infix',
-                                  OnFunc,  OnOperator,
-                                  DeclModifier,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=23),
-    ContextualSimpleDeclAttribute('prefix', 'Prefix',
-                                  OnFunc,  OnOperator,
-                                  DeclModifier,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=24),
-    ContextualSimpleDeclAttribute('postfix', 'Postfix',
-                                  OnFunc,  OnOperator,
-                                  DeclModifier,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=25),
     SimpleDeclAttribute('_transparent', 'Transparent',
                         OnFunc,  OnAccessor,  OnConstructor,  OnVar,  UserInaccessible,
                         ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
@@ -314,74 +281,18 @@ DECL_ATTR_KINDS = [
                                   UserInaccessible,
                                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                                   code=35),
-    ContextualSimpleDeclAttribute('__consuming', 'Consuming',
-                                  OnFunc,  OnAccessor,
-                                  DeclModifier,
-                                  UserInaccessible,
-                                  NotSerialized,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=40),
-    ContextualSimpleDeclAttribute('mutating', 'Mutating',
-                                  OnFunc,  OnAccessor,
-                                  DeclModifier,
-                                  NotSerialized,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=41),
-    ContextualSimpleDeclAttribute('nonmutating', 'NonMutating',
-                                  OnFunc,  OnAccessor,
-                                  DeclModifier,
-                                  NotSerialized,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=42),
-    ContextualSimpleDeclAttribute('convenience', 'Convenience',
-                                  OnConstructor,
-                                  DeclModifier,
-                                  NotSerialized,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=43),
-    ContextualSimpleDeclAttribute('override', 'Override',
-                                  OnFunc,  OnAccessor,  OnVar,  OnSubscript,  OnConstructor,  OnAssociatedType,
-                                  DeclModifier,
-                                  NotSerialized,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=44),
     SimpleDeclAttribute('_hasStorage', 'HasStorage',
                         OnVar,
                         UserInaccessible,
                         NotSerialized,
                         ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                         code=45),
-    DeclAttribute('private', 'AccessControl',
-                  OnFunc,  OnAccessor,  OnExtension,  OnGenericType,  OnVar,  OnSubscript,
-                  OnConstructor,
-                  DeclModifier,
-                  NotSerialized,
-                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                  swift_name='`private`',
-                  code=46),
-    DeclAttributeAlias('fileprivate', 'AccessControl'),
-    DeclAttributeAlias('internal', 'AccessControl'),
-    DeclAttributeAlias('public', 'AccessControl'),
-    ContextualDeclAttributeAlias('open', 'AccessControl'),
-    DeclAttribute('__setter_access', 'SetterAccess',
-                  OnVar,  OnSubscript,
-                  DeclModifier,  RejectByParser,
-                  NotSerialized,
-                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                  code=47),
     DeclAttribute('__raw_doc_comment', 'RawDocComment',
                   OnAnyDecl,
                   RejectByParser,
                   NotSerialized,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=48),
-    ContextualDeclAttribute('weak', 'ReferenceOwnership',
-                            OnVar,
-                            DeclModifier,
-                            NotSerialized,
-                            ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
-                            code=49),
-    ContextualDeclAttributeAlias('unowned', 'ReferenceOwnership'),
     DeclAttribute('_effects', 'Effects',
                   OnAbstractFunction,
                   AllowMultipleAttributes,  UserInaccessible,
@@ -419,11 +330,6 @@ DECL_ATTR_KINDS = [
                   UserInaccessible,
                   ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=56),
-    SimpleDeclAttribute('rethrows', 'Rethrows',
-                        OnFunc,  OnConstructor,
-                        RejectByParser,
-                        ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
-                        code=57),
     SimpleDeclAttribute('rethrows', 'AtRethrows',
                         OnProtocol,
                         ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
@@ -434,10 +340,6 @@ DECL_ATTR_KINDS = [
                   UserInaccessible,
                   ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
                   code=59),
-    ContextualSimpleDeclAttribute('indirect', 'Indirect',  DeclModifier,
-                                  OnEnum,  OnEnumElement,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
-                                  code=60),
     SimpleDeclAttribute('warn_unqualified_access', 'WarnUnqualifiedAccess',
                         OnFunc,  OnAccessor,  #| OnVar
                         LongAttribute,
@@ -640,19 +542,6 @@ DECL_ATTR_KINDS = [
 
     # 101 was @asyncHandler and is now unused
 
-    # TODO: Remove this once we don't need to support 'actor' as a modifier
-    ContextualSimpleDeclAttribute('actor', 'Actor',
-                                  DeclModifier,  OnClass,  ConcurrencyOnly,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,
-                                  APIBreakingToAdd,  APIBreakingToRemove,
-                                  code=102),
-
-    ContextualSimpleDeclAttribute('isolated', 'Isolated',
-                                  DeclModifier,  OnParam,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,
-                                  APIBreakingToAdd,  APIBreakingToRemove,
-                                  code=103),
-
     SimpleDeclAttribute('globalActor', 'GlobalActor',
                         OnClass,  OnStruct,  OnEnum,
                         ABIStableToAdd,  ABIBreakingToRemove,
@@ -663,12 +552,6 @@ DECL_ATTR_KINDS = [
                         OnExtension,  UserInaccessible,
                         ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
                         code=105),
-
-    ContextualSimpleDeclAttribute('async', 'Async',
-                                  DeclModifier,  OnVar,  OnFunc,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,
-                                  APIBreakingToAdd,  APIBreakingToRemove,
-                                  code=106),
 
     SimpleDeclAttribute('Sendable', 'Sendable',
                         OnFunc,  OnConstructor,  OnAccessor,  OnAnyClangDecl,
@@ -682,12 +565,6 @@ DECL_ATTR_KINDS = [
                         APIBreakingToAdd,  APIBreakingToRemove,
                         code=108),
 
-    SimpleDeclAttribute('reasync', 'Reasync',
-                        OnFunc,  OnConstructor,
-                        RejectByParser,
-                        ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
-                        code=109),
-
     SimpleDeclAttribute('reasync', 'AtReasync',
                         OnProtocol,  ConcurrencyOnly,
                         ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
@@ -695,12 +572,6 @@ DECL_ATTR_KINDS = [
                         code=110),
 
     # 111 was an experimental @completionHandlerAsync and is now unused
-
-    ContextualSimpleDeclAttribute('nonisolated', 'Nonisolated',
-                                  DeclModifier,  OnFunc,  OnConstructor,  OnVar,  OnSubscript,
-                                  ABIStableToAdd,  ABIStableToRemove,
-                                  APIBreakingToAdd,  APIStableToRemove,
-                                  code=112),
 
     # 113 was experimental _unsafeSendable and is now unused
 
@@ -723,20 +594,14 @@ DECL_ATTR_KINDS = [
                         UserInaccessible,
                         ABIStableToAdd,  ABIStableToRemove,
                         APIStableToAdd,  APIStableToRemove,
-                        OnParam,  OnVar,  OnNominalType,
+                        OnFunc,  OnParam,  OnVar,  OnNominalType,
                         code=117),
-
-    ContextualSimpleDeclAttribute('distributed', 'DistributedActor',
-                                  DeclModifier,  OnClass,  OnFunc,  OnAccessor,  OnVar,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,
-                                  APIBreakingToAdd,  APIBreakingToRemove,
-                                  code=118),
 
     SimpleDeclAttribute('_lexical', 'Lexical',
                         UserInaccessible,
                         ABIStableToAdd,  ABIStableToRemove,
                         APIStableToAdd,  APIStableToRemove,
-                        OnParam,  OnVar,  OnNominalType,
+                        OnFunc,  OnParam,  OnVar,  OnNominalType,
                         code=119),
 
     SimpleDeclAttribute('_assemblyVision', 'EmitAssemblyVisionRemarks',
@@ -755,7 +620,7 @@ DECL_ATTR_KINDS = [
                         UserInaccessible,
                         ABIStableToAdd,  ABIBreakingToRemove,
                         APIStableToAdd,  APIBreakingToRemove,
-                        OnParam,  OnVar,
+                        OnFunc,  OnParam,  OnVar,
                         code=122),
 
     SimpleDeclAttribute('_noLocks', 'NoLocks',
@@ -774,11 +639,6 @@ DECL_ATTR_KINDS = [
                         ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
                         code=125),
 
-    ContextualSimpleDeclAttribute('_const', 'CompileTimeConst',
-                                  DeclModifier,  OnParam,  OnVar,
-                                  ABIStableToAdd,  ABIStableToRemove,  APIBreakingToAdd,  APIStableToRemove,
-                                  code=126),
-
     DeclAttribute('_unavailableFromAsync', 'UnavailableFromAsync',
                   OnFunc,  OnConstructor,  UserInaccessible,
                   ABIStableToAdd,  ABIStableToRemove,
@@ -795,13 +655,6 @@ DECL_ATTR_KINDS = [
                     AllowMultipleAttributes,  LongAttribute,  UserInaccessible,
                   ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIBreakingToRemove,
                   code=129),
-
-    ContextualSimpleDeclAttribute('_local', 'KnownToBeLocal',
-                                  DeclModifier,  OnFunc,  OnParam,  OnVar,
-                                  UserInaccessible,
-                                  ABIBreakingToAdd,  ABIBreakingToRemove,
-                                  APIBreakingToAdd,  APIBreakingToRemove,
-                                  code=130),
 
     SimpleDeclAttribute('_moveOnly', 'MoveOnly',
                         OnNominalType,
@@ -833,3 +686,201 @@ DECL_ATTR_KINDS = [
                   APIBreakingToAdd, APIStableToRemove, ABIStableToAdd, ABIStableToRemove,
                   code=136),
 ]
+
+# Schema for declaration modifiers:
+#
+# - Modifier name.
+# - C++ class name without the 'Attr' suffix
+# - Options for the attribute, including:
+#    * the declarations the attribute can appear on
+#    * whether duplicates are allowed
+# - Unique attribute identifier used for serialization. This
+#   can never be changed.
+#
+# SimpleDeclAttribute is the same, but the class becomes
+# SimpleDeclAttr<DAK_##NAME> on the C++ side.
+#
+# Please help ease code review/audits:
+# - Please place the "OnXYZ" flags together on the next line.
+# - Please place the non-OnXYZ flags together on the next to last line.
+# - Please place the unique code number on the last line.
+# - Please sort attributes by serialization number.
+# - Please create a "NOTE" comment if a unique number is skipped.
+#
+# If you're adding a new kind of attribute that is spelled with a leading
+# '@' symbol, add an entry to the `DECL_ATTR_KINDS` array instead.
+DECL_MODIFIER_KINDS = [
+    # These are not really attributes or modifiers in the C++ AST and they are
+    # serialized directly into the ASTs they are attached to rather than using
+    # the generic attribute serialization infrastructure.
+    BuiltinDeclModifier('static', swift_name='staticKeyword'),
+    BuiltinDeclModifier('class', swift_name='classKeyword'),
+
+    ContextualSimpleDeclAttribute('final', 'Final',
+                                  OnClass,  OnFunc,  OnAccessor,  OnVar,  OnSubscript,
+                                  DeclModifier,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=2),
+    ContextualSimpleDeclAttribute('required', 'Required',
+                                  OnConstructor,
+                                  DeclModifier,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=4),
+    ContextualSimpleDeclAttribute('optional', 'Optional',
+                                  OnConstructor,  OnFunc,  OnAccessor,  OnVar,  OnSubscript,
+                                  DeclModifier,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=5),
+    ContextualSimpleDeclAttribute('lazy', 'Lazy',  DeclModifier,
+                                  OnVar,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=16),
+    ContextualSimpleDeclAttribute('dynamic', 'Dynamic',
+                                  OnFunc,  OnAccessor,  OnVar,  OnSubscript,  OnConstructor,
+                                  DeclModifier,  ABIBreakingToAdd,  ABIBreakingToRemove,
+                                  APIStableToAdd,  APIStableToRemove,
+                                  code=22),
+    ContextualSimpleDeclAttribute('infix', 'Infix',
+                                  OnFunc,  OnOperator,
+                                  DeclModifier,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=23),
+    ContextualSimpleDeclAttribute('prefix', 'Prefix',
+                                  OnFunc,  OnOperator,
+                                  DeclModifier,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=24),
+    ContextualSimpleDeclAttribute('postfix', 'Postfix',
+                                  OnFunc,  OnOperator,
+                                  DeclModifier,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=25),
+    ContextualSimpleDeclAttribute('__consuming', 'Consuming',
+                                  OnFunc,  OnAccessor,
+                                  DeclModifier,
+                                  UserInaccessible,
+                                  NotSerialized,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=40),
+    ContextualSimpleDeclAttribute('mutating', 'Mutating',
+                                  OnFunc,  OnAccessor,
+                                  DeclModifier,
+                                  NotSerialized,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=41),
+    ContextualSimpleDeclAttribute('nonmutating', 'NonMutating',
+                                  OnFunc,  OnAccessor,
+                                  DeclModifier,
+                                  NotSerialized,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=42),
+    ContextualSimpleDeclAttribute('convenience', 'Convenience',
+                                  OnConstructor,
+                                  DeclModifier,
+                                  NotSerialized,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=43),
+    ContextualSimpleDeclAttribute('override', 'Override',
+                                  OnFunc,  OnAccessor,  OnVar,  OnSubscript,  OnConstructor,  OnAssociatedType,
+                                  DeclModifier,
+                                  NotSerialized,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=44),
+    DeclAttribute('private', 'AccessControl',
+                  OnFunc,  OnAccessor,  OnExtension,  OnGenericType,  OnVar,  OnSubscript,
+                  OnConstructor,
+                  DeclModifier,
+                  NotSerialized,
+                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                  swift_name='privateKeyword',
+                  code=46),
+    DeclAttributeAlias('fileprivate', 'AccessControl', swift_name='fileprivateKeyword'),
+    DeclAttributeAlias('internal', 'AccessControl', swift_name='internalKeyword'),
+    DeclAttributeAlias('public', 'AccessControl', swift_name='publicKeyword'),
+    ContextualDeclAttributeAlias('open', 'AccessControl'),
+    DeclAttribute('__setter_access', 'SetterAccess',
+                  OnVar,  OnSubscript,
+                  DeclModifier,  RejectByParser,
+                  NotSerialized,
+                  ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                  code=47),
+    ContextualDeclAttribute('weak', 'ReferenceOwnership',
+                            OnVar,
+                            DeclModifier,
+                            NotSerialized,
+                            ABIStableToAdd,  ABIStableToRemove,  APIStableToAdd,  APIStableToRemove,
+                            code=49),
+    ContextualDeclAttributeAlias('unowned', 'ReferenceOwnership', swift_name='unowned'),
+
+    SimpleDeclAttribute('rethrows', 'Rethrows',
+                        OnFunc,  OnConstructor,
+                        RejectByParser,
+                        ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
+                        code=57,
+                        swift_name='`rethrows`'),
+                        
+    ContextualSimpleDeclAttribute('indirect', 'Indirect',  DeclModifier,
+                                  OnEnum,  OnEnumElement,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,  APIStableToAdd,  APIStableToRemove,
+                                  code=60),
+
+    ContextualSimpleDeclAttribute('isolated', 'Isolated',
+                                  DeclModifier,  OnParam,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,
+                                  APIBreakingToAdd,  APIBreakingToRemove,
+                                  code=103),
+
+    ContextualSimpleDeclAttribute('async', 'Async',
+                                  DeclModifier,  OnVar,  OnFunc,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,
+                                  APIBreakingToAdd,  APIBreakingToRemove,
+                                  code=106),
+
+    SimpleDeclAttribute('reasync', 'Reasync',
+                        OnFunc,  OnConstructor,
+                        RejectByParser,
+                        ABIBreakingToAdd,  ABIBreakingToRemove,  APIBreakingToAdd,  APIBreakingToRemove,
+                        code=109),
+
+    ContextualSimpleDeclAttribute('nonisolated', 'Nonisolated',
+                                  DeclModifier,  OnFunc,  OnConstructor,  OnVar,  OnSubscript,
+                                  ABIStableToAdd,  ABIStableToRemove,
+                                  APIBreakingToAdd,  APIStableToRemove,
+                                  code=112),
+
+    ContextualSimpleDeclAttribute('distributed', 'DistributedActor',
+                                  DeclModifier,  OnClass,  OnFunc,  OnAccessor,  OnVar,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,
+                                  APIBreakingToAdd,  APIBreakingToRemove,
+                                  code=118),
+
+    ContextualSimpleDeclAttribute('_const', 'CompileTimeConst',
+                                  DeclModifier,  OnParam,  OnVar,
+                                  ABIStableToAdd,  ABIStableToRemove,  APIBreakingToAdd,  APIStableToRemove,
+                                  code=126),
+
+    ContextualSimpleDeclAttribute('_local', 'KnownToBeLocal',
+                                  DeclModifier,  OnFunc,  OnParam,  OnVar,
+                                  UserInaccessible,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,
+                                  APIBreakingToAdd,  APIBreakingToRemove,
+                                  code=130),
+]
+
+DEPRECATED_MODIFIER_KINDS = [
+    # TODO: Remove this once we don't need to support 'actor' as a modifier
+    ContextualSimpleDeclAttribute('actor', 'Actor',
+                                  DeclModifier,  OnClass,  ConcurrencyOnly,
+                                  ABIBreakingToAdd,  ABIBreakingToRemove,
+                                  APIBreakingToAdd,  APIBreakingToRemove,
+                                  code=102),
+]
+
+def verify_attribute_serialization_codes(nodes):
+    # Verify that no serialization code is used twice
+    used_codes = set()
+    for node in nodes:
+        if isinstance(node, DeclAttribute):
+            if node.code in used_codes:
+                error("Serialization code %d used twice" % node.code)
+            used_codes.add(node.code)

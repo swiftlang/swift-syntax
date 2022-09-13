@@ -27,7 +27,6 @@ extension Parser {
     case unchecked = "unchecked"
     case _typeSequence = "_typeSequence"
     case _local = "_local"
-    case tuple = "tuple"
     case _opaqueReturnTypeOf = "_opaqueReturnTypeOf"
   }
 }

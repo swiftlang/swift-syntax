@@ -1248,6 +1248,17 @@ extension Parser {
           attrs = self.parseAttributeList()
         }
 
+        let unexpectedBeforeIsolated: RawUnexpectedNodesSyntax?
+        let isolated: RawTokenSyntax?
+        if self.currentToken.isContextualKeyword("isolated") &&
+            !self.lookahead().startsParameterName(subject.isClosure) {
+          (unexpectedBeforeIsolated, isolated) = self.expectContextualKeyword("isolated")
+        } else {
+          unexpectedBeforeIsolated = nil
+          isolated = nil
+        }
+        let const = self.consumeIfContextualKeyword("_const")
+
         let firstName: RawTokenSyntax?
         let secondName: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
@@ -1307,6 +1318,9 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(RawFunctionParameterSyntax(
           attributes: attrs,
+          unexpectedBeforeIsolated,
+          isolated: isolated,
+          const: const,
           firstName: firstName,
           secondName: secondName,
           unexpectedBeforeColon,
@@ -1414,7 +1428,14 @@ extension Parser {
   public mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
     let input = self.parseParameterClause(for: .functionParameters)
 
-    let async = self.consumeIfContextualKeyword("async")
+    let async: RawTokenSyntax?
+    if let asyncTok = self.consumeIfContextualKeyword("async") {
+      async = asyncTok
+    } else if let reasync = self.consumeIfContextualKeyword("reasync") {
+      async = reasync
+    } else {
+      async = nil
+    }
 
     var throwsKeyword = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword])
 

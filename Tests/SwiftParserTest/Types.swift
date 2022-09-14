@@ -74,5 +74,15 @@ final class TypeTests: XCTestCase {
                 public typealias Body = @_opaqueReturnTypeOf("$s6CatKit10pspspspspsV5cmereV6lilguyQrvp", 0) __
                 """)
   }
+
+  func testVariadics() throws {
+    AssertParse(
+      #"""
+      func takesVariadicFnWithGenericRet<T>(_ fn: (S...) -> T) {}
+      let _: (S...) -> Int = \.i
+      let _: (S...) -> Int = \Array.i
+      let _: (S...) -> Int = \S.i
+      """#)
+  }
 }
 

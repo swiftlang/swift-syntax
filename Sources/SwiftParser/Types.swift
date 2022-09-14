@@ -399,6 +399,7 @@ extension Parser {
         }
         // Parse the type annotation.
         let type = self.parseType()
+        let ellipsis = self.currentToken.isEllipsis ? self.consumeAnyToken() : nil
         let trailingComma = self.consume(if: .comma)
         keepGoing = trailingComma != nil
         elements.append(RawTupleTypeElementSyntax(
@@ -408,7 +409,7 @@ extension Parser {
             unexpectedBeforeColon,
             colon: colon,
             type: type,
-            ellipsis: nil,
+            ellipsis: ellipsis,
             initializer: nil,
             trailingComma: trailingComma,
             arena: self.arena
@@ -803,7 +804,6 @@ extension Parser {
       let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let (unexpectedBeforeArgument, argument) = self.expectIdentifier()
-
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return RawSyntax(
         RawAttributeSyntax(
@@ -862,6 +862,21 @@ extension Parser {
 }
 
 extension Lexer.Lexeme {
+  var isBinaryOperator: Bool {
+    return self.tokenKind == .spacedBinaryOperator
+        || self.tokenKind == .unspacedBinaryOperator
+  }
+
+  var isAnyOperator: Bool {
+    return self.isBinaryOperator
+        || self.tokenKind == .postfixOperator
+        || self.tokenKind == .prefixOperator
+  }
+
+  var isEllipsis: Bool {
+    return self.isAnyOperator && self.tokenText == "..."
+  }
+
   var isOptionalToken: Bool {
     // A postfix '?' by itself is obviously optional.
     if self.tokenKind == .postfixQuestionMark {

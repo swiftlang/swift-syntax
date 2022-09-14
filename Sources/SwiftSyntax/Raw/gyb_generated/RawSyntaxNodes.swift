@@ -6948,7 +6948,11 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
   public init(
     _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ unexpectedBetweenAttributesAndFirstName: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndIsolated: RawUnexpectedNodesSyntax? = nil,
+    isolated: RawTokenSyntax?,
+    _ unexpectedBetweenIsolatedAndConst: RawUnexpectedNodesSyntax? = nil,
+    const: RawTokenSyntax?,
+    _ unexpectedBetweenConstAndFirstName: RawUnexpectedNodesSyntax? = nil,
     firstName: RawTokenSyntax?,
     _ unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? = nil,
     secondName: RawTokenSyntax?,
@@ -6965,24 +6969,28 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .functionParameter, uninitializedCount: 16, arena: arena) { layout in
+      kind: .functionParameter, uninitializedCount: 20, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = unexpectedBetweenAttributesAndFirstName?.raw
-      layout[3] = firstName?.raw
-      layout[4] = unexpectedBetweenFirstNameAndSecondName?.raw
-      layout[5] = secondName?.raw
-      layout[6] = unexpectedBetweenSecondNameAndColon?.raw
-      layout[7] = colon?.raw
-      layout[8] = unexpectedBetweenColonAndType?.raw
-      layout[9] = type?.raw
-      layout[10] = unexpectedBetweenTypeAndEllipsis?.raw
-      layout[11] = ellipsis?.raw
-      layout[12] = unexpectedBetweenEllipsisAndDefaultArgument?.raw
-      layout[13] = defaultArgument?.raw
-      layout[14] = unexpectedBetweenDefaultArgumentAndTrailingComma?.raw
-      layout[15] = trailingComma?.raw
+      layout[2] = unexpectedBetweenAttributesAndIsolated?.raw
+      layout[3] = isolated?.raw
+      layout[4] = unexpectedBetweenIsolatedAndConst?.raw
+      layout[5] = const?.raw
+      layout[6] = unexpectedBetweenConstAndFirstName?.raw
+      layout[7] = firstName?.raw
+      layout[8] = unexpectedBetweenFirstNameAndSecondName?.raw
+      layout[9] = secondName?.raw
+      layout[10] = unexpectedBetweenSecondNameAndColon?.raw
+      layout[11] = colon?.raw
+      layout[12] = unexpectedBetweenColonAndType?.raw
+      layout[13] = type?.raw
+      layout[14] = unexpectedBetweenTypeAndEllipsis?.raw
+      layout[15] = ellipsis?.raw
+      layout[16] = unexpectedBetweenEllipsisAndDefaultArgument?.raw
+      layout[17] = defaultArgument?.raw
+      layout[18] = unexpectedBetweenDefaultArgumentAndTrailingComma?.raw
+      layout[19] = trailingComma?.raw
     }
     self.init(raw: raw)
   }
@@ -6993,47 +7001,59 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var unexpectedBetweenAttributesAndFirstName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndIsolated: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var firstName: RawTokenSyntax? {
+  public var isolated: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenIsolatedAndConst: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var secondName: RawTokenSyntax? {
+  public var const: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenConstAndFirstName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var colon: RawTokenSyntax? {
+  public var firstName: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var type: RawTypeSyntax? {
-    layoutView.children[9].map(RawTypeSyntax.init(raw:))
+  public var secondName: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var ellipsis: RawTokenSyntax? {
+  public var colon: RawTokenSyntax? {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenEllipsisAndDefaultArgument: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var defaultArgument: RawInitializerClauseSyntax? {
-    layoutView.children[13].map(RawInitializerClauseSyntax.init(raw:))
+  public var type: RawTypeSyntax? {
+    layoutView.children[13].map(RawTypeSyntax.init(raw:))
   }
-  public var unexpectedBetweenDefaultArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var trailingComma: RawTokenSyntax? {
+  public var ellipsis: RawTokenSyntax? {
     layoutView.children[15].map(RawTokenSyntax.init(raw:))
+  }
+  public var unexpectedBetweenEllipsisAndDefaultArgument: RawUnexpectedNodesSyntax? {
+    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var defaultArgument: RawInitializerClauseSyntax? {
+    layoutView.children[17].map(RawInitializerClauseSyntax.init(raw:))
+  }
+  public var unexpectedBetweenDefaultArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var trailingComma: RawTokenSyntax? {
+    layoutView.children[19].map(RawTokenSyntax.init(raw:))
   }
 }
 
@@ -9753,11 +9773,11 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   public init(
     _ unexpectedBeforeType: RawUnexpectedNodesSyntax? = nil,
-    type: RawSimpleTypeIdentifierSyntax,
+    type: RawTypeSyntax,
     _ unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax,
     _ unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax? = nil,
-    declBaseName: RawSyntax,
+    declBaseName: RawTokenSyntax,
     _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     arena: __shared SyntaxArena
@@ -9780,8 +9800,8 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var type: RawSimpleTypeIdentifierSyntax {
-    layoutView.children[1].map(RawSimpleTypeIdentifierSyntax.init(raw:))!
+  public var type: RawTypeSyntax {
+    layoutView.children[1].map(RawTypeSyntax.init(raw:))!
   }
   public var unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
@@ -9792,8 +9812,8 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public var unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var declBaseName: RawSyntax {
-    layoutView.children[5]!
+  public var declBaseName: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))

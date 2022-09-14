@@ -3095,11 +3095,15 @@ public enum SyntaxFactory {
     return InitializerClauseSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on FunctionParameterSyntax")
-  public static func makeFunctionParameter(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndFirstName: UnexpectedNodesSyntax? = nil, firstName: TokenSyntax?, _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, secondName: TokenSyntax?, _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax?, _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax?, _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil, defaultArgument: InitializerClauseSyntax?, _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> FunctionParameterSyntax {
+  public static func makeFunctionParameter(_ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, attributes: AttributeListSyntax?, _ unexpectedBetweenAttributesAndIsolated: UnexpectedNodesSyntax? = nil, isolated: TokenSyntax?, _ unexpectedBetweenIsolatedAndConst: UnexpectedNodesSyntax? = nil, const: TokenSyntax?, _ unexpectedBetweenConstAndFirstName: UnexpectedNodesSyntax? = nil, firstName: TokenSyntax?, _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil, secondName: TokenSyntax?, _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax?, _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil, ellipsis: TokenSyntax?, _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil, defaultArgument: InitializerClauseSyntax?, _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil, trailingComma: TokenSyntax?) -> FunctionParameterSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeAttributes?.raw,
       attributes?.raw,
-      unexpectedBetweenAttributesAndFirstName?.raw,
+      unexpectedBetweenAttributesAndIsolated?.raw,
+      isolated?.raw,
+      unexpectedBetweenIsolatedAndConst?.raw,
+      const?.raw,
+      unexpectedBetweenConstAndFirstName?.raw,
       firstName?.raw,
       unexpectedBetweenFirstNameAndSecondName?.raw,
       secondName?.raw,
@@ -3124,6 +3128,10 @@ public enum SyntaxFactory {
   public static func makeBlankFunctionParameter(presence: SourcePresence = .present) -> FunctionParameterSyntax {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .functionParameter,
       from: [
+      nil,
+      nil,
+      nil,
+      nil,
       nil,
       nil,
       nil,
@@ -4341,7 +4349,7 @@ public enum SyntaxFactory {
     return DeclNameSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ImplementsAttributeArgumentsSyntax")
-  public static func makeImplementsAttributeArguments(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: SimpleTypeIdentifierSyntax, _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: Syntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  public static func makeImplementsAttributeArguments(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: TypeSyntax, _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: TokenSyntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeType?.raw,
       type.raw,
@@ -4363,11 +4371,11 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .implementsAttributeArguments,
       from: [
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.simpleTypeIdentifier, arena: .default),
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default),
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default),
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default),
       nil,
       nil,
     ], arena: .default))

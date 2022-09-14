@@ -7417,7 +7417,11 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   var trailingTrivia: Trivia
   var unexpectedBeforeAttributes: UnexpectedNodes?
   var attributes: AttributeList?
-  var unexpectedBetweenAttributesAndFirstName: UnexpectedNodes?
+  var unexpectedBetweenAttributesAndIsolated: UnexpectedNodes?
+  var isolated: Token?
+  var unexpectedBetweenIsolatedAndConst: UnexpectedNodes?
+  var const: Token?
+  var unexpectedBetweenConstAndFirstName: UnexpectedNodes?
   var firstName: Token?
   var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodes?
   var secondName: Token?
@@ -7435,7 +7439,11 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
   ///   - attributes: 
-  ///   - unexpectedBetweenAttributesAndFirstName: 
+  ///   - unexpectedBetweenAttributesAndIsolated: 
+  ///   - isolated: 
+  ///   - unexpectedBetweenIsolatedAndConst: 
+  ///   - const: 
+  ///   - unexpectedBetweenConstAndFirstName: 
   ///   - firstName: 
   ///   - unexpectedBetweenFirstNameAndSecondName: 
   ///   - secondName: 
@@ -7449,12 +7457,16 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   ///   - defaultArgument: 
   ///   - unexpectedBetweenDefaultArgumentAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndFirstName: ExpressibleAsUnexpectedNodes? = nil, firstName: Token? = nil, unexpectedBetweenFirstNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: Token? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndDefaultArgument: ExpressibleAsUnexpectedNodes? = nil, defaultArgument: ExpressibleAsInitializerClause? = nil, unexpectedBetweenDefaultArgumentAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndIsolated: ExpressibleAsUnexpectedNodes? = nil, isolated: Token? = nil, unexpectedBetweenIsolatedAndConst: ExpressibleAsUnexpectedNodes? = nil, const: Token? = nil, unexpectedBetweenConstAndFirstName: ExpressibleAsUnexpectedNodes? = nil, firstName: Token? = nil, unexpectedBetweenFirstNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: Token? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndDefaultArgument: ExpressibleAsUnexpectedNodes? = nil, defaultArgument: ExpressibleAsInitializerClause? = nil, unexpectedBetweenDefaultArgumentAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
-    self.unexpectedBetweenAttributesAndFirstName = unexpectedBetweenAttributesAndFirstName?.createUnexpectedNodes()
+    self.unexpectedBetweenAttributesAndIsolated = unexpectedBetweenAttributesAndIsolated?.createUnexpectedNodes()
+    self.isolated = isolated
+    self.unexpectedBetweenIsolatedAndConst = unexpectedBetweenIsolatedAndConst?.createUnexpectedNodes()
+    self.const = const
+    self.unexpectedBetweenConstAndFirstName = unexpectedBetweenConstAndFirstName?.createUnexpectedNodes()
     self.firstName = firstName
     self.unexpectedBetweenFirstNameAndSecondName = unexpectedBetweenFirstNameAndSecondName?.createUnexpectedNodes()
     self.secondName = secondName
@@ -7477,7 +7489,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionParameterSyntax`.
   func buildFunctionParameter(format: Format) -> FunctionParameterSyntax {
-    var result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndFirstName?.buildUnexpectedNodes(format: format), firstName: firstName?.buildToken(format: format), unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(format: format), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(format: format), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(format: format), unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format), defaultArgument: defaultArgument?.buildInitializerClause(format: format), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken(format: format))
+    var result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndIsolated?.buildUnexpectedNodes(format: format), isolated: isolated?.buildToken(format: format), unexpectedBetweenIsolatedAndConst?.buildUnexpectedNodes(format: format), const: const?.buildToken(format: format), unexpectedBetweenConstAndFirstName?.buildUnexpectedNodes(format: format), firstName: firstName?.buildToken(format: format), unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(format: format), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(format: format), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(format: format), unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format), defaultArgument: defaultArgument?.buildInitializerClause(format: format), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -10103,11 +10115,11 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// The trailing trivia attached to this syntax node once built.
   var trailingTrivia: Trivia
   var unexpectedBeforeType: UnexpectedNodes?
-  var type: SimpleTypeIdentifier
+  var type: TypeBuildable
   var unexpectedBetweenTypeAndComma: UnexpectedNodes?
   var comma: Token
   var unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodes?
-  var declBaseName: SyntaxBuildable
+  var declBaseName: Token
   var unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodes?
   var declNameArguments: DeclNameArguments?
   /// Creates a `ImplementsAttributeArguments` using the provided parameters.
@@ -10120,16 +10132,16 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   ///   - declBaseName: The base name of the protocol's requirement.
   ///   - unexpectedBetweenDeclBaseNameAndDeclNameArguments: 
   ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsSimpleTypeIdentifier, unexpectedBetweenTypeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndDeclBaseName: ExpressibleAsUnexpectedNodes? = nil, declBaseName: ExpressibleAsSyntaxBuildable, unexpectedBetweenDeclBaseNameAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable, unexpectedBetweenTypeAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token = Token.`comma`, unexpectedBetweenCommaAndDeclBaseName: ExpressibleAsUnexpectedNodes? = nil, declBaseName: Token, unexpectedBetweenDeclBaseNameAndDeclNameArguments: ExpressibleAsUnexpectedNodes? = nil, declNameArguments: ExpressibleAsDeclNameArguments? = nil) {
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
     self.unexpectedBeforeType = unexpectedBeforeType?.createUnexpectedNodes()
-    self.type = type.createSimpleTypeIdentifier()
+    self.type = type.createTypeBuildable()
     self.unexpectedBetweenTypeAndComma = unexpectedBetweenTypeAndComma?.createUnexpectedNodes()
     self.comma = comma
     assert(comma.text == #","#)
     self.unexpectedBetweenCommaAndDeclBaseName = unexpectedBetweenCommaAndDeclBaseName?.createUnexpectedNodes()
-    self.declBaseName = declBaseName.createSyntaxBuildable()
+    self.declBaseName = declBaseName
     self.unexpectedBetweenDeclBaseNameAndDeclNameArguments = unexpectedBetweenDeclBaseNameAndDeclNameArguments?.createUnexpectedNodes()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
@@ -10138,7 +10150,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `ImplementsAttributeArgumentsSyntax`.
   func buildImplementsAttributeArguments(format: Format) -> ImplementsAttributeArgumentsSyntax {
-    var result = ImplementsAttributeArgumentsSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildSimpleTypeIdentifier(format: format), unexpectedBetweenTypeAndComma?.buildUnexpectedNodes(format: format), comma: comma.buildToken(format: format), unexpectedBetweenCommaAndDeclBaseName?.buildUnexpectedNodes(format: format), declBaseName: declBaseName.buildSyntax(format: format), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
+    var result = ImplementsAttributeArgumentsSyntax(unexpectedBeforeType?.buildUnexpectedNodes(format: format), type: type.buildType(format: format), unexpectedBetweenTypeAndComma?.buildUnexpectedNodes(format: format), comma: comma.buildToken(format: format), unexpectedBetweenCommaAndDeclBaseName?.buildUnexpectedNodes(format: format), declBaseName: declBaseName.buildToken(format: format), unexpectedBetweenDeclBaseNameAndDeclNameArguments?.buildUnexpectedNodes(format: format), declNameArguments: declNameArguments?.buildDeclNameArguments(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }

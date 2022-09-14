@@ -168,4 +168,43 @@ final class AttributeTests: XCTestCase {
       }
       """)
   }
+
+  func testImplementsAttribute() throws {
+    AssertParse("""
+      @_implements(P, f0())
+      func g0() -> Int {
+        return 10
+      }
+
+      @_implements(P, f(x:y:))
+      func g(x:Int, y:Int) -> Int {
+        return 5
+      }
+
+      @_implements(Q, f(x:y:))
+      func h(x:Int, y:Int) -> Int {
+        return 6
+      }
+
+      @_implements(Equatable, ==(_:_:))
+      public static func isEqual(_ lhs: S, _ rhs: S) -> Bool {
+        return false
+      }
+      """)
+  }
+
+  func testSemanticsAttribute() throws {
+    AssertParse(
+      """
+      @_semantics("constant_evaluable")
+      func testRecursion(_ a: Int) -> Int {
+        return a <= 0 ? 0 : testRecursion(a-1)
+      }
+
+      @_semantics("test_driver")
+      internal func interpretRecursion() -> Int {
+        return testRecursion(10)
+      }
+      """)
+  }
 }

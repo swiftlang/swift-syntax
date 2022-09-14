@@ -433,13 +433,15 @@ enum SwitchCaseStart: RawTokenKindSubset {
 
 // MARK: Expression start
 
-enum AwaitTry: RawTokenKindSubset {
+enum AwaitTryMove: RawTokenKindSubset {
   case awaitContextualKeyword
+  case _moveContextualKeyword
   case tryKeyword
 
   var rawTokenKind: RawTokenKind {
     switch self {
     case .awaitContextualKeyword: return .identifier
+    case ._moveContextualKeyword: return .identifier
     case .tryKeyword: return .tryKeyword
     }
   }
@@ -447,6 +449,7 @@ enum AwaitTry: RawTokenKindSubset {
   var contextualKeyword: SyntaxText? {
     switch self {
     case .awaitContextualKeyword: return "await"
+    case ._moveContextualKeyword: return "_move"
     default: return nil
     }
   }
@@ -573,13 +576,13 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
 ///  - `MatchingPatternStart`
 ///  - `PrimaryExpressionStart`
 enum ExpressionStart: RawTokenKindSubset {
-  case awaitTry(AwaitTry)
+  case awaitTryMove(AwaitTryMove)
   case expressionPrefixOperator(ExpressionPrefixOperator)
   case matchingPatternStart(MatchingPatternStart)
   case primaryExpressionStart(PrimaryExpressionStart)
 
   static var allCases: [ExpressionStart] {
-    return AwaitTry.allCases.map(Self.awaitTry)
+    return AwaitTryMove.allCases.map(Self.awaitTryMove)
     + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
     + MatchingPatternStart.allCases.map(Self.matchingPatternStart)
     + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
@@ -587,7 +590,7 @@ enum ExpressionStart: RawTokenKindSubset {
 
   var rawTokenKind: RawTokenKind {
     switch self {
-    case .awaitTry(let underlyingKind): return underlyingKind.rawTokenKind
+    case .awaitTryMove(let underlyingKind): return underlyingKind.rawTokenKind
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.rawTokenKind
     case .matchingPatternStart(let underlyingKind): return underlyingKind.rawTokenKind
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.rawTokenKind
@@ -596,7 +599,7 @@ enum ExpressionStart: RawTokenKindSubset {
 
   var contextualKeyword: SyntaxText? {
     switch self {
-    case .awaitTry(let underlyingKind): return underlyingKind.contextualKeyword
+    case .awaitTryMove(let underlyingKind): return underlyingKind.contextualKeyword
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.contextualKeyword
     case .matchingPatternStart(let underlyingKind): return underlyingKind.contextualKeyword
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.contextualKeyword

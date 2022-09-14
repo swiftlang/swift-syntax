@@ -223,7 +223,12 @@ final class DeclarationTests: XCTestCase {
   func testAccessLevelModifier() {
     AssertParse(
       """
-      private(set) var a = 0
+      open open(set) var openProp = 0
+      public public(set) var publicProp = 0
+      internal internal(set) var internalProp = 0
+      fileprivate fileprivate(set) var fileprivateProp = 0
+      private private(set) var privateProp = 0
+      internal(set) var defaultProp = 0
       """
     )
 
@@ -717,6 +722,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third"))]),
@@ -738,6 +745,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third")), Syntax(TokenSyntax.identifier("fourth"))]),
@@ -758,6 +767,8 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^MISSING_COLON^#third #^MISSING_RPAREN^#struct#^MISSING_IDENTIFIER^##^BRACES^#: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: .identifier("first"),
         secondName: .identifier("second"),
         colon: .colonToken(presence: .missing),
@@ -784,6 +795,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([
@@ -809,6 +822,8 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^COLON^#[third #^END_ARRAY^#fourth: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),
@@ -837,6 +852,8 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),
@@ -957,6 +974,45 @@ final class DeclarationTests: XCTestCase {
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
                 ])
+  }
+
+  func testModifiedParameter() {
+    AssertParse(
+      #"""
+      func const(_const _ map: String) {}
+      func isolated(isolated _ map: String) {}
+      func isolatedConst(isolated _const _ map: String) {}
+      func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ map: String) {}
+      """#)
+
+    AssertParse(
+      #"""
+      func const(_const map: String) {}
+      func isolated(isolated map: String) {}
+      func isolatedConst(isolated _const map: String) {}
+      """#)
+
+    AssertParse(
+      #"""
+      func const(_const x: String) {}
+      func isolated(isolated: String) {}
+      func isolatedConst(isolated _const: String) {}
+      """#)
+  }
+
+  func testReasyncFunctions() throws {
+    AssertParse(
+      """
+      class MyType {
+        init(_ f: () async -> Void) reasync {
+          await f()
+        }
+
+        func foo(index: Int) reasync rethrows -> String {
+          await f()
+        }
+      }
+      """)
   }
 }
 

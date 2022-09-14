@@ -90,6 +90,11 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: "Expected ']' to end subscript")
       ]
     )
+
+    AssertParse(
+      #"""
+      _ = \Lens<[Int]>.[0]
+      """#)
   }
 
   func testBasicLiterals() {
@@ -485,5 +490,16 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(TokenSyntax.contextualKeyword("async")),
       substructureAfterMarker: "ASYNC"
     )
+  }
+
+  func testTypeExpression() {
+    AssertParse("_ = (any Sequence<Int>).self")
+  }
+
+  func testMoveExpression() {
+    AssertParse("_move msg")
+    AssertParse("use(_move msg)")
+    AssertParse("_move msg")
+    AssertParse("let b = (_move self).buffer")
   }
 }

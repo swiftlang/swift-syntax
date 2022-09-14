@@ -1005,6 +1005,21 @@ final class DeclarationTests: XCTestCase {
       func isolatedConst(isolated _const: String) {}
       """#)
   }
+
+  func testReasyncFunctions() throws {
+    AssertParse(
+      """
+      class MyType {
+        init(_ f: () async -> Void) reasync {
+          await f()
+        }
+
+        func foo(index: Int) reasync rethrows -> String {
+          await f()
+        }
+      }
+      """)
+  }
 }
 
 extension Parser.DeclAttributes {

@@ -1412,7 +1412,14 @@ extension Parser {
   public mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
     let input = self.parseParameterClause(for: .functionParameters)
 
-    let async = self.consumeIfContextualKeyword("async")
+    let async: RawTokenSyntax?
+    if let asyncTok = self.consumeIfContextualKeyword("async") {
+      async = asyncTok
+    } else if let reasync = self.consumeIfContextualKeyword("reasync") {
+      async = reasync
+    } else {
+      async = nil
+    }
 
     var throwsKeyword = self.consume(ifAny: [.throwsKeyword, .rethrowsKeyword])
 

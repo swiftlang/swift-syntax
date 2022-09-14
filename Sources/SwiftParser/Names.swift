@@ -127,6 +127,42 @@ extension Parser {
   }
 }
 
+extension Parser {
+  mutating func parseQualifiedDeclarationName() -> RawQualifiedDeclNameSyntax {
+    let type: RawTypeSyntax?
+    let dot: RawTokenSyntax?
+    if self.lookahead().canParseBaseTypeForQualifiedDeclName() {
+      type = self.parseTypeIdentifier()
+      dot = self.consumePrefix(".", as: .period)
+    } else {
+      type = nil
+      dot = nil
+    }
+
+    let (name, args) = self.parseDeclNameRef([
+      .zeroArgCompoundNames,
+      .keywordsUsingSpecialNames,
+      .operators,
+    ])
+    return RawQualifiedDeclNameSyntax(
+      baseType: type,
+      dot: dot,
+      name: name,
+      arguments: args,
+      arena: self.arena)
+  }
+}
+
+extension Parser.Lookahead {
+  func canParseBaseTypeForQualifiedDeclName() -> Bool {
+    var lookahead = self.lookahead()
+    guard lookahead.canParseSimpleTypeIdentifier() else {
+      return false
+    }
+    return lookahead.currentToken.starts(with: ".")
+  }
+}
+
 extension Parser.Lookahead {
   func canParseArgumentLabelList() -> Bool {
     var lookahead = self.lookahead()

@@ -988,6 +988,7 @@ final class DeclarationTests: XCTestCase {
       func const(_const _ map: String) {}
       func isolated(isolated _ map: String) {}
       func isolatedConst(isolated _const _ map: String) {}
+      func nonEphemeralIsolatedConst(@_nonEmphemeral isolated _const _ map: String) {}
       """#)
 
     AssertParse(

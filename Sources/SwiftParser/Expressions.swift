@@ -383,7 +383,9 @@ extension Parser {
 
     default:
       // If the next token is not an operator, just parse this as expr-postfix.
-      return self.parsePostfixExpression(flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+      return self.parsePostfixExpression(
+        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet,
+        periodHasKeyPathBehavior: false)
     }
   }
 
@@ -405,26 +407,21 @@ extension Parser {
   public mutating func parsePostfixExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool,
-    inVarOrLet: Bool
+    inVarOrLet: Bool,
+    periodHasKeyPathBehavior: Bool
   ) -> RawExprSyntax {
     let head = self.parsePrimaryExpression(inVarOrLet: inVarOrLet)
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
-    return self.parsePostfixExpressionSuffix(head, flavor, forDirective: forDirective)
+    return self.parsePostfixExpressionSuffix(
+      head, flavor, forDirective: forDirective,
+      periodHasKeyPathBehavior: periodHasKeyPathBehavior)
   }
 
   @_spi(RawSyntax)
   public mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
     assert(self.at(any: [.period, .prefixPeriod]))
-
-      // A key path is special, because it allows .[, unlike anywhere else. The
-      // period itself should be left in the token stream. (.? and .! end up
-      // being operators, and so aren't handled here.)
-//        if (periodHasKeyPathBehavior && peekToken().is(tok::l_square)) {
-//          break
-//        }
-
     let period = self.consumeAnyToken(remapping: .period)
     // Handle "x.42" - a tuple index.
     if let name = self.consume(if: .integerLiteral) {
@@ -478,7 +475,9 @@ extension Parser {
         // TODO: diagnose and skip.
         return nil
       }
-      let result = parser.parsePostfixExpressionSuffix(head, flavor, forDirective: forDirective)
+      let result = parser.parsePostfixExpressionSuffix(
+        head, flavor, forDirective: forDirective,
+        periodHasKeyPathBehavior: false)
 
       // TODO: diagnose and skip the remaining token in the current clause.
       return result
@@ -513,7 +512,8 @@ extension Parser {
   public mutating func parsePostfixExpressionSuffix(
     _ start: RawExprSyntax,
     _ flavor: ExprFlavor,
-    forDirective: Bool
+    forDirective: Bool,
+    periodHasKeyPathBehavior: Bool
   ) -> RawExprSyntax {
     // Handle suffix expressions.
     var leadingExpr = start
@@ -525,6 +525,13 @@ extension Parser {
 
       // Check for a .foo suffix.
       if self.at(any: [.period, .prefixPeriod]) {
+        // A key path is special, because it allows .[, unlike anywhere else. The
+        // period itself should be left in the token stream. (.? and .! end up
+        // being operators, and so aren't handled here.)
+        if periodHasKeyPathBehavior && self.peek().tokenKind == .leftSquareBracket {
+          break
+        }
+
         leadingExpr = self.parseDottedExpressionSuffix(leadingExpr)
         continue
       }
@@ -700,7 +707,9 @@ extension Parser {
     // the token is a operator starts with '.', or the following token is '['.
     let root: RawExprSyntax?
     if !self.currentToken.starts(with: ".") {
-      root = self.parsePostfixExpression(.basic, forDirective: forDirective, inVarOrLet: inVarOrLet)
+      root = self.parsePostfixExpression(
+        .basic, forDirective: forDirective, inVarOrLet: inVarOrLet,
+        periodHasKeyPathBehavior: true)
     } else {
       root = nil
     }
@@ -714,12 +723,16 @@ extension Parser {
         dot = self.consumeAnyToken()
       }
       let base = RawExprSyntax(RawKeyPathBaseExprSyntax(period: dot, arena: self.arena))
-      expression = self.parsePostfixExpressionSuffix(base, .basic, forDirective: forDirective)
+      expression = self.parsePostfixExpressionSuffix(
+        base, .basic, forDirective: forDirective,
+        periodHasKeyPathBehavior: false)
     } else if self.at(any: [.period, .prefixPeriod]) {
       // Inside a keypath's path, the period always behaves normally: the key path
       // behavior is only the separation between type and path.
       let base = self.parseDottedExpressionSuffix(nil)
-      expression = self.parsePostfixExpressionSuffix(base, .basic, forDirective: forDirective)
+      expression = self.parsePostfixExpressionSuffix(
+        base, .basic, forDirective: forDirective,
+        periodHasKeyPathBehavior: false)
     } else {
       expression = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     }

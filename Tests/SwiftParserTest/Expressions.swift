@@ -90,6 +90,11 @@ final class ExpressionTests: XCTestCase {
         DiagnosticSpec(message: "Expected ']' to end subscript")
       ]
     )
+
+    AssertParse(
+      #"""
+      _ = \Lens<[Int]>.[0]
+      """#)
   }
 
   func testBasicLiterals() {

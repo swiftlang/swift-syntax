@@ -883,7 +883,7 @@ extension Parser {
       // 'any' followed by another identifier is an existential type.
       if self.atContextualKeyword("any"),
          self.peek().tokenKind == .identifier,
-         self.peek().isAtStartOfLine
+         !self.peek().isAtStartOfLine
       {
         let ty = self.parseType()
         return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))

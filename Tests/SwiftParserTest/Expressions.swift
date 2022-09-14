@@ -491,4 +491,8 @@ final class ExpressionTests: XCTestCase {
       substructureAfterMarker: "ASYNC"
     )
   }
+
+  func testTypeExpression() {
+    AssertParse("_ = (any Sequence<Int>).self")
+  }
 }

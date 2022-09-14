@@ -507,7 +507,13 @@ extension Parser {
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightBrace]) && loopProgress.evaluate(currentToken) {
-        let decl = self.parseDeclaration()
+        let decl: RawDeclSyntax
+        if self.at(.poundSourceLocationKeyword) {
+          decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
+        } else {
+          decl = self.parseDeclaration()
+        }
+
         let semi = self.consume(if: .semicolon)
         elements.append(RawMemberDeclListItemSyntax(
           decl: decl, semicolon: semi, arena: self.arena))

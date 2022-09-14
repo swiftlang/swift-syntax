@@ -69,6 +69,19 @@ final class DirectiveTests: XCTestCase {
        #sourceLocation(file: "foo", line: 42)
        """
     )
+
+    AssertParse(
+      """
+      public class C<R> {
+
+      #sourceLocation(file: "f.swift", line: 1)
+        public func f<S>(_ s: S) {
+
+      #sourceLocation(file: "f.swift", line: 2)
+          g(s)
+        }
+      }
+      """)
   }
 
   public func testUnterminatedPoundIf() {

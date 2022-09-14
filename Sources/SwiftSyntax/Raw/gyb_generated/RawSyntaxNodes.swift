@@ -9753,11 +9753,11 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
 
   public init(
     _ unexpectedBeforeType: RawUnexpectedNodesSyntax? = nil,
-    type: RawSimpleTypeIdentifierSyntax,
+    type: RawTypeSyntax,
     _ unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax,
     _ unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax? = nil,
-    declBaseName: RawSyntax,
+    declBaseName: RawTokenSyntax,
     _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? = nil,
     declNameArguments: RawDeclNameArgumentsSyntax?,
     arena: __shared SyntaxArena
@@ -9780,8 +9780,8 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public var unexpectedBeforeType: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var type: RawSimpleTypeIdentifierSyntax {
-    layoutView.children[1].map(RawSimpleTypeIdentifierSyntax.init(raw:))!
+  public var type: RawTypeSyntax {
+    layoutView.children[1].map(RawTypeSyntax.init(raw:))!
   }
   public var unexpectedBetweenTypeAndComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
@@ -9792,8 +9792,8 @@ public struct RawImplementsAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public var unexpectedBetweenCommaAndDeclBaseName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var declBaseName: RawSyntax {
-    layoutView.children[5]!
+  public var declBaseName: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))

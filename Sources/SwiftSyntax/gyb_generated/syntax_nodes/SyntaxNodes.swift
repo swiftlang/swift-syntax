@@ -9721,11 +9721,11 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 
   public init(
     _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
-    type: SimpleTypeIdentifierSyntax,
+    type: TypeSyntax,
     _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil,
     comma: TokenSyntax,
     _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil,
-    declBaseName: Syntax,
+    declBaseName: TokenSyntax,
     _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
     declNameArguments: DeclNameArgumentsSyntax?
   ) {
@@ -9770,10 +9770,10 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// The type for which the method with this attribute
   /// implements a requirement.
   /// 
-  public var type: SimpleTypeIdentifierSyntax {
+  public var type: TypeSyntax {
     get {
       let childData = data.child(at: 1, parent: Syntax(self))
-      return SimpleTypeIdentifierSyntax(childData!)
+      return TypeSyntax(childData!)
     }
     set(value) {
       self = withType(value)
@@ -9784,8 +9784,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// - param newChild: The new `type` to replace the node's
   ///                   current `type`, if present.
   public func withType(
-    _ newChild: SimpleTypeIdentifierSyntax?) -> ImplementsAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.simpleTypeIdentifier, arena: .default)
+    _ newChild: TypeSyntax?) -> ImplementsAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
     let newData = data.replacingChild(raw, at: 1)
     return ImplementsAttributeArgumentsSyntax(newData)
   }
@@ -9858,10 +9858,10 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// 
   /// The base name of the protocol's requirement.
   /// 
-  public var declBaseName: Syntax {
+  public var declBaseName: TokenSyntax {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      return Syntax(childData!)
+      return TokenSyntax(childData!)
     }
     set(value) {
       self = withDeclBaseName(value)
@@ -9872,8 +9872,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   /// - param newChild: The new `declBaseName` to replace the node's
   ///                   current `declBaseName`, if present.
   public func withDeclBaseName(
-    _ newChild: Syntax?) -> ImplementsAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default)
+    _ newChild: TokenSyntax?) -> ImplementsAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default)
     let newData = data.replacingChild(raw, at: 5)
     return ImplementsAttributeArgumentsSyntax(newData)
   }

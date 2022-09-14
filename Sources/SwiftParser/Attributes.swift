@@ -53,6 +53,8 @@ extension Parser {
       return RawSyntax(self.parseDynamicReplacementAttribute())
     case ._spi:
       return RawSyntax(self.parseSPIAttribute())
+    case ._implements:
+      return RawSyntax(self.parseImplementsAttribute())
     default:
       break
     }
@@ -678,6 +680,43 @@ extension Parser {
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       tokenList: nil,
+      arena: self.arena)
+  }
+}
+
+extension Parser {
+  mutating func parseImplementsAttribute() -> RawAttributeSyntax {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforeSpiToken, spiToken) = self.expectContextualKeyword("_implements")
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    let label = self.parseImplementsAttributeArguments()
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+    return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      unexpectedBeforeSpiToken,
+      attributeName: spiToken,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      argument: RawSyntax(label),
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      tokenList: nil,
+      arena: self.arena)
+  }
+
+  mutating func parseImplementsAttributeArguments() -> RawImplementsAttributeArgumentsSyntax {
+    let type = self.parseTypeIdentifier()
+    let (unexpectedBeforeComma, comma) = self.expect(.comma)
+    let (name, args) = self.parseDeclNameRef([
+      .zeroArgCompoundNames,
+      .operators,
+    ])
+    return RawImplementsAttributeArgumentsSyntax(
+      type: type,
+      unexpectedBeforeComma, comma: comma,
+      declBaseName: name,
+      declNameArguments: args,
       arena: self.arena)
   }
 }

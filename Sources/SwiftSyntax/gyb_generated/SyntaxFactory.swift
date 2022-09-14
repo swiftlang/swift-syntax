@@ -4341,7 +4341,7 @@ public enum SyntaxFactory {
     return DeclNameSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on ImplementsAttributeArgumentsSyntax")
-  public static func makeImplementsAttributeArguments(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: SimpleTypeIdentifierSyntax, _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: Syntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  public static func makeImplementsAttributeArguments(_ unexpectedBeforeType: UnexpectedNodesSyntax? = nil, type: TypeSyntax, _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax, _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil, declBaseName: TokenSyntax, _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeType?.raw,
       type.raw,
@@ -4363,11 +4363,11 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .implementsAttributeArguments,
       from: [
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.simpleTypeIdentifier, arena: .default),
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default),
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default),
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.unknown, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.unknown(""), arena: .default),
       nil,
       nil,
     ], arena: .default))

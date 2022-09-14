@@ -216,7 +216,7 @@ ATTRIBUTE_NODES = [
          `Type, methodName(arg1Label:arg2Label:)`
          ''',
          children=[
-             Child('Type', kind='SimpleTypeIdentifier', description='''
+             Child('Type', kind='Type', description='''
                    The type for which the method with this attribute
                    implements a requirement.
                    '''),
@@ -224,13 +224,9 @@ ATTRIBUTE_NODES = [
                    description='''
                    The comma separating the type and method name
                    '''),
-             Child('DeclBaseName', kind='Syntax', description='''
+             Child('DeclBaseName', kind='Token', description='''
                    The base name of the protocol\'s requirement.
-                   ''',
-                   node_choices=[
-                       Child('Identifier', kind='IdentifierToken'),
-                       Child('Operator', kind='PrefixOperatorToken'),
-                   ]),
+                   '''),
              Child('DeclNameArguments', kind='DeclNameArguments',
                    is_optional=True, description='''
                    The argument labels of the protocol\'s requirement if it

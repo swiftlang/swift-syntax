@@ -1399,11 +1399,11 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .implementsAttributeArguments:
     assert(layout.count == 8)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[1], as: RawSimpleTypeIdentifierSyntax.self)
+    _verify(layout[1], as: RawTypeSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawTokenSyntax.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[5], as: RawSyntax.self)
+    _verify(layout[5], as: RawTokenSyntax.self)
     _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[7], as: RawDeclNameArgumentsSyntax?.self)
     break

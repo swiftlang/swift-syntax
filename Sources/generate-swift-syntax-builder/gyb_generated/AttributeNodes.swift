@@ -297,7 +297,7 @@ let ATTRIBUTE_NODES: [Node] = [
        kind: "Syntax",
        children: [
          Child(name: "Type",
-               kind: "SimpleTypeIdentifier",
+               kind: "Type",
                description: "The type for which the method with this attributeimplements a requirement."),
          Child(name: "Comma",
                kind: "CommaToken",
@@ -306,20 +306,8 @@ let ATTRIBUTE_NODES: [Node] = [
                  "Comma"
                ]),
          Child(name: "DeclBaseName",
-               kind: "Syntax",
-               description: "The base name of the protocol's requirement.",
-               nodeChoices: [
-                 Child(name: "Identifier",
-                       kind: "IdentifierToken",
-                       tokenChoices: [
-                         "Identifier"
-                       ]),
-                 Child(name: "Operator",
-                       kind: "PrefixOperatorToken",
-                       tokenChoices: [
-                         "PrefixOperator"
-                       ])
-               ]),
+               kind: "Token",
+               description: "The base name of the protocol's requirement."),
          Child(name: "DeclNameArguments",
                kind: "DeclNameArguments",
                description: "The argument labels of the protocol's requirement if itis a function requirement.",

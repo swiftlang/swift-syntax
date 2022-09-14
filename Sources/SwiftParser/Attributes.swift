@@ -37,6 +37,8 @@ extension Parser {
     switch declAttr {
     case .available:
       return RawSyntax(self.parseAvailabilityAttribute())
+    case ._spi_available:
+      return RawSyntax(self.parseSPIAvailableAttribute())
     case .differentiable:
       return RawSyntax(self.parseDifferentiableAttribute())
     case .derivative:
@@ -125,6 +127,37 @@ extension Parser {
   mutating func parseAvailabilityAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforeAvailable, available) = self.expectContextualKeyword("available")
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+
+    let argument: RawSyntax
+    do {
+      if self.peek().tokenKind == .integerLiteral {
+        argument = RawSyntax(self.parseAvailabilitySpecList(from: .available))
+      } else if self.peek().tokenKind  == .floatingLiteral {
+        argument = RawSyntax(self.parseAvailabilitySpecList(from: .available))
+      } else {
+        argument = RawSyntax(self.parseExtendedAvailabilitySpecList())
+      }
+    }
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      unexpectedBeforeAvailable,
+      attributeName: available,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      argument: argument,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      tokenList: nil,
+      arena: self.arena)
+  }
+
+  mutating func parseSPIAvailableAttribute() -> RawAttributeSyntax {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforeAvailable, available) = self.expectContextualKeyword("_spi_available")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument: RawSyntax

@@ -25,5 +25,6 @@ extension Parser {
 % for attr in DECL_ATTR_KINDS:
     case ${attr.swift_name} = "${attr.name}"
 % end
+    case _spi_available = "_spi_available"
   }
 }

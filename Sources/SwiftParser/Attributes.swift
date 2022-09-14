@@ -41,6 +41,8 @@ extension Parser {
       return RawSyntax(self.parseDifferentiableAttribute())
     case .derivative:
       return RawSyntax(self.parseDerivativeAttribute())
+    case .transpose:
+      return RawSyntax(self.parseTransposeAttribute())
     case .objc:
       return RawSyntax(self.parseObjectiveCAttribute())
     case ._specialize:
@@ -320,6 +322,29 @@ extension Parser {
       tokenList: nil,
       arena: self.arena)
   }
+
+  mutating func parseTransposeAttribute() -> RawAttributeSyntax {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforeTranspose, transpose) = self.expectContextualKeyword("transpose")
+
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    let argument = self.parseDerivativeAttributeArguments()
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      unexpectedBeforeTranspose,
+      attributeName: transpose,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      argument: RawSyntax(argument),
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      tokenList: nil,
+      arena: self.arena)
+  }
+
 
   mutating func parseDerivativeAttributeArguments() -> RawDerivativeRegistrationAttributeArgumentsSyntax {
     let (unexpectedBeforeOfLabel, ofLabel) = self.expectContextualKeyword("of")

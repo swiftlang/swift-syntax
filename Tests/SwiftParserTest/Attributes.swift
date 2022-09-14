@@ -142,4 +142,30 @@ final class AttributeTests: XCTestCase {
       ) {}
       """)
   }
+
+  func testTransposeAttribute() {
+    AssertParse(
+      """
+      @transpose(of: +)
+      func addTranspose(_ v: Float) -> (Float, Float) {
+        return (v, v)
+      }
+      """)
+
+    AssertParse(
+      """
+      @transpose(of: -, wrt: (0, 1))
+      func subtractTranspose(_ v: Float) -> (Float, Float) {
+        return (v, -v)
+      }
+      """)
+
+    AssertParse(
+      """
+      @transpose(of: Float.-, wrt: (0, 1))
+      func subtractTranspose(_ v: Float) -> (Float, Float) {
+        return (v, -v)
+      }
+      """)
+  }
 }

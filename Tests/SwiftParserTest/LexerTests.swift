@@ -485,28 +485,58 @@ public class LexerTests: XCTestCase {
   }
 
   func testNotARegex() {
-    var data =
-    """
-    min(reduced.count / 2, chunkSize / 2)
-    """
-    let lexemes = data.withUTF8 { buf in
-      Lexer.lex(buf)
+    do {
+      var data =
+      """
+      min(reduced.count / 2, chunkSize / 2)
+      """
+      let lexemes = data.withUTF8 { buf in
+        Lexer.lex(buf)
+      }
+      AssertEqualTokens(lexemes, [
+        lexeme(.identifier, "min"),
+        lexeme(.leftParen, "("),
+        lexeme(.identifier, "reduced"),
+        lexeme(.period, "."),
+        lexeme(.identifier, "count ", trailing: 1),
+        lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
+        lexeme(.integerLiteral, "2"),
+        lexeme(.comma, ", ", trailing: 1),
+        lexeme(.identifier, "chunkSize ", trailing: 1),
+        lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
+        lexeme(.integerLiteral, "2"),
+        lexeme(.rightParen, ")"),
+        lexeme(.eof, ""),
+      ])
     }
-    AssertEqualTokens(lexemes, [
-      lexeme(.identifier, "min"),
-      lexeme(.leftParen, "("),
-      lexeme(.identifier, "reduced"),
-      lexeme(.period, "."),
-      lexeme(.identifier, "count ", trailing: 1),
-      lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
-      lexeme(.integerLiteral, "2"),
-      lexeme(.comma, ", ", trailing: 1),
-      lexeme(.identifier, "chunkSize ", trailing: 1),
-      lexeme(.spacedBinaryOperator, "/ ", trailing: 1),
-      lexeme(.integerLiteral, "2"),
-      lexeme(.rightParen, ")"),
-      lexeme(.eof, ""),
-    ])
+
+    do {
+      var data =
+      """
+      var x: Int {
+        return 0 /
+               x
+      }
+
+      ///
+      """
+      let lexemes = data.withUTF8 { buf in
+        Lexer.lex(buf)
+      }
+      AssertEqualTokens(lexemes, [
+        lexeme(.varKeyword, "var ", trailing: 1),
+        lexeme(.identifier, "x"),
+        lexeme(.colon, ": ", trailing: 1),
+        lexeme(.identifier, "Int ", trailing: 1),
+        lexeme(.leftBrace, "{"),
+        lexeme(.returnKeyword, "\n  return ", leading: 3, trailing: 1),
+        lexeme(.integerLiteral, "0 ", trailing: 1),
+        lexeme(.spacedBinaryOperator, "/", trailing: 0),
+        lexeme(.identifier, "\n         x", leading: 10),
+        lexeme(.rightBrace, "\n}", leading: 1),
+        lexeme(.eof, "\n\n///", leading: 5),
+      ])
+    }
   }
 
   func testUnicodeReplcementsInStream() {

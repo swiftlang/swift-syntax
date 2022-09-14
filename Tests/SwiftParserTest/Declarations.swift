@@ -953,12 +953,6 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testBogusTypeDeclName() {
-    AssertParse("actor #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
-                diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '{' to start actor"),
-                  DiagnosticSpec(locationMarker: "DIAG_AFTER", message: "Expected '}' to end actor")
-                ])
     AssertParse("associatedtype #^DIAG_BEFORE^#5s#^DIAG_AFTER^#",
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),

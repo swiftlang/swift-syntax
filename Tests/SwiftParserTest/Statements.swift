@@ -91,6 +91,8 @@ final class StatementTests: XCTestCase {
   }
 
   func testReturn() {
+    AssertParse("return actor", { $0.parseReturnStatement() })
+
     AssertParse("{ #^ASYNC^#return 0 }",
                 { $0.parseClosureExpression() },
                 substructure: Syntax(ReturnStmtSyntax(returnKeyword: .returnKeyword(),

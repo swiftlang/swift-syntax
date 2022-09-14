@@ -317,10 +317,11 @@ extension Parser {
       }
     }
 
-    switch self.at(anyIn: AwaitTry.self) {
+    switch self.at(anyIn: AwaitTryMove.self) {
     case (.awaitContextualKeyword, let handle)?:
       let awaitTok = self.eat(handle)
-      let sub = self.parseSequenceExpressionElement(flavor, inVarOrLet: inVarOrLet)
+      let sub = self.parseSequenceExpressionElement(
+        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
       return RawExprSyntax(RawAwaitExprSyntax(
         awaitKeyword: awaitTok,
         expression: sub,
@@ -330,13 +331,22 @@ extension Parser {
       let tryKeyword = self.eat(handle)
       let mark = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark])
 
-      let expression = self.parseSequenceExpressionElement(flavor, inVarOrLet: inVarOrLet)
+      let expression = self.parseSequenceExpressionElement(
+        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
       return RawExprSyntax(RawTryExprSyntax(
         tryKeyword: tryKeyword,
         questionOrExclamationMark: mark,
         expression: expression,
         arena: self.arena
       ))
+    case (._moveContextualKeyword, let handle)?:
+      let moveTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(
+        flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
+      return RawExprSyntax(RawMoveExprSyntax(
+        moveKeyword: moveTok,
+        expression: sub,
+        arena: self.arena))
     case nil:
       return self.parseUnaryExpression(flavor, forDirective: forDirective, inVarOrLet: inVarOrLet)
     }

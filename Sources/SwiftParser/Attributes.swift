@@ -508,13 +508,13 @@ extension Parser {
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let availability = self.parseAvailabilitySpecList(from: .available)
-        // FIXME: This is modeled incorrectly in libSyntax.
-        let semi = RawTokenSyntax(missing: .semicolon, arena: self.arena)
+        let (unexpectedBeforeSemi, semi) = self.expect(.semicolon)
         elements.append(RawSyntax(RawAvailabilityEntrySyntax(
           label: ident,
           unexpectedBeforeColon,
           colon: colon,
           availabilityList: availability,
+          unexpectedBeforeSemi,
           semicolon: semi,
           arena: self.arena
         )))

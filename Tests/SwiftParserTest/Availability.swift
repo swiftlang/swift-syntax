@@ -50,4 +50,18 @@ final class AvailabilityTests: XCTestCase {
       """
     )
   }
+
+  func testAvailabilityMacros() throws {
+    AssertParse(
+      """
+      @available(_iOS9, _macOS10_11, tvOS 11.0, *)
+      public func composed() {}
+      """)
+
+    AssertParse(
+      """
+      @_specialize(exported: true, availability: SwiftStdlib 5.1, *; where T == Int)
+      public func testSemanticsAvailability<T>(_ t: T) {}
+      """)
+  }
 }

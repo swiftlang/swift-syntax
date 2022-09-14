@@ -192,4 +192,19 @@ final class AttributeTests: XCTestCase {
       }
       """)
   }
+
+  func testSemanticsAttribute() throws {
+    AssertParse(
+      """
+      @_semantics("constant_evaluable")
+      func testRecursion(_ a: Int) -> Int {
+        return a <= 0 ? 0 : testRecursion(a-1)
+      }
+
+      @_semantics("test_driver")
+      internal func interpretRecursion() -> Int {
+        return testRecursion(10)
+      }
+      """)
+  }
 }

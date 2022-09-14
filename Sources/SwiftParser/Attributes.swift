@@ -55,6 +55,8 @@ extension Parser {
       return RawSyntax(self.parseSPIAttribute())
     case ._implements:
       return RawSyntax(self.parseImplementsAttribute())
+    case ._semantics:
+      return RawSyntax(self.parseSemanticsAttribute())
     default:
       break
     }
@@ -733,6 +735,28 @@ extension Parser {
       comma: comma,
       unexpectedBeforeOrdinal,
       ordinal: ordinal,
+      arena: self.arena)
+  }
+}
+
+extension Parser {
+  mutating func parseSemanticsAttribute() -> RawAttributeSyntax {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforeSemanticsToken, semanticsToken) = self.expectContextualKeyword("_semantics")
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    let label = self.parseStringLiteral()
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+    return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      unexpectedBeforeSemanticsToken,
+      attributeName: semanticsToken,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      argument: RawSyntax(label),
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      tokenList: nil,
       arena: self.arena)
   }
 }

@@ -102,7 +102,7 @@ extension Parser {
     case _implicitSelfCapture = "_implicitSelfCapture"
     case _inheritActorContext = "_inheritActorContext"
     case _eagerMove = "_eagerMove"
-    case _lexical = "_lexical"
+    case _noEagerMove = "_noEagerMove"
     case _assemblyVision = "_assemblyVision"
     case _nonSendable = "_nonSendable"
     case _noImplicitCopy = "_noImplicitCopy"
@@ -118,5 +118,6 @@ extension Parser {
     case typeWrapper = "typeWrapper"
     case _spiOnly = "_spiOnly"
     case _documentation = "_documentation"
+    case typeWrapperIgnored = "typeWrapperIgnored"
   }
 }

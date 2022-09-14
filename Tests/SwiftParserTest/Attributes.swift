@@ -103,4 +103,43 @@ final class AttributeTests: XCTestCase {
       @_Concurrency.MainActor(unsafe) public struct Image : SwiftUI.View {}
       """)
   }
+
+  func testDerivativeAttribute() {
+    AssertParse(
+      """
+      @inlinable
+      @differentiable(reverse, wrt: self)
+      public func differentiableMap<Result: Differentiable>(
+        _ body: @differentiable(reverse) (Element) -> Result
+      ) -> [Result] {
+        map(body)
+      }
+      """)
+
+    AssertParse(
+      """
+      @inlinable
+      @differentiable(reverse, wrt: (self, initialResult))
+      public func differentiableReduce<Result: Differentiable>(
+        _ initialResult: Result,
+        _ nextPartialResult: @differentiable(reverse) (Result, Element) -> Result
+      ) -> Result {
+        reduce(initialResult, nextPartialResult)
+      }
+      """)
+
+    AssertParse(
+      """
+      @inlinable
+      @derivative(of: differentiableReduce)
+      internal func _vjpDifferentiableReduce<Result: Differentiable>(
+        _ initialResult: Result,
+        _ nextPartialResult: @differentiable(reverse) (Result, Element) -> Result
+      ) -> (
+        value: Result,
+        pullback: (Result.TangentVector)
+          -> (Array.TangentVector, Result.TangentVector)
+      ) {}
+      """)
+  }
 }

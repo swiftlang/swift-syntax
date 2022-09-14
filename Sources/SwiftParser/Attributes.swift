@@ -39,6 +39,8 @@ extension Parser {
       return RawSyntax(self.parseAvailabilityAttribute())
     case .differentiable:
       return RawSyntax(self.parseDifferentiableAttribute())
+    case .derivative:
+      return RawSyntax(self.parseDerivativeAttribute())
     case .objc:
       return RawSyntax(self.parseObjectiveCAttribute())
     case ._specialize:
@@ -293,6 +295,61 @@ extension Parser {
     case nil:
       return nil
     }
+  }
+}
+
+extension Parser {
+  mutating func parseDerivativeAttribute() -> RawAttributeSyntax {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforeDerivative, derivative) = self.expectContextualKeyword("derivative")
+
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    let argument = self.parseDerivativeAttributeArguments()
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      unexpectedBeforeDerivative,
+      attributeName: derivative,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      argument: RawSyntax(argument),
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      tokenList: nil,
+      arena: self.arena)
+  }
+
+  mutating func parseDerivativeAttributeArguments() -> RawDerivativeRegistrationAttributeArgumentsSyntax {
+    let (unexpectedBeforeOfLabel, ofLabel) = self.expectContextualKeyword("of")
+    let (unexpectedBetweenOfLabelAndColon, colon) = self.expect(.colon)
+    let originalDeclName = self.parseQualifiedDeclarationName()
+    let period = self.consume(if: .period)
+    let accessor: RawTokenSyntax?
+    if period != nil {
+      accessor = self.parseAnyIdentifier()
+    } else {
+      accessor = nil
+    }
+    let comma = self.consume(if: .comma)
+    let diffParams: RawDifferentiabilityParamsClauseSyntax?
+    if comma != nil {
+      diffParams = self.parseDifferentiabilityParameters()
+    } else {
+      diffParams = nil
+    }
+    return RawDerivativeRegistrationAttributeArgumentsSyntax(
+      unexpectedBeforeOfLabel,
+      ofLabel: ofLabel,
+      unexpectedBetweenOfLabelAndColon,
+      colon: colon,
+      originalDeclName: originalDeclName,
+      period: period,
+      accessorKind: accessor,
+      comma: comma,
+      diffParams: diffParams,
+      arena: self.arena)
   }
 }
 

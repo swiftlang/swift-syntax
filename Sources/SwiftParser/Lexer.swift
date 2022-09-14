@@ -2029,7 +2029,7 @@ extension Lexer.Cursor {
     // }
     //
     if poundCount == 0 && !Tmp.isAtEndOfFile &&
-        (Tmp.peek() == UInt8(ascii: " ") || Tmp.peek() == UInt8(ascii: "\t")) {
+        (Tmp.peek() == UInt8(ascii: " ") || Tmp.peek() == UInt8(ascii: "\n") || Tmp.peek() == UInt8(ascii: "\t")) {
       return nil
     }
 

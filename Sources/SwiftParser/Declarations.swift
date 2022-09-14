@@ -1232,6 +1232,17 @@ extension Parser {
           attrs = self.parseAttributeList()
         }
 
+        let unexpectedBeforeIsolated: RawUnexpectedNodesSyntax?
+        let isolated: RawTokenSyntax?
+        if self.currentToken.isContextualKeyword("isolated") &&
+            !self.lookahead().startsParameterName(subject.isClosure) {
+          (unexpectedBeforeIsolated, isolated) = self.expectContextualKeyword("isolated")
+        } else {
+          unexpectedBeforeIsolated = nil
+          isolated = nil
+        }
+        let const = self.consumeIfContextualKeyword("_const")
+
         let firstName: RawTokenSyntax?
         let secondName: RawTokenSyntax?
         let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
@@ -1291,6 +1302,9 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(RawFunctionParameterSyntax(
           attributes: attrs,
+          unexpectedBeforeIsolated,
+          isolated: isolated,
+          const: const,
           firstName: firstName,
           secondName: secondName,
           unexpectedBeforeColon,

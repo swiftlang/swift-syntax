@@ -722,6 +722,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third"))]),
@@ -743,6 +745,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("third")), Syntax(TokenSyntax.identifier("fourth"))]),
@@ -763,6 +767,8 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^MISSING_COLON^#third #^MISSING_RPAREN^#struct#^MISSING_IDENTIFIER^##^BRACES^#: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: .identifier("first"),
         secondName: .identifier("second"),
         colon: .colonToken(presence: .missing),
@@ -789,6 +795,8 @@ final class DeclarationTests: XCTestCase {
       { $0.parseFunctionSignature() },
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         UnexpectedNodesSyntax([
@@ -814,6 +822,8 @@ final class DeclarationTests: XCTestCase {
       "func foo(first second #^COLON^#[third #^END_ARRAY^#fourth: Int) {}",
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),
@@ -842,6 +852,8 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(FunctionParameterSyntax(
         attributes: nil,
+        isolated: nil,
+        const: nil,
         firstName: TokenSyntax.identifier("first"),
         secondName: TokenSyntax.identifier("second"),
         colon: TokenSyntax(.colon, presence: .missing),
@@ -968,6 +980,29 @@ final class DeclarationTests: XCTestCase {
                 diagnostics: [
                   DiagnosticSpec(locationMarker: "DIAG_BEFORE", message: "identifier can only start with a letter or underscore, not a number"),
                 ])
+  }
+
+  func testModifiedParameter() {
+    AssertParse(
+      #"""
+      func const(_const _ map: String) {}
+      func isolated(isolated _ map: String) {}
+      func isolatedConst(isolated _const _ map: String) {}
+      """#)
+
+    AssertParse(
+      #"""
+      func const(_const map: String) {}
+      func isolated(isolated map: String) {}
+      func isolatedConst(isolated _const map: String) {}
+      """#)
+
+    AssertParse(
+      #"""
+      func const(_const x: String) {}
+      func isolated(isolated: String) {}
+      func isolatedConst(isolated _const: String) {}
+      """#)
   }
 }
 

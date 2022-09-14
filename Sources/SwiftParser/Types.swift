@@ -804,7 +804,6 @@ extension Parser {
       let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
       let (unexpectedBeforeArgument, argument) = self.expectIdentifier()
-
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return RawSyntax(
         RawAttributeSyntax(

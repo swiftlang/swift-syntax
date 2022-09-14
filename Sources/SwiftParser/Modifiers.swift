@@ -22,7 +22,8 @@ extension Parser {
       case (.privateKeyword, _)?,
           (.fileprivateKeyword, _)?,
           (.internalKeyword, _)?,
-          (.publicKeyword, _)?:
+          (.publicKeyword, _)?,
+          (.open, _)?,:
         elements.append(parseAccessLevelModifier())
       case (.staticKeyword, let handle)?:
         let staticKeyword = self.eat(handle)
@@ -64,7 +65,6 @@ extension Parser {
         (.nonmutating, _)?,
         (.convenience, _)?,
         (.override, _)?,
-        (.open, _)?,
         (.weak, _)?,
         (.indirect, _)?,
         (.isolated, _)?,

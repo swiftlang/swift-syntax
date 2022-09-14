@@ -223,7 +223,12 @@ final class DeclarationTests: XCTestCase {
   func testAccessLevelModifier() {
     AssertParse(
       """
-      private(set) var a = 0
+      open open(set) var openProp = 0
+      public public(set) var publicProp = 0
+      internal internal(set) var internalProp = 0
+      fileprivate fileprivate(set) var fileprivateProp = 0
+      private private(set) var privateProp = 0
+      internal(set) var defaultProp = 0
       """
     )
 

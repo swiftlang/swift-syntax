@@ -32,7 +32,11 @@ add_library(SwiftParser STATIC
   Types.swift
 
   Diagnostics/ParserDiagnosticMessages.swift
-  Diagnostics/ParseDiagnosticsGenerator.swift)
+  Diagnostics/ParseDiagnosticsGenerator.swift
+
+  gyb_generated/DeclarationAttribute.swift
+  gyb_generated/DeclarationModifier.swift
+  gyb_generated/TypeAttribute.swift)
 
 target_link_libraries(SwiftParser PUBLIC
   SwiftSyntax

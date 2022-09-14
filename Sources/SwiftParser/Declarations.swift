@@ -13,7 +13,10 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension TokenConsumer {
-  func atStartOfDeclaration(isAtTopLevel: Bool = false, allowRecovery: Bool = false) -> Bool {
+  func atStartOfDeclaration(
+    isAtTopLevel: Bool = false,
+    allowRecovery: Bool = false
+  ) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
       return true
     }
@@ -54,6 +57,19 @@ extension TokenConsumer {
       declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
     }
     switch declStartKeyword {
+    case .actorContextualKeyword:
+      // actor Foo {}
+      if subparser.peek().tokenKind == .identifier {
+        return true
+      }
+      // actor may be somewhere in the modifier list. Eat the tokens until we get
+      // to something that isn't the start of a decl. If that is an identifier,
+      // it's an actor declaration, otherwise, it isn't.
+      var lookahead = subparser.lookahead()
+      repeat {
+        lookahead.consumeAnyToken()
+      } while lookahead.atStartOfDeclaration()
+      return lookahead.at(.identifier)
     case .caseKeyword, nil:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.

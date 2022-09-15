@@ -362,6 +362,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/BackDeployVersionListSyntax>
 - <doc:SwiftSyntax/BackDeployVersionArgumentSyntax>
 - <doc:SwiftSyntax/OpaqueReturnTypeOfAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/ConventionAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/CatchClauseListSyntax>

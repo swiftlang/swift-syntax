@@ -115,6 +115,10 @@ let ATTRIBUTE_NODES: [Node] = [
                        kind: "NamedAttributeStringArgument"),
                  Child(name: "BackDeployArguments",
                        kind: "BackDeployAttributeSpecList"),
+                 Child(name: "ConventionArguments",
+                       kind: "ConventionAttributeArguments"),
+                 Child(name: "ConventionWitnessMethodArguments",
+                       kind: "ConventionWitnessMethodAttributeArguments"),
                  Child(name: "TokenList",
                        kind: "TokenList",
                        collectionElementName: "Token")
@@ -651,6 +655,75 @@ let ATTRIBUTE_NODES: [Node] = [
                description: "The ordinal corresponding to the 'some' keyword that introduced this opaque type.",
                tokenChoices: [
                  "IntegerLiteral"
+               ])
+       ]),
+
+  Node(name: "ConventionAttributeArguments",
+       nameForDiagnostics: "@convention(...) arguments",
+       description: "The arguments for the '@convention(...)'.",
+       kind: "Syntax",
+       children: [
+         Child(name: "ConventionLabel",
+               kind: "IdentifierToken",
+               description: "The convention label.",
+               tokenChoices: [
+                 "Identifier"
+               ],
+               textChoices: [
+                 "block",
+                 "c",
+                 "objc_method",
+                 "thin",
+                 "thick"
+               ]),
+         Child(name: "Comma",
+               kind: "CommaToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ]),
+         Child(name: "CTypeLabel",
+               kind: "IdentifierToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Identifier"
+               ],
+               textChoices: [
+                 "cType"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Colon"
+               ]),
+         Child(name: "CTypeString",
+               kind: "StringLiteralToken",
+               isOptional: true,
+               tokenChoices: [
+                 "StringLiteral"
+               ])
+       ]),
+
+  Node(name: "ConventionWitnessMethodAttributeArguments",
+       nameForDiagnostics: "@convention(...) arguments for witness methods",
+       description: "The arguments for the '@convention(witness_method: ...)'.",
+       kind: "Syntax",
+       children: [
+         Child(name: "WitnessMethodLabel",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ]),
+         Child(name: "Colon",
+               kind: "ColonToken",
+               tokenChoices: [
+                 "Colon"
+               ]),
+         Child(name: "ProtocolName",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
                ])
        ]),
 

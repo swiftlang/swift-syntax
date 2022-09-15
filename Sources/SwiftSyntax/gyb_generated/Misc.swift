@@ -383,6 +383,10 @@ extension Syntax {
       return node
     case .opaqueReturnTypeOfAttributeArguments(let node):
       return node
+    case .conventionAttributeArguments(let node):
+      return node
+    case .conventionWitnessMethodAttributeArguments(let node):
+      return node
     case .labeledStmt(let node):
       return node
     case .continueStmt(let node):
@@ -747,6 +751,8 @@ extension SyntaxKind {
     case .backDeployVersionList: return BackDeployVersionListSyntax.self
     case .backDeployVersionArgument: return BackDeployVersionArgumentSyntax.self
     case .opaqueReturnTypeOfAttributeArguments: return OpaqueReturnTypeOfAttributeArgumentsSyntax.self
+    case .conventionAttributeArguments: return ConventionAttributeArgumentsSyntax.self
+    case .conventionWitnessMethodAttributeArguments: return ConventionWitnessMethodAttributeArgumentsSyntax.self
     case .labeledStmt: return LabeledStmtSyntax.self
     case .continueStmt: return ContinueStmtSyntax.self
     case .whileStmt: return WhileStmtSyntax.self

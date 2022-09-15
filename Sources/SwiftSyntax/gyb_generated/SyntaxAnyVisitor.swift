@@ -1300,6 +1300,20 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: ConventionAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ConventionAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: LabeledStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

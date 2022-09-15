@@ -1212,6 +1212,22 @@ extension Format {
     }
     return result
   }
+  func format(syntax: ConventionAttributeArgumentsSyntax) -> ConventionAttributeArgumentsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
+  func format(syntax: ConventionWitnessMethodAttributeArgumentsSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
   func format(syntax: LabeledStmtSyntax) -> LabeledStmtSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []

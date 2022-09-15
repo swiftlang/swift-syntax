@@ -286,4 +286,6 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "PackExpansionType": 273,
   "OpaqueReturnTypeOfAttributeArguments": 274,
   "HasSymbolCondition": 275,
+  "ConventionAttributeArguments": 276,
+  "ConventionWitnessMethodAttributeArguments": 277,
 ]

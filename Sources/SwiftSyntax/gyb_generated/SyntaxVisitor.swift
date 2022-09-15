@@ -1811,6 +1811,26 @@ open class SyntaxVisitor {
   /// The function called after visiting `OpaqueReturnTypeOfAttributeArgumentsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {}
+  /// Visiting `ConventionAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ConventionAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `ConventionAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ConventionAttributeArgumentsSyntax) {}
+  /// Visiting `ConventionWitnessMethodAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `ConventionWitnessMethodAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {}
   /// Visiting `LabeledStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4727,6 +4747,28 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplConventionAttributeArgumentsSyntax(_ data: SyntaxData) {
+      let node = ConventionAttributeArgumentsSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) {
+      let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && !node.raw.layoutView!.children.isEmpty {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLabeledStmtSyntax(_ data: SyntaxData) {
       let node = LabeledStmtSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -6079,6 +6121,10 @@ open class SyntaxVisitor {
       visitImplBackDeployVersionArgumentSyntax(data)
     case .opaqueReturnTypeOfAttributeArguments:
       visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+    case .conventionAttributeArguments:
+      visitImplConventionAttributeArgumentsSyntax(data)
+    case .conventionWitnessMethodAttributeArguments:
+      visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
     case .labeledStmt:
       visitImplLabeledStmtSyntax(data)
     case .continueStmt:

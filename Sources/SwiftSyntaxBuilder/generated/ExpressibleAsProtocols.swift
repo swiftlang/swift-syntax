@@ -1401,6 +1401,22 @@ public extension ExpressibleAsOpaqueReturnTypeOfAttributeArguments {
     return createOpaqueReturnTypeOfAttributeArguments()
   }
 }
+public protocol ExpressibleAsConventionAttributeArguments: ExpressibleAsSyntaxBuildable {
+  func createConventionAttributeArguments() -> ConventionAttributeArguments
+}
+public extension ExpressibleAsConventionAttributeArguments {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createConventionAttributeArguments()
+  }
+}
+public protocol ExpressibleAsConventionWitnessMethodAttributeArguments: ExpressibleAsSyntaxBuildable {
+  func createConventionWitnessMethodAttributeArguments() -> ConventionWitnessMethodAttributeArguments
+}
+public extension ExpressibleAsConventionWitnessMethodAttributeArguments {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createConventionWitnessMethodAttributeArguments()
+  }
+}
 public protocol ExpressibleAsLabeledStmt: ExpressibleAsStmtBuildable {
   func createLabeledStmt() -> LabeledStmt
 }

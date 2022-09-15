@@ -794,6 +794,54 @@ extension Parser {
   }
 }
 
+extension Parser {
+  mutating func parseConventionArguments() -> RawSyntax {
+    if let witnessMethod = self.consumeIfContextualKeyword("witness_method") {
+      let (unexpectedBeforeColon, colon) = self.expect(.colon)
+      let name = self.parseAnyIdentifier()
+      return RawSyntax(RawConventionWitnessMethodAttributeArgumentsSyntax(
+        witnessMethodLabel: witnessMethod,
+        unexpectedBeforeColon,
+        colon: colon,
+        protocolName: name,
+        arena: self.arena))
+    } else {
+      let label = self.consumeAnyToken()
+      let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
+      let comma: RawTokenSyntax?
+      let cTypeLabel: RawTokenSyntax?
+      let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
+      let colon: RawTokenSyntax?
+      let unexpectedBeforeCTypeString: RawUnexpectedNodesSyntax?
+      let cTypeString: RawTokenSyntax?
+      if self.at(.comma) {
+        (unexpectedBeforeComma, comma) = self.expect(.comma)
+        cTypeLabel = self.consumeAnyToken()
+        (unexpectedBeforeColon, colon) = self.expect(.colon)
+        (unexpectedBeforeCTypeString, cTypeString) = self.expect(.stringLiteral)
+      } else {
+        unexpectedBeforeComma = nil
+        comma = nil
+        cTypeLabel = nil
+        unexpectedBeforeColon = nil
+        colon = nil
+        unexpectedBeforeCTypeString = nil
+        cTypeString = nil
+      }
+      return RawSyntax(RawConventionAttributeArgumentsSyntax(
+        conventionLabel: label,
+        unexpectedBeforeComma,
+        comma: comma,
+        cTypeLabel: cTypeLabel,
+        unexpectedBeforeColon,
+        colon: colon,
+        unexpectedBeforeCTypeString,
+        cTypeString: cTypeString,
+        arena: self.arena))
+    }
+  }
+}
+
 // MARK: Lookahead
 
 extension Parser.Lookahead {

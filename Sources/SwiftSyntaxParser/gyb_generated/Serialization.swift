@@ -196,6 +196,8 @@ extension SyntaxKind {
     case 258: self = .backDeployVersionList
     case 259: self = .backDeployVersionArgument
     case 274: self = .opaqueReturnTypeOfAttributeArguments
+    case 276: self = .conventionAttributeArguments
+    case 277: self = .conventionWitnessMethodAttributeArguments
     case 267: self = .labeledStmt
     case 72: self = .continueStmt
     case 73: self = .whileStmt

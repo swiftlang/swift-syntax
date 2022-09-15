@@ -12289,6 +12289,469 @@ extension OpaqueReturnTypeOfAttributeArgumentsSyntax: CustomReflectable {
   }
 }
 
+// MARK: - ConventionAttributeArgumentsSyntax
+
+/// 
+/// The arguments for the '@convention(...)'.
+/// 
+public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `ConventionAttributeArgumentsSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .conventionAttributeArguments else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ConventionAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .conventionAttributeArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil,
+    conventionLabel: TokenSyntax,
+    _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax?,
+    _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil,
+    cTypeLabel: TokenSyntax?,
+    _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax?,
+    _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil,
+    cTypeString: TokenSyntax?
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeConventionLabel?.raw,
+      conventionLabel.raw,
+      unexpectedBetweenConventionLabelAndComma?.raw,
+      comma?.raw,
+      unexpectedBetweenCommaAndCTypeLabel?.raw,
+      cTypeLabel?.raw,
+      unexpectedBetweenCTypeLabelAndColon?.raw,
+      colon?.raw,
+      unexpectedBetweenColonAndCTypeString?.raw,
+      cTypeString?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conventionAttributeArguments,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeConventionLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeConventionLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeConventionLabel` to replace the node's
+  ///                   current `unexpectedBeforeConventionLabel`, if present.
+  public func withUnexpectedBeforeConventionLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  /// The convention label.
+  public var conventionLabel: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withConventionLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `conventionLabel` replaced.
+  /// - param newChild: The new `conventionLabel` to replace the node's
+  ///                   current `conventionLabel`, if present.
+  public func withConventionLabel(
+    _ newChild: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenConventionLabelAndComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenConventionLabelAndComma` replaced.
+  /// - param newChild: The new `unexpectedBetweenConventionLabelAndComma` to replace the node's
+  ///                   current `unexpectedBetweenConventionLabelAndComma`, if present.
+  public func withUnexpectedBetweenConventionLabelAndComma(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var comma: TokenSyntax? {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `comma` replaced.
+  /// - param newChild: The new `comma` to replace the node's
+  ///                   current `comma`, if present.
+  public func withComma(
+    _ newChild: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 3)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenCommaAndCTypeLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndCTypeLabel` replaced.
+  /// - param newChild: The new `unexpectedBetweenCommaAndCTypeLabel` to replace the node's
+  ///                   current `unexpectedBetweenCommaAndCTypeLabel`, if present.
+  public func withUnexpectedBetweenCommaAndCTypeLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var cTypeLabel: TokenSyntax? {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCTypeLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `cTypeLabel` replaced.
+  /// - param newChild: The new `cTypeLabel` to replace the node's
+  ///                   current `cTypeLabel`, if present.
+  public func withCTypeLabel(
+    _ newChild: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 5)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenCTypeLabelAndColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenCTypeLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenCTypeLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenCTypeLabelAndColon`, if present.
+  public func withUnexpectedBetweenCTypeLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var colon: TokenSyntax? {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 7)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 8, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenColonAndCTypeString(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndCTypeString` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndCTypeString` to replace the node's
+  ///                   current `unexpectedBetweenColonAndCTypeString`, if present.
+  public func withUnexpectedBetweenColonAndCTypeString(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 8)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+
+  public var cTypeString: TokenSyntax? {
+    get {
+      let childData = data.child(at: 9, parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCTypeString(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `cTypeString` replaced.
+  /// - param newChild: The new `cTypeString` to replace the node's
+  ///                   current `cTypeString`, if present.
+  public func withCTypeString(
+    _ newChild: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 9)
+    return ConventionAttributeArgumentsSyntax(newData)
+  }
+}
+
+extension ConventionAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeConventionLabel": unexpectedBeforeConventionLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "conventionLabel": Syntax(conventionLabel).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenConventionLabelAndComma": unexpectedBetweenConventionLabelAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCommaAndCTypeLabel": unexpectedBetweenCommaAndCTypeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "cTypeLabel": cTypeLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenCTypeLabelAndColon": unexpectedBetweenCTypeLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenColonAndCTypeString": unexpectedBetweenColonAndCTypeString.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "cTypeString": cTypeString.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - ConventionWitnessMethodAttributeArgumentsSyntax
+
+/// 
+/// The arguments for the '@convention(witness_method: ...)'.
+/// 
+public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `ConventionWitnessMethodAttributeArgumentsSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .conventionWitnessMethodAttributeArguments else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ConventionWitnessMethodAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .conventionWitnessMethodAttributeArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? = nil,
+    witnessMethodLabel: TokenSyntax,
+    _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax,
+    _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil,
+    protocolName: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeWitnessMethodLabel?.raw,
+      witnessMethodLabel.raw,
+      unexpectedBetweenWitnessMethodLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndProtocolName?.raw,
+      protocolName.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conventionWitnessMethodAttributeArguments,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeWitnessMethodLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeWitnessMethodLabel` replaced.
+  /// - param newChild: The new `unexpectedBeforeWitnessMethodLabel` to replace the node's
+  ///                   current `unexpectedBeforeWitnessMethodLabel`, if present.
+  public func withUnexpectedBeforeWitnessMethodLabel(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
+  }
+
+  public var witnessMethodLabel: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWitnessMethodLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `witnessMethodLabel` replaced.
+  /// - param newChild: The new `witnessMethodLabel` to replace the node's
+  ///                   current `witnessMethodLabel`, if present.
+  public func withWitnessMethodLabel(
+    _ newChild: TokenSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenWitnessMethodLabelAndColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenWitnessMethodLabelAndColon` replaced.
+  /// - param newChild: The new `unexpectedBetweenWitnessMethodLabelAndColon` to replace the node's
+  ///                   current `unexpectedBetweenWitnessMethodLabelAndColon`, if present.
+  public func withUnexpectedBetweenWitnessMethodLabelAndColon(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
+  }
+
+  public var unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 4, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenColonAndProtocolName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenColonAndProtocolName` replaced.
+  /// - param newChild: The new `unexpectedBetweenColonAndProtocolName` to replace the node's
+  ///                   current `unexpectedBetweenColonAndProtocolName`, if present.
+  public func withUnexpectedBetweenColonAndProtocolName(
+    _ newChild: UnexpectedNodesSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 4)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
+  }
+
+  public var protocolName: TokenSyntax {
+    get {
+      let childData = data.child(at: 5, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withProtocolName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `protocolName` replaced.
+  /// - param newChild: The new `protocolName` to replace the node's
+  ///                   current `protocolName`, if present.
+  public func withProtocolName(
+    _ newChild: TokenSyntax?) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 5)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(newData)
+  }
+}
+
+extension ConventionWitnessMethodAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeWitnessMethodLabel": unexpectedBeforeWitnessMethodLabel.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "witnessMethodLabel": Syntax(witnessMethodLabel).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenWitnessMethodLabelAndColon": unexpectedBetweenWitnessMethodLabelAndColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenColonAndProtocolName": unexpectedBetweenColonAndProtocolName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "protocolName": Syntax(protocolName).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - WhereClauseSyntax
 
 public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {

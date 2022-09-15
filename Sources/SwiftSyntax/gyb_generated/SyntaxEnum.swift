@@ -193,6 +193,8 @@ public enum SyntaxEnum {
   case backDeployVersionList(BackDeployVersionListSyntax)
   case backDeployVersionArgument(BackDeployVersionArgumentSyntax)
   case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
+  case conventionAttributeArguments(ConventionAttributeArgumentsSyntax)
+  case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
   case labeledStmt(LabeledStmtSyntax)
   case continueStmt(ContinueStmtSyntax)
   case whileStmt(WhileStmtSyntax)
@@ -643,6 +645,10 @@ public enum SyntaxEnum {
       return "version"
     case .opaqueReturnTypeOfAttributeArguments:
       return "opaque return type arguments"
+    case .conventionAttributeArguments:
+      return "@convention(...) arguments"
+    case .conventionWitnessMethodAttributeArguments:
+      return "@convention(...) arguments for witness methods"
     case .labeledStmt:
       return "labeled statement"
     case .continueStmt:
@@ -1187,6 +1193,10 @@ public extension Syntax {
       return .backDeployVersionArgument(BackDeployVersionArgumentSyntax(self)!)
     case .opaqueReturnTypeOfAttributeArguments:
       return .opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax(self)!)
+    case .conventionAttributeArguments:
+      return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
+    case .conventionWitnessMethodAttributeArguments:
+      return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
     case .labeledStmt:
       return .labeledStmt(LabeledStmtSyntax(self)!)
     case .continueStmt:

@@ -139,7 +139,11 @@ extension Parser {
         case nil:
           // Not sure what this label is but, let's just eat it and
           // keep going.
-          entry = RawSyntax(self.consumeAnyToken())
+          var tokens = [RawTokenSyntax]()
+          while !self.at(any: [.eof, .comma, .rightParen]) {
+            tokens.append(self.consumeAnyToken())
+          }
+          entry = RawSyntax(RawNonEmptyTokenListSyntax(elements: tokens, arena: self.arena))
         }
 
         keepGoing = self.consume(if: .comma)

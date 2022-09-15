@@ -1055,11 +1055,18 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: OperatorDeclSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: IdentifierListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DesignatedTypeListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  override open func visitPost(_ node: IdentifierListSyntax) {
+  override open func visitPost(_ node: DesignatedTypeListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: DesignatedTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: DesignatedTypeElementSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
@@ -1298,6 +1305,20 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: ConventionAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ConventionAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: LabeledStmtSyntax) -> SyntaxVisitorContinueKind {

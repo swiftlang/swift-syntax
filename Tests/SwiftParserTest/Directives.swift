@@ -69,6 +69,19 @@ final class DirectiveTests: XCTestCase {
        #sourceLocation(file: "foo", line: 42)
        """
     )
+
+    AssertParse(
+      """
+      public class C<R> {
+
+      #sourceLocation(file: "f.swift", line: 1)
+        public func f<S>(_ s: S) {
+
+      #sourceLocation(file: "f.swift", line: 2)
+          g(s)
+        }
+      }
+      """)
   }
 
   public func testUnterminatedPoundIf() {
@@ -96,6 +109,44 @@ final class DirectiveTests: XCTestCase {
         DiagnosticSpec(locationMarker: "DIAG_2", message: "Unexpected text '}' in conditional compilation block"),
       ]
     )
+  }
+
+  func testHasAttribute() {
+    AssertParse(
+      """
+      @frozen
+      #if hasAttribute(foo)
+      @foo
+      #endif
+      public struct S2 { }
+      """)
+
+    AssertParse(
+      """
+      struct Inner {
+        @frozen
+      #if hasAttribute(foo)
+        #if hasAttribute(bar)
+        @foo @bar
+        #endif
+      #endif
+        public struct S2 { }
+
+      #if hasAttribute(foo)
+        @foo
+      #endif
+        @inlinable
+        func f1() { }
+
+      #if hasAttribute(foo)
+        @foo
+      #else
+        @available(*, deprecated, message: "nope")
+        @frozen
+      #endif
+        public struct S3 { }
+      }
+      """)
   }
 
 }

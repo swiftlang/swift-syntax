@@ -1017,10 +1017,17 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `IdentifierListSyntax`.
+  /// Visit a `DesignatedTypeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: IdentifierListSyntax) -> Syntax {
+  open func visit(_ node: DesignatedTypeListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `DesignatedTypeElementSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DesignatedTypeElementSyntax) -> Syntax {
     return Syntax(visitChildren(node))
   }
 
@@ -1259,6 +1266,20 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `ConventionAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ConventionAttributeArgumentsSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `ConventionWitnessMethodAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> Syntax {
     return Syntax(visitChildren(node))
   }
 
@@ -3397,8 +3418,18 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIdentifierListSyntax(_ data: SyntaxData) -> Syntax {
-      let node = IdentifierListSyntax(data)
+  private func visitImplDesignatedTypeListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DesignatedTypeListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDesignatedTypeElementSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DesignatedTypeElementSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -3739,6 +3770,26 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
       let node = OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplConventionAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+      let node = ConventionAttributeArgumentsSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+      let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4972,8 +5023,10 @@ open class SyntaxRewriter {
       return visitImplEnumDeclSyntax
     case .operatorDecl:
       return visitImplOperatorDeclSyntax
-    case .identifierList:
-      return visitImplIdentifierListSyntax
+    case .designatedTypeList:
+      return visitImplDesignatedTypeListSyntax
+    case .designatedTypeElement:
+      return visitImplDesignatedTypeElementSyntax
     case .operatorPrecedenceAndTypes:
       return visitImplOperatorPrecedenceAndTypesSyntax
     case .precedenceGroupDecl:
@@ -5042,6 +5095,10 @@ open class SyntaxRewriter {
       return visitImplBackDeployVersionArgumentSyntax
     case .opaqueReturnTypeOfAttributeArguments:
       return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax
+    case .conventionAttributeArguments:
+      return visitImplConventionAttributeArgumentsSyntax
+    case .conventionWitnessMethodAttributeArguments:
+      return visitImplConventionWitnessMethodAttributeArgumentsSyntax
     case .labeledStmt:
       return visitImplLabeledStmtSyntax
     case .continueStmt:
@@ -5519,8 +5576,10 @@ open class SyntaxRewriter {
       return visitImplEnumDeclSyntax(data)
     case .operatorDecl:
       return visitImplOperatorDeclSyntax(data)
-    case .identifierList:
-      return visitImplIdentifierListSyntax(data)
+    case .designatedTypeList:
+      return visitImplDesignatedTypeListSyntax(data)
+    case .designatedTypeElement:
+      return visitImplDesignatedTypeElementSyntax(data)
     case .operatorPrecedenceAndTypes:
       return visitImplOperatorPrecedenceAndTypesSyntax(data)
     case .precedenceGroupDecl:
@@ -5589,6 +5648,10 @@ open class SyntaxRewriter {
       return visitImplBackDeployVersionArgumentSyntax(data)
     case .opaqueReturnTypeOfAttributeArguments:
       return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+    case .conventionAttributeArguments:
+      return visitImplConventionAttributeArgumentsSyntax(data)
+    case .conventionWitnessMethodAttributeArguments:
+      return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
     case .labeledStmt:
       return visitImplLabeledStmtSyntax(data)
     case .continueStmt:

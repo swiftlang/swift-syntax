@@ -756,20 +756,30 @@ DECL_NODES = [
                    is_optional=True),
          ]),
 
-    Node('IdentifierList', name_for_diagnostics=None, kind='SyntaxCollection',
-         element='IdentifierToken'),
+    # designated-type-list -> (',' identifier)*
+    Node('DesignatedTypeList', name_for_diagnostics=None, kind='SyntaxCollection',
+         element='DesignatedTypeElement'),
+    Node('DesignatedTypeElement', name_for_diagnostics=None, kind='Syntax',
+         children=[
+             Child('LeadingComma', kind='CommaToken'),
+             Child('Name', kind='IdentifierToken'),
+         ]),
 
-    # infix-operator-group -> ':' identifier ','? identifier?
+    # infix-operator-group -> ':' identifier designated-type-list?
     Node('OperatorPrecedenceAndTypes', name_for_diagnostics=None, kind='Syntax',
          description='''
          A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
          ''',
          children=[
              Child('Colon', kind='ColonToken'),
-             Child('PrecedenceGroupAndDesignatedTypes', kind='IdentifierList',
-                   collection_element_name='PrecedenceGroupAndDesignatedType',
+             Child('PrecedenceGroup', kind='IdentifierToken',
                    description='''
-                   The precedence group and designated types for this operator
+                   The precedence group for this operator
+                   '''),
+             Child('DesignatedTypes', kind='DesignatedTypeList',
+                   collection_element_name='DesignatedTypeElement',
+                   description='''
+                   The designated types associated with this operator.
                    '''),
          ]),
 

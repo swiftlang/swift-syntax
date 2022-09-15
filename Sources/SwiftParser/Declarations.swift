@@ -47,6 +47,11 @@ extension TokenConsumer {
       }
     }
 
+    if subparser.at(.poundIfKeyword) {
+      var attrLookahead = subparser.lookahead()
+      return attrLookahead.consumeIfConfigOfAttributes()
+    }
+
     let declStartKeyword: DeclarationStart?
     if allowRecovery {
       declStartKeyword = subparser.canRecoverTo(
@@ -507,7 +512,13 @@ extension Parser {
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(any: [.eof, .rightBrace]) && loopProgress.evaluate(currentToken) {
-        let decl = self.parseDeclaration()
+        let decl: RawDeclSyntax
+        if self.at(.poundSourceLocationKeyword) {
+          decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
+        } else {
+          decl = self.parseDeclaration()
+        }
+
         let semi = self.consume(if: .semicolon)
         elements.append(RawMemberDeclListItemSyntax(
           decl: decl, semicolon: semi, arena: self.arena))
@@ -1876,10 +1887,22 @@ extension Parser {
     // checking.
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
-      let identifier = self.expectIdentifierWithoutRecovery()
+      let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
+      var types = [RawDesignatedTypeElementSyntax]()
+      while let comma = self.consume(if: .comma) {
+        let (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
+        types.append(RawDesignatedTypeElementSyntax(
+          leadingComma: comma,
+          unexpectedBeforeDesignatedType,
+          name: designatedType,
+          arena: self.arena))
+      }
       precedenceAndTypes = RawOperatorPrecedenceAndTypesSyntax(
         colon: colon,
-        precedenceGroupAndDesignatedTypes: RawIdentifierListSyntax(elements: [ identifier ], arena: self.arena),
+        unexpectedBeforeIdentifier,
+        precedenceGroup: identifier,
+        designatedTypes: RawDesignatedTypeListSyntax(
+          elements: types, arena: self.arena),
         arena: self.arena)
     } else {
       precedenceAndTypes = nil

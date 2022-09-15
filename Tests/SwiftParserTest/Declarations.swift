@@ -347,6 +347,14 @@ final class DeclarationTests: XCTestCase {
 
   func testOperators() {
     AssertParse("infix operator *-* : FunnyPrecedence")
+
+    AssertParse(
+      """
+      prefix operator ^^ : PrefixMagicOperatorProtocol
+      infix operator  <*< : MediumPrecedence, InfixMagicOperatorProtocol
+      postfix operator ^^ : PostfixMagicOperatorProtocol
+      infix operator ^^ : PostfixMagicOperatorProtocol, Class, Struct
+      """)
   }
 
   func testObjCAttribute() {

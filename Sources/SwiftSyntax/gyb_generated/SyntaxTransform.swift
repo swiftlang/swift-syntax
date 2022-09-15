@@ -588,10 +588,14 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OperatorDeclSyntax) -> ResultType
-  /// Visiting `IdentifierListSyntax` specifically.
+  /// Visiting `DesignatedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IdentifierListSyntax) -> ResultType
+  func visit(_ node: DesignatedTypeListSyntax) -> ResultType
+  /// Visiting `DesignatedTypeElementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DesignatedTypeElementSyntax) -> ResultType
   /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -728,6 +732,14 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> ResultType
+  /// Visiting `ConventionAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ConventionAttributeArgumentsSyntax) -> ResultType
+  /// Visiting `ConventionWitnessMethodAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType
   /// Visiting `LabeledStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1947,10 +1959,16 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: OperatorDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
-  /// Visiting `IdentifierListSyntax` specifically.
+  /// Visiting `DesignatedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: IdentifierListSyntax) -> ResultType {
+  public func visit(_ node: DesignatedTypeListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `DesignatedTypeElementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DesignatedTypeElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
@@ -2155,6 +2173,18 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `ConventionAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ConventionAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  /// Visiting `ConventionWitnessMethodAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   /// Visiting `LabeledStmtSyntax` specifically.
@@ -2982,7 +3012,9 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .operatorDecl(let derived):
       return visit(derived)
-    case .identifierList(let derived):
+    case .designatedTypeList(let derived):
+      return visit(derived)
+    case .designatedTypeElement(let derived):
       return visit(derived)
     case .operatorPrecedenceAndTypes(let derived):
       return visit(derived)
@@ -3051,6 +3083,10 @@ extension SyntaxTransformVisitor {
     case .backDeployVersionArgument(let derived):
       return visit(derived)
     case .opaqueReturnTypeOfAttributeArguments(let derived):
+      return visit(derived)
+    case .conventionAttributeArguments(let derived):
+      return visit(derived)
+    case .conventionWitnessMethodAttributeArguments(let derived):
       return visit(derived)
     case .labeledStmt(let derived):
       return visit(derived)

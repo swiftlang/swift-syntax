@@ -161,7 +161,8 @@ extension SyntaxKind {
     case 20: self = .enumCaseDecl
     case 21: self = .enumDecl
     case 22: self = .operatorDecl
-    case 226: self = .identifierList
+    case 226: self = .designatedTypeList
+    case 278: self = .designatedTypeElement
     case 127: self = .operatorPrecedenceAndTypes
     case 23: self = .precedenceGroupDecl
     case 183: self = .precedenceGroupAttributeList
@@ -196,6 +197,8 @@ extension SyntaxKind {
     case 258: self = .backDeployVersionList
     case 259: self = .backDeployVersionArgument
     case 274: self = .opaqueReturnTypeOfAttributeArguments
+    case 276: self = .conventionAttributeArguments
+    case 277: self = .conventionWitnessMethodAttributeArguments
     case 267: self = .labeledStmt
     case 72: self = .continueStmt
     case 73: self = .whileStmt

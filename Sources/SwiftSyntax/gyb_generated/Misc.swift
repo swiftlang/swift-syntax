@@ -313,7 +313,9 @@ extension Syntax {
       return node
     case .operatorDecl(let node):
       return node
-    case .identifierList(let node):
+    case .designatedTypeList(let node):
+      return node
+    case .designatedTypeElement(let node):
       return node
     case .operatorPrecedenceAndTypes(let node):
       return node
@@ -382,6 +384,10 @@ extension Syntax {
     case .backDeployVersionArgument(let node):
       return node
     case .opaqueReturnTypeOfAttributeArguments(let node):
+      return node
+    case .conventionAttributeArguments(let node):
+      return node
+    case .conventionWitnessMethodAttributeArguments(let node):
       return node
     case .labeledStmt(let node):
       return node
@@ -712,7 +718,8 @@ extension SyntaxKind {
     case .enumCaseDecl: return EnumCaseDeclSyntax.self
     case .enumDecl: return EnumDeclSyntax.self
     case .operatorDecl: return OperatorDeclSyntax.self
-    case .identifierList: return IdentifierListSyntax.self
+    case .designatedTypeList: return DesignatedTypeListSyntax.self
+    case .designatedTypeElement: return DesignatedTypeElementSyntax.self
     case .operatorPrecedenceAndTypes: return OperatorPrecedenceAndTypesSyntax.self
     case .precedenceGroupDecl: return PrecedenceGroupDeclSyntax.self
     case .precedenceGroupAttributeList: return PrecedenceGroupAttributeListSyntax.self
@@ -747,6 +754,8 @@ extension SyntaxKind {
     case .backDeployVersionList: return BackDeployVersionListSyntax.self
     case .backDeployVersionArgument: return BackDeployVersionArgumentSyntax.self
     case .opaqueReturnTypeOfAttributeArguments: return OpaqueReturnTypeOfAttributeArgumentsSyntax.self
+    case .conventionAttributeArguments: return ConventionAttributeArgumentsSyntax.self
+    case .conventionWitnessMethodAttributeArguments: return ConventionWitnessMethodAttributeArgumentsSyntax.self
     case .labeledStmt: return LabeledStmtSyntax.self
     case .continueStmt: return ContinueStmtSyntax.self
     case .whileStmt: return WhileStmtSyntax.self

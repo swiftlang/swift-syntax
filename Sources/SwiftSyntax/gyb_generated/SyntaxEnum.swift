@@ -158,7 +158,8 @@ public enum SyntaxEnum {
   case enumCaseDecl(EnumCaseDeclSyntax)
   case enumDecl(EnumDeclSyntax)
   case operatorDecl(OperatorDeclSyntax)
-  case identifierList(IdentifierListSyntax)
+  case designatedTypeList(DesignatedTypeListSyntax)
+  case designatedTypeElement(DesignatedTypeElementSyntax)
   case operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax)
   case precedenceGroupDecl(PrecedenceGroupDeclSyntax)
   case precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax)
@@ -193,6 +194,8 @@ public enum SyntaxEnum {
   case backDeployVersionList(BackDeployVersionListSyntax)
   case backDeployVersionArgument(BackDeployVersionArgumentSyntax)
   case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
+  case conventionAttributeArguments(ConventionAttributeArgumentsSyntax)
+  case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
   case labeledStmt(LabeledStmtSyntax)
   case continueStmt(ContinueStmtSyntax)
   case whileStmt(WhileStmtSyntax)
@@ -573,7 +576,9 @@ public enum SyntaxEnum {
       return "enum"
     case .operatorDecl:
       return "operator"
-    case .identifierList:
+    case .designatedTypeList:
+      return nil
+    case .designatedTypeElement:
       return nil
     case .operatorPrecedenceAndTypes:
       return nil
@@ -643,6 +648,10 @@ public enum SyntaxEnum {
       return "version"
     case .opaqueReturnTypeOfAttributeArguments:
       return "opaque return type arguments"
+    case .conventionAttributeArguments:
+      return "@convention(...) arguments"
+    case .conventionWitnessMethodAttributeArguments:
+      return "@convention(...) arguments for witness methods"
     case .labeledStmt:
       return "labeled statement"
     case .continueStmt:
@@ -1117,8 +1126,10 @@ public extension Syntax {
       return .enumDecl(EnumDeclSyntax(self)!)
     case .operatorDecl:
       return .operatorDecl(OperatorDeclSyntax(self)!)
-    case .identifierList:
-      return .identifierList(IdentifierListSyntax(self)!)
+    case .designatedTypeList:
+      return .designatedTypeList(DesignatedTypeListSyntax(self)!)
+    case .designatedTypeElement:
+      return .designatedTypeElement(DesignatedTypeElementSyntax(self)!)
     case .operatorPrecedenceAndTypes:
       return .operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax(self)!)
     case .precedenceGroupDecl:
@@ -1187,6 +1198,10 @@ public extension Syntax {
       return .backDeployVersionArgument(BackDeployVersionArgumentSyntax(self)!)
     case .opaqueReturnTypeOfAttributeArguments:
       return .opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax(self)!)
+    case .conventionAttributeArguments:
+      return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
+    case .conventionWitnessMethodAttributeArguments:
+      return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
     case .labeledStmt:
       return .labeledStmt(LabeledStmtSyntax(self)!)
     case .continueStmt:

@@ -3823,29 +3823,56 @@ public enum SyntaxFactory {
     ], arena: .default))
     return OperatorDeclSyntax(data)
   }
-  @available(*, deprecated, message: "Use initializer on IdentifierListSyntax")
-  public static func makeIdentifierList(
-    _ elements: [TokenSyntax]) -> IdentifierListSyntax {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.identifierList,
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeListSyntax")
+  public static func makeDesignatedTypeList(
+    _ elements: [DesignatedTypeElementSyntax]) -> DesignatedTypeListSyntax {
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
       from: elements.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
-    return IdentifierListSyntax(data)
+    return DesignatedTypeListSyntax(data)
   }
 
-  @available(*, deprecated, message: "Use initializer on IdentifierListSyntax")
-  public static func makeBlankIdentifierList(presence: SourcePresence = .present) -> IdentifierListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .identifierList,
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeListSyntax")
+  public static func makeBlankDesignatedTypeList(presence: SourcePresence = .present) -> DesignatedTypeListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .designatedTypeList,
       from: [
     ], arena: .default))
-    return IdentifierListSyntax(data)
+    return DesignatedTypeListSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeElementSyntax")
+  public static func makeDesignatedTypeElement(_ unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? = nil, leadingComma: TokenSyntax, _ unexpectedBetweenLeadingCommaAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax) -> DesignatedTypeElementSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLeadingComma?.raw,
+      leadingComma.raw,
+      unexpectedBetweenLeadingCommaAndName?.raw,
+      name.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeElement,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return DesignatedTypeElementSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeElementSyntax")
+  public static func makeBlankDesignatedTypeElement(presence: SourcePresence = .present) -> DesignatedTypeElementSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .designatedTypeElement,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+    ], arena: .default))
+    return DesignatedTypeElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OperatorPrecedenceAndTypesSyntax")
-  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, precedenceGroupAndDesignatedTypes: IdentifierListSyntax) -> OperatorPrecedenceAndTypesSyntax {
+  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, precedenceGroup: TokenSyntax, _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, designatedTypes: DesignatedTypeListSyntax) -> OperatorPrecedenceAndTypesSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeColon?.raw,
       colon.raw,
-      unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
-      precedenceGroupAndDesignatedTypes.raw,
+      unexpectedBetweenColonAndPrecedenceGroup?.raw,
+      precedenceGroup.raw,
+      unexpectedBetweenPrecedenceGroupAndDesignatedTypes?.raw,
+      designatedTypes.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorPrecedenceAndTypes,
       from: layout, arena: .default)
@@ -3860,7 +3887,9 @@ public enum SyntaxFactory {
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default),
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.identifierList, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.designatedTypeList, arena: .default),
     ], arena: .default))
     return OperatorPrecedenceAndTypesSyntax(data)
   }
@@ -4759,6 +4788,72 @@ public enum SyntaxFactory {
       RawSyntax.makeMissingToken(kind: TokenKind.integerLiteral(""), arena: .default),
     ], arena: .default))
     return OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on ConventionAttributeArgumentsSyntax")
+  public static func makeConventionAttributeArguments(_ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil, conventionLabel: TokenSyntax, _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil, cTypeLabel: TokenSyntax?, _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax?, _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil, cTypeString: TokenSyntax?) -> ConventionAttributeArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeConventionLabel?.raw,
+      conventionLabel.raw,
+      unexpectedBetweenConventionLabelAndComma?.raw,
+      comma?.raw,
+      unexpectedBetweenCommaAndCTypeLabel?.raw,
+      cTypeLabel?.raw,
+      unexpectedBetweenCTypeLabelAndColon?.raw,
+      colon?.raw,
+      unexpectedBetweenColonAndCTypeString?.raw,
+      cTypeString?.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conventionAttributeArguments,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return ConventionAttributeArgumentsSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on ConventionAttributeArgumentsSyntax")
+  public static func makeBlankConventionAttributeArguments(presence: SourcePresence = .present) -> ConventionAttributeArgumentsSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .conventionAttributeArguments,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+    ], arena: .default))
+    return ConventionAttributeArgumentsSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on ConventionWitnessMethodAttributeArgumentsSyntax")
+  public static func makeConventionWitnessMethodAttributeArguments(_ unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? = nil, witnessMethodLabel: TokenSyntax, _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil, protocolName: TokenSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeWitnessMethodLabel?.raw,
+      witnessMethodLabel.raw,
+      unexpectedBetweenWitnessMethodLabelAndColon?.raw,
+      colon.raw,
+      unexpectedBetweenColonAndProtocolName?.raw,
+      protocolName.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conventionWitnessMethodAttributeArguments,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return ConventionWitnessMethodAttributeArgumentsSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on ConventionWitnessMethodAttributeArgumentsSyntax")
+  public static func makeBlankConventionWitnessMethodAttributeArguments(presence: SourcePresence = .present) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .conventionWitnessMethodAttributeArguments,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+    ], arena: .default))
+    return ConventionWitnessMethodAttributeArgumentsSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on LabeledStmtSyntax")
   public static func makeLabeledStmt(_ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil, labelName: TokenSyntax, _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil, labelColon: TokenSyntax, _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil, statement: StmtSyntax) -> LabeledStmtSyntax {

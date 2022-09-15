@@ -803,7 +803,7 @@ extension Parser {
       let (unexpectedBeforeAt, at) = self.expect(.atSign)
       let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-      let (unexpectedBeforeArgument, argument) = self.expectIdentifier()
+      let arguments = self.parseConventionArguments()
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return RawSyntax(
         RawAttributeSyntax(
@@ -813,8 +813,7 @@ extension Parser {
           attributeName: ident,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
-          unexpectedBeforeArgument,
-          argument: RawSyntax(argument),
+          argument: arguments,
           unexpectedBeforeRightParen,
           rightParen: rightParen,
           tokenList: nil,

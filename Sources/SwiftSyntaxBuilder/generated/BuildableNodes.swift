@@ -9032,6 +9032,77 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
     return result
   }
 }
+public struct DesignatedTypeElement: SyntaxBuildable, ExpressibleAsDesignatedTypeElement {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforeLeadingComma: UnexpectedNodes?
+  var leadingComma: Token
+  var unexpectedBetweenLeadingCommaAndName: UnexpectedNodes?
+  var name: Token
+  /// Creates a `DesignatedTypeElement` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeLeadingComma: 
+  ///   - leadingComma: 
+  ///   - unexpectedBetweenLeadingCommaAndName: 
+  ///   - name: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeadingComma: ExpressibleAsUnexpectedNodes? = nil, leadingComma: Token = Token.`comma`, unexpectedBetweenLeadingCommaAndName: ExpressibleAsUnexpectedNodes? = nil, name: Token) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforeLeadingComma = unexpectedBeforeLeadingComma?.createUnexpectedNodes()
+    self.leadingComma = leadingComma
+    assert(leadingComma.text == #","#)
+    self.unexpectedBetweenLeadingCommaAndName = unexpectedBetweenLeadingCommaAndName?.createUnexpectedNodes()
+    self.name = name
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeadingComma: ExpressibleAsUnexpectedNodes? = nil, leadingComma: Token = Token.`comma`, unexpectedBetweenLeadingCommaAndName: ExpressibleAsUnexpectedNodes? = nil, name: String) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeadingComma: unexpectedBeforeLeadingComma, leadingComma: leadingComma, unexpectedBetweenLeadingCommaAndName: unexpectedBetweenLeadingCommaAndName, name: Token.`identifier`(name))
+  }
+  /// Builds a `DesignatedTypeElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DesignatedTypeElementSyntax`.
+  func buildDesignatedTypeElement(format: Format) -> DesignatedTypeElementSyntax {
+    var result = DesignatedTypeElementSyntax(unexpectedBeforeLeadingComma?.buildUnexpectedNodes(format: format), leadingComma: leadingComma.buildToken(format: format), unexpectedBetweenLeadingCommaAndName?.buildUnexpectedNodes(format: format), name: name.buildToken(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildDesignatedTypeElement(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsDesignatedTypeElement`.
+  public func createDesignatedTypeElement() -> DesignatedTypeElement {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `DesignatedTypeElement` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
 /// A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
 public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperatorPrecedenceAndTypes {
   /// The leading trivia attached to this syntax node once built.
@@ -9040,29 +9111,41 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   var trailingTrivia: Trivia
   var unexpectedBeforeColon: UnexpectedNodes?
   var colon: Token
-  var unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodes?
-  var precedenceGroupAndDesignatedTypes: IdentifierList
+  var unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodes?
+  var precedenceGroup: Token
+  var unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodes?
+  var designatedTypes: DesignatedTypeList
   /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeColon: 
   ///   - colon: 
-  ///   - unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: 
-  ///   - precedenceGroupAndDesignatedTypes: The precedence group and designated types for this operator
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: ExpressibleAsUnexpectedNodes? = nil, precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList) {
+  ///   - unexpectedBetweenColonAndPrecedenceGroup: 
+  ///   - precedenceGroup: The precedence group for this operator
+  ///   - unexpectedBetweenPrecedenceGroupAndDesignatedTypes: 
+  ///   - designatedTypes: The designated types associated with this operator.
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroup: ExpressibleAsUnexpectedNodes? = nil, precedenceGroup: Token, unexpectedBetweenPrecedenceGroupAndDesignatedTypes: ExpressibleAsUnexpectedNodes? = nil, designatedTypes: ExpressibleAsDesignatedTypeList) {
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
     assert(colon.text == #":"#)
-    self.unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes = unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.createUnexpectedNodes()
-    self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
+    self.unexpectedBetweenColonAndPrecedenceGroup = unexpectedBetweenColonAndPrecedenceGroup?.createUnexpectedNodes()
+    self.precedenceGroup = precedenceGroup
+    self.unexpectedBetweenPrecedenceGroupAndDesignatedTypes = unexpectedBetweenPrecedenceGroupAndDesignatedTypes?.createUnexpectedNodes()
+    self.designatedTypes = designatedTypes.createDesignatedTypeList()
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroup: ExpressibleAsUnexpectedNodes? = nil, precedenceGroup: String, unexpectedBetweenPrecedenceGroupAndDesignatedTypes: ExpressibleAsUnexpectedNodes? = nil, designatedTypes: ExpressibleAsDesignatedTypeList) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeColon: unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndPrecedenceGroup: unexpectedBetweenColonAndPrecedenceGroup, precedenceGroup: Token.`identifier`(precedenceGroup), unexpectedBetweenPrecedenceGroupAndDesignatedTypes: unexpectedBetweenPrecedenceGroupAndDesignatedTypes, designatedTypes: designatedTypes)
   }
   /// Builds a `OperatorPrecedenceAndTypesSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
   func buildOperatorPrecedenceAndTypes(format: Format) -> OperatorPrecedenceAndTypesSyntax {
-    var result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(format: format), unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildUnexpectedNodes(format: format), precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format))
+    var result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(format: format), unexpectedBetweenColonAndPrecedenceGroup?.buildUnexpectedNodes(format: format), precedenceGroup: precedenceGroup.buildToken(format: format), unexpectedBetweenPrecedenceGroupAndDesignatedTypes?.buildUnexpectedNodes(format: format), designatedTypes: designatedTypes.buildDesignatedTypeList(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -11036,6 +11119,181 @@ public struct OpaqueReturnTypeOfAttributeArguments: SyntaxBuildable, Expressible
   }
   /// Conformance to `ExpressibleAsSyntaxBuildable`.
   /// `OpaqueReturnTypeOfAttributeArguments` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
+/// The arguments for the '@convention(...)'.
+public struct ConventionAttributeArguments: SyntaxBuildable, ExpressibleAsConventionAttributeArguments {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforeConventionLabel: UnexpectedNodes?
+  var conventionLabel: Token
+  var unexpectedBetweenConventionLabelAndComma: UnexpectedNodes?
+  var comma: Token?
+  var unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodes?
+  var cTypeLabel: Token?
+  var unexpectedBetweenCTypeLabelAndColon: UnexpectedNodes?
+  var colon: Token?
+  var unexpectedBetweenColonAndCTypeString: UnexpectedNodes?
+  var cTypeString: Token?
+  /// Creates a `ConventionAttributeArguments` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeConventionLabel: 
+  ///   - conventionLabel: The convention label.
+  ///   - unexpectedBetweenConventionLabelAndComma: 
+  ///   - comma: 
+  ///   - unexpectedBetweenCommaAndCTypeLabel: 
+  ///   - cTypeLabel: 
+  ///   - unexpectedBetweenCTypeLabelAndColon: 
+  ///   - colon: 
+  ///   - unexpectedBetweenColonAndCTypeString: 
+  ///   - cTypeString: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeConventionLabel: ExpressibleAsUnexpectedNodes? = nil, conventionLabel: Token, unexpectedBetweenConventionLabelAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndCTypeLabel: ExpressibleAsUnexpectedNodes? = nil, cTypeLabel: Token? = nil, unexpectedBetweenCTypeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndCTypeString: ExpressibleAsUnexpectedNodes? = nil, cTypeString: Token? = nil) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforeConventionLabel = unexpectedBeforeConventionLabel?.createUnexpectedNodes()
+    self.conventionLabel = conventionLabel
+    assert(conventionLabel.text == #"block"# || conventionLabel.text == #"c"# || conventionLabel.text == #"objc_method"# || conventionLabel.text == #"thin"# || conventionLabel.text == #"thick"#)
+    self.unexpectedBetweenConventionLabelAndComma = unexpectedBetweenConventionLabelAndComma?.createUnexpectedNodes()
+    self.comma = comma
+    assert(comma == nil || comma!.text == #","#)
+    self.unexpectedBetweenCommaAndCTypeLabel = unexpectedBetweenCommaAndCTypeLabel?.createUnexpectedNodes()
+    self.cTypeLabel = cTypeLabel
+    assert(cTypeLabel == nil || cTypeLabel!.text == #"cType"#)
+    self.unexpectedBetweenCTypeLabelAndColon = unexpectedBetweenCTypeLabelAndColon?.createUnexpectedNodes()
+    self.colon = colon
+    assert(colon == nil || colon!.text == #":"#)
+    self.unexpectedBetweenColonAndCTypeString = unexpectedBetweenColonAndCTypeString?.createUnexpectedNodes()
+    self.cTypeString = cTypeString
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeConventionLabel: ExpressibleAsUnexpectedNodes? = nil, conventionLabel: String, unexpectedBetweenConventionLabelAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndCTypeLabel: ExpressibleAsUnexpectedNodes? = nil, cTypeLabel: String?, unexpectedBetweenCTypeLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndCTypeString: ExpressibleAsUnexpectedNodes? = nil, cTypeString: String?) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeConventionLabel: unexpectedBeforeConventionLabel, conventionLabel: Token.`identifier`(conventionLabel), unexpectedBetweenConventionLabelAndComma: unexpectedBetweenConventionLabelAndComma, comma: comma, unexpectedBetweenCommaAndCTypeLabel: unexpectedBetweenCommaAndCTypeLabel, cTypeLabel: cTypeLabel.map {
+      Token.`identifier`($0)
+    }, unexpectedBetweenCTypeLabelAndColon: unexpectedBetweenCTypeLabelAndColon, colon: colon, unexpectedBetweenColonAndCTypeString: unexpectedBetweenColonAndCTypeString, cTypeString: cTypeString.map {
+      Token.`stringLiteral`($0)
+    })
+  }
+  /// Builds a `ConventionAttributeArgumentsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ConventionAttributeArgumentsSyntax`.
+  func buildConventionAttributeArguments(format: Format) -> ConventionAttributeArgumentsSyntax {
+    var result = ConventionAttributeArgumentsSyntax(unexpectedBeforeConventionLabel?.buildUnexpectedNodes(format: format), conventionLabel: conventionLabel.buildToken(format: format), unexpectedBetweenConventionLabelAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(format: format), unexpectedBetweenCommaAndCTypeLabel?.buildUnexpectedNodes(format: format), cTypeLabel: cTypeLabel?.buildToken(format: format), unexpectedBetweenCTypeLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(format: format), unexpectedBetweenColonAndCTypeString?.buildUnexpectedNodes(format: format), cTypeString: cTypeString?.buildToken(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildConventionAttributeArguments(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsConventionAttributeArguments`.
+  public func createConventionAttributeArguments() -> ConventionAttributeArguments {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ConventionAttributeArguments` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
+/// The arguments for the '@convention(witness_method: ...)'.
+public struct ConventionWitnessMethodAttributeArguments: SyntaxBuildable, ExpressibleAsConventionWitnessMethodAttributeArguments {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforeWitnessMethodLabel: UnexpectedNodes?
+  var witnessMethodLabel: Token
+  var unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodes?
+  var colon: Token
+  var unexpectedBetweenColonAndProtocolName: UnexpectedNodes?
+  var protocolName: Token
+  /// Creates a `ConventionWitnessMethodAttributeArguments` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeWitnessMethodLabel: 
+  ///   - witnessMethodLabel: 
+  ///   - unexpectedBetweenWitnessMethodLabelAndColon: 
+  ///   - colon: 
+  ///   - unexpectedBetweenColonAndProtocolName: 
+  ///   - protocolName: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeWitnessMethodLabel: ExpressibleAsUnexpectedNodes? = nil, witnessMethodLabel: Token, unexpectedBetweenWitnessMethodLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndProtocolName: ExpressibleAsUnexpectedNodes? = nil, protocolName: Token) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforeWitnessMethodLabel = unexpectedBeforeWitnessMethodLabel?.createUnexpectedNodes()
+    self.witnessMethodLabel = witnessMethodLabel
+    self.unexpectedBetweenWitnessMethodLabelAndColon = unexpectedBetweenWitnessMethodLabelAndColon?.createUnexpectedNodes()
+    self.colon = colon
+    assert(colon.text == #":"#)
+    self.unexpectedBetweenColonAndProtocolName = unexpectedBetweenColonAndProtocolName?.createUnexpectedNodes()
+    self.protocolName = protocolName
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeWitnessMethodLabel: ExpressibleAsUnexpectedNodes? = nil, witnessMethodLabel: String, unexpectedBetweenWitnessMethodLabelAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndProtocolName: ExpressibleAsUnexpectedNodes? = nil, protocolName: String) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeWitnessMethodLabel: unexpectedBeforeWitnessMethodLabel, witnessMethodLabel: Token.`identifier`(witnessMethodLabel), unexpectedBetweenWitnessMethodLabelAndColon: unexpectedBetweenWitnessMethodLabelAndColon, colon: colon, unexpectedBetweenColonAndProtocolName: unexpectedBetweenColonAndProtocolName, protocolName: Token.`identifier`(protocolName))
+  }
+  /// Builds a `ConventionWitnessMethodAttributeArgumentsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ConventionWitnessMethodAttributeArgumentsSyntax`.
+  func buildConventionWitnessMethodAttributeArguments(format: Format) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+    var result = ConventionWitnessMethodAttributeArgumentsSyntax(unexpectedBeforeWitnessMethodLabel?.buildUnexpectedNodes(format: format), witnessMethodLabel: witnessMethodLabel.buildToken(format: format), unexpectedBetweenWitnessMethodLabelAndColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(format: format), unexpectedBetweenColonAndProtocolName?.buildUnexpectedNodes(format: format), protocolName: protocolName.buildToken(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format) -> Syntax {
+    let result = buildConventionWitnessMethodAttributeArguments(format: format)
+    return Syntax(result)
+  }
+  /// Conformance to `ExpressibleAsConventionWitnessMethodAttributeArguments`.
+  public func createConventionWitnessMethodAttributeArguments() -> ConventionWitnessMethodAttributeArguments {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `ConventionWitnessMethodAttributeArguments` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {

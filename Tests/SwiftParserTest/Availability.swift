@@ -50,4 +50,35 @@ final class AvailabilityTests: XCTestCase {
       """
     )
   }
+
+  func testAvailabilityMacros() throws {
+    AssertParse(
+      """
+      @available(_iOS9, _macOS10_11, tvOS 11.0, *)
+      public func composed() {}
+      """)
+
+    AssertParse(
+      """
+      @_specialize(exported: true, availability: SwiftStdlib 5.1, *; where T == Int)
+      public func testSemanticsAvailability<T>(_ t: T) {}
+      """)
+  }
+
+  func testSPIAvailabilityAttribute() throws {
+    AssertParse(
+      """
+      @_spi_available(*, deprecated, renamed: "another")
+      public class SPIClass1 {}
+
+      @_spi_available(*, unavailable)
+      public class SPIClass2 {}
+
+      @_spi_available(AlienPlatform 5.2, *)
+      public class SPIClass3 {}
+
+      @_spi_available(macOS 10.4, *)
+      public class SPIClass4 {}
+      """)
+  }
 }

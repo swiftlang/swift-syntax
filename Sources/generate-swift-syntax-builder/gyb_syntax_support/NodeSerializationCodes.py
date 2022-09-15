@@ -228,7 +228,7 @@ SYNTAX_NODE_SERIALIZATION_CODES = {
     'AttributedType': 223,
     'YieldStmt': 224,
     'YieldList': 225,
-    'IdentifierList': 226,
+    'DesignatedTypeList': 226,
     'NamedAttributeStringArgument': 227,
     'DeclName': 228,
     'PoundAssertStmt': 229,
@@ -277,6 +277,9 @@ SYNTAX_NODE_SERIALIZATION_CODES = {
     'PackExpansionType': 273,
     'OpaqueReturnTypeOfAttributeArguments': 274,
     'HasSymbolCondition': 275,
+    'ConventionAttributeArguments': 276,
+    'ConventionWitnessMethodAttributeArguments': 277,
+    'DesignatedTypeElement': 278,
 }
 
 

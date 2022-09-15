@@ -159,7 +159,8 @@ public enum SyntaxKind {
   case enumCaseDecl
   case enumDecl
   case operatorDecl
-  case identifierList
+  case designatedTypeList
+  case designatedTypeElement
   case operatorPrecedenceAndTypes
   case precedenceGroupDecl
   case precedenceGroupAttributeList
@@ -194,6 +195,8 @@ public enum SyntaxKind {
   case backDeployVersionList
   case backDeployVersionArgument
   case opaqueReturnTypeOfAttributeArguments
+  case conventionAttributeArguments
+  case conventionWitnessMethodAttributeArguments
   case labeledStmt
   case continueStmt
   case whileStmt
@@ -307,7 +310,7 @@ public enum SyntaxKind {
     case .accessorList: return true
     case .patternBindingList: return true
     case .enumCaseElementList: return true
-    case .identifierList: return true
+    case .designatedTypeList: return true
     case .precedenceGroupAttributeList: return true
     case .precedenceGroupNameList: return true
     case .tokenList: return true

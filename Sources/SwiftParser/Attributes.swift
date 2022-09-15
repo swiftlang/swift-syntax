@@ -14,7 +14,7 @@
 
 extension Parser {
   mutating func parseAttributeList() -> RawAttributeListSyntax? {
-    guard self.at(.atSign) else {
+    guard self.at(any: [.atSign, .poundIfKeyword]) else {
       return nil
     }
 
@@ -23,13 +23,21 @@ extension Parser {
     repeat {
       let attribute = self.parseAttribute()
       elements.append(attribute)
-    } while self.at(.atSign) && loopProgress.evaluate(currentToken)
+    } while self.at(any: [.atSign, .poundIfKeyword]) && loopProgress.evaluate(currentToken)
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
   }
 }
 
 extension Parser {
   mutating func parseAttribute() -> RawSyntax {
+    if self.at(.poundIfKeyword) {
+      return RawSyntax(self.parsePoundIfDirective { parser -> RawSyntax in
+        return parser.parseAttribute()
+      } syntax: { parser, attributes in
+        return RawSyntax(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
+      })
+    }
+
     guard let declAttr = DeclarationAttribute(rawValue: self.peek().tokenText) else {
       return RawSyntax(self.parseCustomAttribute())
     }
@@ -37,6 +45,8 @@ extension Parser {
     switch declAttr {
     case .available:
       return RawSyntax(self.parseAvailabilityAttribute())
+    case ._spi_available:
+      return RawSyntax(self.parseSPIAvailableAttribute())
     case .differentiable:
       return RawSyntax(self.parseDifferentiableAttribute())
     case .derivative:
@@ -125,6 +135,37 @@ extension Parser {
   mutating func parseAvailabilityAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let (unexpectedBeforeAvailable, available) = self.expectContextualKeyword("available")
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+
+    let argument: RawSyntax
+    do {
+      if self.peek().tokenKind == .integerLiteral {
+        argument = RawSyntax(self.parseAvailabilitySpecList(from: .available))
+      } else if self.peek().tokenKind  == .floatingLiteral {
+        argument = RawSyntax(self.parseAvailabilitySpecList(from: .available))
+      } else {
+        argument = RawSyntax(self.parseExtendedAvailabilitySpecList())
+      }
+    }
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    return RawAttributeSyntax(
+      unexpectedBeforeAtSign,
+      atSignToken: atSign,
+      unexpectedBeforeAvailable,
+      attributeName: available,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      argument: argument,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      tokenList: nil,
+      arena: self.arena)
+  }
+
+  mutating func parseSPIAvailableAttribute() -> RawAttributeSyntax {
+    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    let (unexpectedBeforeAvailable, available) = self.expectContextualKeyword("_spi_available")
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument: RawSyntax
@@ -508,13 +549,13 @@ extension Parser {
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let availability = self.parseAvailabilitySpecList(from: .available)
-        // FIXME: This is modeled incorrectly in libSyntax.
-        let semi = RawTokenSyntax(missing: .semicolon, arena: self.arena)
+        let (unexpectedBeforeSemi, semi) = self.expect(.semicolon)
         elements.append(RawSyntax(RawAvailabilityEntrySyntax(
           label: ident,
           unexpectedBeforeColon,
           colon: colon,
           availabilityList: availability,
+          unexpectedBeforeSemi,
           semicolon: semi,
           arena: self.arena
         )))
@@ -758,6 +799,54 @@ extension Parser {
       rightParen: rightParen,
       tokenList: nil,
       arena: self.arena)
+  }
+}
+
+extension Parser {
+  mutating func parseConventionArguments() -> RawSyntax {
+    if let witnessMethod = self.consumeIfContextualKeyword("witness_method") {
+      let (unexpectedBeforeColon, colon) = self.expect(.colon)
+      let name = self.parseAnyIdentifier()
+      return RawSyntax(RawConventionWitnessMethodAttributeArgumentsSyntax(
+        witnessMethodLabel: witnessMethod,
+        unexpectedBeforeColon,
+        colon: colon,
+        protocolName: name,
+        arena: self.arena))
+    } else {
+      let label = self.consumeAnyToken()
+      let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
+      let comma: RawTokenSyntax?
+      let cTypeLabel: RawTokenSyntax?
+      let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
+      let colon: RawTokenSyntax?
+      let unexpectedBeforeCTypeString: RawUnexpectedNodesSyntax?
+      let cTypeString: RawTokenSyntax?
+      if self.at(.comma) {
+        (unexpectedBeforeComma, comma) = self.expect(.comma)
+        cTypeLabel = self.consumeAnyToken()
+        (unexpectedBeforeColon, colon) = self.expect(.colon)
+        (unexpectedBeforeCTypeString, cTypeString) = self.expect(.stringLiteral)
+      } else {
+        unexpectedBeforeComma = nil
+        comma = nil
+        cTypeLabel = nil
+        unexpectedBeforeColon = nil
+        colon = nil
+        unexpectedBeforeCTypeString = nil
+        cTypeString = nil
+      }
+      return RawSyntax(RawConventionAttributeArgumentsSyntax(
+        conventionLabel: label,
+        unexpectedBeforeComma,
+        comma: comma,
+        cTypeLabel: cTypeLabel,
+        unexpectedBeforeColon,
+        colon: colon,
+        unexpectedBeforeCTypeString,
+        cTypeString: cTypeString,
+        arena: self.arena))
+    }
   }
 }
 

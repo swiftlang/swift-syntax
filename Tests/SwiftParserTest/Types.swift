@@ -84,5 +84,19 @@ final class TypeTests: XCTestCase {
       let _: (S...) -> Int = \S.i
       """#)
   }
+
+  func testConvention() throws {
+    AssertParse(
+      #"""
+      let _: @convention(thin) (@convention(thick) () -> (),
+                                @convention(thin) () -> (),
+                                @convention(c) () -> (),
+                                @convention(c, cType: "intptr_t (*)(size_t)") (Int) -> Int,
+                                @convention(block) () -> (),
+                                @convention(method) () -> (),
+                                @convention(objc_method) () -> (),
+                                @convention(witness_method: Bendable) (Fork) -> ()) -> ()
+      """#)
+  }
 }
 

@@ -69,6 +69,10 @@ ATTRIBUTE_NODES = [
                              kind='NamedAttributeStringArgument'),
                        Child('BackDeployArguments',
                              kind='BackDeployAttributeSpecList'),
+                       Child('ConventionArguments',
+                             kind='ConventionAttributeArguments'),
+                       Child('ConventionWitnessMethodArguments',
+                             kind='ConventionWitnessMethodAttributeArguments'),
                        # TokenList for custom effects which are parsed by
                        # `FunctionEffects.parse()` in swift.
                        Child('TokenList', kind='TokenList',
@@ -486,5 +490,36 @@ ATTRIBUTE_NODES = [
              Child('Comma', kind='CommaToken'),
              Child('Ordinal', kind='IntegerLiteralToken',
                    description="The ordinal corresponding to the 'some' keyword that introduced this opaque type."),
+        ]),
+
+    # convention-attribute-arguments -> token ',' 'cType'? ':' string-literal
+    Node('ConventionAttributeArguments',
+         name_for_diagnostics='@convention(...) arguments',
+         kind='Syntax',
+         description='''
+         The arguments for the '@convention(...)'.
+         ''',
+         children=[
+             Child('ConventionLabel', kind='IdentifierToken',
+                   text_choices=['block', 'c', 'objc_method', 'thin', 'thick'],
+                   description='The convention label.'),
+             Child('Comma', kind='CommaToken', is_optional=True),
+             Child('CTypeLabel', kind='IdentifierToken',
+                   text_choices=['cType'], is_optional=True),
+             Child('Colon', kind='ColonToken', is_optional=True),
+             Child('CTypeString', kind='StringLiteralToken', is_optional=True),
+        ]),
+
+    # convention-attribute-arguments -> 'witness_method' ':' identifier
+    Node('ConventionWitnessMethodAttributeArguments',
+         name_for_diagnostics='@convention(...) arguments for witness methods',
+         kind='Syntax',
+         description='''
+         The arguments for the '@convention(witness_method: ...)'.
+         ''',
+         children=[
+             Child('WitnessMethodLabel', kind='IdentifierToken'),
+             Child('Colon', kind='ColonToken'),
+             Child('ProtocolName', kind='IdentifierToken'),
         ]),
 ]

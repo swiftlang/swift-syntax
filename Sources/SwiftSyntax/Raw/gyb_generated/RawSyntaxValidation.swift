@@ -1230,17 +1230,26 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[8], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[9], as: RawOperatorPrecedenceAndTypesSyntax?.self)
     break
-  case .identifierList:
+  case .designatedTypeList:
     for element in layout {
-      _verify(element, as: RawTokenSyntax.self)
+      _verify(element, as: RawDesignatedTypeElementSyntax.self)
     }
     break
-  case .operatorPrecedenceAndTypes:
+  case .designatedTypeElement:
     assert(layout.count == 4)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawTokenSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[3], as: RawIdentifierListSyntax.self)
+    _verify(layout[3], as: RawTokenSyntax.self)
+    break
+  case .operatorPrecedenceAndTypes:
+    assert(layout.count == 6)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTokenSyntax.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawDesignatedTypeListSyntax.self)
     break
   case .precedenceGroupDecl:
     assert(layout.count == 14)
@@ -1523,6 +1532,28 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[3], as: RawTokenSyntax?.self)
     break
   case .opaqueReturnTypeOfAttributeArguments:
+    assert(layout.count == 6)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTokenSyntax.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawTokenSyntax.self)
+    break
+  case .conventionAttributeArguments:
+    assert(layout.count == 10)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawTokenSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTokenSyntax?.self)
+    _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[5], as: RawTokenSyntax?.self)
+    _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[7], as: RawTokenSyntax?.self)
+    _verify(layout[8], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[9], as: RawTokenSyntax?.self)
+    break
+  case .conventionWitnessMethodAttributeArguments:
     assert(layout.count == 6)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawTokenSyntax.self)

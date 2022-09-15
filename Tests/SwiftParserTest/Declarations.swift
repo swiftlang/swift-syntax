@@ -891,6 +891,21 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testInitializers() {
+    AssertParse(
+      """
+      struct S0 {
+        init!(int: Int) { }
+        init! (uint: UInt) { }
+        init !(float: Float) { }
+
+        init?(string: String) { }
+        init ?(double: Double) { }
+        init ? (char: Character) { }
+      }
+      """)
+  }
+
   func testDeinitializers() {
     AssertParse("deinit {}", { $0.parseDeinitializerDeclaration(.empty, .constant(.deinitKeyword)) })
     AssertParse("deinit", { $0.parseDeinitializerDeclaration(.empty, .constant(.deinitKeyword)) })

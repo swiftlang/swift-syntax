@@ -1028,6 +1028,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericArgumentClauseSyntax) -> ResultType
+  /// Visiting `NamedOpaqueReturnTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: NamedOpaqueReturnTypeSyntax) -> ResultType
   /// Visiting `TypeAnnotationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2619,6 +2623,12 @@ extension SyntaxTransformVisitor {
   public func visit(_ node: GenericArgumentClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
+  /// Visiting `NamedOpaqueReturnTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: NamedOpaqueReturnTypeSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
   /// Visiting `TypeAnnotationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3231,6 +3241,8 @@ extension SyntaxTransformVisitor {
     case .genericArgument(let derived):
       return visit(derived)
     case .genericArgumentClause(let derived):
+      return visit(derived)
+    case .namedOpaqueReturnType(let derived):
       return visit(derived)
     case .typeAnnotation(let derived):
       return visit(derived)

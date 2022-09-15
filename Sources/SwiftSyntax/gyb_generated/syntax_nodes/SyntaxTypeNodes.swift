@@ -2579,3 +2579,135 @@ extension AttributedTypeSyntax: CustomReflectable {
   }
 }
 
+// MARK: - NamedOpaqueReturnTypeSyntax
+
+public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `NamedOpaqueReturnTypeSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .namedOpaqueReturnType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `NamedOpaqueReturnTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .namedOpaqueReturnType)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? = nil,
+    genericParameters: GenericParameterClauseSyntax,
+    _ unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? = nil,
+    baseType: TypeSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeGenericParameters?.raw,
+      genericParameters.raw,
+      unexpectedBetweenGenericParametersAndBaseType?.raw,
+      baseType.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.namedOpaqueReturnType,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeGenericParameters(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeGenericParameters` replaced.
+  /// - param newChild: The new `unexpectedBeforeGenericParameters` to replace the node's
+  ///                   current `unexpectedBeforeGenericParameters`, if present.
+  public func withUnexpectedBeforeGenericParameters(
+    _ newChild: UnexpectedNodesSyntax?) -> NamedOpaqueReturnTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return NamedOpaqueReturnTypeSyntax(newData)
+  }
+
+  public var genericParameters: GenericParameterClauseSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameters(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `genericParameters` replaced.
+  /// - param newChild: The new `genericParameters` to replace the node's
+  ///                   current `genericParameters`, if present.
+  public func withGenericParameters(
+    _ newChild: GenericParameterClauseSyntax?) -> NamedOpaqueReturnTypeSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericParameterClause, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return NamedOpaqueReturnTypeSyntax(newData)
+  }
+
+  public var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenGenericParametersAndBaseType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenGenericParametersAndBaseType` replaced.
+  /// - param newChild: The new `unexpectedBetweenGenericParametersAndBaseType` to replace the node's
+  ///                   current `unexpectedBetweenGenericParametersAndBaseType`, if present.
+  public func withUnexpectedBetweenGenericParametersAndBaseType(
+    _ newChild: UnexpectedNodesSyntax?) -> NamedOpaqueReturnTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return NamedOpaqueReturnTypeSyntax(newData)
+  }
+
+  public var baseType: TypeSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withBaseType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `baseType` replaced.
+  /// - param newChild: The new `baseType` to replace the node's
+  ///                   current `baseType`, if present.
+  public func withBaseType(
+    _ newChild: TypeSyntax?) -> NamedOpaqueReturnTypeSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return NamedOpaqueReturnTypeSyntax(newData)
+  }
+}
+
+extension NamedOpaqueReturnTypeSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeGenericParameters": unexpectedBeforeGenericParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericParameters": Syntax(genericParameters).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenGenericParametersAndBaseType": unexpectedBetweenGenericParametersAndBaseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+

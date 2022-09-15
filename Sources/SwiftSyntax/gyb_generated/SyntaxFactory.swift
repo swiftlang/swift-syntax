@@ -6840,6 +6840,31 @@ public enum SyntaxFactory {
     ], arena: .default))
     return GenericArgumentClauseSyntax(data)
   }
+  @available(*, deprecated, message: "Use initializer on NamedOpaqueReturnTypeSyntax")
+  public static func makeNamedOpaqueReturnType(_ unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax, _ unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? = nil, baseType: TypeSyntax) -> NamedOpaqueReturnTypeSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeGenericParameters?.raw,
+      genericParameters.raw,
+      unexpectedBetweenGenericParametersAndBaseType?.raw,
+      baseType.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.namedOpaqueReturnType,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return NamedOpaqueReturnTypeSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on NamedOpaqueReturnTypeSyntax")
+  public static func makeBlankNamedOpaqueReturnType(presence: SourcePresence = .present) -> NamedOpaqueReturnTypeSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .namedOpaqueReturnType,
+      from: [
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericParameterClause, arena: .default),
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default),
+    ], arena: .default))
+    return NamedOpaqueReturnTypeSyntax(data)
+  }
   @available(*, deprecated, message: "Use initializer on TypeAnnotationSyntax")
   public static func makeTypeAnnotation(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax) -> TypeAnnotationSyntax {
     let layout: [RawSyntax?] = [

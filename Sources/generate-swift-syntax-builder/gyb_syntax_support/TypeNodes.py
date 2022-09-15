@@ -225,4 +225,11 @@ TYPE_NODES = [
                    collection_element_name='Argument'),
              Child('RightAngleBracket', kind='RightAngleToken'),
          ]),
+
+    # named-opaque-return-type -> generic-argument-clause type
+    Node('NamedOpaqueReturnType', name_for_diagnostics='named opaque return type', kind='Type',
+         children=[
+             Child('GenericParameters', kind='GenericParameterClause'),
+             Child('BaseType', kind='Type'),
+         ]),
 ]

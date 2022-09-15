@@ -17252,7 +17252,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     leftAngleBracket: TokenSyntax,
     _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil,
     genericParameterList: GenericParameterListSyntax,
-    _ unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax?,
+    _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
     rightAngleBracket: TokenSyntax
   ) {
     let layout: [RawSyntax?] = [
@@ -17260,7 +17262,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       leftAngleBracket.raw,
       unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw,
       genericParameterList.raw,
-      unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw,
+      unexpectedBetweenGenericParameterListAndGenericWhereClause?.raw,
+      genericWhereClause?.raw,
+      unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterClause,
@@ -17369,30 +17373,72 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterClauseSyntax(newData)
   }
 
-  public var unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenGenericParameterListAndRightAngleBracket(value)
+      self = withUnexpectedBetweenGenericParameterListAndGenericWhereClause(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterListAndRightAngleBracket` replaced.
-  /// - param newChild: The new `unexpectedBetweenGenericParameterListAndRightAngleBracket` to replace the node's
-  ///                   current `unexpectedBetweenGenericParameterListAndRightAngleBracket`, if present.
-  public func withUnexpectedBetweenGenericParameterListAndRightAngleBracket(
+  /// Returns a copy of the receiver with its `unexpectedBetweenGenericParameterListAndGenericWhereClause` replaced.
+  /// - param newChild: The new `unexpectedBetweenGenericParameterListAndGenericWhereClause` to replace the node's
+  ///                   current `unexpectedBetweenGenericParameterListAndGenericWhereClause`, if present.
+  public func withUnexpectedBetweenGenericParameterListAndGenericWhereClause(
     _ newChild: UnexpectedNodesSyntax?) -> GenericParameterClauseSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return GenericParameterClauseSyntax(newData)
   }
 
-  public var rightAngleBracket: TokenSyntax {
+  public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `genericWhereClause` replaced.
+  /// - param newChild: The new `genericWhereClause` to replace the node's
+  ///                   current `genericWhereClause`, if present.
+  public func withGenericWhereClause(
+    _ newChild: GenericWhereClauseSyntax?) -> GenericParameterClauseSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 5)
+    return GenericParameterClauseSyntax(newData)
+  }
+
+  public var unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 6, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenGenericWhereClauseAndRightAngleBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenGenericWhereClauseAndRightAngleBracket` replaced.
+  /// - param newChild: The new `unexpectedBetweenGenericWhereClauseAndRightAngleBracket` to replace the node's
+  ///                   current `unexpectedBetweenGenericWhereClauseAndRightAngleBracket`, if present.
+  public func withUnexpectedBetweenGenericWhereClauseAndRightAngleBracket(
+    _ newChild: UnexpectedNodesSyntax?) -> GenericParameterClauseSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 6)
+    return GenericParameterClauseSyntax(newData)
+  }
+
+  public var rightAngleBracket: TokenSyntax {
+    get {
+      let childData = data.child(at: 7, parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
@@ -17406,7 +17452,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public func withRightAngleBracket(
     _ newChild: TokenSyntax?) -> GenericParameterClauseSyntax {
     let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: .default)
-    let newData = data.replacingChild(raw, at: 5)
+    let newData = data.replacingChild(raw, at: 7)
     return GenericParameterClauseSyntax(newData)
   }
 }
@@ -17418,7 +17464,9 @@ extension GenericParameterClauseSyntax: CustomReflectable {
       "leftAngleBracket": Syntax(leftAngleBracket).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenLeftAngleBracketAndGenericParameterList": unexpectedBetweenLeftAngleBracketAndGenericParameterList.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericParameterList": Syntax(genericParameterList).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenGenericParameterListAndRightAngleBracket": unexpectedBetweenGenericParameterListAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenGenericParameterListAndGenericWhereClause": unexpectedBetweenGenericParameterListAndGenericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenGenericWhereClauseAndRightAngleBracket": unexpectedBetweenGenericWhereClauseAndRightAngleBracket.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "rightAngleBracket": Syntax(rightAngleBracket).asProtocol(SyntaxProtocol.self),
     ])
   }

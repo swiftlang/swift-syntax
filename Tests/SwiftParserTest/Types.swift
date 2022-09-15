@@ -130,5 +130,23 @@ final class TypeTests: XCTestCase {
       }
       """)
   }
+
+  func testNamedOpaqueReturnTypes() throws {
+    AssertParse(
+      """
+      func f2() -> <T: SignedInteger, U: SignedInteger> Int {
+      }
+
+      dynamic func lazyMapCollection<C: Collection, T>(_ collection: C, body: @escaping (C.Element) -> T)
+          -> <R: Collection where R.Element == T> R {
+        return collection.lazy.map { body($0) }
+      }
+
+      struct Boom<T: P> {
+        var prop1: Int = 5
+        var prop2: <U, V> (U, V) = ("hello", 5)
+      }
+      """)
+  }
 }
 

@@ -861,6 +861,22 @@ extension Parser {
   }
 }
 
+extension Parser {
+  mutating func parseResultType() -> RawTypeSyntax {
+    if self.currentToken.starts(with: "<") {
+      let generics = self.parseGenericParameters()
+      let baseType = self.parseType()
+      return RawTypeSyntax(
+        RawNamedOpaqueReturnTypeSyntax(
+          genericParameters: generics,
+          baseType: baseType,
+          arena: self.arena))
+    } else {
+      return self.parseType()
+    }
+  }
+}
+
 extension Lexer.Lexeme {
   var isBinaryOperator: Bool {
     return self.tokenKind == .spacedBinaryOperator

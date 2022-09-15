@@ -16200,6 +16200,77 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
     return result
   }
 }
+public struct NamedOpaqueReturnType: TypeBuildable, ExpressibleAsNamedOpaqueReturnType {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforeGenericParameters: UnexpectedNodes?
+  var genericParameters: GenericParameterClause
+  var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodes?
+  var baseType: TypeBuildable
+  /// Creates a `NamedOpaqueReturnType` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeGenericParameters: 
+  ///   - genericParameters: 
+  ///   - unexpectedBetweenGenericParametersAndBaseType: 
+  ///   - baseType: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause, unexpectedBetweenGenericParametersAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforeGenericParameters = unexpectedBeforeGenericParameters?.createUnexpectedNodes()
+    self.genericParameters = genericParameters.createGenericParameterClause()
+    self.unexpectedBetweenGenericParametersAndBaseType = unexpectedBetweenGenericParametersAndBaseType?.createUnexpectedNodes()
+    self.baseType = baseType.createTypeBuildable()
+  }
+  /// Builds a `NamedOpaqueReturnTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `NamedOpaqueReturnTypeSyntax`.
+  func buildNamedOpaqueReturnType(format: Format) -> NamedOpaqueReturnTypeSyntax {
+    var result = NamedOpaqueReturnTypeSyntax(unexpectedBeforeGenericParameters?.buildUnexpectedNodes(format: format), genericParameters: genericParameters.buildGenericParameterClause(format: format), unexpectedBetweenGenericParametersAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `TypeBuildable`.
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildNamedOpaqueReturnType(format: format)
+    return TypeSyntax(result)
+  }
+  /// Conformance to `ExpressibleAsNamedOpaqueReturnType`.
+  public func createNamedOpaqueReturnType() -> NamedOpaqueReturnType {
+    return self
+  }
+  /// Conformance to `ExpressibleAsTypeBuildable`.
+  /// `NamedOpaqueReturnType` may conform to `ExpressibleAsTypeBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createTypeBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createTypeBuildable() -> TypeBuildable {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `TypeBuildable` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
 public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// The leading trivia attached to this syntax node once built.
   var leadingTrivia: Trivia

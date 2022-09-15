@@ -1759,6 +1759,14 @@ extension Format {
     }
     return result
   }
+  func format(syntax: NamedOpaqueReturnTypeSyntax) -> NamedOpaqueReturnTypeSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
+  }
   func format(syntax: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
     var result = syntax
     let leadingTrivia = result.leadingTrivia ?? []

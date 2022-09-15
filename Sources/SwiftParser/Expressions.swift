@@ -962,14 +962,21 @@ extension Parser {
   @_spi(RawSyntax)
   public mutating func parseIdentifierExpression() -> RawExprSyntax {
     let (name, args) = self.parseDeclNameRef(.compoundNames)
+    guard self.lookahead().canParseAsGenericArgumentList() else {
+      if name.tokenText.hasPrefix("<#") && name.tokenText.hasSuffix("#>") && args == nil {
+        return RawExprSyntax(
+          RawEditorPlaceholderExprSyntax(
+            identifier: name,
+            arena: self.arena))
+      }
+      return RawExprSyntax(RawIdentifierExprSyntax(
+        identifier: name, declNameArguments: args,
+        arena: self.arena))
+    }
+
     let identifier = RawIdentifierExprSyntax(
       identifier: name, declNameArguments: args,
       arena: self.arena)
-
-    guard self.lookahead().canParseAsGenericArgumentList() else {
-      return RawExprSyntax(identifier)
-    }
-
     let generics = self.parseGenericArguments()
     return RawExprSyntax(RawSpecializeExprSyntax(
       expression: RawExprSyntax(identifier), genericArgumentClause: generics,

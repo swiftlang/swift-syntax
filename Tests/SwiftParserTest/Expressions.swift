@@ -502,4 +502,8 @@ final class ExpressionTests: XCTestCase {
     AssertParse("_move msg")
     AssertParse("let b = (_move self).buffer")
   }
+
+  func testCodeCompletionExpressions() {
+    AssertParse("if <#test#> {}")
+  }
 }

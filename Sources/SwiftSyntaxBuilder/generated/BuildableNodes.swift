@@ -7417,11 +7417,11 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   var trailingTrivia: Trivia
   var unexpectedBeforeAttributes: UnexpectedNodes?
   var attributes: AttributeList?
-  var unexpectedBetweenAttributesAndIsolated: UnexpectedNodes?
-  var isolated: Token?
-  var unexpectedBetweenIsolatedAndConst: UnexpectedNodes?
-  var const: Token?
-  var unexpectedBetweenConstAndFirstName: UnexpectedNodes?
+  var unexpectedBetweenAttributesAndIsolatedToken: UnexpectedNodes?
+  var isolatedToken: Token?
+  var unexpectedBetweenIsolatedTokenAndConstToken: UnexpectedNodes?
+  var constToken: Token?
+  var unexpectedBetweenConstTokenAndFirstName: UnexpectedNodes?
   var firstName: Token?
   var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodes?
   var secondName: Token?
@@ -7439,11 +7439,11 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Parameters:
   ///   - unexpectedBeforeAttributes: 
   ///   - attributes: 
-  ///   - unexpectedBetweenAttributesAndIsolated: 
-  ///   - isolated: 
-  ///   - unexpectedBetweenIsolatedAndConst: 
-  ///   - const: 
-  ///   - unexpectedBetweenConstAndFirstName: 
+  ///   - unexpectedBetweenAttributesAndIsolatedToken: 
+  ///   - isolatedToken: 
+  ///   - unexpectedBetweenIsolatedTokenAndConstToken: 
+  ///   - constToken: 
+  ///   - unexpectedBetweenConstTokenAndFirstName: 
   ///   - firstName: 
   ///   - unexpectedBetweenFirstNameAndSecondName: 
   ///   - secondName: 
@@ -7457,16 +7457,16 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   ///   - defaultArgument: 
   ///   - unexpectedBetweenDefaultArgumentAndTrailingComma: 
   ///   - trailingComma: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndIsolated: ExpressibleAsUnexpectedNodes? = nil, isolated: Token? = nil, unexpectedBetweenIsolatedAndConst: ExpressibleAsUnexpectedNodes? = nil, const: Token? = nil, unexpectedBetweenConstAndFirstName: ExpressibleAsUnexpectedNodes? = nil, firstName: Token? = nil, unexpectedBetweenFirstNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: Token? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndDefaultArgument: ExpressibleAsUnexpectedNodes? = nil, defaultArgument: ExpressibleAsInitializerClause? = nil, unexpectedBetweenDefaultArgumentAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeAttributes: ExpressibleAsUnexpectedNodes? = nil, attributes: ExpressibleAsAttributeList? = nil, unexpectedBetweenAttributesAndIsolatedToken: ExpressibleAsUnexpectedNodes? = nil, isolatedToken: Token? = nil, unexpectedBetweenIsolatedTokenAndConstToken: ExpressibleAsUnexpectedNodes? = nil, constToken: Token? = nil, unexpectedBetweenConstTokenAndFirstName: ExpressibleAsUnexpectedNodes? = nil, firstName: Token? = nil, unexpectedBetweenFirstNameAndSecondName: ExpressibleAsUnexpectedNodes? = nil, secondName: Token? = nil, unexpectedBetweenSecondNameAndColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token? = nil, unexpectedBetweenColonAndType: ExpressibleAsUnexpectedNodes? = nil, type: ExpressibleAsTypeBuildable? = nil, unexpectedBetweenTypeAndEllipsis: ExpressibleAsUnexpectedNodes? = nil, ellipsis: Token? = nil, unexpectedBetweenEllipsisAndDefaultArgument: ExpressibleAsUnexpectedNodes? = nil, defaultArgument: ExpressibleAsInitializerClause? = nil, unexpectedBetweenDefaultArgumentAndTrailingComma: ExpressibleAsUnexpectedNodes? = nil, trailingComma: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
     self.unexpectedBeforeAttributes = unexpectedBeforeAttributes?.createUnexpectedNodes()
     self.attributes = attributes?.createAttributeList()
-    self.unexpectedBetweenAttributesAndIsolated = unexpectedBetweenAttributesAndIsolated?.createUnexpectedNodes()
-    self.isolated = isolated
-    self.unexpectedBetweenIsolatedAndConst = unexpectedBetweenIsolatedAndConst?.createUnexpectedNodes()
-    self.const = const
-    self.unexpectedBetweenConstAndFirstName = unexpectedBetweenConstAndFirstName?.createUnexpectedNodes()
+    self.unexpectedBetweenAttributesAndIsolatedToken = unexpectedBetweenAttributesAndIsolatedToken?.createUnexpectedNodes()
+    self.isolatedToken = isolatedToken
+    self.unexpectedBetweenIsolatedTokenAndConstToken = unexpectedBetweenIsolatedTokenAndConstToken?.createUnexpectedNodes()
+    self.constToken = constToken
+    self.unexpectedBetweenConstTokenAndFirstName = unexpectedBetweenConstTokenAndFirstName?.createUnexpectedNodes()
     self.firstName = firstName
     self.unexpectedBetweenFirstNameAndSecondName = unexpectedBetweenFirstNameAndSecondName?.createUnexpectedNodes()
     self.secondName = secondName
@@ -7489,7 +7489,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `FunctionParameterSyntax`.
   func buildFunctionParameter(format: Format) -> FunctionParameterSyntax {
-    var result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndIsolated?.buildUnexpectedNodes(format: format), isolated: isolated?.buildToken(format: format), unexpectedBetweenIsolatedAndConst?.buildUnexpectedNodes(format: format), const: const?.buildToken(format: format), unexpectedBetweenConstAndFirstName?.buildUnexpectedNodes(format: format), firstName: firstName?.buildToken(format: format), unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(format: format), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(format: format), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(format: format), unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format), defaultArgument: defaultArgument?.buildInitializerClause(format: format), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken(format: format))
+    var result = FunctionParameterSyntax(unexpectedBeforeAttributes?.buildUnexpectedNodes(format: format), attributes: attributes?.buildAttributeList(format: format), unexpectedBetweenAttributesAndIsolatedToken?.buildUnexpectedNodes(format: format), isolatedToken: isolatedToken?.buildToken(format: format), unexpectedBetweenIsolatedTokenAndConstToken?.buildUnexpectedNodes(format: format), constToken: constToken?.buildToken(format: format), unexpectedBetweenConstTokenAndFirstName?.buildUnexpectedNodes(format: format), firstName: firstName?.buildToken(format: format), unexpectedBetweenFirstNameAndSecondName?.buildUnexpectedNodes(format: format), secondName: secondName?.buildToken(format: format), unexpectedBetweenSecondNameAndColon?.buildUnexpectedNodes(format: format), colon: colon?.buildToken(format: format), unexpectedBetweenColonAndType?.buildUnexpectedNodes(format: format), type: type?.buildType(format: format), unexpectedBetweenTypeAndEllipsis?.buildUnexpectedNodes(format: format), ellipsis: ellipsis?.buildToken(format: format), unexpectedBetweenEllipsisAndDefaultArgument?.buildUnexpectedNodes(format: format), defaultArgument: defaultArgument?.buildInitializerClause(format: format), unexpectedBetweenDefaultArgumentAndTrailingComma?.buildUnexpectedNodes(format: format), trailingComma: trailingComma?.buildToken(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }

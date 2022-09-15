@@ -6948,11 +6948,11 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
   public init(
     _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax?,
-    _ unexpectedBetweenAttributesAndIsolated: RawUnexpectedNodesSyntax? = nil,
-    isolated: RawTokenSyntax?,
-    _ unexpectedBetweenIsolatedAndConst: RawUnexpectedNodesSyntax? = nil,
-    const: RawTokenSyntax?,
-    _ unexpectedBetweenConstAndFirstName: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndIsolatedToken: RawUnexpectedNodesSyntax? = nil,
+    isolatedToken: RawTokenSyntax?,
+    _ unexpectedBetweenIsolatedTokenAndConstToken: RawUnexpectedNodesSyntax? = nil,
+    constToken: RawTokenSyntax?,
+    _ unexpectedBetweenConstTokenAndFirstName: RawUnexpectedNodesSyntax? = nil,
     firstName: RawTokenSyntax?,
     _ unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? = nil,
     secondName: RawTokenSyntax?,
@@ -6973,11 +6973,11 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
-      layout[2] = unexpectedBetweenAttributesAndIsolated?.raw
-      layout[3] = isolated?.raw
-      layout[4] = unexpectedBetweenIsolatedAndConst?.raw
-      layout[5] = const?.raw
-      layout[6] = unexpectedBetweenConstAndFirstName?.raw
+      layout[2] = unexpectedBetweenAttributesAndIsolatedToken?.raw
+      layout[3] = isolatedToken?.raw
+      layout[4] = unexpectedBetweenIsolatedTokenAndConstToken?.raw
+      layout[5] = constToken?.raw
+      layout[6] = unexpectedBetweenConstTokenAndFirstName?.raw
       layout[7] = firstName?.raw
       layout[8] = unexpectedBetweenFirstNameAndSecondName?.raw
       layout[9] = secondName?.raw
@@ -7001,19 +7001,19 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
   public var attributes: RawAttributeListSyntax? {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
   }
-  public var unexpectedBetweenAttributesAndIsolated: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndIsolatedToken: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var isolated: RawTokenSyntax? {
+  public var isolatedToken: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenIsolatedAndConst: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenIsolatedTokenAndConstToken: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var const: RawTokenSyntax? {
+  public var constToken: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
-  public var unexpectedBetweenConstAndFirstName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenConstTokenAndFirstName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   public var firstName: RawTokenSyntax? {

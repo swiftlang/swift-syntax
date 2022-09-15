@@ -1330,8 +1330,8 @@ extension Parser {
         elements.append(RawFunctionParameterSyntax(
           attributes: attrs,
           unexpectedBeforeIsolated,
-          isolated: isolated,
-          const: const,
+          isolatedToken: isolated,
+          constToken: const,
           firstName: firstName,
           secondName: secondName,
           unexpectedBeforeColon,

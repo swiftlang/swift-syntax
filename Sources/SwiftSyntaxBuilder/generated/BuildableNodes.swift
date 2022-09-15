@@ -14555,7 +14555,9 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   var leftAngleBracket: Token
   var unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodes?
   var genericParameterList: GenericParameterList
-  var unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodes?
+  var unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodes?
   var rightAngleBracket: Token
   /// Creates a `GenericParameterClause` using the provided parameters.
   /// - Parameters:
@@ -14563,9 +14565,11 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   ///   - leftAngleBracket: 
   ///   - unexpectedBetweenLeftAngleBracketAndGenericParameterList: 
   ///   - genericParameterList: 
-  ///   - unexpectedBetweenGenericParameterListAndRightAngleBracket: 
+  ///   - unexpectedBetweenGenericParameterListAndGenericWhereClause: 
+  ///   - genericWhereClause: 
+  ///   - unexpectedBetweenGenericWhereClauseAndRightAngleBracket: 
   ///   - rightAngleBracket: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, genericParameterList: ExpressibleAsGenericParameterList, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, genericParameterList: ExpressibleAsGenericParameterList, unexpectedBetweenGenericParameterListAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`) {
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
@@ -14573,24 +14577,26 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
     assert(leftAngleBracket.text == #"<"#)
     self.unexpectedBetweenLeftAngleBracketAndGenericParameterList = unexpectedBetweenLeftAngleBracketAndGenericParameterList?.createUnexpectedNodes()
     self.genericParameterList = genericParameterList.createGenericParameterList()
-    self.unexpectedBetweenGenericParameterListAndRightAngleBracket = unexpectedBetweenGenericParameterListAndRightAngleBracket?.createUnexpectedNodes()
+    self.unexpectedBetweenGenericParameterListAndGenericWhereClause = unexpectedBetweenGenericParameterListAndGenericWhereClause?.createUnexpectedNodes()
+    self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.unexpectedBetweenGenericWhereClauseAndRightAngleBracket = unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.createUnexpectedNodes()
     self.rightAngleBracket = rightAngleBracket
     assert(rightAngleBracket.text == #">"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList =  {
     GenericParameterList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList: unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndRightAngleBracket: unexpectedBetweenGenericParameterListAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList: unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndGenericWhereClause: unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
   }
   /// Builds a `GenericParameterClauseSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterClauseSyntax`.
   func buildGenericParameterClause(format: Format) -> GenericParameterClauseSyntax {
-    var result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(format: format), unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format), genericParameterList: genericParameterList.buildGenericParameterList(format: format), unexpectedBetweenGenericParameterListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken(format: format))
+    var result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(format: format), unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format), genericParameterList: genericParameterList.buildGenericParameterList(format: format), unexpectedBetweenGenericParameterListAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }

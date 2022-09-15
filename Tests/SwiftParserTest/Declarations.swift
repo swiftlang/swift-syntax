@@ -80,12 +80,12 @@ final class DeclarationTests: XCTestCase {
                   DiagnosticSpec(message: "Expected '{' to start class"),
                   DiagnosticSpec(message: "Expected '}' to end class"),
                 ])
-    AssertParse("class B<#^DIAG_1^#where g#^DIAG_2^#",
+    AssertParse("class B<where g#^DIAG^#",
                 diagnostics: [
-                  DiagnosticSpec(locationMarker: "DIAG_1", message: "Expected '>' to end generic parameter clause"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '=' in same type requirement"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '{' to start class"),
-                  DiagnosticSpec(locationMarker: "DIAG_2", message: "Expected '}' to end class"),
+                  DiagnosticSpec(message: "Expected '=' in same type requirement"),
+                  DiagnosticSpec(message: "Expected '>' to end generic parameter clause"),
+                  DiagnosticSpec(message: "Expected '{' to start class"),
+                  DiagnosticSpec(message: "Expected '}' to end class"),
                 ])
   }
 

@@ -6176,13 +6176,15 @@ public enum SyntaxFactory {
     return PrimaryAssociatedTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericParameterClauseSyntax")
-  public static func makeGenericParameterClause(_ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, _ unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
+  public static func makeGenericParameterClause(_ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, _ unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
       unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw,
       genericParameterList.raw,
-      unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw,
+      unexpectedBetweenGenericParameterListAndGenericWhereClause?.raw,
+      genericWhereClause?.raw,
+      unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterClause,
@@ -6199,6 +6201,8 @@ public enum SyntaxFactory {
       RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: .default),
       nil,
       RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericParameterList, arena: .default),
+      nil,
+      nil,
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: .default),
     ], arena: .default))

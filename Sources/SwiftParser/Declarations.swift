@@ -321,6 +321,13 @@ extension Parser {
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
+    let whereClause: RawGenericWhereClauseSyntax?
+    if self.at(.whereKeyword) {
+      whereClause = self.parseGenericWhereClause()
+    } else {
+      whereClause = nil
+    }
+
     let rangle: RawTokenSyntax
     if self.currentToken.starts(with: ">") {
       rangle = self.consumeAnyToken(remapping: .rightAngle)
@@ -337,6 +344,7 @@ extension Parser {
     return RawGenericParameterClauseSyntax(
       leftAngleBracket: langle,
       genericParameterList: parameters,
+      genericWhereClause: whereClause,
       rightAngleBracket: rangle,
       arena: self.arena)
   }
@@ -1373,7 +1381,7 @@ extension Parser {
     } else {
       unexpectedBeforeReturnType = nil
     }
-    let result = self.parseType()
+    let result = self.parseResultType()
     let returnClause = RawReturnClauseSyntax(
       unexpectedBeforeArrow,
       arrow: arrow,

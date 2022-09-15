@@ -161,7 +161,8 @@ extension SyntaxKind {
     case 20: self = .enumCaseDecl
     case 21: self = .enumDecl
     case 22: self = .operatorDecl
-    case 226: self = .identifierList
+    case 226: self = .designatedTypeList
+    case 278: self = .designatedTypeElement
     case 127: self = .operatorPrecedenceAndTypes
     case 23: self = .precedenceGroupDecl
     case 183: self = .precedenceGroupAttributeList

@@ -313,7 +313,9 @@ extension Syntax {
       return node
     case .operatorDecl(let node):
       return node
-    case .identifierList(let node):
+    case .designatedTypeList(let node):
+      return node
+    case .designatedTypeElement(let node):
       return node
     case .operatorPrecedenceAndTypes(let node):
       return node
@@ -716,7 +718,8 @@ extension SyntaxKind {
     case .enumCaseDecl: return EnumCaseDeclSyntax.self
     case .enumDecl: return EnumDeclSyntax.self
     case .operatorDecl: return OperatorDeclSyntax.self
-    case .identifierList: return IdentifierListSyntax.self
+    case .designatedTypeList: return DesignatedTypeListSyntax.self
+    case .designatedTypeElement: return DesignatedTypeElementSyntax.self
     case .operatorPrecedenceAndTypes: return OperatorPrecedenceAndTypesSyntax.self
     case .precedenceGroupDecl: return PrecedenceGroupDeclSyntax.self
     case .precedenceGroupAttributeList: return PrecedenceGroupAttributeListSyntax.self

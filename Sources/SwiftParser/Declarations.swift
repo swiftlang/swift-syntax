@@ -1888,27 +1888,21 @@ extension Parser {
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
       let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
-      let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
-      let comma: RawTokenSyntax?
-      let unexpectedBeforeDesignatedType: RawUnexpectedNodesSyntax?
-      let designatedType: RawTokenSyntax?
-      if self.at(.comma) {
-        (unexpectedBeforeComma, comma) = self.expect(.comma)
-        (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
-      } else {
-        unexpectedBeforeComma = nil
-        comma = nil
-        unexpectedBeforeDesignatedType = nil
-        designatedType = nil
+      var types = [RawDesignatedTypeElementSyntax]()
+      while let comma = self.consume(if: .comma) {
+        let (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
+        types.append(RawDesignatedTypeElementSyntax(
+          leadingComma: comma,
+          unexpectedBeforeDesignatedType,
+          name: designatedType,
+          arena: self.arena))
       }
       precedenceAndTypes = RawOperatorPrecedenceAndTypesSyntax(
         colon: colon,
         unexpectedBeforeIdentifier,
         precedenceGroup: identifier,
-        unexpectedBeforeComma,
-        comma: comma,
-        unexpectedBeforeDesignatedType,
-        designatedType: designatedType,
+        designatedTypes: RawDesignatedTypeListSyntax(
+          elements: types, arena: self.arena),
         arena: self.arena)
     } else {
       precedenceAndTypes = nil

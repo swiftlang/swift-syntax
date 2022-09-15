@@ -1626,19 +1626,19 @@ public extension EnumCaseElementList {
 }
 
 @resultBuilder
-public struct IdentifierListBuilder {
+public struct DesignatedTypeListBuilder {
 
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = Token
+  public typealias Expression = ExpressibleAsDesignatedTypeElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [Token]
+  public typealias Component = [ExpressibleAsDesignatedTypeElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = IdentifierList
+  public typealias FinalResult = DesignatedTypeList
 
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1653,8 +1653,8 @@ public struct IdentifierListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
-  public static func buildExpression(_ expression: ExpressibleAsIdentifierList) -> Component {
-    return expression.createIdentifierList().elements
+  public static func buildExpression(_ expression: ExpressibleAsDesignatedTypeList) -> Component {
+    return expression.createDesignatedTypeList().elements
   }
   
   /// Enables support for `if` statements that do not have an `else`.
@@ -1690,12 +1690,12 @@ public struct IdentifierListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    return .init(component.map { $0.createDesignatedTypeElement() })
   }
 }
 
-public extension IdentifierList {
-  init(@IdentifierListBuilder itemsBuilder: () -> IdentifierList) {
+public extension DesignatedTypeList {
+  init(@DesignatedTypeListBuilder itemsBuilder: () -> DesignatedTypeList) {
     self = itemsBuilder()
   }
 }

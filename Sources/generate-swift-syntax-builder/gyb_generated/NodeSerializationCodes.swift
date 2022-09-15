@@ -237,7 +237,7 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "AttributedType": 223,
   "YieldStmt": 224,
   "YieldList": 225,
-  "IdentifierList": 226,
+  "DesignatedTypeList": 226,
   "NamedAttributeStringArgument": 227,
   "DeclName": 228,
   "PoundAssertStmt": 229,
@@ -288,4 +288,5 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "HasSymbolCondition": 275,
   "ConventionAttributeArguments": 276,
   "ConventionWitnessMethodAttributeArguments": 277,
+  "DesignatedTypeElement": 278,
 ]

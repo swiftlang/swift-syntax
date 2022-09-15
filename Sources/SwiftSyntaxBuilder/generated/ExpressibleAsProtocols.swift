@@ -1155,8 +1155,20 @@ public extension ExpressibleAsOperatorDecl {
     return createOperatorDecl()
   }
 }
-public protocol ExpressibleAsIdentifierList {
-  func createIdentifierList() -> IdentifierList
+public protocol ExpressibleAsDesignatedTypeList {
+  func createDesignatedTypeList() -> DesignatedTypeList
+}
+public protocol ExpressibleAsDesignatedTypeElement: ExpressibleAsDesignatedTypeList, ExpressibleAsSyntaxBuildable {
+  func createDesignatedTypeElement() -> DesignatedTypeElement
+}
+public extension ExpressibleAsDesignatedTypeElement {
+  /// Conformance to `ExpressibleAsDesignatedTypeList`
+  func createDesignatedTypeList() -> DesignatedTypeList {
+    return DesignatedTypeList([self])
+  }
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createDesignatedTypeElement()
+  }
 }
 public protocol ExpressibleAsOperatorPrecedenceAndTypes: ExpressibleAsSyntaxBuildable {
   func createOperatorPrecedenceAndTypes() -> OperatorPrecedenceAndTypes

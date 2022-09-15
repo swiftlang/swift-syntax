@@ -353,6 +353,7 @@ final class DeclarationTests: XCTestCase {
       prefix operator ^^ : PrefixMagicOperatorProtocol
       infix operator  <*< : MediumPrecedence, InfixMagicOperatorProtocol
       postfix operator ^^ : PostfixMagicOperatorProtocol
+      infix operator ^^ : PostfixMagicOperatorProtocol, Class, Struct
       """)
   }
 

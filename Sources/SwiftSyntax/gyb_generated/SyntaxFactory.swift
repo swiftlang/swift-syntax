@@ -3823,33 +3823,56 @@ public enum SyntaxFactory {
     ], arena: .default))
     return OperatorDeclSyntax(data)
   }
-  @available(*, deprecated, message: "Use initializer on IdentifierListSyntax")
-  public static func makeIdentifierList(
-    _ elements: [TokenSyntax]) -> IdentifierListSyntax {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.identifierList,
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeListSyntax")
+  public static func makeDesignatedTypeList(
+    _ elements: [DesignatedTypeElementSyntax]) -> DesignatedTypeListSyntax {
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
       from: elements.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
-    return IdentifierListSyntax(data)
+    return DesignatedTypeListSyntax(data)
   }
 
-  @available(*, deprecated, message: "Use initializer on IdentifierListSyntax")
-  public static func makeBlankIdentifierList(presence: SourcePresence = .present) -> IdentifierListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .identifierList,
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeListSyntax")
+  public static func makeBlankDesignatedTypeList(presence: SourcePresence = .present) -> DesignatedTypeListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .designatedTypeList,
       from: [
     ], arena: .default))
-    return IdentifierListSyntax(data)
+    return DesignatedTypeListSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeElementSyntax")
+  public static func makeDesignatedTypeElement(_ unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? = nil, leadingComma: TokenSyntax, _ unexpectedBetweenLeadingCommaAndName: UnexpectedNodesSyntax? = nil, name: TokenSyntax) -> DesignatedTypeElementSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLeadingComma?.raw,
+      leadingComma.raw,
+      unexpectedBetweenLeadingCommaAndName?.raw,
+      name.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeElement,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return DesignatedTypeElementSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on DesignatedTypeElementSyntax")
+  public static func makeBlankDesignatedTypeElement(presence: SourcePresence = .present) -> DesignatedTypeElementSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .designatedTypeElement,
+      from: [
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default),
+      nil,
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+    ], arena: .default))
+    return DesignatedTypeElementSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OperatorPrecedenceAndTypesSyntax")
-  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, precedenceGroup: TokenSyntax, _ unexpectedBetweenPrecedenceGroupAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndDesignatedType: UnexpectedNodesSyntax? = nil, designatedType: TokenSyntax?) -> OperatorPrecedenceAndTypesSyntax {
+  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, precedenceGroup: TokenSyntax, _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, designatedTypes: DesignatedTypeListSyntax) -> OperatorPrecedenceAndTypesSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeColon?.raw,
       colon.raw,
       unexpectedBetweenColonAndPrecedenceGroup?.raw,
       precedenceGroup.raw,
-      unexpectedBetweenPrecedenceGroupAndComma?.raw,
-      comma?.raw,
-      unexpectedBetweenCommaAndDesignatedType?.raw,
-      designatedType?.raw,
+      unexpectedBetweenPrecedenceGroupAndDesignatedTypes?.raw,
+      designatedTypes.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorPrecedenceAndTypes,
       from: layout, arena: .default)
@@ -3866,9 +3889,7 @@ public enum SyntaxFactory {
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
       nil,
-      nil,
-      nil,
-      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.designatedTypeList, arena: .default),
     ], arena: .default))
     return OperatorPrecedenceAndTypesSyntax(data)
   }

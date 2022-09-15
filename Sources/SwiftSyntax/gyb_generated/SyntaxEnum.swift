@@ -158,7 +158,8 @@ public enum SyntaxEnum {
   case enumCaseDecl(EnumCaseDeclSyntax)
   case enumDecl(EnumDeclSyntax)
   case operatorDecl(OperatorDeclSyntax)
-  case identifierList(IdentifierListSyntax)
+  case designatedTypeList(DesignatedTypeListSyntax)
+  case designatedTypeElement(DesignatedTypeElementSyntax)
   case operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax)
   case precedenceGroupDecl(PrecedenceGroupDeclSyntax)
   case precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax)
@@ -575,7 +576,9 @@ public enum SyntaxEnum {
       return "enum"
     case .operatorDecl:
       return "operator"
-    case .identifierList:
+    case .designatedTypeList:
+      return nil
+    case .designatedTypeElement:
       return nil
     case .operatorPrecedenceAndTypes:
       return nil
@@ -1123,8 +1126,10 @@ public extension Syntax {
       return .enumDecl(EnumDeclSyntax(self)!)
     case .operatorDecl:
       return .operatorDecl(OperatorDeclSyntax(self)!)
-    case .identifierList:
-      return .identifierList(IdentifierListSyntax(self)!)
+    case .designatedTypeList:
+      return .designatedTypeList(DesignatedTypeListSyntax(self)!)
+    case .designatedTypeElement:
+      return .designatedTypeElement(DesignatedTypeElementSyntax(self)!)
     case .operatorPrecedenceAndTypes:
       return .operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax(self)!)
     case .precedenceGroupDecl:

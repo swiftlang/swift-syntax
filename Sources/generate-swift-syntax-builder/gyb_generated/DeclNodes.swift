@@ -1297,10 +1297,26 @@ let DECL_NODES: [Node] = [
                isOptional: true)
        ]),
 
-  Node(name: "IdentifierList",
+  Node(name: "DesignatedTypeList",
        nameForDiagnostics: nil,
        kind: "SyntaxCollection",
-       element: "IdentifierToken"),
+       element: "DesignatedTypeElement"),
+
+  Node(name: "DesignatedTypeElement",
+       nameForDiagnostics: nil,
+       kind: "Syntax",
+       children: [
+         Child(name: "LeadingComma",
+               kind: "CommaToken",
+               tokenChoices: [
+                 "Comma"
+               ]),
+         Child(name: "Name",
+               kind: "IdentifierToken",
+               tokenChoices: [
+                 "Identifier"
+               ])
+       ]),
 
   Node(name: "OperatorPrecedenceAndTypes",
        nameForDiagnostics: nil,
@@ -1318,19 +1334,10 @@ let DECL_NODES: [Node] = [
                tokenChoices: [
                  "Identifier"
                ]),
-         Child(name: "Comma",
-               kind: "CommaToken",
-               isOptional: true,
-               tokenChoices: [
-                 "Comma"
-               ]),
-         Child(name: "DesignatedType",
-               kind: "IdentifierToken",
-               description: "The designated types for this operator",
-               isOptional: true,
-               tokenChoices: [
-                 "Identifier"
-               ])
+         Child(name: "DesignatedTypes",
+               kind: "DesignatedTypeList",
+               description: "The designated types associated with this operator.",
+               collectionElementName: "DesignatedTypeElement")
        ]),
 
   Node(name: "PrecedenceGroupDecl",

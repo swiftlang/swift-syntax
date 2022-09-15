@@ -982,8 +982,16 @@ extension Format {
     }
     return result
   }
-  func format(syntax: IdentifierListSyntax) -> IdentifierListSyntax {
+  func format(syntax: DesignatedTypeListSyntax) -> DesignatedTypeListSyntax {
     syntax
+  }
+  func format(syntax: DesignatedTypeElementSyntax) -> DesignatedTypeElementSyntax {
+    var result = syntax
+    let leadingTrivia = result.leadingTrivia ?? []
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia.addingSpacingAfterNewlinesIfNeeded())
+    }
+    return result
   }
   func format(syntax: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
     var result = syntax

@@ -1375,31 +1375,33 @@ extension Array: ExpressibleAsEnumCaseElementList where Element == ExpressibleAs
     return EnumCaseElementList(self)
   }
 }
-/// `IdentifierList` represents a collection of `Token`
-public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsIdentifierList {
+/// `DesignatedTypeList` represents a collection of `DesignatedTypeElement`
+public struct DesignatedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDesignatedTypeList {
   /// The leading trivia attached to this syntax node once built.
   var leadingTrivia: Trivia = []
   /// The trailing trivia attached to this syntax node once built.
   var trailingTrivia: Trivia = []
-  let elements: [Token]
-  /// Creates a `IdentifierList` with the provided list of elements.
+  let elements: [DesignatedTypeElement]
+  /// Creates a `DesignatedTypeList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `Token`
-  public init (_ elements: [Token]) {
-    self.elements = elements
-  }
-  /// Creates a new `IdentifierList` by flattening the elements in `lists`
-  public init (combining lists: [ExpressibleAsIdentifierList]) {
-    elements = lists.flatMap {
-      $0.createIdentifierList().elements
+  ///   - elements: A list of `ExpressibleAsDesignatedTypeElement`
+  public init (_ elements: [ExpressibleAsDesignatedTypeElement]) {
+    self.elements = elements.map {
+      $0.createDesignatedTypeElement()
     }
   }
-  public init (arrayLiteral elements: Token...) {
+  /// Creates a new `DesignatedTypeList` by flattening the elements in `lists`
+  public init (combining lists: [ExpressibleAsDesignatedTypeList]) {
+    elements = lists.flatMap {
+      $0.createDesignatedTypeList().elements
+    }
+  }
+  public init (arrayLiteral elements: ExpressibleAsDesignatedTypeElement...) {
     self.init(elements)
   }
-  public func buildIdentifierList(format: Format) -> IdentifierListSyntax {
-    var result = IdentifierListSyntax(elements.map {
-      $0.buildToken(format: format)
+  public func buildDesignatedTypeList(format: Format) -> DesignatedTypeListSyntax {
+    var result = DesignatedTypeListSyntax(elements.map {
+      $0.buildDesignatedTypeElement(format: format)
     })
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
@@ -1410,14 +1412,14 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     return format.format(syntax: result)
   }
   public func buildSyntax(format: Format) -> Syntax {
-    return Syntax(buildIdentifierList(format: format))
+    return Syntax(buildDesignatedTypeList(format: format))
   }
-  /// Conformance to `ExpressibleAsIdentifierList`.
-  public func createIdentifierList() -> IdentifierList {
+  /// Conformance to `ExpressibleAsDesignatedTypeList`.
+  public func createDesignatedTypeList() -> DesignatedTypeList {
     return self
   }
   /// Conformance to `ExpressibleAsSyntaxBuildable`.
-  /// `IdentifierList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// `DesignatedTypeList` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
@@ -1434,9 +1436,9 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
     return result
   }
 }
-extension Array: ExpressibleAsIdentifierList where Element == Token {
-  public func createIdentifierList() -> IdentifierList {
-    return IdentifierList(self)
+extension Array: ExpressibleAsDesignatedTypeList where Element == ExpressibleAsDesignatedTypeElement {
+  public func createDesignatedTypeList() -> DesignatedTypeList {
+    return DesignatedTypeList(self)
   }
 }
 /// `PrecedenceGroupAttributeList` represents a collection of `SyntaxBuildable`

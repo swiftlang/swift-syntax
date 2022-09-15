@@ -7208,6 +7208,138 @@ extension EnumCaseElementSyntax: CustomReflectable {
   }
 }
 
+// MARK: - DesignatedTypeElementSyntax
+
+public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DesignatedTypeElementSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .designatedTypeElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DesignatedTypeElementSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .designatedTypeElement)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public init(
+    _ unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? = nil,
+    leadingComma: TokenSyntax,
+    _ unexpectedBetweenLeadingCommaAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax
+  ) {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeLeadingComma?.raw,
+      leadingComma.raw,
+      unexpectedBetweenLeadingCommaAndName?.raw,
+      name.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeElement,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    self.init(data)
+  }
+
+  public var unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 0, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBeforeLeadingComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBeforeLeadingComma` replaced.
+  /// - param newChild: The new `unexpectedBeforeLeadingComma` to replace the node's
+  ///                   current `unexpectedBeforeLeadingComma`, if present.
+  public func withUnexpectedBeforeLeadingComma(
+    _ newChild: UnexpectedNodesSyntax?) -> DesignatedTypeElementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 0)
+    return DesignatedTypeElementSyntax(newData)
+  }
+
+  public var leadingComma: TokenSyntax {
+    get {
+      let childData = data.child(at: 1, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeadingComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leadingComma` replaced.
+  /// - param newChild: The new `leadingComma` to replace the node's
+  ///                   current `leadingComma`, if present.
+  public func withLeadingComma(
+    _ newChild: TokenSyntax?) -> DesignatedTypeElementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.comma, arena: .default)
+    let newData = data.replacingChild(raw, at: 1)
+    return DesignatedTypeElementSyntax(newData)
+  }
+
+  public var unexpectedBetweenLeadingCommaAndName: UnexpectedNodesSyntax? {
+    get {
+      let childData = data.child(at: 2, parent: Syntax(self))
+      if childData == nil { return nil }
+      return UnexpectedNodesSyntax(childData!)
+    }
+    set(value) {
+      self = withUnexpectedBetweenLeadingCommaAndName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `unexpectedBetweenLeadingCommaAndName` replaced.
+  /// - param newChild: The new `unexpectedBetweenLeadingCommaAndName` to replace the node's
+  ///                   current `unexpectedBetweenLeadingCommaAndName`, if present.
+  public func withUnexpectedBetweenLeadingCommaAndName(
+    _ newChild: UnexpectedNodesSyntax?) -> DesignatedTypeElementSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: 2)
+    return DesignatedTypeElementSyntax(newData)
+  }
+
+  public var name: TokenSyntax {
+    get {
+      let childData = data.child(at: 3, parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `name` replaced.
+  /// - param newChild: The new `name` to replace the node's
+  ///                   current `name`, if present.
+  public func withName(
+    _ newChild: TokenSyntax?) -> DesignatedTypeElementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default)
+    let newData = data.replacingChild(raw, at: 3)
+    return DesignatedTypeElementSyntax(newData)
+  }
+}
+
+extension DesignatedTypeElementSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "unexpectedBeforeLeadingComma": unexpectedBeforeLeadingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "leadingComma": Syntax(leadingComma).asProtocol(SyntaxProtocol.self),
+      "unexpectedBetweenLeadingCommaAndName": unexpectedBetweenLeadingCommaAndName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - OperatorPrecedenceAndTypesSyntax
 
 /// 
@@ -7236,20 +7368,16 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     colon: TokenSyntax,
     _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil,
     precedenceGroup: TokenSyntax,
-    _ unexpectedBetweenPrecedenceGroupAndComma: UnexpectedNodesSyntax? = nil,
-    comma: TokenSyntax?,
-    _ unexpectedBetweenCommaAndDesignatedType: UnexpectedNodesSyntax? = nil,
-    designatedType: TokenSyntax?
+    _ unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil,
+    designatedTypes: DesignatedTypeListSyntax
   ) {
     let layout: [RawSyntax?] = [
       unexpectedBeforeColon?.raw,
       colon.raw,
       unexpectedBetweenColonAndPrecedenceGroup?.raw,
       precedenceGroup.raw,
-      unexpectedBetweenPrecedenceGroupAndComma?.raw,
-      comma?.raw,
-      unexpectedBetweenCommaAndDesignatedType?.raw,
-      designatedType?.raw,
+      unexpectedBetweenPrecedenceGroupAndDesignatedTypes?.raw,
+      designatedTypes.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorPrecedenceAndTypes,
       from: layout, arena: .default)
@@ -7342,90 +7470,65 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
 
-  public var unexpectedBetweenPrecedenceGroupAndComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? {
     get {
       let childData = data.child(at: 4, parent: Syntax(self))
       if childData == nil { return nil }
       return UnexpectedNodesSyntax(childData!)
     }
     set(value) {
-      self = withUnexpectedBetweenPrecedenceGroupAndComma(value)
+      self = withUnexpectedBetweenPrecedenceGroupAndDesignatedTypes(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `unexpectedBetweenPrecedenceGroupAndComma` replaced.
-  /// - param newChild: The new `unexpectedBetweenPrecedenceGroupAndComma` to replace the node's
-  ///                   current `unexpectedBetweenPrecedenceGroupAndComma`, if present.
-  public func withUnexpectedBetweenPrecedenceGroupAndComma(
+  /// Returns a copy of the receiver with its `unexpectedBetweenPrecedenceGroupAndDesignatedTypes` replaced.
+  /// - param newChild: The new `unexpectedBetweenPrecedenceGroupAndDesignatedTypes` to replace the node's
+  ///                   current `unexpectedBetweenPrecedenceGroupAndDesignatedTypes`, if present.
+  public func withUnexpectedBetweenPrecedenceGroupAndDesignatedTypes(
     _ newChild: UnexpectedNodesSyntax?) -> OperatorPrecedenceAndTypesSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: 4)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
 
-  public var comma: TokenSyntax? {
+  /// 
+  /// The designated types associated with this operator.
+  /// 
+  public var designatedTypes: DesignatedTypeListSyntax {
     get {
       let childData = data.child(at: 5, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return DesignatedTypeListSyntax(childData!)
     }
     set(value) {
-      self = withComma(value)
+      self = withDesignatedTypes(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `comma` replaced.
-  /// - param newChild: The new `comma` to replace the node's
-  ///                   current `comma`, if present.
-  public func withComma(
-    _ newChild: TokenSyntax?) -> OperatorPrecedenceAndTypesSyntax {
-    let raw = newChild?.raw
+  /// Adds the provided `DesignatedTypeElement` to the node's `designatedTypes`
+  /// collection.
+  /// - param element: The new `DesignatedTypeElement` to add to the node's
+  ///                  `designatedTypes` collection.
+  /// - returns: A copy of the receiver with the provided `DesignatedTypeElement`
+  ///            appended to its `designatedTypes` collection.
+  public func addDesignatedTypeElement(_ element: DesignatedTypeElementSyntax) -> OperatorPrecedenceAndTypesSyntax {
+    var collection: RawSyntax
+    if let col = raw.layoutView!.children[5] {
+      collection = col.layoutView!.appending(element.raw, arena: .default)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
+        from: [element.raw], arena: .default)
+    }
+    let newData = data.replacingChild(collection, at: 5)
+    return OperatorPrecedenceAndTypesSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `designatedTypes` replaced.
+  /// - param newChild: The new `designatedTypes` to replace the node's
+  ///                   current `designatedTypes`, if present.
+  public func withDesignatedTypes(
+    _ newChild: DesignatedTypeListSyntax?) -> OperatorPrecedenceAndTypesSyntax {
+    let raw = newChild?.raw ?? RawSyntax.makeEmptyLayout(kind: SyntaxKind.designatedTypeList, arena: .default)
     let newData = data.replacingChild(raw, at: 5)
-    return OperatorPrecedenceAndTypesSyntax(newData)
-  }
-
-  public var unexpectedBetweenCommaAndDesignatedType: UnexpectedNodesSyntax? {
-    get {
-      let childData = data.child(at: 6, parent: Syntax(self))
-      if childData == nil { return nil }
-      return UnexpectedNodesSyntax(childData!)
-    }
-    set(value) {
-      self = withUnexpectedBetweenCommaAndDesignatedType(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `unexpectedBetweenCommaAndDesignatedType` replaced.
-  /// - param newChild: The new `unexpectedBetweenCommaAndDesignatedType` to replace the node's
-  ///                   current `unexpectedBetweenCommaAndDesignatedType`, if present.
-  public func withUnexpectedBetweenCommaAndDesignatedType(
-    _ newChild: UnexpectedNodesSyntax?) -> OperatorPrecedenceAndTypesSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 6)
-    return OperatorPrecedenceAndTypesSyntax(newData)
-  }
-
-  /// 
-  /// The designated types for this operator
-  /// 
-  public var designatedType: TokenSyntax? {
-    get {
-      let childData = data.child(at: 7, parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withDesignatedType(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `designatedType` replaced.
-  /// - param newChild: The new `designatedType` to replace the node's
-  ///                   current `designatedType`, if present.
-  public func withDesignatedType(
-    _ newChild: TokenSyntax?) -> OperatorPrecedenceAndTypesSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: 7)
     return OperatorPrecedenceAndTypesSyntax(newData)
   }
 }
@@ -7437,10 +7540,8 @@ extension OperatorPrecedenceAndTypesSyntax: CustomReflectable {
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
       "unexpectedBetweenColonAndPrecedenceGroup": unexpectedBetweenColonAndPrecedenceGroup.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "precedenceGroup": Syntax(precedenceGroup).asProtocol(SyntaxProtocol.self),
-      "unexpectedBetweenPrecedenceGroupAndComma": unexpectedBetweenPrecedenceGroupAndComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "unexpectedBetweenCommaAndDesignatedType": unexpectedBetweenCommaAndDesignatedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "designatedType": designatedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "unexpectedBetweenPrecedenceGroupAndDesignatedTypes": unexpectedBetweenPrecedenceGroupAndDesignatedTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "designatedTypes": Syntax(designatedTypes).asProtocol(SyntaxProtocol.self),
     ])
   }
 }

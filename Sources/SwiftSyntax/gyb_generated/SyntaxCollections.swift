@@ -5244,21 +5244,21 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `IdentifierListSyntax` represents a collection of one or more
-/// `TokenSyntax` nodes. IdentifierListSyntax behaves
+/// `DesignatedTypeListSyntax` represents a collection of one or more
+/// `DesignatedTypeElementSyntax` nodes. DesignatedTypeListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
+public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   var layoutView: RawSyntaxLayoutView {
     data.raw.layoutView!
   }
 
-  /// Converts the given `Syntax` node to a `IdentifierListSyntax` if possible. Returns 
+  /// Converts the given `Syntax` node to a `DesignatedTypeListSyntax` if possible. Returns 
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .identifierList else { return nil }
+    guard syntax.raw.kind == .designatedTypeList else { return nil }
     self._syntaxNode = syntax
   }
 
@@ -5266,12 +5266,12 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .identifierList)
+    assert(data.raw.kind == .designatedTypeList)
     self._syntaxNode = Syntax(data)
   }
 
-  public init(_ children: [TokenSyntax]) {
-    let raw = RawSyntax.makeLayout(kind: SyntaxKind.identifierList,
+  public init(_ children: [DesignatedTypeElementSyntax]) {
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
       from: children.map { $0.raw }, arena: .default)
     let data = SyntaxData.forRoot(raw)
     self.init(data)
@@ -5280,52 +5280,52 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.layoutView!.children.count }
 
-  /// Creates a new `IdentifierListSyntax` by replacing the underlying layout with
+  /// Creates a new `DesignatedTypeListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `IdentifierListSyntax` with the new layout underlying it.
+  /// - Returns: A new `DesignatedTypeListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> IdentifierListSyntax {
+    _ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
     let newRaw = layoutView.replacingLayout(with: layout, arena: .default)
     let newData = data.replacingSelf(newRaw)
-    return IdentifierListSyntax(newData)
+    return DesignatedTypeListSyntax(newData)
   }
 
-  /// Creates a new `IdentifierListSyntax` by appending the provided syntax element
+  /// Creates a new `DesignatedTypeListSyntax` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `IdentifierListSyntax` with that element appended to the end.
+  /// - Returns: A new `DesignatedTypeListSyntax` with that element appended to the end.
   public func appending(
-    _ syntax: TokenSyntax) -> IdentifierListSyntax {
+    _ syntax: DesignatedTypeElementSyntax) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `IdentifierListSyntax` by prepending the provided syntax element
+  /// Creates a new `DesignatedTypeListSyntax` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `IdentifierListSyntax` with that element prepended to the
+  /// - Returns: A new `DesignatedTypeListSyntax` with that element prepended to the
   ///            beginning.
   public func prepending(
-    _ syntax: TokenSyntax) -> IdentifierListSyntax {
+    _ syntax: DesignatedTypeElementSyntax) -> DesignatedTypeListSyntax {
     return inserting(syntax, at: 0)
   }
 
-  /// Creates a new `IdentifierListSyntax` by inserting the provided syntax element
+  /// Creates a new `DesignatedTypeListSyntax` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `IdentifierListSyntax` with that element appended to the end.
-  public func inserting(_ syntax: TokenSyntax,
-                        at index: Int) -> IdentifierListSyntax {
+  /// - Returns: A new `DesignatedTypeListSyntax` with that element appended to the end.
+  public func inserting(_ syntax: DesignatedTypeElementSyntax,
+                        at index: Int) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
@@ -5334,16 +5334,16 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `IdentifierListSyntax` by replacing the syntax element
+  /// Creates a new `DesignatedTypeListSyntax` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `IdentifierListSyntax` with the new element at the provided index.
+  /// - Returns: A new `DesignatedTypeListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
-                        with syntax: TokenSyntax) -> IdentifierListSyntax {
+                        with syntax: DesignatedTypeElementSyntax) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
@@ -5352,64 +5352,64 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `IdentifierListSyntax` by removing the syntax element at the
+  /// Creates a new `DesignatedTypeListSyntax` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `IdentifierListSyntax` with the element at the provided index
+  /// - Returns: A new `DesignatedTypeListSyntax` with the element at the provided index
   ///            removed.
-  public func removing(childAt index: Int) -> IdentifierListSyntax {
+  public func removing(childAt index: Int) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `IdentifierListSyntax` by removing the first element.
+  /// Creates a new `DesignatedTypeListSyntax` by removing the first element.
   ///
-  /// - Returns: A new `IdentifierListSyntax` with the first element removed.
-  public func removingFirst() -> IdentifierListSyntax {
+  /// - Returns: A new `DesignatedTypeListSyntax` with the first element removed.
+  public func removingFirst() -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `IdentifierListSyntax` by removing the last element.
+  /// Creates a new `DesignatedTypeListSyntax` by removing the last element.
   ///
-  /// - Returns: A new `IdentifierListSyntax` with the last element removed.
-  public func removingLast() -> IdentifierListSyntax {
+  /// - Returns: A new `DesignatedTypeListSyntax` with the last element removed.
+  public func removingLast() -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
 
-  /// Returns a new `IdentifierListSyntax` with its leading trivia replaced
+  /// Returns a new `DesignatedTypeListSyntax` with its leading trivia replaced
   /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> IdentifierListSyntax {
-    return IdentifierListSyntax(data.withLeadingTrivia(leadingTrivia))
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DesignatedTypeListSyntax {
+    return DesignatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia))
   }
 
-  /// Returns a new `IdentifierListSyntax` with its trailing trivia replaced
+  /// Returns a new `DesignatedTypeListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> IdentifierListSyntax {
-    return IdentifierListSyntax(data.withTrailingTrivia(trailingTrivia))
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DesignatedTypeListSyntax {
+    return DesignatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia))
   }
 
-  /// Returns a new `IdentifierListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> IdentifierListSyntax {
+  /// Returns a new `DesignatedTypeListSyntax` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> DesignatedTypeListSyntax {
     return withLeadingTrivia([])
   }
 
-  /// Returns a new `IdentifierListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> IdentifierListSyntax {
+  /// Returns a new `DesignatedTypeListSyntax` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> DesignatedTypeListSyntax {
     return withTrailingTrivia([])
   }
 
-  /// Returns a new `IdentifierListSyntax` with all trivia removed.
-  public func withoutTrivia() -> IdentifierListSyntax {
+  /// Returns a new `DesignatedTypeListSyntax` with all trivia removed.
+  public func withoutTrivia() -> DesignatedTypeListSyntax {
     return withoutLeadingTrivia().withoutTrailingTrivia()
   }
 
-  /// The leading trivia (spaces, newlines, etc.) associated with this `IdentifierListSyntax`.
+  /// The leading trivia (spaces, newlines, etc.) associated with this `DesignatedTypeListSyntax`.
   public var leadingTrivia: Trivia? {
     get {
       return raw.formLeadingTrivia()
@@ -5419,7 +5419,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
     }
   }
 
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `IdentifierListSyntax`.
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `DesignatedTypeListSyntax`.
   public var trailingTrivia: Trivia? {
     get {
       return raw.formTrailingTrivia()
@@ -5430,9 +5430,9 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `IdentifierListSyntax` to the `BidirectionalCollection` protocol.
-extension IdentifierListSyntax: BidirectionalCollection {
-  public typealias Element = TokenSyntax
+/// Conformance for `DesignatedTypeListSyntax` to the `BidirectionalCollection` protocol.
+extension DesignatedTypeListSyntax: BidirectionalCollection {
+  public typealias Element = DesignatedTypeElementSyntax
   public typealias Index = SyntaxChildrenIndex
 
   public struct Iterator: IteratorProtocol {
@@ -5444,13 +5444,13 @@ extension IdentifierListSyntax: BidirectionalCollection {
       self.iterator = rawChildren.makeIterator()
     }
 
-    public mutating func next() -> TokenSyntax? {
+    public mutating func next() -> DesignatedTypeElementSyntax? {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
       let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
-      return TokenSyntax(data)
+      return DesignatedTypeElementSyntax(data)
     }
   }
 
@@ -5485,11 +5485,11 @@ extension IdentifierListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
 
-  public subscript(position: SyntaxChildrenIndex) -> TokenSyntax {
+  public subscript(position: SyntaxChildrenIndex) -> DesignatedTypeElementSyntax {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
-    return TokenSyntax(data)
+    return DesignatedTypeElementSyntax(data)
   }
 }
 
@@ -11075,7 +11075,7 @@ extension EnumCaseElementListSyntax: CustomReflectable {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }
 }
-extension IdentifierListSyntax: CustomReflectable {
+extension DesignatedTypeListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }

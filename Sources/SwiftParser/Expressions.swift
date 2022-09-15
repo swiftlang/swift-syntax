@@ -503,7 +503,7 @@ extension Parser {
     forDirective: Bool,
     pattern: PatternContext
   ) -> RawExprSyntax {
-    let head = self.parsePrimaryExpression(pattern: pattern)
+    let head = self.parsePrimaryExpression(pattern: pattern, flavor: flavor)
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
@@ -975,8 +975,12 @@ extension Parser {
   ///     primary-expression → key-path-expression
   ///     primary-expression → selector-expression
   ///     primary-expression → key-path-string-expression
+  ///     primary-expression → macro-expansion-expression
   @_spi(RawSyntax)
-  public mutating func parsePrimaryExpression(pattern: PatternContext) -> RawExprSyntax {
+  public mutating func parsePrimaryExpression(
+    pattern: PatternContext,
+    flavor: ExprFlavor
+  ) -> RawExprSyntax {
     switch self.at(anyIn: PrimaryExpressionStart.self) {
     case (.integerLiteral, let handle)?:
       let digits = self.eat(handle)
@@ -1113,8 +1117,12 @@ extension Parser {
         wildcard: wild,
         arena: self.arena
       ))
-    case (.pound, let handle)?:
-      return RawExprSyntax(self.parseUnknownPoundLiteral(poundHandle: handle))
+
+    case (.pound, _)?:
+      return RawExprSyntax(
+        self.parseMacroExpansionExpr(pattern: pattern, flavor: flavor)
+      )
+      
     case (.poundSelectorKeyword, _)?:
       return RawExprSyntax(self.parseObjectiveCSelectorLiteral())
     case (.poundKeyPathKeyword, _)?:
@@ -1213,28 +1221,58 @@ extension Parser {
 }
 
 extension Parser {
-  /// Parse an unknown pound literal, that starts with a `#` at `poundHandle`
-  /// into a `RawIdentifierExprSyntax` that is missing the identifier and
-  /// instead contains all the tokens of the pound literal as unexpected tokens.
-  mutating func parseUnknownPoundLiteral(poundHandle: TokenConsumptionHandle) -> RawIdentifierExprSyntax {
-    var unexpected: [RawSyntax] = []
-    unexpected.append(RawSyntax(self.eat(poundHandle)))
-    if let name = self.consume(if: .identifier) {
-      unexpected.append(RawSyntax(name))
+  /// Parse a macro expansion as an expression.
+  ///
+  ///
+  /// Grammar
+  /// =======
+  ///
+  /// macro-expansion-expression → '#' identifier expr-call-suffix?
+  @_spi(RawSyntax)
+  public mutating func parseMacroExpansionExpr(
+    pattern: PatternContext,
+    flavor: ExprFlavor
+  ) -> RawMacroExpansionExprSyntax {
+    let poundKeyword = self.consumeAnyToken()
+    let (unexpectedBeforeMacro, macro) = self.expectIdentifier()
+
+    // Parse the optional parenthesized argument list.
+    let leftParen = self.consume(if: .leftParen, where: { !$0.isAtStartOfLine })
+    let args: [RawTupleExprElementSyntax]
+    let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
+    let rightParen: RawTokenSyntax?
+    if leftParen != nil {
+      args = parseArgumentListElements(pattern: pattern)
+      (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+    } else {
+      args = []
+      unexpectedBeforeRightParen = nil
+      rightParen = nil
     }
-    // If there is a parenthesis, consume all tokens up to the closing parenthesis.
-    if let leftParen = self.consume(if: .leftParen) {
-      unexpected.append(RawSyntax(leftParen))
-      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-      unexpected += unexpectedBeforeRightParen?.elements ?? []
-      unexpected.append(RawSyntax(rightParen))
+
+    // Parse the optional trailing closures.
+    let trailingClosure: RawClosureExprSyntax?
+    let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
+    if case .trailingClosure = flavor, self.at(.leftBrace), self.lookahead().isValidTrailingClosure(flavor) {
+      (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
+    } else {
+      trailingClosure = nil
+      additionalTrailingClosures = nil
     }
-    return RawIdentifierExprSyntax(
-      RawUnexpectedNodesSyntax(elements: unexpected, arena: self.arena),
-      identifier: missingToken(.identifier, text: nil),
-      declNameArguments: nil,
-      arena: self.arena
-    )
+
+    return RawMacroExpansionExprSyntax(
+      poundToken: poundKeyword,
+      unexpectedBeforeMacro,
+      macro: macro,
+      leftParen: leftParen,
+      argumentList: RawTupleExprElementListSyntax(
+        elements: args, arena: self.arena
+      ),
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      trailingClosure: trailingClosure,
+      additionalTrailingClosures: additionalTrailingClosures,
+      arena: self.arena)
   }
 }
 

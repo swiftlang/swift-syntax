@@ -737,7 +737,7 @@ enum PrimaryExpressionStart: RawTokenKindSubset {
   case leftSquareBracket
   case nilKeyword
   case period
-  case pound // For recovery of unknown directives
+  case pound
   case poundColorLiteralKeyword
   case poundColumnKeyword
   case poundDsohandleKeyword

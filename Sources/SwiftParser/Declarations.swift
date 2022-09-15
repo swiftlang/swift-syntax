@@ -47,6 +47,11 @@ extension TokenConsumer {
       }
     }
 
+    if subparser.at(.poundIfKeyword) {
+      var attrLookahead = subparser.lookahead()
+      return attrLookahead.consumeIfConfigOfAttributes()
+    }
+
     let declStartKeyword: DeclarationStart?
     if allowRecovery {
       declStartKeyword = subparser.canRecoverTo(

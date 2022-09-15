@@ -197,6 +197,44 @@ extension Parser.Lookahead {
     }
     return true
   }
+
+  mutating func consumeIfConfigOfAttributes() -> Bool {
+    while true {
+      // #if / #else / #elseif
+      self.consumeAnyToken()
+
+      // <expression>
+      self.skipUntilEndOfLine()
+
+      while true {
+        if self.at(.atSign) {
+          _ = self.consumeAttributeList()
+          continue
+        }
+
+        if self.at(.poundIfKeyword) {
+          _ = self.consumeIfConfigOfAttributes()
+          continue
+        }
+
+        break
+      }
+
+      guard self.at(any: [ .poundElseifKeyword, .poundElseKeyword ]) else {
+        break
+      }
+    }
+
+    // If we ran out of tokens, say we consumed the rest.
+    if self.at(.eof) {
+      return true
+    }
+
+    guard self.currentToken.isAtStartOfLine else {
+      return false
+    }
+    return self.consume(if: .poundEndifKeyword) != nil
+  }
 }
 
 // MARK: Lookahead

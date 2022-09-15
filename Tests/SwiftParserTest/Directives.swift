@@ -111,4 +111,42 @@ final class DirectiveTests: XCTestCase {
     )
   }
 
+  func testHasAttribute() {
+    AssertParse(
+      """
+      @frozen
+      #if hasAttribute(foo)
+      @foo
+      #endif
+      public struct S2 { }
+      """)
+
+    AssertParse(
+      """
+      struct Inner {
+        @frozen
+      #if hasAttribute(foo)
+        #if hasAttribute(bar)
+        @foo @bar
+        #endif
+      #endif
+        public struct S2 { }
+
+      #if hasAttribute(foo)
+        @foo
+      #endif
+        @inlinable
+        func f1() { }
+
+      #if hasAttribute(foo)
+        @foo
+      #else
+        @available(*, deprecated, message: "nope")
+        @frozen
+      #endif
+        public struct S3 { }
+      }
+      """)
+  }
+
 }

@@ -14,7 +14,7 @@
 
 extension Parser {
   mutating func parseAttributeList() -> RawAttributeListSyntax? {
-    guard self.at(.atSign) else {
+    guard self.at(any: [.atSign, .poundIfKeyword]) else {
       return nil
     }
 
@@ -23,13 +23,21 @@ extension Parser {
     repeat {
       let attribute = self.parseAttribute()
       elements.append(attribute)
-    } while self.at(.atSign) && loopProgress.evaluate(currentToken)
+    } while self.at(any: [.atSign, .poundIfKeyword]) && loopProgress.evaluate(currentToken)
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
   }
 }
 
 extension Parser {
   mutating func parseAttribute() -> RawSyntax {
+    if self.at(.poundIfKeyword) {
+      return RawSyntax(self.parsePoundIfDirective { parser -> RawSyntax in
+        return parser.parseAttribute()
+      } syntax: { parser, attributes in
+        return RawSyntax(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
+      })
+    }
+
     guard let declAttr = DeclarationAttribute(rawValue: self.peek().tokenText) else {
       return RawSyntax(self.parseCustomAttribute())
     }

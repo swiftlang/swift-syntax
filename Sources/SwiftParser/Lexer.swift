@@ -904,7 +904,6 @@ extension Lexer.Cursor {
           _ = self.advanceToEndOfLine()
           continue
         case UInt8(ascii: "*"):
-          self = start
           _ = self.advanceToEndOfSlashStarComment()
           continue
         default:

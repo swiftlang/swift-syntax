@@ -50,18 +50,41 @@ public class LexerTests: XCTestCase {
   }
 
   func testBlockComments() throws {
-    var data =
-    """
-    /* */
-    /**/
-    /* /* */ */
-    """
+    do {
+      var data =
+      """
+      /*/ */
+      func not_doc5() {}
+      """
 
-    data.withUTF8 { buf in
-      let lexemes = Lexer.lex(buf)
-      AssertEqualTokens(lexemes, [
-        lexeme(.eof, "/* */\n/**/\n/* /* */ */", leading: 22),
-      ])
+      data.withUTF8 { buf in
+        let lexemes = Lexer.lex(buf)
+        AssertEqualTokens(lexemes, [
+          lexeme(.funcKeyword, "/*/ */\nfunc ", leading: 7, trailing: 1),
+          lexeme(.identifier, "not_doc5"),
+          lexeme(.leftParen, "("),
+          lexeme(.rightParen, ") ", trailing: 1),
+          lexeme(.leftBrace, "{"),
+          lexeme(.rightBrace, "}"),
+          lexeme(.eof, ""),
+        ])
+      }
+    }
+    
+    do {
+      var data =
+      """
+      /* */
+      /**/
+      /* /* */ */
+      """
+
+      data.withUTF8 { buf in
+        let lexemes = Lexer.lex(buf)
+        AssertEqualTokens(lexemes, [
+          lexeme(.eof, "/* */\n/**/\n/* /* */ */", leading: 22),
+        ])
+      }
     }
   }
 

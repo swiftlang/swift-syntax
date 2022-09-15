@@ -914,4 +914,25 @@ DECL_NODES = [
                    don't associate at all
                    '''),
          ]),
+
+    # e.g., "#embed("filename.txt")"
+    Node('MacroExpansionDecl',
+         name_for_diagnostics="macro expansion declaration", kind='Decl',
+         children=[
+             Child('PoundToken', kind='PoundToken',
+                   description='The `#` sign.'),
+             Child('Macro', kind='IdentifierToken'),
+             Child('LeftParen', kind='LeftParenToken',
+                   is_optional=True),
+             Child('ArgumentList', kind='TupleExprElementList',
+                   collection_element_name='Argument'),
+             Child('RightParen', kind='RightParenToken',
+                   is_optional=True),
+             Child('TrailingClosure', kind='ClosureExpr',
+                   is_optional=True),
+             Child('AdditionalTrailingClosures',
+                   kind='MultipleTrailingClosureElementList',
+                   collection_element_name='AdditionalTrailingClosure',
+                   is_optional=True),
+         ]),
 ]

@@ -766,11 +766,17 @@ DECL_NODES = [
          ''',
          children=[
              Child('Colon', kind='ColonToken'),
-             Child('PrecedenceGroupAndDesignatedTypes', kind='IdentifierList',
-                   collection_element_name='PrecedenceGroupAndDesignatedType',
+             Child('PrecedenceGroup', kind='IdentifierToken',
                    description='''
-                   The precedence group and designated types for this operator
+                   The precedence group for this operator
                    '''),
+             Child('Comma', kind='CommaToken',
+                   is_optional=True),
+             Child('DesignatedType', kind='IdentifierToken',
+                   description='''
+                   The designated types for this operator
+                   ''',
+                   is_optional=True),
          ]),
 
     # precedence-group-decl -> attributes? modifiers? 'precedencegroup'

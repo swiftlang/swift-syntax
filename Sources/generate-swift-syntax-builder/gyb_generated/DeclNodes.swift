@@ -1312,10 +1312,25 @@ let DECL_NODES: [Node] = [
                tokenChoices: [
                  "Colon"
                ]),
-         Child(name: "PrecedenceGroupAndDesignatedTypes",
-               kind: "IdentifierList",
-               description: "The precedence group and designated types for this operator",
-               collectionElementName: "PrecedenceGroupAndDesignatedType")
+         Child(name: "PrecedenceGroup",
+               kind: "IdentifierToken",
+               description: "The precedence group for this operator",
+               tokenChoices: [
+                 "Identifier"
+               ]),
+         Child(name: "Comma",
+               kind: "CommaToken",
+               isOptional: true,
+               tokenChoices: [
+                 "Comma"
+               ]),
+         Child(name: "DesignatedType",
+               kind: "IdentifierToken",
+               description: "The designated types for this operator",
+               isOptional: true,
+               tokenChoices: [
+                 "Identifier"
+               ])
        ]),
 
   Node(name: "PrecedenceGroupDecl",

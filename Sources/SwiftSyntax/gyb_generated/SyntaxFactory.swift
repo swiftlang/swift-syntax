@@ -3840,12 +3840,16 @@ public enum SyntaxFactory {
     return IdentifierListSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on OperatorPrecedenceAndTypesSyntax")
-  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodesSyntax? = nil, precedenceGroupAndDesignatedTypes: IdentifierListSyntax) -> OperatorPrecedenceAndTypesSyntax {
+  public static func makeOperatorPrecedenceAndTypes(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodesSyntax? = nil, precedenceGroup: TokenSyntax, _ unexpectedBetweenPrecedenceGroupAndComma: UnexpectedNodesSyntax? = nil, comma: TokenSyntax?, _ unexpectedBetweenCommaAndDesignatedType: UnexpectedNodesSyntax? = nil, designatedType: TokenSyntax?) -> OperatorPrecedenceAndTypesSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeColon?.raw,
       colon.raw,
-      unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw,
-      precedenceGroupAndDesignatedTypes.raw,
+      unexpectedBetweenColonAndPrecedenceGroup?.raw,
+      precedenceGroup.raw,
+      unexpectedBetweenPrecedenceGroupAndComma?.raw,
+      comma?.raw,
+      unexpectedBetweenCommaAndDesignatedType?.raw,
+      designatedType?.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.operatorPrecedenceAndTypes,
       from: layout, arena: .default)
@@ -3860,7 +3864,11 @@ public enum SyntaxFactory {
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.colon, arena: .default),
       nil,
-      RawSyntax.makeEmptyLayout(kind: SyntaxKind.identifierList, arena: .default),
+      RawSyntax.makeMissingToken(kind: TokenKind.identifier(""), arena: .default),
+      nil,
+      nil,
+      nil,
+      nil,
     ], arena: .default))
     return OperatorPrecedenceAndTypesSyntax(data)
   }

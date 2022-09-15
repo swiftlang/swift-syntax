@@ -8637,17 +8637,25 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
   public init(
     _ unexpectedBeforeColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
-    _ unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax? = nil,
-    precedenceGroupAndDesignatedTypes: RawIdentifierListSyntax,
+    _ unexpectedBetweenColonAndPrecedenceGroup: RawUnexpectedNodesSyntax? = nil,
+    precedenceGroup: RawTokenSyntax,
+    _ unexpectedBetweenPrecedenceGroupAndComma: RawUnexpectedNodesSyntax? = nil,
+    comma: RawTokenSyntax?,
+    _ unexpectedBetweenCommaAndDesignatedType: RawUnexpectedNodesSyntax? = nil,
+    designatedType: RawTokenSyntax?,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .operatorPrecedenceAndTypes, uninitializedCount: 4, arena: arena) { layout in
+      kind: .operatorPrecedenceAndTypes, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeColon?.raw
       layout[1] = colon.raw
-      layout[2] = unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.raw
-      layout[3] = precedenceGroupAndDesignatedTypes.raw
+      layout[2] = unexpectedBetweenColonAndPrecedenceGroup?.raw
+      layout[3] = precedenceGroup.raw
+      layout[4] = unexpectedBetweenPrecedenceGroupAndComma?.raw
+      layout[5] = comma?.raw
+      layout[6] = unexpectedBetweenCommaAndDesignatedType?.raw
+      layout[7] = designatedType?.raw
     }
     self.init(raw: raw)
   }
@@ -8658,11 +8666,23 @@ public struct RawOperatorPrecedenceAndTypesSyntax: RawSyntaxNodeProtocol {
   public var colon: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
-  public var unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndPrecedenceGroup: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
-  public var precedenceGroupAndDesignatedTypes: RawIdentifierListSyntax {
-    layoutView.children[3].map(RawIdentifierListSyntax.init(raw:))!
+  public var precedenceGroup: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenPrecedenceGroupAndComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var comma: RawTokenSyntax? {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  }
+  public var unexpectedBetweenCommaAndDesignatedType: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var designatedType: RawTokenSyntax? {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
 }
 

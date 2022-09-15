@@ -9040,29 +9040,50 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   var trailingTrivia: Trivia
   var unexpectedBeforeColon: UnexpectedNodes?
   var colon: Token
-  var unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: UnexpectedNodes?
-  var precedenceGroupAndDesignatedTypes: IdentifierList
+  var unexpectedBetweenColonAndPrecedenceGroup: UnexpectedNodes?
+  var precedenceGroup: Token
+  var unexpectedBetweenPrecedenceGroupAndComma: UnexpectedNodes?
+  var comma: Token?
+  var unexpectedBetweenCommaAndDesignatedType: UnexpectedNodes?
+  var designatedType: Token?
   /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
   /// - Parameters:
   ///   - unexpectedBeforeColon: 
   ///   - colon: 
-  ///   - unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: 
-  ///   - precedenceGroupAndDesignatedTypes: The precedence group and designated types for this operator
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes: ExpressibleAsUnexpectedNodes? = nil, precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList) {
+  ///   - unexpectedBetweenColonAndPrecedenceGroup: 
+  ///   - precedenceGroup: The precedence group for this operator
+  ///   - unexpectedBetweenPrecedenceGroupAndComma: 
+  ///   - comma: 
+  ///   - unexpectedBetweenCommaAndDesignatedType: 
+  ///   - designatedType: The designated types for this operator
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroup: ExpressibleAsUnexpectedNodes? = nil, precedenceGroup: Token, unexpectedBetweenPrecedenceGroupAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndDesignatedType: ExpressibleAsUnexpectedNodes? = nil, designatedType: Token? = nil) {
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
     self.unexpectedBeforeColon = unexpectedBeforeColon?.createUnexpectedNodes()
     self.colon = colon
     assert(colon.text == #":"#)
-    self.unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes = unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.createUnexpectedNodes()
-    self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
+    self.unexpectedBetweenColonAndPrecedenceGroup = unexpectedBetweenColonAndPrecedenceGroup?.createUnexpectedNodes()
+    self.precedenceGroup = precedenceGroup
+    self.unexpectedBetweenPrecedenceGroupAndComma = unexpectedBetweenPrecedenceGroupAndComma?.createUnexpectedNodes()
+    self.comma = comma
+    assert(comma == nil || comma!.text == #","#)
+    self.unexpectedBetweenCommaAndDesignatedType = unexpectedBetweenCommaAndDesignatedType?.createUnexpectedNodes()
+    self.designatedType = designatedType
+  }
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeColon: ExpressibleAsUnexpectedNodes? = nil, colon: Token = Token.`colon`, unexpectedBetweenColonAndPrecedenceGroup: ExpressibleAsUnexpectedNodes? = nil, precedenceGroup: String, unexpectedBetweenPrecedenceGroupAndComma: ExpressibleAsUnexpectedNodes? = nil, comma: Token? = nil, unexpectedBetweenCommaAndDesignatedType: ExpressibleAsUnexpectedNodes? = nil, designatedType: String?) {
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeColon: unexpectedBeforeColon, colon: colon, unexpectedBetweenColonAndPrecedenceGroup: unexpectedBetweenColonAndPrecedenceGroup, precedenceGroup: Token.`identifier`(precedenceGroup), unexpectedBetweenPrecedenceGroupAndComma: unexpectedBetweenPrecedenceGroupAndComma, comma: comma, unexpectedBetweenCommaAndDesignatedType: unexpectedBetweenCommaAndDesignatedType, designatedType: designatedType.map {
+      Token.`identifier`($0)
+    })
   }
   /// Builds a `OperatorPrecedenceAndTypesSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
   func buildOperatorPrecedenceAndTypes(format: Format) -> OperatorPrecedenceAndTypesSyntax {
-    var result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(format: format), unexpectedBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildUnexpectedNodes(format: format), precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format))
+    var result = OperatorPrecedenceAndTypesSyntax(unexpectedBeforeColon?.buildUnexpectedNodes(format: format), colon: colon.buildToken(format: format), unexpectedBetweenColonAndPrecedenceGroup?.buildUnexpectedNodes(format: format), precedenceGroup: precedenceGroup.buildToken(format: format), unexpectedBetweenPrecedenceGroupAndComma?.buildUnexpectedNodes(format: format), comma: comma?.buildToken(format: format), unexpectedBetweenCommaAndDesignatedType?.buildUnexpectedNodes(format: format), designatedType: designatedType?.buildToken(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }

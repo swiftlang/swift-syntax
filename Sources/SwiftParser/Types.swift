@@ -185,7 +185,8 @@ extension Parser {
       ) {
         base = RawTypeSyntax(RawMetatypeTypeSyntax(
           baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
-       }
+        continue
+      }
 
       if !self.currentToken.isAtStartOfLine {
         if self.currentToken.isOptionalToken {

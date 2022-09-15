@@ -52,6 +52,17 @@ extension Parser {
       case letKeyword
       case varKeyword
 
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme.tokenKind {
+        case .leftParen: self = .leftParen
+        case .wildcardKeyword: self = .wildcardKeyword
+        case .identifier: self = .identifier
+        case .letKeyword: self = .letKeyword
+        case .varKeyword: self = .varKeyword
+        default: return nil
+        }
+      }
+
       var rawTokenKind: RawTokenKind {
         switch self {
         case .leftParen: return .leftParen
@@ -212,6 +223,17 @@ extension Parser.Lookahead {
       case letKeyword
       case varKeyword
       case leftParen
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme.tokenKind {
+        case .identifier: self = .identifier
+        case .wildcardKeyword: self = .wildcardKeyword
+        case .letKeyword: self = .letKeyword
+        case .varKeyword: self = .varKeyword
+        case .leftParen: self = .leftParen
+        default: return nil
+        }
+      }
 
       var rawTokenKind: RawTokenKind {
         switch self {

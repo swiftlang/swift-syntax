@@ -1086,7 +1086,7 @@ extension Parser.Lookahead {
       }
 
       lookahead.eat(.atSign)
-      lookahead.expectIdentifierWithoutRecovery()
+      lookahead.eat(.identifier)
     }
 
     if allowRecovery {

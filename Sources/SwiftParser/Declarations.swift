@@ -393,10 +393,14 @@ extension Parser {
           case postfixOperator
           case prefixOperator
 
-          func accepts(lexeme: Lexer.Lexeme) -> Bool {
-            switch self {
-            case .colon: return true
-            default: return lexeme.tokenText == "=="
+          init?(lexeme: Lexer.Lexeme) {
+            switch (lexeme.tokenKind, lexeme.tokenText) {
+            case (.colon, _): self = .colon
+            case (.spacedBinaryOperator, "=="): self = .spacedBinaryOperator
+            case (.unspacedBinaryOperator, "=="): self = .unspacedBinaryOperator
+            case (.postfixOperator, "=="): self = .postfixOperator
+            case (.prefixOperator, "=="): self = .prefixOperator
+            default: return nil
             }
           }
 
@@ -2044,6 +2048,14 @@ extension Parser {
     enum ExpectedTokenKind: RawTokenKindSubset {
       case poundErrorKeyword
       case poundWarningKeyword
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme.tokenKind {
+        case .poundErrorKeyword: self = .poundErrorKeyword
+        case .poundWarningKeyword: self = .poundWarningKeyword
+        default: return nil
+        }
+      }
 
       var rawTokenKind: RawTokenKind {
         switch self {

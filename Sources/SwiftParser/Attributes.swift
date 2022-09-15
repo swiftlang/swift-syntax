@@ -311,6 +311,15 @@ extension Parser {
       case integerLiteral
       case selfKeyword
 
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme.tokenKind {
+        case .identifier: self = .identifier
+        case .integerLiteral: self = .integerLiteral
+        case .selfKeyword: self = .selfKeyword
+        default: return nil
+        }
+      }
+
       var rawTokenKind: RawTokenKind {
         switch self {
         case .identifier: return .identifier

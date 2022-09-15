@@ -173,6 +173,21 @@ extension Parser {
       case arrow
       case throwsKeyword
 
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme.tokenKind {
+        case .spacedBinaryOperator: self = .spacedBinaryOperator
+        case .unspacedBinaryOperator: self = .unspacedBinaryOperator
+        case .infixQuestionMark: self = .infixQuestionMark
+        case .equal: self = .equal
+        case .isKeyword: self = .isKeyword
+        case .asKeyword: self = .asKeyword
+        case .identifier where lexeme.tokenText == "async": self = .async
+        case .arrow: self = .arrow
+        case .throwsKeyword: self = .throwsKeyword
+        default: return nil
+        }
+      }
+
       var rawTokenKind: RawTokenKind {
         switch self {
         case .spacedBinaryOperator: return .spacedBinaryOperator

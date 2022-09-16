@@ -35,9 +35,14 @@ private func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T) th
   return try body(tempFileURL)
 }
 
-private func getContentsOfSourceFile(at path: String) throws -> [UInt8] {
-  let sourceURL = URL(fileURLWithPath: path)
-  let source = try Data(contentsOf: sourceURL)
+private func getContentsOfSourceFile(at path: String?) throws -> [UInt8] {
+  let source: Data
+  if let path = path {
+    let sourceURL = URL(fileURLWithPath: path)
+    source = try Data(contentsOf: sourceURL)
+  } else {
+    source = FileHandle.standardInput.readDataToEndOfFile()
+  }
   return [UInt8](source)
 }
 
@@ -54,14 +59,14 @@ class SwiftParserTest: ParsableCommand {
 class VerifyRoundTrip: ParsableCommand {
   required init() {}
 
-  init(sourceFile: String, swiftVersion: String?, enableBareSlashRegex: Bool?) {
+  init(sourceFile: String?, swiftVersion: String?, enableBareSlashRegex: Bool?) {
     self.sourceFile = sourceFile
     self.swiftVersion = swiftVersion
     self.enableBareSlashRegex = enableBareSlashRegex
   }
 
-  @Argument(help: "The source file that should be parsed")
-  var sourceFile: String
+  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
+  var sourceFile: String?
 
   @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
   var swiftVersion: String?
@@ -109,8 +114,8 @@ class VerifyRoundTrip: ParsableCommand {
 class PrintDiags: ParsableCommand {
   required init() {}
 
-  @Argument(help: "The source file that should be parsed")
-  var sourceFile: String
+  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
+  var sourceFile: String?
 
   @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
   var swiftVersion: String?
@@ -141,8 +146,8 @@ class PrintDiags: ParsableCommand {
 class DumpTree: ParsableCommand {
   required init() {}
 
-  @Argument(help: "The source file that should be parsed")
-  var sourceFile: String
+  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
+  var sourceFile: String?
 
   @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
   var swiftVersion: String?
@@ -167,8 +172,8 @@ class DumpTree: ParsableCommand {
 class Reduce: ParsableCommand {
   required init() {}
 
-  @Argument(help: "The test case that should be reduced")
-  var sourceFile: String
+  @Argument(help: "The test case that should be reduced; if omitted, use stdin")
+  var sourceFile: String?
 
   @Option(name: .long, help: "Interpret input according to a specific Swift language version number")
   var swiftVersion: String?

@@ -105,7 +105,7 @@ extension TokenConsumer {
   /// If this is the case, return the `Subset` case that the parser is positioned in
   /// as well as a handle to consume that token.
   func at<Subset: RawTokenKindSubset>(anyIn subset: Subset.Type) -> (Subset, TokenConsumptionHandle)? {
-    if let matchedKind = Subset(self.currentToken) {
+    if let matchedKind = Subset(lexeme: self.currentToken) {
       return (matchedKind, TokenConsumptionHandle(
         tokenKind: matchedKind.rawTokenKind,
         remappedKind: matchedKind.remappedKind
@@ -252,25 +252,6 @@ extension TokenConsumer {
       return missingToken(.contextualKeyword, text: name)
     }
   }
-
-  /// If the current token is any of the given `kinds` or a contextual keyword
-  /// with text in `contextualKeywords` and additionally satisfies `condition`,
-  /// consume it. Otherwise synthesize a missing token with `defaultKind`.
-
-  /// This method does not try to eat unexpected until it finds the token of the specified `kind`.
-  /// In the parser, `expect` should be preferred.
-  @_spi(RawSyntax)
-  public mutating func expectAnyWithoutRecovery(
-    _ kinds: [RawTokenKind],
-    where condition: (Lexer.Lexeme) -> Bool = { _ in true },
-    default defaultKind: RawTokenKind
-  ) -> Token {
-    if let token = self.consume(ifAny: kinds, where: condition) {
-      return token
-    } else {
-      return missingToken(defaultKind, text: nil)
-    }
-  }
 }
 
 
@@ -278,10 +259,16 @@ extension TokenConsumer {
 
 extension TokenConsumer {
   mutating func expectIdentifierWithoutRecovery() -> Token {
-    return self.expectAnyWithoutRecovery(IdentifierTokens.allRawTokenKinds, default: .identifier)
+    if let (_ , handle) = self.at(anyIn: IdentifierTokens.self) {
+      return self.eat(handle)
+    }
+    return missingToken(.identifier, text: nil)
   }
 
   mutating func expectIdentifierOrRethrowsWithoutRecovery() -> Token {
-    return self.expectAnyWithoutRecovery(IdentifierOrRethrowsTokens.allRawTokenKinds, default: .identifier)
+    if let (_ , handle) = self.at(anyIn: IdentifierOrRethrowsTokens.self) {
+      return self.eat(handle)
+    }
+    return missingToken(.identifier, text: nil)
   }
 }

@@ -271,7 +271,7 @@ extension Lexer.Lexeme {
   }
 
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {
-    return Operator(self) != nil && self.tokenText == name
+    return Operator(lexeme: self) != nil && self.tokenText == name
   }
 
   var isKeyword: Bool {
@@ -279,7 +279,7 @@ extension Lexer.Lexeme {
   }
 
   func starts(with symbol: SyntaxText) -> Bool {
-    guard Operator(self) != nil || self.tokenKind.isPunctuation else {
+    guard Operator(lexeme: self) != nil || self.tokenKind.isPunctuation else {
       return false
     }
 

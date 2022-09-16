@@ -48,6 +48,19 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
   case _const = "_const"
   case _local = "_local"
 
+  init?(lexeme: Lexer.Lexeme) {
+    switch lexeme.tokenKind {
+    case .staticKeyword: self = .staticKeyword
+    case .classKeyword: self = .classKeyword
+    case .privateKeyword: self = .privateKeyword
+    case .fileprivateKeyword: self = .fileprivateKeyword
+    case .internalKeyword: self = .internalKeyword
+    case .publicKeyword: self = .publicKeyword
+    case .identifier: self.init(rawValue: lexeme.tokenText)
+    default: return nil
+    }
+  }
+
   var rawTokenKind: RawTokenKind {
     switch self {
     case .staticKeyword: return .staticKeyword

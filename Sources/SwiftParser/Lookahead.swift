@@ -283,20 +283,6 @@ extension Parser.Lookahead {
     "_opaqueReturnTypeOf",
   ]
 
-  func isParenthesizedUnowned() -> Bool {
-    assert(self.atContextualKeyword("unowned") && self.peek().tokenKind == .leftParen,
-           "Invariant violated")
-
-    // Look ahead to parse the parenthesized expression.
-    var lookahead = self.lookahead()
-    lookahead.expectIdentifierWithoutRecovery()
-    guard lookahead.consume(if: .leftParen) != nil else {
-      return false
-    }
-    return lookahead.at(.identifier)
-        && lookahead.peek().tokenKind == .rightParen
-        && (lookahead.atContextualKeyword("safe") || lookahead.atContextualKeyword("unsafe"))
-  }
 }
 
 extension Parser.Lookahead {
@@ -364,6 +350,18 @@ extension Parser.Lookahead {
       case poundIfKeyword
       case poundElseKeyword
       case poundElseifKeyword
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch lexeme.tokenKind {
+        case .leftParen: self = .leftParen
+        case .leftBrace: self = .leftBrace
+        case .leftSquareBracket: self = .leftSquareBracket
+        case .poundIfKeyword: self = .poundIfKeyword
+        case .poundElseKeyword: self = .poundElseKeyword
+        case .poundElseifKeyword: self = .poundElseifKeyword
+        default: return nil
+        }
+      }
 
       var rawTokenKind: RawTokenKind {
         switch self {

@@ -25,6 +25,18 @@ enum DeclarationModifier: SyntaxText, ContextualKeywords, RawTokenKindSubset {
   case ${attr.swift_name} = "${attr.name}"
 % end
 
+  init?(lexeme: Lexer.Lexeme) {
+    switch lexeme.tokenKind {
+% for attr in DECL_MODIFIER_KINDS:
+%   if attr.swift_name.endswith('Keyword'):
+    case .${attr.swift_name}: self = .${attr.swift_name}
+%   end
+% end
+    case .identifier: self.init(rawValue: lexeme.tokenText)
+    default: return nil
+    }
+  }
+
   var rawTokenKind: RawTokenKind {
     switch self {
 % for attr in DECL_MODIFIER_KINDS:

@@ -653,7 +653,7 @@ extension Parser.Lookahead {
         return true
       }
 
-      if EffectsSpecifier(self.peek()) != nil {
+      if EffectsSpecifier(lexeme: self.peek()) != nil {
         var backtrack = self.lookahead()
         backtrack.consumeAnyToken()
         backtrack.consumeAnyToken()

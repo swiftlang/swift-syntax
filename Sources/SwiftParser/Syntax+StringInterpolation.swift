@@ -58,7 +58,7 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
 
 /// Syntax nodes that can be formed by a string interpolation involve source
 /// code and interpolated syntax nodes.
-protocol SyntaxExpressibleByStringInterpolation:
+public protocol SyntaxExpressibleByStringInterpolation:
     ExpressibleByStringInterpolation, SyntaxProtocol
     where Self.StringInterpolation == SyntaxStringInterpolation {
   /// Create an instance of this syntax node by parsing it from the given
@@ -87,31 +87,31 @@ extension SyntaxExpressibleByStringInterpolation {
 
 // Parsing support for the main kinds of syntax nodes.
 extension DeclSyntaxProtocol {
-  static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) -> Self {
     return Syntax(raw: parser.parseDeclaration().raw).as(Self.self)!
   }
 }
 
 extension ExprSyntaxProtocol {
-  static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) -> Self {
     return Syntax(raw: parser.parseExpression().raw).as(Self.self)!
   }
 }
 
 extension StmtSyntaxProtocol {
-  static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) -> Self {
     return Syntax(raw: parser.parseStatement().raw).as(Self.self)!
   }
 }
 
 extension TypeSyntaxProtocol {
-  static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) -> Self {
     return Syntax(raw: parser.parseType().raw).as(Self.self)!
   }
 }
 
 extension PatternSyntaxProtocol {
-  static func parse(from parser: inout Parser) -> Self {
+  public static func parse(from parser: inout Parser) -> Self {
     return Syntax(raw: parser.parsePattern().raw).as(Self.self)!
   }
 }

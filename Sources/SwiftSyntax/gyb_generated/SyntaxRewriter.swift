@@ -21,7 +21,12 @@
 //===----------------------------------------------------------------------===//
 
 open class SyntaxRewriter {
-  public init() {}
+  // SyntaxArena to use rewritten layouts.
+  let arena: SyntaxArena
+
+  public init(arena: SyntaxArena? = nil) {
+    self.arena = arena ?? SyntaxArena()
+  }
 
   /// Visit a `UnknownDeclSyntax`.
   ///   - Parameter node: the node that is being visited
@@ -5929,7 +5934,8 @@ open class SyntaxRewriter {
       // Sanity check, ensure the new children are the same length.
       assert(newLayout.count == node.raw.layoutView!.children.count)
 
-      let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: .default)
+      let newRaw = node.raw.layoutView!
+        .replacingLayout(with: Array(newLayout), arena: self.arena)
       // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
       return withExtendedLifetime(rewrittens) {
         SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!

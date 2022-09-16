@@ -1064,7 +1064,8 @@ extension Parser {
     /// Parse open quote.
     let openQuote = self.parseStringLiteralQuote(
       at: openDelimiter != nil ? .leadingRaw : .leading,
-      text: text
+      text: text,
+      wantsMultiline: self.currentToken.isMultilineStringLiteral
     ) ?? RawTokenSyntax(missing: .stringQuote, arena: arena)
     if !openQuote.isMissing {
       text = text.dropFirst(openQuote.tokenText.count)
@@ -1078,7 +1079,8 @@ extension Parser {
     /// Parse close quote.
     let closeQuote = self.parseStringLiteralQuote(
       at: openDelimiter != nil ? .trailingRaw : .trailing,
-      text: text
+      text: text,
+      wantsMultiline: self.currentToken.isMultilineStringLiteral
     ) ?? RawTokenSyntax(missing: openQuote.tokenKind, arena: arena)
     if !closeQuote.isMissing {
       text = text.dropFirst(closeQuote.tokenText.count)
@@ -1209,7 +1211,8 @@ extension Parser {
 
   mutating func parseStringLiteralQuote(
     at position: QuotePosition,
-    text: Slice<SyntaxText>
+    text: Slice<SyntaxText>,
+    wantsMultiline: Bool
   ) -> RawTokenSyntax? {
     // Single quote. We only support single line literal.
     if let first = text.first, first == UInt8(ascii: "'") {
@@ -1223,6 +1226,9 @@ extension Parser {
     while index < text.endIndex && text[index] == UInt8(ascii: "\"") {
       quoteCount += 1
       index = text.index(after: index)
+      guard wantsMultiline else {
+        break
+      }
     }
 
     // Empty single line string. Return only the first quote.

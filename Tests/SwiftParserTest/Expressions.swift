@@ -522,4 +522,23 @@ final class ExpressionTests: XCTestCase {
       var pair : (Int, Double) = makePair(a: 1, b: 2.5)
       """)
   }
+
+  // N.B. This test includes zero-width characters that may not render in most
+  // text editors. Be very careful editing these strings.
+  //
+  // See https://github.com/apple/swift/issues/51192 for more context here.
+  func testFalseMultilineDelimiters() {
+    AssertParse(
+      ###"""
+      _ = #"​"​"#
+
+      _ = #""""#
+
+      _ = #"""""#
+
+      _ = #""""""#
+
+      _ = ##""" foo # "# "##
+      """###)
+  }
 }

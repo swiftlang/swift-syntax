@@ -10,7 +10,8 @@ private func lexeme(
   trailing: Int = 0
 ) -> Lexer.Lexeme {
   return Lexer.Lexeme(
-    tokenKind: kind, isAtStartOfLine: true,
+    tokenKind: kind,
+    flags: [.isAtStartOfLine],
     start: wholeText.baseAddress!,
     leadingTriviaLength: leading,
     textLength: wholeText.count - leading - trailing,

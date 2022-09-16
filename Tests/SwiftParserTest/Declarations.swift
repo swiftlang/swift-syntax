@@ -357,6 +357,7 @@ final class DeclarationTests: XCTestCase {
 
     AssertParse(
       """
+      infix operator  <*<<< : MediumPrecedence, &
       prefix operator ^^ : PrefixMagicOperatorProtocol
       infix operator  <*< : MediumPrecedence, InfixMagicOperatorProtocol
       postfix operator ^^ : PostfixMagicOperatorProtocol

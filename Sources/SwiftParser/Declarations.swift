@@ -1907,10 +1907,11 @@ extension Parser {
       let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier()
       var types = [RawDesignatedTypeElementSyntax]()
       while let comma = self.consume(if: .comma) {
-        let (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
+        // FIXME: The compiler accepts... anything here. This is a bug.
+        // let (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
+        let designatedType = self.consumeAnyToken()
         types.append(RawDesignatedTypeElementSyntax(
           leadingComma: comma,
-          unexpectedBeforeDesignatedType,
           name: designatedType,
           arena: self.arena))
       }

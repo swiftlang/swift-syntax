@@ -399,4 +399,14 @@ let TYPE_NODES: [Node] = [
                ])
        ]),
   
+  Node(name: "NamedOpaqueReturnType",
+       nameForDiagnostics: "named opaque return type",
+       kind: "Type",
+       children: [
+         Child(name: "GenericParameters",
+               kind: "GenericParameterClause"),
+         Child(name: "BaseType",
+               kind: "Type")
+       ]),
+  
 ]

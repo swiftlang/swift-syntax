@@ -2002,6 +2002,14 @@ public extension ExpressibleAsGenericArgumentClause {
     return createGenericArgumentClause()
   }
 }
+public protocol ExpressibleAsNamedOpaqueReturnType: ExpressibleAsTypeBuildable {
+  func createNamedOpaqueReturnType() -> NamedOpaqueReturnType
+}
+public extension ExpressibleAsNamedOpaqueReturnType {
+  func createTypeBuildable() -> TypeBuildable {
+    return createNamedOpaqueReturnType()
+  }
+}
 public protocol ExpressibleAsTypeAnnotation: ExpressibleAsSyntaxBuildable {
   func createTypeAnnotation() -> TypeAnnotation
 }

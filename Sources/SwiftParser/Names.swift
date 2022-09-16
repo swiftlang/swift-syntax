@@ -132,7 +132,7 @@ extension Parser {
     let type: RawTypeSyntax?
     let dot: RawTokenSyntax?
     if self.lookahead().canParseBaseTypeForQualifiedDeclName() {
-      type = self.parseTypeIdentifier()
+      type = self.parseQualifiedTypeIdentifier()
       dot = self.consumePrefix(".", as: .period)
     } else {
       type = nil
@@ -150,6 +150,50 @@ extension Parser {
       name: name,
       arguments: args,
       arena: self.arena)
+  }
+
+  @_spi(RawSyntax)
+  public mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
+    if self.at(.anyKeyword) {
+      return RawTypeSyntax(self.parseAnyType())
+    }
+
+    var result: RawTypeSyntax?
+    var keepGoing: RawTokenSyntax? = nil
+    var loopProgress = LoopProgressCondition()
+    repeat {
+      let (name, _) = self.parseDeclNameRef()
+      let generics: RawGenericArgumentClauseSyntax?
+      if self.atContextualPunctuator("<") {
+        generics = self.parseGenericArguments()
+      } else {
+        generics = nil
+      }
+      if let keepGoing = keepGoing {
+        result = RawTypeSyntax(RawMemberTypeIdentifierSyntax(
+          baseType: result!,
+          period: keepGoing,
+          name: name,
+          genericArgumentClause: generics,
+          arena: self.arena))
+      } else {
+        result = RawTypeSyntax(RawSimpleTypeIdentifierSyntax(
+          name: name, genericArgumentClause: generics, arena: self.arena))
+      }
+
+      // If qualified name base type cannot be parsed from the current
+      // point (i.e. the next type identifier is not followed by a '.'),
+      // then the next identifier is the final declaration name component.
+      var backtrack = self.lookahead()
+      backtrack.consumePrefix(".", as: .period)
+      guard backtrack.canParseBaseTypeForQualifiedDeclName() else {
+        break
+      }
+
+      keepGoing = self.consume(if: .period) ?? self.consume(if: .prefixPeriod)
+    } while keepGoing != nil && loopProgress.evaluate(currentToken)
+
+    return result!
   }
 }
 

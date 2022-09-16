@@ -268,6 +268,7 @@ public enum SyntaxEnum {
   case genericArgumentList(GenericArgumentListSyntax)
   case genericArgument(GenericArgumentSyntax)
   case genericArgumentClause(GenericArgumentClauseSyntax)
+  case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   case typeAnnotation(TypeAnnotationSyntax)
   case enumCasePattern(EnumCasePatternSyntax)
   case isTypePattern(IsTypePatternSyntax)
@@ -796,6 +797,8 @@ public enum SyntaxEnum {
       return "generic argument"
     case .genericArgumentClause:
       return "generic argument clause"
+    case .namedOpaqueReturnType:
+      return "named opaque return type"
     case .typeAnnotation:
       return "type annotation"
     case .enumCasePattern:
@@ -1346,6 +1349,8 @@ public extension Syntax {
       return .genericArgument(GenericArgumentSyntax(self)!)
     case .genericArgumentClause:
       return .genericArgumentClause(GenericArgumentClauseSyntax(self)!)
+    case .namedOpaqueReturnType:
+      return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .typeAnnotation:
       return .typeAnnotation(TypeAnnotationSyntax(self)!)
     case .enumCasePattern:

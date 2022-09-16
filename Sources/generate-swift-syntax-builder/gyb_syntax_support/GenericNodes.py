@@ -96,13 +96,15 @@ GENERIC_NODES = [
                    is_optional=True),
          ]),
 
-    # generic-parameter-clause -> '<' generic-parameter-list '>'
+    # generic-parameter-clause -> '<' generic-parameter-list generic-where-clause? '>'
     Node('GenericParameterClause', name_for_diagnostics='generic parameter clause',
          kind='Syntax',
          children=[
              Child('LeftAngleBracket', kind='LeftAngleToken'),
              Child('GenericParameterList', kind='GenericParameterList',
                    collection_element_name='GenericParameter'),
+             Child('GenericWhereClause', kind='GenericWhereClause',
+                   is_optional=True),
              Child('RightAngleBracket', kind='RightAngleToken'),
          ]),
 

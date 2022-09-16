@@ -146,6 +146,13 @@ final class AttributeTests: XCTestCase {
   func testTransposeAttribute() {
     AssertParse(
       """
+      @transpose(of: S.instanceMethod, wrt: self)
+      static func transposeInstanceMethodWrtSelf(_ other: S, t: S) -> S {
+        other + t
+      }
+      """)
+    AssertParse(
+      """
       @transpose(of: +)
       func addTranspose(_ v: Float) -> (Float, Float) {
         return (v, v)

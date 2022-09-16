@@ -6176,13 +6176,15 @@ public enum SyntaxFactory {
     return PrimaryAssociatedTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on GenericParameterClauseSyntax")
-  public static func makeGenericParameterClause(_ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, _ unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
+  public static func makeGenericParameterClause(_ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, _ unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
     let layout: [RawSyntax?] = [
       unexpectedBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
       unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw,
       genericParameterList.raw,
-      unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw,
+      unexpectedBetweenGenericParameterListAndGenericWhereClause?.raw,
+      genericWhereClause?.raw,
+      unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.raw,
       rightAngleBracket.raw,
     ]
     let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterClause,
@@ -6199,6 +6201,8 @@ public enum SyntaxFactory {
       RawSyntax.makeMissingToken(kind: TokenKind.leftAngle, arena: .default),
       nil,
       RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericParameterList, arena: .default),
+      nil,
+      nil,
       nil,
       RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: .default),
     ], arena: .default))
@@ -6835,6 +6839,31 @@ public enum SyntaxFactory {
       RawSyntax.makeMissingToken(kind: TokenKind.rightAngle, arena: .default),
     ], arena: .default))
     return GenericArgumentClauseSyntax(data)
+  }
+  @available(*, deprecated, message: "Use initializer on NamedOpaqueReturnTypeSyntax")
+  public static func makeNamedOpaqueReturnType(_ unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax, _ unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? = nil, baseType: TypeSyntax) -> NamedOpaqueReturnTypeSyntax {
+    let layout: [RawSyntax?] = [
+      unexpectedBeforeGenericParameters?.raw,
+      genericParameters.raw,
+      unexpectedBetweenGenericParametersAndBaseType?.raw,
+      baseType.raw,
+    ]
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.namedOpaqueReturnType,
+      from: layout, arena: .default)
+    let data = SyntaxData.forRoot(raw)
+    return NamedOpaqueReturnTypeSyntax(data)
+  }
+
+  @available(*, deprecated, message: "Use initializer on NamedOpaqueReturnTypeSyntax")
+  public static func makeBlankNamedOpaqueReturnType(presence: SourcePresence = .present) -> NamedOpaqueReturnTypeSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.makeLayout(kind: .namedOpaqueReturnType,
+      from: [
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.genericParameterClause, arena: .default),
+      nil,
+      RawSyntax.makeEmptyLayout(kind: SyntaxKind.missingType, arena: .default),
+    ], arena: .default))
+    return NamedOpaqueReturnTypeSyntax(data)
   }
   @available(*, deprecated, message: "Use initializer on TypeAnnotationSyntax")
   public static func makeTypeAnnotation(_ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, colon: TokenSyntax, _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil, type: TypeSyntax) -> TypeAnnotationSyntax {

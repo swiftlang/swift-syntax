@@ -269,6 +269,7 @@ public enum SyntaxKind {
   case genericArgumentList
   case genericArgument
   case genericArgumentClause
+  case namedOpaqueReturnType
   case typeAnnotation
   case enumCasePattern
   case isTypePattern

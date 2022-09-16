@@ -185,7 +185,8 @@ extension Parser {
       ) {
         base = RawTypeSyntax(RawMetatypeTypeSyntax(
           baseType: base, period: period, typeOrProtocol: type, arena: self.arena))
-       }
+        continue
+      }
 
       if !self.currentToken.isAtStartOfLine {
         if self.currentToken.isOptionalToken {
@@ -856,6 +857,22 @@ extension Parser {
           arena: self.arena
         )
       )
+    }
+  }
+}
+
+extension Parser {
+  mutating func parseResultType() -> RawTypeSyntax {
+    if self.currentToken.starts(with: "<") {
+      let generics = self.parseGenericParameters()
+      let baseType = self.parseType()
+      return RawTypeSyntax(
+        RawNamedOpaqueReturnTypeSyntax(
+          genericParameters: generics,
+          baseType: baseType,
+          arena: self.arena))
+    } else {
+      return self.parseType()
     }
   }
 }

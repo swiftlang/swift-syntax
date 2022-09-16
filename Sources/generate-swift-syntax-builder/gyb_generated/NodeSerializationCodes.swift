@@ -289,4 +289,5 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "ConventionAttributeArguments": 276,
   "ConventionWitnessMethodAttributeArguments": 277,
   "DesignatedTypeElement": 278,
+  "NamedOpaqueReturnType": 279,
 ]

@@ -14555,7 +14555,9 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   var leftAngleBracket: Token
   var unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodes?
   var genericParameterList: GenericParameterList
-  var unexpectedBetweenGenericParameterListAndRightAngleBracket: UnexpectedNodes?
+  var unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodes?
+  var genericWhereClause: GenericWhereClause?
+  var unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodes?
   var rightAngleBracket: Token
   /// Creates a `GenericParameterClause` using the provided parameters.
   /// - Parameters:
@@ -14563,9 +14565,11 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   ///   - leftAngleBracket: 
   ///   - unexpectedBetweenLeftAngleBracketAndGenericParameterList: 
   ///   - genericParameterList: 
-  ///   - unexpectedBetweenGenericParameterListAndRightAngleBracket: 
+  ///   - unexpectedBetweenGenericParameterListAndGenericWhereClause: 
+  ///   - genericWhereClause: 
+  ///   - unexpectedBetweenGenericWhereClauseAndRightAngleBracket: 
   ///   - rightAngleBracket: 
-  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, genericParameterList: ExpressibleAsGenericParameterList, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`) {
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, genericParameterList: ExpressibleAsGenericParameterList, unexpectedBetweenGenericParameterListAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`) {
     self.leadingTrivia = leadingTrivia
     self.trailingTrivia = trailingTrivia
     self.unexpectedBeforeLeftAngleBracket = unexpectedBeforeLeftAngleBracket?.createUnexpectedNodes()
@@ -14573,24 +14577,26 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
     assert(leftAngleBracket.text == #"<"#)
     self.unexpectedBetweenLeftAngleBracketAndGenericParameterList = unexpectedBetweenLeftAngleBracketAndGenericParameterList?.createUnexpectedNodes()
     self.genericParameterList = genericParameterList.createGenericParameterList()
-    self.unexpectedBetweenGenericParameterListAndRightAngleBracket = unexpectedBetweenGenericParameterListAndRightAngleBracket?.createUnexpectedNodes()
+    self.unexpectedBetweenGenericParameterListAndGenericWhereClause = unexpectedBetweenGenericParameterListAndGenericWhereClause?.createUnexpectedNodes()
+    self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.unexpectedBetweenGenericWhereClauseAndRightAngleBracket = unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.createUnexpectedNodes()
     self.rightAngleBracket = rightAngleBracket
     assert(rightAngleBracket.text == #">"#)
   }
   /// A convenience initializer that allows:
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
-  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList =  {
+  public init (leadingTrivia: Trivia = [], unexpectedBeforeLeftAngleBracket: ExpressibleAsUnexpectedNodes? = nil, leftAngleBracket: Token = Token.`leftAngle`, unexpectedBetweenLeftAngleBracketAndGenericParameterList: ExpressibleAsUnexpectedNodes? = nil, unexpectedBetweenGenericParameterListAndGenericWhereClause: ExpressibleAsUnexpectedNodes? = nil, genericWhereClause: ExpressibleAsGenericWhereClause? = nil, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: ExpressibleAsUnexpectedNodes? = nil, rightAngleBracket: Token = Token.`rightAngle`, @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList =  {
     GenericParameterList([])
   }) {
-    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList: unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndRightAngleBracket: unexpectedBetweenGenericParameterListAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
+    self.init(leadingTrivia: leadingTrivia, unexpectedBeforeLeftAngleBracket: unexpectedBeforeLeftAngleBracket, leftAngleBracket: leftAngleBracket, unexpectedBetweenLeftAngleBracketAndGenericParameterList: unexpectedBetweenLeftAngleBracketAndGenericParameterList, genericParameterList: genericParameterListBuilder(), unexpectedBetweenGenericParameterListAndGenericWhereClause: unexpectedBetweenGenericParameterListAndGenericWhereClause, genericWhereClause: genericWhereClause, unexpectedBetweenGenericWhereClauseAndRightAngleBracket: unexpectedBetweenGenericWhereClauseAndRightAngleBracket, rightAngleBracket: rightAngleBracket)
   }
   /// Builds a `GenericParameterClauseSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
   /// - Returns: The built `GenericParameterClauseSyntax`.
   func buildGenericParameterClause(format: Format) -> GenericParameterClauseSyntax {
-    var result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(format: format), unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format), genericParameterList: genericParameterList.buildGenericParameterList(format: format), unexpectedBetweenGenericParameterListAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken(format: format))
+    var result = GenericParameterClauseSyntax(unexpectedBeforeLeftAngleBracket?.buildUnexpectedNodes(format: format), leftAngleBracket: leftAngleBracket.buildToken(format: format), unexpectedBetweenLeftAngleBracketAndGenericParameterList?.buildUnexpectedNodes(format: format), genericParameterList: genericParameterList.buildGenericParameterList(format: format), unexpectedBetweenGenericParameterListAndGenericWhereClause?.buildUnexpectedNodes(format: format), genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format), unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.buildUnexpectedNodes(format: format), rightAngleBracket: rightAngleBracket.buildToken(format: format))
     if !leadingTrivia.isEmpty {
       result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
     }
@@ -16178,6 +16184,77 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   }
   /// Conformance to `ExpressibleAsSyntaxBuildable`.
   /// `GenericArgumentClause` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    var result = self
+    result.leadingTrivia = leadingTrivia
+    return result
+  }
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    var result = self
+    result.trailingTrivia = trailingTrivia
+    return result
+  }
+}
+public struct NamedOpaqueReturnType: TypeBuildable, ExpressibleAsNamedOpaqueReturnType {
+  /// The leading trivia attached to this syntax node once built.
+  var leadingTrivia: Trivia
+  /// The trailing trivia attached to this syntax node once built.
+  var trailingTrivia: Trivia
+  var unexpectedBeforeGenericParameters: UnexpectedNodes?
+  var genericParameters: GenericParameterClause
+  var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodes?
+  var baseType: TypeBuildable
+  /// Creates a `NamedOpaqueReturnType` using the provided parameters.
+  /// - Parameters:
+  ///   - unexpectedBeforeGenericParameters: 
+  ///   - genericParameters: 
+  ///   - unexpectedBetweenGenericParametersAndBaseType: 
+  ///   - baseType: 
+  public init (leadingTrivia: Trivia = [], trailingTrivia: Trivia = [], unexpectedBeforeGenericParameters: ExpressibleAsUnexpectedNodes? = nil, genericParameters: ExpressibleAsGenericParameterClause, unexpectedBetweenGenericParametersAndBaseType: ExpressibleAsUnexpectedNodes? = nil, baseType: ExpressibleAsTypeBuildable) {
+    self.leadingTrivia = leadingTrivia
+    self.trailingTrivia = trailingTrivia
+    self.unexpectedBeforeGenericParameters = unexpectedBeforeGenericParameters?.createUnexpectedNodes()
+    self.genericParameters = genericParameters.createGenericParameterClause()
+    self.unexpectedBetweenGenericParametersAndBaseType = unexpectedBetweenGenericParametersAndBaseType?.createUnexpectedNodes()
+    self.baseType = baseType.createTypeBuildable()
+  }
+  /// Builds a `NamedOpaqueReturnTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `NamedOpaqueReturnTypeSyntax`.
+  func buildNamedOpaqueReturnType(format: Format) -> NamedOpaqueReturnTypeSyntax {
+    var result = NamedOpaqueReturnTypeSyntax(unexpectedBeforeGenericParameters?.buildUnexpectedNodes(format: format), genericParameters: genericParameters.buildGenericParameterClause(format: format), unexpectedBetweenGenericParametersAndBaseType?.buildUnexpectedNodes(format: format), baseType: baseType.buildType(format: format))
+    if !leadingTrivia.isEmpty {
+      result = result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    }
+    if !trailingTrivia.isEmpty {
+      result = result.withTrailingTrivia(trailingTrivia + (result.trailingTrivia ?? []))
+    }
+    return format.format(syntax: result)
+  }
+  /// Conformance to `TypeBuildable`.
+  public func buildType(format: Format) -> TypeSyntax {
+    let result = buildNamedOpaqueReturnType(format: format)
+    return TypeSyntax(result)
+  }
+  /// Conformance to `ExpressibleAsNamedOpaqueReturnType`.
+  public func createNamedOpaqueReturnType() -> NamedOpaqueReturnType {
+    return self
+  }
+  /// Conformance to `ExpressibleAsTypeBuildable`.
+  /// `NamedOpaqueReturnType` may conform to `ExpressibleAsTypeBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations of `createTypeBuildable`, some of which perform conversions
+  /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
+  public func createTypeBuildable() -> TypeBuildable {
+    return self
+  }
+  /// Conformance to `ExpressibleAsSyntaxBuildable`.
+  /// `TypeBuildable` may conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations of `createSyntaxBuildable`, some of which perform conversions
   /// through `ExpressibleAs*` protocols. To resolve the ambiguity, provie a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {

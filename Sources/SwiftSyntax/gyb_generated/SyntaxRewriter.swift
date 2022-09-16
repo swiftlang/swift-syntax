@@ -1787,6 +1787,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `NamedOpaqueReturnTypeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: NamedOpaqueReturnTypeSyntax) -> TypeSyntax {
+    return TypeSyntax(visitChildren(node))
+  }
+
   /// Visit a `TypeAnnotationSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -4518,6 +4525,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplNamedOpaqueReturnTypeSyntax(_ data: SyntaxData) -> Syntax {
+      let node = NamedOpaqueReturnTypeSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeAnnotationSyntax(_ data: SyntaxData) -> Syntax {
       let node = TypeAnnotationSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5243,6 +5260,8 @@ open class SyntaxRewriter {
       return visitImplGenericArgumentSyntax
     case .genericArgumentClause:
       return visitImplGenericArgumentClauseSyntax
+    case .namedOpaqueReturnType:
+      return visitImplNamedOpaqueReturnTypeSyntax
     case .typeAnnotation:
       return visitImplTypeAnnotationSyntax
     case .enumCasePattern:
@@ -5796,6 +5815,8 @@ open class SyntaxRewriter {
       return visitImplGenericArgumentSyntax(data)
     case .genericArgumentClause:
       return visitImplGenericArgumentClauseSyntax(data)
+    case .namedOpaqueReturnType:
+      return visitImplNamedOpaqueReturnTypeSyntax(data)
     case .typeAnnotation:
       return visitImplTypeAnnotationSyntax(data)
     case .enumCasePattern:

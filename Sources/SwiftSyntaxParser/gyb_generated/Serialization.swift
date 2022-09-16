@@ -271,6 +271,7 @@ extension SyntaxKind {
     case 198: self = .genericArgumentList
     case 155: self = .genericArgument
     case 156: self = .genericArgumentClause
+    case 279: self = .namedOpaqueReturnType
     case 157: self = .typeAnnotation
     case 202: self = .enumCasePattern
     case 203: self = .isTypePattern

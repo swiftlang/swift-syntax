@@ -30,14 +30,16 @@ extension TokenConsumer {
       _ = subparser.consumeAttributeList()
     }
 
-    var modifierProgress = LoopProgressCondition()
-    while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
-            modifierKind != .classKeyword,
-            modifierProgress.evaluate(subparser.currentToken) {
-      subparser.eat(handle)
-      if subparser.at(.leftParen) {
-        subparser.consumeAnyToken()
-        subparser.consume(to: .rightParen)
+    if subparser.currentToken.isKeyword {
+      var modifierProgress = LoopProgressCondition()
+      while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
+              modifierKind != .classKeyword,
+              modifierProgress.evaluate(subparser.currentToken) {
+        subparser.eat(handle)
+        if subparser.at(.leftParen) {
+          subparser.consumeAnyToken()
+          subparser.consume(to: .rightParen)
+        }
       }
     }
 
@@ -75,9 +77,16 @@ extension TokenConsumer {
         lookahead.consumeAnyToken()
       } while lookahead.atStartOfDeclaration()
       return lookahead.at(.identifier)
-    case .caseKeyword, nil:
+    case .caseKeyword:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
+      return false
+    case nil:
+      if subparser.at(anyIn: ContextualDeclKeyword.self)?.0 != nil {
+        subparser.consumeAnyToken()
+        return subparser.atStartOfDeclaration(
+          isAtTopLevel: isAtTopLevel, allowRecovery: allowRecovery)
+      }
       return false
     default: return true
     }
@@ -321,6 +330,13 @@ extension Parser {
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
+    let whereClause: RawGenericWhereClauseSyntax?
+    if self.at(.whereKeyword) {
+      whereClause = self.parseGenericWhereClause()
+    } else {
+      whereClause = nil
+    }
+
     let rangle: RawTokenSyntax
     if self.currentToken.starts(with: ">") {
       rangle = self.consumeAnyToken(remapping: .rightAngle)
@@ -337,6 +353,7 @@ extension Parser {
     return RawGenericParameterClauseSyntax(
       leftAngleBracket: langle,
       genericParameterList: parameters,
+      genericWhereClause: whereClause,
       rightAngleBracket: rangle,
       arena: self.arena)
   }
@@ -1154,7 +1171,7 @@ extension Parser {
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
-    if let parsedFailable = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark]) {
+    if let parsedFailable = self.consume(ifAny: [.exclamationMark, .postfixQuestionMark, .infixQuestionMark]) {
       failable = parsedFailable
     } else if let parsedFailable = self.consumeIfContextualPunctuator("!") {
       failable = parsedFailable
@@ -1373,7 +1390,7 @@ extension Parser {
     } else {
       unexpectedBeforeReturnType = nil
     }
-    let result = self.parseType()
+    let result = self.parseResultType()
     let returnClause = RawReturnClauseSyntax(
       unexpectedBeforeArrow,
       arrow: arrow,

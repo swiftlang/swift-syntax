@@ -119,7 +119,7 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .unknownType, .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType: return true
+    case .unknownType, .missingType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .packExpansionType, .tupleType, .functionType, .attributedType, .namedOpaqueReturnType: return true
     default: return false
     }
   }
@@ -13799,19 +13799,23 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
     leftAngleBracket: RawTokenSyntax,
     _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax? = nil,
     genericParameterList: RawGenericParameterListSyntax,
-    _ unexpectedBetweenGenericParameterListAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
+    genericWhereClause: RawGenericWhereClauseSyntax?,
+    _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil,
     rightAngleBracket: RawTokenSyntax,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericParameterClause, uninitializedCount: 6, arena: arena) { layout in
+      kind: .genericParameterClause, uninitializedCount: 8, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
       layout[2] = unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw
       layout[3] = genericParameterList.raw
-      layout[4] = unexpectedBetweenGenericParameterListAndRightAngleBracket?.raw
-      layout[5] = rightAngleBracket.raw
+      layout[4] = unexpectedBetweenGenericParameterListAndGenericWhereClause?.raw
+      layout[5] = genericWhereClause?.raw
+      layout[6] = unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.raw
+      layout[7] = rightAngleBracket.raw
     }
     self.init(raw: raw)
   }
@@ -13828,11 +13832,17 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
   public var genericParameterList: RawGenericParameterListSyntax {
     layoutView.children[3].map(RawGenericParameterListSyntax.init(raw:))!
   }
-  public var unexpectedBetweenGenericParameterListAndRightAngleBracket: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
+  public var genericWhereClause: RawGenericWhereClauseSyntax? {
+    layoutView.children[5].map(RawGenericWhereClauseSyntax.init(raw:))
+  }
+  public var unexpectedBetweenGenericWhereClauseAndRightAngleBracket: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
   public var rightAngleBracket: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
 }
 
@@ -15217,6 +15227,59 @@ public struct RawGenericArgumentClauseSyntax: RawSyntaxNodeProtocol {
   }
   public var rightAngleBracket: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
+  var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .namedOpaqueReturnType
+  }
+
+  public var raw: RawSyntax
+  init(raw: RawSyntax) {
+    assert(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isKindOf(other.raw) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeGenericParameters: RawUnexpectedNodesSyntax? = nil,
+    genericParameters: RawGenericParameterClauseSyntax,
+    _ unexpectedBetweenGenericParametersAndBaseType: RawUnexpectedNodesSyntax? = nil,
+    baseType: RawTypeSyntax,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .namedOpaqueReturnType, uninitializedCount: 4, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeGenericParameters?.raw
+      layout[1] = genericParameters.raw
+      layout[2] = unexpectedBetweenGenericParametersAndBaseType?.raw
+      layout[3] = baseType.raw
+    }
+    self.init(raw: raw)
+  }
+
+  public var unexpectedBeforeGenericParameters: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var genericParameters: RawGenericParameterClauseSyntax {
+    layoutView.children[1].map(RawGenericParameterClauseSyntax.init(raw:))!
+  }
+  public var unexpectedBetweenGenericParametersAndBaseType: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  public var baseType: RawTypeSyntax {
+    layoutView.children[3].map(RawTypeSyntax.init(raw:))!
   }
 }
 

@@ -117,7 +117,7 @@ extension Parser {
       return (pattern, nil)
     }
 
-    let result = self.parseType()
+    let result = self.parseResultType()
     let type = RawTypeAnnotationSyntax(
       colon: colon,
       type: result,

@@ -48,6 +48,11 @@ final class ExpressionTests: XCTestCase {
 
   func testSequenceExpressions() {
     AssertParse("await a()")
+    AssertParse(
+      """
+      async let child = testNestedTaskPriority(basePri: basePri, curPri: curPri)
+      await child
+      """)
   }
 
   func testNestedTypeSpecialization() {
@@ -501,5 +506,20 @@ final class ExpressionTests: XCTestCase {
     AssertParse("use(_move msg)")
     AssertParse("_move msg")
     AssertParse("let b = (_move self).buffer")
+  }
+
+  func testCodeCompletionExpressions() {
+    AssertParse("if !<#b1#> && !<#b2#> {}")
+    AssertParse("if <#test#> {}")
+    AssertParse("if <#b1#>, <#b2#> {}")
+  }
+
+  func testKeywordApplyExpression() {
+    AssertParse(
+      """
+      optional(x: .some(23))
+      optional(x: .none)
+      var pair : (Int, Double) = makePair(a: 1, b: 2.5)
+      """)
   }
 }

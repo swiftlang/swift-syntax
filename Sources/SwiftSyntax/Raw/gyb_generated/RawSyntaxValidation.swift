@@ -1979,13 +1979,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[3], as: RawTokenSyntax?.self)
     break
   case .genericParameterClause:
-    assert(layout.count == 6)
+    assert(layout.count == 8)
     _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[1], as: RawTokenSyntax.self)
     _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[3], as: RawGenericParameterListSyntax.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
-    _verify(layout[5], as: RawTokenSyntax.self)
+    _verify(layout[5], as: RawGenericWhereClauseSyntax?.self)
+    _verify(layout[6], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[7], as: RawTokenSyntax.self)
     break
   case .conformanceRequirement:
     assert(layout.count == 6)
@@ -2183,6 +2185,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     _verify(layout[3], as: RawGenericArgumentListSyntax.self)
     _verify(layout[4], as: RawUnexpectedNodesSyntax?.self)
     _verify(layout[5], as: RawTokenSyntax.self)
+    break
+  case .namedOpaqueReturnType:
+    assert(layout.count == 4)
+    _verify(layout[0], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[1], as: RawGenericParameterClauseSyntax.self)
+    _verify(layout[2], as: RawUnexpectedNodesSyntax?.self)
+    _verify(layout[3], as: RawTypeSyntax.self)
     break
   case .typeAnnotation:
     assert(layout.count == 4)

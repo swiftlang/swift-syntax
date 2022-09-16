@@ -199,6 +199,9 @@ let GENERIC_NODES: [Node] = [
          Child(name: "GenericParameterList",
                kind: "GenericParameterList",
                collectionElementName: "GenericParameter"),
+         Child(name: "GenericWhereClause",
+               kind: "GenericWhereClause",
+               isOptional: true),
          Child(name: "RightAngleBracket",
                kind: "RightAngleToken",
                tokenChoices: [

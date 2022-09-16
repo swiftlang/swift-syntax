@@ -904,7 +904,6 @@ extension Lexer.Cursor {
           _ = self.advanceToEndOfLine()
           continue
         case UInt8(ascii: "*"):
-          self = start
           _ = self.advanceToEndOfSlashStarComment()
           continue
         default:
@@ -1605,10 +1604,10 @@ extension Lexer.Cursor {
       if !self.isAtEndOfFile, self.peek() == UInt8(ascii: ".") && TokStart.peek() != UInt8(ascii: ".") {
         break
       }
-//      if (Identifier::isEditorPlaceholder(StringRef(CurPtr, BufferEnd-CurPtr)) &&
-//          rangeContainsPlaceholderEnd(CurPtr + 2, BufferEnd)) {
-//        break
-//      }
+      let text = SyntaxText(baseAddress: self.input.baseAddress, count: self.input.count)
+      if text.hasPrefix("<#") && text.containsPlaceholderEnd() {
+        break
+      }
 
 //      // If we are lexing a `/.../` regex literal, we don't consider `/` to be an
 //      // operator character.
@@ -2055,6 +2054,13 @@ extension Lexer.Cursor {
       case nil:
         return nil
       case UInt8(ascii: "/"):
+        // If we're at the end of the literal, peek ahead to see if the closing
+        // slash is actually the start of a comment.
+        if !Tmp.isAtEndOfFile &&
+            (Tmp.peek() == UInt8(ascii: "/") || Tmp.peek() == UInt8(ascii: "*")) {
+          return nil
+        }
+
         var EndLex = Tmp
         for _ in 0..<poundCount {
           guard EndLex.advance(matching: UInt8(ascii: "#")) != nil else {
@@ -2255,5 +2261,25 @@ extension Unicode.Scalar {
     // Exclude non-printables before the space character U+20, and anything
     // including and above the DEL character U+7F.
     return self.value >= 0x20 && self.value < 0x7F
+  }
+}
+
+extension SyntaxText {
+  fileprivate func containsPlaceholderEnd() -> Bool {
+    guard self.count >= 2 else {
+      return false
+    }
+
+    for idx in 0..<(self.count - 1) {
+      let c = self[idx]
+      guard c != UInt8(ascii: "\n") else {
+        return false
+      }
+
+      if self[idx] == UInt8(ascii: "#"), self[idx+1] == UInt8(ascii: ">") {
+        return true
+      }
+    }
+    return false
   }
 }

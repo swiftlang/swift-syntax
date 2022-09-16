@@ -533,6 +533,8 @@ extension Syntax {
       return node
     case .genericArgumentClause(let node):
       return node
+    case .namedOpaqueReturnType(let node):
+      return node
     case .typeAnnotation(let node):
       return node
     case .enumCasePattern(let node):
@@ -828,6 +830,7 @@ extension SyntaxKind {
     case .genericArgumentList: return GenericArgumentListSyntax.self
     case .genericArgument: return GenericArgumentSyntax.self
     case .genericArgumentClause: return GenericArgumentClauseSyntax.self
+    case .namedOpaqueReturnType: return NamedOpaqueReturnTypeSyntax.self
     case .typeAnnotation: return TypeAnnotationSyntax.self
     case .enumCasePattern: return EnumCasePatternSyntax.self
     case .isTypePattern: return IsTypePatternSyntax.self

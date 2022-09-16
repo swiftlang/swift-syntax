@@ -2054,6 +2054,13 @@ extension Lexer.Cursor {
       case nil:
         return nil
       case UInt8(ascii: "/"):
+        // If we're at the end of the literal, peek ahead to see if the closing
+        // slash is actually the start of a comment.
+        if !Tmp.isAtEndOfFile &&
+            (Tmp.peek() == UInt8(ascii: "/") || Tmp.peek() == UInt8(ascii: "*")) {
+          return nil
+        }
+
         var EndLex = Tmp
         for _ in 0..<poundCount {
           guard EndLex.advance(matching: UInt8(ascii: "#")) != nil else {

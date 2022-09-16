@@ -562,6 +562,25 @@ public class LexerTests: XCTestCase {
     }
   }
 
+  func testLex() {
+    do {
+      var data =
+      """
+      n /= 2 // foo
+      """
+      let lexemes = data.withUTF8 { buf in
+        let lexemes = Lexer.lex(buf)
+        AssertEqualTokens(lexemes, [
+          lexeme(.identifier, "n ", trailing: 1),
+          lexeme(.spacedBinaryOperator, "/= ", trailing: 1),
+          lexeme(.integerLiteral, "2 ", trailing: 1),
+          lexeme(.eof, "// foo", leading: 6),
+        ])
+        return lexemes
+      }
+    }
+  }
+
   func testUnicodeReplcementsInStream() {
     do {
       var data =

@@ -504,6 +504,8 @@ final class ExpressionTests: XCTestCase {
   }
 
   func testCodeCompletionExpressions() {
+    AssertParse("if !<#b1#> && !<#b2#> {}")
     AssertParse("if <#test#> {}")
+    AssertParse("if <#b1#>, <#b2#> {}")
   }
 }

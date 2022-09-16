@@ -29,6 +29,7 @@ public struct OperatorTable {
 
   /// Initialize the operator precedence instance with a given set of
   /// operators and precedence groups.
+  @_optimize(none)
   public init(
     precedenceGroups: [PrecedenceGroup],
     operators: [Operator],

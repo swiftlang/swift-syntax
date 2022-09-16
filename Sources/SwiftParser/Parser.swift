@@ -42,8 +42,10 @@ extension Parser {
     // Extended lifetime is required because `SyntaxArena` in the parser must
     // be alive until `Syntax(raw:)` retains the arena.
     return withExtendedLifetime(parser) {
-      let rawSourceFile =  parser.parseSourceFile()
-      return rawSourceFile.syntax
+      parser.arena.assumingSingleThread {
+        let rawSourceFile =  parser.parseSourceFile()
+        return rawSourceFile.syntax
+      }
     }
   }
 }

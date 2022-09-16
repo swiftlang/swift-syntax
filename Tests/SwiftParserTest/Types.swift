@@ -156,5 +156,27 @@ final class TypeTests: XCTestCase {
       }
       """)
   }
+
+  func testPackExpansion() throws {
+    AssertParse(
+      """
+      func f1<@_typeSequence T>() -> T... {}
+      func f2<@_typeSequence T>() -> (T...) {}
+      func f3<@_typeSequence T>() -> G<T... > {}
+      """)
+
+    AssertParse(
+      """
+      enum E<@_typeSequence T> {
+        case f1(_: T...)
+        case f2(_: G<T... >)
+        var x: T... { fatalError() }
+        var x: (T...) { fatalError() }
+        subscript(_: T...) -> Int { fatalError() }
+        subscript() -> T... { fatalError() }
+        subscript() -> (T...) { fatalError() }
+      }
+      """)
+  }
 }
 
